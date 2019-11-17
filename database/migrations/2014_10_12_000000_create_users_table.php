@@ -15,10 +15,13 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('name');
+            $table->string('username');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
+            $table->string('password')->nullable();
+            $table->string('discord_id')->nullable()->unique();
+            $table->string('discord_username')->nullable();
+            $table->string('discord_avatar')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

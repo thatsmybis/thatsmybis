@@ -16,7 +16,11 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password',
+        'username',
+        'email',
+        'discord_username',
+        'discord_id',
+        'password',
     ];
 
     /**
@@ -25,7 +29,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'email',
+        'password',
+        'remember_token',
+        'discord_id'
     ];
 
     /**
