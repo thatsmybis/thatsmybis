@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{CodeRequest, Feedback, Notification, Platform, User};
+use App\{User};
 use Auth;
 use Illuminate\Http\Request;
 
@@ -36,16 +36,6 @@ class HomeController extends Controller
     public function contact()
     {
         return view('contact');
-    }
-
-    /**
-     * Show the Dashboard page.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function dashboard()
-    {
-        return view('dashboard');
     }
 
     /**
