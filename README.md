@@ -65,4 +65,5 @@ tl;dr
 - Make sure the hosts have been setup (read Hostname Resolution in the [docs](https://laravel.com/docs/6.x/homestead#configuring-homestead))
 - Run `vagrant up` while in the Homestead directory.
 - Run `vagrant ssh`
-- Run `composer install` from /home/vagrant/code/aftershock-wow`
+- Run `composer install` from `/home/vagrant/code/aftershock-wow`
+- Create a file named `.env` in `/home/vagrant/code/aftershock-wow`. Base it off of `.env.example` or ask another dev for what details to fill in.
