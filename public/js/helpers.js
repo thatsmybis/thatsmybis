@@ -1,3 +1,6 @@
+// For keeping track of the intervals updating times
+var timestampUpdateInterval = null;
+
 $(document).ready(function () {
     // Format any markdown fields
     parseMarkdown();

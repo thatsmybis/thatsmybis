@@ -46,7 +46,7 @@ class DashboardController extends Controller
      */
     public function roster()
     {
-        $members = User::all();
+        $members = User::orderBy('username')->get();
         return view('roster', ['members' => $members]);
     }
 }

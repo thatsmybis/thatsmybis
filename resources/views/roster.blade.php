@@ -7,8 +7,16 @@
     <div class="col-12 p-4">
         <ul class="list-inline">
             <li>
-                <strong>Column Toggles</strong>
+                <strong>Columns</strong>
             </li>
+            <li class="list-inline-item">
+                <a class="toggle-column-default cursor-pointer font-weight-bold" href="">Default</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+                <a class="toggle-column-loot-council cursor-pointer font-weight-bold" href="">Loot Council</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
                 <a class="toggle-column cursor-pointer" data-column="0" href="">Name</a>
             </li>
@@ -42,19 +50,36 @@
             </li>
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
-                <a class="toggle-column cursor-pointer" data-column="8" href="">Wishlist</a>
+                <a class="toggle-column cursor-pointer" data-column="8" href="">Raid</a>
             </li>
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
-                <a class="toggle-column cursor-pointer" data-column="9" href="">Raid Loot</a>
+                <a class="toggle-column cursor-pointer" data-column="9" href="">Wishlist</a>
             </li>
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
-                <a class="toggle-column cursor-pointer" data-column="10" href="">Notes</a>
+                <a class="toggle-column cursor-pointer" data-column="10" href="">Raid Loot</a>
             </li>
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
-                <a class="toggle-column cursor-pointer" data-column="11" href="">Officer Notes</a>
+                <a class="toggle-column cursor-pointer" data-column="11" href="">Notes</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+                <a class="toggle-column cursor-pointer" data-column="12" href="">Officer Notes</a>
+            </li>
+        </ul>
+        <ul class="list-inline">
+            <li class=" list-inline-item">
+                <select id="classFilter" class="form-control"><option value="">Class</option></select>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+                <select id="raidFilter" class="form-control"><option value="">Raid</option></select>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+                <select id="professionFilter" class="form-control"><option value="">Profession</option></select>
             </li>
         </ul>
     </div>

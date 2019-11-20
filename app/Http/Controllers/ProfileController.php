@@ -180,7 +180,7 @@ class ProfileController extends Controller
             $updateValues['loot_received'] = request()->input('loot_received');
             $updateValues['note']          = request()->input('note');
 
-            if ($isOfficer) {
+            if (false && $isOfficer) {  // TODO: Add permissions check
                 $updateValues['officer_note']  = request()->input('officer_note');
             }
 

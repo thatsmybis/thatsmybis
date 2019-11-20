@@ -2,6 +2,8 @@
 
 use Illuminate\Database\Seeder;
 
+use Faker\Factory as Faker;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -13,6 +15,41 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call([ContentTableSeeder::class]);
         $this->seedContentTable();
+        $this->seedUsersTable();
+    }
+
+    private function seedUsersTable() {
+        $faker = Faker::create();
+
+        $classes = ['druid', 'hunter', 'mage', 'priest', 'rogue', 'shaman', 'warlock', 'warrior'];
+        $specs = ['holy', 'frost', 'prot', 'arcane', 'resto', 'daggers', 'sword', 'enhancement'];
+        $professions = ['alchemy', 'engineering', 'enchanting', 'blacksmithing', 'leatherworking'];
+        $recipes = ['flask of titans', 'flask of distilled wisdom', 'lionheart'];
+        $races = ['orc', 'tauren', 'undead', 'troll'];
+        $raidGroups = ['Mythic', 'Weekend', 'Night'];
+
+        for ($i = 0; $i < 120; $i++) {
+            DB::table('users')->insert([
+                'username'         => $faker->firstName,
+                'email'            => $faker->unique()->safeEmail,
+                'discord_username' => $faker->name . $faker->numberBetween(1000, 9999),
+                'discord_id'       => Str::random(10),
+                'password'         => null,
+                'class'            => $classes[array_rand($classes)],
+                'spec'             => $specs[array_rand($specs)],
+                'professions'      => $professions[array_rand($professions)],
+                'recipes'          => $recipes[array_rand($recipes)],
+                'alts'             => '60 ' . $races[array_rand($races)] . ' ' . $classes[array_rand($classes)],
+                'rank'             => $faker->numberBetween(1,14),
+                'rank_goal'        => $faker->numberBetween(1,14),
+                'raid_group'       => $raidGroups[array_rand($raidGroups)],
+                'wishlist'         => $faker->words(5, true),
+                'loot_received'    => $faker->words(10, true),
+                'note'             => $faker->sentences(3, true),
+                'officer_note'     => $faker->sentences(3, true),
+                'personal_note'    => $faker->sentences(3, true),
+            ]);
+        }
     }
 
     // For whatever reason, it couldn't find the class to run this so I'm just hacking it like so:
@@ -112,7 +149,11 @@ class DatabaseSeeder extends Seeder
                 'title'          => 'Use This Website',
                 'slug'           => 'use_this_website',
                 'is_news'        => 1,
-                'content'        => 'We\'re making this website to help manage all of the static content such as guides that are cluttering up the Discord server, and to help with administration of the guild and the loot council.\n\n**This website will not replace Discord for communications**; all communications are still meant to take place on Discord.\n<iframe src="http://www.strawpoll.me/embed_1/18889845/r" style="width:680px;height:541px;border:0;">Loading poll...</iframe>',
+                'content'        => 'We\'re making this website to help manage all of the static content such as guides that are cluttering up the Discord server, and to help with administration of the guild and the loot council.
+
+**This website will not replace Discord for communications**; all communications are still meant to take place on Discord.
+
+<iframe src="http://www.strawpoll.me/embed_1/18889845/r" style="width:680px;height:541px;border:0;">Loading poll...</iframe>',
                 'user_id'        => 1,
                 'last_edited_by' => null,
                 'created_at'     => '2019-11-20 00:00:00',

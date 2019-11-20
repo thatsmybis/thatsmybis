@@ -28,6 +28,7 @@ class User extends Authenticatable
         'alts',
         'rank',
         'rank_goal',
+        'raid_group',
         'wishlist',
         'loot_received',
         'note',
