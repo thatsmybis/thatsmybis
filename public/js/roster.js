@@ -1,5 +1,12 @@
+var table = null;
 $(document).ready( function () {
-   createTable();
+   table = createTable();
+
+   $(".toggle-column").click(function(e) {
+        e.preventDefault();
+        let column = table.column($(this).attr("data-column"));
+        column.visible(!column.visible());
+   });
 });
 
 function createTable() {
@@ -47,21 +54,24 @@ function createTable() {
                 "data"   : "alts",
                 "render" : function (data, type, row) {
                     return row.alts;
-                }
+                },
+                "visible" : false
             },
             {
                 "title"  : "Rank",
                 "data"   : "rank",
                 "render" : function (data, type, row) {
                     return row.rank;
-                }
+                },
+                "visible" : false
             },
             {
                 "title"  : "Rank Goal",
                 "data"   : "rank_goal",
                 "render" : function (data, type, row) {
                     return row.rank_goal;
-                }
+                },
+                "visible" : false
             },
             {
                 "title"  : "Wishlist",
@@ -75,7 +85,8 @@ function createTable() {
                 "data"   : "loot_recieved",
                 "render" : function (data, type, row) {
                     return row.loot_received;
-                }
+                },
+                "visible" : false
             },
             {
                 "title"  : "Notes",

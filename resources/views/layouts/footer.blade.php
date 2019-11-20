@@ -1,13 +1,14 @@
 <footer class="footer">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-6 h-100 text-center text-lg-left my-auto">
+            <div class="col-lg-6 h-100 text-center text-lg-left mt-5">
                 <ul class="list-inline mb-2">
                     <li class="list-inline-item">
                         <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server">
                             <img class="discord-link" src="{{ asset('images/discord.svg') }}?v=2" alt="Join the {{ env('APP_NAME') }} Discord" title="Join the {{ env('APP_NAME') }} Discord" />
                         </a>
                     </li>
+                    <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
                         <a href="{{ route('about') }}" class="text-brand">about</a>
                     </li>

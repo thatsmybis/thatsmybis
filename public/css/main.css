@@ -37,6 +37,10 @@ ul.no-bullet, ol.no-bullet, li.no-bullet  {
     list-style-type: none;
 }
 
+.cursor-pointer {
+    cursor: pointer;
+}
+
 /* DARK THEME */
 body {
     color:                 #fff !important;
