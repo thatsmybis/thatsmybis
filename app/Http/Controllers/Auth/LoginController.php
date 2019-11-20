@@ -48,7 +48,7 @@ class LoginController extends Controller
      */
     public function redirectToDiscord() {
         return Socialite::driver('discord')
-            ->scopes(['guilds'])
+            ->scopes([])
             ->redirect();
     }
     /**

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\{User};
 use Auth;
 use Illuminate\Http\Request;
-use LaravelRestcord\Discord\Discord;
 
 class DashboardController extends Controller
 {
@@ -26,9 +25,27 @@ class DashboardController extends Controller
      */
     public function dashboard()
     {
-        // LaravelRestcord\Discord\Discord::class
-        $discord = new Discord();
-        dd($discord);
         return view('dashboard');
+    }
+
+    /**
+     * Show the calendar page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function calendar()
+    {
+        return view('calendar');
+    }
+
+    /**
+     * Show the roster page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function roster()
+    {
+        $members = User::all();
+        return view('roster', ['members' => $members]);
     }
 }

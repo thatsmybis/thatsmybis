@@ -21,6 +21,17 @@ class User extends Authenticatable
         'discord_username',
         'discord_id',
         'password',
+        'class',
+        'spec',
+        'professions',
+        'recipes',
+        'alts',
+        'rank',
+        'rank_goal',
+        'wishlist',
+        'loot_received',
+        'note',
+        'officer_note',
     ];
 
     /**
@@ -32,7 +43,7 @@ class User extends Authenticatable
         'email',
         'password',
         'remember_token',
-        'discord_id'
+        'discord_id',
     ];
 
     /**

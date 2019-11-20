@@ -36,9 +36,34 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/discord/callback', 'Auth\LoginController@handleDiscordCallback');
 });
 
-Route::get( '/dashboard', 'DashboardController@dashboard')    ->name('dashboard');
-
 Route::get( '/about',   'HomeController@about')    ->name('about');
 Route::get( '/contact', 'HomeController@contact')->name('contact');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
+
+Route::get( '/dashboard', 'DashboardController@dashboard')->name('dashboard');
+Route::get( '/calendar',  'DashboardController@calendar') ->name('calendar');
+Route::get( '/recipes',   'RecipesController@index')      ->name('recipes');
+Route::get( '/roster',    'DashboardController@roster')   ->name('roster');
+
+Route::get( '/resources',     'ResourcesController@index')->name('resources');
+Route::get( '/resources/pvp', 'ResourcesController@pvp')->name('pvpResources');
+Route::get( '/resources/pve', 'ResourcesController@pve')->name('pveResources');
+
+Route::get( '/resources/druid',   'ResourcesController@druid')  ->name('druidResources');
+Route::get( '/resources/hunter',  'ResourcesController@hunter') ->name('hunterResources');
+Route::get( '/resources/mage',    'ResourcesController@mage')   ->name('mageResources');
+Route::get( '/resources/priest',  'ResourcesController@priest') ->name('priestResources');
+Route::get( '/resources/rogue',   'ResourcesController@rogue')  ->name('rogueResources');
+Route::get( '/resources/shaman',  'ResourcesController@shaman') ->name('shamanResources');
+Route::get( '/resources/warlock', 'ResourcesController@warlock')->name('warlockResources');
+Route::get( '/resources/warrior', 'ResourcesController@warrior')->name('warriorResources');
+
+Route::post('/{id}', 'ProfileController@submit')->where('id', '[0-9]+')->name('updateUser');
+
+Route::group(['prefix' => '{id}'], function () {
+    Route::get( '/',            'ProfileController@findById')->where('id', '[0-9]+')->name('findUserById');
+    Route::get( '/{username?}', 'ProfileController@showUser')->where('id', '[0-9]+')->name('showUser');
+});
+
+Route::get( '/{username}',      'ProfileController@findByUsername')->name('findUserByUsername');
