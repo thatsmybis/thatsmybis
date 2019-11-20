@@ -67,6 +67,9 @@ class LoginController extends Controller
         $authUser = $this->findUser($unauthUser, 'discord');
 
         if ($authUser) {
+            if ($authUser->banned_at) {
+                abort(403, 'You have been banned.');
+            }
             Auth::login($authUser, true);
             return redirect($this->redirectTo);
         } else if ($unauthUser) {

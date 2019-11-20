@@ -41,6 +41,25 @@ ul.no-bullet, ol.no-bullet, li.no-bullet  {
     cursor: pointer;
 }
 
+hr.light {
+    border-color: #6c757d;
+}
+
+button.link, input[type="submit"].link, input[type="reset"].link {
+    background: none;
+    color: #007bff;
+    border: none;
+    padding: 0;
+    font: inherit;
+    cursor: pointer;
+    outline: inherit;
+}
+
+button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hover {
+    color: #0056b3;
+    text-decoration: underline;
+}
+
 /* DARK THEME */
 body {
     color:                 #fff !important;

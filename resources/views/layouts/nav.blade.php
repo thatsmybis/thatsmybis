@@ -7,8 +7,22 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             <li class="nav-item active">
-                <a class="nav-link" href="{{ route('home') }}">Home</a>
+                <a class="nav-link" href="{{ route('home') }}">News</a>
             </li>
+            @if (Auth::user())
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('roster') }}">Roster</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('calendar') }}">Calendar</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('contentIndex') }}">Resources</a>
+                </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('showUser', ['id' => Auth::user()->id, 'username' => Auth::user()->username]) }}">My Profile</a>
+                </li>
+            @endif
         </ul>
         <div class="my-2 my-lg-0">
             @if (Auth::guest())

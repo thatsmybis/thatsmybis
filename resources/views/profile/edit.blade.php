@@ -120,7 +120,7 @@
 
                 <div class="form-group">
                     <label for="note">
-                        Notes
+                        Public Notes
                     </label>
                     <small class="text-muted">
                         ie. "Rushing for 8/8 tier 1"

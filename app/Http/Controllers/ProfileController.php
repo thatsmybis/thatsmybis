@@ -15,7 +15,7 @@ class ProfileController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('sessionHasDiscordToken');
+        $this->middleware(['auth', 'sessionHasDiscordToken', 'seeUser']);
     }
 
     /**
@@ -125,13 +125,15 @@ class ProfileController extends Controller
         if (request()->input('edit') && Auth::id() == $user->id) {
             return view('profile.edit', [
                 'user' => $user,
-                'showOfficerNote' => false,
+                'showPersonalNote' => Auth::id() == $user->id ? true : false,
+                'showOfficerNote'  => false,
             ]);
         } else {
-            return view('profile.view', [
+            return view('profile.show', [
                 'user' => $user,
-                'canEdit' => Auth::id() == $user->id ? true : false,
-                'showOfficerNote' => false,
+                'showPersonalNote' => Auth::id() == $user->id ? true : false,
+                'canEdit'          => Auth::id() == $user->id ? true : false,
+                'showOfficerNote'  => false,
             ]);
         }
     }
@@ -139,7 +141,7 @@ class ProfileController extends Controller
     /**
      * Update a profile
      *
-     * @param string $username The name of the user to update.
+     * @param int $id The id of the user to update.
      *
      * @return \Illuminate\Http\Response
      */
@@ -181,6 +183,32 @@ class ProfileController extends Controller
             if ($isOfficer) {
                 $updateValues['officer_note']  = request()->input('officer_note');
             }
+
+            $user->update($updateValues);
+        }
+
+        return redirect()->route('showUser', ['id' => $user->id, 'username' => $user->username]);
+    }
+
+    /**
+     * Update a user's personal note
+     *
+     * @param int $id The id of the user to update.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function submitPersonalNote($id = null)
+    {
+        $validationRules =  [
+            'personal_note'  => 'nullable|string|max:5000',
+        ];
+
+        $this->validate(request(), $validationRules);
+
+        $user = User::findOrFail($id);
+
+        if ($user->id == Auth::id()) {
+            $updateValues['personal_note'] = request()->input('personal_note');
 
             $user->update($updateValues);
         }

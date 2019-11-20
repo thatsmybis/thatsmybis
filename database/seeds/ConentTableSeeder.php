@@ -2,21 +2,15 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class ConentTableSeeder extends Seeder
 {
     /**
-     * Seed the application's database.
+     * Run the database seeds.
      *
      * @return void
      */
     public function run()
     {
-        // $this->call([ContentTableSeeder::class]);
-        $this->seedContentTable();
-    }
-
-    // For whatever reason, it couldn't find the class to run this so I'm just hacking it like so:
-    private function seedContentTable() {
         $content = [
             [
                 'title'          => 'PvP Resources',
@@ -25,7 +19,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# PvP Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'PvE Resources',
@@ -34,7 +27,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# PvE Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'Druid Resources',
@@ -43,7 +35,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# Druid Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'Hunter Resources',
@@ -52,7 +43,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# Hunter Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'Mage Resources',
@@ -61,7 +51,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# Mage Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'Priest Resources',
@@ -70,7 +59,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# Priest Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'Rogue Resources',
@@ -79,7 +67,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# Rogue Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'Shaman Resources',
@@ -88,7 +75,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# Shaman Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'Warlock Resources',
@@ -97,7 +83,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# Warlock Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'Warrior Resources',
@@ -106,16 +91,14 @@ class DatabaseSeeder extends Seeder
                 'content'        => '# Warrior Resources',
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
             [
                 'title'          => 'Use This Website',
                 'slug'           => 'use_this_website',
                 'is_news'        => 1,
-                'content'        => 'We\'re making this website to help manage all of the static content such as guides that are cluttering up the Discord server, and to help with administration of the guild and the loot council.\n\n**This website will not replace Discord for communications**; all communications are still meant to take place on Discord.\n<iframe src="http://www.strawpoll.me/embed_1/18889845/r" style="width:680px;height:541px;border:0;">Loading poll...</iframe>',
+                'content'        => "We're making this website to help manage all of the static content such as guides that are cluttering up the Discord server, and to help with administration of the guild and the loot council.\n\n**This website will not replace Discord for communications**; all communications are still meant to take place on Discord.",
                 'user_id'        => 1,
                 'last_edited_by' => null,
-                'created_at'     => '2019-11-20 00:00:00',
             ],
         ];
 
@@ -127,7 +110,6 @@ class DatabaseSeeder extends Seeder
                 'content'        => $content['content'],
                 'user_id'        => $content['user_id'],
                 'last_edited_by' => $content['last_edited_by'],
-                'created_at'     => $content['created_at'],
             ]);
         }
     }

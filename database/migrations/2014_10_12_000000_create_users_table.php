@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('discord_id')->nullable()->unique();
             $table->string('discord_username')->nullable();
             $table->string('discord_avatar')->nullable();
+            $table->timestamp('banned_at')->nullable()->index();
             $table->rememberToken();
             $table->timestamps();
         });

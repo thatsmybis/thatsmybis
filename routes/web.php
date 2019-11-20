@@ -46,20 +46,14 @@ Route::get( '/calendar',  'DashboardController@calendar') ->name('calendar');
 Route::get( '/recipes',   'RecipesController@index')      ->name('recipes');
 Route::get( '/roster',    'DashboardController@roster')   ->name('roster');
 
-Route::get( '/resources',     'ResourcesController@index')->name('resources');
-Route::get( '/resources/pvp', 'ResourcesController@pvp')->name('pvpResources');
-Route::get( '/resources/pve', 'ResourcesController@pve')->name('pveResources');
+Route::get( '/resources',        'ContentController@index')->name('contentIndex');
+Route::get( '/resources/{slug}', 'ContentController@show')->name('showContent');
 
-Route::get( '/resources/druid',   'ResourcesController@druid')  ->name('druidResources');
-Route::get( '/resources/hunter',  'ResourcesController@hunter') ->name('hunterResources');
-Route::get( '/resources/mage',    'ResourcesController@mage')   ->name('mageResources');
-Route::get( '/resources/priest',  'ResourcesController@priest') ->name('priestResources');
-Route::get( '/resources/rogue',   'ResourcesController@rogue')  ->name('rogueResources');
-Route::get( '/resources/shaman',  'ResourcesController@shaman') ->name('shamanResources');
-Route::get( '/resources/warlock', 'ResourcesController@warlock')->name('warlockResources');
-Route::get( '/resources/warrior', 'ResourcesController@warrior')->name('warriorResources');
+Route::post('/updateContent/{id?}', 'ContentController@update')->where('id', '[0-9]+')->name('updateContent');
+Route::post('/removeContent/{id}',  'ContentController@remove')->where('id', '[0-9]+')->name('removeContent');
 
-Route::post('/{id}', 'ProfileController@submit')->where('id', '[0-9]+')->name('updateUser');
+Route::post('/{id}/updateAll',          'ProfileController@submit')->where('id', '[0-9]+')            ->name('updateUser');
+Route::post('/{id}/updatePersonalNote', 'ProfileController@submitPersonalNote')->where('id', '[0-9]+')->name('updateUserPersonalNote');
 
 Route::group(['prefix' => '{id}'], function () {
     Route::get( '/',            'ProfileController@findById')->where('id', '[0-9]+')->name('findUserById');

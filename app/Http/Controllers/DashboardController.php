@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{User};
+use App\{Content, User};
 use Auth;
 use Illuminate\Http\Request;
 
@@ -15,7 +15,7 @@ class DashboardController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('sessionHasDiscordToken');
+        $this->middleware(['auth', 'sessionHasDiscordToken', 'seeUser']);
     }
 
     /**
@@ -25,7 +25,8 @@ class DashboardController extends Controller
      */
     public function dashboard()
     {
-        return view('dashboard');
+        $news = Content::where('is_news', 1)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
+        return view('dashboard', ['news' => $news]);
     }
 
     /**

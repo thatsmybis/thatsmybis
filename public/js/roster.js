@@ -40,7 +40,8 @@ function createTable() {
                 "data"   : "professions",
                 "render" : function (data, type, row) {
                     return row.professions;
-                }
+                },
+                "visible" : false
             },
             {
                 "title"  : "Rare Recipes",

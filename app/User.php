@@ -32,6 +32,7 @@ class User extends Authenticatable
         'loot_received',
         'note',
         'officer_note',
+        'personal_note',
     ];
 
     /**
@@ -44,6 +45,7 @@ class User extends Authenticatable
         'password',
         'remember_token',
         'discord_id',
+        'personal_note',
     ];
 
     /**
