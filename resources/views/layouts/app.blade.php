@@ -11,8 +11,8 @@
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="en_CA" />
     <meta property="og:locale:alternate" content="en_GB" />
-    <meta property="og:image" content="@yield('image', '')" />
-    <meta property="og:image:url" content="@yield('image', '')" />
+    <meta property="og:image" content="@yield('image', 'https://random-content.s3.amazonaws.com/logo.jpeg')" />
+    <meta property="og:image:url" content="@yield('image', 'https://random-content.s3.amazonaws.com/logo.jpeg')" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:site_name" content="{{ env('APP_NAME') }}" />
     <meta property="fb:app_id" content="" />
