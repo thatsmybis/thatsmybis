@@ -36,14 +36,14 @@
                     </small>
                     <select name="class" class="form-control">
                         <option value="">—</option>
-                        <option value="druid" {{ old('class')   && old('class') == 'druid'   ? 'selected' : ($user->class && $user->class == 'druid'   ? 'selected' : '') }}>Druid</option>
-                        <option value="hunter" {{ old('class')  && old('class') == 'hunter'  ? 'selected' : ($user->class && $user->class == 'hunter'  ? 'selected' : '') }}>Hunter</option>
-                        <option value="mage" {{ old('class')    && old('class') == 'mage'    ? 'selected' : ($user->class && $user->class == 'mage'    ? 'selected' : '') }}>Mage</option>
-                        <option value="priest" {{ old('class')  && old('class') == 'priest'  ? 'selected' : ($user->class && $user->class == 'priest'  ? 'selected' : '') }}>Priest</option>
-                        <option value="rogue" {{ old('class')   && old('class') == 'rogue'   ? 'selected' : ($user->class && $user->class == 'rogue'   ? 'selected' : '') }}>Rogue</option>
-                        <option value="shaman" {{ old('class')  && old('class') == 'shaman'  ? 'selected' : ($user->class && $user->class == 'shaman'  ? 'selected' : '') }}>Shaman</option>
-                        <option value="warlock" {{ old('class') && old('class') == 'warlock' ? 'selected' : ($user->class && $user->class == 'warlock' ? 'selected' : '') }}>Warlock</option>
-                        <option value="warrior" {{ old('class') && old('class') == 'warrior' ? 'selected' : ($user->class && $user->class == 'warrior' ? 'selected' : '') }}>Warrior</option>
+                        <option value="Druid" {{ old('class')   && old('class') == 'Druid'   ? 'selected' : ($user->class && $user->class == 'Druid'   ? 'selected' : '') }}>Druid</option>
+                        <option value="Hunter" {{ old('class')  && old('class') == 'Hunter'  ? 'selected' : ($user->class && $user->class == 'Hunter'  ? 'selected' : '') }}>Hunter</option>
+                        <option value="Mage" {{ old('class')    && old('class') == 'Mage'    ? 'selected' : ($user->class && $user->class == 'Mage'    ? 'selected' : '') }}>Mage</option>
+                        <option value="Priest" {{ old('class')  && old('class') == 'Priest'  ? 'selected' : ($user->class && $user->class == 'Priest'  ? 'selected' : '') }}>Priest</option>
+                        <option value="Rogue" {{ old('class')   && old('class') == 'Rogue'   ? 'selected' : ($user->class && $user->class == 'Rogue'   ? 'selected' : '') }}>Rogue</option>
+                        <option value="Shaman" {{ old('class')  && old('class') == 'Shaman'  ? 'selected' : ($user->class && $user->class == 'Shaman'  ? 'selected' : '') }}>Shaman</option>
+                        <option value="Warlock" {{ old('class') && old('class') == 'Warlock' ? 'selected' : ($user->class && $user->class == 'Warlock' ? 'selected' : '') }}>Warlock</option>
+                        <option value="Warrior" {{ old('class') && old('class') == 'Warrior' ? 'selected' : ($user->class && $user->class == 'Warrior' ? 'selected' : '') }}>Warrior</option>
                     </select>
                 </div>
 
