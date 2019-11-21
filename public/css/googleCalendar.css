@@ -1,10 +1,13 @@
 /* Google Calendar overrides */
+/* time */
 .te-t {
     white-space: normal !important;
     font-weight: bold !important;
+    font-size: 12px !important;
 }
 
 .te-s {
     white-space: normal !important;
     font-weight: bold !important;
+    font-size: 14px !important;
 }
