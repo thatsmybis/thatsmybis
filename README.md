@@ -11,6 +11,28 @@ Laravel was chosen as the framework for the project. Why? It's a very popular PH
 
 (Nov 16, 2019) A CMS for Laravel hasn't been chosen yet, but one will be chosen and added in.
 
+## FAQ
+
+### Q: Where are the pages?
+`/resources/views`. They're PHP templates made with the [Blade](https://laravel.com/docs/6.x/blade) templating engine, so you'll see some non-html stuff mixed in there.
+
+### Q: Where's the Javascript?
+`/public/js`. Right now, (2019-11-21) there's nothing setup to minify, transpile, or cache bust it. Just a barebones implementation.
+
+For some pages, it's at the bottom of the template. This **does not** follow best practices, but was instead done in the interest of saving time and pushing out a quick MVP.
+
+### Q: Where's the CSS?
+`/public/css`. Not using SASS, minifying, or any of that jazz just yet. (2019-11-21)
+
+### Q: How do I add a page?
+Start by adding it into `/routes/web.php` ([docs here](https://laravel.com/docs/6.x/routing)), then handle it in the appropriate controller in `/app/Http/Controllers`. It's possible to skip using a controller and do it inline in the `web.php` file, but that can get messy.
+
+### Q: How do I access the database?
+There isn't a GUI yet (such as phpMyAdmin), so you'll need to use the terminal or set up a GUI yourself.
+
+### Q: I have more questions.
+Reach out to Lemmings19 here on GitHub or on Discord if you can find me. :)
+
 ## Local Environment Setup
 The easiest way to get a local envrionment setup is with Laravel's configuration for Vagrant. Vagrant is a tool that makes it relatively painless to spin up a virtual machine containing a standardized dev environment for a specific project. This means that rather than configuring your operating system to have the appropriate packages, webserver, databases, and other requirements for this project, you just download and boot up a virtual machine that already has all that crap set up. This allows many developers to run the same dev environment, reducing troubleshooting and headaches, and putting more focus on the project itself.
 
