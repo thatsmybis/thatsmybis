@@ -15,7 +15,7 @@ class DatabaseSeeder extends Seeder
     {
         // $this->call([ContentTableSeeder::class]);
         $this->seedContentTable();
-        $this->seedUsersTable();
+        // $this->seedUsersTable();
     }
 
     private function seedUsersTable() {

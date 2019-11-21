@@ -11,7 +11,7 @@ Laravel was chosen as the framework for the project. Why? It's a very popular PH
 
 (Nov 16, 2019) A CMS for Laravel hasn't been chosen yet, but one will be chosen and added in.
 
-## Environment Setup
+## Local Environment Setup
 The easiest way to get a local envrionment setup is with Laravel's configuration for Vagrant. Vagrant is a tool that makes it relatively painless to spin up a virtual machine containing a standardized dev environment for a specific project. This means that rather than configuring your operating system to have the appropriate packages, webserver, databases, and other requirements for this project, you just download and boot up a virtual machine that already has all that crap set up. This allows many developers to run the same dev environment, reducing troubleshooting and headaches, and putting more focus on the project itself.
 
 Now, there's still going to be a little bit of work and learning curve involved in getting that VM setup. But believe me, it's better than the alternative.
@@ -67,3 +67,50 @@ tl;dr
 - Run `vagrant ssh`
 - Run `composer install` from `/home/vagrant/code/aftershock-wow`
 - Create a file named `.env` in `/home/vagrant/code/aftershock-wow`. Base it off of `.env.example` or ask another dev for what details to fill in.
+
+## Server Environment Setup
+
+I used Ubuntu 18.04. Here's some notes for stuff I had to install and configure:
+
+```
+sudo apt update
+sudo apt install
+sudo apt install apache2
+sudo apt install software-properties-common
+sudo add-apt-repository ppa:ondrej/php
+sudo apt update
+sudo apt install php7.3-fpm
+sudo apt install php7.3
+sudo apt install mysql-server
+sudo mysql_secure_installation
+sudo service apache2 restart
+sudo apt-get install php7.3-mbstring
+sudo apt-get install php7.3-dom
+sudo apt-get install php7.3-zip
+sudo apt-get install php7.3-curl
+sudo apt-get install php7.3-mysql
+sudo a2enmod rewrite
+sudo nano /etc/apache2/apache2.conf
+    > modified `<Directory /var/www/>` to have `AllowOverride All` instead of `AllowOverride None`
+sudo service apache2 restart
+cd /var/www/html
+sudo mkdir aftershock
+sudo chown ubuntu: aftershock
+git clone https://github.com/Lemmings19/aftershock.git aftershock
+cd aftershock
+git config --global credential.helper store
+git pull
+chmod -R 777 storage
+    > this is probably bad
+touch .env
+nano .env
+    > copy in environment settings
+composer install
+sudo mysql -u root -p
+    > CREATE USER 'laravel'@'localhost' IDENTIFIED BY 'enter_a_password_here';
+    > GRANT ALL PRIVILEGES ON *.* TO 'laravel'@'localhost';
+    > UPDATE user SET plugin='mysql_native_password' WHERE User='laravel';
+    > FLUSH PRIVILEGES;
+    > exit;
+sudo service mysql restart
+```
