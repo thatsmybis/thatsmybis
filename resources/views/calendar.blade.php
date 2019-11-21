@@ -5,11 +5,9 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-12 text-center">
-            <iframe src="https://calendar.google.com/calendar/embed?src=kb05a7c6hee4eb1b2dge8niro0%40group.calendar.google.com&ctz=America%2FNew_York"
-                style="border: 0"
-                width="800"
-                height="600"
+        <div class="col-12 text-center" style="height: 88vh; min-height: 500px; min-width: 625px;">
+            <iframe src="http://{{ $_SERVER['SERVER_NAME'] }}/calendar/iframe"
+                style="border: 0; height: 100%; width: 100%;"
                 frameborder="0"
                 scrolling="no"></iframe>
         </div>

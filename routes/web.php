@@ -41,9 +41,10 @@ Route::get( '/contact', 'HomeController@contact')->name('contact');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 
-Route::get( '/dashboard', 'DashboardController@dashboard')->name('dashboard');
-Route::get( '/calendar',  'DashboardController@calendar') ->name('calendar');
-Route::get( '/roster',    'DashboardController@roster')   ->name('roster');
+Route::get( '/dashboard',       'DashboardController@dashboard')->name('dashboard');
+Route::get( '/calendar',        'DashboardController@calendar') ->name('calendar');
+Route::get( '/calendar/iframe', 'DashboardController@calendarIframe') ->name('calendarIframe');
+Route::get( '/roster',          'DashboardController@roster')   ->name('roster');
 
 Route::get( '/resources',        'ContentController@index')->name('contentIndex');
 Route::get( '/resources/{slug}', 'ContentController@show')->name('showContent');
