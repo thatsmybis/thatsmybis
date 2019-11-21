@@ -289,15 +289,6 @@
 @section('scripts')
 <script>
     $(document).ready(function() {
-        $("[name=profession_select]").click(function () {
-            // Find the next available input
-            let input = $(this).parent().next().children().children().filter(function(){ return !this.value;}).first();
-
-            if (input) {
-                input.val($(this).val()).change();
-            }
-        });
-
         $(".js-show-next").change(function() {
             showNext(this);
         }).change();

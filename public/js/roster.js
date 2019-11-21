@@ -161,7 +161,8 @@ function createTable() {
                 "data"   : "officer_note",
                 "render" : function (data, type, row) {
                     return nl2br(row.officer_note);
-                }
+                },
+                "visible" : false
             },
         ],
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
