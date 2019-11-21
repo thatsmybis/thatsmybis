@@ -69,7 +69,7 @@ function createTable() {
                 "title"  : "Name",
                 "data"   : "username",
                 "render" : function (data, type, row) {
-                    return `<a href="${row.id}/${row.username}" class="text-${row.class} font-weight-bold">${row.username}</a>`;
+                    return `<a href="${row.id}/${row.username}" class="text-${row.class.toLowerCase()} font-weight-bold">${row.username}</a>`;
                 }
             },
             {
