@@ -49,10 +49,6 @@ hr.light {
     border-color: #6c757d;
 }
 
-.full-height {
-    height: 100%;
-}
-
 button.link, input[type="submit"].link, input[type="reset"].link {
     background: none;
     color: #007bff;

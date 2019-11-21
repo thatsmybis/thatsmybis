@@ -62,39 +62,32 @@
                         Professions
                     </label>
                     <small class="text-muted">
-                        Your main's professions
+                        SELECT ALL THAT APPLY
                     </small>
 
-                    <select name="profession_select" class="form-control full-height" multiple size="16">
-                        <option value="Alchemy"                      {{ old('profession') && old('profession') == "Alchemy"                     ? 'selected' : '' }}>Alchemy</option>
-                        <option value="Blacksmithing"                {{ old('profession') && old('profession') == "Blacksmithing"               ? 'selected' : '' }}>Blacksmithing</option>
-                        <option value="Blacksmithing - Armorsmith"   {{ old('profession') && old('profession') == "Blacksmithing - Armorsmith"  ? 'selected' : '' }}>Blacksmithing - Armorsmith</option>
-                        <option value="Blacksmithing - Weaponsmith"  {{ old('profession') && old('profession') == "Blacksmithing - Weaponsmith" ? 'selected' : '' }}>Blacksmithing - Weaponsmith</option>
-                        <option value="Enchanting"                   {{ old('profession') && old('profession') == "Enchanting"                  ? 'selected' : '' }}>Enchanting</option>
-                        <option value="Engineering"                  {{ old('profession') && old('profession') == "Engineering"                 ? 'selected' : '' }}>Engineering</option>
-                        <option value="Engineering - Gnome"          {{ old('profession') && old('profession') == "Engineering - Gnome"         ? 'selected' : '' }}>Engineering - Gnome</option>
-                        <option value="Engineering - Goblin"         {{ old('profession') && old('profession') == "Engineering - Goblin"        ? 'selected' : '' }}>Engineering - Goblin</option>
-                        <option value="Herbalism"                    {{ old('profession') && old('profession') == "Herbalism"                   ? 'selected' : '' }}>Herbalism</option>
-                        <option value="Leatherworking"               {{ old('profession') && old('profession') == "Leatherworking"              ? 'selected' : '' }}>Leatherworking</option>
-                        <option value="Leatherworking - Elemental"   {{ old('profession') && old('profession') == "Leatherworking - Elemental"  ? 'selected' : '' }}>Leatherworking - Elemental</option>
-                        <option value="Leatherworking - Dragonscale" {{ old('profession') && old('profession') == "Leatherworking - Dragonscale"? 'selected' : '' }}>Leatherworking - Dragonscale</option>
-                        <option value="Leatherworking - Tribal"      {{ old('profession') && old('profession') == "Leatherworking - Tribal"     ? 'selected' : '' }}>Leatherworking - Tribal</option>
-                        <option value="Mining"                       {{ old('profession') && old('profession') == "Mining"                      ? 'selected' : '' }}>Mining</option>
-                        <option value="Skinning"                     {{ old('profession') && old('profession') == "Skinning"                    ? 'selected' : '' }}>Skinning</option>
-                        <option value="Tailoring"                    {{ old('profession') && old('profession') == "Tailoring"                   ? 'selected' : '' }}>Tailoring</option>
-                    </select>
-                </div>
-                <div class="form-group">
                     <?php
                     $professionsArray = splitByLine($user->professions);
                     $professionsLength = count($professionsArray) - 1;
                     ?>
 
-                    @for ($i = 0; $i < 10; $i++)
-                        <div class="form-group {{ $i > 1 ? 'js-hide-empty' : '' }}" style="{{ $i > 1 ? 'display:none;' : '' }}">
-                            <input name="professions[]" maxlength="200" type="text" class="{{ $i > 0 ? 'js-show-next' : '' }} form-control" placeholder="eg. Skinning" value="{{ old('professions.' . $i) ? old('professions.' . $i) : ($professionsLength  >= $i ? $professionsArray[$i] : '') }}" />
-                        </div>
-                    @endfor
+                    <select name="professions[]" class="form-control" size="16" multiple>
+                        <option value="Alchemy"                      {{ old('professions') && old('professions') == "Alchemy"                     ? 'selected' : (in_array("Alchemy"                     , $professionsArray) ? 'selected' : '') }}>Alchemy</option>
+                        <option value="Blacksmithing"                {{ old('professions') && old('professions') == "Blacksmithing"               ? 'selected' : (in_array("Blacksmithing"               , $professionsArray) ? 'selected' : '') }}>Blacksmithing</option>
+                        <option value="Blacksmithing - Armorsmith"   {{ old('professions') && old('professions') == "Blacksmithing - Armorsmith"  ? 'selected' : (in_array("Blacksmithing - Armorsmith"  , $professionsArray) ? 'selected' : '') }}>Blacksmithing - Armorsmith</option>
+                        <option value="Blacksmithing - Weaponsmith"  {{ old('professions') && old('professions') == "Blacksmithing - Weaponsmith" ? 'selected' : (in_array("Blacksmithing - Weaponsmith" , $professionsArray) ? 'selected' : '') }}>Blacksmithing - Weaponsmith</option>
+                        <option value="Enchanting"                   {{ old('professions') && old('professions') == "Enchanting"                  ? 'selected' : (in_array("Enchanting"                  , $professionsArray) ? 'selected' : '') }}>Enchanting</option>
+                        <option value="Engineering"                  {{ old('professions') && old('professions') == "Engineering"                 ? 'selected' : (in_array("Engineering"                 , $professionsArray) ? 'selected' : '') }}>Engineering</option>
+                        <option value="Engineering - Gnome"          {{ old('professions') && old('professions') == "Engineering - Gnome"         ? 'selected' : (in_array("Engineering - Gnome"         , $professionsArray) ? 'selected' : '') }}>Engineering - Gnome</option>
+                        <option value="Engineering - Goblin"         {{ old('professions') && old('professions') == "Engineering - Goblin"        ? 'selected' : (in_array("Engineering - Goblin"        , $professionsArray) ? 'selected' : '') }}>Engineering - Goblin</option>
+                        <option value="Herbalism"                    {{ old('professions') && old('professions') == "Herbalism"                   ? 'selected' : (in_array("Herbalism"                   , $professionsArray) ? 'selected' : '') }}>Herbalism</option>
+                        <option value="Leatherworking"               {{ old('professions') && old('professions') == "Leatherworking"              ? 'selected' : (in_array("Leatherworking"              , $professionsArray) ? 'selected' : '') }}>Leatherworking</option>
+                        <option value="Leatherworking - Elemental"   {{ old('professions') && old('professions') == "Leatherworking - Elemental"  ? 'selected' : (in_array("Leatherworking - Elemental"  , $professionsArray) ? 'selected' : '') }}>Leatherworking - Elemental</option>
+                        <option value="Leatherworking - Dragonscale" {{ old('professions') && old('professions') == "Leatherworking - Dragonscale"? 'selected' : (in_array("Leatherworking - Dragonscale", $professionsArray) ? 'selected' : '') }}>Leatherworking - Dragonscale</option>
+                        <option value="Leatherworking - Tribal"      {{ old('professions') && old('professions') == "Leatherworking - Tribal"     ? 'selected' : (in_array("Leatherworking - Tribal"     , $professionsArray) ? 'selected' : '') }}>Leatherworking - Tribal</option>
+                        <option value="Mining"                       {{ old('professions') && old('professions') == "Mining"                      ? 'selected' : (in_array("Mining"                      , $professionsArray) ? 'selected' : '') }}>Mining</option>
+                        <option value="Skinning"                     {{ old('professions') && old('professions') == "Skinning"                    ? 'selected' : (in_array("Skinning"                    , $professionsArray) ? 'selected' : '') }}>Skinning</option>
+                        <option value="Tailoring"                    {{ old('professions') && old('professions') == "Tailoring"                   ? 'selected' : (in_array("Tailoring"                   , $professionsArray) ? 'selected' : '') }}>Tailoring</option>
+                    </select>
                 </div>
 
                 <div class="form-group mt-5">
