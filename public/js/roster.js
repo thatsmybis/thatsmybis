@@ -90,7 +90,7 @@ function createTable() {
                 "title"  : "Professions",
                 "data"   : "professions",
                 "render" : function (data, type, row) {
-                    return row.professions;
+                    return nl2br(row.professions);
                 },
                 "visible" : false
             },
@@ -98,14 +98,14 @@ function createTable() {
                 "title"  : "Rare Recipes",
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
-                    return row.recipes;
+                    return nl2br(row.recipes);
                 }
             },
             {
                 "title"  : "Alts",
                 "data"   : "alts",
                 "render" : function (data, type, row) {
-                    return row.alts;
+                    return nl2br(row.alts);
                 },
                 "visible" : false
             },
@@ -137,7 +137,7 @@ function createTable() {
                 "title"  : "Wishlist",
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
-                    return row.wishlist;
+                    return nl2br(row.wishlist);
                 },
                 "visible" : false
             },
@@ -145,7 +145,7 @@ function createTable() {
                 "title"  : "Raid Loot",
                 "data"   : "loot_recieved",
                 "render" : function (data, type, row) {
-                    return row.loot_received;
+                    return nl2br(row.loot_received);
                 },
                 "visible" : false
             },
@@ -153,14 +153,14 @@ function createTable() {
                 "title"  : "Notes",
                 "data"   : "note",
                 "render" : function (data, type, row) {
-                    return row.note;
+                    return nl2br(row.note);
                 }
             },
             {
                 "title"  : "Officer Notes",
                 "data"   : "officer_note",
                 "render" : function (data, type, row) {
-                    return row.officer_note;
+                    return nl2br(row.officer_note);
                 }
             },
         ],

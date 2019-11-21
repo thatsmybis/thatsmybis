@@ -22,10 +22,28 @@
         <div class="col-12 {{ $showPersonalNote ? 'col-md-6' : '' }}">
             <div class="row mb-3">
                 <div class="col-12">
+                    <span class="text-muted font-weight-bold">Raid Group</span>
+                </div>
+                <div class="col-12">
+                    {{ $user->raid_group ? $user->raid_group : '—' }}
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-12">
                     <span class="text-muted font-weight-bold">Professions</span>
                 </div>
                 <div class="col-12">
-                    {{ $user->professions ? $user->professions : '—' }}
+                    @if ($user->professions)
+                        <ul class="lesser-indent">
+                            @foreach (explode("\n", $user->professions) as $value)
+                                <li class="js-markdown-inline">
+                                    {{ $value }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        —
+                    @endif
                 </div>
             </div>
 
@@ -34,7 +52,17 @@
                     <span class="text-muted font-weight-bold">Recipes</span>
                 </div>
                 <div class="col-12">
-                    {{ $user->recipes ? $user->recipes : '—' }}
+                    @if ($user->recipes)
+                        <ul class="lesser-indent">
+                            @foreach (explode("\n", $user->recipes) as $value)
+                                <li class="js-markdown-inline">
+                                    {{ $value }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        —
+                    @endif
                 </div>
             </div>
 
@@ -43,7 +71,17 @@
                     <span class="text-muted font-weight-bold">Alts</span>
                 </div>
                 <div class="col-12">
-                    {{ $user->alts ? $user->alts : '—' }}
+                    @if ($user->alts)
+                        <ul class="lesser-indent">
+                            @foreach (explode("\n", $user->alts) as $value)
+                                <li class="js-markdown-inline">
+                                    {{ $value }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        —
+                    @endif
                 </div>
             </div>
 
@@ -70,7 +108,17 @@
                     <span class="text-muted font-weight-bold">Wishlist</span>
                 </div>
                 <div class="col-12">
-                    {{ $user->wishlist ? $user->wishlist : '—' }}
+                    @if ($user->wishlist)
+                        <ul class="lesser-indent">
+                            @foreach (explode("\n", $user->wishlist) as $value)
+                                <li class="js-markdown-inline">
+                                    {{ $value }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        —
+                    @endif
                 </div>
             </div>
 
@@ -79,7 +127,17 @@
                     <span class="text-muted font-weight-bold">Loot Received</span>
                 </div>
                 <div class="col-12">
-                    {{ $user->loot_received ? $user->loot_received : '—' }}
+                    @if ($user->loot_received)
+                        <ul class="lesser-indent">
+                            @foreach (explode("\n", $user->loot_received) as $value)
+                                <li class="js-markdown-inline">
+                                    {{ $value }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        —
+                    @endif
                 </div>
             </div>
 

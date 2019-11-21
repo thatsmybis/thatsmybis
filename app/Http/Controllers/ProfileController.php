@@ -148,18 +148,19 @@ class ProfileController extends Controller
     public function submit($id = null)
     {
         $validationRules =  [
-            'username'      => 'string|max:255',
-            'spec'          => 'nullable|string|max:50',
-            'class'         => 'nullable|string|max:20',
-            'professions'   => 'nullable|string|max:1000',
-            'recipes'       => 'nullable|string|max:1000',
-            'alts'          => 'nullable|string|max:300',
-            'rank'          => 'nullable|string|max:50',
-            'rank_goal'     => 'nullable|string|max:50',
-            'wishlist'      => 'nullable|string|max:1000',
-            'loot_received' => 'nullable|string|max:1000',
-            'note'          => 'nullable|string|max:1000',
-            'officer_note'  => 'nullable|string|max:1000',
+            'username'        => 'string|max:255',
+            'spec'            => 'nullable|string|max:50',
+            'class'           => 'nullable|string|max:20',
+            'professions.*'   => 'nullable|string|max:100',
+            'recipes.*'       => 'nullable|string|max:100',
+            'alts.*'          => 'nullable|string|max:50',
+            'rank'            => 'nullable|string|max:50',
+            'rank_goal'       => 'nullable|string|max:50',
+            'raid_group'      => 'nullable|string|max:50',
+            'wishlist.*'      => 'nullable|string|max:100',
+            'loot_received.*' => 'nullable|string|max:100',
+            'note'            => 'nullable|string|max:1000',
+            'officer_note'    => 'nullable|string|max:1000',
         ];
 
         $this->validate(request(), $validationRules);
@@ -171,13 +172,14 @@ class ProfileController extends Controller
             $updateValues['username']      = request()->input('username');
             $updateValues['spec']          = request()->input('spec');
             $updateValues['class']         = request()->input('class');
-            $updateValues['professions']   = request()->input('professions');
-            $updateValues['recipes']       = request()->input('recipes');
-            $updateValues['alts']          = request()->input('alts');
+            $updateValues['professions']   = implode(array_filter(request()->input('professions')), "\n");
+            $updateValues['recipes']       = implode(array_filter(request()->input('recipes')), "\n");
+            $updateValues['alts']          = implode(array_filter(request()->input('alts')), "\n");
             $updateValues['rank']          = request()->input('rank');
             $updateValues['rank_goal']     = request()->input('rank_goal');
-            $updateValues['wishlist']      = request()->input('wishlist');
-            $updateValues['loot_received'] = request()->input('loot_received');
+            $updateValues['raid_group']    = request()->input('raid_group');
+            $updateValues['wishlist']      = implode(array_filter(request()->input('wishlist')), "\n");
+            $updateValues['loot_received'] = implode(array_filter(request()->input('loot_received')), "\n");
             $updateValues['note']          = request()->input('note');
 
             if (false && $isOfficer) {  // TODO: Add permissions check

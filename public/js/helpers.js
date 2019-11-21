@@ -89,6 +89,17 @@ function trackTimestamps(rate = 15000) {
 }
 
 /**
+ * Convert newlines to <br> tags. Given the odd name because that's the name PHP uses.
+ *
+ * @param string string The string to convert.
+ *
+ * @return string
+ */
+function nl2br(string) {
+    return string ? string.replace(/\n/g,"<br>") : '';
+}
+
+/**
  * Parse markdown in the given element from markdown into HTML.
  * If no element is provided, do it for all markdown elements.
  */
@@ -179,6 +190,13 @@ function parseMarkdown(element = null) {
         $(".js-markdown").each(function () {
             if (!$(this).hasClass("js-markdown-parsed")) {
                 $(this).html(marked($.trim($(this).text()), {renderer: render}));
+                $(this).addClass("js-markdown-parsed");
+            }
+        });
+
+        $(".js-markdown-inline").each(function () {
+            if (!$(this).hasClass("js-markdown-parsed")) {
+                $(this).html(marked.inlineLexer($.trim($(this).text()), {renderer: render}));
                 $(this).addClass("js-markdown-parsed");
             }
         });

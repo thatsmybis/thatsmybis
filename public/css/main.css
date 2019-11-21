@@ -37,12 +37,20 @@ ul.no-bullet, ol.no-bullet, li.no-bullet  {
     list-style-type: none;
 }
 
+ol.lesser-indent, ul.lesser-indent {
+    padding-left: 1em;
+}
+
 .cursor-pointer {
     cursor: pointer;
 }
 
 hr.light {
     border-color: #6c757d;
+}
+
+.full-height {
+    height: 100%;
 }
 
 button.link, input[type="submit"].link, input[type="reset"].link {
