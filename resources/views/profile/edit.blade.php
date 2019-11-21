@@ -92,7 +92,7 @@
 
                     @for ($i = 0; $i < 10; $i++)
                         <div class="form-group {{ $i > 1 ? 'js-hide-empty' : '' }}" style="{{ $i > 1 ? 'display:none;' : '' }}">
-                            <input name="professions[]" maxlength="200" type="text" class="{{ $i > 0 ? 'js-show-next' : '' }} form-control" placeholder="eg. Obsidian Edged Blade" value="{{ old('professions.' . $i) ? old('professions.' . $i) : ($professionsLength  >= $i ? $professionsArray[$i] : '') }}" />
+                            <input name="professions[]" maxlength="200" type="text" class="{{ $i > 0 ? 'js-show-next' : '' }} form-control" placeholder="eg. Skinning" value="{{ old('professions.' . $i) ? old('professions.' . $i) : ($professionsLength  >= $i ? $professionsArray[$i] : '') }}" />
                         </div>
                     @endfor
                 </div>
@@ -260,7 +260,7 @@
 
                     @for ($i = 0; $i < 30; $i++)
                         <div class="form-group {{ $i > 1 ? 'js-hide-empty' : '' }}" style="{{ $i > 1 ? 'display:none;' : '' }}">
-                            <input name="loot_received[]" maxlength="200" type="text" class="{{ $i > 0 ? 'js-show-next' : '' }} form-control" placeholder="eg. Obsidian Edged Blade" value="{{ old('loot_received.' . $i) ? old('loot_received.' . $i) : ($lootLength  >= $i ? $lootArray[$i] : '') }}" />
+                            <input name="loot_received[]" maxlength="200" type="text" class="{{ $i > 0 ? 'js-show-next' : '' }} form-control" placeholder="eg. Core Hound Tooth" value="{{ old('loot_received.' . $i) ? old('loot_received.' . $i) : ($lootLength  >= $i ? $lootArray[$i] : '') }}" />
                         </div>
                     @endfor
                 </div>

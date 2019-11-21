@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Contact - ' . config('app.name'))
+@section('title', 'About - ' . config('app.name'))
 
 
 @section('content')

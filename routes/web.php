@@ -36,14 +36,13 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/discord/callback', 'Auth\LoginController@handleDiscordCallback');
 });
 
-Route::get( '/about',   'HomeController@about')    ->name('about');
+Route::get( '/about',   'HomeController@about')  ->name('about');
 Route::get( '/contact', 'HomeController@contact')->name('contact');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 
 Route::get( '/dashboard', 'DashboardController@dashboard')->name('dashboard');
 Route::get( '/calendar',  'DashboardController@calendar') ->name('calendar');
-Route::get( '/recipes',   'RecipesController@index')      ->name('recipes');
 Route::get( '/roster',    'DashboardController@roster')   ->name('roster');
 
 Route::get( '/resources',        'ContentController@index')->name('contentIndex');

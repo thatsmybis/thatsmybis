@@ -52,7 +52,7 @@
     </form>
 </div>
 <div>
-    <h3>{{ $content->title }}</h3>
+    <h1>{{ $content->title }}</h1>
 </div>
 <div class="js-markdown">
     {{ $content->content ? $content->content : '—' }}
