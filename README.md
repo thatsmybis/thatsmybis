@@ -13,6 +13,9 @@ Laravel was chosen as the framework for the project. Why? It's a very popular PH
 
 ## FAQ
 
+### Q: How can I contribute?
+Clone the repo, create a new branch (don't use `master`), push it to github, open a new pull request, and let me (Lemmings19) know that you'd like me to review your contribution. If it's all good, we'll merge it into master.
+
 ### Q: Where are the pages?
 `/resources/views`. They're PHP templates made with the [Blade](https://laravel.com/docs/6.x/blade) templating engine, so you'll see some non-html stuff mixed in there.
 
