@@ -25,7 +25,17 @@
                     <span class="text-muted font-weight-bold">Raid Group</span>
                 </div>
                 <div class="col-12">
-                    {{ $user->raid_group ? $user->raid_group : '—' }}
+                    @if ($user->raid_group)
+                        <ul class="lesser-indent">
+                            @foreach (explode("\n", $user->raid_group) as $value)
+                                <li class="js-markdown-inline">
+                                    {{ $value }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        —
+                    @endif
                 </div>
             </div>
             <div class="row mb-3">

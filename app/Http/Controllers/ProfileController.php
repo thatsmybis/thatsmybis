@@ -156,7 +156,7 @@ class ProfileController extends Controller
             'alts.*'          => 'nullable|string|max:50',
             'rank'            => 'nullable|string|max:50',
             'rank_goal'       => 'nullable|string|max:50',
-            'raid_group'      => 'nullable|string|max:50',
+            'raid_group.*'    => 'nullable|string|max:50',
             'wishlist.*'      => 'nullable|string|max:100',
             'loot_received.*' => 'nullable|string|max:100',
             'note'            => 'nullable|string|max:1000',
@@ -177,7 +177,7 @@ class ProfileController extends Controller
             $updateValues['alts']          = implode(array_filter(request()->input('alts')), "\n");
             $updateValues['rank']          = request()->input('rank');
             $updateValues['rank_goal']     = request()->input('rank_goal');
-            $updateValues['raid_group']    = request()->input('raid_group');
+            $updateValues['raid_group']    = implode(array_filter(request()->input('raid_group')), "\n");
             $updateValues['wishlist']      = implode(array_filter(request()->input('wishlist')), "\n");
             $updateValues['loot_received'] = implode(array_filter(request()->input('loot_received')), "\n");
             $updateValues['note']          = request()->input('note');

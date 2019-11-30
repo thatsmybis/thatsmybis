@@ -197,14 +197,18 @@
                         Raid Group
                     </label>
                     <small class="text-muted">
-                        Only select one if you have one
+                        SELECT ALL THAT APPLY
                     </small>
 
-                    <select name="raid_group" class="form-control">
-                        <option value="">—</option>
-                        <option value="Mythic" {{ old('raid_group')  && old('raid_group') == 'mythic'  ? 'selected' : ($user->raid_group && $user->raid_group == 'Mythic' ? 'selected' : '') }}>Mythic</option>
-                        <option value="Night" {{ old('raid_group')   && old('raid_group') == 'night'   ? 'selected' : ($user->raid_group && $user->raid_group == 'Night' ? 'selected' : '') }}>Night</option>
-                        <option value="Weekend" {{ old('raid_group') && old('raid_group') == 'weekend' ? 'selected' : ($user->raid_group && $user->raid_group == 'Weekend' ? 'selected' : '') }}>Weekend</option>
+                    <?php
+                    $raidsArray = splitByLine($user->raid_group);
+                    $raidsLength = count($professionsArray) - 1;
+                    ?>
+
+                    <select name="raid_group[]" class="form-control" size="3" multiple>
+                        <option value="Mythic"  {{ old('raid_group') && old('raid_group') == "Mythic"  ? 'selected' : (in_array("Mythic"  , $raidsArray) ? 'selected' : '') }}>Mythic</option>
+                        <option value="Night"   {{ old('raid_group') && old('raid_group') == "Night"   ? 'selected' : (in_array("Night"   , $raidsArray) ? 'selected' : '') }}>Night</option>
+                        <option value="Weekend" {{ old('raid_group') && old('raid_group') == "Weekend" ? 'selected' : (in_array("Weekend" , $raidsArray) ? 'selected' : '') }}>Weekend</option>
                     </select>
                 </div>
 

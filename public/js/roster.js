@@ -3,12 +3,12 @@ var table = null;
 var colName = 0;
 var colClass = 1;
 var colSpec = 2;
-var colProfessions = 3;
-var colRecipes = 4;
-var colAlts = 5;
-var colRank = 6;
-var colRankGoal = 7;
-var colRaidGroup = 8;
+var colRaidGroup = 3;
+var colProfessions = 4;
+var colRecipes = 5;
+var colAlts = 6;
+var colRank = 7;
+var colRankGoal = 8;
 var colWishlist = 9;
 var colLoot = 10;
 var colNotes = 11;
@@ -29,12 +29,12 @@ $(document).ready( function () {
         table.column(colName).visible(true);
         table.column(colClass).visible(true);
         table.column(colSpec).visible(true);
+        table.column(colRaidGroup).visible(true);
         table.column(colProfessions).visible(false);
-        table.column(colRecipes).visible(true);
+        table.column(colRecipes).visible(false);
         table.column(colAlts).visible(false);
         table.column(colRank).visible(false);
         table.column(colRankGoal).visible(false);
-        table.column(colRaidGroup).visible(true);
         table.column(colWishlist).visible(false);
         table.column(colLoot).visible(false);
         table.column(colNotes).visible(true);
@@ -47,16 +47,34 @@ $(document).ready( function () {
         table.column(colName).visible(true);
         table.column(colClass).visible(true);
         table.column(colSpec).visible(true);
+        table.column(colRaidGroup).visible(true);
         table.column(colProfessions).visible(true);
         table.column(colRecipes).visible(true);
         table.column(colAlts).visible(false);
         table.column(colRank).visible(false);
         table.column(colRankGoal).visible(false);
-        table.column(colRaidGroup).visible(true);
         table.column(colWishlist).visible(true);
         table.column(colLoot).visible(true);
         table.column(colNotes).visible(true);
         table.column(colOfficerNotes).visible(true);
+   });
+
+   $(".toggle-column-bare").click(function(e) {
+        e.preventDefault();
+
+        table.column(colName).visible(true);
+        table.column(colClass).visible(true);
+        table.column(colSpec).visible(false);
+        table.column(colRaidGroup).visible(true);
+        table.column(colProfessions).visible(false);
+        table.column(colRecipes).visible(false);
+        table.column(colAlts).visible(false);
+        table.column(colRank).visible(false);
+        table.column(colRankGoal).visible(false);
+        table.column(colWishlist).visible(false);
+        table.column(colLoot).visible(false);
+        table.column(colNotes).visible(false);
+        table.column(colOfficerNotes).visible(false);
    });
 });
 
@@ -84,7 +102,16 @@ function createTable() {
                 "data"   : "spec",
                 "render" : function (data, type, row) {
                     return row.spec;
-                }
+                },
+                "visible" : true
+            },
+            {
+                "title"  : "Raid",
+                "data"   : "raid_group",
+                "render" : function (data, type, row) {
+                    return nl2br(row.raid_group);
+                },
+                "visible" : true
             },
             {
                 "title"  : "Professions",
@@ -99,7 +126,8 @@ function createTable() {
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
                     return nl2br(row.recipes);
-                }
+                },
+                "visible" : false
             },
             {
                 "title"  : "Alts",
@@ -124,14 +152,6 @@ function createTable() {
                     return row.rank_goal;
                 },
                 "visible" : false
-            },
-            {
-                "title"  : "Raid",
-                "data"   : "raid_group",
-                "render" : function (data, type, row) {
-                    return row.raid_group;
-                },
-                "visible" : true
             },
             {
                 "title"  : "Wishlist",
@@ -162,7 +182,7 @@ function createTable() {
                 "render" : function (data, type, row) {
                     return nl2br(row.officer_note);
                 },
-                "visible" : false
+                "visible" : true
             },
         ],
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting

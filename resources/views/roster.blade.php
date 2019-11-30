@@ -18,6 +18,10 @@
             </li>
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
+                <a class="toggle-column-bare cursor-pointer font-weight-bold" href="">Min</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
                 <a class="toggle-column cursor-pointer" data-column="0" href="">Name</a>
             </li>
             <li class="list-inline-item">&sdot;</li>
@@ -27,6 +31,10 @@
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
                 <a class="toggle-column cursor-pointer" data-column="2" href="">Spec</a>
+            </li>
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+                <a class="toggle-column cursor-pointer" data-column="8" href="">Raid</a>
             </li>
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
@@ -47,10 +55,6 @@
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
                 <a class="toggle-column cursor-pointer" data-column="7" href="">Rank Goal</a>
-            </li>
-            <li class="list-inline-item">&sdot;</li>
-            <li class="list-inline-item">
-                <a class="toggle-column cursor-pointer" data-column="8" href="">Raid</a>
             </li>
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
