@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Content, User};
+use App\{Content, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
@@ -70,7 +70,11 @@ class DashboardController extends Controller
      */
     public function roster()
     {
-        $members = User::orderBy('username')->get();
-        return view('roster', ['members' => $members]);
+        $roles = Role::all();
+        $members = User::with('roles')->orderBy('username')->get();
+        return view('roster', [
+            'members' => $members,
+            'roles'   => $roles,
+        ]);
     }
 }

@@ -1,18 +1,15 @@
 var table = null;
 
 var colName = 0;
-var colClass = 1;
-var colSpec = 2;
-var colRaidGroup = 3;
-var colProfessions = 4;
-var colRecipes = 5;
-var colAlts = 6;
-var colRank = 7;
-var colRankGoal = 8;
-var colWishlist = 9;
-var colLoot = 10;
-var colNotes = 11;
-var colOfficerNotes = 12;
+var colRoles = 1;
+var colRecipes = 2;
+var colAlts = 3;
+var colRank = 4;
+var colRankGoal = 5;
+var colWishlist = 6;
+var colLoot = 7;
+var colNotes = 8;
+var colOfficerNotes = 9;
 
 $(document).ready( function () {
    table = createTable();
@@ -26,54 +23,45 @@ $(document).ready( function () {
    $(".toggle-column-default").click(function(e) {
         e.preventDefault();
 
-        table.column(colName).visible(true);
-        table.column(colClass).visible(true);
-        table.column(colSpec).visible(true);
-        table.column(colRaidGroup).visible(true);
-        table.column(colProfessions).visible(false);
-        table.column(colRecipes).visible(false);
-        table.column(colAlts).visible(false);
-        table.column(colRank).visible(false);
-        table.column(colRankGoal).visible(false);
-        table.column(colWishlist).visible(false);
-        table.column(colLoot).visible(false);
-        table.column(colNotes).visible(true);
+        table.column(colName).        visible(true);
+        table.column(colRoles).       visible(true);
+        table.column(colRecipes).     visible(false);
+        table.column(colAlts).        visible(false);
+        table.column(colRank).        visible(false);
+        table.column(colRankGoal).    visible(false);
+        table.column(colWishlist).    visible(false);
+        table.column(colLoot).        visible(false);
+        table.column(colNotes).       visible(true);
         table.column(colOfficerNotes).visible(true);
    });
 
    $(".toggle-column-loot-council").click(function(e) {
         e.preventDefault();
 
-        table.column(colName).visible(true);
-        table.column(colClass).visible(true);
-        table.column(colSpec).visible(true);
-        table.column(colRaidGroup).visible(true);
-        table.column(colProfessions).visible(true);
-        table.column(colRecipes).visible(true);
-        table.column(colAlts).visible(false);
-        table.column(colRank).visible(false);
-        table.column(colRankGoal).visible(false);
-        table.column(colWishlist).visible(true);
-        table.column(colLoot).visible(true);
-        table.column(colNotes).visible(true);
+        table.column(colName).        visible(true);
+        table.column(colRoles).       visible(true);
+        table.column(colRecipes).     visible(false);
+        table.column(colAlts).        visible(false);
+        table.column(colRank).        visible(false);
+        table.column(colRankGoal).    visible(false);
+        table.column(colWishlist).    visible(true);
+        table.column(colLoot).        visible(true);
+        table.column(colNotes).       visible(true);
         table.column(colOfficerNotes).visible(true);
    });
 
    $(".toggle-column-bare").click(function(e) {
         e.preventDefault();
 
-        table.column(colName).visible(true);
-        table.column(colClass).visible(true);
-        table.column(colSpec).visible(false);
-        table.column(colRaidGroup).visible(true);
-        table.column(colProfessions).visible(false);
-        table.column(colRecipes).visible(false);
-        table.column(colAlts).visible(false);
-        table.column(colRank).visible(false);
-        table.column(colRankGoal).visible(false);
-        table.column(colWishlist).visible(false);
-        table.column(colLoot).visible(false);
-        table.column(colNotes).visible(false);
+        table.column(colName).        visible(true);
+        table.column(colRoles).       visible(true);
+        table.column(colRecipes).     visible(false);
+        table.column(colAlts).        visible(false);
+        table.column(colRank).        visible(false);
+        table.column(colRankGoal).    visible(false);
+        table.column(colWishlist).    visible(false);
+        table.column(colLoot).        visible(false);
+        table.column(colNotes).       visible(false);
         table.column(colOfficerNotes).visible(false);
    });
 });
@@ -87,39 +75,23 @@ function createTable() {
                 "title"  : "Name",
                 "data"   : "username",
                 "render" : function (data, type, row) {
-                    return `<a href="${row.id}/${row.username}" class="text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold">${row.username}</a>`;
+                    return `<a href="${row.id}/${row.username}" class="text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold">
+                        ${row.username}
+                    </a>
+                    <small>${row.spec}<small>`;
                 }
             },
             {
-                "title"  : "Class",
-                "data"   : "class",
+                "title"  : "Roles",
+                "data"   : "roles",
                 "render" : function (data, type, row) {
-                    return row.class;
+                    let roles = "";
+                    data.forEach(function (item, index) {
+                        let color = item.color != 0 ? '#' + rgbToHex(item.color) : "#FFFFFF";
+                        roles += `<span class="tag" style="border-color:${ color };"><span class="role-circle" style="background-color:${ color }"></span>${ item.name }</span>`;
+                    });
+                    return roles;
                 }
-            },
-            {
-                "title"  : "Spec",
-                "data"   : "spec",
-                "render" : function (data, type, row) {
-                    return row.spec;
-                },
-                "visible" : true
-            },
-            {
-                "title"  : "Raid",
-                "data"   : "raid_group",
-                "render" : function (data, type, row) {
-                    return nl2br(row.raid_group);
-                },
-                "visible" : true
-            },
-            {
-                "title"  : "Professions",
-                "data"   : "professions",
-                "render" : function (data, type, row) {
-                    return nl2br(row.professions);
-                },
-                "visible" : false
             },
             {
                 "title"  : "Rare Recipes",
@@ -188,34 +160,38 @@ function createTable() {
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
         "paging" : false,
         initComplete: function () {
-            let sortColumns = [colClass, colProfessions, colRaidGroup];
-            this.api().columns().every( function (index) {
+            let sortColumns = [colRoles];
+            this.api().columns().every(function (index) {
                 var column = this;
 
-                let select = null;
+                let select1 = null;
+                let select2 = null;
 
-                if (index == colClass) {
-                    select = $("#classFilter");
-                } else if (index == colProfessions) {
-                    select = $("#professionFilter");
-                } else if (index == colRaidGroup) {
-                    select = $("#raidFilter");
+                if (index == colRoles) {
+                    select1 = $("#roleFilter1");
+                    select2 = $("#roleFilter2");
                 }
 
                 if (sortColumns.includes(index)) {
-                    select.on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex(
-                            $(this).val()
-                        );
-
-                        column
-                            .search(val ? val : '', true, false)
-                            .draw();
+                    select1.on('change', function () {
+                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        if (select2 && select2.val()) {
+                        // Search for either or
+                            val = val + '|' + $.fn.dataTable.util.escapeRegex(select2.val());
+                        }
+                        column.search(val ? val : '', true, false).draw();
                     });
 
-                    column.data().unique().sort().each(function (d, j) {
-                        select.append('<option value="'+d+'">'+d+'</option>');
-                    });
+                    if (select2) {
+                        select2.on('change', function () {
+                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            if (select1 && select1.val()) {
+                            // Search for either or
+                                val = val + '|' + $.fn.dataTable.util.escapeRegex(select1.val());
+                            }
+                            column.search(val ? val : '', true, false).draw();
+                        });
+                    }
                 }
             } );
         }

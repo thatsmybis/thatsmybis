@@ -27,25 +27,6 @@
                     <input name="username" maxlength="255" type="text" class="form-control" placeholder="What's your name?" value="{{ old('username') ? old('username') : $user->username }}" />
                 </div>
 
-                <div class="form-group mt-5">
-                    <label for="class" class="font-weight-bold">
-                        Class
-                    </label>
-                    <small class="text-muted">
-                        Your main's class
-                    </small>
-                    <select name="class" class="form-control">
-                        <option value="">—</option>
-                        <option value="Druid" {{ old('class')   && old('class') == 'Druid'   ? 'selected' : ($user->class && $user->class == 'Druid'   ? 'selected' : '') }}>Druid</option>
-                        <option value="Hunter" {{ old('class')  && old('class') == 'Hunter'  ? 'selected' : ($user->class && $user->class == 'Hunter'  ? 'selected' : '') }}>Hunter</option>
-                        <option value="Mage" {{ old('class')    && old('class') == 'Mage'    ? 'selected' : ($user->class && $user->class == 'Mage'    ? 'selected' : '') }}>Mage</option>
-                        <option value="Priest" {{ old('class')  && old('class') == 'Priest'  ? 'selected' : ($user->class && $user->class == 'Priest'  ? 'selected' : '') }}>Priest</option>
-                        <option value="Rogue" {{ old('class')   && old('class') == 'Rogue'   ? 'selected' : ($user->class && $user->class == 'Rogue'   ? 'selected' : '') }}>Rogue</option>
-                        <option value="Shaman" {{ old('class')  && old('class') == 'Shaman'  ? 'selected' : ($user->class && $user->class == 'Shaman'  ? 'selected' : '') }}>Shaman</option>
-                        <option value="Warlock" {{ old('class') && old('class') == 'Warlock' ? 'selected' : ($user->class && $user->class == 'Warlock' ? 'selected' : '') }}>Warlock</option>
-                        <option value="Warrior" {{ old('class') && old('class') == 'Warrior' ? 'selected' : ($user->class && $user->class == 'Warrior' ? 'selected' : '') }}>Warrior</option>
-                    </select>
-                </div>
 
                 <div class="form-group mt-5">
                     <label for="spec" class="font-weight-bold">
@@ -55,39 +36,6 @@
                         Your main's spec
                     </small>
                     <input name="spec" maxlength="50" type="text" class="form-control" placeholder="eg. Boomkin" value="{{ old('spec') ? old('spec') : $user->spec }}" />
-                </div>
-
-                <div class="form-group mt-5">
-                    <label for="professions" class="font-weight-bold">
-                        Professions
-                    </label>
-                    <small class="text-muted">
-                        SELECT ALL THAT APPLY
-                    </small>
-
-                    <?php
-                    $professionsArray = splitByLine($user->professions);
-                    $professionsLength = count($professionsArray) - 1;
-                    ?>
-
-                    <select name="professions[]" class="form-control" size="16" multiple>
-                        <option value="Alchemy"                      {{ old('professions') && old('professions') == "Alchemy"                     ? 'selected' : (in_array("Alchemy"                     , $professionsArray) ? 'selected' : '') }}>Alchemy</option>
-                        <option value="Blacksmithing"                {{ old('professions') && old('professions') == "Blacksmithing"               ? 'selected' : (in_array("Blacksmithing"               , $professionsArray) ? 'selected' : '') }}>Blacksmithing</option>
-                        <option value="Blacksmithing - Armorsmith"   {{ old('professions') && old('professions') == "Blacksmithing - Armorsmith"  ? 'selected' : (in_array("Blacksmithing - Armorsmith"  , $professionsArray) ? 'selected' : '') }}>Blacksmithing - Armorsmith</option>
-                        <option value="Blacksmithing - Weaponsmith"  {{ old('professions') && old('professions') == "Blacksmithing - Weaponsmith" ? 'selected' : (in_array("Blacksmithing - Weaponsmith" , $professionsArray) ? 'selected' : '') }}>Blacksmithing - Weaponsmith</option>
-                        <option value="Enchanting"                   {{ old('professions') && old('professions') == "Enchanting"                  ? 'selected' : (in_array("Enchanting"                  , $professionsArray) ? 'selected' : '') }}>Enchanting</option>
-                        <option value="Engineering"                  {{ old('professions') && old('professions') == "Engineering"                 ? 'selected' : (in_array("Engineering"                 , $professionsArray) ? 'selected' : '') }}>Engineering</option>
-                        <option value="Engineering - Gnome"          {{ old('professions') && old('professions') == "Engineering - Gnome"         ? 'selected' : (in_array("Engineering - Gnome"         , $professionsArray) ? 'selected' : '') }}>Engineering - Gnome</option>
-                        <option value="Engineering - Goblin"         {{ old('professions') && old('professions') == "Engineering - Goblin"        ? 'selected' : (in_array("Engineering - Goblin"        , $professionsArray) ? 'selected' : '') }}>Engineering - Goblin</option>
-                        <option value="Herbalism"                    {{ old('professions') && old('professions') == "Herbalism"                   ? 'selected' : (in_array("Herbalism"                   , $professionsArray) ? 'selected' : '') }}>Herbalism</option>
-                        <option value="Leatherworking"               {{ old('professions') && old('professions') == "Leatherworking"              ? 'selected' : (in_array("Leatherworking"              , $professionsArray) ? 'selected' : '') }}>Leatherworking</option>
-                        <option value="Leatherworking - Elemental"   {{ old('professions') && old('professions') == "Leatherworking - Elemental"  ? 'selected' : (in_array("Leatherworking - Elemental"  , $professionsArray) ? 'selected' : '') }}>Leatherworking - Elemental</option>
-                        <option value="Leatherworking - Dragonscale" {{ old('professions') && old('professions') == "Leatherworking - Dragonscale"? 'selected' : (in_array("Leatherworking - Dragonscale", $professionsArray) ? 'selected' : '') }}>Leatherworking - Dragonscale</option>
-                        <option value="Leatherworking - Tribal"      {{ old('professions') && old('professions') == "Leatherworking - Tribal"     ? 'selected' : (in_array("Leatherworking - Tribal"     , $professionsArray) ? 'selected' : '') }}>Leatherworking - Tribal</option>
-                        <option value="Mining"                       {{ old('professions') && old('professions') == "Mining"                      ? 'selected' : (in_array("Mining"                      , $professionsArray) ? 'selected' : '') }}>Mining</option>
-                        <option value="Skinning"                     {{ old('professions') && old('professions') == "Skinning"                    ? 'selected' : (in_array("Skinning"                    , $professionsArray) ? 'selected' : '') }}>Skinning</option>
-                        <option value="Tailoring"                    {{ old('professions') && old('professions') == "Tailoring"                   ? 'selected' : (in_array("Tailoring"                   , $professionsArray) ? 'selected' : '') }}>Tailoring</option>
-                    </select>
                 </div>
 
                 <div class="form-group mt-5">
@@ -190,26 +138,6 @@
                         Your expected rank
                     </small>
                     <input name="rank_goal" maxlength="50" type="text" class="form-control" placeholder="eg. 14" value="{{ old('rank_goal') ? old('rank_goal') : $user->rank_goal }}" />
-                </div>
-
-                <div class="form-group mt-5">
-                    <label for="raid_group" class="font-weight-bold">
-                        Raid Group
-                    </label>
-                    <small class="text-muted">
-                        SELECT ALL THAT APPLY
-                    </small>
-
-                    <?php
-                    $raidsArray = splitByLine($user->raid_group);
-                    $raidsLength = count($professionsArray) - 1;
-                    ?>
-
-                    <select name="raid_group[]" class="form-control" size="3" multiple>
-                        <option value="Mythic"  {{ old('raid_group') && old('raid_group') == "Mythic"  ? 'selected' : (in_array("Mythic"  , $raidsArray) ? 'selected' : '') }}>Mythic</option>
-                        <option value="Night"   {{ old('raid_group') && old('raid_group') == "Night"   ? 'selected' : (in_array("Night"   , $raidsArray) ? 'selected' : '') }}>Night</option>
-                        <option value="Weekend" {{ old('raid_group') && old('raid_group') == "Weekend" ? 'selected' : (in_array("Weekend" , $raidsArray) ? 'selected' : '') }}>Weekend</option>
-                    </select>
                 </div>
 
                 <div class="form-group mt-5">

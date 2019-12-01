@@ -114,7 +114,7 @@ class ProfileController extends Controller
                 return redirect()->route('home');
             }
         } else {
-            $user = User::where('username', '=', strtolower(trim($username)))->first();
+            $user = User::where('username', '=', strtolower(trim($username)))->with('roles')->first();
 
             if (!$user) {
                 request()->session()->flash('status', 'Could not find user ' . $username . '.');
@@ -150,13 +150,10 @@ class ProfileController extends Controller
         $validationRules =  [
             'username'        => 'string|max:255',
             'spec'            => 'nullable|string|max:50',
-            'class'           => 'nullable|string|max:20',
-            'professions.*'   => 'nullable|string|max:100',
             'recipes.*'       => 'nullable|string|max:100',
             'alts.*'          => 'nullable|string|max:50',
             'rank'            => 'nullable|string|max:50',
             'rank_goal'       => 'nullable|string|max:50',
-            'raid_group.*'    => 'nullable|string|max:50',
             'wishlist.*'      => 'nullable|string|max:100',
             'loot_received.*' => 'nullable|string|max:100',
             'note'            => 'nullable|string|max:1000',
@@ -171,13 +168,10 @@ class ProfileController extends Controller
         if ($user->id == $authUser->id) { // TODO: Add permissions check
             $updateValues['username']      = request()->input('username');
             $updateValues['spec']          = request()->input('spec');
-            $updateValues['class']         = request()->input('class');
-            $updateValues['professions']   = implode(array_filter(request()->input('professions')), "\n");
             $updateValues['recipes']       = implode(array_filter(request()->input('recipes')), "\n");
             $updateValues['alts']          = implode(array_filter(request()->input('alts')), "\n");
             $updateValues['rank']          = request()->input('rank');
             $updateValues['rank_goal']     = request()->input('rank_goal');
-            $updateValues['raid_group']    = implode(array_filter(request()->input('raid_group')), "\n");
             $updateValues['wishlist']      = implode(array_filter(request()->input('wishlist')), "\n");
             $updateValues['loot_received'] = implode(array_filter(request()->input('loot_received')), "\n");
             $updateValues['note']          = request()->input('note');

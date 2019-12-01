@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AlterRoleDiscordId extends Migration
+class RemoveExtraUserColumns extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,10 @@ class AlterRoleDiscordId extends Migration
      */
     public function up()
     {
-        Schema::table('roles', function (Blueprint $table) {
-            $table->bigInteger("discord_id")->unsigned()->change();
+        Schema::table('users', function (Blueprint $table) {
+            $table->dropColumn('raid_group');
+            $table->dropColumn('professions');
+            $table->dropColumn('class');
         });
     }
 

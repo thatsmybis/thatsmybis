@@ -133,4 +133,21 @@ class Role extends Model
 
         return false;
     }
+
+    /**
+     * @return string A hex value
+     */
+    public function getColor() {
+        $color = null;
+
+        if ($this->color) {
+            $color = dechex($this->color);
+            if (strlen($color) < 2) {
+                $color = '0' . $color;
+            }
+        } else {
+            $color = 'FFF';
+        }
+        return '#' . $color;
+    }
 }

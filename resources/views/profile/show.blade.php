@@ -10,9 +10,7 @@
                 <span class="text-{{ strtolower($user->class) }}">
                     {{ $user->username }}
                 </span>
-                <br>
                 <small>
-                    {{ $user->spec }} {{ $user->class }}
                     @if ($canEdit)
                         <small><a href="{{ route('showUser', ['id' => $user->id, 'username' => $user->username]) }}?edit=1">edit</a></small>
                     @endif
@@ -22,38 +20,25 @@
         <div class="col-12 {{ $showPersonalNote ? 'col-md-6' : '' }}">
             <div class="row mb-3">
                 <div class="col-12">
-                    <span class="text-muted font-weight-bold">Raid Group</span>
+                    <span class="text-muted font-weight-bold">Roles</span>
                 </div>
-                <div class="col-12">
-                    @if ($user->raid_group)
-                        <ul class="lesser-indent">
-                            @foreach (explode("\n", $user->raid_group) as $value)
-                                <li class="js-markdown-inline">
-                                    {{ $value }}
-                                </li>
-                            @endforeach
-                        </ul>
+                <div class="col-12 m-2">
+                    @if ($user->roles)
+                        @foreach ($user->roles as $role)
+                                <span class="tag" style="border-color:{{ $role->getColor() }};"><span class="role-circle" style="background-color:{{ $role->getColor() }}"></span>{{ $role->name }}</span>
+                        @endforeach
                     @else
                         —
                     @endif
                 </div>
             </div>
+
             <div class="row mb-3">
                 <div class="col-12">
-                    <span class="text-muted font-weight-bold">Professions</span>
+                    <span class="text-muted font-weight-bold">Spec</span>
                 </div>
                 <div class="col-12">
-                    @if ($user->professions)
-                        <ul class="lesser-indent">
-                            @foreach (explode("\n", $user->professions) as $value)
-                                <li class="js-markdown-inline">
-                                    {{ $value }}
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        —
-                    @endif
+                    {{ $user->spec ? $user->spec : '—' }}
                 </div>
             </div>
 
