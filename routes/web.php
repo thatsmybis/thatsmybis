@@ -60,4 +60,8 @@ Route::group(['prefix' => '{id}'], function () {
     Route::get( '/{username?}', 'ProfileController@showUser')->where('id', '[0-9]+')->name('showUser');
 });
 
+Route::group(['prefix' => 'guild'], function () {
+    Route::get( '/syncRoles', 'RolesController@syncRoles')->name('syncRoles');
+});
+
 Route::get( '/{username}',      'ProfileController@findByUsername')->name('findUserByUsername');

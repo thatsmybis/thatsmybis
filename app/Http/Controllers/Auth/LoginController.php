@@ -8,6 +8,7 @@ use App\{User};
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Socialite;
+use RestCord\DiscordClient;
 
 class LoginController extends Controller
 {
@@ -64,6 +65,25 @@ class LoginController extends Controller
             return redirect('auth/discord');
         }
 
+        $id = $unauthUser->getId();
+
+        if (!$id) {
+            abort(403, "Didn't receive your ID from Discord. Try again.");
+        }
+
+        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+
+        try {
+            $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$id]);
+        } catch (\GuzzleHttp\Command\Exception\CommandClientException $e) {
+            abort(404, "Doesn't look like you're in the guild Discord server.");
+        }
+
+        if (!$discordMember) {
+            abort(404, "Doesn't look like you're in the guild Discord server.");
+        }
+
+
         $authUser = $this->findUser($unauthUser, 'discord');
 
         if ($authUser) {
@@ -73,15 +93,7 @@ class LoginController extends Controller
             Auth::login($authUser, true);
             return redirect($this->redirectTo);
         } else if ($unauthUser) {
-            // Store the values we got back from the third party.
-            // These will be accessed again when we create the user.
-            $id = $unauthUser->getId();
-            $email = $unauthUser->getEmail();
-            if (!$id) {
-                abort(403, "Didn't receive your ID from Discord. Try again.");
-            }
-
-            User::create([
+            $user = User::create([
                 'username'         => $unauthUser->getName(),
                 'email'            => $unauthUser->getEmail(),
                 'discord_username' => $unauthUser->getNickname(),
@@ -89,6 +101,8 @@ class LoginController extends Controller
                 'discord_avatar'   => $unauthUser->getAvatar(),
                 'password'         => null,
             ]);
+
+            Auth::login($user, true);
 
             return redirect()->route('dashboard');
         } else {

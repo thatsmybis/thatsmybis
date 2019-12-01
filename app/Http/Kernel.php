@@ -63,6 +63,8 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
 
         'seeUser' => \App\Http\Middleware\SeeUser::class, // custom, added manually
+
+        'acl' => \Kodeine\Acl\Middleware\HasPermission::class, // added manually
     ];
 
     /**

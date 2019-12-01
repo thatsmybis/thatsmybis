@@ -9,11 +9,13 @@
     "license": "",
     "require": {
         "php": "^7.2",
+        "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
+        "kodeine/laravel-acl": "^2.0",
         "laravel/framework": "^6.2",
         "laravel/socialite": "^4.2",
         "laravel/tinker": "^1.0",
-        "more-cores/laravel-restcord": "3.*",
+        "restcord/restcord": "^0.3",
         "socialiteproviders/discord": "^2.0"
     },
     "require-dev": {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\{Content, User};
 use Auth;
 use Illuminate\Http\Request;
+use RestCord\DiscordClient;
 
 class DashboardController extends Controller
 {
@@ -15,7 +16,7 @@ class DashboardController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth', 'sessionHasDiscordToken', 'seeUser']);
+        $this->middleware(['auth', 'seeUser']);
     }
 
     /**
@@ -25,6 +26,16 @@ class DashboardController extends Controller
      */
     public function dashboard()
     {
+        $user = Auth::user();
+
+        // $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+
+        // dd(
+        //     $discord->guild->getGuild(['guild.id' => (int)env('GUILD_ID')]),
+        //     $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$user->discord_id]),
+        // );
+
+
         $news = Content::where('is_news', 1)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
         return view('dashboard', ['news' => $news]);
     }
