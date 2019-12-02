@@ -142,7 +142,9 @@ class Role extends Model
 
         if ($this->color) {
             $color = dechex($this->color);
-            if (strlen($color) < 2) {
+
+            // If it's too short, keep adding prefixed zero's till it's long enough
+            while (strlen($color) < 6) {
                 $color = '0' . $color;
             }
         } else {

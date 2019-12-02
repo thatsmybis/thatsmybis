@@ -22,6 +22,14 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('showUser', ['id' => Auth::user()->id, 'username' => Auth::user()->username]) }}">My Profile</a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Admin
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="adminNavDropdown">
+                        <a class="dropdown-item" href="{{ route('guild.roles') }}">Roles</a>
+                    </div>
+                </li>
             @endif
         </ul>
         <div class="my-2 my-lg-0">

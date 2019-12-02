@@ -78,7 +78,7 @@ function createTable() {
                     return `<a href="${row.id}/${row.username}" class="text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold">
                         ${row.username}
                     </a>
-                    <small>${row.spec}<small>`;
+                    <small>${row.spec ? row.spec : '—'}<small>`;
                 }
             },
             {
@@ -86,10 +86,14 @@ function createTable() {
                 "data"   : "roles",
                 "render" : function (data, type, row) {
                     let roles = "";
-                    data.forEach(function (item, index) {
-                        let color = item.color != 0 ? '#' + rgbToHex(item.color) : "#FFFFFF";
-                        roles += `<span class="tag" style="border-color:${ color };"><span class="role-circle" style="background-color:${ color }"></span>${ item.name }</span>`;
-                    });
+                    if (data.length > 0) {
+                        data.forEach(function (item, index) {
+                            let color = item.color != 0 ? '#' + rgbToHex(item.color) : "#FFFFFF";
+                            roles += `<span class="tag" style="border-color:${ color };"><span class="role-circle" style="background-color:${ color }"></span>${ item.name }</span>`;
+                        });
+                    } else {
+                        roles = '—';
+                    }
                     return roles;
                 }
             },
@@ -97,7 +101,7 @@ function createTable() {
                 "title"  : "Rare Recipes",
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
-                    return nl2br(row.recipes);
+                    return row.recipes ? nl2br(row.recipes) : '—';
                 },
                 "visible" : false
             },
@@ -105,7 +109,7 @@ function createTable() {
                 "title"  : "Alts",
                 "data"   : "alts",
                 "render" : function (data, type, row) {
-                    return nl2br(row.alts);
+                    return row.alts ? nl2br(row.alts) : '—';
                 },
                 "visible" : false
             },
@@ -113,7 +117,7 @@ function createTable() {
                 "title"  : "Rank",
                 "data"   : "rank",
                 "render" : function (data, type, row) {
-                    return row.rank;
+                    return row.rank ? row.rank : '—';
                 },
                 "visible" : false
             },
@@ -121,7 +125,7 @@ function createTable() {
                 "title"  : "Rank Goal",
                 "data"   : "rank_goal",
                 "render" : function (data, type, row) {
-                    return row.rank_goal;
+                    return row.rank_goal ? row.rank_goal : '—';
                 },
                 "visible" : false
             },
@@ -129,7 +133,7 @@ function createTable() {
                 "title"  : "Wishlist",
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
-                    return nl2br(row.wishlist);
+                    return row.wishlist ? nl2br(row.wishlist) : '—';
                 },
                 "visible" : false
             },
@@ -137,7 +141,7 @@ function createTable() {
                 "title"  : "Raid Loot",
                 "data"   : "loot_recieved",
                 "render" : function (data, type, row) {
-                    return nl2br(row.loot_received);
+                    return row.loot_received ? nl2br(row.loot_received) : '—';
                 },
                 "visible" : false
             },
@@ -145,14 +149,14 @@ function createTable() {
                 "title"  : "Notes",
                 "data"   : "note",
                 "render" : function (data, type, row) {
-                    return nl2br(row.note);
+                    return row.note ? nl2br(row.note) : '—';
                 }
             },
             {
                 "title"  : "Officer Notes",
                 "data"   : "officer_note",
                 "render" : function (data, type, row) {
-                    return nl2br(row.officer_note);
+                    return row.officer_note ? nl2br(row.officer_note) : '—';
                 },
                 "visible" : true
             },
@@ -176,8 +180,8 @@ function createTable() {
                     select1.on('change', function () {
                         var val = $.fn.dataTable.util.escapeRegex($(this).val());
                         if (select2 && select2.val()) {
-                        // Search for either or
-                            val = val + '|' + $.fn.dataTable.util.escapeRegex(select2.val());
+                            // Must contain both
+                            val = "(?=.*" + val + ")(?=.*" + $.fn.dataTable.util.escapeRegex(select2.val()) + ")";
                         }
                         column.search(val ? val : '', true, false).draw();
                     });
@@ -186,8 +190,8 @@ function createTable() {
                         select2.on('change', function () {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
                             if (select1 && select1.val()) {
-                            // Search for either or
-                                val = val + '|' + $.fn.dataTable.util.escapeRegex(select1.val());
+                                // Must contain both
+                                val = "(?=.*" + val + ")(?=.*" + $.fn.dataTable.util.escapeRegex(select1.val()) + ")";
                             }
                             column.search(val ? val : '', true, false).draw();
                         });

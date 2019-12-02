@@ -88,7 +88,7 @@
             </ul>
         </div>
     </div>
-    <div class="col-12 p-3 bg-light rounded">
+    <div class="col-12 p-3 rounded">
         <table id="roster" class="col-xs-12 table table-border table-hover stripe">
         </table>
     </div>

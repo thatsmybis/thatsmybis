@@ -205,7 +205,9 @@ function parseMarkdown(element = null) {
 
  function rgbToHex (rgb) {
     let hex = Number(rgb).toString(16);
-    if (hex.length < 2) {
+
+    // If it's too short, keep adding prefixed zero's till it's long enough
+    while (hex.length < 6) {
         hex = "0" + hex;
     }
     return hex;

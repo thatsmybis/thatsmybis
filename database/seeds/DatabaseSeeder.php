@@ -14,8 +14,8 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call([ContentTableSeeder::class]);
-        $this->seedContentTable();
-        // $this->seedUsersTable();
+        // $this->seedContentTable();
+        $this->seedUsersTable();
     }
 
     private function seedUsersTable() {
@@ -28,21 +28,21 @@ class DatabaseSeeder extends Seeder
         $races = ['orc', 'tauren', 'undead', 'troll'];
         $raidGroups = ['Mythic', 'Weekend', 'Night'];
 
-        for ($i = 0; $i < 120; $i++) {
+        for ($i = 0; $i < 5; $i++) {
             DB::table('users')->insert([
                 'username'         => $faker->firstName,
                 'email'            => $faker->unique()->safeEmail,
                 'discord_username' => $faker->name . $faker->numberBetween(1000, 9999),
                 'discord_id'       => Str::random(10),
                 'password'         => null,
-                'class'            => $classes[array_rand($classes)],
+                // 'class'            => $classes[array_rand($classes)],
                 'spec'             => $specs[array_rand($specs)],
-                'professions'      => $professions[array_rand($professions)],
+                // 'professions'      => $professions[array_rand($professions)],
                 'recipes'          => $recipes[array_rand($recipes)],
                 'alts'             => '60 ' . $races[array_rand($races)] . ' ' . $classes[array_rand($classes)],
                 'rank'             => $faker->numberBetween(1,14),
                 'rank_goal'        => $faker->numberBetween(1,14),
-                'raid_group'       => $raidGroups[array_rand($raidGroups)],
+                // 'raid_group'       => $raidGroups[array_rand($raidGroups)],
                 'wishlist'         => $faker->words(5, true),
                 'loot_received'    => $faker->words(10, true),
                 'note'             => $faker->sentences(3, true),

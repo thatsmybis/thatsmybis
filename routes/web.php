@@ -61,7 +61,8 @@ Route::group(['prefix' => '{id}'], function () {
 });
 
 Route::group(['prefix' => 'guild'], function () {
-    Route::get( '/syncRoles', 'RolesController@syncRoles')->name('syncRoles');
+    Route::get( '/roles',     'RolesController@roles')    ->name('guild.roles');
+    Route::get( '/syncRoles', 'RolesController@syncRoles')->name('guild.syncRoles');
 });
 
 Route::get( '/{username}',      'ProfileController@findByUsername')->name('findUserByUsername');

@@ -20,6 +20,19 @@ class RolesController extends Controller
     }
 
     /**
+     * Show the roles page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function roles()
+    {
+        $roles = Role::all();
+        return view('roles', [
+            'roles'   => $roles,
+        ]);
+    }
+
+    /**
      * Sync the database's roles with those on the Discord server
      *
      * @return \Illuminate\Http\Response
@@ -29,7 +42,6 @@ class RolesController extends Controller
         $roles = Role::all();
         $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
         $discordRoles = $discord->guild->getGuildRoles(['guild.id' => (int)env('GUILD_ID')]);
-
         $addedCount = 0;
 
         foreach ($discordRoles as $role) {
@@ -47,6 +59,6 @@ class RolesController extends Controller
             }
         }
         request()->session()->flash('status', $addedCount . ' Discord roles added.');
-        redirect()->back();
+        return redirect()->route('guild.roles');
     }
 }

@@ -68,7 +68,7 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
     color: #fff;
     white-space: nowrap;
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
     padding: 4px 14px 4px 14px !important;
     margin: 4px !important;
     border-radius: 14px;
@@ -97,3 +97,26 @@ body {
     min-height:            100vh;
     /*background-attachment: fixed;*/
 }
+/* END DARK THEME */
+
+/* DATATABLES OVERRIDE */
+.dataTables_wrapper .dataTables_filter,
+.dataTables_wrapper .dataTables_info,
+.table {
+    color: #c6c6c6;
+}
+
+table.dataTable.stripe tbody tr.odd,
+table.dataTable tbody tr.odd {
+    background: transparent;
+}
+
+table.dataTable.stripe tbody tr.even,
+table.dataTable tbody tr.even {
+    background: #ffffff14;
+}
+
+.table-hover tbody tr:hover {
+    color: #fff;
+}
+/* END DATATABLES OVERRIDE */
