@@ -115,7 +115,7 @@ class ContentController extends Controller
                 $raid = Raid::findOrFail($category);
 
                 $updateValues['raid_id'] = $raid->id;
-                $category = $raid->name;
+                $category = $raid->slug;
             }
 
             $updateValues['category'] = $category;
