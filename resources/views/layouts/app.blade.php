@@ -66,6 +66,44 @@
 <body>
     @include('layouts/nav')
 
+    @if (session('status'))
+        <div class="container-fluid">
+            <div class="col-12">
+                <div class="alert alert-success">
+                    {!! session('status') !!}
+                </div>
+            </div>
+        </div>
+    @endif
+    @if (session('status-success'))
+        <div class="container-fluid">
+            <div class="col-12">
+                <div class="alert alert-success">
+                    {!! session('status-success') !!}
+                </div>
+            </div>
+        </div>
+    @endif
+    @if (session('status-warning'))
+        <div class="container-fluid">
+            <div class="col-12">
+                <div class="alert alert-warning">
+                    {!! session('status-warning') !!}
+                </div>
+            </div>
+        </div>
+    @endif
+    @if (session('status-danger'))
+        <div class="container-fluid">
+            <div class="col-12">
+                <div class="alert alert-danger">
+                    {!! session('status-danger') !!}
+                </div>
+            </div>
+        </div>
+    @endif
+
+
     @yield('content')
 
     @if (!isset($noFooter))

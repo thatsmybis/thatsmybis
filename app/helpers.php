@@ -14,3 +14,12 @@ function getDateTime($format = 'Y-m-d H:i:s') {
 function splitByLine($string) {
     return preg_split("/\r\n|\n|\r/", $string);
 }
+
+function slug($string) {
+    $slug = substr(Illuminate\Support\Str::slug($string, '_'), 0, 50);
+    if ($slug) {
+        return $slug;
+    } else {
+        return '_';
+    }
+}

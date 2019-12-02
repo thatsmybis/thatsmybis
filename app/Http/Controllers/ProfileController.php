@@ -28,6 +28,25 @@ class ProfileController extends Controller
         return view('dashboard');
     }
 
+    public function ban($id = null) {
+        $user = User::find($id);
+
+        if (!$user) {
+            abort(404, 'User not found.');
+        }
+
+        if ($user->banned_at) {
+            $user->banned_at = null;
+            request()->session()->flash('status', 'User ' . $user->username . ' unbanned.');
+        } else {
+            $user->banned_at = getDateTime();
+            request()->session()->flash('status-danger', 'User ' . $user->username . ' banned.');
+        }
+        $user->save();
+
+        return redirect()->route('showUser', [$user->id, $user->username]);
+    }
+
     /**
      * Find a user by ID.
      *

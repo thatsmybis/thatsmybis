@@ -142,3 +142,13 @@ sudo mysql -u root -p
     > exit;
 sudo service mysql restart
 ```
+
+# Permissions
+
+Permissions are initially loaded in a kinda janky manner, but it works for now. They're loaded in PermissionsController::addPermissions(). The permissions page has a button to call this method.
+
+# Roles
+
+Roles are loaded from the Discord server.
+
+There are some variables in the .env file that expect certain roles to exist. Add their ID's to this config before running the 'Sync Roles' command on the Roles page.

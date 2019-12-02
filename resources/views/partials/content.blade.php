@@ -9,15 +9,17 @@
                 <span class="js-watchable-timestamp" data-timestamp="{{ strtotime($content->created_at) }}"></span> ago
             </li>
         @endif
-        <li class="list-inline-item">
-            <a class="js-edit-content" data-id="{{ $content->id }}" href="">edit</a>
-        </li>
-        <li class="list-inline-item">
-            <form id="removeContent{{ $content->id }}" class="form-horizontal" role="form" method="POST" action="{{ route('removeContent', $content->id) }}">
-                {{ csrf_field() }}
-                <button class="link" onClick="return confirm('Are you sure you want to remove this content?');">remove</button>
-            </form>
-        </li>
+        @if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|class_leader|raider'))
+            <li class="list-inline-item">
+                <a class="js-edit-content" data-id="{{ $content->id }}" href="">edit</a>
+            </li>
+            <li class="list-inline-item">
+                <form id="removeContent{{ $content->id }}" class="form-horizontal" role="form" method="POST" action="{{ route('removeContent', $content->id) }}">
+                    {{ csrf_field() }}
+                    <button class="link" onClick="return confirm('Are you sure you want to remove this content?');">remove</button>
+                </form>
+            </li>
+        @endif
     </ul>
 </div>
 
@@ -39,7 +41,12 @@
             </small>
             <input name="slug" maxlength="255" type="text" class="form-control" placeholder="Type something_like_this" value="{{ old('slug') ? old('slug') : $content->slug }}" />
         </div>
-        <input hidden name="is_news" value="{{ $content->is_news }}">
+        <input hidden name="category" value="{{ $content->category }}">
+        <div class="form-group">
+            <span class="text-muted">
+                {{ $content->category }}
+            </span>
+        </div>
         <div class="">
             <small class="text-muted">format text with <a target="_blank" href="{{ env('LINK_MARKDOWN') }}">markdown</a></small>
         </div>

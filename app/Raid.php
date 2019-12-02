@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Content extends Model
+class Raid extends Model
 {
     protected $table = 'content';
 
@@ -14,14 +14,10 @@ class Content extends Model
      * @var array
      */
     protected $fillable = [
-        'title',
+        'name',
         'slug',
-        'category',
-        'content',
-        'user_id',
-        'raid_id',
-        'last_edited_by',
-        'removed_at',
+        'discord_channel_id',
+        'discord_role_id',
     ];
 
     /**
@@ -31,8 +27,4 @@ class Content extends Model
      */
     protected $hidden = [
     ];
-
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
 }

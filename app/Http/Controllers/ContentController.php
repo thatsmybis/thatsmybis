@@ -25,7 +25,7 @@ class ContentController extends Controller
      */
     public function index()
     {
-        $content = Content::where('is_news', 0)->whereNull('removed_at')->with('user')->get();
+        $content = Content::where('category', 'resource')->whereNull('removed_at')->with('user')->get();
         return view('content.index', ['content' => $content]);
     }
 
@@ -70,7 +70,7 @@ class ContentController extends Controller
             'id'       => 'nullable|integer|exists:content,id',
             'title'    => 'required|string|max:255',
             'slug'     => 'required|string|max:255',
-            'is_news'  => 'nullable|boolean',
+            'category' => 'required|string|max:255',
         ];
 
         $this->validate(request(), $validationRules);
@@ -78,16 +78,35 @@ class ContentController extends Controller
         $updateValues['content'] = request()->input('content');
         $updateValues['title']   = request()->input('title');
         $updateValues['slug']    = request()->input('slug');
-        $updateValues['is_news'] = request()->input('is_news') ? 1 : 0;
 
         if ($id) {
             $content = Content::findOrFail($id);
+
+            if ($content->category == 'news' && !Auth::user()->hasRole('admin|guild_master|officer')) {
+                abort(403);
+            }
+
+            if (in_array($category, explode(',', env('RAID_SLUGS'))) && !Auth::user()->hasRole('admin|guild_master|officer|raid_leader')) {
+                abort(403);
+            }
+
             $updateValues['last_edited_by'] = Auth::id();
             $content->update($updateValues);
 
             return redirect()->back();
         } else {
             $updateValues['user_id'] = Auth::id();
+            $category = request()->input('category');
+            $updateValues['category'] = request()->input('category');
+
+            if ($category == 'news' && !Auth::user()->hasRole('admin|guild_master|officer')) {
+                abort(403);
+            }
+
+            if (in_array($category, explode(',', env('RAID_SLUGS'))) && !Auth::user()->hasRole('admin|guild_master|officer|raid_leader')) {
+                abort(403);
+            }
+
             $content = Content::create($updateValues);
             return redirect()->route('showContent', ['slug' => $content->slug]);
         }

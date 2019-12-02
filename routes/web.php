@@ -49,20 +49,41 @@ Route::get( '/roster',          'DashboardController@roster')   ->name('roster')
 Route::get( '/resources',        'ContentController@index')->name('contentIndex');
 Route::get( '/resources/{slug}', 'ContentController@show')->name('showContent');
 
-Route::post('/updateContent/{id?}', 'ContentController@update')->where('id', '[0-9]+')->name('updateContent');
-Route::post('/removeContent/{id}',  'ContentController@remove')->where('id', '[0-9]+')->name('removeContent');
+Route::group([
+        'prefix'     => 'guild',
+        'middleware' => 'acl',
+        'is'         => 'admin|guild_master|officer|raid_leader|class_leader|raider',
+    ], function () {
+    Route::post('/updateContent/{id?}', 'ContentController@update')->where('id', '[0-9]+')->name('updateContent');
+    Route::post('/removeContent/{id}',  'ContentController@remove')->where('id', '[0-9]+')->name('removeContent');
+});
 
 Route::post('/{id}/updateAll',          'ProfileController@submit')->where('id', '[0-9]+')            ->name('updateUser');
 Route::post('/{id}/updatePersonalNote', 'ProfileController@submitPersonalNote')->where('id', '[0-9]+')->name('updateUserPersonalNote');
+
+Route::get( '/ban/{id}', [
+        'uses'       => 'ProfileController@ban',
+        'middleware' => 'acl',
+        'is'         => 'admin|guild_master|officer|raider',
+    ])->where('id', '[0-9]+')               ->name('banUser');
+
 
 Route::group(['prefix' => '{id}'], function () {
     Route::get( '/',            'ProfileController@findById')->where('id', '[0-9]+')->name('findUserById');
     Route::get( '/{username?}', 'ProfileController@showUser')->where('id', '[0-9]+')->name('showUser');
 });
 
-Route::group(['prefix' => 'guild'], function () {
+Route::group([
+        'prefix'     => 'guild',
+        'middleware' => 'acl',
+        'is'         => 'admin|guild_master|officer|raider',
+    ], function () {
     Route::get( '/roles',     'RolesController@roles')    ->name('guild.roles');
     Route::get( '/syncRoles', 'RolesController@syncRoles')->name('guild.syncRoles');
+
+    // Can't get the permissions working right now (2019-12-02), so I'm disabling this.
+    // Route::get( '/permissions', 'PermissionsController@permissions')->name('guild.permissions');
+    // Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');
 });
 
 Route::get( '/{username}',      'ProfileController@findByUsername')->name('findUserByUsername');

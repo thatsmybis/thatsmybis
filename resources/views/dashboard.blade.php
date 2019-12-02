@@ -9,7 +9,7 @@
             @include('partials/createContent')
         </div>
 
-        @foreach ($news as $content)
+        @foreach ($contents->where('category', 'news') as $content)
             <div class="col-12 col-lg-6 offset-lg-3 mt-3 mb-3">
                 @include('partials/content')
             </div>

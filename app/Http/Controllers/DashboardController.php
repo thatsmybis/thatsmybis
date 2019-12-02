@@ -36,8 +36,8 @@ class DashboardController extends Controller
         // );
 
 
-        $news = Content::where('is_news', 1)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
-        return view('dashboard', ['news' => $news]);
+        $content = Content::whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
+        return view('dashboard', ['contents' => $content]);
     }
 
     /**
@@ -71,7 +71,7 @@ class DashboardController extends Controller
     public function roster()
     {
         $roles = Role::all();
-        $members = User::with('roles')->orderBy('username')->get();
+        $members = User::whereNull('banned_at')->with('roles')->orderBy('username')->get();
         return view('roster', [
             'members' => $members,
             'roles'   => $roles,

@@ -14,8 +14,14 @@
                     @if ($canEdit)
                         <small><a href="{{ route('showUser', ['id' => $user->id, 'username' => $user->username]) }}?edit=1">edit</a></small>
                     @endif
+                    @if (Auth::user()->hasRole('admin|guild_master|officer'))
+                        <small><a href="{{ route('banUser', ['id' => $user->id]) }}">{{ $user->banned_at ? 'unban' : 'ban' }}</a></small>
+                    @endif
                 </small>
             </h1>
+            <small class="small text-muted">
+                {{ $user->discord_username }}
+            </small>
         </div>
         <div class="col-12 {{ $showPersonalNote ? 'col-md-6' : '' }}">
             <div class="row mb-3">

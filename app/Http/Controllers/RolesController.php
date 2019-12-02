@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Content, Role, User};
+use App\{Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
@@ -26,7 +26,7 @@ class RolesController extends Controller
      */
     public function roles()
     {
-        $roles = Role::all();
+        $roles = Role::all()->sortByDesc('position');
         return view('roles', [
             'roles'   => $roles,
         ]);
@@ -53,7 +53,7 @@ class RolesController extends Controller
                     'permissions' => $role->permissions,
                     'position'    => $role->position,
                     'color'       => $role->color,
-                    'slug'        => $role->name,
+                    'slug'        => slug($role->name),
                     'description' => '',
                 ]);
             }

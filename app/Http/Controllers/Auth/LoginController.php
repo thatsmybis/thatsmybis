@@ -104,7 +104,7 @@ class LoginController extends Controller
 
             Auth::login($user, true);
 
-            return redirect()->route('dashboard');
+            return redirect()->route('home');
         } else {
             abort(403, "Something went wrong with the data Discord sent us. Try again.");
         }
