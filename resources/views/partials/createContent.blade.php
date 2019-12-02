@@ -24,14 +24,14 @@
                 </label>
                 @if (Auth::user()->hasRole('admin|guild_master|officer|raider'))
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="category" id="categoryA" value="News" checked>
+                        <input class="form-check-input" type="radio" name="category" id="categoryA" value="news" {{ old('category') && old('category') == 'News' ? 'checked' : '' }}>
                         <label class="form-check-label" for="categoryA">
                             News
                         </label>
                     </div>
                 @endif
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="category" id="categoryB" value="resource" checked>
+                    <input class="form-check-input" type="radio" name="category" id="categoryB" value="resource" {{ old('category') && old('category') == 'resource' ? 'checked' : '' }}>
                     <label class="form-check-label" for="categoryB">
                         Resources
                     </label>
@@ -39,7 +39,7 @@
                 @if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider'))
                     @foreach ($raids as $raid)
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="category" id="category{{ $raid->id }}" value="{{ $raid->id }}" checked>
+                            <input class="form-check-input" type="radio" name="category" id="category{{ $raid->id }}" value="{{ $raid->id }}" {{ old('category') && old('category') == $raid->slug ? 'checked' : '' }}>
                             <label class="form-check-label" for="category{{ $raid->id }}">
                                 {{ $raid->name }}
                             </label>

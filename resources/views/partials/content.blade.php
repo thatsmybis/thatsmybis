@@ -30,15 +30,13 @@
         <div class="form-group mt-3">
             <label for="class">
                 Title
+                <span class="text-muted">#{{ $content->category }}</span>
             </label>
             <input name="title" maxlength="255" type="text" class="form-control" placeholder="Enter a title" value="{{ old('title') ? old('title') : $content->title }}" />
         </div>
-        <div class="form-group">
-            <span class="text-muted">
-                {{ $content->category }}
-            </span>
-            <input hidden name="category" value="{{ $content->category }}">
-        </div>
+
+        <input hidden name="category" value="{{ $content->category }}">
+
         <div class="">
             <small class="text-muted">format text with <a target="_blank" href="{{ env('LINK_MARKDOWN') }}">markdown</a></small>
         </div>
