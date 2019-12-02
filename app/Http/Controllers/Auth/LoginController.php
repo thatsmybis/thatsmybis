@@ -76,11 +76,11 @@ class LoginController extends Controller
         try {
             $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$id]);
         } catch (\GuzzleHttp\Command\Exception\CommandClientException $e) {
-            abort(404, "Doesn't look like you're in the guild Discord server.");
+            abort(403, "Doesn't look like you're in the guild Discord server.");
         }
 
         if (!$discordMember) {
-            abort(404, "Doesn't look like you're in the guild Discord server.");
+            abort(403, "Doesn't look like you're in the guild Discord server.");
         }
 
 
@@ -93,6 +93,18 @@ class LoginController extends Controller
             Auth::login($authUser, true);
             return redirect($this->redirectTo);
         } else if ($unauthUser) {
+            $allowedRoles = explode(',', env('GUILD_ALLOWED_SIGNUP_ROLES'));
+            $pass = false;
+            foreach ($discordMember->roles as $role) {
+                if (in_array($role, $allowedRoles)) {
+                    $pass = true;
+                }
+            }
+
+            if (!$pass) {
+                abort(403, 'Missing appropriate Discord role.');
+            }
+
             $user = User::create([
                 'username'         => $unauthUser->getName(),
                 'email'            => $unauthUser->getEmail(),
