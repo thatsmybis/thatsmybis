@@ -81,17 +81,22 @@ class ContentController extends Controller
 
         if ($id) {
             $content = Content::findOrFail($id);
+            $category = $content->category;
 
-            if ($content->category == 'news' && !Auth::user()->hasRole('admin|guild_master|officer')) {
-                abort(403);
+            if ($category == 'news' && !Auth::user()->hasRole('admin|guild_master|officer|raider')) {
+                abort(403, 'You cannot edit news posts.');
             }
 
-            if (in_array($category, explode(',', env('RAID_SLUGS'))) && !Auth::user()->hasRole('admin|guild_master|officer|raid_leader')) {
-                abort(403);
-            }
+            // ints are raid id's
+            if (is_numeric($category)) {
+                if (!Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider')) {
+                    abort(403, 'You cannot edit raid posts.');
+                }
 
-            if (in_array()) {
+                $raid = Raid::findOrFail($category);
 
+                $updateValues['raid_id'] = $raid->id;
+                $category = $raid->slug;
             }
 
             $updateValues['last_edited_by'] = Auth::id();
@@ -103,13 +108,13 @@ class ContentController extends Controller
             $category = request()->input('category');
 
             if ($category == 'news' && !Auth::user()->hasRole('admin|guild_master|officer|raider')) {
-                abort(403);
+                abort(403, 'You cannot create news posts.');
             }
 
             // ints are raid id's
             if (is_numeric($category)) {
                 if (!Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider')) {
-                    abort(403);
+                    abort(403, 'You cannot create raid posts.');
                 }
 
                 $raid = Raid::findOrFail($category);
