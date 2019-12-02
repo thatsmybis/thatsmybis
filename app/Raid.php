@@ -6,8 +6,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Raid extends Model
 {
-    protected $table = 'content';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -27,4 +25,8 @@ class Raid extends Model
      */
     protected $hidden = [
     ];
+
+    public function role() {
+        return $this->hasOne(Role::class, 'discord_id', 'discord_role_id');
+    }
 }

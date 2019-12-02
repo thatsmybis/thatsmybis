@@ -3,12 +3,13 @@
     <div class="form-group">
         <ul class="list-inline mb-2">
             <li class="list-inline-item">
-                <a class="js-edit-content" data-id="{{ $fakeId }}" href="">create new</a>
+                <a class="js-edit-content btn btn-sm btn-light" data-id="{{ $fakeId }}" href="">New Post</a>
             </li>
+            @include('partials/newsCategories')
         </ul>
     </div>
 
-    <div class="js-content" data-id="{{ $fakeId }}" style="display:none;">
+    <div class="js-content bg-dark mb-1 p-2 rounded" data-id="{{ $fakeId }}" style="display:none;">
         <form class="form-horizontal" role="form" method="POST" action="{{ route('updateContent') }}">
             {{ csrf_field() }}
             <div class="form-group mt-3">
@@ -19,50 +20,31 @@
             </div>
             <div class="form-group">
                 <label for="class">
-                    URL Title
-                </label>
-                <small class="text-muted">
-                    eg. "why_rag_is_boss"
-                </small>
-                <input name="slug" maxlength="255" type="text" class="form-control" placeholder="Type something_like_this" value="{{ old('slug') ? old('slug') : '' }}" />
-            </div>
-            <div class="form-group">
-                <label for="class">
                     Post To
                 </label>
-                @if (Auth::user()->hasRole('admin|guild_master|officer'))
+                @if (Auth::user()->hasRole('admin|guild_master|officer|raider'))
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="category" id="category1" value="news" checked>
-                        <label class="form-check-label" for="category1">
+                        <input class="form-check-input" type="radio" name="category" id="categoryA" value="News" checked>
+                        <label class="form-check-label" for="categoryA">
                             News
                         </label>
                     </div>
                 @endif
                 <div class="form-check">
-                    <input class="form-check-input" type="radio" name="category" id="category2" value="resource" checked>
-                    <label class="form-check-label" for="category2">
+                    <input class="form-check-input" type="radio" name="category" id="categoryB" value="resource" checked>
+                    <label class="form-check-label" for="categoryB">
                         Resources
                     </label>
                 </div>
                 @if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider'))
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="category" id="category3" value="myth_raid" checked>
-                        <label class="form-check-label" for="category3">
-                            Myth Raid
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="category" id="category4" value="night_raid" checked>
-                        <label class="form-check-label" for="category4">
-                            Night Raid
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="category" id="category5" value="weekend_raid" checked>
-                        <label class="form-check-label" for="category5">
-                            Weekend Raid
-                        </label>
-                    </div>
+                    @foreach ($raids as $raid)
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" name="category" id="category{{ $raid->id }}" value="{{ $raid->id }}" checked>
+                            <label class="form-check-label" for="category{{ $raid->id }}">
+                                {{ $raid->name }}
+                            </label>
+                        </div>
+                    @endforeach
                 @endif
             </div>
             <div class="">
@@ -75,5 +57,11 @@
                 <button class="btn btn-success">Create</button>
             </div>
         </form>
+    </div>
+@else
+    <div class="form-group">
+        <ul class="list-inline mb-2">
+            @include('partials/newsCategories')
+        </ul>
     </div>
 @endif

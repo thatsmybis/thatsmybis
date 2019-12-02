@@ -18,7 +18,7 @@ class CreateRaidsTable extends Migration
             $table->string('name');
             $table->string('slug');
             $table->bigInteger('discord_channel_id')->nullable();
-            $table->bigInteger('discord_role_id')->nullable();
+            $table->bigInteger('discord_role_id')->nullable()->index();
             $table->timestamps();
         });
 
@@ -30,9 +30,9 @@ class CreateRaidsTable extends Migration
         /*
         INSERT INTO `raids` (`name`, `slug`, `discord_channel_id`, `discord_role_id`)
         VALUES
-            ("Myth Raid", "myth_raid", 641092767530876928, 640647183087173738),
-            ("Night Raid", "night_raid", 639522941138370576, 640647320521670687),
-            ("Weekend Raid", "weekend_raid", 641092795922382858, 640647260798976062);
+            ("Myth Raid", "myth-raid", 641092767530876928, 640647183087173738),
+            ("Night Raid", "night-raid", 639522941138370576, 640647320521670687),
+            ("Weekend Raid", "weekend-raid", 641092795922382858, 640647260798976062);
         */
     }
 

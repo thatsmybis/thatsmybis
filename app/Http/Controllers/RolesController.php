@@ -27,7 +27,7 @@ class RolesController extends Controller
     public function roles()
     {
         $roles = Role::all()->sortByDesc('position');
-        return view('roles', [
+        return view('guild.roles', [
             'roles'   => $roles,
         ]);
     }

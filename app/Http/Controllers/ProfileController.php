@@ -18,16 +18,6 @@ class ProfileController extends Controller
         $this->middleware(['auth', 'seeUser']);
     }
 
-    /**
-     * Show the Dashboard page.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        return view('dashboard');
-    }
-
     public function ban($id = null) {
         $user = User::find($id);
 

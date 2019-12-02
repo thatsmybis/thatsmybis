@@ -49,7 +49,7 @@ class HomeController extends Controller
         if (Auth::check() && Auth::user()) {
         // Authenticated users default to a different page
             request()->session()->reflash();
-            return redirect()->route('dashboard');
+            return redirect()->route('news');
         } else {
             return view('home');
         }

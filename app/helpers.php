@@ -16,10 +16,10 @@ function splitByLine($string) {
 }
 
 function slug($string) {
-    $slug = substr(Illuminate\Support\Str::slug($string, '_'), 0, 50);
+    $slug = substr(Illuminate\Support\Str::slug($string, '-'), 0, 50);
     if ($slug) {
         return $slug;
     } else {
-        return '_';
+        return '-';
     }
 }

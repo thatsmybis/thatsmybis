@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Content, User};
+use App\{Content, Raid, User};
 use Auth;
 use Illuminate\Http\Request;
 
@@ -69,7 +69,7 @@ class ContentController extends Controller
             'content'  => 'nullable|string|max:65000',
             'id'       => 'nullable|integer|exists:content,id',
             'title'    => 'required|string|max:255',
-            'slug'     => 'required|string|max:255',
+            // 'slug'     => 'required|string|max:255',
             'category' => 'required|string|max:255',
         ];
 
@@ -77,7 +77,7 @@ class ContentController extends Controller
 
         $updateValues['content'] = request()->input('content');
         $updateValues['title']   = request()->input('title');
-        $updateValues['slug']    = request()->input('slug');
+        $updateValues['slug']    = slug(request()->input('title'));
 
         if ($id) {
             $content = Content::findOrFail($id);
@@ -90,6 +90,10 @@ class ContentController extends Controller
                 abort(403);
             }
 
+            if (in_array()) {
+
+            }
+
             $updateValues['last_edited_by'] = Auth::id();
             $content->update($updateValues);
 
@@ -97,15 +101,24 @@ class ContentController extends Controller
         } else {
             $updateValues['user_id'] = Auth::id();
             $category = request()->input('category');
-            $updateValues['category'] = request()->input('category');
 
-            if ($category == 'news' && !Auth::user()->hasRole('admin|guild_master|officer')) {
+            if ($category == 'news' && !Auth::user()->hasRole('admin|guild_master|officer|raider')) {
                 abort(403);
             }
 
-            if (in_array($category, explode(',', env('RAID_SLUGS'))) && !Auth::user()->hasRole('admin|guild_master|officer|raid_leader')) {
-                abort(403);
+            // ints are raid id's
+            if (is_numeric($category)) {
+                if (!Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider')) {
+                    abort(403);
+                }
+
+                $raid = Raid::findOrFail($category);
+
+                $updateValues['raid_id'] = $raid->id;
+                $category = $raid->name;
             }
+
+            $updateValues['category'] = $category;
 
             $content = Content::create($updateValues);
             return redirect()->route('showContent', ['slug' => $content->slug]);

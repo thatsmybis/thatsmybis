@@ -22,12 +22,13 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('showUser', ['id' => Auth::user()->id, 'username' => Auth::user()->username]) }}">My Profile</a>
                 </li>
-                @if (Auth::user()->hasRole('admin|guild_master|officer'))
+                @if (Auth::user()->hasRole('admin|guild_master|officer|raider'))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin
                         </a>
                         <div class="dropdown-menu" aria-labelledby="adminNavDropdown">
+                            <a class="dropdown-item" href="{{ route('guild.raids') }}">Raids</a>
                             <a class="dropdown-item" href="{{ route('guild.roles') }}">Roles</a>
                             <!-- Can't get permissions working right now, so I'm disabling this
                                 <a class="dropdown-item" href="">Permissions</a> -->

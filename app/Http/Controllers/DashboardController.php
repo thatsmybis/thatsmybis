@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Content, Role, User};
+use App\{Content, Raid, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
@@ -20,24 +20,33 @@ class DashboardController extends Controller
     }
 
     /**
-     * Show the Dashboard page.
+     * Show the News page.
      *
      * @return \Illuminate\Http\Response
      */
-    public function dashboard()
+    public function news()
     {
-        $user = Auth::user();
+        $user = User::where('id', Auth::id())->with('roles')->first();
 
-        // $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+        $category = request()->input('category');
 
-        // dd(
-        //     $discord->guild->getGuild(['guild.id' => (int)env('GUILD_ID')]),
-        //     $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$user->discord_id]),
-        // );
+        if (!$category) {
+            $userDiscordRoles = $user->roles->keyBy('discord_id')->keys();
 
+            $userRaids = Raid::whereIn('discord_role_id', $userDiscordRoles)->get()->keyBy('id')->keys()->toArray();
 
-        $content = Content::whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
-        return view('dashboard', ['contents' => $content]);
+            $content = Content::where('category', 'news')->orWhereIn('raid_id', $userRaids)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
+        } else {
+            $content = Content::where('category', $category)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
+        }
+
+        $raids = Raid::all();
+
+        return view('news', [
+            'category' => $category,
+            'contents' => $content,
+            'raids'    => Raid::all(),
+        ]);
     }
 
     /**

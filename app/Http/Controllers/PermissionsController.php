@@ -21,20 +21,20 @@ class PermissionsController extends Controller
     }
 
     /**
-     * Show the roles page.
+     * Show the raids page.
      *
      * @return \Illuminate\Http\Response
      */
     public function permissions()
     {
         $permissions = Permission::with('roles')->get();
-        return view('permissions', [
+        return view('guild.permissions', [
             'permissions' => $permissions,
         ]);
     }
 
     /**
-     * Sync the database's roles with those on the Discord server
+     * Sync the database's permissions with whatever you have set here
      *
      * @return \Illuminate\Http\Response
      */
