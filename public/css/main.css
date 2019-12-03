@@ -37,6 +37,10 @@
     color: #8e959b !important;
 }
 
+.font-weight-medium {
+    font-weight: 600 !important;
+}
+
 .nowrap {
     white-space: nowrap;
 }
@@ -47,6 +51,10 @@ ul.no-bullet, ol.no-bullet, li.no-bullet  {
 
 ol.lesser-indent, ul.lesser-indent {
     padding-left: 1em;
+}
+
+ol.no-indent, ul.no-indent {
+    padding-left: 0em;
 }
 
 .cursor-pointer {

@@ -50,10 +50,48 @@
 
             <div class="row mb-3">
                 <div class="col-12">
+                    <span class="text-muted font-weight-bold">Wishlist</span>
+                </div>
+                <div class="col-12">
+                    @if ($user->wishlist->count() > 0)
+                        <ul class="lesser-indent">
+                            @foreach ($user->wishlist as $item)
+                                <li class="">
+                                    @include('partials/item')
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        —
+                    @endif
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12">
+                    <span class="text-muted font-weight-bold">Loot Received</span>
+                </div>
+                <div class="col-12">
+                    @if ($user->received->count() > 0)
+                        <ul class="lesser-indent">
+                            @foreach ($user->received as $item)
+                                <li class="">
+                                    @include('partials/item')
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        —
+                    @endif
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <div class="col-12">
                     <span class="text-muted font-weight-bold">Recipes</span>
                 </div>
                 <div class="col-12">
-                    @if ($user->recipes)
+                    @if ($user->recipes->count() > 0)
                         <ul class="lesser-indent">
                             @foreach ($user->recipes as $item)
                                 <li class="">
@@ -101,44 +139,6 @@
                 </div>
                 <div class="col-12">
                     {{ $user->rank_goal ? $user->rank_goal : '—' }}
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-12">
-                    <span class="text-muted font-weight-bold">Wishlist</span>
-                </div>
-                <div class="col-12">
-                    @if ($user->wishlist)
-                        <ul class="lesser-indent">
-                            @foreach ($user->wishlist as $item)
-                                <li class="">
-                                    @include('partials/item')
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        —
-                    @endif
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-12">
-                    <span class="text-muted font-weight-bold">Loot Received</span>
-                </div>
-                <div class="col-12">
-                    @if ($user->received)
-                        <ul class="lesser-indent">
-                            @foreach ($user->received as $item)
-                                <li class="">
-                                    @include('partials/item')
-                                </li>
-                            @endforeach
-                        </ul>
-                    @else
-                        —
-                    @endif
                 </div>
             </div>
 

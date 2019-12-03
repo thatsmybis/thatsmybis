@@ -39,6 +39,14 @@ class Item extends Model
     ];
 
     public function users() {
-        return $this->belongsToMany(User::class, 'user_items')->withTimeStamps()->withPivot('is_received', 'is_wishlist');
+        return $this->belongsToMany(User::class, 'user_items')->withTimeStamps()->withPivot('type');
+    }
+
+    public function wishlistUsers() {
+        return $this->belongsToMany(User::class, 'user_items')->withTimeStamps()->withPivot('type')->where('type', 'wishlist');
+    }
+
+    public function receivedUsers() {
+        return $this->belongsToMany(User::class, 'user_items')->withTimeStamps()->withPivot('type')->where('type', 'received');
     }
 }

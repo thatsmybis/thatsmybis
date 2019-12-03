@@ -64,6 +64,13 @@ $(document).ready( function () {
         table.column(colNotes).       visible(false);
         table.column(colOfficerNotes).visible(false);
    });
+
+    // Triggered when a column is made visible
+    table.on('column-visibility.dt', function (e, settings, column, state) {
+        // Refresh wowhead links to show stlying.
+        // wowhead's script previously ignored these links if they weren't visible
+        $WowheadPower.refreshLinks();
+    });
 });
 
 function createTable() {
@@ -101,7 +108,7 @@ function createTable() {
                 "title"  : "Rare Recipes",
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
-                    return row.recipes ? nl2br(row.recipes) : '—';
+                    return data ? getItemList(data) : '—';
                 },
                 "visible" : false
             },
@@ -133,7 +140,7 @@ function createTable() {
                 "title"  : "Wishlist",
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
-                    return row.wishlist ? nl2br(row.wishlist) : '—';
+                    return data ? getItemList(data) : '—';
                 },
                 "visible" : false
             },
@@ -141,7 +148,7 @@ function createTable() {
                 "title"  : "Raid Loot",
                 "data"   : "loot_recieved",
                 "render" : function (data, type, row) {
-                    return row.loot_received ? nl2br(row.loot_received) : '—';
+                    return data ? getItemList(data) : '—';
                 },
                 "visible" : false
             },
@@ -201,4 +208,14 @@ function createTable() {
         }
     });
     return memberTable;
+}
+
+// Gets an HTML list of items with pretty wowhead formatting
+function getItemList(data) {
+    let items = `<ul class="no-indent no-bullet">`;
+    $.each(data, function (index, item) {
+        items += `<li class="font-weight-medium"><a href="/item/${ item.item_id }" data-wowhead="item=${ item.item_id }">${ item.name }</a></li>`;
+    });
+    items += `</ul>`;
+    return items;
 }

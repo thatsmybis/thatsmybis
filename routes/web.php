@@ -49,6 +49,8 @@ Route::get( '/roster',          'DashboardController@roster')   ->name('roster')
 Route::get( '/resources',        'ContentController@index')->name('contentIndex');
 Route::get( '/resources/{slug}', 'ContentController@show')->name('showContent');
 
+Route::get( '/item/{item_id}/{slug?}', 'ItemController@show')->name('showItem');
+
 Route::group([
         'middleware' => 'acl',
         'is'         => 'admin|guild_master|officer|raid_leader|class_leader|raider',

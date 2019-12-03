@@ -83,13 +83,10 @@ class DashboardController extends Controller
             'username',
             'discord_username',
             'spec',
-            'recipes',
             'alts',
             'rank',
             'rank_goal',
             'raid_group',
-            'wishlist',
-            'loot_received',
             'note',
         ];
         if (Auth::user()->hasRole('admin|guild_master|officer|raider')) {
@@ -97,7 +94,7 @@ class DashboardController extends Controller
         }
 
         $members = User::select()
-            ->whereNull('banned_at')->with('roles')->orderBy('username')->get();
+            ->whereNull('banned_at')->with(['recipes', 'received', 'roles', 'wishlist'])->orderBy('username')->get();
 
         $roles = Role::all();
 
