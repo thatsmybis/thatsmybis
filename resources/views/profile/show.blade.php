@@ -151,7 +151,7 @@
                 </div>
             </div>
 
-            @if ($showOfficerNote)
+            @if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider'))
                 <div class="row mb-3">
                     <div class="col-12">
                         <span class="text-muted font-weight-bold">Officer Notes</span>

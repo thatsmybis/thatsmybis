@@ -32,7 +32,7 @@ $(document).ready( function () {
         table.column(colWishlist).    visible(false);
         table.column(colLoot).        visible(false);
         table.column(colNotes).       visible(true);
-        table.column(colOfficerNotes).visible(true);
+        table.column(colOfficerNotes).visible(false);
    });
 
    $(".toggle-column-loot-council").click(function(e) {
@@ -158,7 +158,7 @@ function createTable() {
                 "render" : function (data, type, row) {
                     return row.officer_note ? nl2br(row.officer_note) : '—';
                 },
-                "visible" : true
+                "visible" : false
             },
         ],
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting

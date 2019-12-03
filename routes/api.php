@@ -16,3 +16,9 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('/officer-note/{id}', [
+        'uses'       => 'Api\ProfileController@submitOfficerNote',
+        'middleware' => 'acl',
+        'is'         => 'admin|guild_master|officer|raid_leader|raider',
+    ])->name('apiOfficerNote');

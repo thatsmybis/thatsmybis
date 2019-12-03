@@ -79,8 +79,28 @@ class DashboardController extends Controller
      */
     public function roster()
     {
+        $userFields = [
+            'username',
+            'discord_username',
+            'spec',
+            'recipes',
+            'alts',
+            'rank',
+            'rank_goal',
+            'raid_group',
+            'wishlist',
+            'loot_received',
+            'note',
+        ];
+        if (Auth::user()->hasRole('admin|guild_master|officer|raider')) {
+            $userFields[] = 'officer_note';
+        }
+
+        $members = User::select()
+            ->whereNull('banned_at')->with('roles')->orderBy('username')->get();
+
         $roles = Role::all();
-        $members = User::whereNull('banned_at')->with('roles')->orderBy('username')->get();
+
         return view('roster', [
             'members' => $members,
             'roles'   => $roles,

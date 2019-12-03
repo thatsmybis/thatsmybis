@@ -57,10 +57,12 @@
                 <li class="list-inline-item">
                     <a class="toggle-column cursor-pointer" data-column="8" href="">Notes</a>
                 </li>
-                <li class="list-inline-item">&sdot;</li>
-                <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="9" href="">Officer Notes</a>
-                </li>
+                @if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider'))
+                    <li class="list-inline-item">&sdot;</li>
+                    <li class="list-inline-item">
+                        <a class="toggle-column cursor-pointer" data-column="9" href="">Officer Notes</a>
+                    </li>
+                @endif
             </ul>
         </div>
         <div class="mt-4">
