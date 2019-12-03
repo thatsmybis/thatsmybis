@@ -39,49 +39,6 @@
                 </div>
 
                 <div class="form-group mt-5">
-                    <label for="recipes" class="font-weight-bold">
-                        Rare Recipes
-                    </label>
-                    <small class="text-muted">
-                        Any rare recipes on your accounts
-                    </small>
-                    <?php
-                    $recipesArray = splitByLine($user->recipes);
-                    $recipesLength = count($recipesArray) - 1;
-                    ?>
-                    <div class="form-group">
-                        <input name="recipes[]" maxlength="100" type="text" class="form-control" placeholder="eg. Dirge's Kickin' Chimaerok Chops" value="{{ old('recipes.0]') ? old('recipes.0') : ($recipesLength >= 0 ? $recipesArray[0] : '') }}" />
-                    </div>
-                    <div class="form-group">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Flask of Distilled Wisdom"       value="{{ old('recipes.1') ? old('recipes.1') : ($recipesLength >= 1 ? $recipesArray[1] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Enchant Weapon - Crusader"       value="{{ old('recipes.2') ? old('recipes.2') : ($recipesLength >= 2 ? $recipesArray[2] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Enchant Weapon - Spell Power"    value="{{ old('recipes.3') ? old('recipes.3') : ($recipesLength >= 3 ? $recipesArray[3] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Lionheart Helm"                  value="{{ old('recipes.4') ? old('recipes.4') : ($recipesLength >= 4 ? $recipesArray[4] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Arcanite Reaper"                 value="{{ old('recipes.5') ? old('recipes.5') : ($recipesLength >= 5 ? $recipesArray[5] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Devilsaur Leggings"              value="{{ old('recipes.6') ? old('recipes.6') : ($recipesLength >= 6 ? $recipesArray[6] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Hide of the Wild"                value="{{ old('recipes.7') ? old('recipes.7') : ($recipesLength >= 7 ? $recipesArray[7] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Bottomless Bag"                  value="{{ old('recipes.8') ? old('recipes.8') : ($recipesLength >= 8 ? $recipesArray[8] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Force Reactive Disk"             value="{{ old('recipes.9') ? old('recipes.9') : ($recipesLength >= 9 ? $recipesArray[9] : '') }}" />
-                    </div>
-                </div>
-
-                <div class="form-group mt-5">
                     <label for="alts" class="font-weight-bold">
                         60 Alts
                     </label>
@@ -188,6 +145,49 @@
                             <input name="loot_received[]" maxlength="200" type="text" class="{{ $i > 0 ? 'js-show-next' : '' }} form-control" placeholder="eg. Core Hound Tooth" value="{{ old('loot_received.' . $i) ? old('loot_received.' . $i) : ($lootLength  >= $i ? $lootArray[$i] : '') }}" />
                         </div>
                     @endfor
+                </div>
+
+                <div class="form-group mt-5">
+                    <label for="recipes" class="font-weight-bold">
+                        Rare Recipes
+                    </label>
+                    <small class="text-muted">
+                        Any rare recipes on your accounts
+                    </small>
+                    <?php
+                    $recipesArray = splitByLine($user->recipes);
+                    $recipesLength = count($recipesArray) - 1;
+                    ?>
+                    <div class="form-group">
+                        <input name="recipes[]" maxlength="100" type="text" class="form-control" placeholder="eg. Dirge's Kickin' Chimaerok Chops" value="{{ old('recipes.0]') ? old('recipes.0') : ($recipesLength >= 0 ? $recipesArray[0] : '') }}" />
+                    </div>
+                    <div class="form-group">
+                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Flask of Distilled Wisdom"       value="{{ old('recipes.1') ? old('recipes.1') : ($recipesLength >= 1 ? $recipesArray[1] : '') }}" />
+                    </div>
+                    <div class="js-hide-empty form-group" style="display:none;">
+                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Enchant Weapon - Crusader"       value="{{ old('recipes.2') ? old('recipes.2') : ($recipesLength >= 2 ? $recipesArray[2] : '') }}" />
+                    </div>
+                    <div class="js-hide-empty form-group" style="display:none;">
+                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Enchant Weapon - Spell Power"    value="{{ old('recipes.3') ? old('recipes.3') : ($recipesLength >= 3 ? $recipesArray[3] : '') }}" />
+                    </div>
+                    <div class="js-hide-empty form-group" style="display:none;">
+                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Lionheart Helm"                  value="{{ old('recipes.4') ? old('recipes.4') : ($recipesLength >= 4 ? $recipesArray[4] : '') }}" />
+                    </div>
+                    <div class="js-hide-empty form-group" style="display:none;">
+                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Arcanite Reaper"                 value="{{ old('recipes.5') ? old('recipes.5') : ($recipesLength >= 5 ? $recipesArray[5] : '') }}" />
+                    </div>
+                    <div class="js-hide-empty form-group" style="display:none;">
+                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Devilsaur Leggings"              value="{{ old('recipes.6') ? old('recipes.6') : ($recipesLength >= 6 ? $recipesArray[6] : '') }}" />
+                    </div>
+                    <div class="js-hide-empty form-group" style="display:none;">
+                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Hide of the Wild"                value="{{ old('recipes.7') ? old('recipes.7') : ($recipesLength >= 7 ? $recipesArray[7] : '') }}" />
+                    </div>
+                    <div class="js-hide-empty form-group" style="display:none;">
+                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Bottomless Bag"                  value="{{ old('recipes.8') ? old('recipes.8') : ($recipesLength >= 8 ? $recipesArray[8] : '') }}" />
+                    </div>
+                    <div class="js-hide-empty form-group" style="display:none;">
+                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Force Reactive Disk"             value="{{ old('recipes.9') ? old('recipes.9') : ($recipesLength >= 9 ? $recipesArray[9] : '') }}" />
+                    </div>
                 </div>
 
                 <div class="form-group mt-5">

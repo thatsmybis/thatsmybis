@@ -96,6 +96,10 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
     margin-right: 4px;
 }
 
+.js-markdown img {
+    max-width: 100%;
+}
+
 /* DARK THEME */
 body {
     color:                 #fff !important;

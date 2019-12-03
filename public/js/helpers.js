@@ -7,6 +7,12 @@ $.ajaxSetup({
     }
 });
 
+// For config options: https://marked.js.org/#/USING_ADVANCED.md#options
+marked.setOptions({
+    gfm: true,
+    breaks: true
+});
+
 $(document).ready(function () {
     // Format any markdown fields
     parseMarkdown();
@@ -103,6 +109,30 @@ function trackTimestamps(rate = 15000) {
  */
 function nl2br(string) {
     return string ? string.replace(/\n/g,"<br>") : '';
+}
+
+function cleanUrl(sanitize, base, href) {
+    if (sanitize) {
+        try {
+            var prot = decodeURIComponent(unescape(href))
+            .replace(/[^\w:]/g, '')
+            .toLowerCase();
+        } catch (e) {
+            return null;
+        }
+        if (prot.indexOf('javascript:') === 0 || prot.indexOf('vbscript:') === 0 || prot.indexOf('data:') === 0) {
+            return null;
+        }
+    }
+    if (base && !originIndependentUrl.test(href)) {
+        href = resolveUrl(base, href);
+    }
+    try {
+        href = encodeURI(href).replace(/%25/g, '%');
+    } catch (e) {
+        return null;
+    }
+    return href;
 }
 
 /**
@@ -208,7 +238,6 @@ function parseMarkdown(element = null) {
         });
     }
 }
-
  function rgbToHex (rgb) {
     let hex = Number(rgb).toString(16);
 

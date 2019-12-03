@@ -46,6 +46,10 @@
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.min.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
+    <!-- Wowhead tooltips and stuff -->
+    <script>var whTooltips = {colorLinks: true, iconizeLinks: false, renameLinks: true, iconSize: 'large', hide: { maxstack: true, ilvl: false, sellprice: true }};</script>
+    <script src="https://wow.zamimg.com/widgets/power.js"></script>
+
     @yield('css')
 
     <!-- Scripts -->

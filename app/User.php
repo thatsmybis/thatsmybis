@@ -24,13 +24,10 @@ class User extends Authenticatable
         'discord_id',
         'password',
         'spec',
-        'recipes',
         'alts',
         'rank',
         'rank_goal',
         'raid_group',
-        'wishlist',
-        'loot_received',
         'note',
         'officer_note',
         'personal_note',
@@ -57,4 +54,31 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function recipes() {
+        $query = $this
+            ->belongsToMany(Item::class, 'user_items')
+            ->where('user_items.type', 'recipe')
+            ->withTimeStamps();
+
+        return ($query);
+    }
+
+    public function received() {
+        $query = $this
+            ->belongsToMany(Item::class, 'user_items')
+            ->where('user_items.type', 'received')
+            ->withTimeStamps();
+
+        return ($query);
+    }
+
+    public function wishlist() {
+        $query = $this
+            ->belongsToMany(Item::class, 'user_items')
+            ->where('user_items.type', 'wishlist')
+            ->withTimeStamps();
+
+        return ($query);
+    }
 }

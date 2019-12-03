@@ -55,9 +55,9 @@
                 <div class="col-12">
                     @if ($user->recipes)
                         <ul class="lesser-indent">
-                            @foreach (explode("\n", $user->recipes) as $value)
-                                <li class="js-markdown-inline">
-                                    {{ $value }}
+                            @foreach ($user->recipes as $item)
+                                <li class="">
+                                    @include('partials/item')
                                 </li>
                             @endforeach
                         </ul>
@@ -111,9 +111,9 @@
                 <div class="col-12">
                     @if ($user->wishlist)
                         <ul class="lesser-indent">
-                            @foreach (explode("\n", $user->wishlist) as $value)
-                                <li class="js-markdown-inline">
-                                    {{ $value }}
+                            @foreach ($user->wishlist as $item)
+                                <li class="">
+                                    @include('partials/item')
                                 </li>
                             @endforeach
                         </ul>
@@ -128,11 +128,11 @@
                     <span class="text-muted font-weight-bold">Loot Received</span>
                 </div>
                 <div class="col-12">
-                    @if ($user->loot_received)
+                    @if ($user->received)
                         <ul class="lesser-indent">
-                            @foreach (explode("\n", $user->loot_received) as $value)
-                                <li class="js-markdown-inline">
-                                    {{ $value }}
+                            @foreach ($user->received as $item)
+                                <li class="">
+                                    @include('partials/item')
                                 </li>
                             @endforeach
                         </ul>
