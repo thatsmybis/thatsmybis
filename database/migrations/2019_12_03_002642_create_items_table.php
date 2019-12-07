@@ -33,6 +33,7 @@ class CreateItemsTable extends Migration
             $table->integer('item_id')->unsigned()->index()->foreign()->references('id')->on('items')->onDelete('cascade');
             $table->bigInteger('user_id')->unsigned()->index()->foreign()->references('id')->on('users')->onDelete('cascade');
             $table->string('type', 20)->nullable();
+            $table->integer('order')->unsigned();
 
             $table->timestamps();
 

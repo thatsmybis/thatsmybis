@@ -22,3 +22,5 @@ Route::post('/officer-note/{id}', [
         'middleware' => 'acl',
         'is'         => 'admin|guild_master|officer|raid_leader|raider',
     ])->name('apiOfficerNote');
+
+Route::get( '/items/query/{query}', 'Api\ItemsController@query')->name('apiSearchItems');

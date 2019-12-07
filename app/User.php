@@ -59,6 +59,7 @@ class User extends Authenticatable
         $query = $this
             ->belongsToMany(Item::class, 'user_items')
             ->where('user_items.type', 'recipe')
+            ->orderBy('order')
             ->withTimeStamps();
 
         return ($query);
@@ -68,6 +69,7 @@ class User extends Authenticatable
         $query = $this
             ->belongsToMany(Item::class, 'user_items')
             ->where('user_items.type', 'received')
+            ->orderBy('order')
             ->withTimeStamps();
 
         return ($query);
@@ -77,6 +79,7 @@ class User extends Authenticatable
         $query = $this
             ->belongsToMany(Item::class, 'user_items')
             ->where('user_items.type', 'wishlist')
+            ->orderBy('order')
             ->withTimeStamps();
 
         return ($query);

@@ -69,7 +69,7 @@ $(document).ready( function () {
     table.on('column-visibility.dt', function (e, settings, column, state) {
         // Refresh wowhead links to show stlying.
         // wowhead's script previously ignored these links if they weren't visible
-        $WowheadPower.refreshLinks();
+        makeWowheadLinks();
     });
 });
 

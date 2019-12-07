@@ -54,13 +54,13 @@
                 </div>
                 <div class="col-12">
                     @if ($user->wishlist->count() > 0)
-                        <ul class="lesser-indent">
+                        <ol class="lesser-indent">
                             @foreach ($user->wishlist as $item)
                                 <li class="">
                                     @include('partials/item')
                                 </li>
                             @endforeach
-                        </ul>
+                        </ol>
                     @else
                         —
                     @endif

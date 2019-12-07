@@ -1,0 +1,166 @@
+$(document).ready(function () {
+    addItemAutocompleteHandler();
+    addItemListSelectHandler();
+    addItemRemoveHandler();
+    addTagInputHandlers();
+    $(".js-sortable").sortable({handle: ".js-sort-handle"});
+});
+
+// Adds autocomplete for items!
+function addItemAutocompleteHandler() {
+    $(".js-item-autocomplete").each(function () {
+        var self = this; // Allows callback functions to access `this`
+        $(this).autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    method: "get",
+                    dataType: "json",
+                    url: "/api/items/query/" + request.term,
+                    success: function (data) {
+                        response(data);
+                        if (data.length <= 0) {
+                            $(self).nextAll(".js-status-indicator").show();
+                            $(self).nextAll(".js-status-indicator").html("<span class=\"bg-danger\">&nbsp;" + request.term + " not found&nbsp;</span>");
+                        }
+                    },
+                    error: function () {
+                    }
+                });
+            },
+            search: function () {
+                $(this).nextAll(".js-status-indicator").hide();
+                $(this).nextAll(".js-status-indicator").empty();
+                $(this).nextAll(".js-loading-indicator").show();
+            },
+            response: function () {
+                $(this).nextAll(".js-loading-indicator").hide();
+            },
+            select: function (event, ui) {
+                console.log(ui);
+                if (ui.item.value) {
+                    // Put the value into a tag below the input
+                    value = ui.item.value;
+                    label = ui.item.label;
+
+                    addTag(this, value, label);
+
+                    // prevent autocomplete from autofilling this.val()
+                    return false;
+                }
+            },
+            minLength: 1,
+            delay: 400
+        });
+    });
+}
+
+// Adds the current input to the list below the input
+function addItemListSelectHandler() {
+    /**
+     * Move the selected value to the list under the select.
+     * Change the selected value back to the default value.
+     **/
+    $(".js-input-item").change(function () {
+        $(this).find(":selected").val();
+        $(this).find(":selected").html().trim();
+
+        value = $(this).find(":selected").val();
+        label = $(this).find(":selected").html().trim();
+        $nextInput = $(this).next("ul").children("li").children("input[value='']").first();
+
+        if ($nextInput.val() == "") {
+        // Add the item.
+            $nextInput.parent("li").show();
+            $nextInput.val(value);
+            $nextInput.siblings(".js-input-label").html(" " + label);
+            $(this).val("");
+            $(this).find("option:first").text("—");
+        } else {
+        // Can't add any more.
+            $(this).val("");
+            // If a select input triggered this
+            $(this).find("option:first").text("maximum added");
+        }
+    });
+}
+
+/**
+ * When typing a tag and NOT using autocomplete, handle what happens
+ * when the user presses enter, space, or comma.
+ *
+ * @return void
+ */
+function addTagInputHandlers() {
+    $(".js-item-autocomplete").keyup(function (e) {
+        keys = [
+            13, // enter
+            // 32, // space
+            // 188 // comma
+        ];
+
+        if ($.inArray(e.keyCode, keys) >= 0) {
+            e.preventDefault();
+
+            // Put the value into a tag below the input
+            value = this.value ;
+            label = value;
+
+            addTag(this, value, label);
+        }
+    });
+
+    // When the element loses focus, submit whatever was in it
+    $(".js-item-autocomplete").focusout(function () {
+        if ($(this).val()) {
+            // Put the value into a tag below the input
+            value = this.value;
+            label = value;
+            addTag(this, value, label);
+        }
+    });
+}
+
+function addItemRemoveHandler() {
+    /**
+     * Remove the chosen tag from the list that appears below the select.
+     */
+    $(".js-input-button").click(function () {
+        $(this).prev("input").val("");
+        $(this).parent("li").hide();
+
+        // Remove the select's warning message.
+        $(this).parent("li").parent("ul").siblings(".js-input-select").find("option:first").text("—");
+
+        // Remove the input's warning message, only if it is present.
+        textInput = $(this).parent("li").parent("ul").siblings(".js-input-text");
+        if (textInput.val() && textInput.val().match("^maximum") && textInput.val().match("added$")) {
+            textInput.val("");
+        }
+    });
+}
+
+/**
+ * Take the given value and plop it into the next available input, provided it's in a list.
+ *
+ * @var $this         object The object that you want to add the tag after.
+ * @var value         string The tag to add.
+ * @var label         string The visible name of the tag to add.
+ *
+ * @return            bool   True on success.
+ */
+function addTag($this, value, label) {
+    if ($this && value && label) {
+        $nextInput = $($this).next().next("ul").children("li").children("input[value='']").first();
+
+        if ($nextInput.val() == "") {
+            $nextInput.parent("li").show();
+            $nextInput.val(value);
+            $nextInput.siblings(".js-input-label").html(" " + label);
+            $($this).val("");
+            return true;
+        } else {
+            $($this).val("maximum items added");
+            return false;
+        }
+    }
+}

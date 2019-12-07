@@ -5,3 +5,5 @@ $(document).ready(function () {
         $(".js-content[data-id=" + id + "]").toggle();
     });
 });
+
+

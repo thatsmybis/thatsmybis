@@ -108,6 +108,35 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
     max-width: 100%;
 }
 
+.input-item {
+    padding: 1px 4px 5px 3px;
+    border: solid 1px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.move-cursor {
+    cursor: move !important;
+}
+
+.text-unselectable {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+button.close {
+    line-height: 0.8;
+    color: #fff;
+    opacity: 1;
+    text-shadow: none;
+}
+
+button.close:hover {
+    color: #e5e5e5;
+}
+
 /* DARK THEME */
 body {
     color:                 #fff !important;

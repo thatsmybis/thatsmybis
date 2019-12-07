@@ -8,6 +8,9 @@ use Illuminate\Http\Request;
 
 class ProfileController extends Controller
 {
+    const MAX_RECEIVED_ITEMS=100;
+    const MAX_RECIPES=50;
+    const MAX_WISHLIST_ITEMS=10;
     /**
      * Create a new controller instance.
      *
@@ -133,7 +136,10 @@ class ProfileController extends Controller
 
         if (request()->input('edit') && Auth::id() == $user->id) {
             return view('profile.edit', [
-                'user' => $user,
+                'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
+                'maxRecipes'       => self::MAX_RECIPES,
+                'maxWishlistItems' => self::MAX_WISHLIST_ITEMS,
+                'user'             => $user,
                 'showPersonalNote' => Auth::id() == $user->id ? true : false,
                 'showOfficerNote'  => false,
             ]);
@@ -157,33 +163,102 @@ class ProfileController extends Controller
     public function submit($id = null)
     {
         $validationRules =  [
-            'username'        => 'string|max:255',
-            'spec'            => 'nullable|string|max:50',
-            'recipes.*'       => 'nullable|string|max:100',
-            'alts.*'          => 'nullable|string|max:50',
-            'rank'            => 'nullable|string|max:50',
-            'rank_goal'       => 'nullable|string|max:50',
-            'wishlist.*'      => 'nullable|string|max:100',
-            'loot_received.*' => 'nullable|string|max:100',
-            'note'            => 'nullable|string|max:1000',
-            'officer_note'    => 'nullable|string|max:1000',
+            'username'     => 'string|max:255',
+            'spec'         => 'nullable|string|max:50',
+            'alts.*'       => 'nullable|string|max:50',
+            'rank'         => 'nullable|string|max:50',
+            'rank_goal'    => 'nullable|string|max:50',
+            'wishlist.*'   => 'nullable|integer|exists:items,id',
+            'received.*'   => 'nullable|integer|exists:items,id',
+            'recipes.*'    => 'nullable|integer|exists:items,id',
+            'note'         => 'nullable|string|max:1000',
+            'officer_note' => 'nullable|string|max:1000',
         ];
 
         $this->validate(request(), $validationRules);
 
-        $user = User::findOrFail($id);
+        $user = User::with(['wishlist', 'recipes', 'received'])->findOrFail($id);
         $authUser = Auth::user();
 
         if ($user->id == $authUser->id) { // TODO: Add permissions check
             $updateValues['username']      = request()->input('username');
             $updateValues['spec']          = request()->input('spec');
-            $updateValues['recipes']       = implode(array_filter(request()->input('recipes')), "\n");
             $updateValues['alts']          = implode(array_filter(request()->input('alts')), "\n");
             $updateValues['rank']          = request()->input('rank');
             $updateValues['rank_goal']     = request()->input('rank_goal');
-            $updateValues['wishlist']      = implode(array_filter(request()->input('wishlist')), "\n");
-            $updateValues['loot_received'] = implode(array_filter(request()->input('loot_received')), "\n");
             $updateValues['note']          = request()->input('note');
+
+            if (request()->input('wishlist')) {
+                $items = [];
+                $existingItems = $user->wishlist->keyBy('id')->keys()->toArray();
+
+                $i = 0;
+                foreach (request()->input('wishlist') as $id) {
+                    if($id) {
+                        $i++;
+                        $items[$id] = [
+                            'order' => $i,
+                            'type'  => 'wishlist',
+                            ];
+                    }
+                }
+                // Gets items which need to be dropped...
+                $toDrop = array_diff($existingItems, array_keys($items));
+                // Drops them...
+                $user->wishlist()->detach($toDrop);
+                // Adds any new items
+                $user->wishlist()->syncWithoutDetaching($items);
+            } else {
+                $user->wishlist()->detach();
+            }
+
+            if (request()->input('recipes')) {
+                $items = [];
+                $existingItems = $user->recipes->keyBy('id')->keys()->toArray();
+
+                $i = 0;
+                foreach (request()->input('recipes') as $id) {
+                    if($id) {
+                        $i++;
+                        $items[$id] = [
+                            'order' => $i,
+                            'type'  => 'recipe',
+                            ];
+                    }
+                }
+                // Gets items which need to be dropped...
+                $toDrop = array_diff($existingItems, array_keys($items));
+                // Drops them...
+                $user->recipes()->detach($toDrop);
+                // Adds any new items
+                $user->recipes()->syncWithoutDetaching($items);
+            } else {
+                $user->recipes()->detach();
+            }
+
+            if (request()->input('received')) {
+                $items = [];
+                $existingItems = $user->received->keyBy('id')->keys()->toArray();
+
+                $i = 0;
+                foreach (request()->input('received') as $id) {
+                    if($id) {
+                        $i++;
+                        $items[$id] = [
+                            'order' => $i,
+                            'type'  => 'received',
+                            ];
+                    }
+                }
+                // Gets items which need to be dropped...
+                $toDrop = array_diff($existingItems, array_keys($items));
+                // Drops them...
+                $user->received()->detach($toDrop);
+                // Adds any new items
+                $user->received()->syncWithoutDetaching($items);
+            } else {
+                $user->received()->detach();
+            }
 
             if (false && $isOfficer) {  // TODO: Add permissions check
                 $updateValues['officer_note']  = request()->input('officer_note');

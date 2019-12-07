@@ -15,7 +15,7 @@
             @if ($item->receivedUsers->count() > 0)
                 @foreach ($item->receivedUsers as $user)
                     <li class="lead font-weight-bold">
-                        <a href="{{ route('showUser', ['id' => $user->id, 'username' => $user->username]) }}">{{ $user->name }}</a>
+                        <a href="{{ route('showUser', ['id' => $user->id, 'username' => $user->username]) }}">{{ $user->username }}</a>
                     </li>
                 @endforeach
             @else

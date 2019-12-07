@@ -98,95 +98,101 @@
                 </div>
 
                 <div class="form-group mt-5">
-                    <label for="wishlist" class="font-weight-bold">
-                        Raid Gear Wishlist
-                    </label>
-                    <small class="text-muted">
-                        CURRENT CONTENT ONLY
-                    </small>
+                    <div class="row">
+                        <div class="col-md-8 col-sm-10 col-12">
+                            <label for="wishlist">
+                                Wishlist
+                                <small class="text-muted font-weight-normal">Max {{ $maxWishlistItems }}</small>
+                            </label>
 
-                    <?php
-                    $wishlistArray = splitByLine($user->wishlist);
-                    $wishlistLength = count($wishlistArray) - 1;
-                    ?>
+                            <div class="{{ $errors->has('wishlist.*') ? 'has-error' : '' }}">
+                                <input id="wishlist" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control">
+                                <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
-                    <div class="form-group">
-                        <input name="wishlist[]" maxlength="200" type="text" class="form-control" placeholder="eg. Shadowstrike"                value="{{ old('wishlist.0') ? old('wishlist.0') : ($wishlistLength  >= 0 ? $wishlistArray[0] : '') }}" />
-                    </div>
-                    <div class="form-group">
-                        <input name="wishlist[]" maxlength="200" type="text" class="js-show-next form-control" placeholder="eg. Obsidian Edged Blade"        value="{{ old('wishlist.1') ? old('wishlist.1') : ($wishlistLength  >= 1 ? $wishlistArray[1] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="wishlist[]" maxlength="200" type="text" class="js-show-next form-control" placeholder="eg. Talisman of Ephemeral Power" value="{{ old('wishlist.2') ? old('wishlist.2') : ($wishlistLength  >= 2 ? $wishlistArray[2] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="wishlist[]" maxlength="200" type="text" class="js-show-next form-control" placeholder="eg. Gianstalker's Leggings"      value="{{ old('wishlist.3') ? old('wishlist.3') : ($wishlistLength  >= 3 ? $wishlistArray[3] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="wishlist[]" maxlength="200" type="text" class="js-show-next form-control" placeholder="eg. Striker's Mark"              value="{{ old('wishlist.4') ? old('wishlist.4') : ($wishlistLength  >= 4 ? $wishlistArray[4] : '') }}" />
-                    </div>
-                </div>
-
-                <div class="form-group mt-5">
-                    <label for="loot_received" class="font-weight-bold">
-                        Loot Received
-                    </label>
-                    <small class="text-muted">
-                        Only loot you've received in guild runs
-                    </small>
-
-                    <?php
-                    $lootArray = splitByLine($user->loot_received);
-                    $lootLength = count($lootArray) - 1;
-                    ?>
-
-                    @for ($i = 0; $i < 30; $i++)
-                        <div class="form-group {{ $i > 1 ? 'js-hide-empty' : '' }}" style="{{ $i > 1 ? 'display:none;' : '' }}">
-                            <input name="loot_received[]" maxlength="200" type="text" class="{{ $i > 0 ? 'js-show-next' : '' }} form-control" placeholder="eg. Core Hound Tooth" value="{{ old('loot_received.' . $i) ? old('loot_received.' . $i) : ($lootLength  >= $i ? $lootArray[$i] : '') }}" />
+                                <ul class="js-sortable no-bullet no-indent mb-0">
+                                    @for ($i = 0; $i < $maxWishlistItems; $i++)
+                                        <li class="input-item" style="{{ old('wishlist.' . $i) || ($user->wishlist && $user->wishlist->get($i)) ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="wishlist[]" value="{{ old('wishlist.' . $i) ? old('wishlist.' . $i) : ($user->wishlist && $user->wishlist->get($i) ? $user->wishlist->get($i)->id : '') }}" style="display:none;">
+                                            <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('wishlist.' . $i) ? old('wishlist.' . $i) : ($user->wishlist && $user->wishlist->get($i) ? $user->wishlist->get($i)->name : '') }}</span>&nbsp;
+                                        </li>
+                                    @endfor
+                                </ul>
+                                <div>
+                                    @if ($errors->has('wishlist.*'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('wishlist.*') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
                         </div>
-                    @endfor
+                    </div>
                 </div>
 
                 <div class="form-group mt-5">
-                    <label for="recipes" class="font-weight-bold">
-                        Rare Recipes
-                    </label>
-                    <small class="text-muted">
-                        Any rare recipes on your accounts
-                    </small>
-                    <?php
-                    $recipesArray = splitByLine($user->recipes);
-                    $recipesLength = count($recipesArray) - 1;
-                    ?>
-                    <div class="form-group">
-                        <input name="recipes[]" maxlength="100" type="text" class="form-control" placeholder="eg. Dirge's Kickin' Chimaerok Chops" value="{{ old('recipes.0]') ? old('recipes.0') : ($recipesLength >= 0 ? $recipesArray[0] : '') }}" />
+                    <div class="row">
+                        <div class="col-md-8 col-sm-10 col-12">
+                            <label for="received">
+                                Loot Received
+                                <small class="text-muted font-weight-normal">Max {{ $maxReceivedItems }}</small>
+                            </label>
+
+                            <div class="{{ $errors->has('received.*') ? 'has-error' : '' }}">
+                                <input id="received" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control">
+                                <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+
+                                <ul class="js-sortable no-bullet no-indent mb-0">
+                                    @for ($i = 0; $i < $maxReceivedItems; $i++)
+                                        <li class="input-item" style="{{ old('received.' . $i) || ($user->received && $user->received->get($i)) ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="received[]" value="{{ old('received.' . $i) ? old('received.' . $i) : ($user->received && $user->received->get($i) ? $user->received->get($i)->id : '') }}" style="display:none;">
+                                            <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('received.' . $i) ? old('received.' . $i) : ($user->received && $user->received->get($i) ? $user->received->get($i)->name : '') }}</span>&nbsp;
+                                        </li>
+                                    @endfor
+                                </ul>
+                                <div>
+                                    @if ($errors->has('received.*'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('received.*') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Flask of Distilled Wisdom"       value="{{ old('recipes.1') ? old('recipes.1') : ($recipesLength >= 1 ? $recipesArray[1] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Enchant Weapon - Crusader"       value="{{ old('recipes.2') ? old('recipes.2') : ($recipesLength >= 2 ? $recipesArray[2] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Enchant Weapon - Spell Power"    value="{{ old('recipes.3') ? old('recipes.3') : ($recipesLength >= 3 ? $recipesArray[3] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Lionheart Helm"                  value="{{ old('recipes.4') ? old('recipes.4') : ($recipesLength >= 4 ? $recipesArray[4] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Arcanite Reaper"                 value="{{ old('recipes.5') ? old('recipes.5') : ($recipesLength >= 5 ? $recipesArray[5] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Devilsaur Leggings"              value="{{ old('recipes.6') ? old('recipes.6') : ($recipesLength >= 6 ? $recipesArray[6] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Hide of the Wild"                value="{{ old('recipes.7') ? old('recipes.7') : ($recipesLength >= 7 ? $recipesArray[7] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Bottomless Bag"                  value="{{ old('recipes.8') ? old('recipes.8') : ($recipesLength >= 8 ? $recipesArray[8] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="recipes[]" maxlength="100" type="text" class="js-show-next form-control" placeholder="eg. Force Reactive Disk"             value="{{ old('recipes.9') ? old('recipes.9') : ($recipesLength >= 9 ? $recipesArray[9] : '') }}" />
+                </div>
+
+                <div class="form-group mt-5">
+                    <div class="row">
+                        <div class="col-md-8 col-sm-10 col-12">
+                            <label for="recipes">
+                                Rare Recipes
+                                <small class="text-muted font-weight-normal">Max {{ $maxRecipes }}</small>
+                            </label>
+
+                            <div class="{{ $errors->has('recipes.*') ? 'has-error' : '' }}">
+                                <input id="recipes" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control">
+                                <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+
+                                <ul class="js-sortable no-bullet no-indent mb-0">
+                                    @for ($i = 0; $i < $maxRecipes; $i++)
+                                        <li class="input-item" style="{{ old('recipes.' . $i) || ($user->recipes && $user->recipes->get($i)) ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="recipes[]" value="{{ old('recipes.' . $i) ? old('recipes.' . $i) : ($user->recipes && $user->recipes->get($i) ? $user->recipes->get($i)->id : '') }}" style="display:none;">
+                                            <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('recipes.' . $i) ? old('recipes.' . $i) : ($user->recipes && $user->recipes->get($i) ? $user->recipes->get($i)->name : '') }}</span>&nbsp;
+                                        </li>
+                                    @endfor
+                                </ul>
+                                <div>
+                                    @if ($errors->has('recipes.*'))
+                                        <span class="help-block">
+                                            <strong>{{ $errors->first('recipes.*') }}</strong>
+                                        </span>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
 
