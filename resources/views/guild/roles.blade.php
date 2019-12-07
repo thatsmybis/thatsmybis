@@ -24,6 +24,10 @@
         <a class="btn btn-danger" href="{{ route('guild.syncRoles') }}" onclick="return confirm('Are you sure? If a role has been deleted and then recreated on Discord, this could break this website until a dev can fix it.')">
             (danger) Sync Roles
         </a>
+        <br>
+        <small class="text-muted">
+            Fetches roles from the Discord server and adds them to the list of usable roles on the website.
+        </small>
     </div>
 </div>
 @endsection

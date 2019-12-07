@@ -1,6 +1,9 @@
 <div>
-    <h4 class="text-druid font-weight-bold">
-        {{ $content->title }} <small class="nowrap text-muted">#{{ $content->category }}</small>
+    <h4 class="font-weight-bold">
+        <a href="{{ route('showPost', ['slug' => $content->slug]) }}" class="text-druid">
+            {{ $content->title }}</a>
+        <a href="{{ route('news', ['category' => $content->category]) }}" class="small nowrap text-muted">
+            #{{ $content->category }}</a>
     </h4>
 </div>
 <div class="js-content bg-dark mb-1 p-2 rounded" data-id="{{ $content->id }}" style="display:none;">

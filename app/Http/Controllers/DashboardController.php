@@ -31,6 +31,8 @@ class DashboardController extends Controller
         $category = request()->input('category');
 
         if (!$category) {
+            $category = 'my-feed';
+
             $userDiscordRoles = $user->roles->keyBy('discord_id')->keys();
 
             $userRaids = Raid::whereIn('discord_role_id', $userDiscordRoles)->get()->keyBy('id')->keys()->toArray();

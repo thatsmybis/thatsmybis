@@ -37,7 +37,10 @@ class ContentController extends Controller
     public function show($slug)
     {
         $content = Content::where('slug', $slug)->whereNull('removed_at')->with('user')->firstOrFail();
-        return view('content.show', ['content' => $content]);
+        return view('content.show', [
+            'content'  => $content,
+            'raids'    => Raid::all(),
+        ]);
     }
 
     /**

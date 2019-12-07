@@ -7,6 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Kodeine\Acl\Traits\HasRole;
+use RestCord\DiscordClient;
 
 class User extends Authenticatable
 {
@@ -83,5 +84,13 @@ class User extends Authenticatable
             ->withTimeStamps();
 
         return ($query);
+    }
+
+    // Fetch the user's roles from Discord and sync them
+    public function fetchAndSyncRoles() {
+        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+        $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$this->discord_id]);
+        $roles = Role::whereIn('discord_id', $discordMember->roles)->get()->keyBy('id')->keys()->toArray();
+        $this->syncRoles($roles);
     }
 }

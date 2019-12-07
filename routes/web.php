@@ -48,6 +48,7 @@ Route::get( '/roster',          'DashboardController@roster')   ->name('roster')
 
 Route::get( '/resources',        'ContentController@index')->name('contentIndex');
 Route::get( '/resources/{slug}', 'ContentController@show')->name('showContent');
+Route::get( '/posts/{slug}',     'ContentController@show')->name('showPost');
 
 Route::get( '/item/{item_id}/{slug?}', 'ItemController@show')->name('showItem');
 

@@ -29,10 +29,7 @@ class SeeUser
 
             try {
                 // Sync the user's role(s)
-                $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
-                $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$user->discord_id]);
-                $roles = Role::whereIn('discord_id', $discordMember->roles)->get()->keyBy('id')->keys()->toArray();
-                $user->syncRoles($roles);
+                $user->fetchAndSyncRoles();
             } catch (\GuzzleHttp\Command\Exception\CommandClientException $e) {
                 abort(404, "Doesn't look like you're in the guild Discord server.");
             }
