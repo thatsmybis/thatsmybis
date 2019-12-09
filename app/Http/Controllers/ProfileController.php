@@ -134,21 +134,35 @@ class ProfileController extends Controller
             }
         }
 
-        if (request()->input('edit') && Auth::id() == $user->id) {
+        $canEdit = false;
+        $showPersonalNote = false;
+        $showOfficerNote = false;
+
+        if (Auth::id() == $user->id) {
+            $canEdit = true;
+            // $showPersonalNote = true;
+        }
+
+        if (Auth::user()->hasRole(env('PERMISSION_RAID_LEADER'))) {
+            $canEdit = true;
+            $showOfficerNote = true;
+        }
+
+        if (request()->input('edit') && $canEdit) {
             return view('profile.edit', [
                 'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
                 'maxRecipes'       => self::MAX_RECIPES,
                 'maxWishlistItems' => self::MAX_WISHLIST_ITEMS,
                 'user'             => $user,
-                'showPersonalNote' => Auth::id() == $user->id ? true : false,
-                'showOfficerNote'  => false,
+                'showPersonalNote' => $showPersonalNote,
+                'showOfficerNote'  => $showOfficerNote,
             ]);
         } else {
             return view('profile.show', [
-                'user' => $user,
-                'showPersonalNote' => Auth::id() == $user->id ? true : false,
-                'canEdit'          => Auth::id() == $user->id ? true : false,
-                'showOfficerNote'  => false,
+                'user'             => $user,
+                'canEdit'          => $canEdit,
+                'showPersonalNote' => $showPersonalNote,
+                'showOfficerNote'  => $showOfficerNote,
             ]);
         }
     }
@@ -180,13 +194,25 @@ class ProfileController extends Controller
         $user = User::with(['wishlist', 'recipes', 'received'])->findOrFail($id);
         $authUser = Auth::user();
 
-        if ($user->id == $authUser->id) { // TODO: Add permissions check
-            $updateValues['username']      = request()->input('username');
-            $updateValues['spec']          = request()->input('spec');
-            $updateValues['alts']          = implode(array_filter(request()->input('alts')), "\n");
-            $updateValues['rank']          = request()->input('rank');
-            $updateValues['rank_goal']     = request()->input('rank_goal');
-            $updateValues['note']          = request()->input('note');
+        $canEdit = false;
+        $canEditOfficerNote = false;
+
+        if (Auth::id() == $user->id) {
+            $canEdit = true;
+        }
+
+        if (Auth::user()->hasRole(env('PERMISSION_RAID_LEADER'))) {
+            $canEdit = true;
+            $canEditOfficerNote = true;
+        }
+
+        if ($canEdit) {
+            $updateValues['username']  = request()->input('username');
+            $updateValues['spec']      = request()->input('spec');
+            $updateValues['alts']      = implode(array_filter(request()->input('alts')), "\n");
+            $updateValues['rank']      = request()->input('rank');
+            $updateValues['rank_goal'] = request()->input('rank_goal');
+            $updateValues['note']      = request()->input('note');
 
             if (request()->input('wishlist')) {
                 $items = [];
@@ -260,11 +286,13 @@ class ProfileController extends Controller
                 $user->received()->detach();
             }
 
-            if (false && $isOfficer) {  // TODO: Add permissions check
+            if ($canEditOfficerNote) {
                 $updateValues['officer_note']  = request()->input('officer_note');
             }
 
             $user->update($updateValues);
+        } else {
+            abort(403);
         }
 
         return redirect()->route('showUser', ['id' => $user->id, 'username' => $user->username]);

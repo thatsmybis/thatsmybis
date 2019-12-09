@@ -57,7 +57,7 @@
                 <li class="list-inline-item">
                     <a class="toggle-column cursor-pointer" data-column="8" href="">Notes</a>
                 </li>
-                @if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider'))
+                @if (Auth::user()->hasRole(env('PERMISSION_RAID_LEADER')))
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
                         <a class="toggle-column cursor-pointer" data-column="9" href="">Officer Notes</a>
@@ -101,6 +101,7 @@
 @section('scripts')
 <script>
     var members = {!! $members->toJson() !!};
+    var showOfficerNote = {{ Auth::user()->hasRole(env('PERMISSION_RAID_LEADER')) ? 'true' : 'false' }};
 </script>
 <script src="{{ asset('js/roster.js') }}"></script>
 @endsection

@@ -14,7 +14,7 @@
                     @if ($canEdit)
                         <small><a href="{{ route('showUser', ['id' => $user->id, 'username' => $user->username]) }}?edit=1">edit</a></small>
                     @endif
-                    @if (Auth::user()->hasRole('admin|guild_master|officer'))
+                    @if (Auth::user()->hasRole(env('PERMISSION_ADMIN')))
                         <small><a href="{{ route('banUser', ['id' => $user->id]) }}">{{ $user->banned_at ? 'unban' : 'ban' }}</a></small>
                     @endif
                 </small>
@@ -23,12 +23,13 @@
                 {{ $user->discord_username }}
             </small>
         </div>
+
         <div class="col-12 {{ $showPersonalNote ? 'col-md-6' : '' }}">
             <div class="row mb-3">
                 <div class="col-12">
                     <span class="text-muted font-weight-bold">Roles</span>
                 </div>
-                <div class="col-12 m-2">
+                <div class="col-12 mt-2 mb-2">
                     @if ($user->roles)
                         @foreach ($user->roles as $role)
                                 <span class="tag" style="border-color:{{ $role->getColor() }};"><span class="role-circle" style="background-color:{{ $role->getColor() }}"></span>{{ $role->name }}</span>
@@ -151,7 +152,7 @@
                 </div>
             </div>
 
-            @if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider'))
+            @if ($showOfficerNote)
                 <div class="row mb-3">
                     <div class="col-12">
                         <span class="text-muted font-weight-bold">Officer Notes</span>
@@ -162,6 +163,7 @@
                 </div>
             @endif
         </div>
+
         @if ($showPersonalNote)
             <div class="col-12 col-md-6">
                 <div class="row mb-3">

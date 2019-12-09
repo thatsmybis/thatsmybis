@@ -86,13 +86,13 @@ class ContentController extends Controller
             $content = Content::findOrFail($id);
             $category = $content->category;
 
-            if ($category == 'news' && !Auth::user()->hasRole('admin|guild_master|officer|raider')) {
+            if ($category == 'news' && !Auth::user()->hasRole(env('PERMISSION_ADMIN'))) {
                 abort(403, 'You cannot edit news posts.');
             }
 
             // ints are raid id's
             if (is_numeric($category)) {
-                if (!Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider')) {
+                if (!Auth::user()->hasRole(env('PERMISSION_RAID_LEADER'))) {
                     abort(403, 'You cannot edit raid posts.');
                 }
 
@@ -110,13 +110,13 @@ class ContentController extends Controller
             $updateValues['user_id'] = Auth::id();
             $category = request()->input('category');
 
-            if ($category == 'news' && !Auth::user()->hasRole('admin|guild_master|officer|raider')) {
+            if ($category == 'news' && !Auth::user()->hasRole(env('PERMISSION_ADMIN'))) {
                 abort(403, 'You cannot create news posts.');
             }
 
             // ints are raid id's
             if (is_numeric($category)) {
-                if (!Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider')) {
+                if (!Auth::user()->hasRole(env('PERMISSION_RAID_LEADER'))) {
                     abort(403, 'You cannot create raid posts.');
                 }
 

@@ -41,7 +41,7 @@
                 <span class="js-watchable-timestamp" data-timestamp="{{ strtotime($content->created_at) }}"></span> ago
             </li>
         @endif
-        @if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|class_leader|raider'))
+        @if (Auth::user()->hasRole(env('PERMISSION_RAID_LEADER')))
             <li class="small list-inline-item">
                 <a class="js-edit-content" data-id="{{ $content->id }}" href="">edit</a>
             </li>

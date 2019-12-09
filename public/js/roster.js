@@ -32,7 +32,9 @@ $(document).ready( function () {
         table.column(colWishlist).    visible(false);
         table.column(colLoot).        visible(false);
         table.column(colNotes).       visible(true);
-        table.column(colOfficerNotes).visible(false);
+        if (showOfficerNote) {
+            table.column(colOfficerNotes).visible(false);
+        }
    });
 
    $(".toggle-column-loot-council").click(function(e) {
@@ -47,7 +49,9 @@ $(document).ready( function () {
         table.column(colWishlist).    visible(true);
         table.column(colLoot).        visible(true);
         table.column(colNotes).       visible(true);
-        table.column(colOfficerNotes).visible(true);
+        if (showOfficerNote) {
+            table.column(colOfficerNotes).visible(true);
+        }
    });
 
    $(".toggle-column-bare").click(function(e) {
@@ -62,7 +66,9 @@ $(document).ready( function () {
         table.column(colWishlist).    visible(false);
         table.column(colLoot).        visible(false);
         table.column(colNotes).       visible(false);
-        table.column(colOfficerNotes).visible(false);
+        if (showOfficerNote) {
+            table.column(colOfficerNotes).visible(false);
+        }
    });
 
     // Triggered when a column is made visible

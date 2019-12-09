@@ -22,7 +22,7 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('showUser', ['id' => Auth::user()->id, 'username' => Auth::user()->username]) }}">My Profile</a>
                 </li>
-                @if (Auth::user()->hasRole('admin|guild_master|officer|raider'))
+                @if (Auth::user()->hasRole(env('PERMISSION_ADMIN')))
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin

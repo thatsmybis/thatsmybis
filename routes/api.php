@@ -20,7 +20,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 Route::post('/officer-note/{id}', [
         'uses'       => 'Api\ProfileController@submitOfficerNote',
         'middleware' => 'acl',
-        'is'         => 'admin|guild_master|officer|raid_leader|raider',
+        'is'         => env('PERMISSION_RAID_LEADER'),
     ])->name('apiOfficerNote');
 
 Route::get( '/items/query/{query}', 'Api\ItemsController@query')->name('apiSearchItems');

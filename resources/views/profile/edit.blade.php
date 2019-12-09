@@ -203,7 +203,7 @@
                     <small class="text-muted">
                         ie. "Rushing for 8/8 tier 1"
                     </small>
-                    <textarea name="note" rows="3" maxlength="1000" placeholder="" class="form-control">{{ old('note') ? old('note') : $user->note }}</textarea>
+                    <textarea name="note" rows="3" maxlength="1000" placeholder="ie. I want 5/8 t1" class="form-control">{{ old('note') ? old('note') : $user->note }}</textarea>
                 </div>
 
                 @if ($showOfficerNote)
@@ -211,7 +211,7 @@
                         <label for="officer_note" class="font-weight-bold">
                             Officer Notes
                         </label>
-                        <textarea name="officer_note" rows="3" maxlength="1000" placeholder="" class="form-control">{{ old('officer_note') ? old('officer_note') : $user->officer_note }}</textarea>
+                        <textarea name="officer_note" rows="3" maxlength="1000" placeholder="ie. On their third strike - next time is a gkick" class="form-control">{{ old('officer_note') ? old('officer_note') : $user->officer_note }}</textarea>
                     </div>
                 @endif
 

@@ -1,4 +1,4 @@
-@if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|class_leaders|raider'))
+@if (Auth::user()->hasRole(env('PERMISSION_CLASS_LEADER')))
     <?php $fakeId = md5(strtotime('now')); ?>
     <div class="form-group">
         <ul class="list-inline mb-2">
@@ -22,7 +22,7 @@
                 <label for="class">
                     Post To
                 </label>
-                @if (Auth::user()->hasRole('admin|guild_master|officer|raider'))
+                @if (Auth::user()->hasRole(env('PERMISSION_ADMIN')))
                     <div class="form-check">
                         <input class="form-check-input" type="radio" name="category" id="categoryA" value="news" {{ old('category') && old('category') == 'News' ? 'checked' : '' }}>
                         <label class="form-check-label" for="categoryA">
@@ -36,7 +36,7 @@
                         Resources
                     </label>
                 </div>
-                @if (Auth::user()->hasRole('admin|guild_master|officer|raid_leader|raider'))
+                @if (Auth::user()->hasRole(env('PERMISSION_RAID_LEADER')))
                     @foreach ($raids as $raid)
                         <div class="form-check">
                             <input class="form-check-input" type="radio" name="category" id="category{{ $raid->id }}" value="{{ $raid->id }}" {{ old('category') && old('category') == $raid->slug ? 'checked' : '' }}>

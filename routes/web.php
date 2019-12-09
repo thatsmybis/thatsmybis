@@ -54,7 +54,7 @@ Route::get( '/item/{item_id}/{slug?}', 'ItemController@show')->name('showItem');
 
 Route::group([
         'middleware' => 'acl',
-        'is'         => 'admin|guild_master|officer|raid_leader|class_leader|raider',
+        'is'         => env('PERMISSION_CLASS_LEADER'),
     ], function () {
     Route::post('/updateContent/{id?}', 'ContentController@update')->where('id', '[0-9]+')->name('updateContent');
     Route::post('/removeContent/{id}',  'ContentController@remove')->where('id', '[0-9]+')->name('removeContent');
