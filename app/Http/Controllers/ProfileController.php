@@ -182,9 +182,9 @@ class ProfileController extends Controller
             'alts.*'       => 'nullable|string|max:50',
             'rank'         => 'nullable|string|max:50',
             'rank_goal'    => 'nullable|string|max:50',
-            'wishlist.*'   => 'nullable|integer|exists:items,id',
-            'received.*'   => 'nullable|integer|exists:items,id',
-            'recipes.*'    => 'nullable|integer|exists:items,id',
+            'wishlist.*'   => 'nullable|integer|exists:items,item_id',
+            'received.*'   => 'nullable|integer|exists:items,item_id',
+            'recipes.*'    => 'nullable|integer|exists:items,item_id',
             'note'         => 'nullable|string|max:1000',
             'officer_note' => 'nullable|string|max:1000',
         ];
@@ -216,7 +216,7 @@ class ProfileController extends Controller
 
             if (request()->input('wishlist')) {
                 $items = [];
-                $existingItems = $user->wishlist->keyBy('id')->keys()->toArray();
+                $existingItems = $user->wishlist->keyBy('item_id')->keys()->toArray();
 
                 $i = 0;
                 foreach (request()->input('wishlist') as $id) {
@@ -240,7 +240,7 @@ class ProfileController extends Controller
 
             if (request()->input('recipes')) {
                 $items = [];
-                $existingItems = $user->recipes->keyBy('id')->keys()->toArray();
+                $existingItems = $user->recipes->keyBy('item_id')->keys()->toArray();
 
                 $i = 0;
                 foreach (request()->input('recipes') as $id) {
@@ -264,7 +264,7 @@ class ProfileController extends Controller
 
             if (request()->input('received')) {
                 $items = [];
-                $existingItems = $user->received->keyBy('id')->keys()->toArray();
+                $existingItems = $user->received->keyBy('item_id')->keys()->toArray();
 
                 $i = 0;
                 foreach (request()->input('received') as $id) {

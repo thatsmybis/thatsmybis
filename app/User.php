@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function recipes() {
         $query = $this
-            ->belongsToMany(Item::class, 'user_items')
+            ->belongsToMany(Item::class, 'user_items', 'user_id', 'item_id')
             ->where('user_items.type', 'recipe')
             ->orderBy('order')
             ->withTimeStamps();
@@ -68,7 +68,7 @@ class User extends Authenticatable
 
     public function received() {
         $query = $this
-            ->belongsToMany(Item::class, 'user_items')
+            ->belongsToMany(Item::class, 'user_items', 'user_id', 'item_id')
             ->where('user_items.type', 'received')
             ->orderBy('order')
             ->withTimeStamps();
@@ -78,7 +78,7 @@ class User extends Authenticatable
 
     public function wishlist() {
         $query = $this
-            ->belongsToMany(Item::class, 'user_items')
+            ->belongsToMany(Item::class, 'user_items', 'user_id', 'item_id')
             ->where('user_items.type', 'wishlist')
             ->orderBy('order')
             ->withTimeStamps();

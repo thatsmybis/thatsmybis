@@ -38,7 +38,7 @@ class ItemsController extends \App\Http\Controllers\Controller
             return response()->json(['error' => 'Query did not pass validation. Query must be between 1 and 40 characters.'], 403);
         } else {
             if ($query && $query != " ") {
-                $results = Item::select(['id', 'name', 'item_id'])
+                $results = Item::select(['name', 'item_id'])
                     ->where('name', 'like', '%' . $query . '%')
                     // For a more performant/powerful query...
                     // ->whereRaw(
@@ -56,7 +56,7 @@ class ItemsController extends \App\Http\Controllers\Controller
 
                 // We just want the names in a plain old array; not key:value.
                 $results = $results->transform(function ($item) {
-                    return ['value' => $item['id'], 'label' => $item['name']];
+                    return ['value' => $item['item_id'], 'label' => $item['name']];
                 });
             } else {
                 return response()->json([], 200);

@@ -57,7 +57,7 @@
                                 <ul class="js-sortable no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxWishlistItems; $i++)
                                         <li class="input-item" style="{{ old('wishlist.' . $i) || ($user->wishlist && $user->wishlist->get($i)) ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="wishlist[]" value="{{ old('wishlist.' . $i) ? old('wishlist.' . $i) : ($user->wishlist && $user->wishlist->get($i) ? $user->wishlist->get($i)->id : '') }}" style="display:none;">
+                                            <input type="checkbox" checked name="wishlist[]" value="{{ old('wishlist.' . $i) ? old('wishlist.' . $i) : ($user->wishlist && $user->wishlist->get($i) ? $user->wishlist->get($i)->item_id : '') }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
                                             <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('wishlist.' . $i) ? old('wishlist.' . $i) : ($user->wishlist && $user->wishlist->get($i) ? $user->wishlist->get($i)->name : '') }}</span>&nbsp;
                                         </li>
@@ -94,7 +94,7 @@
                                 <ul class="js-sortable no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxReceivedItems; $i++)
                                         <li class="input-item" style="{{ old('received.' . $i) || ($user->received && $user->received->get($i)) ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="received[]" value="{{ old('received.' . $i) ? old('received.' . $i) : ($user->received && $user->received->get($i) ? $user->received->get($i)->id : '') }}" style="display:none;">
+                                            <input type="checkbox" checked name="received[]" value="{{ old('received.' . $i) ? old('received.' . $i) : ($user->received && $user->received->get($i) ? $user->received->get($i)->item_id : '') }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
                                             <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('received.' . $i) ? old('received.' . $i) : ($user->received && $user->received->get($i) ? $user->received->get($i)->name : '') }}</span>&nbsp;
                                         </li>
@@ -129,7 +129,7 @@
                                 <ul class="js-sortable no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxRecipes; $i++)
                                         <li class="input-item" style="{{ old('recipes.' . $i) || ($user->recipes && $user->recipes->get($i)) ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="recipes[]" value="{{ old('recipes.' . $i) ? old('recipes.' . $i) : ($user->recipes && $user->recipes->get($i) ? $user->recipes->get($i)->id : '') }}" style="display:none;">
+                                            <input type="checkbox" checked name="recipes[]" value="{{ old('recipes.' . $i) ? old('recipes.' . $i) : ($user->recipes && $user->recipes->get($i) ? $user->recipes->get($i)->item_id : '') }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
                                             <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('recipes.' . $i) ? old('recipes.' . $i) : ($user->recipes && $user->recipes->get($i) ? $user->recipes->get($i)->name : '') }}</span>&nbsp;
                                         </li>

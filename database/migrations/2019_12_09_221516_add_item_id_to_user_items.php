@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class DropFkFromUserItems extends Migration
+class AddItemIdToUserItems extends Migration
 {
     /**
      * Run the migrations.
@@ -14,8 +14,7 @@ class DropFkFromUserItems extends Migration
     public function up()
     {
         Schema::table('user_items', function (Blueprint $table) {
-            $table->dropForeign(['item_id']);
-            $table->dropColumn(['item_id']);
+            $table->integer('item_id')->unsigned()->index()->foreign()->references('item_id')->on('items')->onDelete('cascade');
         });
     }
 

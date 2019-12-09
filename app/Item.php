@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
 {
+    protected $primaryKey = 'item_id';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -44,11 +46,24 @@ class Item extends Model
         return $this->belongsToMany(User::class, 'user_items')->withTimeStamps()->withPivot('type');
     }
 
-    public function wishlistUsers() {
-        return $this->belongsToMany(User::class, 'user_items')->withTimeStamps()->withPivot('type')->where('type', 'wishlist');
+    public function recipeUsers() {
+        return $this->belongsToMany(User::class, 'user_items', 'item_id', 'user_id')
+            ->withTimeStamps()
+            ->withPivot('type')
+            ->where('type', 'recipe');
     }
 
     public function receivedUsers() {
-        return $this->belongsToMany(User::class, 'user_items')->withTimeStamps()->withPivot('type')->where('type', 'received');
+        return $this->belongsToMany(User::class, 'user_items', 'item_id', 'user_id')
+            ->withTimeStamps()
+            ->withPivot('type')
+            ->where('type', 'received');
+    }
+
+    public function wishlistUsers() {
+        return $this->belongsToMany(User::class, 'user_items', 'item_id', 'user_id')
+            ->withTimeStamps()
+            ->withPivot('type')
+            ->where('type', 'wishlist');
     }
 }
