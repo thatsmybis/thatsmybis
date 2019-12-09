@@ -17,91 +17,36 @@
             @endif
             <form class="form-horizontal" role="form" method="POST" action="{{ route('updateUser', $user->id) }}">
                 {{ csrf_field() }}
-                <div class="form-group mt-5">
-                    <label for="username" class="font-weight-bold">
-                        Main's Name
-                    </label>
-                    <small class="text-muted">
-                        Your main's name
-                    </small>
-                    <input name="username" maxlength="255" type="text" class="form-control" placeholder="What's your name?" value="{{ old('username') ? old('username') : $user->username }}" />
-                </div>
 
+                <div class="row mt-5">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="username" class="font-weight-bold">
+                                Main's Name
+                            </label>
+                            <input name="username" maxlength="255" type="text" class="form-control" placeholder="What's your name?" value="{{ old('username') ? old('username') : $user->username }}" />
+                        </div>
+                    </div>
 
-                <div class="form-group mt-5">
-                    <label for="spec" class="font-weight-bold">
-                        Spec
-                    </label>
-                    <small class="text-muted">
-                        Your main's spec
-                    </small>
-                    <input name="spec" maxlength="50" type="text" class="form-control" placeholder="eg. Boomkin" value="{{ old('spec') ? old('spec') : $user->spec }}" />
-                </div>
-
-                <div class="form-group mt-5">
-                    <label for="alts" class="font-weight-bold">
-                        60 Alts
-                    </label>
-                    <small class="text-muted">
-                        Only ones you can raid with
-                    </small>
-
-                    <?php
-                    $altsArray = splitByLine($user->alts);
-                    $altsLength = count($altsArray) - 1;
-                    ?>
-
-                    <div class="form-group">
-                        <input name="alts[]" maxlength="50" type="text" class="form-control" placeholder="eg. 60 Undead Rogue"   value="{{ old('alts.0') ? old('alts.0') : ($altsLength >= 0 ? $altsArray[0] : '') }}" />
-                    </div>
-                    <div class="form-group">
-                        <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Orc Hunter"     value="{{ old('alts.1') ? old('alts.1') : ($altsLength >= 1 ? $altsArray[1] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Undead Mage"    value="{{ old('alts.2') ? old('alts.2') : ($altsLength >= 2 ? $altsArray[2] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Tauren Druid"   value="{{ old('alts.3') ? old('alts.3') : ($altsLength >= 3 ? $altsArray[3] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Troll Priest"   value="{{ old('alts.4') ? old('alts.4') : ($altsLength >= 4 ? $altsArray[4] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Orc Warrior"    value="{{ old('alts.5') ? old('alts.5') : ($altsLength >= 5 ? $altsArray[5] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Undead Warlock" value="{{ old('alts.6') ? old('alts.6') : ($altsLength >= 6 ? $altsArray[6] : '') }}" />
-                    </div>
-                    <div class="js-hide-empty form-group" style="display:none;">
-                        <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Tauren Shaman"  value="{{ old('alts.7') ? old('alts.7') : ($altsLength >= 7 ? $altsArray[7] : '') }}" />
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="spec" class="font-weight-normal">
+                                Spec
+                            </label>
+                            <input name="spec" maxlength="50" type="text" class="form-control" placeholder="eg. Boomkin" value="{{ old('spec') ? old('spec') : $user->spec }}" />
+                        </div>
                     </div>
                 </div>
 
-                <div class="form-group mt-5">
-                    <label for="rank" class="font-weight-bold">
-                        PvP Rank
-                    </label>
-                    <small class="text-muted">
-                        Current rank
-                    </small>
-                    <input name="rank" maxlength="50" type="text" class="form-control" placeholder="eg. 2" value="{{ old('rank') ? old('rank') : $user->rank }}" />
-                </div>
+                <hr class="light">
 
-                <div class="form-group mt-5">
-                    <label for="rank_goal" class="font-weight-bold">
-                        PvP Rank Goal
-                    </label>
-                    <small class="text-muted">
-                        Your expected rank
-                    </small>
-                    <input name="rank_goal" maxlength="50" type="text" class="form-control" placeholder="eg. 14" value="{{ old('rank_goal') ? old('rank_goal') : $user->rank_goal }}" />
-                </div>
-
-                <div class="form-group mt-5">
+                <div class="form-group mt-4">
                     <div class="row">
                         <div class="col-md-8 col-sm-10 col-12">
                             <label for="wishlist">
-                                Wishlist
+                                <span class="font-weight-bold text-legendary">
+                                    Wishlist
+                                </span>
                                 <small class="text-muted font-weight-normal">Max {{ $maxWishlistItems }}</small>
                             </label>
 
@@ -130,11 +75,15 @@
                     </div>
                 </div>
 
-                <div class="form-group mt-5">
+                <hr class="light">
+
+                <div class="form-group mt-4">
                     <div class="row">
                         <div class="col-md-8 col-sm-10 col-12">
                             <label for="received">
-                                Loot Received
+                                <span class="font-weight-bold text-epic">
+                                    Loot Received
+                                </span>
                                 <small class="text-muted font-weight-normal">Max {{ $maxReceivedItems }}</small>
                             </label>
 
@@ -163,11 +112,13 @@
                     </div>
                 </div>
 
-                <div class="form-group mt-5">
+                <hr class="light">
+
+                <div class="form-group mt-4">
                     <div class="row">
                         <div class="col-md-8 col-sm-10 col-12">
                             <label for="recipes">
-                                Rare Recipes
+                                <span class="font-weight-bold text-rare text-rare">Rare Recipes</span>
                                 <small class="text-muted font-weight-normal">Max {{ $maxRecipes }}</small>
                             </label>
 
@@ -192,6 +143,71 @@
                                     @endif
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="light">
+
+                <div class="row mt-5">
+                    <div class="col-md-6 col-sm-8 col-12">
+                        <div class="form-group">
+                            <label for="alts" class="font-weight-bold">
+                                60 Alts
+                            </label>
+                            <small class="text-muted">
+                                Only ones you can raid with
+                            </small>
+
+                            <?php
+                            $altsArray = splitByLine($user->alts);
+                            $altsLength = count($altsArray) - 1;
+                            ?>
+
+                            <div class="form-group">
+                                <input name="alts[]" maxlength="50" type="text" class="form-control" placeholder="eg. 60 Undead Rogue"   value="{{ old('alts.0') ? old('alts.0') : ($altsLength >= 0 ? $altsArray[0] : '') }}" />
+                            </div>
+                            <div class="form-group">
+                                <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Orc Hunter"     value="{{ old('alts.1') ? old('alts.1') : ($altsLength >= 1 ? $altsArray[1] : '') }}" />
+                            </div>
+                            <div class="js-hide-empty form-group" style="display:none;">
+                                <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Undead Mage"    value="{{ old('alts.2') ? old('alts.2') : ($altsLength >= 2 ? $altsArray[2] : '') }}" />
+                            </div>
+                            <div class="js-hide-empty form-group" style="display:none;">
+                                <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Tauren Druid"   value="{{ old('alts.3') ? old('alts.3') : ($altsLength >= 3 ? $altsArray[3] : '') }}" />
+                            </div>
+                            <div class="js-hide-empty form-group" style="display:none;">
+                                <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Troll Priest"   value="{{ old('alts.4') ? old('alts.4') : ($altsLength >= 4 ? $altsArray[4] : '') }}" />
+                            </div>
+                            <div class="js-hide-empty form-group" style="display:none;">
+                                <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Orc Warrior"    value="{{ old('alts.5') ? old('alts.5') : ($altsLength >= 5 ? $altsArray[5] : '') }}" />
+                            </div>
+                            <div class="js-hide-empty form-group" style="display:none;">
+                                <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Undead Warlock" value="{{ old('alts.6') ? old('alts.6') : ($altsLength >= 6 ? $altsArray[6] : '') }}" />
+                            </div>
+                            <div class="js-hide-empty form-group" style="display:none;">
+                                <input name="alts[]" maxlength="50" type="text" class="js-show-next form-control" placeholder="eg. 60 Tauren Shaman"  value="{{ old('alts.7') ? old('alts.7') : ($altsLength >= 7 ? $altsArray[7] : '') }}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mt-5">
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="rank" class="font-weight-bold">
+                                PvP Rank
+                            </label>
+                            <input name="rank" maxlength="50" type="text" class="form-control" placeholder="eg. 2" value="{{ old('rank') ? old('rank') : $user->rank }}" />
+                        </div>
+                    </div>
+
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label for="rank_goal" class="font-weight-normal">
+                                Rank Goal
+                            </label>
+                            <input name="rank_goal" maxlength="50" type="text" class="form-control" placeholder="eg. 14" value="{{ old('rank_goal') ? old('rank_goal') : $user->rank_goal }}" />
                         </div>
                     </div>
                 </div>

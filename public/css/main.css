@@ -33,6 +33,16 @@
     color: #bb9b63;
 }
 
+.text-legendary {
+    color: #ff8000;
+}
+.text-epic {
+    color: #a335ee;
+}
+.text-rare {
+    color: #0070dd;
+}
+
 .text-muted {
     color: #8e959b !important;
 }
@@ -169,3 +179,12 @@ table.dataTable tbody tr.even {
     color: #fff;
 }
 /* END DATATABLES OVERRIDE */
+
+.ui-autocomplete {
+    /*max-height: 1000px;*/
+    /*overflow-y: auto;*/
+    /* prevent horizontal scrollbar */
+    /*overflow-x: hidden;*/
+    /* add padding to account for vertical scrollbar */
+    /*padding-right: 20px;*/
+}

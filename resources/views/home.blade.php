@@ -5,7 +5,7 @@
 @section('content')
 <div class="container-fluid">
     <div class="col-12 text-center pt-5 pb-5">
-        <h1 class="font-weight-bold text-druid">
+        <h1 class="font-weight-bold text-legendary">
             &lt;Aftershock&gt;
         </h1>
         <span class="lead font-weight-normal">

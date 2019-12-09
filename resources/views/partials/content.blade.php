@@ -1,6 +1,6 @@
 <div>
     <h4 class="font-weight-bold">
-        <a href="{{ route('showPost', ['slug' => $content->slug]) }}" class="text-druid">
+        <a href="{{ route('showPost', ['slug' => $content->slug]) }}" class="text-legendary">
             {{ $content->title }}</a>
         <a href="{{ route('news', ['category' => $content->category]) }}" class="small nowrap text-muted">
             #{{ $content->category }}</a>

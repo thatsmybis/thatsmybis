@@ -39,11 +39,13 @@ class ItemsController extends \App\Http\Controllers\Controller
         } else {
             if ($query && $query != " ") {
                 $results = Item::select(['id', 'name', 'item_id'])
-                    ->whereRaw(
-                        "MATCH(`items`.`name`) AGAINST(? IN BOOLEAN MODE)",
-                        [$query . '*'] // note the wildcard added to the end
-                    )
-                    ->limit(10)
+                    ->where('name', 'like', '%' . $query . '%')
+                    // For a more performant/powerful query...
+                    // ->whereRaw(
+                    //     "MATCH(`items`.`name`) AGAINST(? IN BOOLEAN MODE)",
+                    //     ['+' . $query . ''] // note the prefixed or suffixed character(s) https://dev.mysql.com/doc/refman/5.5/en/fulltext-boolean.html
+                    // )
+                    ->limit(100)
                     ->get();
 
                 // For testing the query time:
