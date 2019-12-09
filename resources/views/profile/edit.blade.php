@@ -47,7 +47,7 @@
                                 <span class="font-weight-bold text-legendary">
                                     Wishlist
                                 </span>
-                                <small class="text-muted font-weight-normal">Max {{ $maxWishlistItems }}</small>
+                                <small class="text-muted font-weight-normal">CURRENT CONTENT ONLY, max {{ $maxWishlistItems }}</small>
                             </label>
 
                             <div class="{{ $errors->has('wishlist.*') ? 'has-error' : '' }}">
