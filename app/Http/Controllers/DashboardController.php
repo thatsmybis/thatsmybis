@@ -68,7 +68,7 @@ class DashboardController extends Controller
      */
     public function calendarIframe()
     {
-        $iframe = file_get_contents('https://calendar.google.com/calendar/embed?src=kb05a7c6hee4eb1b2dge8niro0%40group.calendar.google.com&ctz=America%2FNew_York');
+        $iframe = file_get_contents('https://calendar.google.com/calendar/embed?' . env('GOOGLE_CALENDAR'));
         $iframe = str_replace('</head>','<link rel="stylesheet" href="http://' . $_SERVER['SERVER_NAME'] . '/css/googleCalendar.css" /></head>', $iframe);
         $iframe = str_replace('</title>','</title><base href="https://calendar.google.com/" />', $iframe);
         return $iframe;
