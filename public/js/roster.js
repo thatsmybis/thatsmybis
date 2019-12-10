@@ -100,10 +100,12 @@ function createTable() {
                 "render" : function (data, type, row) {
                     let roles = "";
                     if (data.length > 0) {
+                        roles = '<ul class="no-indent no-bullet">';
                         data.forEach(function (item, index) {
                             let color = item.color != 0 ? '#' + rgbToHex(item.color) : "#FFFFFF";
-                            roles += `<span class="tag" style="border-color:${ color };"><span class="role-circle" style="background-color:${ color }"></span>${ item.name }</span>`;
+                            roles += `<li><span class="tag" style="border-color:${ color };"><span class="role-circle" style="background-color:${ color }"></span>${ item.name }</span></li>`;
                         });
+                        roles += "</ul>";
                     } else {
                         roles = '—';
                     }
