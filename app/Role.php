@@ -14,7 +14,15 @@ class Role extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'discord_id', 'slug', 'description', 'permissions', 'position', 'color'];
+    protected $fillable = [
+        'name',
+        'discord_id',
+        'slug',
+        'description',
+        'permissions',
+        'position',
+        'color'
+    ];
 
     /**
      * The database table used by the model.

@@ -58,7 +58,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class, 'role_user')->orderByDesc('position')->withTimestamps();
+        return $this->belongsToMany(Role::class, 'role_user')->orderByDesc('position', 'desc');
     }
 
     public function recipes() {

@@ -97,8 +97,8 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
     white-space: nowrap;
     border-style: solid;
     border-width: 1px;
-    padding: 4px 14px 4px 14px !important;
-    margin: 4px !important;
+    padding: 0px 10px 3px 10px !important;
+    margin: 4px 0px 2px 0px !important;
     border-radius: 14px;
     background-color: #36393e;
 }

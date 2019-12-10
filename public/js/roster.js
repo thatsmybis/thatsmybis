@@ -223,7 +223,7 @@ function createTable() {
 function getItemList(data) {
     let items = `<ol class="no-indent">`;
     $.each(data, function (index, item) {
-        items += `<li class="font-weight-medium"><a href="/item/${ item.item_id }" data-wowhead="item=${ item.item_id }">${ item.name }</a></li>`;
+        items += `<li class="font-weight-medium"><a href="https://classic.wowhead.com/item=${ item.item_id }" data-wowhead="item=${ item.item_id }">${ item.name }</a></li>`;
     });
     items += `</ol>`;
     return items;
