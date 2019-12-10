@@ -74,13 +74,13 @@
                 </div>
                 <div class="col-12">
                     @if ($user->received->count() > 0)
-                        <ul class="lesser-indent">
+                        <ol class="lesser-indent">
                             @foreach ($user->received as $item)
                                 <li class="">
                                     @include('partials/item')
                                 </li>
                             @endforeach
-                        </ul>
+                        </ol>
                     @else
                         —
                     @endif
@@ -93,13 +93,13 @@
                 </div>
                 <div class="col-12">
                     @if ($user->recipes->count() > 0)
-                        <ul class="lesser-indent">
+                        <ol class="lesser-indent">
                             @foreach ($user->recipes as $item)
                                 <li class="">
                                     @include('partials/item')
                                 </li>
                             @endforeach
-                        </ul>
+                        </ol>
                     @else
                         —
                     @endif
@@ -112,13 +112,13 @@
                 </div>
                 <div class="col-12">
                     @if ($user->alts)
-                        <ul class="lesser-indent">
+                        <ol class="lesser-indent">
                             @foreach (explode("\n", $user->alts) as $value)
                                 <li class="js-markdown-inline">
                                     {{ $value }}
                                 </li>
                             @endforeach
-                        </ul>
+                        </ol>
                     @else
                         —
                     @endif

@@ -218,10 +218,10 @@ function createTable() {
 
 // Gets an HTML list of items with pretty wowhead formatting
 function getItemList(data) {
-    let items = `<ul class="no-indent no-bullet">`;
+    let items = `<ol class="no-indent">`;
     $.each(data, function (index, item) {
         items += `<li class="font-weight-medium"><a href="/item/${ item.item_id }" data-wowhead="item=${ item.item_id }">${ item.name }</a></li>`;
     });
-    items += `</ul>`;
+    items += `</ol>`;
     return items;
 }
