@@ -29,8 +29,8 @@ $(document).ready( function () {
         table.column(colAlts).        visible(false);
         table.column(colRank).        visible(false);
         table.column(colRankGoal).    visible(false);
-        table.column(colWishlist).    visible(false);
-        table.column(colLoot).        visible(false);
+        table.column(colWishlist).    visible(true);
+        table.column(colLoot).        visible(true);
         table.column(colNotes).       visible(true);
         if (showOfficerNote) {
             table.column(colOfficerNotes).visible(false);
@@ -148,7 +148,7 @@ function createTable() {
                 "render" : function (data, type, row) {
                     return data ? getItemList(data) : '—';
                 },
-                "visible" : false
+                "visible" : true
             },
             {
                 "title"  : "Loot Received",
@@ -156,7 +156,7 @@ function createTable() {
                 "render" : function (data, type, row) {
                     return data ? getItemList(data) : '—';
                 },
-                "visible" : false
+                "visible" : true
             },
             {
                 "title"  : "Notes",
@@ -211,6 +211,7 @@ function createTable() {
                     }
                 }
             } );
+            makeWowheadLinks();
         }
     });
     return memberTable;
