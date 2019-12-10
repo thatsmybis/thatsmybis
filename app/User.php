@@ -3,7 +3,7 @@
 namespace App;
 
 use App\Role;
-use Illuminate\Contracts\Auth\MustVerifyEmail;
+// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Kodeine\Acl\Traits\HasRole;
@@ -20,7 +20,7 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'username',
-        'email',
+        // 'email',
         'discord_username',
         'discord_id',
         'password',
@@ -40,7 +40,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'email',
+        // 'email',
         'password',
         'remember_token',
         'discord_id',

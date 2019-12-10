@@ -49,7 +49,7 @@ class LoginController extends Controller
      */
     public function redirectToDiscord() {
         return Socialite::driver('discord')
-            ->scopes([])
+            ->setScopes(['identify'])
             ->redirect();
     }
     /**
@@ -107,7 +107,7 @@ class LoginController extends Controller
 
             $user = User::create([
                 'username'         => $unauthUser->getName(),
-                'email'            => $unauthUser->getEmail(),
+                // 'email'            => $unauthUser->getEmail(),
                 'discord_username' => $unauthUser->getNickname(),
                 'discord_id'       => $id,
                 'discord_avatar'   => $unauthUser->getAvatar(),
@@ -133,21 +133,6 @@ class LoginController extends Controller
     private function findUser($user, $service) {
         $serviceField = $service . '_id';
         $authUser = User::where($serviceField, $user->id)->first();
-        if (!$authUser) {
-            $userWithSameEmail = User::where('email', $user->email)->first();
-            if ($userWithSameEmail) {
-                if (!$userWithSameEmail->$serviceField) {
-                // This user already exists but they haven't linked this social platform yet.
-                // Link their account to this social platform and log them in.
-                    $userWithSameEmail->$serviceField = $user->id;
-                    $userWithSameEmail->save();
-                    $authUser = $userWithSameEmail;
-                } else {
-                // Email already taken and registered with a different service account
-                    abort(403, 'Cannot proceed. Someone already registered ' . $user->email . ' and linked it to a different ' . $service . ' account. (' . $user->email . ' is the email ' . $service . ' just gave us) Sorry! Try using a different account.');
-                }
-            }
-        }
         return $authUser;
     }
 }
