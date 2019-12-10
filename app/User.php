@@ -56,6 +56,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
     ];
 
+    public function roles()
+    {
+        return $this->belongsToMany(Role::class, 'role_user')->orderByDesc('position')->withTimestamps();
+    }
+
     public function recipes() {
         $query = $this
             ->belongsToMany(Item::class, 'user_items', 'user_id', 'item_id')

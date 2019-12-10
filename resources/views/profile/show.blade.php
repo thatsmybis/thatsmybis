@@ -31,9 +31,13 @@
                 </div>
                 <div class="col-12 mt-2 mb-2">
                     @if ($user->roles)
-                        @foreach ($user->roles as $role)
-                                <span class="tag" style="border-color:{{ $role->getColor() }};"><span class="role-circle" style="background-color:{{ $role->getColor() }}"></span>{{ $role->name }}</span>
-                        @endforeach
+                        <ul class="list-inline">
+                            @foreach ($user->roles as $role)
+                                <li class="list-inline-item">
+                                    <span class="tag" style="border-color:{{ $role->getColor() }};"><span class="role-circle" style="background-color:{{ $role->getColor() }}"></span>{{ $role->name }}</span>
+                                </li>
+                            @endforeach
+                        </ul>
                     @else
                         —
                     @endif

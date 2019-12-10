@@ -91,6 +91,8 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
 }
 
 .tag {
+    display: block;
+    width: max-content;
     color: #fff;
     white-space: nowrap;
     border-style: solid;

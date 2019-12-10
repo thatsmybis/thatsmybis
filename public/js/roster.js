@@ -100,10 +100,10 @@ function createTable() {
                 "render" : function (data, type, row) {
                     let roles = "";
                     if (data.length > 0) {
-                        roles = '<ul class="no-indent no-bullet">';
+                        roles = '<ul class="list-inline">';
                         data.forEach(function (item, index) {
                             let color = item.color != 0 ? '#' + rgbToHex(item.color) : "#FFFFFF";
-                            roles += `<li><span class="tag" style="border-color:${ color };"><span class="role-circle" style="background-color:${ color }"></span>${ item.name }</span></li>`;
+                            roles += `<li class="list-inline-item"><span class="tag" style="border-color:${ color };"><span class="role-circle" style="background-color:${ color }"></span>${ item.name }</span></li>`;
                         });
                         roles += "</ul>";
                     } else {
@@ -116,7 +116,7 @@ function createTable() {
                 "title"  : "Recipes",
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
-                    return data ? getItemList(data) : '—';
+                    return data.length ? getItemList(data) : '—';
                 },
                 "visible" : false
             },
@@ -148,7 +148,7 @@ function createTable() {
                 "title"  : "Wishlist",
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
-                    return data ? getItemList(data) : '—';
+                    return data.length ? getItemList(data) : '—';
                 },
                 "visible" : true
             },
@@ -156,7 +156,7 @@ function createTable() {
                 "title"  : "Loot Received",
                 "data"   : "received",
                 "render" : function (data, type, row) {
-                    return data ? getItemList(data) : '—';
+                    return data.length ? getItemList(data) : '—';
                 },
                 "visible" : true
             },
