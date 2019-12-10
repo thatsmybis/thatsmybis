@@ -127,19 +127,16 @@
 
             <div class="row mb-3">
                 <div class="col-12">
-                    <span class="text-muted font-weight-bold">Rank</span>
-                </div>
-                <div class="col-12">
-                    {{ $user->rank ? $user->rank : '—' }}
-                </div>
-            </div>
-
-            <div class="row mb-3">
-                <div class="col-12">
-                    <span class="text-muted font-weight-bold">Rank Goal</span>
-                </div>
-                <div class="col-12">
-                    {{ $user->rank_goal ? $user->rank_goal : '—' }}
+                    <div>
+                        <span class="text-muted font-weight-bold">Rank</span>
+                        <br>
+                        {{ $user->rank ? $user->rank : '—' }}
+                    </div>
+                    <div>
+                        <span class="text-muted font-weight-normal">Rank Goal</span>
+                        <br>
+                        {{ $user->rank_goal ? $user->rank_goal : '—' }}
+                    </div>
                 </div>
             </div>
 
