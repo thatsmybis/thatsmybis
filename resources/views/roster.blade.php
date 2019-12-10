@@ -31,7 +31,7 @@
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="2" href="">Rare Recipes</a>
+                    <a class="toggle-column cursor-pointer" data-column="2" href="">Recipes</a>
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item">
@@ -51,7 +51,7 @@
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="7" href="">Raid Loot</a>
+                    <a class="toggle-column cursor-pointer" data-column="7" href="">Loot Received</a>
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item">

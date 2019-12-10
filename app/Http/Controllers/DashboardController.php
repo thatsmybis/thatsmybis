@@ -97,7 +97,7 @@ class DashboardController extends Controller
 
         $members = User::select($userFields)
             ->whereNull('banned_at')
-            ->with(['recipes', 'received', 'roles', 'wishlist'])
+            ->with(['wishlist', 'recipes', 'received', 'roles'])
             ->orderBy('username')->get();
 
         $roles = Role::all();

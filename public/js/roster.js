@@ -111,7 +111,7 @@ function createTable() {
                 }
             },
             {
-                "title"  : "Rare Recipes",
+                "title"  : "Recipes",
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
                     return data ? getItemList(data) : '—';
@@ -151,8 +151,8 @@ function createTable() {
                 "visible" : false
             },
             {
-                "title"  : "Raid Loot",
-                "data"   : "loot_recieved",
+                "title"  : "Loot Received",
+                "data"   : "received",
                 "render" : function (data, type, row) {
                     return data ? getItemList(data) : '—';
                 },

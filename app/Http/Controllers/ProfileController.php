@@ -126,7 +126,7 @@ class ProfileController extends Controller
                 return redirect()->route('home');
             }
         } else {
-            $user = User::where('username', '=', strtolower(trim($username)))->with(['roles', 'wishlist', 'received'])->first();
+            $user = User::where('username', '=', strtolower(trim($username)))->with(['roles', 'wishlist', 'recipes', 'received'])->first();
 
             if (!$user) {
                 request()->session()->flash('status', 'Could not find user ' . $username . '.');
