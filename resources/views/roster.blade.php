@@ -72,7 +72,7 @@
                 </li>
                 <li class=" list-inline-item">
                     <select id="roleFilter1" class="form-control">
-                        <option value="" class="bg-tag">Roles</option>
+                        <option value="" class="bg-tag">Role 1</option>
                         @foreach ($roles as $role)
                             <option value="{{ $role->name }}" class="bg-tag" style="color:{{ $role->getColor() }};">
                                 {{ $role->name }}
@@ -82,7 +82,7 @@
                 </li>
                 <li class=" list-inline-item">
                     <select id="roleFilter2" class="form-control">
-                        <option value="" class="bg-tag">Roles</option>
+                        <option value="" class="bg-tag">Role 2</option>
                         @foreach ($roles as $role)
                             <option value="{{ $role->name }}" class="bg-tag" style="color:{{ $role->getColor() }};">
                                 {{ $role->name }}
