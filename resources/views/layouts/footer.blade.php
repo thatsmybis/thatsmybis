@@ -3,6 +3,7 @@
         <div class="row">
             <div class="col-lg-6 h-100 text-center text-lg-left mt-5">
                 <ul class="list-inline mb-2">
+                    {{--
                     <li class="list-inline-item">
                         <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server">
                             <img class="discord-link" src="{{ asset('images/discord.svg') }}?v=2" alt="Join the {{ env('APP_NAME') }} Discord" title="Join the {{ env('APP_NAME') }} Discord" />
@@ -24,6 +25,7 @@
                     <li class="list-inline-item">
                         <a href="{{ route('privacy') }}" class="text-brand">privacy</a>
                     </li>
+                    --}}
                 </ul>
                 <!-- <p class="text-muted small mb-4 mb-lg-0">&copy; {{ env('APP_NAME') }} 2019. All Rights Reserved.</p> -->
             </div>

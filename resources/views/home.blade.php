@@ -19,7 +19,7 @@
     </div>
     <div class="col-12 col-lg-6 offset-lg-3 text-center pb-5">
         <p class="lead">
-            <a href="https://forms.gle/zHBLPEPsFXyYds6HA" target="_blank">Apply Now</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLSf43pxcn8OkFoHadWH-BirLe7JYkqQptZg89JKiwQwGkEacCg/viewform" target="_blank">Apply Now</a>
         </p>
     </div>
 </div>
