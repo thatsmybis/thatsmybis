@@ -10,9 +10,11 @@
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('home') }}">News</a>
                 </li>
+                <!--
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('calendar') }}">Calendar</a>
                 </li>
+                -->
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('roster') }}">Roster</a>
                 </li>
