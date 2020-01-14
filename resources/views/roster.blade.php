@@ -8,7 +8,7 @@
         <div>
             <ul class="list-inline">
                 <li>
-                    <strong>Columns</strong>
+                    <strong>Column Visibility</strong>
                 </li>
                 <li class="list-inline-item">
                     <a class="toggle-column-default cursor-pointer font-weight-bold" href="">Default</a>
@@ -67,6 +67,9 @@
         </div>
         <div class="mt-4">
             <ul class="list-inline">
+                <li>
+                    <strong>Filter by Roles</strong>
+                </li>
                 <li class=" list-inline-item">
                     <select id="roleFilter1" class="form-control">
                         <option value="" class="bg-tag">Roles</option>
