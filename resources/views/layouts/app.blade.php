@@ -70,7 +70,12 @@
 </head>
 <body>
     @include('layouts/nav')
-
+    <div class="mb-3 text-center text-muted small">
+        Site is in development.
+        Report any bugs to Lemmings19#1149 on Discord.
+        <br>
+        If you're a web dev or designer, also reach out to Lemmings19#1149. <a href="https://github.com/Lemmings19/aftershock/" target="_blank">github</a>
+    </div>
     @if (session('status'))
         <div class="container-fluid">
             <div class="col-12">
