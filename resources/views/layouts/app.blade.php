@@ -39,6 +39,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}?v=1" />
     <meta name="description" content="@yield('description', 'An online gaming community.')" />
     <meta name="keywords" content="@yield('keywords', 'aftershock, aftershockwow, aftershock wow')" />
+    <meta name="author" content="https://github.com/Lemmings19/">
 
     <!-- Styles -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:400,400i,600,600i,700,700i&display=swap" rel="stylesheet">
