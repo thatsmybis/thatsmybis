@@ -140,7 +140,7 @@
                 &lt;<span class="font-weight-bold">Aftershock</span>&gt;
             </h1>
             <p class="mt-1 font-weight-normal text-3 mb-5">
-                The top <span>Horde</span> guild on US-Faerlina
+                A top <span>Horde</span> guild on US-Faerlina
             </p>
             <p class="text-muted font-weight-light pt-3 text-4">
                 We believe that <em>community</em> is the core of Classic WoW…
