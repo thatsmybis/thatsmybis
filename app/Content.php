@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\{Guild, Member};
 use Illuminate\Database\Eloquent\Model;
 
 class Content extends Model
@@ -18,8 +19,9 @@ class Content extends Model
         'slug',
         'category',
         'content',
-        'user_id',
+        'member_id',
         'raid_id',
+        'guild_id',
         'last_edited_by',
         'removed_at',
     ];
@@ -32,7 +34,11 @@ class Content extends Model
     protected $hidden = [
     ];
 
-    public function user() {
-        return $this->belongsTo(User::class);
+    public function guild() {
+        return $this->belongsTo(Guild::class);
+    }
+
+    public function member() {
+        return $this->belongsTo(Member::class);
     }
 }

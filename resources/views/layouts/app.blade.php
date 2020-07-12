@@ -70,10 +70,7 @@
 </head>
 <body class="@yield('bodyClass')">
     @include('layouts/nav')
-    <div class="mb-3 text-center text-muted small">
-        Site is in development.
-        Report any bugs to Lemmings19#1149 on Discord.
-    </div>
+
     @if (session('status'))
         <div class="container-fluid">
             <div class="col-12">

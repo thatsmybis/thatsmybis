@@ -1,3 +1,16 @@
+body {
+    color:                 #fff !important;
+    background-color:      #161523;
+    background-image:      linear-gradient(#1c1b3a 0px, #161523 100vh);
+    background-repeat:     no-repeat;
+    min-height:            100vh;
+    /*background-attachment: fixed;*/
+}
+
+.bg-darker {
+    background-color: #242344;
+}
+
 .discord-link {
     height: 40px;
 }
@@ -112,11 +125,11 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
     color: #fff;
     white-space: nowrap;
     border-style: solid;
-    border-width: 1px;
+    border-width: 0px;
     padding: 0px 10px 3px 10px !important;
     margin: 4px 0px 2px 0px !important;
     border-radius: 14px;
-    background-color: #36393e;
+    background-color: #2f2e4e;
 }
 
 .bg-tag {
@@ -164,17 +177,6 @@ button.close {
 button.close:hover {
     color: #e5e5e5;
 }
-
-/* DARK THEME */
-body {
-    color:                 #fff !important;
-    background-color:      #2f3136;
-    background-image:      linear-gradient(#36393f 0px, #2f3136 100vh);
-    background-repeat:     no-repeat;
-    min-height:            100vh;
-    /*background-attachment: fixed;*/
-}
-/* END DARK THEME */
 
 /* DATATABLES OVERRIDE */
 .dataTables_wrapper .dataTables_filter,

@@ -149,7 +149,7 @@
                     <span class="text-muted font-weight-bold">Public Notes</span>
                 </div>
                 <div class="col-12">
-                    {{ $user->note ? $user->note : '—' }}
+                    {{ $user->public_note ? $user->public_note : '—' }}
                 </div>
             </div>
 

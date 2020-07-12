@@ -213,13 +213,13 @@
                 </div>
 
                 <div class="form-group mt-5">
-                    <label for="note" class="font-weight-bold">
+                    <label for="public_note" class="font-weight-bold">
                         Public Notes
                     </label>
                     <small class="text-muted">
                         ie. "Rushing for 8/8 tier 1"
                     </small>
-                    <textarea name="note" rows="3" maxlength="1000" placeholder="ie. I want 5/8 t1" class="form-control">{{ old('note') ? old('note') : $user->note }}</textarea>
+                    <textarea name="public_note" rows="3" maxlength="1000" placeholder="ie. I want 5/8 t1" class="form-control">{{ old('public_note') ? old('public_note') : $user->public_note }}</textarea>
                 </div>
 
                 @if ($showOfficerNote)

@@ -8,8 +8,8 @@ var colRank = 4;
 var colRankGoal = 5;
 var colWishlist = 6;
 var colLoot = 7;
-var colNotes = 8;
-var colOfficerNotes = 9;
+var colPublicNote = 8;
+var colOfficerNote = 9;
 
 $(document).ready( function () {
    table = createTable();
@@ -31,9 +31,9 @@ $(document).ready( function () {
         table.column(colRankGoal).    visible(false);
         table.column(colWishlist).    visible(true);
         table.column(colLoot).        visible(true);
-        table.column(colNotes).       visible(true);
+        table.column(colPublicNote).       visible(true);
         if (showOfficerNote) {
-            table.column(colOfficerNotes).visible(false);
+            table.column(colOfficerNote).visible(false);
         }
    });
 
@@ -48,9 +48,9 @@ $(document).ready( function () {
         table.column(colRankGoal).    visible(false);
         table.column(colWishlist).    visible(true);
         table.column(colLoot).        visible(true);
-        table.column(colNotes).       visible(true);
+        table.column(colPublicNote).       visible(true);
         if (showOfficerNote) {
-            table.column(colOfficerNotes).visible(true);
+            table.column(colOfficerNote).visible(true);
         }
    });
 
@@ -65,9 +65,9 @@ $(document).ready( function () {
         table.column(colRankGoal).    visible(false);
         table.column(colWishlist).    visible(false);
         table.column(colLoot).        visible(false);
-        table.column(colNotes).       visible(false);
+        table.column(colPublicNote).       visible(false);
         if (showOfficerNote) {
-            table.column(colOfficerNotes).visible(false);
+            table.column(colOfficerNote).visible(false);
         }
    });
 
@@ -161,14 +161,14 @@ function createTable() {
                 "visible" : true
             },
             {
-                "title"  : "Notes",
-                "data"   : "note",
+                "title"  : "Public Note",
+                "data"   : "public_note",
                 "render" : function (data, type, row) {
-                    return row.note ? nl2br(row.note) : '—';
+                    return row.public_note ? nl2br(row.public_note) : '—';
                 }
             },
             {
-                "title"  : "Officer Notes",
+                "title"  : "Officer Note",
                 "data"   : "officer_note",
                 "render" : function (data, type, row) {
                     return row.officer_note ? nl2br(row.officer_note) : '—';

@@ -185,7 +185,7 @@ class ProfileController extends Controller
             'wishlist.*'   => 'nullable|integer|exists:items,item_id',
             'received.*'   => 'nullable|integer|exists:items,item_id',
             'recipes.*'    => 'nullable|integer|exists:items,item_id',
-            'note'         => 'nullable|string|max:1000',
+            'public_note'  => 'nullable|string|max:1000',
             'officer_note' => 'nullable|string|max:1000',
         ];
 
@@ -207,12 +207,12 @@ class ProfileController extends Controller
         }
 
         if ($canEdit) {
-            $updateValues['username']  = request()->input('username');
-            $updateValues['spec']      = request()->input('spec');
-            $updateValues['alts']      = implode(array_filter(request()->input('alts')), "\n");
-            $updateValues['rank']      = request()->input('rank');
-            $updateValues['rank_goal'] = request()->input('rank_goal');
-            $updateValues['note']      = request()->input('note');
+            $updateValues['username']    = request()->input('username');
+            $updateValues['spec']        = request()->input('spec');
+            $updateValues['alts']        = implode(array_filter(request()->input('alts')), "\n");
+            $updateValues['rank']        = request()->input('rank');
+            $updateValues['rank_goal']   = request()->input('rank_goal');
+            $updateValues['public_note'] = request()->input('public_note');
 
             if (request()->input('wishlist')) {
                 $items = [];
