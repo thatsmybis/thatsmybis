@@ -1,17 +1,17 @@
 {
-    "name": "lemmings19/aftershock",
+    "name": "lemmings19/thatsmybis",
     "type": "project",
-    "description": "A website for the Aftershock gaming community.",
+    "description": "A tool for loot council guilds.",
     "keywords": [
         "website",
-        "aftershock"
+        "thatsmybis"
     ],
     "license": "",
     "require": {
         "php": "^7.2",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
-        "kodeine/laravel-acl": "^2.0",
+        "kodeine/laravel-acl": "^2.0.5",
         "laravel/framework": "^6.2",
         "laravel/socialite": "^4.2",
         "laravel/tinker": "^1.0",

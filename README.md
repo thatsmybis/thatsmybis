@@ -1,4 +1,4 @@
-# Aftershock, a World of Warcraft: Classic Guild
+# That's My BIS; a tool for managing loot council guilds in World of Warcraft Classic
 This project serves as a place to host resources and crap for the guild. Links to stuff. Links to polls. Calendars, etc. It aims to delegate all of the user management to the guild's Discord server.
 
 This project shouldn't become a place for active communication (ie. chatting); instead, the guild Discord should maintian that role.
@@ -68,15 +68,15 @@ tl;dr
         - C:\Users\Joe\.ssh\id_rsa
 
     folders:
-        - map: C:\projects\aftershock-wow
-          to: /home/vagrant/code/aftershock-wow
+        - map: C:\projects\thatsmybis
+          to: /home/vagrant/code/thatsmybis
 
     sites:
-        - map: aftershockwow.local
-          to: /home/vagrant/code/aftershock-wow/public
+        - map: thatsmybis.local
+          to: /home/vagrant/code/thatsmybis/public
 
     databases:
-        - aftershockwow
+        - thatsmybis
 
     features:
         - mariadb: false
@@ -93,8 +93,8 @@ tl;dr
 - Make sure the hosts have been setup (read Hostname Resolution in the [docs](https://laravel.com/docs/6.x/homestead#configuring-homestead))
 - Run `vagrant up` while in the Homestead directory.
 - Run `vagrant ssh`
-- Run `composer install` from `/home/vagrant/code/aftershock-wow`
-- Create a file named `.env` in `/home/vagrant/code/aftershock-wow`. Base it off of `.env.example` or ask another dev for what details to fill in.
+- Run `composer install` from `/home/vagrant/code/thatsmybis`
+- Create a file named `.env` in `/home/vagrant/code/thatsmybis`. Base it off of `.env.example` or ask another dev for what details to fill in.
 
 ## Server Environment Setup
 
@@ -122,10 +122,10 @@ sudo nano /etc/apache2/apache2.conf
     > modified `<Directory /var/www/>` to have `AllowOverride All` instead of `AllowOverride None`
 sudo service apache2 restart
 cd /var/www/html
-sudo mkdir aftershock
-sudo chown ubuntu: aftershock
-git clone https://github.com/Lemmings19/aftershock.git aftershock
-cd aftershock
+sudo mkdir thatsmybis
+sudo chown ubuntu: thatsmybis
+git clone https://github.com/Lemmings19/thatsmybis.git thatsmybis
+cd thatsmybis
 git config --global credential.helper store
 git pull
 chmod -R 777 storage

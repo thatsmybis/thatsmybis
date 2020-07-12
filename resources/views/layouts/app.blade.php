@@ -3,18 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta property="og:site_name" content="{{ env('APP_NAME') }}">
-    <meta property="og:title" content="@yield('title', env('APP_NAME') . ' WoW Classic Guild')" />
+    <meta property="og:title" content="@yield('title', env('APP_NAME'))" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:type" content="website" />
-    <meta property="og:description" content="@yield('description', 'An online gaming community.')" />
+    <meta property="og:description" content="@yield('description', 'A tool for loot council guilds.')" />
     <meta property="og:determiner" content="" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="en_CA" />
     <meta property="og:locale:alternate" content="en_GB" />
-    <meta property="og:image" content="@yield('image', 'https://random-content.s3.amazonaws.com/logo.jpeg')" />
-    <meta property="og:image:url" content="@yield('image', 'https://random-content.s3.amazonaws.com/logo.jpeg')" />
+    <meta property="og:image" content="@yield('image', 'https://random-content.s3.amazonaws.com/thatsmybis_logo.jpeg')" />
+    <meta property="og:image:url" content="@yield('image', 'https://random-content.s3.amazonaws.com/thatsmybis_logo.jpeg')" />
     <meta property="og:image:type" content="image/png" />
-    <meta property="og:site_name" content="{{ env('APP_NAME') }}" />
     <meta property="fb:app_id" content="" />
 
     <!-- JSON-LD markup for schema.org  -->
@@ -24,7 +23,7 @@
         "@type" :       "Organization",
         "name" :        "{{ env('APP_NAME') }}",
         "image" :       "",
-        "description" : "{{ env('APP_NAME') }} WoW Classic Guild",
+        "description" : "{{ env('APP_NAME') }}",
         "url" :         "{{ env('APP_URL') }}"
     }
     </script>
@@ -38,7 +37,7 @@
     <title>@yield('title', config('app.name'))</title>
     <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}?v=1" />
     <meta name="description" content="@yield('description', 'An online gaming community.')" />
-    <meta name="keywords" content="@yield('keywords', 'aftershock, aftershockwow, aftershock wow')" />
+    <meta name="keywords" content="@yield('keywords', "thatsmybis,that's my bis,thatsmybis wow,thatsmybis classic,faerlina,horde,faerlina horde,wow streamers,warcraft streamers,faerlina streamer,faerlina streamers")" />
     <meta name="author" content="https://github.com/Lemmings19/">
 
     <!-- Styles -->
@@ -69,13 +68,11 @@
         instructions how to enable JavaScript in your web browser</a>.
     </noscript>
 </head>
-<body>
+<body class="@yield('bodyClass')">
     @include('layouts/nav')
     <div class="mb-3 text-center text-muted small">
         Site is in development.
         Report any bugs to Lemmings19#1149 on Discord.
-        <br>
-        If you're a web dev or designer, also reach out to Lemmings19#1149. <a href="https://github.com/Lemmings19/aftershock/" target="_blank">github</a>
     </div>
     @if (session('status'))
         <div class="container-fluid">

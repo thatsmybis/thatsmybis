@@ -28,11 +28,19 @@ class CreateRaidsTable extends Migration
         });
 
         /*
+        -- Aftershock ID's
         INSERT INTO `raids` (`name`, `slug`, `discord_channel_id`, `discord_role_id`)
         VALUES
             ("Myth Raid", "myth-raid", 641092767530876928, 640647183087173738),
             ("Night Raid", "night-raid", 639522941138370576, 640647320521670687),
             ("Weekend Raid", "weekend-raid", 641092795922382858, 640647260798976062);
+
+        -- Testing ID's
+        INSERT INTO `raids` (`name`, `slug`, `discord_channel_id`, `discord_role_id`)
+        VALUES
+            ("Myth Raid", "myth-raid", 447690468927733763, 650539420621078575),
+            ("Night Raid", "night-raid", 447690468927733763, 650539375364407322),
+            ("Weekend Raid", "weekend-raid", 447690468927733763, 650539396197515268);
         */
     }
 
