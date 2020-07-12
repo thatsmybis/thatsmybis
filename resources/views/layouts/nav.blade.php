@@ -6,9 +6,9 @@
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            @if (Auth::user())
+            @if (Auth::user() && isset($guildName) && $guildName)
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('home') }}">News</a>
+                    <a class="nav-link" href="{{ route('news') }}">News</a>
                 </li>
                 <!--
                 <li class="nav-item active">

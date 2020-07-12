@@ -41,16 +41,23 @@ Route::get( '/contact', 'HomeController@contact')->name('contact');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 
-Route::get( '/news',            'DashboardController@news')->name('news');
-Route::get( '/calendar',        'DashboardController@calendar') ->name('calendar');
-Route::get( '/calendar/iframe', 'DashboardController@calendarIframe') ->name('calendarIframe');
-Route::get( '/roster',          'DashboardController@roster')   ->name('roster');
+Route::group(['prefix' => '{guildName}'], function () {
+    Route::get( '/news',            'DashboardController@news')->name('news');
+    Route::get( '/calendar',        'DashboardController@calendar') ->name('calendar');
+    Route::get( '/calendar/iframe', 'DashboardController@calendarIframe') ->name('calendarIframe');
+    Route::get( '/roster',          'DashboardController@roster')   ->name('roster');
 
-Route::get( '/resources',        'ContentController@index')->name('contentIndex');
-Route::get( '/resources/{slug}', 'ContentController@show')->name('showContent');
-Route::get( '/posts/{slug}',     'ContentController@show')->name('showPost');
+    Route::get( '/resources',        'ContentController@index')->name('contentIndex');
+    Route::get( '/resources/{slug}', 'ContentController@show')->name('showContent');
+    Route::get( '/posts/{slug}',     'ContentController@show')->name('showPost');
 
-Route::get( '/item/{item_id}/{slug?}', 'ItemController@show')->name('showItem');
+    Route::get( '/item/{item_id}/{slug?}', 'ItemController@show')->name('showItem');
+
+    Route::group(['prefix' => '{id}'], function () {
+        Route::get( '/',            'ProfileController@findById')->where('id', '[0-9]+')->name('findUserById');
+        Route::get( '/{username?}', 'ProfileController@showUser')->where('id', '[0-9]+')->name('showUser');
+    });
+});
 
 Route::group([
         'middleware' => 'acl',
@@ -68,12 +75,6 @@ Route::get( '/ban/{id}', [
         'middleware' => 'acl',
         'is'         => 'admin|guild_master|officer|raider',
     ])->where('id', '[0-9]+')               ->name('banUser');
-
-
-Route::group(['prefix' => '{id}'], function () {
-    Route::get( '/',            'ProfileController@findById')->where('id', '[0-9]+')->name('findUserById');
-    Route::get( '/{username?}', 'ProfileController@showUser')->where('id', '[0-9]+')->name('showUser');
-});
 
 Route::group([
         'prefix'     => 'guild',

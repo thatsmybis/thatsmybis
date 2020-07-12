@@ -29,7 +29,7 @@ class SeeUser
 
             try {
                 // Sync the user's role(s)
-                $user->fetchAndSyncRoles();
+                // $user->fetchAndSyncRoles();
             } catch (\GuzzleHttp\Command\Exception\CommandClientException $e) {
                 abort(404, "Doesn't look like you're in the guild Discord server.");
             }

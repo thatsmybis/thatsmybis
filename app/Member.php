@@ -4,8 +4,9 @@ namespace App;
 
 use App\{Character, Content, Guild, Role, User};
 use Kodeine\Acl\Traits\HasRole;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Member
+class Member extends Authenticatable
 {
     use HasRole;
 

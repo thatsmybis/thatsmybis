@@ -30,6 +30,12 @@
             </p>
 
             <div class="mt-5 mb-5">
+                <a class="btn btn-light" href="{{ route('discordLogin') }}" title="Sign in with Discord" rel="nofollow">
+                    <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> Sign In
+                </a>
+            </div>
+
+            <div class="mt-5 mb-5">
                 Click the black void below
                 <blockquote class="reddit-card"><a href="https://www.reddit.com/r/classicwow/comments/hnjsge/how_to_loot_council/">How To Loot Council</a> from <a href="http://www.reddit.com/r/classicwow">r/classicwow</a></blockquote>
                 <script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
