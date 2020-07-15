@@ -7,9 +7,9 @@
     <div class="row">
         <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
             @if (count($errors) > 0)
-                <ul>
+                <ul class="alert alert-danger">
                     @foreach ($errors->all() as $error)
-                        <li class="alert alert-danger">
+                        <li>
                             {{ $error }}
                         </li>
                     @endforeach

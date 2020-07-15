@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Content, Raid, Role, User};
+use App\{Content, Guild, Raid, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
@@ -24,8 +24,9 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function news()
+    public function news($guildSlug)
     {
+        $guild = Guild::where('slug', $guildSlug)->with(['raids', 'roles'])->firstOrFail();
         $user = User::where('id', Auth::id())->with('roles')->first();
 
         $category = request()->input('category');
@@ -33,21 +34,20 @@ class DashboardController extends Controller
         if (!$category) {
             $category = 'my-feed';
 
-            $userDiscordRoles = $user->roles->keyBy('discord_id')->keys();
+            $userDiscordRoles = $user->roles->where(['guild_id' => $guild->id])->keyBy('discord_id')->keys();
 
             $userRaids = Raid::whereIn('discord_role_id', $userDiscordRoles)->get()->keyBy('id')->keys()->toArray();
 
-            $content = Content::where('category', 'news')->orWhereIn('raid_id', $userRaids)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
+            $content = Content::where(['category' => 'news', 'guild_id' => $guild->id])->orWhereIn('raid_id', $userRaids)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
         } else {
             $content = Content::where('category', $category)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
         }
 
-        $raids = Raid::all();
-
         return view('news', [
             'category' => $category,
             'contents' => $content,
-            'raids'    => Raid::all(),
+            'guild'    => $guild,
+            'raids'    => $guild->raids,
         ]);
     }
 
@@ -56,9 +56,10 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function calendar()
+    public function calendar($guildSlug)
     {
-        return view('calendar');
+        $guild = Guild::where('slug', $guildSlug)->firstOrFail();
+        return view('calendar', ['guild' => $guild]);
     }
 
     /**
@@ -66,9 +67,10 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function calendarIframe()
+    public function calendarIframe($guildSlug)
     {
-        $iframe = file_get_contents('https://calendar.google.com/calendar/embed?' . env('GOOGLE_CALENDAR'));
+        $guild = Guild::where('slug', $guildSlug)->firstOrFail();
+        $iframe = file_get_contents($guild->calendar_link); // 'https://calendar.google.com/calendar/embed?' .
         $iframe = str_replace('</head>','<link rel="stylesheet" href="http://' . $_SERVER['SERVER_NAME'] . '/css/googleCalendar.css" /></head>', $iframe);
         $iframe = str_replace('</title>','</title><base href="https://calendar.google.com/" />', $iframe);
         return $iframe;

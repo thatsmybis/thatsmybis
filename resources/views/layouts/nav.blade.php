@@ -1,37 +1,38 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="{{ route('home') }}"><span class="text-legendary font-weight-bold">That's My BIS</span></a>
+    <a class="navbar-brand" href="{{ route('home') }}"><span class="text-legendary font-weight-bold">{{ env('APP_NAME') }}</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
-            @if (Auth::user() && isset($guildName) && $guildName)
+            @if (Auth::user() && isset($guild) && $guild)
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('news') }}">News</a>
+                    <a class="nav-link" href="{{ route('news', ['guildSlug' => $guild->slug]) }}">News</a>
                 </li>
-                <!--
+                @if ($guild->calendar_link)
+                    <li class="nav-item active">
+                        <a class="nav-link" href="{{ route('calendar', ['guildSlug' => $guild->slug]) }}">Calendar</a>
+                    </li>
+                @endif
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('calendar') }}">Calendar</a>
-                </li>
-                -->
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('roster') }}">Roster</a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('contentIndex') }}">Resources</a>
+                    <a class="nav-link" href="{{ route('roster', ['guildSlug' => $guild->slug]) }}">Roster</a>
                 </li>
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('showUser', ['id' => Auth::user()->id, 'username' => Auth::user()->username]) }}">My Profile</a>
+                    <a class="nav-link" href="{{ route('contentIndex', ['guildSlug' => $guild->slug]) }}">Resources</a>
                 </li>
-                @if (Auth::user()->hasRole(env('PERMISSION_ADMIN')))
+                <li class="nav-item active">
+                    <a class="nav-link" href="{{ route('showMember', ['guildSlug' => $guild->slug, 'id' => Auth::user()->id, 'username' => Auth::user()->username]) }}">My Profile</a>
+                </li>
+                @if (true) <!-- TODO permissions -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin
                         </a>
                         <div class="dropdown-menu" aria-labelledby="adminNavDropdown">
-                            <a class="dropdown-item" href="{{ route('guild.raids') }}">Raids</a>
-                            <a class="dropdown-item" href="{{ route('guild.roles') }}">Roles</a>
+                            <a class="dropdown-item" href="{{ route('guild.raids', ['guildSlug' => $guild->slug]) }}">Raids</a>
+                            <a class="dropdown-item" href="{{ route('guild.roles', ['guildSlug' => $guild->slug]) }}">Roles</a>
+                            <a class="dropdown-item" href="{{ route('guild.settings', ['guildSlug' => $guild->slug]) }}">Settings</a>
                             <!-- Can't get permissions working right now, so I'm disabling this
                                 <a class="dropdown-item" href="">Permissions</a> -->
                         </div>

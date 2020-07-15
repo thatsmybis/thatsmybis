@@ -63,4 +63,13 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'role_user');
     }
+
+    // TODO
+    // Fetch the user's roles from Discord and sync them
+    public function fetchAndSyncRoles() {
+        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+        $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$this->discord_id]);
+        $roles = Role::whereIn('discord_id', $discordMember->roles)->get()->keyBy('id')->keys()->toArray();
+        $this->syncRoles($roles);
+    }
 }

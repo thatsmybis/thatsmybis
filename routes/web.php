@@ -38,24 +38,50 @@ Route::group(['prefix' => 'auth'], function () {
 
 Route::get( '/about',   'HomeController@about')  ->name('about');
 Route::get( '/contact', 'HomeController@contact')->name('contact');
+Route::get( '/faq',     'HomeController@faq')    ->name('faq');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 
-Route::group(['prefix' => '{guildName}'], function () {
-    Route::get( '/news',            'DashboardController@news')->name('news');
-    Route::get( '/calendar',        'DashboardController@calendar') ->name('calendar');
-    Route::get( '/calendar/iframe', 'DashboardController@calendarIframe') ->name('calendarIframe');
-    Route::get( '/roster',          'DashboardController@roster')   ->name('roster');
+Route::get( '/register-guild', 'GuildController@showRegister')->name('guild.showRegister');
+Route::post('/submit-guild',   'GuildController@register')    ->name('guild.register');
+
+Route::group(['prefix' => '{guildSlug}'], function () {
+    Route::get( '/news',            'DashboardController@news')          ->name('guild.news');
+    Route::get( '/calendar',        'DashboardController@calendar')      ->name('guild.calendar');
+    Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
+    Route::get( '/roster',          'DashboardController@roster')        ->name('guild.roster');
 
     Route::get( '/resources',        'ContentController@index')->name('contentIndex');
-    Route::get( '/resources/{slug}', 'ContentController@show')->name('showContent');
-    Route::get( '/posts/{slug}',     'ContentController@show')->name('showPost');
+    Route::get( '/resources/{slug}', 'ContentController@show') ->name('showContent');
+    Route::get( '/posts/{slug}',     'ContentController@show') ->name('showPost');
 
     Route::get( '/item/{item_id}/{slug?}', 'ItemController@show')->name('showItem');
 
     Route::group(['prefix' => '{id}'], function () {
         Route::get( '/',            'ProfileController@findById')->where('id', '[0-9]+')->name('findUserById');
-        Route::get( '/{username?}', 'ProfileController@showUser')->where('id', '[0-9]+')->name('showUser');
+        Route::get( '/{username?}', 'ProfileController@showMember')->where('id', '[0-9]+')->name('showMember');
+    });
+
+    Route::group([
+        // 'middleware' => 'acl',
+        // 'is'         => 'admin|guild_master|officer|raider',
+    ], function () {
+        Route::get( '/raids',            'RaidController@raids') ->name('guild.raids');
+        Route::get( '/raids/edit/{id?}', 'RaidController@edit') ->name('guild.editRaid');
+        Route::post('/raids/remove',     'RaidController@remove')->name('guild.removeRaid');
+        Route::post('/raids/update',     'RaidController@update')->name('guild.updateRaid');
+        Route::post('/raids',            'RaidController@create')->name('guild.createRaid');
+
+        Route::get( '/roles',     'RoleController@roles')    ->name('guild.roles');
+        Route::get( '/syncRoles', 'RoleController@syncRoles')->name('guild.syncRoles');
+
+        Route::get( '/settings',  'GuildController@settings')->name('guild.settings');
+
+        Route::post('/settings',  'GuildController@submitSettings')->name('guild.submitSettings');
+
+        // Can't get the permissions working right now (2019-12-02), so I'm disabling this.
+        // Route::get( '/permissions', 'PermissionsController@permissions')->name('guild.permissions');
+        // Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');
     });
 });
 
@@ -75,20 +101,5 @@ Route::get( '/ban/{id}', [
         'middleware' => 'acl',
         'is'         => 'admin|guild_master|officer|raider',
     ])->where('id', '[0-9]+')               ->name('banUser');
-
-Route::group([
-        'prefix'     => 'guild',
-        'middleware' => 'acl',
-        'is'         => 'admin|guild_master|officer|raider',
-    ], function () {
-    Route::get( '/raids',     'RaidsController@raids')    ->name('guild.raids');
-
-    Route::get( '/roles',     'RolesController@roles')    ->name('guild.roles');
-    Route::get( '/syncRoles', 'RolesController@syncRoles')->name('guild.syncRoles');
-
-    // Can't get the permissions working right now (2019-12-02), so I'm disabling this.
-    // Route::get( '/permissions', 'PermissionsController@permissions')->name('guild.permissions');
-    // Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');
-});
 
 Route::get( '/{username}',      'ProfileController@findByUsername')->name('findUserByUsername');

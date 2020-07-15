@@ -26,13 +26,6 @@ class LoginController extends Controller
     use AuthenticatesUsers;
 
     /**
-     * Where to redirect users after login.
-     *
-     * @var string
-     */
-    protected $redirectTo = '/news';
-
-    /**
      * Create a new controller instance.
      *
      * @return void
@@ -42,16 +35,22 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-        /**
+    /**
      * Redirect the user to the Discord authentication page.
      *
      * @return Response
      */
     public function redirectToDiscord() {
         return Socialite::driver('discord')
+            // Don't require Discord to send back and email
+            // https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes
             ->setScopes(['identify'])
+            // Don't prompt the user to accept our app's usage of their Discord profile EVERY time (only on first signup)
+            // https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-authorization-url-example
+            ->with(['prompt' => 'none'])
             ->redirect();
     }
+
     /**
      * Obtain the user information from Discord.
      *
@@ -73,17 +72,6 @@ class LoginController extends Controller
 
         $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
 
-        try {
-            $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$id]);
-        } catch (\GuzzleHttp\Command\Exception\CommandClientException $e) {
-            abort(403, "Doesn't look like you're in the guild Discord server.");
-        }
-
-        if (!$discordMember) {
-            abort(403, "Doesn't look like you're in the guild Discord server.");
-        }
-
-
         $authUser = $this->findUser($unauthUser, 'discord');
 
         if ($authUser) {
@@ -91,20 +79,8 @@ class LoginController extends Controller
                 abort(403, 'You have been banned.');
             }
             Auth::login($authUser, true);
-            return redirect($this->redirectTo);
+            return redirect()->route('home');
         } else if ($unauthUser) {
-            $allowedRoles = explode(',', env('GUILD_ALLOWED_SIGNUP_ROLES'));
-            $pass = false;
-            foreach ($discordMember->roles as $role) {
-                if (in_array($role, $allowedRoles)) {
-                    $pass = true;
-                }
-            }
-
-            if (!$pass) {
-                abort(403, 'Missing appropriate Discord role.');
-            }
-
             $user = User::create([
                 'username'         => $unauthUser->getName(),
                 // 'email'            => $unauthUser->getEmail(),

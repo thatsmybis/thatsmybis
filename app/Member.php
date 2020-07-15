@@ -3,13 +3,10 @@
 namespace App;
 
 use App\{Character, Content, Guild, Role, User};
-use Kodeine\Acl\Traits\HasRole;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Database\Eloquent\Model;
 
-class Member extends Authenticatable
+class Member extends Model
 {
-    use HasRole;
-
     /**
      * The attributes that are mass assignable.
      *
@@ -48,21 +45,7 @@ class Member extends Authenticatable
         return $this->belongsTo(Guild::class);
     }
 
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'role_member')->orderByDesc('position', 'desc');
-    }
-
     public function user() {
         return $this->belongsTo(User::class);
     }
-
-    // TODO
-    // // Fetch the user's roles from Discord and sync them
-    // public function fetchAndSyncRoles() {
-    //     $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
-    //     $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$this->discord_id]);
-    //     $roles = Role::whereIn('discord_id', $discordMember->roles)->get()->keyBy('id')->keys()->toArray();
-    //     $this->syncRoles($roles);
-    // }
 }

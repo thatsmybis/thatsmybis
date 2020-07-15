@@ -3,8 +3,9 @@
 namespace App;
 
 use App\{Item, Member, Raid};
+use Illuminate\Database\Eloquent\Model;
 
-class Character
+class Character extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -18,6 +19,8 @@ class Character
         'race',
         'class',
         'spec',
+        'profession_1',
+        'profession_2',
         'rank',
         'rank_goal',
         'raid_id',

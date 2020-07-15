@@ -47,6 +47,8 @@
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.1/css/all.css" integrity="sha384-B9BoFFAuBaCfqw6lxWBZrhg/z4NkwqdBci+E+Sc2XlK/Rz25RYn8Fetb+Aw5irxa" crossorigin="anonymous">
+
     <!-- Wowhead tooltips and stuff -->
     <script>var whTooltips = {colorLinks: true, iconizeLinks: false, renameLinks: true, iconSize: 'large', hide: { maxstack: true, ilvl: false, sellprice: true }};</script>
     <script src="https://wow.zamimg.com/widgets/power.js"></script>
@@ -72,7 +74,7 @@
     @include('layouts/nav')
 
     @if (session('status'))
-        <div class="container-fluid">
+        <div class="container-fluid container-width-capped">
             <div class="col-12">
                 <div class="alert alert-success">
                     {!! session('status') !!}
@@ -81,7 +83,7 @@
         </div>
     @endif
     @if (session('status-success'))
-        <div class="container-fluid">
+        <div class="container-fluid container-width-capped">
             <div class="col-12">
                 <div class="alert alert-success">
                     {!! session('status-success') !!}
@@ -90,7 +92,7 @@
         </div>
     @endif
     @if (session('status-warning'))
-        <div class="container-fluid">
+        <div class="container-fluid container-width-capped">
             <div class="col-12">
                 <div class="alert alert-warning">
                     {!! session('status-warning') !!}
@@ -99,7 +101,7 @@
         </div>
     @endif
     @if (session('status-danger'))
-        <div class="container-fluid">
+        <div class="container-fluid container-width-capped">
             <div class="col-12">
                 <div class="alert alert-danger">
                     {!! session('status-danger') !!}

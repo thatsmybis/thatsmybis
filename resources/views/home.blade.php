@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col-lg-12 text-center mb-5">
             <h1 class="mt-5 text-1">
-                <span class="font-weight-bold">That's My BIS</span>
+                <span class="font-weight-bold">{{ env('APP_NAME') }}</span>
             </h1>
             <p class="mt-1 font-weight-normal mb-5 text-3">
                 A tool for loot council guilds

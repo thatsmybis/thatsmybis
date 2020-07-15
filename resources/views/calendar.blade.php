@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 text-center" style="height: 88vh; min-height: 500px; min-width: 625px;">
-            <iframe src="http://{{ $_SERVER['SERVER_NAME'] }}/calendar/iframe"
+            <iframe src="http://{{ $_SERVER['SERVER_NAME'] }}/{{ $guild->slug }}/calendar/iframe"
                 style="border: 0; height: 100%; width: 100%;"
                 frameborder="0"
                 scrolling="no"></iframe>

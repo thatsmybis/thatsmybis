@@ -15,7 +15,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except('index', 'about', 'contact', 'privacy', 'terms');
+        $this->middleware('auth')->except('index', 'about', 'contact', 'faq', 'privacy', 'terms');
         $this->middleware('seeUser');
     }
 
@@ -37,6 +37,16 @@ class HomeController extends Controller
     public function contact()
     {
         return view('contact');
+    }
+
+    /**
+     * Show the faq page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function faq()
+    {
+        return view('faq');
     }
 
     /**

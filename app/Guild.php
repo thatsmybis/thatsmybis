@@ -6,8 +6,10 @@ use App\{
     Content,
     Member,
     Raid,
+    Role,
     User,
 };
+use Illuminate\Database\Eloquent\Model;
 
 class Guild extends Model
 {
@@ -18,6 +20,7 @@ class Guild extends Model
      */
     protected $fillable = [
         'name',
+        'slug',
         'user_id',
         'discord_id',
         'admin_role_id',
@@ -57,11 +60,16 @@ class Guild extends Model
 
     // Excludes banned members
     public function members() {
-        return $this->belongsToMany(Member::class)->whereNull('banned_at')->orderBy('username');
+        return $this->hasMany(Member::class)->whereNull('banned_at')->orderBy('username');
+    }
+
+    public function roles()
+    {
+        return $this->hasMany(Role::class);
     }
 
     public function raids() {
-        return $this->belongsToMany(Raid::class);
+        return $this->hasMany(Raid::class);
     }
 
     public function user() {

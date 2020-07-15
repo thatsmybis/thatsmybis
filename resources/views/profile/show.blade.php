@@ -12,7 +12,7 @@
                 </span>
                 <small>
                     @if ($canEdit)
-                        <small><a href="{{ route('showUser', ['id' => $user->id, 'username' => $user->username]) }}?edit=1">edit</a></small>
+                        <small><a href="{{ route('showMember', ['guildSlug' => $guild->slug, 'id' => $user->id, 'username' => $user->username]) }}?edit=1">edit</a></small>
                     @endif
                     @if (Auth::user()->hasRole(env('PERMISSION_ADMIN')))
                         <small><a href="{{ route('banUser', ['id' => $user->id]) }}">{{ $user->banned_at ? 'unban' : 'ban' }}</a></small>

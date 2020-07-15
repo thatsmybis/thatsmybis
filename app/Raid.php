@@ -2,6 +2,10 @@
 
 namespace App;
 
+use App\{
+    Raid,
+    Role,
+};
 use Illuminate\Database\Eloquent\Model;
 
 class Raid extends Model
@@ -14,8 +18,8 @@ class Raid extends Model
     protected $fillable = [
         'name',
         'slug',
-        'discord_channel_id',
-        'discord_role_id',
+        'role_id',
+        'guild_id',
     ];
 
     /**
@@ -26,7 +30,11 @@ class Raid extends Model
     protected $hidden = [
     ];
 
+    public function raid() {
+        return $this->belongsTo(Raid::class);
+    }
+
     public function role() {
-        return $this->hasOne(Role::class, 'discord_id', 'discord_role_id');
+        return $this->belongsTo(Role::class);
     }
 }
