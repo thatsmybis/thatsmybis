@@ -28,6 +28,8 @@ class RoleController extends Controller
     {
         $guild = Guild::where('slug', $guildSlug)->with(['roles'])->firstOrFail();
 
+        // TODO: validate user can view this page
+
         return view('guild.roles', [
             'guild' => $guild,
         ]);
@@ -41,6 +43,8 @@ class RoleController extends Controller
     public function syncRoles($guildSlug)
     {
         $guild = Guild::where('slug', $guildSlug)->with(['raids', 'roles'])->firstOrFail();
+
+        // TODO: Validate user can do sync these roles
 
         $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
 

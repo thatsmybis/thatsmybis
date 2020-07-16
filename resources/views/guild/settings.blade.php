@@ -28,7 +28,7 @@
                             <label for="name" class="font-weight-bold">
                                 Guild Name
                             </label>
-                            <input name="name" maxlength="255" type="text" class="form-control" placeholder="Must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
+                            <input name="name" maxlength="255" type="text" class="form-control" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
                         </div>
                     </div>
                 </div>
@@ -47,7 +47,7 @@
                                 maxlength="255"
                                 type="text"
                                 class="form-control"
-                                placeholder="Paste your guild's Discord ID here"
+                                placeholder="paste your guild's Discord ID here"
                                 value="{{ old('discord_id') ? old('discord_id') : $guild->discord_id }}" />
                         </div>
                     </div>
@@ -65,7 +65,7 @@
                                 maxlength="255"
                                 type="text"
                                 class="form-control"
-                                placeholder="Paste the public URL"
+                                placeholder="paste the calendar's public URL"
                                 value="{{ old('calendar_link') ? old('calendar_link') : $guild->calendar_link }}" />
                             <small class="text-muted">
                                 Calendar settings > Integrate calendar > Public URL to this calendar

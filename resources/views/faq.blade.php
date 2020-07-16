@@ -11,7 +11,7 @@
                 <li><a href="#what-does-this-do">What does this website do?</a></li>
                 <li><a href="#getting-started">How do I get started?</a></li>
                 <li><a href="#role-whitelisting">What does 'Discord users with these roles are allowed to join' mean?</a></li>
-                <li><a href="#discord-requirement">Do I need to use Discord?</a></li>
+                <li><a href="#discord-requirement">Do I <em>need</em> to use Discord?</a></li>
                 <li><a href="#google-calendar">Google Calendar?</a></li>
                 <li><a href="#name-origin">Where'd you get your name?</a></li>
                 <li><a href="#feature-request">Can you add feature XYZ?</a></li>
@@ -50,9 +50,9 @@
 
             <hr class="light">
 
-            <h2 id="discord-requirement">Do I need to use Discord?</h2>
+            <h2 id="discord-requirement">Do I <em>need</em> to use Discord?</h2>
             <p>
-                Yes. We originally designed this website to work with our guild and other major guilds on our server. We all use Discord, so we designed this website around our needs.
+                Yes. We designed this website to work with our guild and other major guilds on our server. We all use Discord, so we designed this website around our needs.
             </p>
             <p>
                 We suggest you have a Discord server for your guild. We also suggest you create roles on your Discord server which you then assign to your guild members (roles such as 'Guild Master', 'Officer', 'Class Leader', 'Raider', 'Member'). These roles can then be imported onto this website and be used to define who has access to what (ie. a Raid Leader can assign loot to a raider, but a standard Member cannot).
@@ -62,7 +62,10 @@
 
             <h2 id="google-calendar">Google Calendar?</h2>
             <p>
-                You can create a Google Calendar and share a link to its public URL (in Google Calendar: Calendar settings > Integrate calendar > Public URL to this calendar) in the guild settings page. {{ env('APP_NAME') }} will then give your guild members access to a page that shows this calendar.
+                You can create a Google Calendar and share a link to its public URL in the guild settings page. {{ env('APP_NAME') }} will then give your guild members access to a page that shows this calendar.
+            </p>
+            <p>
+                <strong>If the calendar isn't working</strong>, follow <a href="https://i.imgur.com/IrhWvj7.png" target="_blank">these instructions</a>. <small>(in Google Calendar 1&gt; Calendar settings 2&gt; Settings for my calendars 3&gt; Choose your calendar 4&gt; Integrate calendar 5&gt; Public URL to this calendar)</small> If it's still not working, reach out to us <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a>.
             </p>
             <p>
                 This was chosen as the easiest possible solution for solving the problem of scheduling raids and events in a guild. Many guilds already use Google Sheets to manage a lot of information, and so it wasn't much of a stretch for those guilds to use Google Calendar amongst their officers as well.
@@ -78,7 +81,7 @@
 
             <h2 id="name-origin">Where'd you get your name?</h2>
             <p>
-                It's an ongoing meme (and reality) that many players and classes in World of Warcraft Classic will attempt to claim pretty much every item as their Best in Slot (BIS). Here's a <a href="https://www.youtube.com/watch?v=3lCC3r-Bxzk" target="_blank">tasteful little song</a> personifying this meme. We thought it sounded like an appropriate name for this website.
+                It's an ongoing meme (and reality) that many players and classes in World of Warcraft Classic will attempt to claim pretty much every item as their Best in Slot (BIS). Here's a <a href="https://www.youtube.com/watch?v=3lCC3r-Bxzk" target="_blank">tasteful little song</a> about this meme. We thought it sounded like an appropriate name for this website.
             </p>
 
             <hr class="light">

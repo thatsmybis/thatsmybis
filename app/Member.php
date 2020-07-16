@@ -19,6 +19,8 @@ class Member extends Model
         'public_note',
         'officer_note',
         'personal_note',
+        'banned_at',
+        'quit_at',
     ];
 
     /**

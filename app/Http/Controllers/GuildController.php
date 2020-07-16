@@ -118,8 +118,10 @@ class GuildController extends Controller
      */
     public function settings($guildSlug)
     {
-        // TODO PERMISSIONS
         $guild = Guild::where('slug', $guildSlug)->with(['raids', 'roles'])->firstOrFail();
+
+        // TODO: Validate can view this page for this guild
+
         return view('guild.settings', ['guild' => $guild]);
     }
 
@@ -131,6 +133,8 @@ class GuildController extends Controller
     public function submitSettings($guildSlug)
     {
         $guild = Guild::where('slug', $guildSlug)->with(['roles', 'raids'])->firstOrFail();
+
+        // TODO: Validate user can update settings for this guild
 
         $validationRules =  [
             'name'           => 'string|max:255|unique:guilds,name,' . $guild->id,
@@ -148,6 +152,6 @@ class GuildController extends Controller
         $guild->update($updateValues);
 
         request()->session()->flash('status', 'Guild settings updated.');
-        return redirect()->route('news', ['guildSlug' => $guild->slug]);
+        return redirect()->route('guild.news', ['guildSlug' => $guild->slug]);
     }
 }

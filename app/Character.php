@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Item, Member, Raid};
+use App\{Item, Guild, Member, Raid};
 use Illuminate\Database\Eloquent\Model;
 
 class Character extends Model
@@ -14,6 +14,7 @@ class Character extends Model
      */
     protected $fillable = [
         'member_id',
+        'guild_id',
         'name',
         'level',
         'race',
@@ -28,6 +29,8 @@ class Character extends Model
         'officer_note',
         'personal_note',
         'position',
+        'hidden_at',
+        'removed_at',
     ];
 
     /**
@@ -39,6 +42,39 @@ class Character extends Model
         'officer_note',
         'personal_note',
     ];
+
+    const RACE_ORC       = 'Orc';
+    const RACE_TAUREN    = 'Tauren';
+    const RACE_TROLL     = 'Troll';
+    const RACE_UNDEAD    = 'Undead';
+    const RACE_DWARF     = 'Dwarf';
+    const RACE_GNOME     = 'Gnome';
+    const RACE_HUMAN     = 'Human';
+    const RACE_NIGHT_ELF = 'Night Elf';
+
+    const CLASS_DRUID   = 'Druid';
+    const CLASS_HUNTER  = 'Hunter';
+    const CLASS_MAGE    = 'Mage';
+    const CLASS_PALADIN = 'Paladin';
+    const CLASS_PRIEST  = 'Priest';
+    const CLASS_ROGUE   = 'Rogue';
+    const CLASS_SHAMAN  = 'Shaman';
+    const CLASS_WARLOCK = 'Warlock';
+    const CLASS_WARRIOR = 'Warrior';
+
+    const PROFESSION_ALCHEMY        = 'Alchemy';
+    const PROFESSION_BLACKSMITHING  = 'Blacksmithing';
+    const PROFESSION_ENCHANTING     = 'Enchanting';
+    const PROFESSION_ENGINEERING    = 'Engineering';
+    const PROFESSION_HERBALISM      = 'Herbalism';
+    const PROFESSION_LEATHERWORKING = 'Leatherworking';
+    const PROFESSION_MINING         = 'Mining';
+    const PROFESSION_SKINNING       = 'Skinning';
+    const PROFESSION_TAILORING      = 'Tailoring';
+
+    public function guild() {
+        return $this->belongsTo(Guild::class);
+    }
 
     public function member() {
         return $this->belongsTo(Member::class);
@@ -76,5 +112,46 @@ class Character extends Model
             ->withTimeStamps();
 
         return ($query);
+    }
+
+    static public function classes() {
+        return [
+            self::CLASS_DRUID,
+            self::CLASS_HUNTER,
+            self::CLASS_MAGE,
+            self::CLASS_PALADIN,
+            self::CLASS_PRIEST,
+            self::CLASS_ROGUE,
+            self::CLASS_SHAMAN,
+            self::CLASS_WARLOCK,
+            self::CLASS_WARRIOR,
+        ];
+    }
+
+    static public function professions() {
+        return [
+            self::PROFESSION_ALCHEMY,
+            self::PROFESSION_BLACKSMITHING,
+            self::PROFESSION_ENCHANTING,
+            self::PROFESSION_ENGINEERING,
+            self::PROFESSION_HERBALISM,
+            self::PROFESSION_LEATHERWORKING,
+            self::PROFESSION_MINING,
+            self::PROFESSION_SKINNING,
+            self::PROFESSION_TAILORING,
+        ];
+    }
+
+    static public function races() {
+        return [
+            self::RACE_ORC,
+            self::RACE_TAUREN,
+            self::RACE_TROLL,
+            self::RACE_UNDEAD,
+            self::RACE_DWARF,
+            self::RACE_GNOME,
+            self::RACE_HUMAN,
+            self::RACE_NIGHT_ELF,
+        ];
     }
 }

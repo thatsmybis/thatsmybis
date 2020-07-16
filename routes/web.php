@@ -49,7 +49,16 @@ Route::group(['prefix' => '{guildSlug}'], function () {
     Route::get( '/news',            'DashboardController@news')          ->name('guild.news');
     Route::get( '/calendar',        'DashboardController@calendar')      ->name('guild.calendar');
     Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
-    Route::get( '/roster',          'DashboardController@roster')        ->name('guild.roster');
+
+    Route::get( '/roster',          'CharacterController@roster')        ->name('guild.roster');
+
+    Route::group(['prefix' => 'characters'], function () {
+        Route::get( '/create',     'CharacterController@edit')  ->name('character.create');
+        Route::get( '/edit/{id?}', 'CharacterController@edit')  ->name('character.edit');
+        Route::post('/remove',     'CharacterController@remove')->name('character.remove');
+        Route::post('/update',     'CharacterController@update')->name('character.update');
+        Route::post('/',           'CharacterController@create')->name('character.create');
+    });
 
     Route::get( '/resources',        'ContentController@index')->name('contentIndex');
     Route::get( '/resources/{slug}', 'ContentController@show') ->name('showContent');
@@ -66,11 +75,14 @@ Route::group(['prefix' => '{guildSlug}'], function () {
         // 'middleware' => 'acl',
         // 'is'         => 'admin|guild_master|officer|raider',
     ], function () {
-        Route::get( '/raids',            'RaidController@raids') ->name('guild.raids');
-        Route::get( '/raids/edit/{id?}', 'RaidController@edit') ->name('guild.editRaid');
-        Route::post('/raids/remove',     'RaidController@remove')->name('guild.removeRaid');
-        Route::post('/raids/update',     'RaidController@update')->name('guild.updateRaid');
-        Route::post('/raids',            'RaidController@create')->name('guild.createRaid');
+        Route::group(['prefix' => 'raids'], function () {
+            Route::get( '/',           'RaidController@raids') ->name('guild.raids');
+            Route::get( '/create',     'RaidController@edit')  ->name('guild.raid.create');
+            Route::get( '/edit/{id?}', 'RaidController@edit')  ->name('guild.raid.edit');
+            Route::post('/remove',     'RaidController@remove')->name('guild.raid.remove');
+            Route::post('/update',     'RaidController@update')->name('guild.raid.update');
+            Route::post('/',           'RaidController@create')->name('guild.raid.create');
+        });
 
         Route::get( '/roles',     'RoleController@roles')    ->name('guild.roles');
         Route::get( '/syncRoles', 'RoleController@syncRoles')->name('guild.syncRoles');

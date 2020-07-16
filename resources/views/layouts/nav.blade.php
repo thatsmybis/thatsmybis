@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
-    <a class="navbar-brand" href="{{ route('home') }}"><span class="text-legendary font-weight-bold">{{ env('APP_NAME') }}</span></a>
+    <a class="navbar-brand" href="{{ route('home') }}"><span class="text-legendary font-weight-bold">{{ isset($guild) && $guild->name ? $guild->name : env('APP_NAME') }}</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -8,15 +8,15 @@
         <ul class="navbar-nav mr-auto">
             @if (Auth::user() && isset($guild) && $guild)
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('news', ['guildSlug' => $guild->slug]) }}">News</a>
+                    <a class="nav-link" href="{{ route('guild.news', ['guildSlug' => $guild->slug]) }}">News</a>
                 </li>
                 @if ($guild->calendar_link)
                     <li class="nav-item active">
-                        <a class="nav-link" href="{{ route('calendar', ['guildSlug' => $guild->slug]) }}">Calendar</a>
+                        <a class="nav-link" href="{{ route('guild.calendar', ['guildSlug' => $guild->slug]) }}">Calendar</a>
                     </li>
                 @endif
                 <li class="nav-item active">
-                    <a class="nav-link" href="{{ route('roster', ['guildSlug' => $guild->slug]) }}">Roster</a>
+                    <a class="nav-link" href="{{ route('guild.roster', ['guildSlug' => $guild->slug]) }}">Roster</a>
                 </li>
                 <li class="nav-item active">
                     <a class="nav-link" href="{{ route('contentIndex', ['guildSlug' => $guild->slug]) }}">Resources</a>

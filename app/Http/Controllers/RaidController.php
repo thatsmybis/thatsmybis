@@ -29,6 +29,8 @@ class RaidController extends Controller
     {
         $guild = Guild::where('slug', $guildSlug)->with(['raids', 'raids.role'])->firstOrFail();
 
+        // TODO: Validate user can view/edit this raid
+
         $raid = null;
 
         if ($id) {
@@ -54,6 +56,8 @@ class RaidController extends Controller
     {
         $guild = Guild::where('slug', $guildSlug)->with(['raids', 'raids.role'])->firstOrFail();
 
+        // TODO: Validate user can view this guild's raids
+
         return view('guild.raids.list', [
             'guild' => $guild,
         ]);
@@ -64,8 +68,9 @@ class RaidController extends Controller
      * @return
      */
     public function create($guildSlug) {
-
         $guild = Guild::where('slug', $guildSlug)->with('raids')->firstOrFail();
+
+        // TODO: Validate user can create a raid in this guild
 
         $validationRules = [
             'name'    => 'string|max:255',
@@ -99,6 +104,8 @@ class RaidController extends Controller
      */
     public function update($guildSlug) {
         $guild = Guild::where('slug', $guildSlug)->with(['raids'])->firstOrFail();
+
+        // TODO: Validate a user can update a raid in this guild
 
         $validationRules =  [
             'id'      => 'required|integer|exists:raids,id',
@@ -134,6 +141,8 @@ class RaidController extends Controller
      */
     public function remove($guildSlug) {
         $guild = Guild::where('slug', $guildSlug)->firstOrFail();
+
+        // TODO: Validate user can remove raids in this guild
 
         $validationRules = [
             'id' => 'required|integer|exists:raids,id',

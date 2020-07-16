@@ -18,7 +18,7 @@
                 <h4 class="mb-3">Your guilds</h4>
                 <ul class="list-group">
                     @foreach ($user->members as $member)
-                        <li class="list-group-item text-4">
+                        <li class="list-group-item text-4 mb-2">
                             <a href="{{ route('guild.news', ['guildSlug' => $member->guild->slug]) }}" class="text-success font-weight-bold">
                                 &lt;{{ $member->guild->name }}&gt;
                             </a>

@@ -23,13 +23,13 @@
                                     </small>
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
-                                            <a href="{{ route('guild.editRaid', ['guildSlug' => $guild->slug, 'id' => $raid->id]) }}">
+                                            <a href="{{ route('guild.raid.edit', ['guildSlug' => $guild->slug, 'id' => $raid->id]) }}">
                                                 <span class="fas fa-fw fa-pencil"></span>
                                                 edit
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <form class="form-inline" role="form" method="POST" action="{{ route('guild.removeRaid', ['guildSlug' => $guild->slug]) }}">
+                                            <form class="form-inline" role="form" method="POST" action="{{ route('guild.raid.remove', ['guildSlug' => $guild->slug]) }}">
                                                 {{ csrf_field() }}
                                                 <input hidden name="id" value="{{ $raid->id }}">
                                                 <button type="submit" class="btn btn-link text-danger p-0 m-0 pl-3" onclick="return confirm('PERMANENTLY remove raid? Cannot be undone.')">
@@ -49,7 +49,7 @@
                     @endif
                 </div>
                 <div class="col-12 mt-3">
-                    <a href="{{ route('guild.editRaid', ['guildSlug' => $guild->slug]) }}" class="btn btn-success">
+                    <a href="{{ route('guild.raid.edit', ['guildSlug' => $guild->slug]) }}" class="btn btn-success">
                         <span class="fas fa-fw fa-plus"></span> Create New Raid
                     </a>
                 </div>
