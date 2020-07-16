@@ -3,6 +3,7 @@
 namespace App;
 
 use App\{
+    Character,
     Content,
     Member,
     Raid,
@@ -49,9 +50,19 @@ class Guild extends Model
         'calendar_link',
     ];
 
+    // Excludes hidden and removed characters
+    public function allCharacters() {
+        return $this->hasMany(Character::class)->orderBy('username');
+    }
+
     // Includes banned members
     public function allMembers() {
         return $this->members()->orderBy('username');
+    }
+
+    // Excludes hidden and removed characters
+    public function characters() {
+        return $this->hasMany(Character::class)->whereNull('hidden_at')->whereNull('removed_at')->orderBy('name');
     }
 
     public function content() {

@@ -28,7 +28,7 @@ class Character extends Model
         'public_note',
         'officer_note',
         'personal_note',
-        'position',
+        'order',
         'hidden_at',
         'removed_at',
     ];

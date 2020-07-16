@@ -56,7 +56,7 @@
                                     @foreach ($guild->members as $member)
                                         <option value="{{ $member->id }}"
                                             data-tokens="{{ $member->id }}"
-                                            {{ old('member_id') ? (old('member_id') == $member->id ? 'selected' : '') : ($character && $character->member_id == $member_id ? 'selected' : '') }}>
+                                            {{ old('member_id') ? (old('member_id') == $member->id ? 'selected' : '') : ($character && $character->member_id == $member->id ? 'selected' : '') }}>
                                             {{ $member->username }}
                                         </option>
                                     @endforeach

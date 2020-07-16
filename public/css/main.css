@@ -91,6 +91,10 @@ body {
     white-space: nowrap;
 }
 
+.form-control:focus {
+  box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 128, 0);
+}
+
 ul.no-bullet, ol.no-bullet, li.no-bullet  {
     list-style-type: none;
 }
