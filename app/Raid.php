@@ -37,4 +37,23 @@ class Raid extends Model
     public function role() {
         return $this->belongsTo(Role::class);
     }
+
+    /**
+     * @return string A hex value
+     */
+    public function getColor() {
+        $color = null;
+
+        if ($this->color) {
+            $color = dechex($this->color);
+
+            // If it's too short, keep adding prefixed zero's till it's long enough
+            while (strlen($color) < 6) {
+                $color = '0' . $color;
+            }
+        } else {
+            $color = 'FFF';
+        }
+        return '#' . $color;
+    }
 }

@@ -47,7 +47,7 @@ class CharacterController extends Controller
      */
     public function roster($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with('roles')->firstOrFail();
+        $guild = Guild::where('slug', $guildSlug)->with(['raids'])->firstOrFail();
 
         // TODO: Validate user can view this roster
 
@@ -76,13 +76,14 @@ class CharacterController extends Controller
         $characters = Character::select($characterFields)
             ->where('guild_id', $guild->id)
             ->whereNull('hidden_at')
-            ->with(['member', 'raid', 'recipes', 'received', 'wishlist'])
+            ->with(['member', 'member.user.roles', 'raid', 'recipes', 'received', 'wishlist'])
             ->orderBy('name')
             ->get();
 
         return view('roster', [
-            'guild'      => $guild,
             'characters' => $characters,
+            'guild'      => $guild,
+            'raids'      => $guild->raids,
         ]);
     }
 

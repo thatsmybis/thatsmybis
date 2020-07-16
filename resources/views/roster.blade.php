@@ -15,77 +15,50 @@
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item">
-                    <a class="toggle-column-loot-council cursor-pointer font-weight-bold" href="">Loot Council</a>
+                    <a class="toggle-column cursor-pointer" data-column="1" href="">Loot Received</a>
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item">
-                    <a class="toggle-column-bare cursor-pointer font-weight-bold" href="">Min</a>
+                    <a class="toggle-column cursor-pointer" data-column="2" href="">Wishlist</a>
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="0" href="">Name</a>
+                    <a class="toggle-column cursor-pointer" data-column="3" href="">Recipes</a>
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="1" href="">Roles</a>
+                    <a class="toggle-column cursor-pointer" data-column="4" href="">Roles</a>
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="2" href="">Recipes</a>
+                    <a class="toggle-column cursor-pointer" data-column="5" href="">Notes</a>
                 </li>
-                <li class="list-inline-item">&sdot;</li>
-                <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="3" href="">Alts</a>
-                </li>
-                <li class="list-inline-item">&sdot;</li>
-                <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="4" href="">Rank</a>
-                </li>
-                <li class="list-inline-item">&sdot;</li>
-                <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="5" href="">Rank Goal</a>
-                </li>
-                <li class="list-inline-item">&sdot;</li>
-                <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="6" href="">Wishlist</a>
-                </li>
-                <li class="list-inline-item">&sdot;</li>
-                <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="7" href="">Loot Received</a>
-                </li>
-                <li class="list-inline-item">&sdot;</li>
-                <li class="list-inline-item">
-                    <a class="toggle-column cursor-pointer" data-column="8" href="">Notes</a>
-                </li>
-                @if (Auth::user()->hasRole(env('PERMISSION_RAID_LEADER')))
-                    <li class="list-inline-item">&sdot;</li>
-                    <li class="list-inline-item">
-                        <a class="toggle-column cursor-pointer" data-column="9" href="">Officer Notes</a>
-                    </li>
-                @endif
             </ul>
         </div>
         <div class="mt-4">
             <ul class="list-inline">
-                <li>
-                    <strong>Filter by Roles</strong>
-                </li>
                 <li class=" list-inline-item">
-                    <select id="roleFilter1" class="form-control">
-                        <option value="" class="bg-tag">Role 1</option>
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->name }}" class="bg-tag" style="color:{{ $role->getColor() }};">
-                                {{ $role->name }}
+                    <label for="raid_filter">
+                        Raid
+                    </label>
+                    <select id="raid_filter" class="form-control">
+                        <option value="" class="bg-tag">—</option>
+                        @foreach ($raids as $raid)
+                            <option value="{{ $raid->name }}" class="bg-tag" style="color:{{ $raid->getColor() }};">
+                                {{ $raid->name }}
                             </option>
                         @endforeach
                     </select>
                 </li>
                 <li class=" list-inline-item">
-                    <select id="roleFilter2" class="form-control">
-                        <option value="" class="bg-tag">Role 2</option>
-                        @foreach ($roles as $role)
-                            <option value="{{ $role->name }}" class="bg-tag" style="color:{{ $role->getColor() }};">
-                                {{ $role->name }}
+                    <label for="class_filter">
+                        Class
+                    </label>
+                    <select id="class_filter" class="form-control">
+                        <option value="" class="bg-tag">—</option>
+                        @foreach (App\Character::classes() as $class)
+                            <option value="{{ $class }}" class="bg-tag text-{{ strtolower($class) }}">
+                                {{ $class }}
                             </option>
                         @endforeach
                     </select>
@@ -103,8 +76,10 @@
 
 @section('scripts')
 <script>
-    var members = {!! $members->toJson() !!};
-    var showOfficerNote = {{ Auth::user()->hasRole(env('PERMISSION_RAID_LEADER')) ? 'true' : 'false' }};
+    var characters = {!! $characters->toJson() !!};
+    var raids = {!! $raids->toJson() !!};
+    {{-- TODO PERMISSIONS FOR NOTE --}}
+    var showOfficerNote = true;
 </script>
 <script src="{{ asset('js/roster.js') }}"></script>
 @endsection
