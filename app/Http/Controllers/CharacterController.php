@@ -10,6 +10,10 @@ use RestCord\DiscordClient;
 
 class CharacterController extends Controller
 {
+    const MAX_RECEIVED_ITEMS = 100;
+    const MAX_RECIPES        = 50;
+    const MAX_WISHLIST_ITEMS = 10;
+
     /**
      * Create a new controller instance.
      *
@@ -52,61 +56,40 @@ class CharacterController extends Controller
         // TODO: Validate user can view this roster
 
         $characterFields = [
-            'member_id',
-            'guild_id',
-            'name',
-            'level',
-            'race',
-            'class',
-            'spec',
-            'profession_1',
-            'profession_2',
-            'rank',
-            'rank_goal',
-            'raid_id',
-            'public_note',
-            'hidden_at',
-            'removed_at',
+            'characters.id',
+            'characters.member_id',
+            'characters.guild_id',
+            'characters.name',
+            'characters.level',
+            'characters.race',
+            'characters.class',
+            'characters.spec',
+            'characters.profession_1',
+            'characters.profession_2',
+            'characters.rank',
+            'characters.rank_goal',
+            'characters.raid_id',
+            'characters.public_note',
+            'characters.hidden_at',
+            'characters.removed_at',
         ];
 
-        // if (Auth::user()->hasRole(env('PERMISSION_RAID_LEADER'))) {
-        //     $characterFields[] = 'officer_note';
-        // }
+        // TODO permissions for showing officer note
+        if (true) {
+            $characterFields[] = 'characters.officer_note';
+        }
 
         $characters = Character::select($characterFields)
-            ->where('guild_id', $guild->id)
-            ->whereNull('hidden_at')
+            ->where('characters.guild_id', $guild->id)
+            ->whereNull('characters.hidden_at')
             ->with(['member', 'member.user.roles', 'raid', 'recipes', 'received', 'wishlist'])
-            ->orderBy('name')
+            ->orderBy('characters.name')
             ->get();
 
         return view('roster', [
             'characters' => $characters,
             'guild'      => $guild,
             'raids'      => $guild->raids,
-        ]);
-    }
-
-    /**
-     * Show a character for editing
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($guildSlug, $id = null)
-    {
-        $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
-
-        // TODO: Validate user can edit this character
-
-        $character = null;
-
-        if ($id) {
-            $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
-        }
-
-        return view('characters.edit', [
-            'guild'     => $guild,
-            'character' => $character,
         ]);
     }
 
@@ -156,12 +139,6 @@ class CharacterController extends Controller
             $createValues['member_id'] = $currentMember->id;
         }
 
-        // User is editing their own character
-        if ($createValues['member_id'] == $currentMember->id) {
-            $createValues['personal_note'] = request()->input('personal_note');
-            $createValues['order']         = request()->input('order');
-        }
-
         $createValues['name']          = request()->input('name');
         $createValues['level']         = request()->input('level');
         $createValues['race']          = request()->input('race');
@@ -172,10 +149,17 @@ class CharacterController extends Controller
         $createValues['rank']          = request()->input('rank');
         $createValues['rank_goal']     = request()->input('rank_goal');
         $createValues['raid_id']       = request()->input('raid_id');
+        $createValues['public_note']   = request()->input('public_note');
 
         // TODO: Permissions for who can edit public note
         if (true) {
-            $createValues['public_note']   = request()->input('public_note');
+            $createValues['officer_note']   = request()->input('officer_note');
+        }
+
+        // User is editing their own character
+        if ($createValues['member_id'] == $currentMember->id) {
+            $createValues['personal_note'] = request()->input('personal_note');
+            $createValues['order']         = request()->input('order');
         }
 
         $createValues['guild_id']      = $guild->id;
@@ -184,6 +168,79 @@ class CharacterController extends Controller
 
         request()->session()->flash('status', 'Successfully created ' . $createValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
         return redirect()->route('guild.news', ['guildSlug' => $guild->slug]);
+    }
+
+    /**
+     * Show a character for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function edit($guildSlug, $id)
+    {
+        $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
+
+        $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->first();
+
+        if (!$character) {
+            $character = Character::where(['name' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
+        }
+
+        // TODO: Validate user can edit this character in this guild
+
+        return view('characters.edit', [
+            'guild'     => $guild,
+            'character' => $character,
+        ]);
+    }
+
+    /**
+     * Show a character's loot for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function loot($guildSlug, $id)
+    {
+        $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
+
+        $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with(['member', 'received', 'recipes', 'wishlist'])->first();
+
+        if (!$character) {
+            $character = Character::where(['name' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
+        }
+
+        // TODO: Validate user can edit this character's loot in this guild
+
+        return view('characters.loot', [
+            'guild'     => $guild,
+            'character' => $character,
+
+            'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
+            'maxRecipes'       => self::MAX_RECIPES,
+            'maxWishlistItems' => self::MAX_WISHLIST_ITEMS,
+        ]);
+    }
+
+    /**
+     * Show a character
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function show($guildSlug, $id)
+    {
+        $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
+
+        $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->first();
+
+        if (!$character) {
+            $character = Character::where(['name' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
+        }
+
+        // TODO: Validate user can view this character in this guild
+
+        return view('characters.show', [
+            'guild'     => $guild,
+            'character' => $character,
+        ]);
     }
 
     /**
@@ -217,6 +274,7 @@ class CharacterController extends Controller
         // TODO: Validate user has permissions to update this character in this guild
 
         $validationRules = $this->getValidationRules();
+        $validationRules['id'] = 'required|integer|exists:characters,id';
 
         $validationMessages = [];
 
@@ -236,12 +294,6 @@ class CharacterController extends Controller
             abort(403, 'You do not have permission to change who owns this character.');
         }
 
-        // User is editing their own character
-        if ($currentCharacter->member_id == $currentMember->id) {
-            $updateValues['personal_note'] = request()->input('personal_note');
-            $updateValues['order']         = request()->input('order');
-        }
-
         $updateValues['name']          = request()->input('name');
         $updateValues['level']         = request()->input('level');
         $updateValues['race']          = request()->input('race');
@@ -252,16 +304,156 @@ class CharacterController extends Controller
         $updateValues['rank']          = request()->input('rank');
         $updateValues['rank_goal']     = request()->input('rank_goal');
         $updateValues['raid_id']       = request()->input('raid_id');
+        $updateValues['public_note']   = request()->input('public_note');
 
-        // TODO: Permissions for who can edit public note
+        // TODO: Permissions for who can edit officer note
         if (true) {
-            $updateValues['public_note']   = request()->input('public_note');
+            $updateValues['officer_note']   = request()->input('officer_note');
+        }
+
+        // User is editing their own character
+        if ($currentCharacter->member_id == $currentMember->id) {
+            $updateValues['personal_note'] = request()->input('personal_note');
+            $updateValues['order']         = request()->input('order');
         }
 
         $currentCharacter->update($updateValues);
 
         request()->session()->flash('status', 'Successfully updated ' . $updateValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
         return redirect()->route('guild.news', ['guildSlug' => $guild->slug]);
+    }
+
+    /**
+     * Update a character's loot
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateLoot($guildSlug)
+    {
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                    return $query->where('members.user_id', Auth::id());
+                },
+            'characters' => function ($query) {
+                    return $query->Where('id', request()->input('id'))
+                        ->with(['wishlist', 'recipes', 'received']);
+                },
+            ])->firstOrFail();
+
+        $validationRules =  [
+            'id'         => 'required|integer|exists:characters,id',
+            'wishlist.*' => 'nullable|integer|exists:items,item_id',
+            'received.*' => 'nullable|integer|exists:items,item_id',
+            'recipes.*'  => 'nullable|integer|exists:items,item_id',
+            'public_note'   => 'nullable|string|max:1000',
+            'officer_note'  => 'nullable|string|max:1000',
+            'personal_note' => 'nullable|string|max:2000',
+        ];
+
+        $this->validate(request(), $validationRules);
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+        $character = $guild->characters->first();
+
+        if (!$character || !$currentMember) {
+            abort(404, 'Character not found.');
+        }
+
+        // TODO: permissions; can user edit this character's loot?
+
+        $updateValues = [];
+
+        $updateValues['public_note']   = request()->input('public_note');
+
+        // TODO: Permissions for who can edit officer note
+        if (true) {
+            $updateValues['officer_note']   = request()->input('officer_note');
+        }
+
+        // User is editing their own character
+        if ($character->member_id == $currentMember->id) {
+            $updateValues['personal_note'] = request()->input('personal_note');
+            $updateValues['order']         = request()->input('order');
+        }
+
+        $character->update($updateValues);
+
+        if (request()->input('wishlist')) {
+            $items = [];
+            $existingItems = $character->wishlist->keyBy('item_id')->keys()->toArray();
+
+            $i = 0;
+            foreach (request()->input('wishlist') as $id) {
+                if($id) {
+                    $i++;
+                    $items[$id] = [
+                        'added_by' => $currentMember->id,
+                        'order'    => $i,
+                        'type'     => 'wishlist',
+                        ];
+                }
+            }
+            // Gets items which need to be dropped...
+            $toDrop = array_diff($existingItems, array_keys($items));
+            // Drops them...
+            $character->wishlist()->detach($toDrop);
+            // Adds any new items
+            $character->wishlist()->syncWithoutDetaching($items);
+        } else {
+            $character->wishlist()->detach();
+        }
+
+        if (request()->input('recipes')) {
+            $items = [];
+            $existingItems = $character->recipes->keyBy('item_id')->keys()->toArray();
+
+            $i = 0;
+            foreach (request()->input('recipes') as $id) {
+                if($id) {
+                    $i++;
+                    $items[$id] = [
+                        'added_by' => $currentMember->id,
+                        'order'    => $i,
+                        'type'     => 'recipe',
+                        ];
+                }
+            }
+            // Gets items which need to be dropped...
+            $toDrop = array_diff($existingItems, array_keys($items));
+            // Drops them...
+            $character->recipes()->detach($toDrop);
+            // Adds any new items
+            $character->recipes()->syncWithoutDetaching($items);
+        } else {
+            $character->recipes()->detach();
+        }
+
+        if (request()->input('received')) {
+            $items = [];
+            $existingItems = $character->received->keyBy('item_id')->keys()->toArray();
+
+            $i = 0;
+            foreach (request()->input('received') as $id) {
+                if($id) {
+                    $i++;
+                    $items[$id] = [
+                        'added_by' => $currentMember->id,
+                        'order'    => $i,
+                        'type'     => 'received',
+                        ];
+                }
+            }
+            // Gets items which need to be dropped...
+            $toDrop = array_diff($existingItems, array_keys($items));
+            // Drops them...
+            $character->received()->detach($toDrop);
+            // Adds any new items
+            $character->received()->syncWithoutDetaching($items);
+        } else {
+            $character->received()->detach();
+        }
+
+        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'id' => $character->name]);
     }
 
     /**

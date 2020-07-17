@@ -37,6 +37,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label for="name" class="font-weight-bold">
+                                <span class="text-muted fas fa-fw fa-users"></span>
                                 Guild Name
                             </label>
                             <input name="name" maxlength="255" type="text" class="form-control" placeholder="it's gotta be unique" value="{{ old('name') ? old('name') : null }}" />
@@ -44,6 +45,7 @@
 
                         <div class="form-group">
                             <label for="discord_id" class="font-weight-bold">
+                                <span class="text-muted fab fa-fw fa-discord"></span>
                                 Discord Server ID
                                 &nbsp;
                                 <a href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-" target="_blank" class="small text-muted">
@@ -66,7 +68,10 @@
                         </div>
 
                         <div class="form-group pt-3">
-                            <button disabled class="btn btn-success" id="submit_button">A little submit button ofc</button>
+                            <button disabled class="btn btn-success" id="submit_button">
+                                <span class="fas fa-fw fa-check"></span>
+                                A little submit button ofc
+                            </button>
                         </div>
                     </div>
                 </div>

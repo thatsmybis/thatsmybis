@@ -9,24 +9,6 @@ var colNotes = 5;
 var colClass = 6;
 var colRaid = 7;
 
-/*
-    member_id
-    guild_id
-    name
-    level
-    race
-    class
-    spec
-    profession_1
-    profession_2
-    rank
-    rank_goal
-    raid_id
-    public_note
-    hidden_at
-    removed_at
-*/
-
 $(document).ready( function () {
    table = createTable();
 
@@ -61,13 +43,13 @@ function createTable() {
         "data"      : characters,
         "columns"   : [
             {
-                "title"  : "Character",
+                "title"  : '<span class="fas fa-fw fa-user"></span> Character',
                 "data"   : "character",
                 "render" : function (data, type, row) {
                     return `
                     <ul class="no-bullet no-indent">
                         <li>
-                            <a href="${row.guild_name}/characters/${row.name}"
+                            <a href="characters/${row.name}"
                                 class="text-4 text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold"
                                 title="${ row.member ? row.member.username : 'unknown member' }">
                                 ${ row.name }
@@ -77,9 +59,9 @@ function createTable() {
                         ${ row.raid || row.class ? `
                             <li>
                                 <span class="font-weight-bold">
-                                    ${ row.raid.name }
+                                    ${ row.raid ? row.raid.name : '' }
                                 </span>
-                                ${ row.class  ? row.class : '' }
+                                ${ row.class ? row.class : '' }
                             </li>` : `` }
 
                         ${ row.level || row.race || row.spec ? `
@@ -104,27 +86,30 @@ function createTable() {
                 "visible" : true,
             },
             {
-                "title"  : "Loot Received",
+                "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Loot Received',
                 "data"   : "received",
                 "render" : function (data, type, row) {
-                    return data.length ? getItemList(data) : '—';
+                    return data.length ? getItemList(data, 'received', row.id) : '—';
                 },
+                "orderable" : false,
                 "visible" : true,
             },
             {
-                "title"  : "Wishlist",
+                "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
-                    return data.length ? getItemList(data) : '—';
+                    return data.length ? getItemList(data, 'wishlist', row.id) : '—';
                 },
+                "orderable" : false,
                 "visible" : true,
             },
             {
-                "title"  : "Recipes",
+                "title"  : '<span class="text-rare fas fa-fw fa-book"></span> Recipes',
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
-                    return data.length ? getItemList(data) : '—';
+                    return data.length ? getItemList(data, 'recipes', row.id) : '—';
                 },
+                "orderable" : false,
                 "visible" : false,
             },
             {
@@ -144,15 +129,18 @@ function createTable() {
                     }
                     return roles;
                 },
+                "orderable" : false,
                 "visible" : false,
             },
             {
-                "title"  : "Notes",
+                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
                 "data"   : "public_note",
                 "render" : function (data, type, row) {
                     return (row.public_note ? nl2br(row.public_note) : '—')
-                        + (row.officer_note ? "OFFICER NOTE" + nl2br(row.officer_note) : '');
-                }
+                        + (row.officer_note ? "<br><small>Officer's Note</small><br><em>" + nl2br(row.officer_note) + "</em>" : '');
+                },
+                "orderable" : false,
+                "visible" : true,
             },
             {
                 "title"  : "Class",
@@ -214,14 +202,16 @@ function createTable() {
                 }
             } );
             makeWowheadLinks();
+            addItemAutocompleteHandler();
+            addTagInputHandlers();
         }
     });
     return memberTable;
 }
 
 // Gets an HTML list of items with pretty wowhead formatting
-function getItemList(data) {
-    let items = `<ol class="no-indent">`;
+function getItemList(data, type, characterId) {
+    let items = `<ol class="no-indent js-item-list" data-type="${ type }" data-id="${ characterId }">`;
     $.each(data, function (index, item) {
         let clipItem = false;
 
@@ -233,18 +223,31 @@ function getItemList(data) {
         }
 
         items += `
-        <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
-            style="${ clipItem ? 'display:none;' : '' }">
-            <a href="https://classic.wowhead.com/item=${ item.item_id }"
-                data-wowhead="item=${ item.item_id }">
-                ${ item.name }
-            </a>
-        </li>`;
+            <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
+                style="${ clipItem ? 'display:none;' : '' }">
+                <a href="https://classic.wowhead.com/item=${ item.item_id }"
+                    data-wowhead="item=${ item.item_id }">
+                    ${ item.name }
+                </a>
+            </li>`;
     });
 
     if (data.length > 5) {
         items += `<li class="font-weight-light js-show-clipped-items" style="display:none;"><small>show less…</small></li>`;
     }
+
+    items +=
+        `<li class="font-weight-light no-bullet">
+            <span class="fas fa-fw fa-plus"></span>
+            <span class="js-add-item cursor-pointer" data-type="${ type }" data-id="${ characterId }">
+                add item
+            </span>
+        </li>
+        <li class="no-bullet no-indent pt-2 pb-2 pr-3" data-type="${ type }" data-id="${ characterId }">
+            <input data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control">
+            <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+        </li>
+        `;
 
     items += `</ol>`;
     return items;

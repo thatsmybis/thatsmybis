@@ -53,11 +53,14 @@ Route::group(['prefix' => '{guildSlug}'], function () {
     Route::get( '/roster',          'CharacterController@roster')        ->name('guild.roster');
 
     Route::group(['prefix' => 'characters'], function () {
-        Route::get( '/create',     'CharacterController@edit')  ->name('character.create');
-        Route::get( '/edit/{id?}', 'CharacterController@edit')  ->name('character.edit');
-        Route::post('/remove',     'CharacterController@remove')->name('character.remove');
-        Route::post('/update',     'CharacterController@update')->name('character.update');
-        Route::post('/',           'CharacterController@create')->name('character.create');
+        Route::get( '/create',      'CharacterController@edit')      ->name('character.create');
+        Route::get( '/edit/{id}',   'CharacterController@edit')      ->name('character.edit');
+        Route::get( '/loot/{id}',   'CharacterController@loot')      ->name('character.loot');
+        Route::post('/remove',      'CharacterController@remove')    ->name('character.remove');
+        Route::post('/update',      'CharacterController@update')    ->name('character.update');
+        Route::post('/update/loot', 'CharacterController@updateLoot')->name('character.updateLoot');
+        Route::post('/',            'CharacterController@create')    ->name('character.create');
+        Route::get( '/{id}',        'CharacterController@show')      ->name('character.show');
     });
 
     Route::get( '/resources',        'ContentController@index')->name('contentIndex');

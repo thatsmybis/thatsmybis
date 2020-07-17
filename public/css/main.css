@@ -59,6 +59,9 @@ body {
 .text-rogue {
     color: #fff468;
 }
+.text-shaman {
+    color: #2359ff;
+}
 .text-warlock {
     color: #9382c9;
 }
@@ -93,6 +96,10 @@ body {
 
 .form-control:focus {
   box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 128, 0);
+}
+
+.nav-item.active {
+    font-weight: 700 !important;
 }
 
 ul.no-bullet, ol.no-bullet, li.no-bullet  {

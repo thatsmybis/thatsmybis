@@ -7,21 +7,21 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             @if (Auth::user() && isset($guild) && $guild)
-                <li class="nav-item active">
+                <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.news']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('guild.news', ['guildSlug' => $guild->slug]) }}">News</a>
                 </li>
                 @if ($guild->calendar_link)
-                    <li class="nav-item active">
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.calendar']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('guild.calendar', ['guildSlug' => $guild->slug]) }}">Calendar</a>
                     </li>
                 @endif
-                <li class="nav-item active">
+                <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.roster']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('guild.roster', ['guildSlug' => $guild->slug]) }}">Roster</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item {{ in_array(Route::currentRouteName(), ['contentIndex', 'showContent']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('contentIndex', ['guildSlug' => $guild->slug]) }}">Resources</a>
                 </li>
-                <li class="nav-item active">
+                <li class="nav-item {{ in_array(Route::currentRouteName(), ['dashboard']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('showMember', ['guildSlug' => $guild->slug, 'id' => Auth::user()->id, 'username' => Auth::user()->username]) }}">My Profile</a>
                 </li>
                 @if (true) <!-- TODO permissions -->

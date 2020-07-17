@@ -42,7 +42,7 @@
 
             <h2 id="role-whitelisting">What does 'Discord users with these roles are allowed to join' mean?</h2>
             <p>
-                We require you to whitelist which members of your Discord server are allowed to register on this website. This is to prevent literally anyone who joins your Discord from crashing your guild on this website, which could be destructive.
+                We require you to whitelist which members of your Discord server are allowed to register by giving them whitelisted roles that you choose. This is to prevent literally anyone who joins your Discord from crashing your guild on this website, which could be destructive.
             </p>
             <p>
                 To set this up, you will need to create roles on your Discord server and assign them to your members. We recommend adding a 'Member' or 'Raider' role at the very least. Beyond that, we also suggest adding roles for 'Guild Master', 'Officer', 'Raid Leader', and 'Class Leader'. It is not required that your guild have this structure; it is simply how <em>most</em> successful guilds are structured.
@@ -81,7 +81,7 @@
 
             <h2 id="name-origin">Where'd you get your name?</h2>
             <p>
-                It's an ongoing meme (and reality) that many players and classes in World of Warcraft Classic will attempt to claim pretty much every item as their Best in Slot (BIS). Here's a <a href="https://www.youtube.com/watch?v=3lCC3r-Bxzk" target="_blank">tasteful little song</a> about this meme. We thought it sounded like an appropriate name for this website.
+                It's an ongoing meme (and reality) that many players and classes in World of Warcraft Classic will attempt to claim pretty much every item as their Best in Slot ("That's my BIS"). We thought it sounded like an appropriate name for this website. Here's a <a href="https://www.youtube.com/watch?v=3lCC3r-Bxzk" target="_blank">tasteful little song</a> about this meme.
             </p>
 
             <hr class="light">

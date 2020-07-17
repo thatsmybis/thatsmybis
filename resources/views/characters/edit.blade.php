@@ -6,10 +6,12 @@
     <div class="row">
         <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
             <div class="row">
-                <div class="col-12 mb-3">
-                    <h4>{{ $character ? 'Edit' : 'Create' }} Character</h4>
+                <div class="col-12">
+                     @include('characters/partials/header', ['showEdit' => false, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
                 </div>
             </div>
+
+            <hr class="light">
 
             @if (count($errors) > 0)
                 <ul class="alert alert-danger">
@@ -29,6 +31,7 @@
                     <div class="col-sm-6 col-12">
                         <div class="form-group">
                             <label for="name" class="font-weight-bold">
+                                <span class="text-muted fas fa-fw fa-user"></span>
                                 Character Name
                             </label>
                             <input name="name"
@@ -44,7 +47,7 @@
                     <div class="col-sm-6 col-12">
                         <div class="form-group">
                             <label for="member_id" class="font-weight-bold">
-                                <span class="text-muted fas fa-fw fa-user"></span>
+
                                 Player
                             </label>
                             <div class="form-group">
@@ -285,7 +288,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label for="officer_note" class="font-weight-bold">
-                                <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
+                                <span class="text-muted fas fa-fw fa-shield"></span>
                                 Officer Note
                                 <small class="text-muted">only officers can see this</small>
                             </label>
@@ -299,7 +302,7 @@
                     <div class="col-12">
                         <div class="form-group">
                             <label for="personal_note" class="font-weight-bold">
-                                <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
+                                <span class="text-muted fas fa-fw fa-lock"></span>
                                 Personal Note
                                 <small class="text-muted">only you can see this</small>
                             </label>
