@@ -104,7 +104,7 @@ function createTable() {
                 "visible" : true,
             },
             {
-                "title"  : '<span class="text-rare fas fa-fw fa-book"></span> Recipes',
+                "title"  : '<span class="text-gold fas fa-fw fa-book"></span> Recipes',
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
                     return data.length ? getItemList(data, 'recipes', row.id) : '—';
@@ -137,7 +137,7 @@ function createTable() {
                 "data"   : "public_note",
                 "render" : function (data, type, row) {
                     return (row.public_note ? nl2br(row.public_note) : '—')
-                        + (row.officer_note ? "<br><small>Officer's Note</small><br><em>" + nl2br(row.officer_note) + "</em>" : '');
+                        + (row.officer_note ? '<br><small class="font-weight-bold">Officer\'s Note</small><br><em>' + nl2br(row.officer_note) + '</em>' : '');
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -236,6 +236,7 @@ function getItemList(data, type, characterId) {
         items += `<li class="font-weight-light js-show-clipped-items" style="display:none;"><small>show less…</small></li>`;
     }
 
+    /*
     items +=
         `<li class="font-weight-light no-bullet">
             <span class="fas fa-fw fa-plus"></span>
@@ -248,7 +249,7 @@ function getItemList(data, type, characterId) {
             <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
         </li>
         `;
-
+    */
     items += `</ol>`;
     return items;
 }

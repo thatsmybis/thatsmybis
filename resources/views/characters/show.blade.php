@@ -7,7 +7,7 @@
         <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
             <div class="row">
                 <div class="col-12">
-                    @include('characters/partials/header', ['showEdit' => true])
+                    @include('characters/partials/header', ['headerSize' => 1, 'showEdit' => true])
                 </div>
             </div>
 
@@ -19,7 +19,7 @@
 
             <div class="row mb-3">
                 <div class="col-12 mb-4">
-                    <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'id' => $character->name]) }}" class="text-4">
+                    <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-4">
                         <span class="fas fa-fw fa-pencil"></span>
                         edit loot
                     </a>
@@ -70,7 +70,7 @@
 
             <div class="row mb-3">
                 <div class="col-12">
-                    <span class="text-rare font-weight-bold">
+                    <span class="text-gold font-weight-bold">
                         <span class="fas fa-fw fa-book"></span>
                         Recipes
                     </span>

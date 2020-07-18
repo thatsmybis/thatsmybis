@@ -48,11 +48,11 @@
                         <div class="form-group">
                             <label for="member_id" class="font-weight-bold">
 
-                                Player
+                                Guild Member
                             </label>
                             <div class="form-group">
                                 <select name="member_id" class="form-control selectpicker" data-live-search="true">
-                                    <option value="" selected>
+                                    <option value="">
                                         —
                                     </option>
 
@@ -77,12 +77,12 @@
                             </label>
                             <div class="form-group">
                                 <select name="class" class="form-control">
-                                    <option value="" selected>
+                                    <option value="" class="bg-tag">
                                         —
                                     </option>
 
                                     @foreach (App\Character::classes() as $class)
-                                        <option value="{{ $class }}"
+                                        <option value="{{ $class }}" class="bg-tag text-{{ strtolower($class) }}-important"
                                             {{ old('class') ? (old('class') == $class ? 'selected' : '') : ($character && $character->class == $class ? 'selected' : '') }}>
                                             {{ $class }}
                                         </option>

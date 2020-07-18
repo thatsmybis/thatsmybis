@@ -27,7 +27,7 @@ class CharacterController extends Controller
     private function getValidationRules() {
         return [
             'member_id'     => 'nullable|integer|exists:members,id',
-            'name'          => 'nullable|string|min:2|max:40',
+            'name'          => 'nullable|string|min:2|max:32',
             'level'         => 'nullable|integer|min:1|max:60',
             'race'          => ['nullable', 'string', Rule::in(Character::races())],
             'class'         => ['nullable', 'string', Rule::in(Character::classes())],
@@ -113,7 +113,7 @@ class CharacterController extends Controller
         $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
 
         if (!$selectedMember) {
-            abort(403, 'Chosen player not found.');
+            abort(403, 'Guild member not found.');
         }
 
         if ($guild->characters->count() > 0) {
@@ -131,6 +131,7 @@ class CharacterController extends Controller
         $createValues = [];
 
         // TODO: If has permissions, allow to create characters tied to other members
+        // TODO: also if they can edit officer note
         if (true) {
             $createValues['member_id']    = $selectedMember->id;
             $createValues['officer_note'] = request()->input('officer_note');
@@ -150,11 +151,6 @@ class CharacterController extends Controller
         $createValues['rank_goal']     = request()->input('rank_goal');
         $createValues['raid_id']       = request()->input('raid_id');
         $createValues['public_note']   = request()->input('public_note');
-
-        // TODO: Permissions for who can edit public note
-        if (true) {
-            $createValues['officer_note']   = request()->input('officer_note');
-        }
 
         // User is editing their own character
         if ($createValues['member_id'] == $currentMember->id) {
@@ -266,6 +262,18 @@ class CharacterController extends Controller
         $currentCharacter  = $guild->characters->where('id', request()->input('id'))->first();
         $sameNameCharacter = $guild->characters->where('name', request()->input('name'))->first();
 
+        if (!$currentMember) {
+            abort(404, 'Not a member of that guild.');
+        }
+
+        if (!$currentCharacter) {
+            abort(404, 'Character not found.');
+        }
+
+        if (!$selectedMember) {
+            abort(404, 'Guild member not found.');
+        }
+
         // Can't create a duplicate name
         if ($sameNameCharacter && ($currentCharacter->id != $sameNameCharacter->id)) {
             abort(403, 'Name taken.');
@@ -283,6 +291,7 @@ class CharacterController extends Controller
         $updateValues = [];
 
         // TODO: If has permissions, allow to change who owns character or modify someone else's character
+        // TODO: Also if they can edit officer note
         if (true) {
             $updateValues['member_id']    = ($selectedMember ? $selectedMember->id : null);
             $updateValues['officer_note'] = request()->input('officer_note');
@@ -305,11 +314,6 @@ class CharacterController extends Controller
         $updateValues['rank_goal']     = request()->input('rank_goal');
         $updateValues['raid_id']       = request()->input('raid_id');
         $updateValues['public_note']   = request()->input('public_note');
-
-        // TODO: Permissions for who can edit officer note
-        if (true) {
-            $updateValues['officer_note']   = request()->input('officer_note');
-        }
 
         // User is editing their own character
         if ($currentCharacter->member_id == $currentMember->id) {
@@ -453,7 +457,7 @@ class CharacterController extends Controller
             $character->received()->detach();
         }
 
-        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'id' => $character->name]);
+        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]);
     }
 
     /**
@@ -461,25 +465,25 @@ class CharacterController extends Controller
      * @return
      */
     public function remove($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->firstOrFail();
+        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
 
-        // TODO: Validate user can update this character in this guild
+        // // TODO: Validate user can update this character in this guild
 
-        $validationRules = [
-            'id' => 'required|integer|exists:raids,id',
-        ];
+        // $validationRules = [
+        //     'id' => 'required|integer|exists:raids,id',
+        // ];
 
-        $validationMessages = [];
+        // $validationMessages = [];
 
-        $this->validate(request(), $validationRules, $validationMessages);
+        // $this->validate(request(), $validationRules, $validationMessages);
 
-        $guild = Guild::where('slug', $guildSlug)->firstOrFail();
+        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
 
-        $raid = Raid::where(['id' => request()->input('id'), 'guild_id' => $guild->id])->firstOrFail();
+        // $raid = Raid::where(['id' => request()->input('id'), 'guild_id' => $guild->id])->firstOrFail();
 
-        $raid->delete();
+        // $raid->delete();
 
-        request()->session()->flash('status', 'Successfully removed raid.');
-        return redirect()->back();
+        // request()->session()->flash('status', 'Successfully removed raid.');
+        // return redirect()->back();
     }
 }

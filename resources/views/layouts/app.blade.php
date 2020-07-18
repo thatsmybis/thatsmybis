@@ -50,10 +50,6 @@
 
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.1/css/all.css" integrity="sha384-B9BoFFAuBaCfqw6lxWBZrhg/z4NkwqdBci+E+Sc2XlK/Rz25RYn8Fetb+Aw5irxa" crossorigin="anonymous">
 
-    <!-- Wowhead tooltips and stuff -->
-    <script>var whTooltips = {colorLinks: true, iconizeLinks: false, renameLinks: true, iconSize: 'large', hide: { maxstack: true, ilvl: false, sellprice: true }};</script>
-    <script src="https://wow.zamimg.com/widgets/power.js"></script>
-
     @yield('css')
 
     <!-- Scripts -->
@@ -128,6 +124,11 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script><!-- For fancy select stuff like searching select inputs -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/0.7.0/marked.min.js"></script><!-- Markdown parser -->
+
+    <!-- Wowhead tooltips and stuff -->
+    <script>var whTooltips = {colorLinks: true, iconizeLinks: false, renameLinks: true, iconSize: 'large', hide: { maxstack: true, ilvl: false, sellprice: true }};</script>
+    <script src="https://wow.zamimg.com/widgets/power.js"></script>
+
     <script src="{{ asset('/js/helpers.js') }}"></script>
     <script src="{{ asset('/js/main.js') }}"></script>
     <script src="{{ asset('/js/autocomplete.js') }}"></script>

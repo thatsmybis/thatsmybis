@@ -50,24 +50,31 @@ Route::group(['prefix' => '{guildSlug}'], function () {
     Route::get( '/calendar',        'DashboardController@calendar')      ->name('guild.calendar');
     Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
 
-    Route::get( '/roster',          'CharacterController@roster')        ->name('guild.roster');
-
     Route::group(['prefix' => 'characters'], function () {
         Route::get( '/create',      'CharacterController@edit')      ->name('character.create');
-        Route::get( '/edit/{id}',   'CharacterController@edit')      ->name('character.edit');
-        Route::get( '/loot/{id}',   'CharacterController@loot')      ->name('character.loot');
+        Route::get( '/{name}/edit', 'CharacterController@edit')      ->name('character.edit');
+        Route::get( '/{name}/loot', 'CharacterController@loot')      ->name('character.loot');
         Route::post('/remove',      'CharacterController@remove')    ->name('character.remove');
         Route::post('/update',      'CharacterController@update')    ->name('character.update');
-        Route::post('/update/loot', 'CharacterController@updateLoot')->name('character.updateLoot');
+        Route::post('/loot/update', 'CharacterController@updateLoot')->name('character.updateLoot');
         Route::post('/',            'CharacterController@create')    ->name('character.create');
-        Route::get( '/{id}',        'CharacterController@show')      ->name('character.show');
+        Route::get( '/{name}',      'CharacterController@show')      ->name('character.show');
+    });
+
+    Route::get( '/item/{item_id}/{slug?}', 'ItemController@show')->name('showItem');
+
+    Route::group(['prefix' => 'members'], function () {
+        Route::get( '/{username}/edit', 'MemberController@edit')  ->name('member.edit');
+        Route::post('/update',          'MemberController@update')->name('member.update');
+        Route::post('/remove',          'MemberController@remove')->name('member.remove');
+        Route::get( '/{username}',      'MemberController@show')  ->name('member.show');
     });
 
     Route::get( '/resources',        'ContentController@index')->name('contentIndex');
     Route::get( '/resources/{slug}', 'ContentController@show') ->name('showContent');
     Route::get( '/posts/{slug}',     'ContentController@show') ->name('showPost');
 
-    Route::get( '/item/{item_id}/{slug?}', 'ItemController@show')->name('showItem');
+    Route::get( '/roster',          'CharacterController@roster')        ->name('guild.roster');
 
     Route::group(['prefix' => '{id}'], function () {
         Route::get( '/',            'ProfileController@findById')->where('id', '[0-9]+')->name('findUserById');

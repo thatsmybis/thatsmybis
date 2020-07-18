@@ -44,6 +44,9 @@ body {
 .text-druid {
     color: #ff8000;
 }
+.text-dk {
+    color: #c41e3b;
+}
 .text-hunter {
     color: #9dd367;
 }
@@ -69,6 +72,40 @@ body {
     color: #bb9b63;
 }
 
+.text-druid-important {
+    color: #ff8000 !important;
+}
+.text-hunter-important {
+    color: #9dd367 !important;
+}
+.text-mage-important {
+    color: #68ccef !important;
+}
+.text-paladin-important {
+    color: #e68cab !important;
+}
+.text-priest-important {
+    color: #d7d7d7 !important;
+}
+.text-rogue-important {
+    color: #fff468 !important;
+}
+.text-shaman-important {
+    color: #2359ff !important;
+}
+.text-warlock-important {
+    color: #9382c9 !important;
+}
+.text-warrior-important {
+    color: #bb9b63 !important;
+}
+
+.text-cyan {
+    color: #30bce0;
+}
+.text-gold {
+    color: #ffb400; /* gold coins */
+}
 .text-legendary {
     color: #ff8000;
 }

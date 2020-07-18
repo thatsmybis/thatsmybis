@@ -40,7 +40,7 @@
                                 <span class="text-muted fas fa-fw fa-users"></span>
                                 Guild Name
                             </label>
-                            <input name="name" maxlength="255" type="text" class="form-control" placeholder="it's gotta be unique" value="{{ old('name') ? old('name') : null }}" />
+                            <input name="name" maxlength="36" type="text" class="form-control" placeholder="it's gotta be unique" value="{{ old('name') ? old('name') : null }}" />
                         </div>
 
                         <div class="form-group">

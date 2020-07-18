@@ -7,6 +7,9 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav mr-auto">
             @if (Auth::user() && isset($guild) && $guild)
+                <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.roster']) ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('guild.roster', ['guildSlug' => $guild->slug]) }}">Roster</a>
+                </li>
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.news']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('guild.news', ['guildSlug' => $guild->slug]) }}">News</a>
                 </li>
@@ -15,9 +18,6 @@
                         <a class="nav-link" href="{{ route('guild.calendar', ['guildSlug' => $guild->slug]) }}">Calendar</a>
                     </li>
                 @endif
-                <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.roster']) ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('guild.roster', ['guildSlug' => $guild->slug]) }}">Roster</a>
-                </li>
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['contentIndex', 'showContent']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('contentIndex', ['guildSlug' => $guild->slug]) }}">Resources</a>
                 </li>

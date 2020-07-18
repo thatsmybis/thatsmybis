@@ -41,7 +41,7 @@ class GuildController extends Controller
     public function register()
     {
         $validationRules =  [
-            'name'       => 'string|max:255|unique:guilds,name',
+            'name'       => 'string|max:36|unique:guilds,name',
             'discord_id' => 'string|max:255|unique:guilds,discord_id',
             'bot_added'  => 'numeric|gte:1',
         ];
@@ -137,7 +137,7 @@ class GuildController extends Controller
         // TODO: Validate user can update settings for this guild
 
         $validationRules =  [
-            'name'           => 'string|max:255|unique:guilds,name,' . $guild->id,
+            'name'           => 'string|max:36|unique:guilds,name,' . $guild->id,
             'calendar_link'  => 'nullable|string|max:255',
             'member_roles.*' => 'nullable|integer|exists:roles,discord_id',
         ];

@@ -2,14 +2,13 @@
     <li>
         <ul class="list-inline">
             <li class="list-inline-item">
-                <h2 title="ID {{ $character->id }}"
-                    class="font-weight-bold">
-                    {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<span class="text-{{ $character->class ? strtolower($character->class) : '' }}"><a href="{{route('character.show', ['guildSlug' => $guild->slug, 'id' => $character->name]) }}">{{ $character->name }}</a></span>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
-                </h2>
+                <h{{ isset($headerSize) && $headerSize ? $headerSize : '2' }} class="font-weight-bold">
+                    {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-{{ $character->class ? strtolower($character->class) : '' }}">{{ $character->name }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
+                </h{{ isset($headerSize) && $headerSize ? $headerSize : '2' }}>
             </li>
             @if (isset($showEdit) && $showEdit)
                 <li class="list-inline-item">
-                    <a href="{{ route('character.edit', ['guildSlug' => $guild->slug, 'id' => $character->name]) }}">
+                    <a href="{{ route('character.edit', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">
                         <span class="fas fa-fw fa-pencil"></span>
                         edit
                     </a>
@@ -46,10 +45,10 @@
         </li>
     @endif
 
-    @if ($character->member)
+    @if ((!isset($showOwner) && isset($character->member) && $character->member) || (isset($showOwner) && $showOwner && isset($character->member) && $character->member))
         <li>
             <small>
-                <a href="" class="">
+                <a href="{{route('member.show', ['guildSlug' => $guild->slug, 'username' => $character->member->username]) }}" class="">
                     {{ $character->member->username }}'s character
                 </a>
             </small>

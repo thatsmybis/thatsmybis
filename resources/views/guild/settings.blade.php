@@ -28,7 +28,7 @@
                             <label for="name" class="font-weight-bold">
                                 Guild Name
                             </label>
-                            <input name="name" maxlength="255" type="text" class="form-control" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
+                            <input name="name" maxlength="36" type="text" class="form-control" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
                         </div>
                     </div>
                 </div>

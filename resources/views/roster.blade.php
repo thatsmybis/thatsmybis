@@ -75,7 +75,7 @@
                     <select id="class_filter" class="form-control">
                         <option value="" class="bg-tag">—</option>
                         @foreach (App\Character::classes() as $class)
-                            <option value="{{ $class }}" class="bg-tag text-{{ strtolower($class) }}">
+                            <option value="{{ $class }}" class="bg-tag text-{{ strtolower($class) }}-important">
                                 {{ $class }}
                             </option>
                         @endforeach
