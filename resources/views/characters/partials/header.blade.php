@@ -25,24 +25,26 @@
         </li>
     @endif
 
-    @if ($character->level || $character->race || $character->spec)
-        <li>
-            <small>
-                {{ $character->level ? $character->level : '' }}
-                {{ $character->race  ? $character->race : '' }}
-                {{ $character->spec  ? $character->spec : '' }}
-            </small>
-        </li>
-    @endif
+    @if (!isset($showDetails) || $showDetails)
+        @if ($character->level || $character->race || $character->spec)
+            <li>
+                <small>
+                    {{ $character->level ? $character->level : '' }}
+                    {{ $character->race  ? $character->race : '' }}
+                    {{ $character->spec  ? $character->spec : '' }}
+                </small>
+            </li>
+        @endif
 
-    @if ($character->rank || $character->profession_1 || $character->profession_2)
-        <li>
-            <small>
-                {{ $character->rank         ? 'Rank ' . $character->rank . ($character->profession_1 || $character->profession_2 ? ',' : '') : '' }}
-                {{ $character->profession_1 ? $character->profession_1 . ($character->profession_2 ? ',' : '') : '' }}
-                {{ $character->profession_2 ? $character->profession_2 : ''}}
-            </small>
-        </li>
+        @if ($character->rank || $character->profession_1 || $character->profession_2)
+            <li>
+                <small>
+                    {{ $character->rank         ? 'Rank ' . $character->rank . ($character->profession_1 || $character->profession_2 ? ',' : '') : '' }}
+                    {{ $character->profession_1 ? $character->profession_1 . ($character->profession_2 ? ',' : '') : '' }}
+                    {{ $character->profession_2 ? $character->profession_2 : ''}}
+                </small>
+            </li>
+        @endif
     @endif
 
     @if ((!isset($showOwner) && isset($character->member) && $character->member) || (isset($showOwner) && $showOwner && isset($character->member) && $character->member))

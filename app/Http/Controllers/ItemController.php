@@ -69,7 +69,7 @@ class ItemController extends Controller
             'guild'      => $guild,
             'item'       => $item,
             'raids'      => $guild->raids,
-            'itemJson'   => self::getItemJson($id),
+            'itemJson'   => self::getItemJson($item->item_id),
         ]);
     }
 
@@ -79,6 +79,13 @@ class ItemController extends Controller
      * @param int $id The ID of the item to fetch.
      */
     public static function getItemJson($id) {
-        return json_decode(file_get_contents('https://classic.wowhead.com/tooltip/item/' . (int)$id));
+        $json = null;
+        try {
+            // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)
+            $json = json_decode(file_get_contents('https://classic.wowhead.com/tooltip/item/' . (int)$id));
+        } catch (Exception $e) {
+            // Fail silently, that's okay, we just won't display the content
+        }
+        return $json;
     }
 }

@@ -1,6 +1,6 @@
-<div>
-    <ul class="list-inline">
-        <li class=" list-inline-item">
+<div class="pr-2 pl-2">
+    <ul class="list-inline mb-0">
+        <li class="list-inline-item">
             <label for="raid_filter font-weight-light">
                 <span class="text-muted fas fa-fw fa-users-crown"></span>
                 Raid
@@ -58,6 +58,7 @@
                 Recipes
             </a>
         </li>
+        <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <a class="toggle-column cursor-pointer font-weight-light" data-column="4" href="">
@@ -65,6 +66,7 @@
                 Roles
             </a>
         </li>
+        -->
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <a class="toggle-column cursor-pointer font-weight-light" data-column="5" href="">
@@ -75,7 +77,7 @@
     </ul>
 </div>
 
-<div class="col-12 pb-3 pr-3 pl-3 rounded">
+<div class="col-12 pb-3 pr-2 pl-2 rounded">
     <table id="characterTable" class="col-xs-12 table table-border table-hover stripe">
     </table>
 </div>

@@ -7,54 +7,61 @@
     <div class="row">
         <div class="col-12">
             <h1 class="font-weight-bold">
-                <a class="q{!! $itemJson->quality !!}" href="https://classic.wowhead.com/item={{ $item->id}}">
-                    <span class="iconlarge">
-                        <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
-                </a>
+                @if ($itemJson)
+                    {{-- %69 (code for 'i') is a workaround for breaking the link so wowhead's script won't parse it, allowing *us* to style it however we want --}}
+                    <a class="q{!! $itemJson->quality !!}" href="https://classic.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
+                        <span class="iconlarge">
+                            <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
+                    </a>
+                @else
+                    @include('partials/item', ['wowheadLink' => true])
+                @endif
             </h1>
         </div>
 
-        <div class="col-12 mb-4">
-            {!! $itemJson->tooltip !!}
-        </div>
-
-            <!--
-            <div class="row mb-3">
-                <div class="col-sm-6 col-12">
-                    <h4>Wishlisted</h4>
-                    <ul>
-                        @if ($item->wishlistedCharacters->count() > 0)
-                            @foreach ($item->wishlistedCharacters as $character)
-                                <li class="lead font-weight-bold">
-                                    <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
-                                </li>
-                            @endforeach
-                        @else
-                            <li class="lead">
-                                <em>nobody?</em>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
-
-                <div class="col-sm-6 col-12">
-                    <h4>Already Received</h4>
-                    <ul>
-                        @if ($item->receivedCharacters->count() > 0)
-                            @foreach ($item->receivedCharacters as $character)
-                                <li class="lead font-weight-bold">
-                                    <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
-                                </li>
-                            @endforeach
-                        @else
-                            <li class="lead">
-                                <em>nobody?</em>
-                            </li>
-                        @endif
-                    </ul>
-                </div>
+        @if ($itemJson)
+            <div class="col-12 mb-4">
+                {!! $itemJson->tooltip !!}
             </div>
-            -->
+        @endif
+
+        <!--
+        <div class="row mb-3">
+            <div class="col-sm-6 col-12">
+                <h4>Wishlisted</h4>
+                <ul>
+                    @if ($item->wishlistedCharacters->count() > 0)
+                        @foreach ($item->wishlistedCharacters as $character)
+                            <li class="lead font-weight-bold">
+                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
+                            </li>
+                        @endforeach
+                    @else
+                        <li class="lead">
+                            <em>nobody?</em>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+
+            <div class="col-sm-6 col-12">
+                <h4>Already Received</h4>
+                <ul>
+                    @if ($item->receivedCharacters->count() > 0)
+                        @foreach ($item->receivedCharacters as $character)
+                            <li class="lead font-weight-bold">
+                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
+                            </li>
+                        @endforeach
+                    @else
+                        <li class="lead">
+                            <em>nobody?</em>
+                        </li>
+                    @endif
+                </ul>
+            </div>
+        </div>
+        -->
     </div>
     <div class="row bg-lighter">
         <div class="col-12 mt-3 mb-3">
@@ -72,12 +79,12 @@
     </div>
     <div class="row">
         <div class="col-12 mt-3 mb-3">
-            <h2>Already Has It</h2>
+            <h2>Have It</h2>
             <ul>
                 @if ($item->receivedCharacters->count() > 0)
                     @foreach ($item->receivedCharacters as $character)
-                        <li class="lead font-weight-bold">
-                            <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
+                        <li class="no-bullet font-weight-bold mb-2">
+                            @include('characters/partials/header', ['showDetails' => false, 'showEdit' => false, 'showOwner' => false])
                         </li>
                     @endforeach
                 @else

@@ -47,7 +47,7 @@ function createTable() {
                 "data"   : "character",
                 "render" : function (data, type, row) {
                     return `
-                    <ul class="no-bullet no-indent">
+                    <ul class="no-bullet no-indent mb-2">
                         <li>
                             <a href="character/${row.name}"
                                 class="text-4 text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold"
@@ -211,30 +211,32 @@ function createTable() {
 
 // Gets an HTML list of items with pretty wowhead formatting
 function getItemList(data, type, characterId) {
-    let items = `<ol class="no-indent js-item-list" data-type="${ type }" data-id="${ characterId }">`;
+    let items = `<ol class="no-indent js-item-list mb-2" data-type="${ type }" data-id="${ characterId }">`;
+    let initialLimit = 4;
+
     $.each(data, function (index, item) {
         let clipItem = false;
 
-        if (index >= 5) {
+        if (index >= initialLimit) {
             clipItem = true;
-            if (index == 5) {
-                items += `<li class="font-weight-light js-show-clipped-items"><small>show more…</small></li>`;
+            if (index == initialLimit) {
+                items += `<li class="js-show-clipped-items no-bullet font-weight-light"><small>show ${ data.length - initialLimit } more…</small></li>`;
             }
         }
 
         items += `
             <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
-                <a href="items/${item.name}"
+                <a href="item/${item.item_id}/${item.name}"
                     data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"
-                    data-wowhead="item=${ item.item_id }">
+                    data-wowhead="item=${ item.item_id }?domain=classic">
                     ${ item.name }
                 </a>
             </li>`;
     });
 
-    if (data.length > 5) {
-        items += `<li class="font-weight-light js-show-clipped-items" style="display:none;"><small>show less…</small></li>`;
+    if (data.length > initialLimit) {
+        items += `<li class="js-show-clipped-items font-weight-light no-bullet" style="display:none;"><small>show less…</small></li>`;
     }
 
     /*

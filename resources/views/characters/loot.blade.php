@@ -7,11 +7,17 @@
         <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
             <div class="row">
                 <div class="col-12">
-                     @include('characters/partials/header', ['showEdit' => false, 'titleSuffix' => "'s loot"])
+                    @include('characters/partials/header', ['showEdit' => false, 'titleSuffix' => "'s loot"])
                 </div>
             </div>
 
             <hr class="light">
+
+            <div class="row">
+                <div class="col-12">
+                    <span class="font-weight-bold">Hint:</span> Your top 4 items are displayed first; make them count.
+                </div>
+            </div>
 
             @if (count($errors) > 0)
                 <ul class="alert alert-danger">

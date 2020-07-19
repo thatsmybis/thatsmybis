@@ -127,7 +127,7 @@
 
     <!-- Wowhead tooltips and stuff -->
 
-    <script>var whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true, iconSize: '@yield('wowheadIconSize', 'small')', hide: { maxstack: true, ilvl: false, sellprice: true }};</script>
+    <script>var whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true, dropChance: true, iconSize: '@yield('wowheadIconSize', 'small')', hide: { maxstack: true, ilvl: false, sellprice: true }};</script>
     <script src="https://wow.zamimg.com/widgets/power.js"></script>
 
     <script src="{{ asset('/js/helpers.js') }}"></script>

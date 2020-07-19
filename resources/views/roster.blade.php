@@ -3,8 +3,8 @@
 
 @section('content')
 
-<div class="container-fluid">
-    <div class="col-12 p-4">
+<div class="container-fluid pr-0 pl-0">
+    <div class="col-12 pb-2 pt-2 pr-0 pl-0">
         @include('partials/characterDatatable')
     </div>
 </div>
