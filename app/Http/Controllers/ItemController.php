@@ -19,6 +19,23 @@ class ItemController extends Controller
     }
 
     /**
+     * Show the mass input page
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function massInput($guildSlug)
+    {
+
+        $guild = Guild::where('slug', $guildSlug)->with(['characters', 'raids', 'raids.role'])->firstOrFail();
+
+        // TODO: Validate user can view this guild's raids
+
+        return view('item.massInput', [
+            'guild' => $guild,
+        ]);
+    }
+
+    /**
      * Show an item
      *
      * @return \Illuminate\Http\Response
@@ -64,7 +81,7 @@ class ItemController extends Controller
             return redirect()->route('guild.item.show', ['guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name)]);
         }
 
-        return view('item', [
+        return view('item.show', [
             'characters' => $item->characters,
             'guild'      => $guild,
             'item'       => $item,

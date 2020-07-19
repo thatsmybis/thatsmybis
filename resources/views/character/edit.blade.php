@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-12">
                     @if ($character)
-                        @include('characters/partials/header', ['showEdit' => false, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
+                        @include('character/partials/header', ['showEdit' => false, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
                     @else
                         <h1>Create Character</h1>
                     @endif
@@ -322,26 +322,4 @@
         </div>
     </div>
 </div>
-@endsection
-
-@section('scripts')
-<script>
-    $(document).ready(function() {
-        $(".js-show-next").change(function() {
-            showNext(this);
-        }).change();
-
-        $(".js-show-next").keyup(function() {
-            showNext(this);
-        });
-    });
-
-    // If the current element has a value, show it and the next element that is hidden because it is empty
-    function showNext(currentElement) {
-        if ($(currentElement).val() != "") {
-            $(currentElement).show();
-            $(currentElement).parent().next(".js-hide-empty").show();
-        }
-    }
-</script>
 @endsection

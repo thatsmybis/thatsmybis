@@ -183,7 +183,7 @@ class CharacterController extends Controller
 
         // TODO: Validate user can edit this character in this guild
 
-        return view('characters.edit', [
+        return view('character.edit', [
             'guild'     => $guild,
             'character' => $character,
         ]);
@@ -206,7 +206,7 @@ class CharacterController extends Controller
 
         // TODO: Validate user can edit this character's loot in this guild
 
-        return view('characters.loot', [
+        return view('character.loot', [
             'guild'     => $guild,
             'character' => $character,
 
@@ -233,7 +233,7 @@ class CharacterController extends Controller
 
         // TODO: Validate user can view this character in this guild
 
-        return view('characters.show', [
+        return view('character.show', [
             'guild'     => $guild,
             'character' => $character,
         ]);
@@ -250,7 +250,7 @@ class CharacterController extends Controller
 
         // TODO: Validate user can create a character in this guild
 
-        return view('characters.edit', [
+        return view('character.edit', [
             'guild'     => $guild,
             'character' => null,
         ]);

@@ -82,10 +82,14 @@ Route::group(['prefix' => '{guildSlug}'], function () {
 
     Route::get( '/roster',          'CharacterController@roster')        ->name('guild.roster');
 
+    // TODO: Probably remove this
     Route::group(['prefix' => '{id}'], function () {
         Route::get( '/',            'ProfileController@findById')->where('id', '[0-9]+')->name('findUserById');
         Route::get( '/{username?}', 'ProfileController@showMember')->where('id', '[0-9]+')->name('showMember');
     });
+
+    Route::get( '/raid-input', 'ItemController@massInput')      ->name('item.massInput');
+    Route::post('/raid-input', 'ItemController@submitMassInput')->name('item.massInput.submit');
 
     Route::group([
         // 'middleware' => 'acl',

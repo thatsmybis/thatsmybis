@@ -7,7 +7,7 @@
         <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
             <div class="row">
                 <div class="col-12">
-                    @include('characters/partials/header', ['showEdit' => false, 'titleSuffix' => "'s loot"])
+                    @include('character/partials/header', ['showEdit' => false, 'titleSuffix' => "'s loot"])
                 </div>
             </div>
 

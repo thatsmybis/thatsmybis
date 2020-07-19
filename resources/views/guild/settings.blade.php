@@ -121,16 +121,14 @@
 </div>
 @endsection
 
-@section('scripts')
+@section('scripts)
 <script>
-    $(document).ready(function() {
-        $(".js-show-next").change(function() {
-            showNext(this);
-        }).change();
+    $(".js-show-next").change(function() {
+        showNext(this);
+    }).change();
 
-        $(".js-show-next").keyup(function() {
-            showNext(this);
-        });
+    $(".js-show-next").keyup(function() {
+        showNext(this);
     });
 
     // If the current element has a value, show it and the next element that is hidden because it is empty

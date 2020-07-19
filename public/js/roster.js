@@ -49,7 +49,7 @@ function createTable() {
                     return `
                     <ul class="no-bullet no-indent mb-2">
                         <li>
-                            <a href="character/${row.name}"
+                            <a href="/${ guild.slug } /character/${row.name}"
                                 class="text-4 text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold"
                                 title="${ row.member ? row.member.username : 'unknown member' }">
                                 ${ row.name }
@@ -227,7 +227,7 @@ function getItemList(data, type, characterId) {
         items += `
             <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
-                <a href="item/${item.item_id}/${item.name}"
+                <a href="/${ guild.slug }/item/${item.item_id}/${item.name}"
                     data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"
                     data-wowhead="item=${ item.item_id }?domain=classic">
                     ${ item.name }

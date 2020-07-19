@@ -48,22 +48,6 @@ class RaidController extends Controller
     }
 
     /**
-     * Show the raids page.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function raids($guildSlug)
-    {
-        $guild = Guild::where('slug', $guildSlug)->with(['raids', 'raids.role'])->firstOrFail();
-
-        // TODO: Validate user can view this guild's raids
-
-        return view('guild.raids.list', [
-            'guild' => $guild,
-        ]);
-    }
-
-    /**
      * Create a raid
      * @return
      */
@@ -99,6 +83,22 @@ class RaidController extends Controller
     }
 
     /**
+     * Show the raids page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function raids($guildSlug)
+    {
+        $guild = Guild::where('slug', $guildSlug)->with(['raids', 'raids.role'])->firstOrFail();
+
+        // TODO: Validate user can view this guild's raids
+
+        return view('guild.raids.list', [
+            'guild' => $guild,
+        ]);
+    }
+
+    /**
      * Update a raid
      * @return
      */
@@ -131,8 +131,6 @@ class RaidController extends Controller
 
         request()->session()->flash('status', 'Successfully updated raid.');
         return redirect()->route('guild.raids', ['guildSlug' => $guild->slug]);
-
-
     }
 
     /**
@@ -141,7 +139,7 @@ class RaidController extends Controller
      */
     public function remove($guildSlug) {
         $guild = Guild::where('slug', $guildSlug)->firstOrFail();
-
+// NOT IMPLEMENTED!!!!!!!! PLACEHOLDER CODE!!!!
         // TODO: Validate user can remove raids in this guild
 
         $validationRules = [

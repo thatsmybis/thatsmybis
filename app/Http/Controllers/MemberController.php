@@ -46,7 +46,7 @@ class MemberController extends Controller
 
         // TODO: Validate user can edit this character in this guild
 
-        return view('members.edit', [
+        return view('member.edit', [
             'guild'  => $guild,
             'member' => $member,
             'user'   => $user,
@@ -88,7 +88,7 @@ class MemberController extends Controller
             }
         }
 
-        return view('members.show', [
+        return view('member.show', [
             'characters' => $member->characters,
             'guild'      => $guild,
             'member'     => $member,

@@ -135,6 +135,20 @@ body {
     white-space: nowrap;
 }
 
+/* Nice well contrasted backgrounds with the dark theme */
+.dropdown-menu {
+    background-color: #2a2947;
+}
+.dropdown-menu a, .dropdown-menu a:hover {
+    color: #fff;
+}
+.dropdown-item:hover {
+    background-color: #201f3c;
+}
+.dropdown-item.selected.active{
+    background-color: #161523;
+}
+
 .form-control:focus {
   box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 128, 0);
 }
@@ -153,6 +167,10 @@ ol.lesser-indent, ul.lesser-indent {
 
 ol.no-indent, ul.no-indent {
     padding-left: 0em;
+}
+
+ul.striped > li:nth-of-type(odd), ol.striped > li:nth-of-type(odd) {
+    background: #ffffff07;
 }
 
 .cursor-pointer {
@@ -192,7 +210,7 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
 }
 
 .bg-tag {
-    background-color: #2f2e4e;
+    background-color: #2a2947;
     color: #fff;
 }
 

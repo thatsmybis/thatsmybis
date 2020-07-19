@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row">
+    <div class="row m-3 mb-4">
         <div class="col-12">
             <h1 class="font-weight-bold">
                 @if ($itemJson)
@@ -20,52 +20,14 @@
         </div>
 
         @if ($itemJson)
-            <div class="col-12 mb-4">
+            <div class="col-12">
                 {!! $itemJson->tooltip !!}
             </div>
         @endif
-
-        <!--
-        <div class="row mb-3">
-            <div class="col-sm-6 col-12">
-                <h4>Wishlisted</h4>
-                <ul>
-                    @if ($item->wishlistedCharacters->count() > 0)
-                        @foreach ($item->wishlistedCharacters as $character)
-                            <li class="lead font-weight-bold">
-                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
-                            </li>
-                        @endforeach
-                    @else
-                        <li class="lead">
-                            <em>nobody?</em>
-                        </li>
-                    @endif
-                </ul>
-            </div>
-
-            <div class="col-sm-6 col-12">
-                <h4>Already Received</h4>
-                <ul>
-                    @if ($item->receivedCharacters->count() > 0)
-                        @foreach ($item->receivedCharacters as $character)
-                            <li class="lead font-weight-bold">
-                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
-                            </li>
-                        @endforeach
-                    @else
-                        <li class="lead">
-                            <em>nobody?</em>
-                        </li>
-                    @endif
-                </ul>
-            </div>
-        </div>
-        -->
     </div>
-    <div class="row bg-lighter">
-        <div class="col-12 mt-3 mb-3">
-            <h2 class="font-weight-bold">Wishlisted</h2>
+    <div class="row bg-lighter pt-2 mb-3">
+        <div class="col-12 pr-0 pl-0">
+            <h2 class="font-weight-bold pl-2">Wishlisted</h2>
             @if ($characters->count() > 0)
                 @include('partials/characterDatatable')
             @else
@@ -80,11 +42,11 @@
     <div class="row">
         <div class="col-12 mt-3 mb-3">
             <h2>Have It</h2>
-            <ul>
+            <ul class="list-inline striped">
                 @if ($item->receivedCharacters->count() > 0)
                     @foreach ($item->receivedCharacters as $character)
-                        <li class="no-bullet font-weight-bold mb-2">
-                            @include('characters/partials/header', ['showDetails' => false, 'showEdit' => false, 'showOwner' => false])
+                        <li class="list-inline-item font-weight-bold rounded pt-2 pl-3 pb-3 pr-3">
+                            @include('character/partials/header', ['showDetails' => false, 'showEdit' => false, 'showOwner' => false])
                         </li>
                     @endforeach
                 @else
