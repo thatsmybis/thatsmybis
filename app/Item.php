@@ -2,6 +2,7 @@
 
 namespace App;
 
+use App\{Character, Guild};
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
@@ -42,28 +43,23 @@ class Item extends Model
     protected $hidden = [
     ];
 
-    public function users() {
-        return $this->belongsToMany(User::class, 'user_items')->withTimeStamps()->withPivot('type');
+    public function characters() {
+        return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
+            ->withTimeStamps()
+            ->withPivot('type');
     }
 
-    public function recipeUsers() {
-        return $this->belongsToMany(User::class, 'user_items', 'item_id', 'user_id')
+    public function receivedCharacters() {
+        return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->withTimeStamps()
             ->withPivot('type')
-            ->where('type', 'recipe');
+            ->whereIn('type', ['received', 'recipe']);
     }
 
-    public function receivedUsers() {
-        return $this->belongsToMany(User::class, 'user_items', 'item_id', 'user_id')
+    public function wishlistedCharacters() {
+        return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->withTimeStamps()
             ->withPivot('type')
-            ->where('type', 'received');
-    }
-
-    public function wishlistUsers() {
-        return $this->belongsToMany(User::class, 'user_items', 'item_id', 'user_id')
-            ->withTimeStamps()
-            ->withPivot('type')
-            ->where('type', 'wishlist');
+            ->where(['type' => 'wishlist']);
     }
 }

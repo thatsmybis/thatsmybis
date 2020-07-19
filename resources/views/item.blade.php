@@ -4,43 +4,102 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="col-12">
-        <h2>
-            @include('partials/item', ['wowheadLink' => true])
-        </h2>
-    </div>
-    <div class="col-12">
-        <h3>Has It</h3>
-        <ul>
-            @if ($item->receivedUsers->count() > 0)
-                @foreach ($item->receivedUsers as $user)
-                    <li class="lead font-weight-bold">
-                        <a href="{{ route('showUser', ['id' => $user->id, 'username' => $user->username]) }}">{{ $user->username }}</a>
-                    </li>
-                @endforeach
-            @else
-                <li class="lead">
-                    <em>nobody?</em>
-                </li>
-            @endif
-        </ul>
-    </div>
+    <div class="row">
+        <div class="col-12">
+            <h1 class="font-weight-bold">
+                <a class="q{!! $itemJson->quality !!}" href="https://classic.wowhead.com/item={{ $item->id}}">
+                    <span class="iconlarge">
+                        <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
+                </a>
+            </h1>
+        </div>
 
-    <div class="col-12">
-        <h3>Wants It</h3>
-        <ul>
-            @if ($item->wishlistUsers->count() > 0)
-                @foreach ($item->wishlistUsers as $user)
-                    <li class="lead font-weight-bold">
-                        <a href="{{ route('showUser', ['id' => $user->id, 'username' => $user->username]) }}">{{ $user->username }}</a>
-                    </li>
-                @endforeach
+        <div class="col-12 mb-4">
+            {!! $itemJson->tooltip !!}
+        </div>
+
+            <!--
+            <div class="row mb-3">
+                <div class="col-sm-6 col-12">
+                    <h4>Wishlisted</h4>
+                    <ul>
+                        @if ($item->wishlistedCharacters->count() > 0)
+                            @foreach ($item->wishlistedCharacters as $character)
+                                <li class="lead font-weight-bold">
+                                    <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
+                                </li>
+                            @endforeach
+                        @else
+                            <li class="lead">
+                                <em>nobody?</em>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+
+                <div class="col-sm-6 col-12">
+                    <h4>Already Received</h4>
+                    <ul>
+                        @if ($item->receivedCharacters->count() > 0)
+                            @foreach ($item->receivedCharacters as $character)
+                                <li class="lead font-weight-bold">
+                                    <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
+                                </li>
+                            @endforeach
+                        @else
+                            <li class="lead">
+                                <em>nobody?</em>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+            -->
+    </div>
+    <div class="row bg-lighter">
+        <div class="col-12 mt-3 mb-3">
+            <h2 class="font-weight-bold">Wishlisted</h2>
+            @if ($characters->count() > 0)
+                @include('partials/characterDatatable')
             @else
-                <li class="lead">
-                    <em>nobody?</em>
-                </li>
+                <ul>
+                    <li class="lead no-bullet">
+                        <em>nobody has added this item to their wishlist yet</em>
+                    </li>
+                </ul>
             @endif
-        </ul>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12 mt-3 mb-3">
+            <h2>Already Has It</h2>
+            <ul>
+                @if ($item->receivedCharacters->count() > 0)
+                    @foreach ($item->receivedCharacters as $character)
+                        <li class="lead font-weight-bold">
+                            <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">{{ $character->name }}</a>
+                        </li>
+                    @endforeach
+                @else
+                    <li class="lead no-bullet">
+                        <em>nobody has added this item to their character sheet yet</em>
+                    </li>
+                @endif
+            </ul>
+        </div>
     </div>
 </div>
+
 @endsection
+
+@section('scripts')
+<script>
+    var characters = {!! $characters->makeVisible('officer_note')->toJson() !!};
+    var guild = {!! $guild->toJson() !!};
+    var raids = {!! $raids->toJson() !!};
+    {{-- TODO PERMISSIONS FOR NOTE --}}
+    var showOfficerNote = true;
+</script>
+<script src="{{ asset('js/roster.js') }}"></script>
+@endsection
+

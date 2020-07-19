@@ -38,7 +38,7 @@ $(document).ready( function () {
 });
 
 function createTable() {
-    memberTable = $("#roster").DataTable({
+    memberTable = $("#characterTable").DataTable({
         "autoWidth" : false,
         "data"      : characters,
         "columns"   : [
@@ -49,7 +49,7 @@ function createTable() {
                     return `
                     <ul class="no-bullet no-indent">
                         <li>
-                            <a href="characters/${row.name}"
+                            <a href="character/${row.name}"
                                 class="text-4 text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold"
                                 title="${ row.member ? row.member.username : 'unknown member' }">
                                 ${ row.name }
@@ -225,7 +225,8 @@ function getItemList(data, type, characterId) {
         items += `
             <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
-                <a href="https://classic.wowhead.com/item=${ item.item_id }"
+                <a href="items/${item.name}"
+                    data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"
                     data-wowhead="item=${ item.item_id }">
                     ${ item.name }
                 </a>

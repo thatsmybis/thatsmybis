@@ -9,7 +9,7 @@
         </ul>
     </div>
 
-    <div class="js-content bg-darker mb-1 p-2 rounded" data-id="{{ $fakeId }}" style="display:none;">
+    <div class="js-content bg-lighter mb-1 p-2 rounded" data-id="{{ $fakeId }}" style="display:none;">
         <form class="form-horizontal" role="form" method="POST" action="{{ route('updateContent') }}">
             {{ csrf_field() }}
             <div class="form-group mt-3">

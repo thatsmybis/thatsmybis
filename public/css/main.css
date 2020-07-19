@@ -11,7 +11,11 @@ body {
     max-width: 1200px;
 }
 
-.bg-darker {
+.bg-lighter {
+    background-color: #201f3c;
+}
+
+.bg-lightest {
     background-color: #242344;
 }
 
@@ -251,7 +255,7 @@ table.dataTable tbody tr.odd {
 
 table.dataTable.stripe tbody tr.even,
 table.dataTable tbody tr.even {
-    background: #ffffff14;
+    background: #ffffff07;
 }
 
 .table-hover tbody tr:hover {

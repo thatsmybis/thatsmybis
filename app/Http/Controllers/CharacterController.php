@@ -12,7 +12,7 @@ class CharacterController extends Controller
 {
     const MAX_RECEIVED_ITEMS = 100;
     const MAX_RECIPES        = 50;
-    const MAX_WISHLIST_ITEMS = 10;
+    const MAX_WISHLIST_ITEMS = 16;
 
     /**
      * Create a new controller instance.
@@ -236,6 +236,23 @@ class CharacterController extends Controller
         return view('characters.show', [
             'guild'     => $guild,
             'character' => $character,
+        ]);
+    }
+
+    /**
+     * Show a character for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showCreate($guildSlug)
+    {
+        $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
+
+        // TODO: Validate user can create a character in this guild
+
+        return view('characters.edit', [
+            'guild'     => $guild,
+            'character' => null,
         ]);
     }
 

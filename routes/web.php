@@ -45,13 +45,17 @@ Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 Route::get( '/register-guild', 'GuildController@showRegister')->name('guild.showRegister');
 Route::post('/submit-guild',   'GuildController@register')    ->name('guild.register');
 
+Route::group(['prefix' => 'item'], function () {
+    Route::get( '/{item_id}/{slug?}', 'ItemController@show')->name('item.show');
+});
+
 Route::group(['prefix' => '{guildSlug}'], function () {
     Route::get( '/news',            'DashboardController@news')          ->name('guild.news');
     Route::get( '/calendar',        'DashboardController@calendar')      ->name('guild.calendar');
     Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
 
-    Route::group(['prefix' => 'characters'], function () {
-        Route::get( '/create',      'CharacterController@edit')      ->name('character.create');
+    Route::group(['prefix' => 'character'], function () {
+        Route::get( '/create',      'CharacterController@showCreate')->name('character.create');
         Route::get( '/{name}/edit', 'CharacterController@edit')      ->name('character.edit');
         Route::get( '/{name}/loot', 'CharacterController@loot')      ->name('character.loot');
         Route::post('/remove',      'CharacterController@remove')    ->name('character.remove');
@@ -61,9 +65,11 @@ Route::group(['prefix' => '{guildSlug}'], function () {
         Route::get( '/{name}',      'CharacterController@show')      ->name('character.show');
     });
 
-    Route::get( '/item/{item_id}/{slug?}', 'ItemController@show')->name('showItem');
+    Route::group(['prefix' => 'item'], function () {
+        Route::get( '/{item_id}/{slug?}', 'ItemController@showWithGuild')->name('guild.item.show');
+    });
 
-    Route::group(['prefix' => 'members'], function () {
+    Route::group(['prefix' => 'member'], function () {
         Route::get( '/{username}/edit', 'MemberController@edit')  ->name('member.edit');
         Route::post('/update',          'MemberController@update')->name('member.update');
         Route::post('/remove',          'MemberController@remove')->name('member.remove');
@@ -85,7 +91,7 @@ Route::group(['prefix' => '{guildSlug}'], function () {
         // 'middleware' => 'acl',
         // 'is'         => 'admin|guild_master|officer|raider',
     ], function () {
-        Route::group(['prefix' => 'raids'], function () {
+        Route::group(['prefix' => 'raid'], function () {
             Route::get( '/',           'RaidController@raids') ->name('guild.raids');
             Route::get( '/create',     'RaidController@edit')  ->name('guild.raid.create');
             Route::get( '/edit/{id?}', 'RaidController@edit')  ->name('guild.raid.edit');

@@ -36,7 +36,7 @@
                         <ol class="">
                             @foreach ($character->wishlist as $item)
                                 <li class="">
-                                    @include('partials/item', ['wowheadLink' => true])
+                                    @include('partials/item', ['wowheadLink' => false])
                                 </li>
                             @endforeach
                         </ol>
@@ -58,7 +58,7 @@
                         <ol class="">
                             @foreach ($character->received as $item)
                                 <li class="">
-                                    @include('partials/item', ['wowheadLink' => true])
+                                    @include('partials/item', ['wowheadLink' => false])
                                 </li>
                             @endforeach
                         </ol>
@@ -80,7 +80,7 @@
                         <ol class="">
                             @foreach ($character->recipes as $item)
                                 <li class="">
-                                    @include('partials/item', ['wowheadLink' => true])
+                                    @include('partials/item', ['wowheadLink' => false])
                                 </li>
                             @endforeach
                         </ol>

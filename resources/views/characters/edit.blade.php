@@ -7,7 +7,11 @@
         <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
             <div class="row">
                 <div class="col-12">
-                     @include('characters/partials/header', ['showEdit' => false, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
+                    @if ($character)
+                        @include('characters/partials/header', ['showEdit' => false, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
+                    @else
+                        <h1>Create Character</h1>
+                    @endif
                 </div>
             </div>
 
