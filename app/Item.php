@@ -35,6 +35,10 @@ class Item extends Model
         'set_id',
     ];
 
+    const TYPE_RECEIVED = 'received';
+    const TYPE_RECIPE = 'recipe';
+    const TYPE_WISHLIST = 'wishlist';
+
     /**
      * The attributes that should be hidden for arrays.
      *
@@ -53,13 +57,13 @@ class Item extends Model
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->withTimeStamps()
             ->withPivot('type')
-            ->whereIn('type', ['received', 'recipe']);
+            ->whereIn('type', [self::TYPE_RECEIVED, self::TYPE_WISHLIST]);
     }
 
     public function wishlistedCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->withTimeStamps()
             ->withPivot('type')
-            ->where(['type' => 'wishlist']);
+            ->where(['type' => self::TYPE_WISHLIST]);
     }
 }

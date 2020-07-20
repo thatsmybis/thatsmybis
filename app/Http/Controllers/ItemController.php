@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\{Guild, Item};
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
@@ -88,6 +89,66 @@ class ItemController extends Controller
             'raids'      => $guild->raids,
             'itemJson'   => self::getItemJson($item->item_id),
         ]);
+    }
+
+    public function submitMassInput($guildSlug) {
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                    return $query->where('members.user_id', Auth::id());
+                },
+            'characters',
+            ])->firstOrFail();
+
+        $validationRules =  [
+            'items.*.id'            => 'nullable|integer|exists:items,item_id',
+            'items.*.character_id'  => 'nullable|integer|exists:characters,id',
+
+        ];
+
+        $this->validate(request(), $validationRules);
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        // TODO: Keep this style of permissions check?
+        if (!$currentMember) {
+            abort(404, 'You\'re not a member of that guild.');
+        }
+
+        // TODO: permissions for mass assigning items in this guild?
+
+        $warnings = '';
+        $rows = [];
+        $now = getDateTime();
+
+        $addedCount  = 0;
+        $failedCount = 0;
+
+        foreach (request()->input('items') as $item) {
+            if ($item['id']) {
+                if ($guild->characters->contains('id', $item['character_id'])) {
+                    $rows[] = [
+                        'item_id'      => $item['id'],
+                        'character_id' => $item['character_id'],
+                        'added_by'     => $currentMember->id,
+                        'type'         => Item::TYPE_RECEIVED,
+                        'order'        => '0', // Top of the list
+                        'created_at'   => $now,
+                    ];
+                    $addedCount++;
+                } else {
+                    $warnings .= (isset($item['label']) ? $item['label'] : $item['id']) . ' to character ID ' . $item['character_id'] . ', ';
+                    $failedCount++;
+                }
+            }
+        }
+
+        DB::table('character_items')->insert($rows);
+
+        // TODO: The following items could not be assigned to characters because they were not found in the guild:
+
+        request()->session()->flash('status', 'Successfully added ' . $addedCount . ' items. ' . $failedCount . ' failures' . ($warnings ? ': ' . rtrim($warnings, ', ') : '.'));
+
+        return redirect()->route('guild.roster', ['guildSlug' => $guild->slug]);
     }
 
     /**

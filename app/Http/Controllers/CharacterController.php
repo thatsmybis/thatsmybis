@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\{Character, Content, Guild, Raid, Role, User};
+use App\{Character, Content, Guild, Item, Raid, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 use RestCord\DiscordClient;
 
 class CharacterController extends Controller
@@ -362,13 +363,13 @@ class CharacterController extends Controller
             ])->firstOrFail();
 
         $validationRules =  [
-            'id'         => 'required|integer|exists:characters,id',
-            'wishlist.*' => 'nullable|integer|exists:items,item_id',
-            'received.*' => 'nullable|integer|exists:items,item_id',
-            'recipes.*'  => 'nullable|integer|exists:items,item_id',
-            'public_note'   => 'nullable|string|max:1000',
-            'officer_note'  => 'nullable|string|max:1000',
-            'personal_note' => 'nullable|string|max:2000',
+            'id'                 => 'required|integer|exists:characters,id',
+            'wishlist.*.item_id' => 'nullable|integer|exists:items,item_id',
+            'received.*.item_id' => 'nullable|integer|exists:items,item_id',
+            'recipes.*.item_id'  => 'nullable|integer|exists:items,item_id',
+            'public_note'        => 'nullable|string|max:1000',
+            'officer_note'       => 'nullable|string|max:1000',
+            'personal_note'      => 'nullable|string|max:2000',
         ];
 
         $this->validate(request(), $validationRules);
@@ -400,78 +401,22 @@ class CharacterController extends Controller
         $character->update($updateValues);
 
         if (request()->input('wishlist')) {
-            $items = [];
-            $existingItems = $character->wishlist->keyBy('item_id')->keys()->toArray();
-
-            $i = 0;
-            foreach (request()->input('wishlist') as $id) {
-                if($id) {
-                    $i++;
-                    $items[$id] = [
-                        'added_by' => $currentMember->id,
-                        'order'    => $i,
-                        'type'     => 'wishlist',
-                        ];
-                }
-            }
-            // Gets items which need to be dropped...
-            $toDrop = array_diff($existingItems, array_keys($items));
-            // Drops them...
-            $character->wishlist()->detach($toDrop);
-            // Adds any new items
-            $character->wishlist()->syncWithoutDetaching($items);
+            $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember);
         } else {
             $character->wishlist()->detach();
         }
 
-        if (request()->input('recipes')) {
-            $items = [];
-            $existingItems = $character->recipes->keyBy('item_id')->keys()->toArray();
-
-            $i = 0;
-            foreach (request()->input('recipes') as $id) {
-                if($id) {
-                    $i++;
-                    $items[$id] = [
-                        'added_by' => $currentMember->id,
-                        'order'    => $i,
-                        'type'     => 'recipe',
-                        ];
-                }
-            }
-            // Gets items which need to be dropped...
-            $toDrop = array_diff($existingItems, array_keys($items));
-            // Drops them...
-            $character->recipes()->detach($toDrop);
-            // Adds any new items
-            $character->recipes()->syncWithoutDetaching($items);
-        } else {
-            $character->recipes()->detach();
-        }
-
         if (request()->input('received')) {
-            $items = [];
-            $existingItems = $character->received->keyBy('item_id')->keys()->toArray();
-
-            $i = 0;
-            foreach (request()->input('received') as $id) {
-                if($id) {
-                    $i++;
-                    $items[$id] = [
-                        'added_by' => $currentMember->id,
-                        'order'    => $i,
-                        'type'     => 'received',
-                        ];
-                }
-            }
-            // Gets items which need to be dropped...
-            $toDrop = array_diff($existingItems, array_keys($items));
-            // Drops them...
-            $character->received()->detach($toDrop);
-            // Adds any new items
-            $character->received()->syncWithoutDetaching($items);
+            $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember);
         } else {
             $character->received()->detach();
+        }
+
+
+        if (request()->input('recipes')) {
+            $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember);
+        } else {
+            $character->recipes()->detach();
         }
 
         return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]);
@@ -502,5 +447,103 @@ class CharacterController extends Controller
 
         // request()->session()->flash('status', 'Successfully removed raid.');
         // return redirect()->back();
+    }
+
+    /**
+     * A custom sync function that allows for duplicate entries. I didn't see a clear way
+     * to allow duplicates using Laravel's provided sync functions for collections. RIP.
+     *
+     * Heavy on the comments because my brain was having a hard time.
+     *
+     * If you want to see a much more succinct version using Laravel's sync() and some basic
+     * PHP array checks, look at this file in commit 8064d3f09cfe52083e6ca5d288deb034251c9322
+     *
+     * @param Collection    $existingItems The items already attached to the character for this item type.
+     * @param Array         $inputItems    The items provided from the HTML form input.
+     * @param string        $itemType      The type of item. (ie. received, recipe, wishlist)
+     * @param App\Character $character     The character to sync the items to.
+     * @param App\Member    $currentMember The member syncing these items.
+     */
+    private function syncItems($existingItems, $inputItems, $itemType, $character, $currentMember) {
+        $toAdd    = [];
+        $toUpdate = [];
+        $toDrop   = [];
+
+        $now = getDateTime();
+
+        /**
+         * Go over all the items we already have in the database.
+         * If any of these are found in the set sent from the input, we're going to update them with new metadata.
+         * If any of these aren't found in the input, they shouldn' exist anymore so we'll drop them.
+         */
+        foreach ($existingItems as $existingItemKey => $existingItem) {
+            $found = false;
+            $i = 0;
+            foreach ($inputItems as $inputItemKey => $inputItem) {
+                if ($inputItem['item_id']) {
+                    $i++;
+                }
+                // We found a match
+                if (!isset($inputItems[$inputItemKey]['resolved']) && $existingItem->item_id == $inputItem['item_id']) {
+                    $found = true;
+                    // Update the metadata
+                    $toUpdate[] = [
+                        'id'    => $existingItem->pivot->id,
+                        'order' => $i,
+                    ];
+                    $existingItem->pivot->order = $i;
+                    // Mark the input item as resolved so that we don't go over it again (we've already resolved what to do with this item)
+                    $inputItems[$inputItemKey]['resolved'] = true;
+                    break;
+                }
+            }
+
+            // We didn't find this item in the input, so we should get rid of it
+            if (!$found) {
+                // We'll drop them all at once later on, rather than executing individual queries
+                $toDrop[] = $existingItem->pivot->id;
+                // Also remove it from the collection... for good measure I guess.
+                $existingItems->forget($existingItemKey);
+            }
+        }
+        // dd($toDrop, $toUpdate);
+        /**
+         * Now we're left with just the items from the form that didn't already exist in the database.
+         * We're going to add these to the database.
+         */
+        $i = 0;
+        foreach ($inputItems as $inputItem) {
+            if ($inputItem['item_id']) {
+                $i++;
+            }
+            if (!isset($inputItem['resolved']) && $inputItem['item_id']) {
+                $toAdd[] = [
+                    'item_id'      => $inputItem['item_id'],
+                    'character_id' => $character->id,
+                    'added_by'     => $currentMember->id,
+                    'type'         => $itemType,
+                    'order'        => $i,
+                    'created_at'   => $now,
+                ];
+            }
+        }
+
+        // Delete...
+        DB::table('character_items')->whereIn('id', $toDrop)->delete();
+
+        // Update...
+        // I'm sure there's some clever way to perform an UPDATE statement with CASE statements... https://stackoverflow.com/questions/3432/multiple-updates-in-mysql
+        // Don't have time for that just to remove a few queries.
+        foreach ($toUpdate as $item) {
+            DB::table('character_items')
+                ->where('id', $item['id'])
+                ->update([
+                    'order'      => $item['order'],
+                    'updated_at' => $now,
+                ]);
+        }
+
+        // Insert...
+        DB::table('character_items')->insert($toAdd);
     }
 }

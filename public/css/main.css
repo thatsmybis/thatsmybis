@@ -170,7 +170,15 @@ ol.no-indent, ul.no-indent {
 }
 
 ul.striped > li:nth-of-type(odd), ol.striped > li:nth-of-type(odd) {
-    background: #ffffff07;
+    background: #ffffff0a;
+}
+
+div.striped:nth-of-type(odd) {
+    background: #ffffff0a;
+}
+
+div.striped-light:nth-of-type(odd) {
+    background: #2b2951;
 }
 
 .cursor-pointer {

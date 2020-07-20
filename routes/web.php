@@ -88,8 +88,8 @@ Route::group(['prefix' => '{guildSlug}'], function () {
         Route::get( '/{username?}', 'ProfileController@showMember')->where('id', '[0-9]+')->name('showMember');
     });
 
-    Route::get( '/raid-input', 'ItemController@massInput')      ->name('item.massInput');
-    Route::post('/raid-input', 'ItemController@submitMassInput')->name('item.massInput.submit');
+    Route::get( '/raid-time', 'ItemController@massInput')      ->name('item.massInput');
+    Route::post('/raid-time', 'ItemController@submitMassInput')->name('item.massInput.submit');
 
     Route::group([
         // 'middleware' => 'acl',

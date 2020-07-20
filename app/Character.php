@@ -89,6 +89,7 @@ class Character extends Model
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->where('character_items.type', 'recipe')
             ->orderBy('order')
+            ->withPivot(['id', 'added_by', 'type', 'order', 'created_at'])
             ->withTimeStamps();
 
         return ($query);
@@ -99,6 +100,7 @@ class Character extends Model
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->where('character_items.type', 'received')
             ->orderBy('order')
+            ->withPivot(['id', 'added_by', 'type', 'order', 'created_at'])
             ->withTimeStamps();
 
         return ($query);
@@ -109,6 +111,7 @@ class Character extends Model
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->where('character_items.type', 'wishlist')
             ->orderBy('order')
+            ->withPivot(['id', 'added_by', 'type', 'order', 'created_at'])
             ->withTimeStamps();
 
         return ($query);

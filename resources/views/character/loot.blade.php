@@ -51,20 +51,19 @@
 
                                 <ul class="js-sortable no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxWishlistItems; $i++)
-                                        <li class="input-item" style="{{ old('wishlist.' . $i) || ($character->wishlist && $character->wishlist->get($i)) ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="wishlist[]" value="{{ old('wishlist.' . $i) ? old('wishlist.' . $i) : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->item_id : '') }}" style="display:none;">
+                                        <li class="input-item {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('wishlist.' . $i . '.item_id') || ($character->wishlist && $character->wishlist->get($i)) ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ old('wishlist.' . $i . '.item_id') ? old('wishlist.' . $i . '.item_id') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->item_id : '') }}" style="display:none;">
+                                            <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ old('wishlist.' . $i . '.label') ? old('wishlist.' . $i . '.label') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('wishlist.' . $i) ? old('wishlist.' . $i) : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}</span>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('wishlist.' . $i . '.label') ? old('wishlist.' . $i . '.label') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}</span>&nbsp;
                                         </li>
+                                        @if ($errors->has('wishlist.' . $i . '.item_id'))
+                                            <li class="'text-danger font-weight-bold'">
+                                                {{ $errors->first('wishlist.' . $i . '.item_id') }}
+                                            </li>
+                                        @endif
                                     @endfor
                                 </ul>
-                                <div>
-                                    @if ($errors->has('wishlist.*'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('wishlist.*') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -89,20 +88,19 @@
 
                                 <ul class="js-sortable no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxReceivedItems; $i++)
-                                        <li class="input-item" style="{{ old('received.' . $i) || ($character->received && $character->received->get($i)) ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="received[]" value="{{ old('received.' . $i) ? old('received.' . $i) : ($character->received && $character->received->get($i) ? $character->received->get($i)->item_id : '') }}" style="display:none;">
+                                        <li class="input-item {{ $errors->has('received.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('received.' . $i . '.item_id') || ($character->received && $character->received->get($i)) ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ old('received.' . $i . '.item_id') ? old('received.' . $i . '.item_id') : ($character->received && $character->received->get($i) ? $character->received->get($i)->item_id : '') }}" style="display:none;">
+                                            <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ old('received.' . $i . '.label') ? old('received.' . $i . '.label') : ($character->received && $character->received->get($i) ? $character->received->get($i)->name : '') }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('received.' . $i) ? old('received.' . $i) : ($character->received && $character->received->get($i) ? $character->received->get($i)->name : '') }}</span>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('received.' . $i . '.label') ? old('received.' . $i . '.label') : ($character->received && $character->received->get($i) ? $character->received->get($i)->name : '') }}</span>&nbsp;
                                         </li>
+                                        @if ($errors->has('received.' . $i . '.item_id'))
+                                            <li class="'text-danger font-weight-bold'">
+                                                {{ $errors->first('received.' . $i . '.item_id') }}
+                                            </li>
+                                        @endif
                                     @endfor
                                 </ul>
-                                <div>
-                                    @if ($errors->has('received.*'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('received.*') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -127,20 +125,19 @@
 
                                 <ul class="js-sortable no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxRecipes; $i++)
-                                        <li class="input-item" style="{{ old('recipes.' . $i) || ($character->recipes && $character->recipes->get($i)) ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="recipes[]" value="{{ old('recipes.' . $i) ? old('recipes.' . $i) : ($character->recipes && $character->recipes->get($i) ? $character->recipes->get($i)->item_id : '') }}" style="display:none;">
+                                        <li class="input-item {{ $errors->has('recipes.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('recipes.' . $i . '.item_id') || ($character->recipes && $character->recipes->get($i)) ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="recipes[{{ $i }}][item_id]" value="{{ old('recipes.' . $i . '.item_id') ? old('recipes.' . $i . '.item_id') : ($character->recipes && $character->recipes->get($i) ? $character->recipes->get($i)->item_id : '') }}" style="display:none;">
+                                            <input type="checkbox" checked name="recipes[{{ $i }}][label]" value="{{ old('recipes.' . $i . '.label') ? old('recipes.' . $i . '.label') : ($character->recipes && $character->recipes->get($i) ? $character->recipes->get($i)->name : '') }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('recipes.' . $i) ? old('recipes.' . $i) : ($character->recipes && $character->recipes->get($i) ? $character->recipes->get($i)->name : '') }}</span>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('recipes.' . $i . '.label') ? old('recipes.' . $i . '.label') : ($character->recipes && $character->recipes->get($i) ? $character->recipes->get($i)->name : '') }}</span>&nbsp;
                                         </li>
+                                        @if ($errors->has('recipes.' . $i . '.item_id'))
+                                            <li class="'text-danger font-weight-bold'">
+                                                {{ $errors->first('recipes.' . $i . '.item_id') }}
+                                            </li>
+                                        @endif
                                     @endfor
                                 </ul>
-                                <div>
-                                    @if ($errors->has('recipes.*'))
-                                        <span class="help-block">
-                                            <strong>{{ $errors->first('recipes.*') }}</strong>
-                                        </span>
-                                    @endif
-                                </div>
                             </div>
                         </div>
                     </div>

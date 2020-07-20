@@ -36,13 +36,15 @@ function addItemAutocompleteHandler() {
                 $(this).nextAll(".js-loading-indicator").hide();
             },
             select: function (event, ui) {
-                console.log(ui);
                 if (ui.item.value) {
                     // Put the value into a tag below the input
                     value = ui.item.value;
                     label = ui.item.label;
 
-                    addTag(this, value, label);
+                    // Only allow numbers (an item ID must be found)
+                    if (Number.isInteger(value)) {
+                        addTag(this, value, label);
+                    }
 
                     // prevent autocomplete from autofilling this.val()
                     return false;
@@ -72,6 +74,9 @@ function addItemListSelectHandler() {
         // Add the item.
             $nextInput.parent("li").show();
             $nextInput.val(value);
+            // Populate the hidden input's sibling that holds onto the label
+            // Useful if submission fails on the server side and the server wants to send the label back
+            $nextInput.siblings("input[value='']").first().val(label);
             $nextInput.siblings(".js-input-label").html(" " + label);
             $(this).val("");
             $(this).find("option:first").text("—");
@@ -105,7 +110,10 @@ function addTagInputHandlers() {
             value = this.value ;
             label = value;
 
-            addTag(this, value, label);
+            // Only allow numbers (an item ID must be found)
+            if (Number.isInteger(value)) {
+                addTag(this, value, label);
+            }
         }
     });
 
@@ -115,7 +123,11 @@ function addTagInputHandlers() {
             // Put the value into a tag below the input
             value = this.value;
             label = value;
-            addTag(this, value, label);
+
+            // Only allow numbers (an item ID must be found)
+            if (Number.isInteger(value)) {
+                addTag(this, value, label);
+            }
         }
     });
 }
@@ -125,7 +137,8 @@ function addItemRemoveHandler() {
      * Remove the chosen tag from the list that appears below the select.
      */
     $(".js-input-button").click(function () {
-        $(this).prev("input").val("");
+        $(this).prev("input").val(""); // Clear the label input
+        $(this).prev("input").prev("input").val(""); // Clear the value input
         $(this).parent("li").hide();
 
         // Remove the select's warning message.
@@ -150,11 +163,15 @@ function addItemRemoveHandler() {
  */
 function addTag($this, value, label) {
     if ($this && value && label) {
+        // Find the hidden input
         $nextInput = $($this).next().next("ul").children("li").children("input[value='']").first();
 
         if ($nextInput.val() == "") {
             $nextInput.parent("li").show();
             $nextInput.val(value);
+            // Populate the hidden input's sibling that holds onto the label
+            // Useful if submission fails on the server side and the server wants to send the label back
+            $nextInput.siblings("input[value='']").first().val(label);
             $nextInput.siblings(".js-input-label").html(" " + label);
             $($this).val("");
             return true;

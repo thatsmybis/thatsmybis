@@ -137,7 +137,7 @@ function createTable() {
                 "data"   : "public_note",
                 "render" : function (data, type, row) {
                     return (row.public_note ? nl2br(row.public_note) : '—')
-                        + (row.officer_note ? '<br><small class="font-weight-bold">Officer\'s Note</small><br><em>' + nl2br(row.officer_note) + '</em>' : '');
+                        + (row.officer_note ? '<br><small class="font-weight-bold"><u>Officer\'s Note</u></small><br><em>' + nl2br(row.officer_note) + '</em>' : '');
                 },
                 "orderable" : false,
                 "visible" : true,
