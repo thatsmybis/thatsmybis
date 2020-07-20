@@ -28,8 +28,8 @@
     <div class="row bg-lighter pt-2 mb-3">
         <div class="col-12 pr-0 pl-0">
             <h2 class="font-weight-bold pl-2">Wishlisted</h2>
-            @if ($characters->count() > 0)
-                @include('partials/characterDatatable')
+            @if ($wishlistCharacters->count() > 0)
+                @include('partials/characterDatatable', ['characters' => $wishlistCharacters])
             @else
                 <ul>
                     <li class="lead no-bullet">
@@ -43,8 +43,8 @@
         <div class="col-12 mt-3 mb-3">
             <h2>Have It</h2>
             <ul class="list-inline striped">
-                @if ($item->receivedCharacters->count() > 0)
-                    @foreach ($item->receivedCharacters as $character)
+                @if ($receivedCharacters->count() > 0)
+                    @foreach ($receivedCharacters as $character)
                         <li class="list-inline-item font-weight-bold rounded pt-2 pl-3 pb-3 pr-3">
                             @include('character/partials/header', ['showDetails' => false, 'showEdit' => false, 'showOwner' => false])
                         </li>
@@ -63,7 +63,7 @@
 
 @section('scripts')
 <script>
-    var characters = {!! $characters->makeVisible('officer_note')->toJson() !!};
+    var characters = {!! $wishlistCharacters->makeVisible('officer_note')->toJson() !!};
     var guild = {!! $guild->toJson() !!};
     var raids = {!! $raids->toJson() !!};
     {{-- TODO PERMISSIONS FOR NOTE --}}

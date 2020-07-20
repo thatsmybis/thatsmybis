@@ -152,3 +152,7 @@ Permissions are initially loaded in a kinda janky manner, but it works for now. 
 Roles are loaded from the Discord server.
 
 There are some variables in the .env file that expect certain roles to exist. Add their ID's to this config before running the 'Sync Roles' command on the Roles page.
+
+## Laraval Custom Configurations
+
+- `ONLY_FULL_GROUP_BY` for SQL has been disabled in `database.php` by changing `strict` to `false`. This is to allow for writing simpler `GROUP BY` clauses in queries. If you can fix the `group by` complications caused by `strict`, you're welcome to turn it back on. I tried. It required mutilating my `SELECT` statements, and even then I couldn't get it to 100% work the way it did before 5.7 when it just assumed `ANY_VALUE()` on non-aggregated columns (even when I told it to use `ANY_VALUE()`). Good luck. ([SO thread](https://stackoverflow.com/questions/34115174/error-related-to-only-full-group-by-when-executing-a-query-in-mysql))

@@ -50,20 +50,23 @@ class Item extends Model
     public function characters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->withTimeStamps()
-            ->withPivot('type');
+            ->withPivot('type')
+            ->orderBy('characters.name');
     }
 
     public function receivedCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
+            ->where(['type' => self::TYPE_RECEIVED])
             ->withTimeStamps()
             ->withPivot('type')
-            ->whereIn('type', [self::TYPE_RECEIVED, self::TYPE_WISHLIST]);
+            ->orderBy('characters.name');
     }
 
-    public function wishlistedCharacters() {
+    public function wishlistCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
+            ->where(['type' => self::TYPE_WISHLIST])
             ->withTimeStamps()
             ->withPivot('type')
-            ->where(['type' => self::TYPE_WISHLIST]);
+            ->orderBy('characters.name');
     }
 }

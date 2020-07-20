@@ -53,20 +53,33 @@ class ItemController extends Controller
             ->firstOrFail();
 
         $item = Item::where('item_id', $id)->with([
-                'characters' => function ($query) use($guild) {
-                    return $query->where([
-                            'characters.guild_id' => $guild->id,
-                            'character_items.type' => 'wishlist',
-                        ])
-                    // ->whereNull('characters.id')
-                        ->with([
-                            'raid',
-                            'received',
-                            'recipes',
-                            'wishlist',
-                        ]);
-                },
-            ])->firstOrFail();
+            'receivedCharacters' => function ($query) use($guild) {
+                return $query
+                    ->where([
+                        'characters.guild_id' => $guild->id,
+                    ])
+                    ->groupBy(['character_items.character_id'])
+                    ->with([
+                        'raid',
+                        'received',
+                        'recipes',
+                        'wishlist',
+                    ]);
+            },
+            'wishlistCharacters' => function ($query) use($guild) {
+                return $query
+                    ->where([
+                        'characters.guild_id' => $guild->id,
+                    ])
+                    ->groupBy(['character_items.character_id'])
+                    ->with([
+                        'raid',
+                        'received',
+                        'recipes',
+                        'wishlist',
+                    ]);
+            },
+        ])->firstOrFail();
 
         // TODO: Permissions to view this guild's item entry..
         // I did a check here, not sure if it's what I'll use as a standard.
@@ -83,11 +96,12 @@ class ItemController extends Controller
         }
 
         return view('item.show', [
-            'characters' => $item->characters,
-            'guild'      => $guild,
-            'item'       => $item,
-            'raids'      => $guild->raids,
-            'itemJson'   => self::getItemJson($item->item_id),
+            'guild'              => $guild,
+            'item'               => $item,
+            'raids'              => $guild->raids,
+            'receivedCharacters' => $item->receivedCharacters,
+            'wishlistCharacters' => $item->wishlistCharacters,
+            'itemJson'           => self::getItemJson($item->item_id),
         ]);
     }
 

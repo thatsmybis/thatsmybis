@@ -52,7 +52,7 @@ class Guild extends Model
 
     // Excludes hidden and removed characters
     public function allCharacters() {
-        return $this->hasMany(Character::class)->orderBy('username');
+        return $this->hasMany(Character::class)->orderBy('name');
     }
 
     // Includes banned members

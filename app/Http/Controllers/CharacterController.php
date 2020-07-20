@@ -506,7 +506,7 @@ class CharacterController extends Controller
                 $existingItems->forget($existingItemKey);
             }
         }
-        // dd($toDrop, $toUpdate);
+
         /**
          * Now we're left with just the items from the form that didn't already exist in the database.
          * We're going to add these to the database.
@@ -524,6 +524,7 @@ class CharacterController extends Controller
                     'type'         => $itemType,
                     'order'        => $i,
                     'created_at'   => $now,
+                    'updated_at'   => $now,
                 ];
             }
         }
