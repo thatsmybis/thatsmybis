@@ -18,10 +18,18 @@
     </li>
     @if ($character->raid || $character->class)
         <li>
-            <span class="font-weight-bold">
-                {{ $character->raid ? $character->raid->name : '' }}
-            </span>
-            {{ $character->class ? $character->class : '' }}
+            <ul class="list-inline">
+                @if ($character->raid)
+                    <li class="list-inline-item font-weight-bold">
+                        <span class="tag d-inline" style="border-color:{{ $character->raid->getColor() }};"><span class="role-circle" style="background-color:{{ $character->raid->getColor() }}"></span>
+                            {{ $character->raid->name }}
+                        </span>
+                    </li>
+                @endif
+                <li class="list-inline-item">
+                    {{ $character->class ? $character->class : '' }}
+                </li>
+            </ul>
         </li>
     @endif
 

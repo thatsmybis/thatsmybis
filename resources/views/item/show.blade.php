@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row m-3 mb-4">
+    <div class="row mr-1 ml-1 mt-3 mb-3 pt-3 pb-3 bg-lightest rounded">
         <div class="col-12">
             <h1 class="font-weight-bold">
                 @if ($itemJson)
@@ -25,9 +25,12 @@
             </div>
         @endif
     </div>
-    <div class="row bg-lighter pt-2 mb-3">
-        <div class="col-12 pr-0 pl-0">
+
+    <div class="row pt-2 mb-3 bg-lightest rounded">
+        <div class="col-12">
             <h2 class="font-weight-bold pl-2">Wishlisted</h2>
+        </div>
+        <div class="col-12 pr-0 pl-0">
             @if ($wishlistCharacters->count() > 0)
                 @include('partials/characterDatatable', ['characters' => $wishlistCharacters])
             @else
@@ -39,13 +42,14 @@
             @endif
         </div>
     </div>
-    <div class="row">
-        <div class="col-12 mt-3 mb-3">
+
+    <div class="row mr-1 ml-1 mb-3 pt-1  bg-lightest rounded">
+        <div class="col-12">
             <h2>Have It</h2>
             <ul class="list-inline striped">
                 @if ($receivedCharacters->count() > 0)
                     @foreach ($receivedCharacters as $character)
-                        <li class="list-inline-item font-weight-bold rounded pt-2 pl-3 pb-3 pr-3">
+                        <li class="list-inline-item rounded pt-2 pl-3 pb-3 pr-3">
                             @include('character/partials/header', ['showDetails' => false, 'showEdit' => false, 'showOwner' => false])
                         </li>
                     @endforeach

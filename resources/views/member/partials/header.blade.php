@@ -18,10 +18,16 @@
     </li>
     <li>
         @if (isset($guild) && $guild)
-            &lt;{{ $guild->name }}&gt;
+            <span class="text-success">
+                &lt;{{ $guild->name }}&gt;
+            </span>
         @endif
 
-        {{ isset($discordUsername) && $discordUsername ? $discordUsername : '' }}
+        @if (isset($discordUsername) && $discordUsername)
+            <span class="text-discord">
+                <span class="fab fa-fw fa-discord"></span> {{ $discordUsername }}
+            </span>
+        @endif
     </li>
     @if (isset($user->roles) && $user->roles->count() > 0)
         <li class="mt-2">

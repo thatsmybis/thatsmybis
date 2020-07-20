@@ -3,9 +3,9 @@
 
 @section('content')
 
-<div class="container-fluid">
+<div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
+        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             @if (count($errors) > 0)
                 <ul class="alert alert-danger">
                     @foreach ($errors->all() as $error)

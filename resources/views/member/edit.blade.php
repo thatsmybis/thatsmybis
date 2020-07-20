@@ -2,13 +2,12 @@
 @section('title', "Edit Profile - " . config('app.name'))
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
+        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row mb-4">
-                <div class="col-12">
+                <div class="col-12 pt-2 bg-lightest rounded">
                     @include('member/partials/header', ['discordUsername' => $user->discord_username, 'showEdit' => false, 'titlePrefix' => 'Edit '])
-                    <hr class="light">
                 </div>
             </div>
 
@@ -26,7 +25,7 @@
 
                 <input hidden name="id" value="{{ $member->id }}" />
 
-                <div class="row mb-4">
+                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
                     <div class="col-sm-6 col-12">
                         <div class="form-group">
                             <label for="username" class="font-weight-bold">
@@ -43,8 +42,8 @@
                     </div>
                 </div>
 
-                <div class="row mb-4">
-                    <div class="col-12">
+                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
+                    <div class="col-12 mb-4">
                         <div class="form-group">
                             <label for="public_note" class="font-weight-bold">
                                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
@@ -54,11 +53,9 @@
                             <textarea data-max-length="2000" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control">{{ old('public_note') ? old('public_note') : ($member ? $member->public_note : '') }}</textarea>
                         </div>
                     </div>
-                </div>
 
-                <!-- TODO: Permissions for who can see/set this -->
-                <div class="row mb-4">
-                    <div class="col-12">
+                    <!-- TODO: Permissions for who can see/set this -->
+                    <div class="col-12 mb-4">
                         <div class="form-group">
                             <label for="officer_note" class="font-weight-bold">
                                 <span class="text-muted fas fa-fw fa-shield"></span>
@@ -68,10 +65,8 @@
                             <textarea data-max-length="2000" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
                         </div>
                     </div>
-                </div>
 
-                <!-- TODO: Permissions for who can see/set this -->
-                <div class="row mb-4">
+                    <!-- TODO: Permissions for who can see/set this -->
                     <div class="col-12">
                         <div class="form-group">
                             <label for="personal_note" class="font-weight-bold">

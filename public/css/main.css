@@ -11,8 +11,8 @@ body {
     max-width: 1200px;
 }
 
-.bg-lighter {
-    background-color: #201f3c;
+.bg-light {
+    background-color: #201f3c !important;
 }
 
 .bg-lightest {
@@ -125,6 +125,10 @@ body {
 
 .text-muted {
     color: #8e959b !important;
+}
+
+.text-discord {
+    color: #7289DA;
 }
 
 .font-weight-medium {

@@ -2,9 +2,9 @@
 @section('title', "Loot for " . $character->name . " - " . config('app.name'))
 
 @section('content')
-<div class="container-fluid">
+<div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-xl-6 offset-xl-3 col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12">
+        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row">
                 <div class="col-12">
                     @include('character/partials/header', ['showEdit' => false, 'titleSuffix' => "'s loot"])
