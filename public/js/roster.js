@@ -113,6 +113,7 @@ function createTable() {
                 "visible" : false,
             },
             {
+                /* a cut feature */
                 "title"  : "Roles",
                 "data"   : "user.roles",
                 "render" : function (data, type, row) {

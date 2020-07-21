@@ -6,14 +6,16 @@
     <div class="row">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row">
-                <div class="col-12 mb-3">
-                    <h4>Raids</h4>
+                <div class="col-12 pt-2 mb-2">
+                    <h1 class="font-wight-medium">
+                        Raids
+                    </h1>
                 </div>
-                <div class="col-12">
+                <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     @if ($guild->raids->count() > 0)
-                        <ol class="no-bullet">
+                        <ol class="no-bullet no-indent striped">
                             @foreach ($guild->raids as $raid)
-                                <li>
+                                <li class="p-3 mb-3 rounded">
                                     <span class="role-circle" style="{{ $raid->role ? 'background-color:' . $raid->role->getColor() : '' }}" title="{{ $raid->role ? $raid->role->getColor() : ''}}"></span>
                                     <span title="{{ $raid->slug }}">{{ $raid->name }}</span>
                                     <small class="text-muted">

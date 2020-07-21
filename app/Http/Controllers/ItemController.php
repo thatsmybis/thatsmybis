@@ -26,13 +26,27 @@ class ItemController extends Controller
      */
     public function massInput($guildSlug)
     {
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'characters',
+            'members' => function ($query) {
+                    return $query->where('members.user_id', Auth::id());
+                },
+            'raids',
+            'raids.role'
+            ])->firstOrFail();
 
-        $guild = Guild::where('slug', $guildSlug)->with(['characters', 'raids', 'raids.role'])->firstOrFail();
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        // TODO: Keep this style of permissions check?
+        if (!$currentMember) {
+            abort(404, 'Not a member of that guild.');
+        }
 
         // TODO: Validate user can view this guild's raids
 
         return view('item.massInput', [
-            'guild' => $guild,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
         ]);
     }
 
@@ -113,6 +127,13 @@ class ItemController extends Controller
             'characters',
             ])->firstOrFail();
 
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        // TODO: Keep this style of permissions check?
+        if (!$currentMember) {
+            abort(404, 'Not a member of that guild.');
+        }
+
         $validationRules =  [
             'items.*.id'            => 'nullable|integer|exists:items,item_id',
             'items.*.character_id'  => 'nullable|integer|exists:characters,id',
@@ -120,13 +141,6 @@ class ItemController extends Controller
         ];
 
         $this->validate(request(), $validationRules);
-
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        // TODO: Keep this style of permissions check?
-        if (!$currentMember) {
-            abort(404, 'You\'re not a member of that guild.');
-        }
 
         // TODO: permissions for mass assigning items in this guild?
 

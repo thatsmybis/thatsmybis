@@ -6,13 +6,15 @@
     <div class="row">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row mb-3">
-                <div class="col-12 pt-2 bg-lightest rounded">
-                    @if ($character)
+                @if ($character)
+                    <div class="col-12 pt-2 bg-lightest rounded">
                         @include('character/partials/header', ['headerSize' => 1, 'showEdit' => false, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
-                    @else
-                        <h1>Create Character</h1>
-                    @endif
-                </div>
+                    </div>
+                @else
+                    <div class="col-12 pt-2 mb-2">
+                        <h1 class="font-wight-medium ">Create a Character</h1>
+                    </div>
+                @endif
             </div>
 
             @if (count($errors) > 0)

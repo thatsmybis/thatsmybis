@@ -10,20 +10,37 @@
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.roster']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('guild.roster', ['guildSlug' => $guild->slug]) }}">Roster</a>
                 </li>
+
+                <!-- Why hello there... yes. Yes, there is a 'news' page. No, I don't quite think it's ready for the mainstream yet.
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.news']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('guild.news', ['guildSlug' => $guild->slug]) }}">News</a>
                 </li>
+                -->
+
                 @if ($guild->calendar_link)
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.calendar']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('guild.calendar', ['guildSlug' => $guild->slug]) }}">Calendar</a>
                     </li>
                 @endif
+
+                <!-- Why yes, there's a section for hosting resources such as guides... but it's just not time yet!
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['contentIndex', 'showContent']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('contentIndex', ['guildSlug' => $guild->slug]) }}">Resources</a>
                 </li>
-                <li class="nav-item {{ in_array(Route::currentRouteName(), ['dashboard']) ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('showMember', ['guildSlug' => $guild->slug, 'id' => Auth::user()->id, 'username' => Auth::user()->username]) }}">My Profile</a>
-                </li>
+                -->
+
+                @if (isset($currentMember) && $currentMember)
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['member.edit', 'member.show']) && $currentMember->id == (isset($member) ? $member->id : null) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]) }}">My Profile</a>
+                    </li>
+                @endif
+
+                @if (true) <!-- TODO PERMISSIONS -->
+                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['item.massInput']) ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('item.massInput', ['guildSlug' => $guild->slug]) }}">Raid Time!</a>
+                    </li>
+                @endif
+
                 @if (true) <!-- TODO permissions -->
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

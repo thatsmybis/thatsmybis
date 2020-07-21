@@ -80,13 +80,7 @@ Route::group(['prefix' => '{guildSlug}'], function () {
     Route::get( '/resources/{slug}', 'ContentController@show') ->name('showContent');
     Route::get( '/posts/{slug}',     'ContentController@show') ->name('showPost');
 
-    Route::get( '/roster',          'CharacterController@roster')        ->name('guild.roster');
-
-    // TODO: Probably remove this
-    Route::group(['prefix' => '{id}'], function () {
-        Route::get( '/',            'ProfileController@findById')->where('id', '[0-9]+')->name('findUserById');
-        Route::get( '/{username?}', 'ProfileController@showMember')->where('id', '[0-9]+')->name('showMember');
-    });
+    Route::get( '/roster',          'DashboardController@roster')->name('guild.roster');
 
     Route::get( '/raid-time', 'ItemController@massInput')      ->name('item.massInput');
     Route::post('/raid-time', 'ItemController@submitMassInput')->name('item.massInput.submit');

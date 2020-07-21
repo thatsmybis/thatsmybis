@@ -1,18 +1,20 @@
 @extends('layouts.app')
-@section('title',  $guild->name . ' Roster - ' . config('app.name'))
+@section('title',  'Roster - ' . config('app.name'))
 
 @section('content')
 
 <div class="container-fluid">
-    <div class="row pt-2 mb-3 bg-lightest rounded">
+    <div class="row pt-2 mb-3">
         <div class="col-12 mt-2 mb-2">
-            <h1 class="font-weight-bold">
-                <span class="text-success">
+            <h2 class="font-weight-medium">
+                <span class="text-uncommon">
                     &lt;{{ $guild->name }}&gt;
                 </span>
                 Roster
-            </h1>
+            </h2>
         </div>
+    </div>
+    <div class="row pt-2 mb-3 bg-light rounded">
         <div class="col-12 pr-0 pl-0">
             @include('partials/characterDatatable')
         </div>

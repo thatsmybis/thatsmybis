@@ -29,10 +29,16 @@ class MemberController extends Controller
     {
         $guild = Guild::where('slug', $guildSlug)->with([
             'members' => function ($query) use($username) {
-                    return $query->where('members.username', $username);
+                    return $query->where('members.username', $username)
+                        ->orWhere('members.user_id', Auth::id());
                         // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
                 },
             ])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+        if (!$currentMember) {
+            abort(404, 'Not a member of that guild.');
+        }
 
         // TODO: Validate user can view this character in this guild
 
@@ -47,9 +53,10 @@ class MemberController extends Controller
         // TODO: Validate user can edit this character in this guild
 
         return view('member.edit', [
-            'guild'  => $guild,
-            'member' => $member,
-            'user'   => $user,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'member'        => $member,
+            'user'          => $user,
         ]);
     }
 
@@ -63,6 +70,7 @@ class MemberController extends Controller
         $guild = Guild::where('slug', $guildSlug)->with([
             'members' => function ($query) use($username) {
                     return $query->where('members.username', $username)
+                        ->orWhere('members.user_id', Auth::id())
                         ->with([
                         'characters',
                         'characters.recipes',
@@ -70,6 +78,11 @@ class MemberController extends Controller
                     ]);
                 },
             ])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+        if (!$currentMember) {
+            abort(404, 'Not a member of that guild.');
+        }
 
         // TODO: Validate user can view this character in this guild
 
@@ -89,11 +102,12 @@ class MemberController extends Controller
         }
 
         return view('member.show', [
-            'characters' => $member->characters,
-            'guild'      => $guild,
-            'member'     => $member,
-            'recipes'    => $recipes,
-            'user'       => $user,
+            'characters'    => $member->characters,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'member'        => $member,
+            'recipes'       => $recipes,
+            'user'          => $user,
         ]);
     }
 
@@ -172,25 +186,25 @@ class MemberController extends Controller
      * @return
      */
     public function remove($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->firstOrFail();
+        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
 
-        // TODO: Validate user can update this character in this guild
+        // // TODO: Validate user can update this character in this guild
 
-        $validationRules = [
-            'id' => 'required|integer|exists:raids,id',
-        ];
+        // $validationRules = [
+        //     'id' => 'required|integer|exists:raids,id',
+        // ];
 
-        $validationMessages = [];
+        // $validationMessages = [];
 
-        $this->validate(request(), $validationRules, $validationMessages);
+        // $this->validate(request(), $validationRules, $validationMessages);
 
-        $guild = Guild::where('slug', $guildSlug)->firstOrFail();
+        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
 
-        $raid = Raid::where(['id' => request()->input('id'), 'guild_id' => $guild->id])->firstOrFail();
+        // $raid = Raid::where(['id' => request()->input('id'), 'guild_id' => $guild->id])->firstOrFail();
 
-        $raid->delete();
+        // $raid->delete();
 
-        request()->session()->flash('status', 'Successfully removed raid.');
-        return redirect()->back();
+        // request()->session()->flash('status', 'Successfully removed raid.');
+        // return redirect()->back();
     }
 }

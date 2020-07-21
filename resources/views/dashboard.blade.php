@@ -7,21 +7,36 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-12 text-center mb-5">
-            <h2 class="mt-5">
-                Welcome, <strong>{{ Auth::user()->discord_username }}</strong>
+        <div class="col-12 text-center mt-5 mb-5">
+            <h2 class="">
+                Welcome, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
             </h2>
         </div>
 
-        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mb-5">
+        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mt-5 mb-5">
             @if ($user->members->count() > 0)
-                <h4 class="mb-3">Your guilds</h4>
-                <ul class="list-group">
+                <h3 class="font-weight-normal mb-3">
+                    <span class="fas fa-fw fa-users text-muted"></span>
+                    Your Guilds
+                </h3>
+                <ul class="no-bullet no-indent">
                     @foreach ($user->members as $member)
-                        <li class="list-group-item text-4 mb-2">
-                            <a href="{{ route('guild.news', ['guildSlug' => $member->guild->slug]) }}" class="text-success font-weight-bold">
-                                &lt;{{ $member->guild->name }}&gt;
-                            </a>
+                        <li class="bg-lightest mt-3 mb-3 p-3">
+                            <h2>
+                                <a href="{{ route('guild.roster', ['guildSlug' => $member->guild->slug]) }}" class="text-uncommon font-weight-medium">
+                                    &lt;{{ $member->guild->name }}&gt;
+                                </a>
+                            </h2>
+                            <ul class="list-inline">
+                                @foreach ($member->characters as $character)
+                                    <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
+                                        <a href="{{route('character.show', ['guildSlug' => $member->guild->slug, 'name' => $character->name]) }}"
+                                            class="text-{{ $character->class ? strtolower($character->class) : '' }}">
+                                            {{ $character->name }}
+                                        </a>
+                                    </li>
+                                @endforeach
+                            </ul>
                         </li>
                     @endforeach
                 </ul>
@@ -40,7 +55,7 @@
         <div class="col-12 text-center mb-5">
             <div class="mt-5 mb-5">
                 <p class="font-weight-normal pt-3 text-4">
-                    If you like, you can also
+                    Are you a Guild Master?
                 </p>
                 <a class="btn btn-light" href="{{ route('guild.showRegister') }}" title="Register a Guild" rel="nofollow">
                     <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> Register a Guild

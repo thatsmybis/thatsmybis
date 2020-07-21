@@ -46,55 +46,6 @@ class CharacterController extends Controller
     }
 
     /**
-     * Show the roster page.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function roster($guildSlug)
-    {
-        $guild = Guild::where('slug', $guildSlug)->with(['raids'])->firstOrFail();
-
-        // TODO: Validate user can view this roster
-
-        $characterFields = [
-            'characters.id',
-            'characters.member_id',
-            'characters.guild_id',
-            'characters.name',
-            'characters.level',
-            'characters.race',
-            'characters.class',
-            'characters.spec',
-            'characters.profession_1',
-            'characters.profession_2',
-            'characters.rank',
-            'characters.rank_goal',
-            'characters.raid_id',
-            'characters.public_note',
-            'characters.hidden_at',
-            'characters.removed_at',
-        ];
-
-        // TODO permissions for showing officer note
-        if (true) {
-            $characterFields[] = 'characters.officer_note';
-        }
-
-        $characters = Character::select($characterFields)
-            ->where('characters.guild_id', $guild->id)
-            ->whereNull('characters.hidden_at')
-            ->with(['member', 'member.user.roles', 'raid', 'recipes', 'received', 'wishlist'])
-            ->orderBy('characters.name')
-            ->get();
-
-        return view('roster', [
-            'characters' => $characters,
-            'guild'      => $guild,
-            'raids'      => $guild->raids,
-        ]);
-    }
-
-    /**
      * Create a character
      * @return
      */
@@ -111,14 +62,13 @@ class CharacterController extends Controller
             ])->firstOrFail();
 
         $currentMember  = $guild->members->where('user_id', Auth::id())->first();
-        $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
-
-        if (!$selectedMember) {
-            abort(403, 'Guild member not found.');
-        }
 
         if ($guild->characters->count() > 0) {
             abort(403, 'Name taken.');
+        }
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
         }
 
         // TODO: Validate user has permissions to create a character in this guild
@@ -134,7 +84,14 @@ class CharacterController extends Controller
         // TODO: If has permissions, allow to create characters tied to other members
         // TODO: also if they can edit officer note
         if (true) {
-            $createValues['member_id']    = $selectedMember->id;
+            $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
+            // if (!$selectedMember) {
+            //     abort(403, 'Guild member not found.');
+            // }
+
+            if ($selectedMember) {
+                $createValues['member_id']    = $selectedMember->id;
+            }
             $createValues['officer_note'] = request()->input('officer_note');
         } else {
         // Assign to current user's member object for this guild
@@ -154,17 +111,22 @@ class CharacterController extends Controller
         $createValues['public_note']   = request()->input('public_note');
 
         // User is editing their own character
-        if ($createValues['member_id'] == $currentMember->id) {
+        if (isset($createValues['member_id']) && $createValues['member_id'] == $currentMember->id) {
             $createValues['personal_note'] = request()->input('personal_note');
             $createValues['order']         = request()->input('order');
         }
 
         $createValues['guild_id']      = $guild->id;
 
-        Character::create($createValues);
+        $character = Character::create($createValues);
 
         request()->session()->flash('status', 'Successfully created ' . $createValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
-        return redirect()->route('guild.news', ['guildSlug' => $guild->slug]);
+
+        return view('character.show', [
+            'character'     => $character,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+        ]);
     }
 
     /**
@@ -176,6 +138,12 @@ class CharacterController extends Controller
     {
         $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
 
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
+        }
+
         $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->first();
 
         if (!$character) {
@@ -185,8 +153,9 @@ class CharacterController extends Controller
         // TODO: Validate user can edit this character in this guild
 
         return view('character.edit', [
-            'guild'     => $guild,
-            'character' => $character,
+            'character'     => $character,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
         ]);
     }
 
@@ -197,7 +166,18 @@ class CharacterController extends Controller
      */
     public function loot($guildSlug, $id)
     {
-        $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                return $query->where('members.user_id', Auth::id());
+            }])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
+        }
+
+        // TODO: Permissions
 
         $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with(['member', 'received', 'recipes', 'wishlist'])->first();
 
@@ -208,8 +188,9 @@ class CharacterController extends Controller
         // TODO: Validate user can edit this character's loot in this guild
 
         return view('character.loot', [
-            'guild'     => $guild,
-            'character' => $character,
+            'character'     => $character,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
 
             'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
             'maxRecipes'       => self::MAX_RECIPES,
@@ -224,7 +205,16 @@ class CharacterController extends Controller
      */
     public function show($guildSlug, $id)
     {
-        $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                return $query->where('members.user_id', Auth::id());
+            }])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
+        }
 
         $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->first();
 
@@ -235,8 +225,9 @@ class CharacterController extends Controller
         // TODO: Validate user can view this character in this guild
 
         return view('character.show', [
-            'guild'     => $guild,
-            'character' => $character,
+            'character'     => $character,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
         ]);
     }
 
@@ -249,11 +240,18 @@ class CharacterController extends Controller
     {
         $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
 
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(404, 'Not a member of that guild.');
+        }
+
         // TODO: Validate user can create a character in this guild
 
         return view('character.edit', [
-            'guild'     => $guild,
-            'character' => null,
+            'character'     => null,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
         ]);
     }
 
@@ -288,10 +286,6 @@ class CharacterController extends Controller
             abort(404, 'Character not found.');
         }
 
-        if (!$selectedMember) {
-            abort(404, 'Guild member not found.');
-        }
-
         // Can't create a duplicate name
         if ($sameNameCharacter && ($currentCharacter->id != $sameNameCharacter->id)) {
             abort(403, 'Name taken.');
@@ -311,6 +305,10 @@ class CharacterController extends Controller
         // TODO: If has permissions, allow to change who owns character or modify someone else's character
         // TODO: Also if they can edit officer note
         if (true) {
+            // if (!$selectedMember) {
+            //     abort(404, 'Guild member not found.');
+            // }
+
             $updateValues['member_id']    = ($selectedMember ? $selectedMember->id : null);
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if (!$selectedMember) {
@@ -342,7 +340,8 @@ class CharacterController extends Controller
         $currentCharacter->update($updateValues);
 
         request()->session()->flash('status', 'Successfully updated ' . $updateValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
-        return redirect()->route('guild.news', ['guildSlug' => $guild->slug]);
+
+        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $currentCharacter->name]);
     }
 
     /**

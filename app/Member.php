@@ -35,7 +35,7 @@ class Member extends Model
 
     public function characters()
     {
-        return $this->hasMany(Character::class)->orderBy('order');
+        return $this->hasMany(Character::class)->orderBy('name');
     }
 
     public function content()

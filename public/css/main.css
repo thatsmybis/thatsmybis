@@ -12,11 +12,15 @@ body {
 }
 
 .bg-light {
-    background-color: #201f3c !important;
+    background-color: #201f3c !important; /* Eh... have to override bootstrap class apparently */
 }
 
 .bg-lightest {
     background-color: #242344;
+}
+
+.bg-dark {
+    background-color: #161523 !important;
 }
 
 .discord-link {
@@ -67,7 +71,7 @@ body {
     color: #fff468;
 }
 .text-shaman {
-    color: #2359ff;
+    color: #4a76ff; /* originally #2359ff */
 }
 .text-warlock {
     color: #9382c9;

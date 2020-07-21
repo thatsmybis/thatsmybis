@@ -55,12 +55,16 @@
         @endif
     @endif
 
-    @if ((!isset($showOwner) && isset($character->member) && $character->member) || (isset($showOwner) && $showOwner && isset($character->member) && $character->member))
+    @if (!isset($showOwner) || (isset($showOwner) && $showOwner))
         <li>
             <small>
-                <a href="{{route('member.show', ['guildSlug' => $guild->slug, 'username' => $character->member->username]) }}" class="">
-                    {{ $character->member->username }}'s character
-                </a>
+                @if (isset($character->member) && $character->member)
+                    <a href="{{route('member.show', ['guildSlug' => $guild->slug, 'username' => $character->member->username]) }}" class="">
+                        {{ $character->member->username }}'s character
+                    </a>
+                @else
+                    Unclaimed
+                @endif
             </small>
         </li>
     @endif

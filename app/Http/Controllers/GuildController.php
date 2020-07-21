@@ -118,11 +118,23 @@ class GuildController extends Controller
      */
     public function settings($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with(['raids', 'roles'])->firstOrFail();
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                return $query->where('members.user_id', Auth::id());
+            },
+            'raids',
+            'roles',
+        ])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
+        }
 
         // TODO: Validate can view this page for this guild
 
-        return view('guild.settings', ['guild' => $guild]);
+        return view('guild.settings', ['currentMember' => $currentMember, 'guild' => $guild]);
     }
 
     /**
@@ -132,7 +144,19 @@ class GuildController extends Controller
      */
     public function submitSettings($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with(['roles', 'raids'])->firstOrFail();
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                return $query->where('members.user_id', Auth::id());
+            },
+            'raids',
+            'roles',
+        ])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
+        }
 
         // TODO: Validate user can update settings for this guild
 
@@ -152,6 +176,6 @@ class GuildController extends Controller
         $guild->update($updateValues);
 
         request()->session()->flash('status', 'Guild settings updated.');
-        return redirect()->route('guild.news', ['guildSlug' => $guild->slug]);
+        return redirect()->route('guild.roster', ['guildSlug' => $guild->slug]);
     }
 }

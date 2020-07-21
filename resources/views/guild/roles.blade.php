@@ -6,14 +6,16 @@
     <div class="row">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row">
-                <div class="col-12 mb-3">
-                    <h4>Roles</h4>
+                <div class="col-12 pt-2 mb-2">
+                    <h1 class="font-wight-medium">
+                        Roles
+                    </h1>
                 </div>
 
                 <div class="col-12">
-                    <ol class="no-bullet">
+                    <ol class="no-bullet no-indent striped">
                         @foreach ($guild->roles->sortByDesc('position') as $role)
-                            <li title="pos:{{ $role->position}} id:{{ $role->id }} disc-id:{{ $role->discord_id }} slug:{{ $role->slug}}">
+                            <li class="p-1 pl-3 rounded" title="pos:{{ $role->position}} id:{{ $role->id }} disc-id:{{ $role->discord_id }} slug:{{ $role->slug}}">
                                 <span class="role-circle" style="background-color:{{ $role->getColor() }}"></span>
                                 {{ $role->name }}
                                 <small class="text-muted">
@@ -31,7 +33,7 @@
                     </a>
                     <br>
                     <small class="text-muted">
-                        Fetches roles from the Discord server and adds them to the list of usable roles on the website.
+                        Fetches roles from the Discord server and adds them to the list of usable roles on the website
                     </small>
                 </div>
             </div>
