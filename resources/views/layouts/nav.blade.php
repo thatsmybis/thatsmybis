@@ -12,7 +12,7 @@
                 </li>
 
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.item.list']) ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('guild.roster', ['guildSlug' => $guild->slug]) }}">Items</a>
+                    <a class="nav-link" href="{{ route('guild.item.list', ['guildSlug' => $guild->slug]) }}">Items</a>
                 </li>
 
                 <!-- Why hello there... yes. Yes, there is a 'news' page. No, I don't quite think it's ready for the mainstream yet.

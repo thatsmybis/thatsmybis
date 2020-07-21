@@ -24,9 +24,60 @@ class ItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showWithGuild($guildSlug)
+    public function listWithGuild($guildSlug) // TODO: Pass in a raid instance name to filter items by
     {
+        $guild = Guild::where('slug', $guildSlug)
+            ->with(['members' => function ($query) {
+                    return $query->where('members.id', Auth::id());
+                },
+                'raids',
+            ])
+            ->firstOrFail();
+/*
+        $items = Item::where('item_id', '*')->with([ // TODO: Where raid matches
+            'wishlistCharacters' => function ($query) use($guild) {
+                return $query
+                    ->where([
+                        'characters.guild_id' => $guild->id,
+                    ])
+                    ->groupBy(['character_items.character_id']);
+            },
+        ])->get();
+*/
+        $instanceId = 3;
 
+        $items = Item::
+            leftJoin('character_items', function ($join) {
+                $join->on('character_items.item_id', '=', 'items.item_id')
+                    ->where('character_items.type', '=', Item::TYPE_WISHLIST);
+            })
+            ->leftJoin('characters', function ($join) use ($guild) {
+                $join->on('characters.id', 'character_items.character_id')
+                    ->where('characters.guild_id', $guild->id)
+                    ->groupBy('characters.id');
+            })
+            // ->join('item_item_sources', function ($join) {
+            //     $join->on('item_item_sources.item_id', 'items.item_id');
+            // })
+            // ->join('item_sources', function ($join) {
+            //     $join->on('item_sources.id', 'item_item_sources.item_source_id');
+            // })
+            // ->where('item_sources.instance_id', $instanceId)
+            ->get();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
+        }
+dd($items);
+        // TODO: Permissions to view this guild's items
+
+        return view('item.list', [
+            'guild'              => $guild,
+            'items'              => $items,
+            'raids'              => $guild->raids,
+        ]);
     }
 
     /**

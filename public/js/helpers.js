@@ -37,6 +37,32 @@ function addInputAntiSubmitHandler(selector = ":text") {
     });
 }
 
+// Turn a url into a slug url!
+function slug(string) {
+    let theChosenCharacter = "-";
+
+    const a = "àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôœṕŕßśșțùúüûǘẃẍÿź·/_,:;";
+    const b = "aaaaaaaaceeeeghiiiimnnnoooooprssstuuuuuwxyz------";
+    const p = new RegExp(a.split("").join("|"), "g");
+
+    let slug =  string.toString().toLowerCase()
+        .replace(/\s+/g, "-")                    // Replace spaces with -
+        .replace(p, c => b.charAt(a.indexOf(c))) // Replace special characters
+        .replace(/&/g, "")                       // Remove ampersands (can optionally change to replace with '-and-)
+        .replace(/[^\w\-]+/g, "")                // Remove all non-word characters
+        .replace(/\-\-+/g, "-")                  // Replace multiple - with single -
+        .replace(/^-+/, "")                      // Trim - from start of text
+        .replace(/-+$/, "")                      // Trim - from end of text
+        .replace(/-+/g, theChosenCharacter)      // Replace - with The Chosen Character
+        .substr(0, 50);                          // Limit length to 50 characters
+
+    if (slug) {
+        return slug;
+    } else {
+        return theChosenCharacter;
+    }
+}
+
 /**
  * Tracks any timestamps on the page and prints how long since/until each timestamp's date.
  *

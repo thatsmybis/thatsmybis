@@ -5,6 +5,7 @@ namespace App;
 use App\{
     Character,
     Content,
+    Item,
     Member,
     Raid,
     Role,
@@ -67,6 +68,13 @@ class Guild extends Model
 
     public function content() {
         return $this->hasMany(Content::class)->whereNull('removed_at')->orderByDesc('created_at');
+    }
+
+    public function items() {
+        return $this->belongsToMany(Item::class, 'guild_items', 'guild_id', 'item_id')
+            ->withTimeStamps()
+            ->withPivot(['created_by', 'updated_by', 'note', 'priority'])
+            ->orderBy('items.name');
     }
 
     // Excludes banned members

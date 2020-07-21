@@ -16,7 +16,7 @@ function splitByLine($string) {
 }
 
 function slug($string) {
-    $slug = substr(Illuminate\Support\Str::slug($string, '-'), 0, 100);
+    $slug = substr(Illuminate\Support\Str::slug($string, '-'), 0, 50);
     if ($slug) {
         return $slug;
     } else {

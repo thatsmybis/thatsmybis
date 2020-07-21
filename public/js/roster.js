@@ -51,7 +51,7 @@ function createTable() {
                         <li>
                             <a href="/${ guild.slug }/character/${row.name}"
                                 class="text-4 text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold"
-                                title="${ row.member ? row.member.username : 'unknown member' }">
+                                title="${ row.member ? row.member.username : '' }">
                                 ${ row.name }
                             </a>
                         </li>
@@ -113,7 +113,7 @@ function createTable() {
                 "visible" : false,
             },
             {
-                /* a cut feature */
+                /* this feature has been cut */
                 "title"  : "Roles",
                 "data"   : "user.roles",
                 "render" : function (data, type, row) {
@@ -228,7 +228,7 @@ function getItemList(data, type, characterId) {
         items += `
             <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
-                <a href="/${ guild.slug }/item/${item.item_id}/${item.name}"
+                <a href="/${ guild.slug }/item/${ item.item_id }/${ slug(item.name) }"
                     data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"
                     data-wowhead="item=${ item.item_id }?domain=classic">
                     ${ item.name }

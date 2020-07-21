@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Character, Guild};
+use App\{Character, Guild, ItemSource};
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
@@ -15,7 +15,6 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
-        'item_id',
         'name',
         'description',
         'note',
@@ -52,6 +51,16 @@ class Item extends Model
             ->withTimeStamps()
             ->withPivot('type')
             ->orderBy('characters.name');
+    }
+
+    public function guilds() {
+        return $this->belongsToMany(Guild::class, 'guild_items', 'item_id', 'guild_id')
+            ->withTimeStamps()
+            ->withPivot(['created_by', 'updated_by', 'note', 'priority']);
+    }
+
+    public function itemSources() {
+        return $this->belongsToMany(ItemSource::class, 'item_item_sources', 'item_id', 'item_source_id');
     }
 
     public function receivedCharacters() {
