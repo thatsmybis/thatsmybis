@@ -12,7 +12,7 @@
                 <li><a href="#getting-started">How do I get started?</a></li>
                 <li><a href="#role-whitelisting">What does 'Discord users with these roles are allowed to join' mean?</a></li>
                 <li><a href="#discord-requirement">Do I <em>need</em> to use Discord?</a></li>
-                <li><a href="#google-calendar">Google Calendar?</a></li>
+                <!--<li><a href="#google-calendar">Google Calendar?</a></li>-->
                 <li><a href="#name-origin">Where'd you get your name?</a></li>
                 <li><a href="#feature-request">Can you add feature XYZ?</a></li>
                 <li><a href="#how-to-help">I'd like to help out</a></li>
@@ -60,6 +60,7 @@
 
             <hr class="light">
 
+            <!--
             <h2 id="google-calendar">Google Calendar?</h2>
             <p>
                 You can create a Google Calendar and share a link to its public URL in the guild settings page. {{ env('APP_NAME') }} will then give your guild members access to a page that shows this calendar.
@@ -78,6 +79,7 @@
             </p>
 
             <hr class="light">
+            -->
 
             <h2 id="name-origin">Where'd you get your name?</h2>
             <p>

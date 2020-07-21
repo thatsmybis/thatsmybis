@@ -61,11 +61,11 @@ Route::group(['prefix' => '{guildSlug}'], function () {
         Route::post('/remove',      'CharacterController@remove')    ->name('character.remove');
         Route::post('/update',      'CharacterController@update')    ->name('character.update');
         Route::post('/loot/update', 'CharacterController@updateLoot')->name('character.updateLoot');
-        Route::post('/',            'CharacterController@create')    ->name('character.create');
         Route::get( '/{name}',      'CharacterController@show')      ->name('character.show');
     });
 
     Route::group(['prefix' => 'item'], function () {
+        Route::get( '/list',              'ItemController@listWithGuild')->name('guild.item.list');
         Route::get( '/{item_id}/{slug?}', 'ItemController@showWithGuild')->name('guild.item.show');
     });
 

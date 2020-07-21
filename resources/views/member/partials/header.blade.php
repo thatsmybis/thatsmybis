@@ -18,7 +18,7 @@
     </li>
     <li>
         @if (isset($guild) && $guild)
-            <span class="text-success">
+            <span class="text-uncommon">
                 &lt;{{ $guild->name }}&gt;
             </span>
         @endif

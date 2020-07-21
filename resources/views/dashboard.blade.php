@@ -36,6 +36,12 @@
                                         </a>
                                     </li>
                                 @endforeach
+                                <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
+                                    <a href="{{ route('character.create', ['guildSlug' => $member->guild->slug]) }}">
+                                        <span class="fas fa-plus"></span>
+                                        create character
+                                    </a>
+                                </li>
                             </ul>
                         </li>
                     @endforeach

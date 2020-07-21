@@ -143,6 +143,16 @@ body {
     white-space: nowrap;
 }
 
+.item-tooltip {
+    max-width: 680px;
+}
+
+.class-icon {
+    border-radius: 50%;
+    vertical-align: bottom;
+    max-height: 32px;
+}
+
 /* Nice well contrasted backgrounds with the dark theme */
 .dropdown-menu {
     background-color: #2a2947;

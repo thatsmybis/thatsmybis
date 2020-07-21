@@ -1,6 +1,11 @@
 <ul class="no-bullet no-indent">
     <li>
         <ul class="list-inline">
+            @if (isset($showIcon) && $showIcon && $character->class)
+                <li class="list-inline-item">
+                    <img src="{{ asset('images/' . $character->class . '.jpg') }}" class="class-icon" />
+                </li>
+            @endif
             <li class="list-inline-item">
                 <h{{ isset($headerSize) && $headerSize ? $headerSize : '2' }} class="font-weight-bold">
                     {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-{{ $character->class ? strtolower($character->class) : '' }}">{{ $character->name }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}

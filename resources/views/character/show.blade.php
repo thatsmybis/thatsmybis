@@ -7,7 +7,7 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
-                    @include('character/partials/header', ['headerSize' => 1, 'showEdit' => true])
+                    @include('character/partials/header', ['headerSize' => 1, 'showEdit' => true, 'showIcon' => false])
                 </div>
             </div>
 
@@ -35,7 +35,9 @@
                             @endforeach
                         </ol>
                     @else
-                        —
+                        <div class="pl-4">
+                            —
+                        </div>
                     @endif
                 </div>
 
@@ -55,7 +57,9 @@
                             @endforeach
                         </ol>
                     @else
-                        —
+                        <div class="pl-4">
+                            —
+                        </div>
                     @endif
                 </div>
 
@@ -65,7 +69,7 @@
                         Recipes
                     </span>
                 </div>
-                <div class="col-12">
+                <div class="col-12 pb-3">
                     @if ($character->recipes->count() > 0)
                         <ol class="">
                             @foreach ($character->recipes as $item)
@@ -75,7 +79,9 @@
                             @endforeach
                         </ol>
                     @else
-                        —
+                        <div class="pl-4">
+                            —
+                        </div>
                     @endif
                 </div>
             </div>
@@ -87,7 +93,7 @@
                         Public Note
                     </span>
                 </div>
-                <div class="col-12 mb-3">
+                <div class="col-12 mb-3 pl-4">
                     {{ $character->public_note ? $character->public_note : '—' }}
                 </div>
 
@@ -97,7 +103,7 @@
                         Officer Note
                     </span>
                 </div>
-                <div class="col-12 mb-3">
+                <div class="col-12 mb-3 pl-4">
                     {{ $character->officer_note ? $character->officer_note : '—' }}
                 </div>
 
@@ -107,7 +113,7 @@
                         Personal Note
                     </span>
                 </div>
-                <div class="col-12">
+                <div class="col-12 pl-4">
                     {{ $character->personal_note ? $character->personal_note : '—' }}
                 </div>
             </div>

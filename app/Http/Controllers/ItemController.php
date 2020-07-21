@@ -20,6 +20,16 @@ class ItemController extends Controller
     }
 
     /**
+     * List the items
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showWithGuild($guildSlug)
+    {
+
+    }
+
+    /**
      * Show the mass input page
      *
      * @return \Illuminate\Http\Response

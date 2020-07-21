@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark">
+<nav class="navbar navbar-expand-md navbar-dark">
     <a class="navbar-brand" href="{{ route('home') }}"><span class="text-legendary font-weight-bold">{{ isset($guild) && $guild->name ? $guild->name : env('APP_NAME') }}</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -11,18 +11,23 @@
                     <a class="nav-link" href="{{ route('guild.roster', ['guildSlug' => $guild->slug]) }}">Roster</a>
                 </li>
 
+                <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.item.list']) ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('guild.roster', ['guildSlug' => $guild->slug]) }}">Items</a>
+                </li>
+
                 <!-- Why hello there... yes. Yes, there is a 'news' page. No, I don't quite think it's ready for the mainstream yet.
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.news']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('guild.news', ['guildSlug' => $guild->slug]) }}">News</a>
                 </li>
                 -->
 
+                <!-- Yep, there's support for a calendar...
                 @if ($guild->calendar_link)
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.calendar']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('guild.calendar', ['guildSlug' => $guild->slug]) }}">Calendar</a>
                     </li>
                 @endif
-
+                -->
                 <!-- Why yes, there's a section for hosting resources such as guides... but it's just not time yet!
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['contentIndex', 'showContent']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('contentIndex', ['guildSlug' => $guild->slug]) }}">Resources</a>

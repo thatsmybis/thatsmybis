@@ -124,14 +124,6 @@
         showNext(this);
     });
 
-    $(".js-show-next").change(function() {
-        showNext(this);
-    }).change();
-
-    $(".js-show-next").keyup(function() {
-        showNext(this);
-    });
-
     // If the current element has a value, show it and the next element that is hidden because it is empty
     function showNext(currentElement) {
         if ($(currentElement).val() != "") {

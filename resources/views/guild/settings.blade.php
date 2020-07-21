@@ -60,6 +60,7 @@
                             </div>
                         </div>
 
+                        <!-- Yep, it's here and it works
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
@@ -81,6 +82,7 @@
                                 </div>
                             </div>
                         </div>
+                        -->
 
                     </div>
                 </div>

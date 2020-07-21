@@ -11,7 +11,7 @@
                 </div>
             </div>
 
-            <div class="row mb-3 pt-3 pb-1 bg-light rounded">
+            <div class="row mb-3 pt-3 bg-light rounded">
                 <div class="col-12 mb-2">
                     <span class="font-weight-bold">
                         <span class="fas fa-fw fa-user text-muted"></span>
@@ -19,17 +19,19 @@
                     </span>
                 </div>
                 <div class="col-12">
-                    @if ($characters->count() > 0)
-                        <ol class="striped no-bullet no-indent">
-                            @foreach ($characters as $character)
-                                <li class="pt-2 pl-3 pb-3 pr-3 rounded">
-                                    @include('character/partials/header', ['character' => $character, 'showEdit' => true, 'showOwner' => false])
-                                </li>
-                            @endforeach
-                        </ol>
-                    @else
-                        —
-                    @endif
+                    <ol class="striped no-bullet no-indent">
+                        @foreach ($characters as $character)
+                            <li class="pt-2 pl-3 pb-3 pr-3 rounded">
+                                @include('character/partials/header', ['character' => $character, 'showEdit' => true, 'showIcon' => false, 'showOwner' => false])
+                            </li>
+                        @endforeach
+                        <li class="pt-3 pl-3 pb-3 pr-3 rounded">
+                            <a href="{{ route('character.create', ['guildSlug' => $guild->slug]) }}" class="font-weight-medium">
+                                <span class="fas fa-plus"></span>
+                                create character
+                            </a>
+                        </li>
+                    </ol>
                 </div>
             </div>
 
