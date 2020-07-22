@@ -35,44 +35,46 @@
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <a class="toggle-column-default cursor-pointer" href="">Defaults</a>
+            <span class="toggle-column-default text-link cursor-pointer" href="">
+                Defaults
+            </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <a class="toggle-column cursor-pointer font-weight-light" data-column="1" href="">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="1" href="">
                 <span class="text-muted fas fa-fw fa-sack"></span>
                 Loot Received
-            </a>
+            </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <a class="toggle-column cursor-pointer font-weight-light" data-column="2" href="">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2" href="">
                 <span class="text-muted fas fa-fw fa-scroll-old"></span>
                 Wishlist
-            </a>
+            </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <a class="toggle-column cursor-pointer font-weight-light" data-column="3" href="">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
                 <span class="text-muted fas fa-fw fa-book"></span>
                 Recipes
-            </a>
+            </span>
         </li>
         <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <a class="toggle-column cursor-pointer font-weight-light" data-column="4" href="">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4" href="">
                 <span class="text-muted fab fa-fw fa-discord"></span>
                 Roles
-            </a>
+            </span>
         </li>
         -->
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <a class="toggle-column cursor-pointer font-weight-light" data-column="5" href="">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="5" href="">
                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
                 Notes
-            </a>
+            </span>
         </li>
     </ul>
 </div>

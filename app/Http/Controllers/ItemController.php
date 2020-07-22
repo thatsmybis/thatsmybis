@@ -33,6 +33,12 @@ class ItemController extends Controller
                 'raids',
             ])
             ->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
+        }
 /*
         $items = Item::where('item_id', '*')->with([ // TODO: Where raid matches
             'wishlistCharacters' => function ($query) use($guild) {
@@ -76,18 +82,15 @@ class ItemController extends Controller
             ->with('wishlistCharacters')
             ->get();
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
 
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
 
         // TODO: Permissions to view this guild's items
 
         return view('item.list', [
-            'guild'              => $guild,
-            'items'              => $items,
-            'raids'              => $guild->raids,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'items'         => $items,
+            'raids'         => $guild->raids,
         ]);
     }
 

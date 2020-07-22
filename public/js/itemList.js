@@ -3,8 +3,9 @@ var table = null;
 var colSource = 0;
 var colName = 1;
 var colWishlist = 2;
-var colNotes = 3;
-var colPriority = 4;
+var colPriority = 3;
+var colNotes = 4;
+
 
 // For keeping track of the loot's source
 var lastSource = null;
@@ -41,7 +42,7 @@ function createTable(lastSource) {
         "data"      : items,
         "columns"   : [
             {
-                "title"  : '<span class="fas fa-fw fa-sword"></span> Boss',
+                "title"  : '<span class="fas fa-fw fa-skull-crossbones"></span> Boss',
                 "data"   : "",
                 "render" : function (data, type, row) {
                     if (row.source_name) {
@@ -63,7 +64,7 @@ function createTable(lastSource) {
                 "className" : "text-right",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-sword"></span> Item',
+                "title"  : '<span class="fas fa-fw fa-treasure-chest text-gold"></span> Item',
                 "data"   : "",
                 "render" : function (data, type, row) {
                     return `
