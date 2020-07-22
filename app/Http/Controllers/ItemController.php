@@ -44,25 +44,36 @@ class ItemController extends Controller
             },
         ])->get();
 */
-        $instanceId = 3;
+        $instanceId = 6;
 
-        $items = Item::
-            leftJoin('character_items', function ($join) {
-                $join->on('character_items.item_id', '=', 'items.item_id')
-                    ->where('character_items.type', '=', Item::TYPE_WISHLIST);
-            })
-            ->leftJoin('characters', function ($join) use ($guild) {
-                $join->on('characters.id', 'character_items.character_id')
-                    ->where('characters.guild_id', $guild->id)
-                    ->groupBy('characters.id');
-            })
-            // ->join('item_item_sources', function ($join) {
-            //     $join->on('item_item_sources.item_id', 'items.item_id');
+        $items = Item::select([
+                'items.item_id',
+                'items.name',
+                'item_sources.name AS source_name',
+                'guild_items.note AS guild_note',
+                'guild_items.priority AS guild_priority',
+            ])
+            // ->join('character_items', function ($join) {
+            //     $join->on('character_items.item_id', '=', 'items.item_id')
+            //         ->where('character_items.type', '=', Item::TYPE_WISHLIST);
             // })
-            // ->join('item_sources', function ($join) {
-            //     $join->on('item_sources.id', 'item_item_sources.item_source_id');
+            // ->leftJoin('characters', function ($join) use ($guild) {
+            //     $join->on('characters.id', 'character_items.character_id')
+            //         ->where('characters.guild_id', $guild->id)
+            //         ->groupBy('characters.id');
             // })
-            // ->where('item_sources.instance_id', $instanceId)
+            ->join('item_item_sources', function ($join) {
+                $join->on('item_item_sources.item_id', 'items.item_id');
+            })
+            ->join('item_sources', function ($join) {
+                $join->on('item_sources.id', 'item_item_sources.item_source_id');
+            })
+            ->leftJoin('guild_items', function ($join) use ($guild) {
+                $join->on('guild_items.item_id', 'items.item_id')
+                    ->where('guild_items.guild_id', $guild->id);
+            })
+            ->where('item_sources.instance_id', $instanceId)
+            ->with('wishlistCharacters')
             ->get();
 
         $currentMember = $guild->members->where('user_id', Auth::id())->first();
@@ -70,7 +81,7 @@ class ItemController extends Controller
         if (!$currentMember) {
             abort(403, 'Not a member of that guild.');
         }
-dd($items);
+
         // TODO: Permissions to view this guild's items
 
         return view('item.list', [
@@ -127,6 +138,12 @@ dd($items);
             ])
             ->firstOrFail();
 
+        $currentMember = $guild->members->first();
+
+        if (!$currentMember) {
+            abort(403, "You're not part of that guild.");
+        }
+
         $item = Item::where('item_id', $id)->with([
             'receivedCharacters' => function ($query) use($guild) {
                 return $query
@@ -160,9 +177,7 @@ dd($items);
         // I did a check here, not sure if it's what I'll use as a standard.
         // Leave it if it's fine, replace it if it's not.
 
-        if (!$guild->members->first()) {
-            abort(403, "You're not part of that guild.");
-        }
+
 
         $itemSlug = slug($item->name);
 
@@ -171,6 +186,7 @@ dd($items);
         }
 
         return view('item.show', [
+            'currentMember'      => $currentMember,
             'guild'              => $guild,
             'item'               => $item,
             'raids'              => $guild->raids,

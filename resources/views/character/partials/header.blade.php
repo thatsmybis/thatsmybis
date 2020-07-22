@@ -19,6 +19,14 @@
                     </a>
                 </li>
             @endif
+            @if (isset($showEditLoot) && $showEditLoot)
+                <li class="list-inline-item">
+                    <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">
+                        <span class="fas fa-fw fa-sack"></span>
+                        loot
+                    </a>
+                </li>
+            @endif
         </ul>
     </li>
     @if ($character->raid || $character->class)

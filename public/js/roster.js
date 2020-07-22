@@ -49,8 +49,8 @@ function createTable() {
                     return `
                     <ul class="no-bullet no-indent mb-2">
                         <li>
-                            <a href="/${ guild.slug }/character/${row.name}"
-                                class="text-4 text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold"
+                            <a href="/${ guild.slug }/character/${ row.name }"
+                                class="text-4 text-${ row.class ? row.class.toLowerCase() : ''} font-weight-bold"
                                 title="${ row.member ? row.member.username : '' }">
                                 ${ row.name }
                             </a>
@@ -84,6 +84,7 @@ function createTable() {
                     </ul>`;
                 },
                 "visible" : true,
+                "width"   : "250px",
             },
             {
                 "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Loot Received',
@@ -93,6 +94,7 @@ function createTable() {
                 },
                 "orderable" : false,
                 "visible" : true,
+                "width"   : "280px",
             },
             {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
@@ -102,6 +104,7 @@ function createTable() {
                 },
                 "orderable" : false,
                 "visible" : true,
+                "width"   : "280px",
             },
             {
                 "title"  : '<span class="text-gold fas fa-fw fa-book"></span> Recipes',
@@ -111,6 +114,7 @@ function createTable() {
                 },
                 "orderable" : false,
                 "visible" : false,
+                "width"   : "280px",
             },
             {
                 /* this feature has been cut */

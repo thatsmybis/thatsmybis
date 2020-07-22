@@ -22,7 +22,7 @@
                     <ol class="striped no-bullet no-indent">
                         @foreach ($characters as $character)
                             <li class="pt-2 pl-3 pb-3 pr-3 rounded">
-                                @include('character/partials/header', ['character' => $character, 'showEdit' => true, 'showIcon' => false, 'showOwner' => false])
+                                @include('character/partials/header', ['character' => $character, 'showEdit' => true, 'showEditLoot' => true, 'showIcon' => false, 'showOwner' => false])
                             </li>
                         @endforeach
                         <li class="pt-3 pl-3 pb-3 pr-3 rounded">

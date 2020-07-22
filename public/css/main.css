@@ -188,11 +188,11 @@ ol.no-indent, ul.no-indent {
 }
 
 ul.striped > li:nth-of-type(odd), ol.striped > li:nth-of-type(odd) {
-    background: #ffffff0a;
+    background: #ffffff0c;
 }
 
 div.striped:nth-of-type(odd) {
-    background: #ffffff0a;
+    background: #ffffff0c;
 }
 
 div.striped-light:nth-of-type(odd) {
@@ -292,6 +292,20 @@ button.close:hover {
     color: #c6c6c6;
 }
 
+.table td {
+    border-top: none;
+}
+
+.table tr.top-border td {
+    border-top: 2px solid #4b498c;
+    box-shadow: inset 0px 10px 10px -10px #4b498c;
+}
+
+.table th {
+    border-top: 1px solid #4b498c;
+    box-shadow: inset 0px 10px 10px -10px #4b498c;
+}
+
 table.dataTable.stripe tbody tr.odd,
 table.dataTable tbody tr.odd {
     background: transparent;
@@ -299,7 +313,7 @@ table.dataTable tbody tr.odd {
 
 table.dataTable.stripe tbody tr.even,
 table.dataTable tbody tr.even {
-    background: #ffffff07;
+    background: #ffffff0c;
 }
 
 .table-hover tbody tr:hover {

@@ -1,9 +1,13 @@
 var table = null;
 
-var colName = 0;
-var colWishlist = 1;
-var colNotes = 2;
-var colPriority = 3;
+var colSource = 0;
+var colName = 1;
+var colWishlist = 2;
+var colNotes = 3;
+var colPriority = 4;
+
+// For keeping track of the loot's source
+var lastSource = null;
 
 $(document).ready( function () {
    table = createTable();
@@ -31,32 +35,47 @@ $(document).ready( function () {
     });
 });
 
-function createTable() {
+function createTable(lastSource) {
     memberTable = $("#itemTable").DataTable({
         "autoWidth" : false,
         "data"      : items,
         "columns"   : [
             {
+                "title"  : '<span class="fas fa-fw fa-sword"></span> Boss',
+                "data"   : "",
+                "render" : function (data, type, row) {
+                    if (row.source_name) {
+                        thisSource = row.source_name;
+                    }
+
+                    return `
+                    <ul class="no-bullet no-indent mb-2">
+                        ${ row.source_name ? `
+                            <li>
+                                <span class="font-weight-bold">
+                                    ${ row.source_name }
+                                </span>
+                            </li>` : `` }
+                    </ul>`;
+                },
+                "visible"   : true,
+                "width"     : "165px",
+                "className" : "text-right",
+            },
+            {
                 "title"  : '<span class="fas fa-fw fa-sword"></span> Item',
-                "data"   : "item",
+                "data"   : "",
                 "render" : function (data, type, row) {
                     return `
                     <ul class="no-bullet no-indent mb-2">
                         <li>
-                            <a href="/${ guild.slug }/item/${ item.item_id }/${ slug(item.name) }"
-                                class="text-4 font-weight-bold"
-                                data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"
-                                data-wowhead="item=${ item.item_id }?domain=classic">
-                                ${ item.name }
+                            <a href="/${ guild.slug }/item/${ row.item_id }/${ slug(row.name) }"
+                                class=""
+                                data-wowhead-link="https://classic.wowhead.com/item=${ row.item_id }"
+                                data-wowhead="item=${ row.item_id }?domain=classic">
+                                ${ row.name }
                             </a>
                         </li>
-
-                        ${ row.itemSource ? `
-                            <li>
-                                <span class="font-weight-bold">
-                                    ${ row.itemSource.name }
-                                </span>
-                            </li>` : `` }
 
                         ${ row.is_bis || row.is_bis_horde || row.is_bis_alliance ? `
                             <li>
@@ -69,30 +88,32 @@ function createTable() {
                     </ul>`;
                 },
                 "visible" : true,
+                "width"   : "310px",
             },
             {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
-                "data"   : "wishlist",
+                "data"   : "wishlist_characters",
                 "render" : function (data, type, row) {
                     return data.length ? getCharacterList(data, 'wishlist', row.id) : '—';
+                },
+                "orderable" : false,
+                "visible" : true,
+                "width"   : "200px",
+            },
+            {
+                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Priority',
+                "data"   : "guild_priority",
+                "render" : function (data, type, row) {
+                    return (data ? nl2br(data) : '—');
                 },
                 "orderable" : false,
                 "visible" : true,
             },
             {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
-                "data"   : "note",
+                "data"   : "guild_note",
                 "render" : function (data, type, row) {
-                    return (row.pivot.note ? nl2br(row.pivot.note) : '—');
-                },
-                "orderable" : false,
-                "visible" : true,
-            },
-            {
-                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Priority',
-                "data"   : "priority",
-                "render" : function (data, type, row) {
-                    return (row.pivot.priority ? nl2br(row.pivot.priority) : '—');
+                    return (data ? nl2br(data) : '—');
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -100,7 +121,7 @@ function createTable() {
         ],
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
         "paging" : false,
-        initComplete: function () {
+        "initComplete": function () {
             let sortColumns = [colWishlist];
             this.api().columns().every(function (index) {
                 var column = this;
@@ -134,10 +155,21 @@ function createTable() {
                         });
                     }
                 }
-            } );
+            });
             makeWowheadLinks();
             addItemAutocompleteHandler();
             addTagInputHandlers();
+        },
+        "createdRow" : function (row, data, dataIndex) {
+            if (dataIndex == 0 || lastSource == null) {
+                lastSource = data.source_name;
+            }
+
+            console.log(data.source_name, lastSource);
+            if (data.source_name != lastSource) {
+                $(row).addClass("top-border");
+                lastSource = data.source_name;
+            }
         }
     });
     return memberTable;
@@ -145,11 +177,11 @@ function createTable() {
 
 // Gets an HTML list of characters
 function getCharacterList(data, type, itemId) {
-    let characters = `<ol class="no-indent js-item-list mb-2" data-type="${ type }" data-id="${ itemId }">`;
+    let characters = `<ul type="a" class="no-indent js-item-list mb-2" data-type="${ type }" data-id="${ itemId }">`;
     let initialLimit = 4;
 
-    $.each(data, function (index, item) {
-        let clipItem = false;
+    $.each(data, function (index, character) {
+        let clipCharacter = false;
 
         if (index >= initialLimit) {
             clipCharacter = true;
@@ -163,8 +195,8 @@ function getCharacterList(data, type, itemId) {
                 style="${ clipCharacter ? 'display:none;' : '' }">
 
                 <a href="/${ guild.slug }/character/${ character.name }"
-                    class="text-4 text-${row.class ? row.class.toLowerCase() : ''} font-weight-bold">
-                    ${ item.name }
+                    class="text-${ character.class ? character.class.toLowerCase() : ''}">
+                    ${ character.name }
                 </a>
             </li>`;
     });
@@ -173,6 +205,6 @@ function getCharacterList(data, type, itemId) {
         characters += `<li class="js-show-clipped-items font-weight-light no-bullet" style="display:none;"><small>show less…</small></li>`;
     }
 
-    characters += `</ol>`;
+    characters += `</ul>`;
     return characters;
 }

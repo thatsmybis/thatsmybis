@@ -21,21 +21,21 @@
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <a class="toggle-column cursor-pointer font-weight-light" data-column="1" href="">
+            <a class="toggle-column cursor-pointer font-weight-light" data-column="2" href="">
                 <span class="text-muted fas fa-fw fa-scroll-old"></span>
                 Wishlist
             </a>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <a class="toggle-column cursor-pointer font-weight-light" data-column="2" href="">
+            <a class="toggle-column cursor-pointer font-weight-light" data-column="3" href="">
                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
                 Notes
             </a>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <a class="toggle-column cursor-pointer font-weight-light" data-column="3" href="">
+            <a class="toggle-column cursor-pointer font-weight-light" data-column="4" href="">
                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
                 Priority
             </a>
