@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Guild, Item};
+use App\{Guild, Instance, Item};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -24,7 +24,7 @@ class ItemController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function listWithGuild($guildSlug) // TODO: Pass in a raid instance name to filter items by
+    public function listWithGuild($guildSlug, $instanceSlug)
     {
         $guild = Guild::where('slug', $guildSlug)
             ->with(['members' => function ($query) {
@@ -39,18 +39,8 @@ class ItemController extends Controller
         if (!$currentMember) {
             abort(403, 'Not a member of that guild.');
         }
-/*
-        $items = Item::where('item_id', '*')->with([ // TODO: Where raid matches
-            'wishlistCharacters' => function ($query) use($guild) {
-                return $query
-                    ->where([
-                        'characters.guild_id' => $guild->id,
-                    ])
-                    ->groupBy(['character_items.character_id']);
-            },
-        ])->get();
-*/
-        $instanceId = 6;
+
+        $instance = Instance::where('slug', $instanceSlug)->firstOrFail();
 
         $items = Item::select([
                 'items.item_id',
@@ -59,15 +49,6 @@ class ItemController extends Controller
                 'guild_items.note AS guild_note',
                 'guild_items.priority AS guild_priority',
             ])
-            // ->join('character_items', function ($join) {
-            //     $join->on('character_items.item_id', '=', 'items.item_id')
-            //         ->where('character_items.type', '=', Item::TYPE_WISHLIST);
-            // })
-            // ->leftJoin('characters', function ($join) use ($guild) {
-            //     $join->on('characters.id', 'character_items.character_id')
-            //         ->where('characters.guild_id', $guild->id)
-            //         ->groupBy('characters.id');
-            // })
             ->join('item_item_sources', function ($join) {
                 $join->on('item_item_sources.item_id', 'items.item_id');
             })
@@ -78,8 +59,13 @@ class ItemController extends Controller
                 $join->on('guild_items.item_id', 'items.item_id')
                     ->where('guild_items.guild_id', $guild->id);
             })
-            ->where('item_sources.instance_id', $instanceId)
-            ->with('wishlistCharacters')
+            ->where('item_sources.instance_id', $instance->id)
+            ->orderBy('item_sources.order')
+            ->orderBy('items.name')
+            ->with(['wishlistCharacters' => function ($query) use($guild) {
+                return $query->groupBy(['character_items.character_id']);
+                }
+            ])
             ->get();
 
 
@@ -89,6 +75,7 @@ class ItemController extends Controller
         return view('item.list', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'instance'      => $instance,
             'items'         => $items,
             'raids'         => $guild->raids,
         ]);

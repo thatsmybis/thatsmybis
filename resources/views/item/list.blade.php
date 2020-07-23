@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title',  'Items - ' . config('app.name'))
+@section('title',  $instance->name . ' - ' . config('app.name'))
 
 @section('content')
 

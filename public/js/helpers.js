@@ -295,5 +295,14 @@ function rgbToHex (rgb) {
 // Updates any wowhead links to have a tooltip, plus other modifications.
 // The configuration for this is defined in the HTML header (app.blade.php)
 function makeWowheadLinks() {
-    $WowheadPower.refreshLinks();
+    // Sometimes the error "WH.getDataEnv is not a function" appears
+    // This *seems* to be due to trying to refresh the links before they've finished their inital
+    // setup, but I'm not sure.
+    // If the error goes through (and I don't see anything we can do to fix/handle it), it breaks the
+    // javascript on the rest of our page. try/catch is a cheap fix.
+    try {
+        $WowheadPower.refreshLinks();
+    } catch (error) {
+        console.log("Failed to refresh wowhead links.");
+    }
 }

@@ -132,6 +132,7 @@
     <script src="https://wow.zamimg.com/widgets/power.js"></script>
     <style>.q4 {color: #ab4aed !important;}/* override wowhead epic color to be higher contrast */</style>
 
+    <script src="{{ asset('/js/wowheadPower.js') }}"></script>
     <script src="{{ asset('/js/helpers.js') }}"></script>
     <script src="{{ asset('/js/main.js') }}"></script>
     <script src="{{ asset('/js/autocomplete.js') }}"></script>

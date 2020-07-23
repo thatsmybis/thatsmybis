@@ -99,7 +99,7 @@ body {
     color: #fff468 !important;
 }
 .text-shaman-important {
-    color: #2359ff !important;
+    color: #4a76ff !important;
 }
 .text-warlock-important {
     color: #9382c9 !important;
@@ -295,15 +295,18 @@ button.close:hover {
     color: #c6c6c6;
 }
 
+/* get rid of the default solid border that clutters things */
 .table td {
     border-top: none;
 }
 
+/* top border to be used when splitting rows from one another or into 'groups' */
 .table tr.top-border td {
     border-top: 2px solid #4b498c;
     box-shadow: inset 0px 10px 10px -10px #4b498c;
 }
 
+/* cool top border for th */
 .table th {
     border-top: 1px solid #4b498c;
     box-shadow: inset 0px 10px 10px -10px #4b498c;
@@ -313,7 +316,6 @@ table.dataTable.stripe tbody tr.odd,
 table.dataTable tbody tr.odd {
     background: transparent;
 }
-
 table.dataTable.stripe tbody tr.even,
 table.dataTable tbody tr.even {
     background: #ffffff0c;
@@ -322,6 +324,14 @@ table.dataTable tbody tr.even {
 .table-hover tbody tr:hover {
     color: #fff;
 }
+
+/* search box that matches bootstrap styles */
+div.dataTables_filter input {
+    margin-left: inherit;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+}
+
 /* END DATATABLES OVERRIDE */
 
 .ui-autocomplete {

@@ -8,7 +8,7 @@
             <select id="raid_filter" class="form-control">
                 <option value="" class="bg-tag">—</option>
                 @foreach ($raids as $raid)
-                    <option value="{{ $raid->name }}" class="bg-tag" style="color:{{ $raid->getColor() }};">
+                    <option value="{{ $raid->id }}" class="bg-tag" style="color:{{ $raid->getColor() }};">
                         {{ $raid->name }}
                     </option>
                 @endforeach

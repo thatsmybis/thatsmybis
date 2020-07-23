@@ -34,6 +34,18 @@ $(document).ready( function () {
         // wowhead's script previously ignored these links if they weren't visible
         makeWowheadLinks();
     });
+
+    // Filter out characters based on the raid they are in
+    $("#raid_filter").on('change', function () {
+        let raidId = $(this).val();
+
+        if (raidId) {
+            $(".js-item-wishlist-character[data-raid-id!='" + raidId + "']").hide();
+            $(".js-item-wishlist-character[data-raid-id='" + raidId + "']").show();
+        } else {
+            $(".js-item-wishlist-character").show();
+        }
+    }).change();
 });
 
 function createTable(lastSource) {
@@ -50,7 +62,7 @@ function createTable(lastSource) {
                     }
 
                     return `
-                    <ul class="no-bullet no-indent mb-2">
+                    <ul class="no-bullet no-indent mb-0">
                         ${ row.source_name ? `
                             <li>
                                 <span class="font-weight-bold">
@@ -60,7 +72,7 @@ function createTable(lastSource) {
                     </ul>`;
                 },
                 "visible"   : true,
-                "width"     : "165px",
+                "width"     : "195px",
                 "className" : "text-right",
             },
             {
@@ -68,7 +80,7 @@ function createTable(lastSource) {
                 "data"   : "",
                 "render" : function (data, type, row) {
                     return `
-                    <ul class="no-bullet no-indent mb-2">
+                    <ul class="no-bullet no-indent mb-0">
                         <li>
                             <a href="/${ guild.slug }/item/${ row.item_id }/${ slug(row.name) }"
                                 class=""
@@ -99,7 +111,7 @@ function createTable(lastSource) {
                 },
                 "orderable" : false,
                 "visible" : true,
-                "width"   : "200px",
+                "width"   : "400px",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Priority',
@@ -123,50 +135,13 @@ function createTable(lastSource) {
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
         "paging" : false,
         "initComplete": function () {
-            let sortColumns = [colWishlist];
-            this.api().columns().every(function (index) {
-                var column = this;
-
-                let select1 = null;
-                let select2 = null; // Iniitalize this beside select1 if we want a secondary sort
-
-                if (index == colWishlist) {
-                    select1 = $("#raid_filter");
-                    select2 = null;
-                }
-
-                if (sortColumns.includes(index)) {
-                    select1.on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                        if (select2 && select2.val()) {
-                            // Must contain both
-                            val = "(?=.*" + val + ")(?=.*" + $.fn.dataTable.util.escapeRegex(select2.val()) + ")";
-                        }
-                        column.search(val ? val : '', true, false).draw();
-                    });
-
-                    if (select2) {
-                        select2.on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
-                            if (select1 && select1.val()) {
-                                // Must contain both
-                                val = "(?=.*" + val + ")(?=.*" + $.fn.dataTable.util.escapeRegex(select1.val()) + ")";
-                            }
-                            column.search(val ? val : '', true, false).draw();
-                        });
-                    }
-                }
-            });
             makeWowheadLinks();
-            addItemAutocompleteHandler();
-            addTagInputHandlers();
         },
         "createdRow" : function (row, data, dataIndex) {
+            // Add a top border style between different loot sources
             if (dataIndex == 0 || lastSource == null) {
                 lastSource = data.source_name;
             }
-
-            console.log(data.source_name, lastSource);
             if (data.source_name != lastSource) {
                 $(row).addClass("top-border");
                 lastSource = data.source_name;
@@ -178,33 +153,18 @@ function createTable(lastSource) {
 
 // Gets an HTML list of characters
 function getCharacterList(data, type, itemId) {
-    let characters = `<ul type="a" class="no-indent js-item-list mb-2" data-type="${ type }" data-id="${ itemId }">`;
+    let characters = `<ul class="list-inline js-item-list mb-2" data-type="${ type }" data-id="${ itemId }">`;
     let initialLimit = 4;
 
     $.each(data, function (index, character) {
-        let clipCharacter = false;
-
-        if (index >= initialLimit) {
-            clipCharacter = true;
-            if (index == initialLimit) {
-                characters += `<li class="js-show-clipped-items no-bullet font-weight-light"><small>show ${ data.length - initialLimit } more…</small></li>`;
-            }
-        }
-
         characters += `
-            <li class="font-weight-normal ${ clipCharacter ? 'js-clipped-item' : '' }"
-                style="${ clipCharacter ? 'display:none;' : '' }">
-
+            <li data-raid-id="${ character.raid_id }" class="js-item-wishlist-character list-inline-item font-weight-normal">
                 <a href="/${ guild.slug }/character/${ character.name }"
-                    class="text-${ character.class ? character.class.toLowerCase() : ''}">
+                    class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     ${ character.name }
                 </a>
             </li>`;
     });
-
-    if (data.length > initialLimit) {
-        characters += `<li class="js-show-clipped-items font-weight-light no-bullet" style="display:none;"><small>show less…</small></li>`;
-    }
 
     characters += `</ul>`;
     return characters;

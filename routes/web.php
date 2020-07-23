@@ -45,9 +45,9 @@ Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 Route::get( '/register-guild', 'GuildController@showRegister')->name('guild.showRegister');
 Route::post('/submit-guild',   'GuildController@register')    ->name('guild.register');
 
-Route::group(['prefix' => 'item'], function () {
-    Route::get( '/{item_id}/{slug?}', 'ItemController@show')->name('item.show');
-});
+// Route::group(['prefix' => 'item'], function () {
+//     Route::get( '/{item_id}/{slug?}', 'ItemController@show')->name('item.show');
+// });
 
 Route::group(['prefix' => '{guildSlug}'], function () {
     Route::get( '/news',            'DashboardController@news')          ->name('guild.news');
@@ -64,10 +64,9 @@ Route::group(['prefix' => '{guildSlug}'], function () {
         Route::get( '/{name}',      'CharacterController@show')      ->name('character.show');
     });
 
-    Route::group(['prefix' => 'item'], function () {
-        Route::get( '/list',              'ItemController@listWithGuild')->name('guild.item.list');
-        Route::get( '/{item_id}/{slug?}', 'ItemController@showWithGuild')->name('guild.item.show');
-    });
+    Route::get( '/items',                  'ItemController@indexWithGuild')->name('guild.item.index');
+    Route::get( '/items/{instanceSlug}',   'ItemController@listWithGuild') ->name('guild.item.list');
+    Route::get( '/item/{item_id}/{slug?}', 'ItemController@showWithGuild') ->name('guild.item.show');
 
     Route::group(['prefix' => 'member'], function () {
         Route::get( '/{username}/edit', 'MemberController@edit')  ->name('member.edit');
