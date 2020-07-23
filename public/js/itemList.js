@@ -72,7 +72,7 @@ function createTable(lastSource) {
                     </ul>`;
                 },
                 "visible"   : true,
-                "width"     : "195px",
+                "width"     : "180px",
                 "className" : "text-right",
             },
             {
@@ -101,7 +101,7 @@ function createTable(lastSource) {
                     </ul>`;
                 },
                 "visible" : true,
-                "width"   : "310px",
+                "width"   : "330px",
             },
             {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
