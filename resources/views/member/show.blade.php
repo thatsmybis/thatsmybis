@@ -15,7 +15,9 @@
                 <div class="col-12 mb-2">
                     <span class="font-weight-bold">
                         <span class="fas fa-fw fa-user text-muted"></span>
-                        Characters
+                        <a href="{{ route('character.create', ['guildSlug' => $guild->slug]) }}" class="text-white">
+                            Characters
+                        </a>
                     </span>
                 </div>
                 <div class="col-12">

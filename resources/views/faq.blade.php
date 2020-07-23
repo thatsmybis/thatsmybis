@@ -10,7 +10,7 @@
             <ol>
                 <li><a href="#what-does-this-do">What does this website do?</a></li>
                 <li><a href="#getting-started">How do I get started?</a></li>
-                <li><a href="#role-whitelisting">What does 'Discord users with these roles are allowed to join' mean?</a></li>
+                <li><a href="#role-whitelisting">What does 'Whitelist of who can join' mean?</a></li>
                 <li><a href="#discord-requirement">Do I <em>need</em> to use Discord?</a></li>
                 <!--<li><a href="#google-calendar">Google Calendar?</a></li>-->
                 <li><a href="#name-origin">Where'd you get your name?</a></li>
@@ -40,7 +40,7 @@
 
             <hr class="light">
 
-            <h2 id="role-whitelisting">What does 'Discord users with these roles are allowed to join' mean?</h2>
+            <h2 id="role-whitelisting">What does 'Whitelist of who can join' mean?</h2>
             <p>
                 We require you to whitelist which members of your Discord server are allowed to register by giving them whitelisted roles that you choose. This is to prevent literally anyone who joins your Discord from crashing your guild on this website, which could be destructive.
             </p>

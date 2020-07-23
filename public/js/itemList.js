@@ -72,7 +72,7 @@ function createTable(lastSource) {
                     </ul>`;
                 },
                 "visible"   : true,
-                "width"     : "180px",
+                "width"     : "130px",
                 "className" : "text-right",
             },
             {
@@ -121,6 +121,7 @@ function createTable(lastSource) {
                 },
                 "orderable" : false,
                 "visible" : true,
+                "width"   : "200px",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
@@ -130,6 +131,7 @@ function createTable(lastSource) {
                 },
                 "orderable" : false,
                 "visible" : true,
+                "width"   : "200px",
             },
         ],
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
@@ -159,7 +161,7 @@ function getCharacterList(data, type, itemId) {
     $.each(data, function (index, character) {
         characters += `
             <li data-raid-id="${ character.raid_id }" class="js-item-wishlist-character list-inline-item font-weight-normal">
-                <a href="/${ guild.slug }/character/${ character.name }"
+                <a href="/${ guild.slug }/c/${ character.name }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     ${ character.name }
                 </a>

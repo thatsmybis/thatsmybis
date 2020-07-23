@@ -49,7 +49,7 @@ function createTable() {
                     return `
                     <ul class="no-bullet no-indent mb-2">
                         <li>
-                            <a href="/${ guild.slug }/character/${ row.name }"
+                            <a href="/${ guild.slug }/c/${ row.name }"
                                 class="text-4 text-${ row.class ? row.class.toLowerCase() : ''} font-weight-bold"
                                 title="${ row.member ? row.member.username : '' }">
                                 ${ row.name }
@@ -146,6 +146,7 @@ function createTable() {
                 },
                 "orderable" : false,
                 "visible" : true,
+                "width"   : "280px",
             },
             {
                 "title"  : "Class",

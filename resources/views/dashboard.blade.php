@@ -23,7 +23,7 @@
                     @foreach ($user->members as $member)
                         <li class="bg-lightest mt-3 mb-3 p-3">
                             <h2>
-                                <a href="{{ route('guild.roster', ['guildSlug' => $member->guild->slug]) }}" class="text-uncommon font-weight-medium">
+                                <a href="{{ route('guild.home', ['guildSlug' => $member->guild->slug]) }}" class="text-uncommon font-weight-medium">
                                     &lt;{{ $member->guild->name }}&gt;
                                 </a>
                             </h2>

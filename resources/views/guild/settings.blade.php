@@ -8,6 +8,7 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
+                        <span class="fas fa-fw fa-users text-muted"></span>
                         Guild Settings
                     </h1>
                 </div>
@@ -43,7 +44,6 @@
                             <div class="col-md-8 col-12">
                                 <div class="form-group">
                                     <label for="discord_id" class="font-weight-normal">
-                                        <span class="fab fa-fw fa-discord text-muted"></span>
                                         <span class="text-muted">Discord ID</span>
                                         <small class="text-muted">
                                             locked
@@ -60,7 +60,7 @@
                             </div>
                         </div>
 
-                        <!-- Yep, it's here and it works
+                        <!-- Yes, this calendar feature is functional. It's been cut to minimize clutter.
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
@@ -90,16 +90,19 @@
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="row">
+                            <div class="col-12">
+                                <label for="member_roles" class="font-weight-bold">
+                                    <span class="fab fa-fw fa-discord text-muted"></span>
+                                    Whitelist of who can join
+                                    <br>
+                                    <small class="text-muted">
+                                        Discord users with any of these roles are allowed to join
+                                        <a href="{{ route('faq') }}#role-whitelisting">what's this?</a>
+                                    </small>
+                                </label>
+                            </div>
                             <div class="col-md-6 col-sm-8 col-12">
                                 <div class="form-group">
-                                    <label for="member_roles" class="font-weight-bold">
-                                        <span class="fab fa-fw fa-discord text-muted"></span>
-                                        Discord users with any of these roles are allowed to join
-                                        <small><a href="{{ route('faq') }}#role-whitelisting">what's this?</a></small>
-                                    </label>
-                                    <small class="text-muted">
-                                    </small>
-
                                     @php
                                         $memberRoleIds = explode(',', $guild->member_role_ids);
                                         $memberRoleLength = count($memberRoleIds) - 1;

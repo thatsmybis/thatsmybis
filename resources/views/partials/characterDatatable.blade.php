@@ -2,7 +2,7 @@
     <ul class="list-inline mb-0">
         <li class="list-inline-item">
             <label for="raid_filter font-weight-light">
-                <span class="text-muted fas fa-fw fa-users-crown"></span>
+                <span class="text-muted fas fa-fw fa-users"></span>
                 Raid
             </label>
             <select id="raid_filter" class="form-control">

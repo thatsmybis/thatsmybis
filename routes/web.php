@@ -50,11 +50,13 @@ Route::post('/submit-guild',   'GuildController@register')    ->name('guild.regi
 // });
 
 Route::group(['prefix' => '{guildSlug}'], function () {
+    Route::get( '/',                'DashboardController@home')          ->name('guild.home');
+
     Route::get( '/news',            'DashboardController@news')          ->name('guild.news');
     Route::get( '/calendar',        'DashboardController@calendar')      ->name('guild.calendar');
     Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
 
-    Route::group(['prefix' => 'character'], function () {
+    Route::group(['prefix' => 'c'], function () {
         Route::get( '/create',      'CharacterController@showCreate')->name('character.create');
         Route::get( '/{name}/edit', 'CharacterController@edit')      ->name('character.edit');
         Route::get( '/{name}/loot', 'CharacterController@loot')      ->name('character.loot');
@@ -64,11 +66,10 @@ Route::group(['prefix' => '{guildSlug}'], function () {
         Route::get( '/{name}',      'CharacterController@show')      ->name('character.show');
     });
 
-    Route::get( '/items',                  'ItemController@indexWithGuild')->name('guild.item.index');
-    Route::get( '/items/{instanceSlug}',   'ItemController@listWithGuild') ->name('guild.item.list');
-    Route::get( '/item/{item_id}/{slug?}', 'ItemController@showWithGuild') ->name('guild.item.show');
+    Route::get( '/loot/{instanceSlug}',    'ItemController@listWithGuild') ->name('guild.item.list');
+    Route::get( '/loot/{item_id}/{slug?}', 'ItemController@showWithGuild') ->name('guild.item.show');
 
-    Route::group(['prefix' => 'member'], function () {
+    Route::group(['prefix' => 'u'], function () {
         Route::get( '/{username}/edit', 'MemberController@edit')  ->name('member.edit');
         Route::post('/update',          'MemberController@update')->name('member.update');
         Route::post('/remove',          'MemberController@remove')->name('member.remove');

@@ -8,6 +8,7 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
+                        <span class="fas fa-fw fa-users-crown text-muted"></span>
                         Raids
                     </h1>
                 </div>

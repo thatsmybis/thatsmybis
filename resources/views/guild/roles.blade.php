@@ -8,8 +8,12 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
-                        Roles
+                        <span class="fab fa-fw fa-discord text-muted"></span>
+                        Discord Roles
                     </h1>
+                    <p>
+                        If you've added or changed roles on your Discord server, consider syncing them
+                    </p>
                 </div>
 
                 <div class="col-12">

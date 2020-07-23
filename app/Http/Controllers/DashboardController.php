@@ -108,6 +108,31 @@ class DashboardController extends Controller
     }
 
     /**
+     * Show the default guild page
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function home($guildSlug)
+    {
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                return $query->where('members.user_id', Auth::id());
+            },
+        ])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
+        }
+
+        return redirect()->route('member.show', [
+            'guildSlug' => $guild->slug,
+            'username'  => $currentMember->username
+        ]);
+    }
+
+    /**
      * Show the roster page.
      *
      * @return \Illuminate\Http\Response
