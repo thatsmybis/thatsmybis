@@ -76,7 +76,11 @@ class MemberController extends Controller
             },
         ]);
 
-        $member = $guild->members->where('username', $username);
+        $member = $guild->members->where('username', $username)->first();
+
+        if (!$member) {
+            abort(404, 'Member not found.');
+        }
 
         $user = User::where('id', $member->user_id)->with([
             'roles' => function ($query) use($guild) {

@@ -98,12 +98,12 @@ class RaidController extends Controller
         $currentMember = request()->get('currentMember');
 
         $guild->load([
-            'raids' => function ($query) {
+            'allRaids' => function ($query) {
                 return $query->where('id', request()->input('id'));
             }
         ]);
 
-        $raid = $guild->raids->first();
+        $raid = $guild->allRaids->first();
 
         if (!$raid) {
             abort(404, 'Raid not found.');

@@ -40,7 +40,7 @@
                                                     {{ $raid->disabled_at ? '' : 'checked' }}>
                                                 <button type="submit"
                                                     class="btn btn-link text-{{ $raid->disabled_at ? 'success' : 'danger' }} p-0 m-0 ml-3"
-                                                    title="{{ $raid->disabled_at ? 'Raid is shown in dropdowns again' : 'Raid is no longer shown in dropdowns' }}">
+                                                    title="{{ $raid->disabled_at ? 'Raid is shown in dropdowns again' : 'Raid is no longer shown in dropdowns. Characters already assigned to this raid will remain assigned to it.' }}">
                                                     <span class="fas fa-fw fa-{{ $raid->disabled_at ? 'trash-undo' : 'trash' }}"></span>
                                                     {{ $raid->disabled_at ? 'enable' : 'disable' }}
                                                 </button>

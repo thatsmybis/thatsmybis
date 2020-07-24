@@ -35,6 +35,21 @@ $(document).ready( function () {
         // wowhead's script previously ignored these links if they weren't visible
         makeWowheadLinks();
     });
+
+    $(".js-show-clipped-items").click(function () {
+        let id = $(this).data("id");
+        let type = $(this).data("type");
+        $(".js-clipped-item[data-id='" + id + "'][data-type='" + type + "']").show();
+        $(".js-show-clipped-items[data-id='" + id + "'][data-type='" + type + "']").hide();
+        $(".js-hide-clipped-items[data-id='" + id + "'][data-type='" + type + "']").show();
+    });
+    $(".js-hide-clipped-items").click(function () {
+        let id = $(this).data("id");
+        let type = $(this).data("type");
+        $(".js-clipped-item[data-id='" + id + "'][data-type='" + type + "']").hide();
+        $(".js-show-clipped-items[data-id='" + id + "'][data-type='" + type + "']").show();
+        $(".js-hide-clipped-items[data-id='" + id + "'][data-type='" + type + "']").hide();
+    });
 });
 
 function createTable() {
@@ -226,12 +241,12 @@ function getItemList(data, type, characterId) {
         if (index >= initialLimit) {
             clipItem = true;
             if (index == initialLimit) {
-                items += `<li class="js-show-clipped-items no-bullet font-weight-light"><small>show ${ data.length - initialLimit } more…</small></li>`;
+                items += `<li class="js-show-clipped-items small cursor-pointer no-bullet " data-type="${ type }" data-id="${ characterId }">show ${ data.length - initialLimit } more…</li>`;
             }
         }
 
         items += `
-            <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
+            <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }" data-type="${ type }" data-id="${ characterId }"
                 style="${ clipItem ? 'display:none;' : '' }">
                 <a href="/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"
                     data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"
@@ -242,23 +257,9 @@ function getItemList(data, type, characterId) {
     });
 
     if (data.length > initialLimit) {
-        items += `<li class="js-show-clipped-items font-weight-light no-bullet" style="display:none;"><small>show less…</small></li>`;
+        items += `<li class="js-hide-clipped-items small cursor-pointer no-bullet" style="display:none;" data-type="${ type }" data-id="${ characterId }">show less…</li>`;
     }
 
-    /*
-    items +=
-        `<li class="font-weight-light no-bullet">
-            <span class="fas fa-fw fa-plus"></span>
-            <span class="js-add-item cursor-pointer" data-type="${ type }" data-id="${ characterId }">
-                add item
-            </span>
-        </li>
-        <li class="no-bullet no-indent pt-2 pb-2 pr-3" data-type="${ type }" data-id="${ characterId }">
-            <input data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control">
-            <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
-        </li>
-        `;
-    */
     items += `</ol>`;
     return items;
 }

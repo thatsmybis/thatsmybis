@@ -103,7 +103,7 @@
                                                     data-raid-id="{{ $character->raid_id }}"
                                                     class="js-character-option bg-tag text-{{ strtolower($character->class) }}-important"
                                                     {{ old('items.' . $loop->iteration . '.character_id') && old('items.' . $loop->iteration . '.character_id') == $character->id  ? 'selected' : '' }}>
-                                                    {{ $character->name }} &nbsp; ({{ $character->class }})
+                                                    {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }}
                                                 </option>
                                             @endforeach
                                         </select>

@@ -246,7 +246,10 @@ class ItemController extends Controller
 
         request()->session()->flash('status', 'Successfully added ' . $addedCount . ' items. ' . $failedCount . ' failures' . ($warnings ? ': ' . rtrim($warnings, ', ') : '.'));
 
-        return redirect()->route('guild.roster', ['guildSlug' => $guild->slug]);
+        return redirect()->route('member.show', [
+            'guildSlug' => $guild->slug,
+            'username'  => $currentMember->username
+        ]);
     }
 
     /**
