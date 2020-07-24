@@ -60,7 +60,7 @@ class RoleController extends Controller
         $remoteRoles = $discord->guild->getGuildRoles(['guild.id' => $guild->discord_id]);
 
         $updatedCount = 0;
-        $addedCount = 0;
+        $addedCount   = 0;
         $removedCount = 0;
 
         // Iterate over the roles in remote

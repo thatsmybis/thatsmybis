@@ -104,7 +104,7 @@
                             <div class="col-md-6 col-sm-8 col-12">
                                 <div class="form-group">
                                     @php
-                                        $memberRoleIds = explode(',', $guild->member_role_ids);
+                                        $memberRoleIds = $guild->getMemberRoleIds();
                                         $memberRoleLength = count($memberRoleIds) - 1;
                                     @endphp
 

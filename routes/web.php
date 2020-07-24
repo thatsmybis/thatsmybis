@@ -50,7 +50,7 @@ Route::post('/submit-guild',   'GuildController@register')    ->name('guild.regi
 // });
 
 Route::group([
-        'middleware' => ['checkGuildPermissions'],
+        'middleware' => ['seeUser', 'checkGuildPermissions'],
         'prefix'     => '{guildSlug}'
     ], function () {
     Route::get( '/',                'DashboardController@home')          ->name('guild.home');

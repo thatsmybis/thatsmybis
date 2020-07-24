@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use Auth, Closure;
-use App\{Guild};
+use App\{Guild, Member};
+use Exception;
+use RestCord\DiscordClient;
 
 class CheckGuildPermissions
 {
@@ -29,10 +31,42 @@ class CheckGuildPermissions
                 abort(404, 'Guild not found.');
             }
 
+            $user = request()->get('currentUser');
+            if (!$user) {
+                request()->session()->flash('status', 'You need to be signed in to do that.');
+                return redirect()->route('login');
+            }
+
+            // Guild owner doesn't have to go through this process
+            // This ensures they never lock themselves out due to messing with roles
+            if ($user->id != $guild->user_id) {
+                $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+
+                // Check if current user is on that guild's Discord
+                try {
+                    $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$guild->discord_id, 'user.id' => (int)$user->discord_id]);
+                } catch (Exception $e) {
+                    request()->session()->flash('status', 'You don\'t appear to be a member of that guild\'s  Discord.');
+                    return redirect()->route('home');
+                }
+
+                // Check that the Discord user has one of the role(s) required to access this guild
+                $matchingRoles = array_intersect($guild->getMemberRoleIds(), $discordMember->roles);
+
+                if (count($matchingRoles) <= 0) {
+                    request()->session()->flash('status', 'Insufficient Discord role to access that guild.');
+                    return redirect()->route('home');
+                }
+
+                // They're on the Discord and they have an appropriate role if they get this far
+            }
+
+            // Fetch their existing member object
             $currentMember = $guild->members->where('user_id', Auth::id())->first();
 
             if (!$currentMember) {
-                abort(403, 'Not a member of that guild.');
+                // Don't have a member object? Let's create one...
+                $currentMember = Member::create($user, $discordMember, $guild);
             }
 
             // Store the guild and current member for later access.

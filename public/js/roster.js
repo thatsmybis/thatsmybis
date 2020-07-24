@@ -257,7 +257,7 @@ function getItemList(data, type, characterId) {
     });
 
     if (data.length > initialLimit) {
-        items += `<li class="js-hide-clipped-items small cursor-pointer no-bullet" style="display:none;" data-type="${ type }" data-id="${ characterId }">show less…</li>`;
+        items += `<li class="js-hide-clipped-items small cursor-pointer no-bullet" style="display:none;" data-type="${ type }" data-id="${ characterId }">show less</li>`;
     }
 
     items += `</ol>`;

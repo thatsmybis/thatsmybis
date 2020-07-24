@@ -55,8 +55,6 @@ class GuildController extends Controller
         // Verify that the bot is on the server
         $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
 
-        $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$input['discord_id']]);
-
         try {
             $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$input['discord_id'], 'user.id' => (int)$user->discord_id]);
         } catch (Exception $e) {
@@ -64,6 +62,8 @@ class GuildController extends Controller
         }
 
         $hasPermissions = false;
+
+        $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$input['discord_id']]);
 
         // Go through each of the user's roles, and check to see if any of them have admin or management permissions
         // We're only going to let the user register this server if they have one of those permissions
@@ -104,12 +104,7 @@ class GuildController extends Controller
                 ]);
         }
 
-        // Create a member for the current user
-        $member = Member::firstOrCreate(['user_id' => $user->id, 'guild_id' => $guild->id], ['username' => $user->username]);
-
-        // Attach the member's current roles from the guild discord
-        $roles = Role::whereIn('discord_id', $discordMember->roles)->get()->keyBy('id')->keys()->toArray();
-        $user->roles()->attach($roles);
+        $member = Member::create($user, $discordMember, $guild);
 
         // Redirect to guild settings page; prompting the user to finish setup
         request()->session()->flash('status', 'Successfully registered guild.');

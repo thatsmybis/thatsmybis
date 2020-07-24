@@ -98,4 +98,8 @@ class Guild extends Model
     public function user() {
         return $this->belongsTo(User::class);
     }
+
+    public function getMemberRoleIds() {
+        return explode(',', $this->member_role_ids);
+    }
 }
