@@ -4,24 +4,100 @@
 
 @section('content')
 <div class="container-fluid">
-    <div class="row mt-3 mb-3">
+    <div class="row mt-3">
         <div class="col-12">
-            <div class="bg-lightest rounded p-3 d-inline-block item-tooltip"> <!-- d-inline-block to fit the contents rather than screen... I am undecided -->
-                <h1 class="font-weight-bold">
+            <ul class="list-inline">
+                <li class="list-inline-item bg-lightest rounded p-3 item-tooltip align-top">
+                    <h1 class="font-weight-bold">
+                        @if ($itemJson)
+                            {{-- %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want --}}
+                            <a class="q{!! $itemJson->quality !!}" href="https://classic.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
+                                <span class="iconlarge">
+                                    <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
+                            </a>
+                        @else
+                            @include('partials/item', ['wowheadLink' => true])
+                        @endif
+                    </h1>
                     @if ($itemJson)
-                        {{-- %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want --}}
-                        <a class="q{!! $itemJson->quality !!}" href="https://classic.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
-                            <span class="iconlarge">
-                                <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
-                        </a>
-                    @else
-                        @include('partials/item', ['wowheadLink' => true])
+                        {!! $itemJson->tooltip !!}
                     @endif
-                </h1>
-                @if ($itemJson)
-                    {!! $itemJson->tooltip !!}
+                </li>
+                @if ($guild)
+                    <li class="list-inline-item bg-lightest rounded p-3 align-top">
+                        <form role="form" method="POST" action="{{ route('guild.item.updateNote', ['guildSlug' => $guild->slug]) }}">
+                            {{ csrf_field() }}
+
+                            <input hidden name="id" value="{{ $item->item_id }}" />
+
+                            <div class="row mb-3 pt-3">
+
+                                @if (count($errors) > 0)
+                                    <div class="col-12">
+                                        <ul class="alert alert-danger">
+                                            @foreach ($errors->all() as $error)
+                                                <li>
+                                                    {{ $error }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+
+                                <div class="col-12">
+                                    <span class="text-muted font-weight-bold">
+                                        <span class="fas fa-fw fa-comment-alt-lines"></span>
+                                        Guild Note
+                                    </span>
+                                </div>
+                                <div class="col-12 mb-3 pl-4">
+                                    {{ $notes['note'] ? $notes['note'] : '—' }}
+                                    @if ($showNoteEdit)
+                                        <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
+                                    @endif
+                                </div>
+                                @if ($showNoteEdit)
+                                    <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
+                                        <div class="form-group">
+                                            <label for="note" class="sr-only">
+                                                Item Priority
+                                            </label>
+                                            <textarea data-max-length="144" name="note" rows="2" placeholder="add a note" class="form-control">{{ old('note') ? old('note') : ($item ? $notes['note'] : '') }}</textarea>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="col-12">
+                                    <span class="text-muted font-weight-bold">
+                                        <span class="fas fa-fw fa-sort-amount-down"></span>
+                                        Guild Priority
+                                    </span>
+                                </div>
+                                <div class="col-12 mb-3 pl-4">
+                                    {{ $notes['priority'] ? $notes['priority'] : '—' }}
+                                    @if ($showNoteEdit)
+                                        <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
+                                    @endif
+                                </div>
+                                @if ($showNoteEdit)
+                                    <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
+                                        <div class="form-group">
+                                            <label for="priority" class="sr-only">
+                                                Item Priority
+                                            </label>
+                                            <textarea data-max-length="144" name="priority" rows="2" placeholder="which class/spec is first in line, which is second, etc." class="form-control">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
+                                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
                 @endif
-            </div>
+            </ul>
         </div>
     </div>
 
@@ -67,8 +143,8 @@
 @section('scripts')
 <script>
     var characters = {!! $wishlistCharacters->makeVisible('officer_note')->toJson() !!};
-    var guild = {!! $guild->toJson() !!};
-    var raids = {!! $raids->toJson() !!};
+    var guild      = {!! $guild->toJson() !!};
+    var raids      = {!! $raids->toJson() !!};
     {{-- TODO PERMISSIONS FOR NOTE --}}
     var showOfficerNote = true;
 </script>

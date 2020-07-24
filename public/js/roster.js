@@ -233,7 +233,7 @@ function getItemList(data, type, characterId) {
         items += `
             <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
-                <a href="/${ guild.slug }/item/${ item.item_id }/${ slug(item.name) }"
+                <a href="/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"
                     data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"
                     data-wowhead="item=${ item.item_id }?domain=classic">
                     ${ item.name }

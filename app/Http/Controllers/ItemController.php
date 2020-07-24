@@ -94,7 +94,6 @@ class ItemController extends Controller
                     return $query->where('members.user_id', Auth::id());
                 },
             'raids',
-            'raids.role'
             ])->firstOrFail();
 
         $currentMember = $guild->members->where('user_id', Auth::id())->first();
@@ -135,6 +134,15 @@ class ItemController extends Controller
         }
 
         $item = Item::where('item_id', $id)->with([
+            'guilds' => function ($query) use($guild) {
+                return $query->select([
+                    'guild_items.created_by',
+                    'guild_items.updated_by',
+                    'guild_items.note',
+                    'guild_items.priority'
+                ])
+                ->where('guilds.id', $guild->id);
+            },
             'receivedCharacters' => function ($query) use($guild) {
                 return $query
                     ->where([
@@ -167,20 +175,34 @@ class ItemController extends Controller
         // I did a check here, not sure if it's what I'll use as a standard.
         // Leave it if it's fine, replace it if it's not.
 
-
-
         $itemSlug = slug($item->name);
 
         if ($slug && $slug != $itemSlug) {
-            return redirect()->route('guild.item.show', ['guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name)]);
+            return redirect()->route('guild.item.show', [
+                'guildSlug' => $guild->slug,
+                'item_id' => $item->item_id,
+                'slug' => slug($item->name)
+            ]);
+        }
+
+        $notes = [];
+        $notes['note']     = null;
+        $notes['priority'] = null;
+
+        // If this guild has notes for this item, prep them for ease of access in the view
+        if ($item->guilds->count() > 0) {
+            $notes['note']     = $item->guilds->first()->pivot->note;
+            $notes['priority'] = $item->guilds->first()->pivot->priority;
         }
 
         return view('item.show', [
             'currentMember'      => $currentMember,
             'guild'              => $guild,
             'item'               => $item,
+            'notes'              => $notes,
             'raids'              => $guild->raids,
             'receivedCharacters' => $item->receivedCharacters,
+            'showNoteEdit'       => true, // TODO PERMISSIONS
             'wishlistCharacters' => $item->wishlistCharacters,
             'itemJson'           => self::getItemJson($item->item_id),
         ]);
@@ -211,9 +233,10 @@ class ItemController extends Controller
 
         // TODO: permissions for mass assigning items in this guild?
 
-        $warnings = '';
-        $rows = [];
-        $now = getDateTime();
+        $warnings   = '';
+        $newRows    = [];
+        $detachRows = [];
+        $now        = getDateTime();
 
         $addedCount  = 0;
         $failedCount = 0;
@@ -221,13 +244,18 @@ class ItemController extends Controller
         foreach (request()->input('items') as $item) {
             if ($item['id']) {
                 if ($guild->characters->contains('id', $item['character_id'])) {
-                    $rows[] = [
+                    $newRows[] = [
                         'item_id'      => $item['id'],
                         'character_id' => $item['character_id'],
                         'added_by'     => $currentMember->id,
                         'type'         => Item::TYPE_RECEIVED,
                         'order'        => '0', // Top of the list
                         'created_at'   => $now,
+                    ];
+                    $detachRows[] = [
+                        'item_id'      => $item['id'],
+                        'character_id' => $item['character_id'],
+                        'type'         => Item::TYPE_WISHLIST,
                     ];
                     $addedCount++;
                 } else {
@@ -237,13 +265,82 @@ class ItemController extends Controller
             }
         }
 
-        DB::table('character_items')->insert($rows);
+        // Add the items to the character's received list
+        DB::table('character_items')->insert($newRows);
 
-        // TODO: The following items could not be assigned to characters because they were not found in the guild:
+        // For each item added, attempt to delete a matching item from the character's wishlist
+        foreach ($detachRows as $detachRow) {
+            DB::table('character_items')->where([
+                'item_id'      => $detachRow['item_id'],
+                'character_id' => $detachRow['character_id'],
+                'type'         => $detachRow['type'],
+            ])->limit(1)->delete();
+        }
 
         request()->session()->flash('status', 'Successfully added ' . $addedCount . ' items. ' . $failedCount . ' failures' . ($warnings ? ': ' . rtrim($warnings, ', ') : '.'));
 
         return redirect()->route('guild.roster', ['guildSlug' => $guild->slug]);
+    }
+
+    /**
+     * Update an item's notes
+     * @return
+     */
+    public function updateNote($guildSlug) {
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                return $query->where('members.user_id', Auth::id());
+            },
+            ])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(404, 'Not a member of that guild.');
+        }
+
+        $validationRules = [
+            'id'       => 'required|integer|exists:items,item_id',
+            'note'     => 'nullable|string|max:144',
+            'priority' => 'nullable|string|max:144',
+        ];
+
+        $validationMessages = [];
+
+        $this->validate(request(), $validationRules, $validationMessages);
+
+        $item = Item::findOrFail(request()->input('id'));
+
+        $existingRelationship = $guild->items()->find(request()->input('id'));
+
+        // TODO: If has permissions to edit items for this guild
+        if (false) {
+            abort(403, "You do not have permission to edit someone else's character.");
+        }
+
+        $noticeVerb = null;
+
+        if ($existingRelationship) {
+            $noticeVerb = 'updated';
+
+            $guild->items()->updateExistingPivot($item->item_id, [
+                'note'       => request()->input('note'),
+                'priority'   => request()->input('priority'),
+                'updated_by' => $currentMember->id,
+            ]);
+        } else {
+            $noticeVerb = 'created';
+
+            $guild->items()->attach($item->item_id, [
+                'note'       => request()->input('note'),
+                'priority'   => request()->input('priority'),
+                'created_by' => $currentMember->id,
+            ]);
+        }
+
+        request()->session()->flash('status', "Successfully " . $noticeVerb . " " . $item->name ."'s note.");
+
+        return redirect()->route('guild.item.show', ['guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name)]);
     }
 
     /**

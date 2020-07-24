@@ -16,6 +16,21 @@
                         <strong>Hint:</strong> Keep the roster and/or item pages open in another window to review who deserves what
                     </small>
                 </div>
+
+                <div class="col-12 pt-2 mb-2">
+                    <label for="raid_filter font-weight-light">
+                        <span class="text-muted fas fa-fw fa-users"></span>
+                        Raid
+                    </label>
+                    <select id="raid_filter" class="form-control">
+                        <option value="" class="bg-tag">—</option>
+                        @foreach ($guild->raids as $raid)
+                            <option value="{{ $raid->id }}" class="bg-tag" style="color:{{ $raid->getColor() }};">
+                                {{ $raid->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
             </div>
 
             @if (count($errors) > 0)
@@ -85,7 +100,8 @@
                                             @foreach ($guild->characters as $character)
                                                 <option value="{{ $character->id }}"
                                                     data-tokens="{{ $character->id }}"
-                                                    class="bg-tag text-{{ strtolower($character->class) }}-important"
+                                                    data-raid-id="{{ $character->raid_id }}"
+                                                    class="js-character-option bg-tag text-{{ strtolower($character->class) }}-important"
                                                     {{ old('items.' . $loop->iteration . '.character_id') && old('items.' . $loop->iteration . '.character_id') == $character->id  ? 'selected' : '' }}>
                                                     {{ $character->name }} &nbsp; ({{ $character->class }})
                                                 </option>
@@ -116,20 +132,5 @@
 @endsection
 
 @section('scripts')
-<script>
-    $(".js-show-next").change(function() {
-        showNext(this);
-    });
-    $(".js-show-next").keyup(function() {
-        showNext(this);
-    });
-
-    // If the current element has a value, show it and the next element that is hidden because it is empty
-    function showNext(currentElement) {
-        if ($(currentElement).val() != "") {
-            $(currentElement).show();
-            $(currentElement).closest(".row").next(".js-hide-empty").show();
-        }
-    }
-</script>
+<script src="{{ asset('js/itemMassInput.js') }}"></script>
 @endsection

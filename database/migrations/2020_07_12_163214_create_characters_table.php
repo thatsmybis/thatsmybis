@@ -23,9 +23,9 @@ class CreateCharactersTable extends Migration
             $table->string('spec')->nullable();
             $table->string('rank')->nullable();
             $table->string('rank_goal')->nullable();
-            $table->string('public_note', 1000)->nullable();
-            $table->string('personal_note', 5000)->nullable();
-            $table->string('officer_note', 1000)->nullable();
+            $table->string('public_note')->nullable();
+            $table->string('personal_note', 2200)->nullable();
+            $table->string('officer_note')->nullable();
             $table->bigInteger('raid_id')->unsigned()->nullable();
             $table->integer('order')->unsigned()->nullable();
             $table->timestamps();

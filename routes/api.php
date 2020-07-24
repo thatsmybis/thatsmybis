@@ -17,10 +17,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::post('/officer-note/{id}', [
-        'uses'       => 'Api\ProfileController@submitOfficerNote',
-        'middleware' => 'acl',
-        'is'         => env('PERMISSION_RAID_LEADER'),
-    ])->name('apiOfficerNote');
-
-Route::get( '/items/query/{query}', 'Api\ItemsController@query')->name('apiSearchItems');
+Route::get( '/items/query/{query}',    'Api\ItemsController@query')  ->name('apiSearchItems');

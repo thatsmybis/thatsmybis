@@ -63,17 +63,23 @@ Route::group(['prefix' => '{guildSlug}'], function () {
         Route::post('/remove',      'CharacterController@remove')    ->name('character.remove');
         Route::post('/update',      'CharacterController@update')    ->name('character.update');
         Route::post('/loot/update', 'CharacterController@updateLoot')->name('character.updateLoot');
+        Route::post('/note/update', 'CharacterController@updateNote')->name('character.updateNote');
         Route::get( '/{name}',      'CharacterController@show')      ->name('character.show');
     });
 
-    Route::get( '/loot/{instanceSlug}',    'ItemController@listWithGuild') ->name('guild.item.list');
-    Route::get( '/loot/{item_id}/{slug?}', 'ItemController@showWithGuild') ->name('guild.item.show');
+    Route::get( '/loot/{instanceSlug}',    'ItemController@listWithGuild')->name('guild.item.list');
+
+    Route::group(['prefix' => 'i'], function () {
+        Route::get( '/{item_id}/{slug?}', 'ItemController@showWithGuild')->name('guild.item.show');
+        Route::post('/note/update',       'ItemController@updateNote')   ->name('guild.item.updateNote');
+    });
 
     Route::group(['prefix' => 'u'], function () {
-        Route::get( '/{username}/edit', 'MemberController@edit')  ->name('member.edit');
-        Route::post('/update',          'MemberController@update')->name('member.update');
-        Route::post('/remove',          'MemberController@remove')->name('member.remove');
-        Route::get( '/{username}',      'MemberController@show')  ->name('member.show');
+        Route::get( '/{username}/edit', 'MemberController@edit')      ->name('member.edit');
+        Route::post('/update',          'MemberController@update')    ->name('member.update');
+        Route::post('/note/update',     'MemberController@updateNote')->name('member.updateNote');
+        Route::post('/remove',          'MemberController@remove')    ->name('member.remove');
+        Route::get( '/{username}',      'MemberController@show')      ->name('member.show');
     });
 
     Route::get( '/resources',        'ContentController@index')->name('contentIndex');

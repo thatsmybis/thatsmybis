@@ -3,9 +3,8 @@ var table = null;
 var colSource = 0;
 var colName = 1;
 var colWishlist = 2;
-var colPriority = 3;
-var colNotes = 4;
-
+var colNotes = 3;
+var colPriority = 4;
 
 // For keeping track of the loot's source
 var lastSource = null;
@@ -76,13 +75,13 @@ function createTable(lastSource) {
                 "className" : "text-right",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-treasure-chest text-gold"></span> Item',
+                "title"  : '<span class="fas fa-fw fa-treasure-chest text-gold"></span> Loot',
                 "data"   : "",
                 "render" : function (data, type, row) {
                     return `
                     <ul class="no-bullet no-indent mb-0">
                         <li>
-                            <a href="/${ guild.slug }/item/${ row.item_id }/${ slug(row.name) }"
+                            <a href="/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }"
                                 class=""
                                 data-wowhead-link="https://classic.wowhead.com/item=${ row.item_id }"
                                 data-wowhead="item=${ row.item_id }?domain=classic">
@@ -114,8 +113,8 @@ function createTable(lastSource) {
                 "width"   : "400px",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Priority',
-                "data"   : "guild_priority",
+                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
+                "data"   : "guild_note",
                 "render" : function (data, type, row) {
                     return (data ? nl2br(data) : '—');
                 },
@@ -124,8 +123,8 @@ function createTable(lastSource) {
                 "width"   : "200px",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
-                "data"   : "guild_note",
+                "title"  : '<span class="fas fa-fw fa-sort-amount-down"></span> Priority',
+                "data"   : "guild_priority",
                 "render" : function (data, type, row) {
                     return (data ? nl2br(data) : '—');
                 },

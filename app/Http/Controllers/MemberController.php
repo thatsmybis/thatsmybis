@@ -102,12 +102,14 @@ class MemberController extends Controller
         }
 
         return view('member.show', [
-            'characters'    => $member->characters,
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'member'        => $member,
-            'recipes'       => $recipes,
-            'user'          => $user,
+            'characters'       => $member->characters,
+            'currentMember'    => $currentMember,
+            'guild'            => $guild,
+            'member'           => $member,
+            'recipes'          => $recipes,
+            'showOfficerNote'  => false, // TODO permissions for this
+            'showPersonalNote' => ($currentMember->id == $member->id),
+            'user'             => $user,
         ]);
     }
 
@@ -146,8 +148,8 @@ class MemberController extends Controller
         $validationRules = [
             'id'            => 'required|integer|exists:members,id',
             'username'      => 'nullable|string|min:2|max:32',
-            'public_note'   => 'nullable|string|max:1000',
-            'officer_note'  => 'nullable|string|max:1000',
+            'public_note'   => 'nullable|string|max:144',
+            'officer_note'  => 'nullable|string|max:144',
             'personal_note' => 'nullable|string|max:2000',
         ];
 
@@ -179,6 +181,64 @@ class MemberController extends Controller
 
         request()->session()->flash('status', 'Successfully updated profile.');
         return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $selectedMember->username]);
+    }
+
+    /**
+     * Update a character's note(s) only
+     * @return
+     */
+    public function updateNote($guildSlug) {
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                return $query->where('members.user_id', Auth::id())
+                    ->orwhere('members.user_id', request()->input('id'));
+            },
+            ])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(404, 'Not a member of that guild.');
+        }
+
+        $validationRules = [
+            'id'            => 'required|integer|exists:members,id',
+            'officer_note'  => 'nullable|string|max:144',
+            'personal_note' => 'nullable|string|max:2000',
+            'public_note'   => 'nullable|string|max:144',
+        ];
+
+        $validationMessages = [];
+
+        $this->validate(request(), $validationRules, $validationMessages);
+
+        $member = $guild->members->where('user_id', request()->input('id'))->first();
+
+        if (!$member) {
+            abort(404, "Member not found.");
+        }
+
+        $updateValues = [];
+
+        // TODO: If has permissions, allow to change who owns character or modify someone else's character
+        // TODO: Also if they can edit officer note
+        if (true) {
+            $updateValues['officer_note'] = request()->input('officer_note');
+        } else if ($currentMember->id != $member->id) {
+            abort(403, "You do not have permission to edit someone else.");
+        }
+
+        $updateValues['public_note'] = request()->input('public_note');
+
+        // User is editing their own member
+        if ($currentMember->id == $member->id) {
+            $updateValues['personal_note'] = request()->input('personal_note');
+        }
+
+        $member->update($updateValues);
+
+        request()->session()->flash('status', "Successfully updated " . $member->username ."'s note.");
+        return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $member->username]);
     }
 
     /**

@@ -271,7 +271,7 @@
                                 Public Note
                                 <small class="text-muted">anyone in the guild can see this</small>
                             </label>
-                            <textarea data-max-length="2000" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
+                            <textarea data-max-length="144" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
                         </div>
                     </div>
 
@@ -283,7 +283,7 @@
                                 Officer Note
                                 <small class="text-muted">only officers can see this</small>
                             </label>
-                            <textarea data-max-length="2000" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                            <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
                         </div>
                     </div>
 

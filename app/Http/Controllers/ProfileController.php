@@ -185,8 +185,8 @@ class ProfileController extends Controller
             'wishlist.*'   => 'nullable|integer|exists:items,item_id',
             'received.*'   => 'nullable|integer|exists:items,item_id',
             'recipes.*'    => 'nullable|integer|exists:items,item_id',
-            'public_note'  => 'nullable|string|max:1000',
-            'officer_note' => 'nullable|string|max:1000',
+            'public_note'  => 'nullable|string|max:144',
+            'officer_note' => 'nullable|string|max:144',
         ];
 
         $this->validate(request(), $validationRules);

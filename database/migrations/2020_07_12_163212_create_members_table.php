@@ -18,9 +18,9 @@ class CreateMembersTable extends Migration
             $table->string('username');
             $table->bigInteger('user_id')->unsigned();
             $table->bigInteger('guild_id')->unsigned();
-            $table->string('public_note', 1000)->nullable();
-            $table->string('personal_note', 5000)->nullable();
-            $table->string('officer_note', 1000)->nullable();
+            $table->string('public_note')->nullable();
+            $table->string('personal_note', 2200)->nullable();
+            $table->string('officer_note')->nullable();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');

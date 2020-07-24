@@ -16,8 +16,8 @@
 @section('scripts')
 <script>
     var characters = {!! $characters->makeVisible('officer_note')->toJson() !!};
-    var guild = {!! $guild->toJson() !!};
-    var raids = {!! $raids->toJson() !!};
+    var guild      = {!! $guild->toJson() !!};
+    var raids      = {!! $raids->toJson() !!};
     {{-- TODO PERMISSIONS FOR NOTE --}}
     var showOfficerNote = true;
 </script>

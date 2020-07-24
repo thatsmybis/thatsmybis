@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Item;
+use Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 

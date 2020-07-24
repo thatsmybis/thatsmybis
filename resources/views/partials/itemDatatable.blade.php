@@ -30,14 +30,14 @@
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
-                Priority
+                Notes
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4" href="">
                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
-                Notes
+                Priority
             </span>
         </li>
     </ul>
