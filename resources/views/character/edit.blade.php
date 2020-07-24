@@ -304,7 +304,7 @@
                 </div>
 
                 <!-- TODO: Permissions for who can see/set this -->
-                @if ($currentMember->id == $character->member_id)
+                @if ($character && $currentMember->id == $character->member_id)
                     <div class="row mb-3 pt-2 pb-1 bg-light rounded">
                         <div class="col-12">
                             <div class="form-group mb-0">

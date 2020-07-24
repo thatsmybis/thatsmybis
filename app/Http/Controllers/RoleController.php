@@ -26,18 +26,8 @@ class RoleController extends Controller
      */
     public function roles($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'raids',
-        ])->firstOrFail();
-
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
         // TODO: validate user can view this page
 
@@ -54,7 +44,10 @@ class RoleController extends Controller
      */
     public function syncRoles($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with(['raids', 'roles'])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load(['raids', 'roles']);
 
         // TODO: Validate user can do sync these roles
 

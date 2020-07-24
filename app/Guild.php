@@ -61,6 +61,10 @@ class Guild extends Model
         return $this->members()->orderBy('username');
     }
 
+    public function allRaids() {
+        return $this->hasMany(Raid::class);
+    }
+
     // Excludes hidden and removed characters
     public function characters() {
         return $this->hasMany(Character::class)->whereNull('inactive_at')->orderBy('name');
@@ -88,7 +92,7 @@ class Guild extends Model
     }
 
     public function raids() {
-        return $this->hasMany(Raid::class);
+        return $this->hasMany(Raid::class)->whereNull('disabled_at');
     }
 
     public function user() {

@@ -26,21 +26,14 @@ class DashboardController extends Controller
      */
     public function news($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'raids',
-            'roles',
-        ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+        $guild->load(['raids', 'roles']);
 
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
-
-        $user = User::where('id', Auth::id())->with('roles')->first();
+        // TODO: We want member not user
+        // TODO: Change this if we re-implement the news section
+        $user = request()->get('guild')->load('roles');
 
         // TODO: Permissions
 
@@ -74,19 +67,9 @@ class DashboardController extends Controller
      */
     public function calendar($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-        ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
-
-        // TODO: Permissions
         return view('calendar', ['currentMember' => $currentMember, 'guild' => $guild]);
     }
 
@@ -97,9 +80,8 @@ class DashboardController extends Controller
      */
     public function calendarIframe($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->firstOrFail();
-
-        // TODO: Permissions
+        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
+        $guild = request()->get('guild');
 
         $iframe = file_get_contents($guild->calendar_link); // 'https://calendar.google.com/calendar/embed?' .
         $iframe = str_replace('</head>','<link rel="stylesheet" href="http://' . $_SERVER['SERVER_NAME'] . '/css/googleCalendar.css" /></head>', $iframe);
@@ -114,17 +96,8 @@ class DashboardController extends Controller
      */
     public function home($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-        ])->firstOrFail();
-
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
         return redirect()->route('member.show', [
             'guildSlug' => $guild->slug,
@@ -139,18 +112,10 @@ class DashboardController extends Controller
      */
     public function roster($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'raids'
-        ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild->load(['raids']);
 
         // TODO: Validate user can view this roster
 

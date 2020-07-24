@@ -123,19 +123,10 @@ class GuildController extends Controller
      */
     public function settings($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'raids',
-            'roles',
-        ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild->load(['raids', 'roles']);
 
         // TODO: Validate can view this page for this guild
 
@@ -149,19 +140,10 @@ class GuildController extends Controller
      */
     public function submitSettings($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'raids',
-            'roles',
-        ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild->load(['raids', 'roles']);
 
         // TODO: Validate user can update settings for this guild
 

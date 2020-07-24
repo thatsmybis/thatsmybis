@@ -20,6 +20,7 @@ class Raid extends Model
         'slug',
         'role_id',
         'guild_id',
+        'disabled_at',
     ];
 
     /**
@@ -29,10 +30,6 @@ class Raid extends Model
      */
     protected $hidden = [
     ];
-
-    public function raid() {
-        return $this->belongsTo(Raid::class);
-    }
 
     public function role() {
         return $this->belongsTo(Role::class);

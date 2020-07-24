@@ -27,19 +27,10 @@ class RaidController extends Controller
      */
     public function edit($guildSlug, $id = null)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'raids',
-            'raids.role',
-        ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild->load(['raids', 'raids.role']);
 
         // TODO: Validate user can view/edit this raid
 
@@ -49,7 +40,7 @@ class RaidController extends Controller
             $raid = $guild->raids->where('id', $id)->first();
 
             if (!$raid) {
-                abort(404);
+                abort(404, 'Raid not found.');
             }
         }
 
@@ -65,18 +56,10 @@ class RaidController extends Controller
      * @return
      */
     public function create($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'raids',
-        ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild->load(['raids']);
 
         // TODO: Validate user can create a raid in this guild
 
@@ -107,25 +90,54 @@ class RaidController extends Controller
     }
 
     /**
+     * Disable a raid
+     * @return
+     */
+    public function toggleDisable($guildSlug) {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load([
+            'raids' => function ($query) {
+                return $query->where('id', request()->input('id'));
+            }
+        ]);
+
+        $raid = $guild->raids->first();
+
+        if (!$raid) {
+            abort(404, 'Raid not found.');
+        }
+
+        // TODO: Validate user has permissions to disable this raid
+
+        $validationRules = [
+            'id' => 'required|integer|exists:raids,id'
+        ];
+        $validationMessages = [];
+        $this->validate(request(), $validationRules, $validationMessages);
+
+        $disabledAt = (request()->input('disabled_at') == 1 ? getDateTime() : null);
+
+        $updateValues['disabled_at']  = $disabledAt;
+
+        $raid->update($updateValues);
+
+        request()->session()->flash('status', 'Successfully ' . ($disabledAt ? 'disabled' : 'enabled') . ' ' . $raid->name . '.');
+        return redirect()->route('guild.raids', ['guildSlug' => $guild->slug]);
+    }
+
+    /**
      * Show the raids page.
      *
      * @return \Illuminate\Http\Response
      */
     public function raids($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'raids',
-            'raids.role',
-        ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild->load(['allRaids', 'allRaids.role']);
 
         // TODO: Validate user can view this guild's raids
 
@@ -140,18 +152,10 @@ class RaidController extends Controller
      * @return
      */
     public function update($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'raids',
-        ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild->load(['raids']);
 
         // TODO: Validate a user can update a raid in this guild
 
@@ -179,32 +183,5 @@ class RaidController extends Controller
 
         request()->session()->flash('status', 'Successfully updated ' . $raid->name . '.');
         return redirect()->route('guild.raids', ['guildSlug' => $guild->slug]);
-    }
-
-    /**
-     * Remove a raid
-     * @return
-     */
-    public function remove($guildSlug) {
-//         $guild = Guild::where('slug', $guildSlug)->firstOrFail();
-// // NOT IMPLEMENTED!!!!!!!! PLACEHOLDER CODE!!!!
-//         // TODO: Validate user can remove raids in this guild
-
-//         $validationRules = [
-//             'id' => 'required|integer|exists:raids,id',
-//         ];
-
-//         $validationMessages = [];
-
-//         $this->validate(request(), $validationRules, $validationMessages);
-
-//         $guild = Guild::where('slug', $guildSlug)->firstOrFail();
-
-//         $raid = Raid::where(['id' => request()->input('id'), 'guild_id' => $guild->id])->firstOrFail();
-
-//         $raid->delete();
-
-//         request()->session()->flash('status', 'Successfully removed raid.');
-//         return redirect()->back();
     }
 }

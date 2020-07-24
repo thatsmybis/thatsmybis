@@ -27,20 +27,17 @@ class MemberController extends Controller
      */
     public function edit($guildSlug, $username)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load([
             'members' => function ($query) use($username) {
-                    return $query->where('members.username', $username)
-                        ->orWhere('members.user_id', Auth::id());
-                        // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
-                },
-            ])->firstOrFail();
+                return $query->where('members.username', $username);
+                // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
+            },
+        ]);
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
-
-        // TODO: Validate user can view this character in this guild
+        // TODO: Validate user can edit this character in this guild
 
         $member = $guild->members->first();
 
@@ -49,8 +46,6 @@ class MemberController extends Controller
                 return $query->where('guild_id', $guild->id);
             },
             ])->first();
-
-        // TODO: Validate user can edit this character in this guild
 
         return view('member.edit', [
             'currentMember' => $currentMember,
@@ -67,26 +62,21 @@ class MemberController extends Controller
      */
     public function show($guildSlug, $username)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load([
             'members' => function ($query) use($username) {
-                    return $query->where('members.username', $username)
-                        ->orWhere('members.user_id', Auth::id())
-                        ->with([
-                            'characters',
-                            'characters.recipes',
-                            // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
-                        ]);
-                },
-            ])->firstOrFail();
+                return $query->where('members.username', $username)
+                    ->with([
+                        'characters',
+                        'characters.recipes',
+                        // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
+                    ]);
+            },
+        ]);
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
-
-        // TODO: Validate user can view this character in this guild
-
-        $member = $guild->members->first();
+        $member = $guild->members->where('username', $username);
 
         $user = User::where('id', $member->user_id)->with([
             'roles' => function ($query) use($guild) {
@@ -118,21 +108,18 @@ class MemberController extends Controller
      * @return
      */
     public function update($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id())
-                        ->orWhere('members.id', request()->input('id'))
-                        ->orWhere('members.username', request()->input('username'));
-                },
-            ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember  = $guild->members->where('user_id', Auth::id())->first();
+        $guild->load([
+            'members' => function ($query) {
+                return $query->where('members.id', request()->input('id'))
+                    ->orWhere('members.username', request()->input('username'));
+            },
+        ]);
+
         $selectedMember = $guild->members->where('id', request()->input('id'))->first();
         $sameNameMember = $guild->members->where('username', request()->input('username'))->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
 
         if (!$selectedMember) {
             abort(404, 'Guild member not found.');
@@ -188,18 +175,16 @@ class MemberController extends Controller
      * @return
      */
     public function updateNote($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->with([
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load([
             'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id())
-                    ->orwhere('members.user_id', request()->input('id'));
+                return $query->where('members.user_id', request()->input('id'));
             },
-            ])->firstOrFail();
+        ]);
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        // TODO: Validate user can update this member's note
 
         $validationRules = [
             'id'            => 'required|integer|exists:members,id',
@@ -239,32 +224,5 @@ class MemberController extends Controller
 
         request()->session()->flash('status', "Successfully updated " . $member->username ."'s note.");
         return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $member->username]);
-    }
-
-    /**
-     * Remove a character
-     * @return
-     */
-    public function remove($guildSlug) {
-        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
-
-        // // TODO: Validate user can update this character in this guild
-
-        // $validationRules = [
-        //     'id' => 'required|integer|exists:raids,id',
-        // ];
-
-        // $validationMessages = [];
-
-        // $this->validate(request(), $validationRules, $validationMessages);
-
-        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
-
-        // $raid = Raid::where(['id' => request()->input('id'), 'guild_id' => $guild->id])->firstOrFail();
-
-        // $raid->delete();
-
-        // request()->session()->flash('status', 'Successfully removed raid.');
-        // return redirect()->back();
     }
 }

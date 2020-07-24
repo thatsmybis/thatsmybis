@@ -12,6 +12,8 @@ class SeeUser
     /**
      * Handle an incoming request.
      *
+     * Stores the user object in the request for convenient access later on.
+     *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
      * @return mixed
@@ -19,6 +21,7 @@ class SeeUser
     public function handle($request, Closure $next)
     {
         $user = $request->user();
+
         if ($user) {
             // You shall not pass!
             if ($user->banned_at) {
@@ -33,7 +36,11 @@ class SeeUser
             } catch (\GuzzleHttp\Command\Exception\CommandClientException $e) {
                 abort(404, "Doesn't look like you're in the guild Discord server.");
             }
+
+            // Store the user for later access.
+            $request->attributes->add(['currentUser' => $user]);
         }
+
         return $next($request);
     }
 }

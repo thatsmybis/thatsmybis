@@ -26,19 +26,10 @@ class ItemController extends Controller
      */
     public function listWithGuild($guildSlug, $instanceSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)
-            ->with(['members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id());
-                },
-                'raids',
-            ])
-            ->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild->load(['raids']);
 
         $instance = Instance::where('slug', $instanceSlug)->firstOrFail();
 
@@ -87,20 +78,13 @@ class ItemController extends Controller
      */
     public function massInput($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load([
             'characters',
-            'members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id());
-                },
             'raids',
-            ])->firstOrFail();
-
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        // TODO: Keep this style of permissions check?
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        ]);
 
         // TODO: Validate user can view this guild's raids
 
@@ -117,20 +101,10 @@ class ItemController extends Controller
      */
     public function showWithGuild($guildSlug, $id, $slug = null)
     {
-        $guild = Guild::where('slug', $guildSlug)
-            ->with(['members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id());
-                        // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
-                },
-                'raids',
-            ])
-            ->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->first();
-
-        if (!$currentMember) {
-            abort(403, "You're not part of that guild.");
-        }
+        $guild->load(['raids']);
 
         $item = Item::where('item_id', $id)->with([
             'guilds' => function ($query) use($guild) {
@@ -203,24 +177,18 @@ class ItemController extends Controller
             'receivedCharacters' => $item->receivedCharacters,
             'showNoteEdit'       => true, // TODO PERMISSIONS
             'wishlistCharacters' => $item->wishlistCharacters,
-            'itemJson'           => self::getItemJson($item->item_id),
+            'itemJson'           => self::getItemWowheadJson($item->item_id),
         ]);
     }
 
     public function submitMassInput($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id());
-                },
-            'characters',
-            ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        // TODO: Keep this style of permissions check?
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        // Allow adding items to inactive characters as well
+        // Perhaps someone deactivated a character while the raid leader was still editing the form
+        // We don't want the submission to fail because of that
+        $guild->load(['allCharacters']);
 
         $validationRules =  [
             'items.*.id'            => 'nullable|integer|exists:items,item_id',
@@ -242,7 +210,7 @@ class ItemController extends Controller
 
         foreach (request()->input('items') as $item) {
             if ($item['id']) {
-                if ($guild->characters->contains('id', $item['character_id'])) {
+                if ($guild->allCharacters->contains('id', $item['character_id'])) {
                     $newRows[] = [
                         'item_id'      => $item['id'],
                         'character_id' => $item['character_id'],
@@ -286,17 +254,10 @@ class ItemController extends Controller
      * @return
      */
     public function updateNote($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild->load(['raids', 'roles']);
 
         $validationRules = [
             'id'       => 'required|integer|exists:items,item_id',
@@ -347,7 +308,7 @@ class ItemController extends Controller
      *
      * @param int $id The ID of the item to fetch.
      */
-    public static function getItemJson($id) {
+    public static function getItemWowheadJson($id) {
         $json = null;
         try {
             // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)

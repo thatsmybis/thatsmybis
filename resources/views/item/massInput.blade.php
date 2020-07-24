@@ -17,7 +17,7 @@
                     </small>
                 </div>
 
-                <div class="col-12 pt-2 mb-2">
+                <div class="col-sm-6 col-12 pt-2 mb-2">
                     <label for="raid_filter font-weight-light">
                         <span class="text-muted fas fa-fw fa-users"></span>
                         Raid

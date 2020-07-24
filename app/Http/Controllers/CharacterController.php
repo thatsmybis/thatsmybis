@@ -51,25 +51,21 @@ class CharacterController extends Controller
      * @return
      */
     public function create($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->with([
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load([
             'members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id())
-                        ->orWhere('members.id', request()->input('member_id'));
-                },
-            'characters' => function ($query) {
-                    return $query->where('name', request()->input('name'));
-                },
+                return $query->Where('members.id', request()->input('member_id'));
+            },
+            'allCharacters' => function ($query) {
+                return $query->where('characters.name', request()->input('name'));
+            },
             'raids',
-            ])->firstOrFail();
+        ]);
 
-        $currentMember  = $guild->members->where('user_id', Auth::id())->first();
-
-        if ($guild->characters->count() > 0) {
+        if ($guild->allCharacters->count() > 0) {
             abort(403, 'Name taken.');
-        }
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
         }
 
         // TODO: Validate user has permissions to create a character in this guild
@@ -133,13 +129,8 @@ class CharacterController extends Controller
      */
     public function edit($guildSlug, $id)
     {
-        $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
-
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
         $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->first();
 
@@ -163,16 +154,8 @@ class CharacterController extends Controller
      */
     public function loot($guildSlug, $id)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            }])->firstOrFail();
-
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
         // TODO: Permissions
 
@@ -202,16 +185,8 @@ class CharacterController extends Controller
      */
     public function show($guildSlug, $id)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            }])->firstOrFail();
-
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
         $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->first();
 
@@ -237,13 +212,8 @@ class CharacterController extends Controller
      */
     public function showCreate($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with('members')->firstOrFail();
-
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
         // TODO: Validate user can create a character in this guild
 
@@ -259,27 +229,24 @@ class CharacterController extends Controller
      * @return
      */
     public function update($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id())
-                        ->orWhere('members.id', request()->input('member_id'));
-                },
-            'characters' => function ($query) {
-                    return $query->where('name', request()->input('name'))
-                        ->orWhere('id', request()->input('id'));
-                },
-            'raids',
-            ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
 
-        $currentMember  = $guild->members->where('user_id', Auth::id())->first();
+        $guild->load([
+            'members' => function ($query) {
+                return $query->Where('members.id', request()->input('member_id'));
+            },
+            'allCharacters' => function ($query) {
+                return $query->where('name', request()->input('name'))
+                    ->orWhere('id', request()->input('id'));
+            },
+            'raids',
+        ]);
+
         $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
 
-        $currentCharacter  = $guild->characters->where('id', request()->input('id'))->first();
-        $sameNameCharacter = $guild->characters->where('name', request()->input('name'))->first();
-
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
-        }
+        $currentCharacter  = $guild->allCharacters->where('id', request()->input('id'))->first();
+        $sameNameCharacter = $guild->allCharacters->where('name', request()->input('name'))->first();
 
         if (!$currentCharacter) {
             abort(404, 'Character not found.');
@@ -351,15 +318,21 @@ class CharacterController extends Controller
      */
     public function updateLoot($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id());
-                },
-            'characters' => function ($query) {
-                    return $query->Where('id', request()->input('id'))
-                        ->with(['wishlist', 'recipes', 'received']);
-                },
-            ])->firstOrFail();
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load([
+            'allCharacters' => function ($query) {
+                return $query->Where('id', request()->input('id'))
+                    ->with(['wishlist', 'recipes', 'received']);
+            },
+        ]);
+
+        $character = $guild->allCharacters->first();
+
+        if (!$character) {
+            abort(404, 'Character not found.');
+        }
 
         $validationRules =  [
             'id'                 => 'required|integer|exists:characters,id',
@@ -372,13 +345,6 @@ class CharacterController extends Controller
         ];
 
         $this->validate(request(), $validationRules);
-
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
-        $character = $guild->characters->first();
-
-        if (!$character || !$currentMember) {
-            abort(404, 'Character not found.');
-        }
 
         // TODO: permissions; can user edit this character's loot?
 
@@ -426,19 +392,19 @@ class CharacterController extends Controller
      * @return
      */
     public function updateNote($guildSlug) {
-        $guild = Guild::where('slug', $guildSlug)->with([
-            'members' => function ($query) {
-                return $query->where('members.user_id', Auth::id());
-            },
-            'characters' => function ($query) {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load([
+            'allCharacters' => function ($query) {
                 return $query->where('id', request()->input('id'));
             },
-            ])->firstOrFail();
+        ]);
 
-        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+        $character = $guild->allCharacters->first();
 
-        if (!$currentMember) {
-            abort(403, 'Not a member of that guild.');
+        if (!$character) {
+            abort(404, "Character not found.");
         }
 
         $validationRules = $this->getValidationRules();
@@ -447,12 +413,6 @@ class CharacterController extends Controller
         $validationMessages = [];
 
         $this->validate(request(), $validationRules, $validationMessages);
-
-        $character = $guild->characters->first();
-
-        if (!$character) {
-            abort(404, "Character not found.");
-        }
 
         $updateValues = [];
 
@@ -476,33 +436,6 @@ class CharacterController extends Controller
         request()->session()->flash('status', "Successfully updated " . $character->name ."'s note.");
 
         return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]);
-    }
-
-    /**
-     * Remove a character
-     * @return
-     */
-    public function remove($guildSlug) {
-        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
-
-        // // TODO: Validate user can update this character in this guild
-
-        // $validationRules = [
-        //     'id' => 'required|integer|exists:raids,id',
-        // ];
-
-        // $validationMessages = [];
-
-        // $this->validate(request(), $validationRules, $validationMessages);
-
-        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
-
-        // $raid = Raid::where(['id' => request()->input('id'), 'guild_id' => $guild->id])->firstOrFail();
-
-        // $raid->delete();
-
-        // request()->session()->flash('status', 'Successfully removed raid.');
-        // return redirect()->back();
     }
 
     /**

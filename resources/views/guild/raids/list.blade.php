@@ -13,11 +13,12 @@
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
-                    @if ($guild->raids->count() > 0)
+                    @if ($guild->allRaids->count() > 0)
                         <ol class="no-bullet no-indent striped">
-                            @foreach ($guild->raids as $raid)
+                            @foreach ($guild->allRaids as $raid)
                                 <li class="p-3 mb-3 rounded">
                                     <span class="role-circle" style="{{ $raid->role ? 'background-color:' . $raid->role->getColor() : '' }}" title="{{ $raid->role ? $raid->role->getColor() : ''}}"></span>
+                                    <span class="font-weight-bold text-danger">{{ $raid->disabled_at ? 'DISABLED' : '' }}</span>
                                     <span title="{{ $raid->slug }}">{{ $raid->name }}</span>
                                     <small class="text-muted">
                                         @if ($raid->role)
@@ -32,12 +33,16 @@
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <form class="form-inline" role="form" method="POST" action="{{ route('guild.raid.remove', ['guildSlug' => $guild->slug]) }}">
+                                            <form class="form-inline" role="form" method="POST" action="{{ route('guild.raid.toggleDisable', ['guildSlug' => $guild->slug]) }}">
                                                 {{ csrf_field() }}
                                                 <input hidden name="id" value="{{ $raid->id }}">
-                                                <button type="submit" class="btn btn-link text-danger p-0 m-0 pl-3" onclick="return confirm('PERMANENTLY remove raid? Cannot be undone.')">
-                                                    <span class="fas fa-fw fa-trash"></span>
-                                                    remove
+                                                <input hidden type="checkbox" name="disabled_at" value="1" class="" autocomplete="off"
+                                                    {{ $raid->disabled_at ? '' : 'checked' }}>
+                                                <button type="submit"
+                                                    class="btn btn-link text-{{ $raid->disabled_at ? 'success' : 'danger' }} p-0 m-0 ml-3"
+                                                    title="{{ $raid->disabled_at ? 'Raid is shown in dropdowns again' : 'Raid is no longer shown in dropdowns' }}">
+                                                    <span class="fas fa-fw fa-{{ $raid->disabled_at ? 'trash-undo' : 'trash' }}"></span>
+                                                    {{ $raid->disabled_at ? 'enable' : 'disable' }}
                                                 </button>
                                             </form>
                                         </li>
