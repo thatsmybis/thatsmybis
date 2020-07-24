@@ -4,8 +4,8 @@ namespace App\Http\Controllers\Auth;
 
 use Auth;
 use App\{User};
-
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Socialite;
 use RestCord\DiscordClient;

@@ -37,7 +37,7 @@ class MemberController extends Controller
 
         $currentMember = $guild->members->where('user_id', Auth::id())->first();
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         // TODO: Validate user can view this character in this guild
@@ -72,16 +72,16 @@ class MemberController extends Controller
                     return $query->where('members.username', $username)
                         ->orWhere('members.user_id', Auth::id())
                         ->with([
-                        'characters',
-                        'characters.recipes',
-                        // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
-                    ]);
+                            'characters',
+                            'characters.recipes',
+                            // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
+                        ]);
                 },
             ])->firstOrFail();
 
         $currentMember = $guild->members->where('user_id', Auth::id())->first();
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         // TODO: Validate user can view this character in this guild
@@ -131,7 +131,7 @@ class MemberController extends Controller
         $sameNameMember = $guild->members->where('username', request()->input('username'))->first();
 
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         if (!$selectedMember) {
@@ -198,7 +198,7 @@ class MemberController extends Controller
         $currentMember = $guild->members->where('user_id', Auth::id())->first();
 
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         $validationRules = [
@@ -212,7 +212,7 @@ class MemberController extends Controller
 
         $this->validate(request(), $validationRules, $validationMessages);
 
-        $member = $guild->members->where('user_id', request()->input('id'))->first();
+        $member = $guild->members->where('id', request()->input('id'))->first();
 
         if (!$member) {
             abort(404, "Member not found.");

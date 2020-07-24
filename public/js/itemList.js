@@ -154,12 +154,12 @@ function createTable(lastSource) {
 
 // Gets an HTML list of characters
 function getCharacterList(data, type, itemId) {
-    let characters = `<ul class="list-inline js-item-list mb-2" data-type="${ type }" data-id="${ itemId }">`;
+    let characters = `<ul class="list-inline js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
     let initialLimit = 4;
 
     $.each(data, function (index, character) {
         characters += `
-            <li data-raid-id="${ character.raid_id }" class="js-item-wishlist-character list-inline-item font-weight-normal">
+            <li data-raid-id="${ character.raid_id }" class="js-item-wishlist-character list-inline-item font-weight-normal mb-1">
                 <a href="/${ guild.slug }/c/${ character.name }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     ${ character.name }

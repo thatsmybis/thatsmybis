@@ -12,9 +12,9 @@
                 <a href="https://discord.com/api/oauth2/authorize?client_id=645311036785950721&permissions=0&redirect_uri=https%3A%2F%2Fthatsmybis.com%2Fauth%2Fdiscord%2Fcallback&scope=bot"
                     target="_blank"
                     class="font-italic font-weight-bold">
-                    <span class="text-legendary">{{ env('APP_NAME') }}</span> bot
+                    <span class="">{{ env('APP_NAME') }}</span> bot
                 </a>
-                to your guild's Discord server. <span class="small text-muted">(requires guild permissions)</span> This allows us to verify who's on the server and their permissions. You need to leave the bot on the server so long as you want to keep using <span class="text-legendary">{{ env('APP_NAME') }}</span>.
+                to your guild's Discord server. <span class="small text-muted">(requires guild permissions)</span> This allows us to verify who's on the server and their permissions. You need to leave the bot on the server so long as you want to keep using <span class="">{{ env('APP_NAME') }}</span>.
             </p>
             <p class="pt-3 text-4">
                 Then, you're going to want to fill out this little form here:

@@ -47,9 +47,10 @@
     @endif
 
     @if (!isset($showDetails) || $showDetails)
-        @if ($character->level || $character->race || $character->spec)
+        @if ($character->inactive_at || $character->level || $character->race || $character->spec)
             <li>
                 <small>
+                    <span class="font-weight-bold text-danger">{{ $character->inactive_at ? 'INACTIVE' : '' }}</span>
                     {{ $character->level ? $character->level : '' }}
                     {{ $character->race  ? $character->race : '' }}
                     {{ $character->spec  ? $character->spec : '' }}

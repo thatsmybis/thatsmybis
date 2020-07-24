@@ -150,27 +150,29 @@
                         </div>
                     @endif
 
-                    @if ($showPersonalNote)
-                        <div class="col-12">
-                            <span class="text-muted font-weight-bold">
-                                <span class="fas fa-fw fa-lock"></span>
-                                Personal Note
-                            </span>
-                        </div>
-                        <div class="col-12 mb-3 pl-4">
-                            {{ $character->personal_note ? $character->personal_note : '—' }}
-                            <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
-                        </div>
-                        <div class="js-note-input col-12 pl-4" style="display:none;">
-                            <div class="form-group">
-                                <label for="personal_note" class="font-weight-bold">
-                                    <span class="sr-only">Personal Note</span>
-                                    <small class="text-muted">only you can see this</small>
-                                </label>
-                                <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
+                    {{--
+                        @if ($showPersonalNote)
+                            <div class="col-12">
+                                <span class="text-muted font-weight-bold">
+                                    <span class="fas fa-fw fa-eye-slash"></span>
+                                    Personal Note
+                                </span>
                             </div>
-                        </div>
-                    @endif
+                            <div class="col-12 mb-3 pl-4">
+                                {{ $character->personal_note ? $character->personal_note : '—' }}
+                                <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
+                            </div>
+                            <div class="js-note-input col-12 pl-4" style="display:none;">
+                                <div class="form-group">
+                                    <label for="personal_note" class="font-weight-bold">
+                                        <span class="sr-only">Personal Note</span>
+                                        <small class="text-muted">only you can see this</small>
+                                    </label>
+                                    <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
+                                </div>
+                            </div>
+                        @endif
+                    --}}
 
                     <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                         <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>

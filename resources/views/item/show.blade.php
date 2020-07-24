@@ -7,7 +7,7 @@
     <div class="row mt-3">
         <div class="col-12">
             <ul class="list-inline">
-                <li class="list-inline-item bg-lightest rounded p-3 item-tooltip align-top">
+                <li class="list-inline-item bg-lightest rounded pl-3 pb-3 pr-3 mt-3 item-tooltip align-top">
                     <h1 class="font-weight-bold">
                         @if ($itemJson)
                             {{-- %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want --}}
@@ -24,7 +24,7 @@
                     @endif
                 </li>
                 @if ($guild)
-                    <li class="list-inline-item bg-lightest rounded p-3 align-top">
+                    <li class="list-inline-item bg-lightest rounded p-3 mt-3 align-top item-notes">
                         <form role="form" method="POST" action="{{ route('guild.item.updateNote', ['guildSlug' => $guild->slug]) }}">
                             {{ csrf_field() }}
 
@@ -85,7 +85,7 @@
                                             <label for="priority" class="sr-only">
                                                 Item Priority
                                             </label>
-                                            <textarea data-max-length="144" name="priority" rows="2" placeholder="which class/spec is first in line, which is second, etc." class="form-control">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
+                                            <textarea data-max-length="144" name="priority" rows="2" placeholder="eg. mage > warlock > boomkin > arcane shot hunter" class="form-control">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
                                         </div>
                                     </div>
                                 @endif

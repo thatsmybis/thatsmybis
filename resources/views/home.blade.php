@@ -2,31 +2,33 @@
 @section('title', config('app.name'))
 
 @section('css')
+<link rel="stylesheet" type="text/css" href="/css/stars.css">
 @endsection
 
-@section('bodyClass')
-    marquee-classic-bg
+@section('css')
+
 @endsection
+
+@section('bodyClass', 'bg-gradient')
 
 @section('content')
+<div id="stars"></div>
+<div id="stars2"></div>
+<div id="stars3"></div>
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 text-center mb-5">
-            <h1 class="mt-5 text-1">
+            <h1 class="mt-5 mb-5 text-1">
                 <span class="font-weight-bold">{{ env('APP_NAME') }}</span>
             </h1>
-            <p class="mt-1 font-weight-normal mb-5 text-3">
+        <p class="mt-1 font-weight-normal mb-5 text-3">
                 A tool for loot council guilds
             </p>
 
-            <p class="text-muted font-weight-normal pt-3 text-4">
-                Keep track of what your raiders have and want.
-                <br><br>
-                Hooks into your Discord server, allowing all of
+            <p class="font-weight-normal pt-3 text-4">
+                easily keep track of your raid's
                 <br>
-                your raiders access while maintaining your existing
-                <br>
-                guild structure and permissions.
+                loot distribution
             </p>
 
             <div class="mt-5 mb-5">
@@ -35,8 +37,7 @@
                 </a>
             </div>
 
-            <div class="mt-5 mb-5">
-                Click the black void below
+            <div class="mt-5 mb-5 pt-5">
                 <blockquote class="reddit-card"><a href="https://www.reddit.com/r/classicwow/comments/hnjsge/how_to_loot_council/">How To Loot Council</a> from <a href="http://www.reddit.com/r/classicwow">r/classicwow</a></blockquote>
                 <script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
             </div>

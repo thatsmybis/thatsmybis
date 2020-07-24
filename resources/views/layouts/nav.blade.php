@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark">
-    <a class="navbar-brand" href="{{ route('home') }}"><span class="text-legendary font-weight-bold">{{ isset($guild) && $guild->name ? $guild->name : env('APP_NAME') }}</span></a>
+    <a class="navbar-brand" href="{{ route('home') }}"><span class="text-white font-weight-bold">{{ isset($guild) && $guild->name ? $guild->name : env('APP_NAME') }}</span></a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
@@ -84,10 +84,10 @@
                                 Discord Roles
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids', ['guildSlug' => $guild->slug]) }}">
-                                Raids
+                                Raid Groups
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.settings', ['guildSlug' => $guild->slug]) }}">
-                                Settings
+                                Guild Settings
                             </a>
                             <!-- Can't get permissions working right now, so I'm disabling this
                                 <a class="dropdown-item" href="">Permissions</a> -->
@@ -98,11 +98,13 @@
         </ul>
         <div class="my-2 my-lg-0">
             @if (Auth::guest())
-                <a class="" href="{{ route('discordLogin') }}" title="Sign in with Discord" rel="nofollow">
+                <a class="text-white" href="{{ route('discordLogin') }}" title="Sign in with Discord" rel="nofollow">
+                    <span class="fal fa-fw fa-sign-in-alt"></span>
                     Sign In
                 </a>
             @else
                 <a href="{{ route('logout') }}"
+                    class="text-white"
                     onclick="event.preventDefault();
                              document.getElementById('logout-form').submit();">
                     <span class="text-grey fal fa-fw fa-sign-out"></span> Sign Out ({{ Auth::user()->username }})

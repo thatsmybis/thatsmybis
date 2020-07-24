@@ -57,7 +57,8 @@ Route::group(['prefix' => '{guildSlug}'], function () {
     Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
 
     Route::group(['prefix' => 'c'], function () {
-        Route::get( '/create',      'CharacterController@showCreate')->name('character.create');
+        Route::get( '/create',      'CharacterController@showCreate')->name('character.showCreate');
+        Route::post('/create',      'CharacterController@create')    ->name('character.create');
         Route::get( '/{name}/edit', 'CharacterController@edit')      ->name('character.edit');
         Route::get( '/{name}/loot', 'CharacterController@loot')      ->name('character.loot');
         Route::post('/remove',      'CharacterController@remove')    ->name('character.remove');

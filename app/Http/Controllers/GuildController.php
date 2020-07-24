@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\{Guild, Member, Role, User};
 use Auth;
+use Exception;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
 use Kodeine\Acl\Models\Eloquent\Permission;
@@ -56,7 +57,11 @@ class GuildController extends Controller
 
         $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$input['discord_id']]);
 
-        $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$input['discord_id'], 'user.id' => (int)$user->discord_id]);
+        try {
+            $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$input['discord_id'], 'user.id' => (int)$user->discord_id]);
+        } catch (Exception $e) {
+            abort(403, "Insufficient server privileges to register that guild.");
+        }
 
         $hasPermissions = false;
 
@@ -176,6 +181,6 @@ class GuildController extends Controller
         $guild->update($updateValues);
 
         request()->session()->flash('status', 'Guild settings updated.');
-        return redirect()->route('guild.roster', ['guildSlug' => $guild->slug]);
+        return redirect()->route('guild.settings', ['guildSlug' => $guild->slug]);
     }
 }

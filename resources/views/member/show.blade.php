@@ -15,7 +15,7 @@
                 <div class="col-12 mb-2">
                     <span class="font-weight-bold">
                         <span class="fas fa-fw fa-user text-muted"></span>
-                        <a href="{{ route('character.create', ['guildSlug' => $guild->slug]) }}" class="text-white">
+                        <a href="{{ route('character.showCreate', ['guildSlug' => $guild->slug]) }}" class="text-white">
                             Characters
                         </a>
                     </span>
@@ -28,7 +28,7 @@
                             </li>
                         @endforeach
                         <li class="pt-3 pl-3 pb-3 pr-3 rounded">
-                            <a href="{{ route('character.create', ['guildSlug' => $guild->slug]) }}" class="font-weight-medium">
+                            <a href="{{ route('character.showCreate', ['guildSlug' => $guild->slug]) }}" class="font-weight-medium">
                                 <span class="fas fa-plus"></span>
                                 create character
                             </a>
@@ -37,7 +37,7 @@
                 </div>
             </div>
 
-             <div class="row mb-3 pt-3 bg-light rounded">
+             <div class="row mb-3 pb-3 pt-3 bg-light rounded">
                 <div class="col-12 mb-2">
                     <span class="text-gold font-weight-bold">
                         <span class="fas fa-fw fa-book"></span>
@@ -46,7 +46,7 @@
                 </div>
                 <div class="col-12">
                     @if ($recipes->count() > 0)
-                        <ol class="">
+                        <ol class="mb-0">
                             @foreach ($recipes as $item)
                                 @php
                                     $itemCharacter = $characters->find($item->pivot->character_id);
@@ -133,27 +133,29 @@
                         </div>
                     @endif
 
-                    @if ($showPersonalNote)
-                        <div class="col-12">
-                            <span class="text-muted font-weight-bold">
-                                <span class="fas fa-fw fa-lock"></span>
-                                Personal Note
-                            </span>
-                        </div>
-                        <div class="col-12 mb-3 pl-4">
-                            {{ $member->personal_note ? $member->personal_note : '—' }}
-                            <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
-                        </div>
-                        <div class="js-note-input col-12 pl-4" style="display:none;">
-                            <div class="form-group">
-                                <label for="personal_note" class="font-weight-bold">
-                                    <span class="sr-only">Personal Note</span>
-                                    <small class="text-muted">only you can see this</small>
-                                </label>
-                                <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($member ? $member->personal_note : '') }}</textarea>
+                    {{--
+                        @if ($showPersonalNote)
+                            <div class="col-12">
+                                <span class="text-muted font-weight-bold">
+                                    <span class="fas fa-fw fa-eye-slash"></span>
+                                    Personal Note
+                                </span>
                             </div>
-                        </div>
-                    @endif
+                            <div class="col-12 mb-3 pl-4">
+                                {{ $member->personal_note ? $member->personal_note : '—' }}
+                                <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
+                            </div>
+                            <div class="js-note-input col-12 pl-4" style="display:none;">
+                                <div class="form-group">
+                                    <label for="personal_note" class="font-weight-bold">
+                                        <span class="sr-only">Personal Note</span>
+                                        <small class="text-muted">only you can see this</small>
+                                    </label>
+                                    <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($member ? $member->personal_note : '') }}</textarea>
+                                </div>
+                            </div>
+                        @endif
+                    --}}
 
                     <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                         <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>

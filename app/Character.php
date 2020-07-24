@@ -29,8 +29,7 @@ class Character extends Model
         'officer_note',
         'personal_note',
         'order',
-        'hidden_at',
-        'removed_at',
+        'inactive_at',
     ];
 
     /**

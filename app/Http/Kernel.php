@@ -39,7 +39,6 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            \App\Http\Middleware\VerifyCsrfToken::class,
             'throttle:60,1',
             'bindings',
         ],

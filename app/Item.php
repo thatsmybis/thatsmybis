@@ -48,6 +48,7 @@ class Item extends Model
 
     public function characters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
+            ->whereNull('characters.inactive_at')
             ->withTimeStamps()
             ->withPivot('type')
             ->orderBy('characters.name');
@@ -66,6 +67,7 @@ class Item extends Model
     public function receivedCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['type' => self::TYPE_RECEIVED])
+            ->whereNull('characters.inactive_at')
             ->withTimeStamps()
             ->withPivot('type')
             ->orderBy('characters.name');
@@ -74,6 +76,7 @@ class Item extends Model
     public function wishlistCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['type' => self::TYPE_WISHLIST])
+            ->whereNull('characters.inactive_at')
             ->withTimeStamps()
             ->withPivot('type')
             ->orderBy('characters.name');

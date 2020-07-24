@@ -37,7 +37,7 @@
                                     </li>
                                 @endforeach
                                 <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
-                                    <a href="{{ route('character.create', ['guildSlug' => $member->guild->slug]) }}">
+                                    <a href="{{ route('character.showCreate', ['guildSlug' => $member->guild->slug]) }}">
                                         <span class="fas fa-plus"></span>
                                         create character
                                     </a>
@@ -49,10 +49,10 @@
             @else
                 <div class="mt-5 mb-5">
                     <p class="font-weight-normal pt-3 text-4">
-                        You don't belong to any guilds yet.
+                        You don't belong to any guilds yet
                     </p>
                     <p class="font-weight-normal pt-3 text-4">
-                        Ask your guild leader for a link to your guild's page.
+                        Ask your guild leader for a link to your guild's page
                     </p>
                 </div>
             @endif

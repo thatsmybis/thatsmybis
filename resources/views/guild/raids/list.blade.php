@@ -9,7 +9,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
                         <span class="fas fa-fw fa-users-crown text-muted"></span>
-                        Raids
+                        Raid Groups
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
@@ -47,7 +47,7 @@
                         </ol>
                     @else
                     <p class="text-4">
-                        No raids yet
+                        No raid groups yet
                     </p>
                     @endif
                 </div>

@@ -11,19 +11,19 @@
                         </li>
                         <li class="list-inline-item">&sdot;</li>
                         <li class="list-inline-item">
-                            <a href="{{ route('about') }}" class="text-brand">about</a>
+                            <a href="{{ route('about') }}" class="text-white">about</a>
                         </li>
                         <li class="list-inline-item">&sdot;</li>
                         <li class="list-inline-item">
-                            <a href="{{ route('contact') }}" class="text-brand">contact</a>
+                            <a href="{{ route('contact') }}" class="text-white">contact</a>
                         </li>
                         <li class="list-inline-item">&sdot;</li>
                         <li class="list-inline-item">
-                            <a href="{{ route('terms') }}" class="text-brand">terms</a>
+                            <a href="{{ route('terms') }}" class="text-white">terms</a>
                         </li>
                         <li class="list-inline-item">&sdot;</li>
                         <li class="list-inline-item">
-                            <a href="{{ route('privacy') }}" class="text-brand">privacy</a>
+                            <a href="{{ route('privacy') }}" class="text-white">privacy</a>
                         </li>
                         --}}
                     </ul>
@@ -33,7 +33,7 @@
                 <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
                     <ul class="list-inline mb-0">
                         <li class="list-inline-item">
-                            <a href="{{ route('faq') }}" class="text-brand">FAQ</a>
+                            <a href="{{ route('faq') }}" class="text-white">FAQ</a>
                         </li>
                         {{--
                             <li class="list-inline-item mr-3">

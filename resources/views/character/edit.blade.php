@@ -264,7 +264,7 @@
                 </div>
 
                 <div class="row mb-3 pb-1 pt-2 bg-light rounded">
-                    <div class="col-12 mb-4">
+                    <div class="col-12">
                         <div class="form-group">
                             <label for="public_note" class="font-weight-bold">
                                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
@@ -276,7 +276,7 @@
                     </div>
 
                     <!-- TODO: Permissions for who can see/set this -->
-                    <div class="col-12 mb-4">
+                    <div class="col-12 mt-4">
                         <div class="form-group">
                             <label for="officer_note" class="font-weight-bold">
                                 <span class="text-muted fas fa-fw fa-shield"></span>
@@ -287,18 +287,38 @@
                         </div>
                     </div>
 
-                    <!-- TODO: Permissions for who can see/set this -->
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="personal_note" class="font-weight-bold">
-                                <span class="text-muted fas fa-fw fa-lock"></span>
-                                Personal Note
-                                <small class="text-muted">only you can see this</small>
-                            </label>
-                            <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
+                    {{--
+                        @if ($currentMember->id == $character->member_id)
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="personal_note" class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-eye-slash"></span>
+                                        Personal Note
+                                        <small class="text-muted">only you can see this</small>
+                                    </label>
+                                    <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
+                                </div>
+                            </div>
+                        @endif
+                    --}}
+                </div>
+
+                <!-- TODO: Permissions for who can see/set this -->
+                @if ($currentMember->id == $character->member_id)
+                    <div class="row mb-3 pt-2 pb-1 bg-light rounded">
+                        <div class="col-12">
+                            <div class="form-group mb-0">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="inactive_at" value="1" class="" autocomplete="off"
+                                            {{ old('inactive_at') && old('inactive_at') == 1 ? 'checked' : ($character->inactive_at ? 'checked' : '') }}>
+                                            Inactive <small class="text-muted">no longer visible</small>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="form-group">
                     <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>

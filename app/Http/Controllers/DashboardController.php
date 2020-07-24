@@ -169,8 +169,7 @@ class DashboardController extends Controller
             'characters.rank_goal',
             'characters.raid_id',
             'characters.public_note',
-            'characters.hidden_at',
-            'characters.removed_at',
+            'characters.inactive_at',
         ];
 
         // TODO permissions for showing officer note
@@ -180,7 +179,7 @@ class DashboardController extends Controller
 
         $characters = Character::select($characterFields)
             ->where('characters.guild_id', $guild->id)
-            ->whereNull('characters.hidden_at')
+            ->whereNull('characters.inactive_at')
             ->with([/*'member', 'member.user.roles',*/'raid', 'recipes', 'received', 'wishlist'])
             ->orderBy('characters.name')
             ->get();

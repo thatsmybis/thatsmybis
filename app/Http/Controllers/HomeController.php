@@ -59,7 +59,8 @@ class HomeController extends Controller
         if (Auth::check() && Auth::user()) {
         // Authenticated users default to a different page
             request()->session()->reflash();
-            return view('dashboard', ['user' => Auth::user()->with(['members', 'members.characters', 'members.characters.raid', 'members.guild'])->first()]);
+            $user = User::with(['members', 'members.characters', 'members.characters.raid', 'members.guild'])->findOrFail(Auth::id());
+            return view('dashboard', ['user' => $user]);
         } else {
             return view('home');
         }

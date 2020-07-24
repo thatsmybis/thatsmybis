@@ -7,6 +7,10 @@ body {
     /*background-attachment: fixed;*/
 }
 
+.bg-gradient {
+    background: linear-gradient(to top, #473967 20%, #1c1b3a 80%);
+}
+
 .container-width-capped {
     max-width: 1200px;
 }
@@ -148,6 +152,10 @@ body {
 
 .item-tooltip {
     max-width: 680px;
+}
+
+.item-notes {
+    max-width: 500px;
 }
 
 .class-icon {

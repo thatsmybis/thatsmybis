@@ -42,6 +42,7 @@ class CharacterController extends Controller
             'officer_note'  => 'nullable|string|max:144',
             'personal_note' => 'nullable|string|max:2000',
             'order'         => 'nullable|integer|min:0|max:50',
+            'is_inactive'   => 'nullable|boolean',
         ];
     }
 
@@ -122,11 +123,7 @@ class CharacterController extends Controller
 
         request()->session()->flash('status', 'Successfully created ' . $createValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
 
-        return view('character.show', [
-            'character'     => $character,
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-        ]);
+        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]);
     }
 
     /**
@@ -245,7 +242,7 @@ class CharacterController extends Controller
         $currentMember = $guild->members->where('user_id', Auth::id())->first();
 
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         // TODO: Validate user can create a character in this guild
@@ -281,7 +278,7 @@ class CharacterController extends Controller
         $sameNameCharacter = $guild->characters->where('name', request()->input('name'))->first();
 
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         if (!$currentCharacter) {
@@ -321,17 +318,18 @@ class CharacterController extends Controller
             abort(403, 'You do not have permission to change who owns this character.');
         }
 
-        $updateValues['name']          = request()->input('name');
-        $updateValues['level']         = request()->input('level');
-        $updateValues['race']          = request()->input('race');
-        $updateValues['class']         = request()->input('class');
-        $updateValues['spec']          = request()->input('spec');
-        $updateValues['profession_1']  = request()->input('profession_1');
-        $updateValues['profession_2']  = request()->input('profession_2');
-        $updateValues['rank']          = request()->input('rank');
-        $updateValues['rank_goal']     = request()->input('rank_goal');
-        $updateValues['raid_id']       = request()->input('raid_id');
-        $updateValues['public_note']   = request()->input('public_note');
+        $updateValues['name']         = request()->input('name');
+        $updateValues['level']        = request()->input('level');
+        $updateValues['race']         = request()->input('race');
+        $updateValues['class']        = request()->input('class');
+        $updateValues['spec']         = request()->input('spec');
+        $updateValues['profession_1'] = request()->input('profession_1');
+        $updateValues['profession_2'] = request()->input('profession_2');
+        $updateValues['rank']         = request()->input('rank');
+        $updateValues['rank_goal']    = request()->input('rank_goal');
+        $updateValues['raid_id']      = request()->input('raid_id');
+        $updateValues['public_note']  = request()->input('public_note');
+        $updateValues['inactive_at']  = (request()->input('inactive_at') == 1 ? getDateTime() : null);
 
         // User is editing their own character
         if ($currentCharacter->member_id == $currentMember->id) {
@@ -440,7 +438,7 @@ class CharacterController extends Controller
         $currentMember = $guild->members->where('user_id', Auth::id())->first();
 
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         $validationRules = $this->getValidationRules();

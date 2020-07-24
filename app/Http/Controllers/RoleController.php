@@ -26,12 +26,24 @@ class RoleController extends Controller
      */
     public function roles($guildSlug)
     {
-        $guild = Guild::where('slug', $guildSlug)->with(['roles'])->firstOrFail();
+        $guild = Guild::where('slug', $guildSlug)->with([
+            'members' => function ($query) {
+                return $query->where('members.user_id', Auth::id());
+            },
+            'raids',
+        ])->firstOrFail();
+
+        $currentMember = $guild->members->where('user_id', Auth::id())->first();
+
+        if (!$currentMember) {
+            abort(403, 'Not a member of that guild.');
+        }
 
         // TODO: validate user can view this page
 
         return view('guild.roles', [
-            'guild' => $guild,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
         ]);
     }
 

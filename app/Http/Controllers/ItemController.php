@@ -28,7 +28,7 @@ class ItemController extends Controller
     {
         $guild = Guild::where('slug', $guildSlug)
             ->with(['members' => function ($query) {
-                    return $query->where('members.id', Auth::id());
+                    return $query->where('members.user_id', Auth::id());
                 },
                 'raids',
             ])
@@ -63,12 +63,11 @@ class ItemController extends Controller
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
             ->with(['wishlistCharacters' => function ($query) use($guild) {
-                return $query->groupBy(['character_items.character_id']);
+                return $query->where('characters.guild_id', $guild->id)
+                    ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 }
             ])
             ->get();
-
-
 
         // TODO: Permissions to view this guild's items
 
@@ -100,7 +99,7 @@ class ItemController extends Controller
 
         // TODO: Keep this style of permissions check?
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         // TODO: Validate user can view this guild's raids
@@ -120,7 +119,7 @@ class ItemController extends Controller
     {
         $guild = Guild::where('slug', $guildSlug)
             ->with(['members' => function ($query) {
-                    return $query->where('members.id', Auth::id());
+                    return $query->where('members.user_id', Auth::id());
                         // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
                 },
                 'raids',
@@ -220,7 +219,7 @@ class ItemController extends Controller
 
         // TODO: Keep this style of permissions check?
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         $validationRules =  [
@@ -296,7 +295,7 @@ class ItemController extends Controller
         $currentMember = $guild->members->where('user_id', Auth::id())->first();
 
         if (!$currentMember) {
-            abort(404, 'Not a member of that guild.');
+            abort(403, 'Not a member of that guild.');
         }
 
         $validationRules = [

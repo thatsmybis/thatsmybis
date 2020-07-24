@@ -63,7 +63,7 @@ class Guild extends Model
 
     // Excludes hidden and removed characters
     public function characters() {
-        return $this->hasMany(Character::class)->whereNull('hidden_at')->whereNull('removed_at')->orderBy('name');
+        return $this->hasMany(Character::class)->whereNull('inactive_at')->orderBy('name');
     }
 
     public function content() {
