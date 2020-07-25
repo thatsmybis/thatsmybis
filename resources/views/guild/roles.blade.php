@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="col-xs-12 mt-3">
-                    <a class="btn btn-success" href="{{ route('guild.syncRoles', ['guildSlug' => $guild->slug]) }}" onclick="return confirm('Are you sure? If a role has been deleted and then recreated on Discord, this could break this website until a dev can fix it.')">
+                    <a class="btn btn-success" href="{{ route('guild.syncRoles', ['guildSlug' => $guild->slug]) }}">
                         <span class="fas fa-fw fa-sync"></span>
                         Sync Roles
                     </a>

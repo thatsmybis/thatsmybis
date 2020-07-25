@@ -97,7 +97,15 @@ class InsertItemSources extends Migration
                 ("Gluth",             "Gluth",             7, 15932, null, 14, "2020-07-21 00:00:00"),
                 ("Thaddius",          "thaddius",          7, 15928, null, 15, "2020-07-21 00:00:00"),
                 ("Sapphiron",         "sapphiron",         7, 15989, null, 16, "2020-07-21 00:00:00"),
-                ("Kel\'Thuzad",       "kelthuzad",         7, 15990, null, 17, "2020-07-21 00:00:00");');
+                ("Kel\'Thuzad",       "kelthuzad",         7, 15990, null, 17, "2020-07-21 00:00:00"),
+
+                ("Azuregos",       "azuregos",       8, 6109,  null, 1, "2020-07-24 00:00:00"),
+                ("Lord Kazzak",    "lord-kazzak",    8, 12397, null, 2, "2020-07-24 00:00:00"),
+                ("Dragons Shared", "dragons-shared", 8, null,  null, 3, "2020-07-24 00:00:00"),
+                ("Emeriss",        "emeriss",        8, 14889, null, 4, "2020-07-24 00:00:00"),
+                ("Lethon",         "lethon",         8, 14888, null, 5, "2020-07-24 00:00:00"),
+                ("Taerar",         "taerar",         8, 14890, null, 6, "2020-07-24 00:00:00"),
+                ("Ysondre",        "ysondre",        8, 14887, null, 7, "2020-07-24 00:00:00");');
     }
 
     /**

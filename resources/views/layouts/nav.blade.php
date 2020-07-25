@@ -27,6 +27,9 @@
                         <a class="dropdown-item" href="{{ route('guild.item.list', ['guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
                             Ruins of Ahn'Qiraj
                         </a>
+                        <a class="dropdown-item" href="{{ route('guild.item.list', ['guildSlug' => $guild->slug, 'instanceSlug' => 'world-bosses']) }}">
+                            World Bosses
+                        </a>
                         <a class="dropdown-item" href="{{ route('guild.item.list', ['guildSlug' => $guild->slug, 'instanceSlug' => 'molten-core']) }}">
                             Molten Core
                         </a>
@@ -83,11 +86,11 @@
                             <a class="dropdown-item" href="{{ route('guild.roles', ['guildSlug' => $guild->slug]) }}">
                                 Discord Roles
                             </a>
-                            <a class="dropdown-item" href="{{ route('guild.raids', ['guildSlug' => $guild->slug]) }}">
-                                Raid Groups
-                            </a>
                             <a class="dropdown-item" href="{{ route('guild.settings', ['guildSlug' => $guild->slug]) }}">
                                 Guild Settings
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.raids', ['guildSlug' => $guild->slug]) }}">
+                                Raid Groups
                             </a>
                             <!-- Can't get permissions working right now, so I'm disabling this
                                 <a class="dropdown-item" href="">Permissions</a> -->

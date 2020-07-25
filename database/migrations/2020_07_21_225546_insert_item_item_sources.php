@@ -521,6 +521,7 @@ class InsertItemItemSources extends Migration
                 (37, 19861), -- touch-of-chaos
                 (37, 19865), -- warblade-of-the-hakkari
                 (37, 19854); -- zinrokh-destroyer-of-worlds");
+
         // Tie ZG loot to ZG bosses
         DB::insert("INSERT INTO `item_item_sources` (`item_source_id`, `item_id`)
             VALUES
@@ -786,6 +787,77 @@ class InsertItemItemSources extends Migration
                 (59, 21596), -- ring-of-the-godslayer
                 (59, 21839), -- scepter-of-the-false-prophet
                 (59, 21579); -- vanquished-tentacle-of-cthun");
+
+            // Tie World Boss loot to World Bosses
+            DB::insert("INSERT INTO `item_item_sources` (`item_source_id`, `item_id`)
+                VALUES
+                    -- Azuregos 77
+                    (77, 19130), -- cold-snap
+                    (77, 19132), -- crystal-adorned-crown
+                    (77, 18208), -- drape-of-benediction
+                    (77, 18202), -- eskhandars-left-claw
+                    (77, 17070), -- fang-of-the-mystics
+                    (77, 18545), -- leggings-of-arcane-supremacy
+                    (77, 18704), -- mature-blue-dragon-sinew
+                    (77, 18541), -- puissant-cape
+                    (77, 19131), -- snowblind-shoes
+                    (77, 18542), -- typhoon
+                    (77, 18547), -- unmelting-ice-girdle
+
+                    -- Lord Kazzak 78
+                    (78, 17113), -- amberseal-keeper
+                    (78, 19135), -- blacklight-bracer
+                    (78, 17111), -- blazefury-medallion
+                    (78, 18544), -- doomhide-gauntlets
+                    (78, 17112), -- empyrean-demolisher
+                    (78, 18204), -- eskhandars-pelt
+                    (78, 19133), -- fel-infused-leggings
+                    (78, 19134), -- flayed-doomguard-belt
+                    (78, 18546), -- infernal-headcage
+                    (78, 18543), -- ring-of-entropy
+                    (78, 18665), -- the-eye-of-shadow
+
+                    -- Green Dragons Shared 79
+                    (79, 20619), -- acid-inscribed-greaves
+                    (79, 20617), -- ancient-corroded-leggings
+                    (79, 20616), -- dragonbone-wristguards
+                    (79, 20615), -- dragonspur-wraps
+                    (79, 20618), -- gloves-of-delusional-power
+                    (79, 20579), -- green-dragonskin-cloak
+                    (79, 20580), -- hammer-of-bestial-fury
+                    (79, 20644), -- nightmare-engulfed-object
+                    (79, 20581), -- staff-of-rampant-growth
+                    (79, 20582), -- trance-stone
+
+                    -- Emeriss 80
+                    (80, 20621), -- boots-of-the-endless-moor
+                    (80, 20623), -- circlet-of-restless-dreams
+                    (80, 20622), -- dragonheart-necklace
+                    (80, 20599), -- polished-ironwood-crossbow
+                    (80, 20624), -- ring-of-the-unliving
+
+                    -- Lethon 81
+                    (81, 20625), -- belt-of-the-dark-bog
+                    (81, 20626), -- black-bark-wristbands
+                    (81, 20627), -- dark-heart-pants
+                    (81, 20628), -- deviate-growth-cap
+                    (81, 20630), -- gauntlets-of-the-shining-light
+                    (81, 20629), -- malignant-footguards
+
+                    -- Taerar 82
+                    (82, 20634), -- boots-of-fright
+                    (82, 20631), -- mendicants-slippers
+                    (82, 20632), -- mindtear-band
+                    (82, 20577), -- nightmare-blade
+                    (82, 20633), -- unnatural-leather-spaulders
+
+                    -- Ysondre 83
+                    (83, 20637), -- acid-inscribed-pauldrons
+                    (83, 20578), -- emerald-dragonfang
+                    (83, 20636), -- hibernation-crystal
+                    (83, 20635), -- jade-inlaid-vestments
+                    (83, 20638), -- leggings-of-the-demented-mind
+                    (83, 20639); -- strangely-glyphed-legplates");
     }
 
     /**
