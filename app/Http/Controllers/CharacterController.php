@@ -130,6 +130,8 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $guild->load(['raids', 'raids.role']);
+
         $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->first();
 
         if (!$character) {

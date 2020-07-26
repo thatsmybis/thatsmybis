@@ -113,7 +113,7 @@ class DashboardController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids']);
+        $guild->load(['raids', 'raids.role']);
 
         $characterFields = [
             'characters.id',

@@ -163,12 +163,13 @@
                             </label>
                             <div class="form-group">
                                 <select name="raid_id" class="form-control">
-                                    <option value="" selected>
+                                    <option value="" selected class="bg-tag">
                                         —
                                     </option>
 
                                     @foreach ($guild->raids as $raid)
                                         <option value="{{ $raid->id }}"
+                                            class="bg-tag" style="color:{{ $raid->getColor() }};"
                                             {{ old('raid_id') ? (old('raid_id') == $raid->id ? 'selected' : '') : ($character && $character->raid_id == $raid->id ? 'selected' : '') }}>
                                             {{ $raid->name }}
                                         </option>

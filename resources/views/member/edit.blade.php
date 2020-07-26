@@ -7,7 +7,7 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row mb-4">
                 <div class="col-12 pt-2 bg-lightest rounded">
-                    @include('member/partials/header', ['discordUsername' => $user->discord_username, 'showEdit' => false, 'titlePrefix' => 'Edit '])
+                    @include('member/partials/header', ['discordUsername' => $member->user->discord_username, 'showEdit' => false, 'titlePrefix' => 'Edit '])
                 </div>
             </div>
 

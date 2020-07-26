@@ -124,12 +124,14 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <select name="gm_role_id" class="form-control">
-                                            <option value="" selected>
+                                            <option value="" selected class="bg-tag">
                                                 —
                                             </option>
 
                                             @foreach ($guild->roles as $role)
-                                                <option value="{{ $role->discord_id }}" {{ old('gm_role_id') && old('gm_role_id') == $role->discord_id ? 'selected' : ($guild->gm_role_id == $role->discord_id ? 'selected' : '') }}>
+                                                <option value="{{ $role->discord_id }}"
+                                                    class="bg-tag" style="color:{{ $role->getColor() }};"
+                                                    {{ old('gm_role_id') && old('gm_role_id') == $role->discord_id ? 'selected' : ($guild->gm_role_id == $role->discord_id ? 'selected' : '') }}>
                                                     {{ $role->name }}
                                                 </option>
                                             @endforeach
@@ -163,12 +165,14 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <select name="officer_role_id" class="form-control">
-                                            <option value="" selected>
+                                            <option value="" selected class="bg-tag">
                                                 —
                                             </option>
 
                                             @foreach ($guild->roles as $role)
-                                                <option value="{{ $role->discord_id }}" {{ old('officer_role_id') && old('officer_role_id') == $role->discord_id ? 'selected' : ($guild->officer_role_id == $role->discord_id ? 'selected' : '') }}>
+                                                <option value="{{ $role->discord_id }}"
+                                                    class="bg-tag" style="color:{{ $role->getColor() }};"
+                                                    {{ old('officer_role_id') && old('officer_role_id') == $role->discord_id ? 'selected' : ($guild->officer_role_id == $role->discord_id ? 'selected' : '') }}>
                                                     {{ $role->name }}
                                                 </option>
                                             @endforeach
@@ -202,12 +206,14 @@
                                 <div class="form-group">
                                     <div class="form-group">
                                         <select name="raid_leader_role_id" class="form-control">
-                                            <option value="" selected>
+                                            <option value="" selected class="bg-tag">
                                                 —
                                             </option>
 
                                             @foreach ($guild->roles as $role)
-                                                <option value="{{ $role->discord_id }}" {{ old('raid_leader_role_id') && old('raid_leader_role_id') == $role->discord_id ? 'selected' : ($guild->raid_leader_role_id == $role->discord_id ? 'selected' : '') }}>
+                                                <option value="{{ $role->discord_id }}"
+                                                    class="bg-tag" style="color:{{ $role->getColor() }};"
+                                                    {{ old('raid_leader_role_id') && old('raid_leader_role_id') == $role->discord_id ? 'selected' : ($guild->raid_leader_role_id == $role->discord_id ? 'selected' : '') }}>
                                                     {{ $role->name }}
                                                 </option>
                                             @endforeach
@@ -253,12 +259,14 @@
                                     @for ($i = 0; $i < 12; $i++)
                                         <div class="form-group {{ $i > 1 ? 'js-hide-empty' : '' }}" style="{{ $i > 1 ? 'display:none;' : '' }}">
                                             <select name="member_roles[]" class="form-control {{ $i > 0 ? 'js-show-next' : '' }}">
-                                                <option value="" selected>
+                                                <option value="" selected class="bg-tag">
                                                     —
                                                 </option>
 
                                                 @foreach ($guild->roles as $role)
-                                                    <option value="{{ $role->discord_id }}" {{ old('member_roles.' . $i) ? (old('member_roles.' . $i) == $role->discord_id ? 'selected' : '') : ($memberRoleLength >= $i && $memberRoleIds[$i] == $role->discord_id ? 'selected' : '') }}>
+                                                    <option value="{{ $role->discord_id }}"
+                                                        class="bg-tag" style="color:{{ $role->getColor() }};"
+                                                        {{ old('member_roles.' . $i) ? (old('member_roles.' . $i) == $role->discord_id ? 'selected' : '') : ($memberRoleLength >= $i && $memberRoleIds[$i] == $role->discord_id ? 'selected' : '') }}>
                                                         {{ $role->name }}
                                                     </option>
                                                 @endforeach

@@ -32,8 +32,12 @@ class MemberController extends Controller
 
         $guild->load([
             'members' => function ($query) use($username) {
-                return $query->where('members.username', $username);
-                // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
+                return $query->where('members.username', $username)
+                ->with([
+                    'roles',
+                    'user',
+                ]);
+
             },
         ]);
 
@@ -41,17 +45,10 @@ class MemberController extends Controller
 
         $member = $guild->members->first();
 
-        $user = User::where('id', $member->user_id)->with([
-            'roles' => function ($query) use($guild) {
-                return $query->where('guild_id', $guild->id);
-            },
-            ])->first();
-
         return view('member.edit', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'member'        => $member,
-            'user'          => $user,
         ]);
     }
 

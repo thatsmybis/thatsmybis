@@ -30,14 +30,18 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids', 'raids.role']);
+        $guild->load([
+            'allRaids' => function ($query) use ($id) {
+                return $query->where('id', $id);
+            },
+            'allRaids.role']);
 
         // TODO: Validate can edit this raid
 
         $raid = null;
 
         if ($id) {
-            $raid = $guild->raids->where('id', $id)->first();
+            $raid = $guild->allRaids->where('id', $id)->first();
 
             if (!$raid) {
                 abort(404, 'Raid not found.');
@@ -164,8 +168,6 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids']);
-
         // TODO: Validate can update a raid
 
         $validationRules =  [
@@ -176,7 +178,15 @@ class RaidController extends Controller
 
         $this->validate(request(), $validationRules);
 
-        $raid = $guild->raids->where('id', request()->input('id'))->first();
+        $id = request()->input('id');
+
+        $guild->load([
+            'allRaids' => function ($query) use ($id) {
+                return $query->where('id', $id);
+            },
+        ]);
+
+        $raid = $guild->allRaids->where('id', $id)->first();
         if (!$raid) {
             abort(404, 'Raid not found.');
         }

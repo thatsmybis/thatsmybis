@@ -60,12 +60,13 @@
 
                                     <div class="form-group">
                                         <select name="role_id" class="form-control">
-                                            <option value="" selected>
+                                            <option value="" selected class="bg-tag">
                                                 —
                                             </option>
 
                                             @foreach ($guild->roles as $role)
                                                 <option value="{{ $role->id }}"
+                                                    class="bg-tag" style="color:{{ $role->getColor() }};"
                                                     {{ old('role_id') ? (old('role_id') == $role->id ? 'selected' : '') : ($raid && $raid->role_id && $raid->role_id == $role->id ? 'selected' : '') }}>
                                                     {{ $role->name }}
                                                 </option>
