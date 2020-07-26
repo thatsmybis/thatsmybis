@@ -12,14 +12,19 @@
                         Discord Roles
                     </h1>
                     <p>
-                        If you've added or changed roles on your Discord server, consider syncing them
+                        When we see a new role attached to a member, we'll sync this list
+                    </p>
+                    <p>
+                        If you want to manually trigger an update, hit the button down at the bottom
+                        <br>
+                        This will update colors, names, order, add new roles, and remove old ones
                     </p>
                 </div>
 
                 <div class="col-12">
                     <ol class="no-bullet no-indent striped">
                         @foreach ($guild->roles->sortByDesc('position') as $role)
-                            <li class="p-1 pl-3 rounded" title="pos:{{ $role->position}} id:{{ $role->id }} disc-id:{{ $role->discord_id }} slug:{{ $role->slug}}">
+                            <li class="p-1 pl-3 rounded" title="Discord ID:{{ $role->discord_id }}">
                                 <span class="role-circle" style="background-color:{{ $role->getColor() }}"></span>
                                 {{ $role->name }}
                                 <small class="text-muted">

@@ -71,10 +71,11 @@ function createTable() {
                             </a>
                         </li>
 
-                        ${ row.raid || row.class ? `
+                        ${ row.raid_name || row.class ? `
                             <li>
                                 <span class="font-weight-bold">
-                                    ${ row.raid ? row.raid.name : '' }
+                                    <span class="role-circle" style="background-color:${ row.raid_color ? getColorFromDec(parseInt(row.raid_color)) : '' }"></span>
+                                    ${ row.raid_name ? row.raid_name : '' }
                                 </span>
                                 ${ row.class ? row.class : '' }
                             </li>` : `` }
@@ -175,7 +176,7 @@ function createTable() {
                 "title"  : "Raid",
                 "data"   : "raid",
                 "render" : function (data, type, row) {
-                    return (row.raid ? row.raid.name : null);
+                    return (row.raid_name ? row.raid_name : null);
                 },
                 "visible" : false,
             },

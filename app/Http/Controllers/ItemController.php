@@ -54,7 +54,27 @@ class ItemController extends Controller
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
             ->with(['wishlistCharacters' => function ($query) use($guild) {
-                return $query->where('characters.guild_id', $guild->id)
+                return $query->select([
+                        'characters.raid_id',
+                        'characters.name',
+                        'characters.level',
+                        'characters.race',
+                        'characters.spec',
+                        'characters.class',
+                        'members.username',
+                        'raids.name AS raid_name',
+                        'raid_roles.color AS raid_color',
+                    ])
+                    ->leftJoin('members', function ($join) {
+                        $join->on('members.id', 'characters.member_id');
+                    })
+                    ->leftJoin('raids', function ($join) use ($guild) {
+                        $join->on('raids.id', 'characters.raid_id');
+                    })
+                    ->join('roles AS raid_roles', function ($join) {
+                        $join->on('raid_roles.id', 'raids.role_id');
+                    })
+                    ->where('characters.guild_id', $guild->id)
                     ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 }
             ])

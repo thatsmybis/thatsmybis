@@ -28,6 +28,8 @@ class RoleController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $guild->load('roles');
+
         // TODO: validate user can view this page
 
         return view('guild.roles', [

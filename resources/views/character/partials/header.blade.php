@@ -29,12 +29,19 @@
             @endif
         </ul>
     </li>
-    @if ($character->raid || $character->class)
+    @if ($character->raid_id || $character->class)
         <li>
             <ul class="list-inline">
-                @if ($character->raid)
+                {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
+                @if ($character->relationLoaded('raid'))
+                    @php
+                        $raidColor = null;
+                        if ($character->raid->relationLoaded('role')) {
+                            $raidColor = $character->raid->getColor();
+                        }
+                    @endphp
                     <li class="list-inline-item font-weight-bold">
-                        <span class="tag d-inline" style="border-color:{{ $character->raid->getColor() }};"><span class="role-circle" style="background-color:{{ $character->raid->getColor() }}"></span>
+                        <span class="tag d-inline" style="border-color:{{ $raidColor }};"><span class="role-circle" style="background-color:{{ $raidColor }}"></span>
                             {{ $character->raid->name }}
                         </span>
                     </li>
@@ -72,10 +79,13 @@
     @if (!isset($showOwner) || (isset($showOwner) && $showOwner))
         <li>
             <small>
-                @if (isset($character->member) && $character->member)
-                    <a href="{{route('member.show', ['guildSlug' => $guild->slug, 'username' => $character->member->username]) }}" class="">
-                        {{ $character->member->username }}'s character
-                    </a>
+                @if ($character->member_id)
+                    {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
+                    @if ($character->relationLoaded('member'))
+                        <a href="{{route('member.show', ['guildSlug' => $guild->slug, 'username' => $character->member->username]) }}" class="">
+                            {{ $character->member->username }}'s character
+                        </a>
+                    @endif
                 @else
                     Unclaimed
                 @endif

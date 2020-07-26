@@ -4,6 +4,7 @@ namespace App;
 
 use App\{Character, Content, Guild, Role, User};
 use Illuminate\Database\Eloquent\Model;
+use \Illuminate\Support\Facades\Log;
 use Kodeine\Acl\Traits\HasRole;
 
 class Member extends Model

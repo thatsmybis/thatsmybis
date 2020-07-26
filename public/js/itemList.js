@@ -161,9 +161,9 @@ function getCharacterList(data, type, itemId) {
         characters += `
             <li data-raid-id="${ character.raid_id }" class="js-item-wishlist-character list-inline-item font-weight-normal mb-1">
                 <a href="/${ guild.slug }/c/${ character.name }"
-                    title="${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' }"
+                    title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
-                    ${ character.name }
+                    <span class="role-circle" style="background-color:${ character.raid_color ? getColorFromDec(parseInt(character.raid_color)) : '' }"></span>${ character.name }
                 </a>
             </li>`;
     });

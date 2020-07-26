@@ -70,6 +70,8 @@ class MemberController extends Controller
                 return $query->where('members.username', $username)
                     ->with([
                         'characters',
+                        'characters.raid',
+                        'characters.raid.role',
                         'characters.recipes',
                         'roles',
                         // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call

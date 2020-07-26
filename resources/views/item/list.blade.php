@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row pt-2 mb-3">
         <div class="col-12 text-center pr-0 pl-0">
-            <h1 class="font-weight-medium mb-0">
+            <h1 class="font-weight-medium mb-0 blizz-font">
                 {{ $instance->name }}
             </h1>
         </div>

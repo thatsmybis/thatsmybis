@@ -59,7 +59,7 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids']);
+        $guild->load(['raids', 'roles']);
 
         // TODO: Validate user can create a raid
 
@@ -74,6 +74,15 @@ class RaidController extends Controller
 
         if ($guild->raids->contains('name', request()->input('name'))) {
             abort(403, 'Name already exists.');
+        }
+
+        $role = null;
+
+        if (request()->input('role_id')) {
+            $role = $guild->roles->where('id', request()->input('role_id'));
+            if (!$role) {
+                abort(404, 'Role not found.');
+            }
         }
 
         $createValues = [];
@@ -168,9 +177,16 @@ class RaidController extends Controller
         $this->validate(request(), $validationRules);
 
         $raid = $guild->raids->where('id', request()->input('id'))->first();
-
         if (!$raid) {
-            abort(404);
+            abort(404, 'Raid not found.');
+        }
+
+        $role = null;
+        if (request()->input('role_id')) {
+            $role = $guild->roles->where('id', request()->input('role_id'));
+            if (!$role) {
+                abort(404, 'Role not found.');
+            }
         }
 
         $updateValues = [];

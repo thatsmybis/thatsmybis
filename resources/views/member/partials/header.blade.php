@@ -17,6 +17,7 @@
         </ul>
     </li>
     <li>
+        {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
         @if (isset($guild) && $guild)
             <span class="text-uncommon">
                 &lt;{{ $guild->name }}&gt;
@@ -29,7 +30,9 @@
             </span>
         @endif
     </li>
-    @if (isset($member->roles) && $member->roles->count() > 0)
+
+    {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
+    @if ($member->relationLoaded('roles') && $member->roles->count() > 0)
         <li class="mt-2">
             <ul class="list-inline">
                 @foreach ($member->roles as $role)

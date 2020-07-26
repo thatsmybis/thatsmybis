@@ -179,16 +179,16 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($guildSlug, $id)
+    public function show($guildSlug, $name)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->first();
+        $character = Character::where(['name' => $name], ['guild_id' => $guild->id])
+            ->with([
+                'member', 'raid', 'raid.role',
+            ])->firstOrFail();
 
-        if (!$character) {
-            $character = Character::where(['name' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
-        }
 
         return view('character.show', [
             'character'        => $character,

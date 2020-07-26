@@ -62,7 +62,7 @@ class Guild extends Model
     }
 
     public function allRaids() {
-        return $this->hasMany(Raid::class);
+        return $this->hasMany(Raid::class)->orderBy('name');
     }
 
     // Excludes hidden and removed characters
@@ -88,11 +88,11 @@ class Guild extends Model
 
     public function roles()
     {
-        return $this->hasMany(Role::class);
+        return $this->hasMany(Role::class)->orderBy('name');
     }
 
     public function raids() {
-        return $this->hasMany(Raid::class)->whereNull('disabled_at');
+        return $this->hasMany(Raid::class)->whereNull('disabled_at')->orderBy('name');
     }
 
     public function user() {

@@ -49,6 +49,26 @@ function addNoteHandlers() {
     });
 }
 
+function decToHex(number) {
+    return parseInt(number).toString(16);
+}
+
+/**
+ * Pass a number, get back a hex color complete with leading hash to make it HTML friendly
+ */
+function getColorFromDec(color) {
+    if (color) {
+        color = decToHex(color);
+        // If it's too short, keep adding prefixed zero's until it's long enough
+        while (color.length < 6) {
+            color = '0' + color;
+        }
+    } else {
+        color = 'FFF';
+    }
+    return '#' + color;
+}
+
 // Turn a url into a slug url!
 function slug(string) {
     let theChosenCharacter = "-";

@@ -41,8 +41,8 @@ class Raid extends Model
     public function getColor() {
         $color = null;
 
-        if ($this->color) {
-            $color = dechex($this->color);
+        if ($this->role_id) {
+            $color = dechex($this->role->color);
 
             // If it's too short, keep adding prefixed zero's till it's long enough
             while (strlen($color) < 6) {

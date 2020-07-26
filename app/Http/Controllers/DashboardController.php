@@ -131,6 +131,9 @@ class DashboardController extends Controller
             'characters.raid_id',
             'characters.public_note',
             'characters.inactive_at',
+            'members.username',
+            'raids.name AS raid_name',
+            'raid_roles.color AS raid_color',
         ];
 
         // TODO permissions for showing officer note
@@ -139,9 +142,18 @@ class DashboardController extends Controller
         }
 
         $characters = Character::select($characterFields)
+            ->leftJoin('members', function ($join) {
+                $join->on('members.id', 'characters.member_id');
+            })
+            ->leftJoin('raids', function ($join) use ($guild) {
+                $join->on('raids.id', 'characters.raid_id');
+            })
+            ->join('roles AS raid_roles', function ($join) {
+                $join->on('raid_roles.id', 'raids.role_id');
+            })
             ->where('characters.guild_id', $guild->id)
             ->whereNull('characters.inactive_at')
-            ->with([/*'member', 'member.user.roles',*/'raid', 'recipes', 'received', 'wishlist'])
+            ->with(['recipes', 'received', 'wishlist'])
             ->orderBy('characters.name')
             ->get();
 
