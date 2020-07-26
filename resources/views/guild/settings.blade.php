@@ -115,13 +115,131 @@
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="row">
                             <div class="col-12">
+                                <label for="gm_role_id" class="font-weight-bold">
+                                    <span class="fas fa-fw fa-crown text-gold"></span>
+                                    Guild Master Role
+                                </label>
+                            </div>
+                            <div class="col-md-6 col-sm-8 col-12">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <select name="gm_role_id" class="form-control">
+                                            <option value="" selected>
+                                                —
+                                            </option>
+
+                                            @foreach ($guild->roles as $role)
+                                                <option value="{{ $role->discord_id }}" {{ old('gm_role_id') && old('gm_role_id') == $role->discord_id ? 'selected' : ($guild->gm_role_id == $role->discord_id ? 'selected' : '') }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="small text-muted mb-3">
+                                    <ul>
+                                        @foreach ($permissions->whereIn('role_note', ['guild_master', 'officer', 'raid_leader']) as $permission)
+                                            <li>
+                                                {{ $permission->description }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="officer_role_id" class="font-weight-bold">
+                                    <span class="fas fa-fw fa-gavel text-legendary"></span>
+                                    Officer Role
+                                </label>
+                            </div>
+                            <div class="col-md-6 col-sm-8 col-12">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <select name="officer_role_id" class="form-control">
+                                            <option value="" selected>
+                                                —
+                                            </option>
+
+                                            @foreach ($guild->roles as $role)
+                                                <option value="{{ $role->discord_id }}" {{ old('officer_role_id') && old('officer_role_id') == $role->discord_id ? 'selected' : ($guild->officer_role_id == $role->discord_id ? 'selected' : '') }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="small text-muted mb-3">
+                                    <ul>
+                                        @foreach ($permissions->whereIn('role_note', ['officer', 'raid_leader']) as $permission)
+                                            <li>
+                                                {{ $permission->description }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="row">
+                            <div class="col-12">
+                                <label for="raid_leader_role_id" class="font-weight-bold">
+                                    <span class="fas fa-fw fa-helmet-battle text-dk"></span>
+                                    Raid Leader Role
+                                </label>
+                            </div>
+                            <div class="col-md-6 col-sm-8 col-12">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <select name="raid_leader_role_id" class="form-control">
+                                            <option value="" selected>
+                                                —
+                                            </option>
+
+                                            @foreach ($guild->roles as $role)
+                                                <option value="{{ $role->discord_id }}" {{ old('raid_leader_role_id') && old('raid_leader_role_id') == $role->discord_id ? 'selected' : ($guild->raid_leader_role_id == $role->discord_id ? 'selected' : '') }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="small text-muted mb-3">
+                                    <ul>
+                                        @foreach ($permissions->where('role_note', 'raid_leader') as $permission)
+                                            <li>
+                                                {{ $permission->description }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="row">
+                            <div class="col-12">
                                 <label for="member_roles" class="font-weight-bold">
-                                    <span class="fab fa-fw fa-discord text-muted"></span>
-                                    Whitelist of who can join
+                                    <span class="fas fa-fw fa-swords text-success"></span>
+                                    Raiders
                                     <br>
                                     <small class="text-muted">
-                                        Discord users with any of these roles are allowed to join
-                                        <a href="{{ route('faq') }}#role-whitelisting">what's this?</a>
+                                        Discord users with <strong>any</strong> of these roles are allowed to join
+                                        <br>
+                                        Guild Masters, Officers, and Raid Leaders must also have at least one of these roles
                                     </small>
                                 </label>
                             </div>
@@ -148,10 +266,6 @@
                                         </div>
                                     @endfor
                                 </div>
-                                <div class="small text-muted mb-3">
-                                    Not seeing all of your roles?
-                                    <a href="{{ route('guild.roles', ['guildSlug' => $guild->slug]) }}#role-whitelisting">sync roles</a>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -162,6 +276,10 @@
                         <span class="fas fa-fw fa-save"></span>
                         Save
                     </button>
+                    <div class="small text-muted mb-3">
+                        Not seeing all of your roles?
+                        <a href="{{ route('guild.roles', ['guildSlug' => $guild->slug]) }}#role-whitelisting">sync roles</a>
+                    </div>
                 </div>
             </form>
         </div>

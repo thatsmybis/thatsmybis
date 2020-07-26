@@ -10,7 +10,7 @@
             <ol>
                 <li><a href="#what-does-this-do">What does this website do?</a></li>
                 <li><a href="#getting-started">How do I get started?</a></li>
-                <li><a href="#role-whitelisting">What does 'Whitelist of who can join' mean?</a></li>
+                <li><a href="#role-whitelisting">Why do my Discord users need a specific role to join?</a></li>
                 <li><a href="#discord-requirement">Do I <em>need</em> to use Discord?</a></li>
                 <!--<li><a href="#google-calendar">Google Calendar?</a></li>-->
                 <li><a href="#name-origin">Where'd you get your name?</a></li>
@@ -40,12 +40,15 @@
 
             <hr class="light">
 
-            <h2 id="role-whitelisting">What does 'Whitelist of who can join' mean?</h2>
+            <h2 id="role-whitelisting">Why do my Discord users need a specific role to join?</h2>
             <p>
                 We require you to whitelist which members of your Discord server are allowed to register by giving them whitelisted roles that you choose. This is to prevent literally anyone who joins your Discord from crashing your guild on this website, which could be destructive.
             </p>
             <p>
-                To set this up, you will need to create roles on your Discord server and assign them to your members. We recommend adding a 'Member' or 'Raider' role at the very least. Beyond that, we also suggest adding roles for 'Guild Master', 'Officer', 'Raid Leader', and 'Class Leader'. It is not required that your guild have this structure; it is simply how <em>most</em> successful guilds are structured.
+                To set this up, you will need to create roles on your Discord server and assign them to your members. We recommend adding a 'Member' or 'Raider' role at the very least. Beyond that, we also suggest adding roles for 'Guild Master', 'Officer', and 'Raid Leader'. It is not required that your guild have this structure; it is simply how <em>most</em> successful guilds are structured.
+            </p>
+            <p>
+                Once that's done, you might need to sync your Discord roles from the Roles page. Then, select the roles you want to whitelist in Guild Settings page. (only the guild's owner or guild master can see these pages)
             </p>
 
             <hr class="light">

@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\{Guild, Member, Role, User};
+use App\{Guild, Member, Permission, Role, User};
 use Auth;
 use Exception;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
-use Kodeine\Acl\Models\Eloquent\Permission;
+// use Kodeine\Acl\Models\Eloquent\Permission;
 
 class GuildController extends Controller
 {
@@ -121,11 +121,17 @@ class GuildController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids', 'roles']);
+        $guild->load(['roles']);
 
         // TODO: Validate can view settings page for this guild
 
-        return view('guild.settings', ['currentMember' => $currentMember, 'guild' => $guild]);
+        $permissions = Permission::all();
+
+        return view('guild.settings', [
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'permissions'   => $permissions,
+        ]);
     }
 
     /**
@@ -138,21 +144,84 @@ class GuildController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids', 'roles']);
+        $guild->load('roles');
 
         // TODO: Validate user can update settings for this guild
 
         $validationRules =  [
-            'name'           => 'string|max:36|unique:guilds,name,' . $guild->id,
-            'calendar_link'  => 'nullable|string|max:255',
-            'member_roles.*' => 'nullable|integer|exists:roles,discord_id',
+            'name'                => 'string|max:36|unique:guilds,name,' . $guild->id,
+            'calendar_link'       => 'nullable|string|max:255',
+            'gm_role_id'          => 'nullable|integer|exists:roles,discord_id',
+            'officer_role_id'     => 'nullable|integer|exists:roles,discord_id',
+            'raid_leader_role_id' => 'nullable|integer|exists:roles,discord_id',
+            'member_roles.*'      => 'nullable|integer|exists:roles,discord_id',
         ];
 
         $this->validate(request(), $validationRules);
 
+        $permissions = Permission::all();
+
         $updateValues['name']            = request()->input('name');
         $updateValues['slug']            = slug(request()->input('name'));
         $updateValues['calendar_link']   = request()->input('calendar_link');
+
+        if (request()->input('gm_role_id')) {
+            // Let's make sure that role exists...
+            $role = $guild->roles->where('discord_id', request()->input('gm_role_id'))->first();
+            if ($role && $role->discord_id != $guild->gm_role_id) { // Don't bother if this role is already there; this will be duplicating the effort
+                // Attach the appropriate permissions to that role!
+                $rolePermissions = $permissions->whereIn('role_note', ['guild_master', 'officer', 'raid_leader']);
+                $role->permissions()->sync($rolePermissions->keyBy('id')->keys()->toArray());
+                $updateValues['gm_role_id'] = request()->input('gm_role_id');
+            }
+        } else {
+            $updateValues['gm_role_id'] = null;
+            if ($guild->gm_role_id) {
+                // Not anymore you're not!
+                // Strip this role of all it's ill-gotten permissions! Walk the plank, ya scurvy dog!
+                $role = $guild->roles->where('discord_id', $guild->gm_role_id)->first();
+                if ($role) {
+                    $role->permissions()->detach();
+                }
+            }
+        }
+
+        // Copy of the GM code seen above
+        if (request()->input('officer_role_id')) {
+            $role = $guild->roles->where('discord_id', request()->input('officer_role_id'))->first();
+            if ($role && $role->discord_id != $guild->officer_role_id) {
+                $rolePermissions = $permissions->whereIn('role_note', ['officer', 'raid_leader']);
+                $role->permissions()->sync($rolePermissions->keyBy('id')->keys()->toArray());
+                $updateValues['officer_role_id'] = request()->input('officer_role_id');
+            }
+        } else {
+            $updateValues['officer_role_id'] = null;
+            if ($guild->officer_role_id) {
+                $role = $guild->roles->where('discord_id', $guild->officer_role_id)->first();
+                if ($role) {
+                    $role->permissions()->detach();
+                }
+            }
+        }
+
+        // Copy of the GM code seen above
+        if (request()->input('raid_leader_role_id')) {
+            $role = $guild->roles->where('discord_id', request()->input('raid_leader_role_id'))->first();
+            if ($role && $role->discord_id != $guild->raid_leader_role_id) { // Don't bother if this role is already there
+                $rolePermissions = $permissions->whereIn('role_note', ['raid_leader']);
+                $role->permissions()->sync($rolePermissions->keyBy('id')->keys()->toArray());
+                $updateValues['raid_leader_role_id'] = request()->input('raid_leader_role_id');
+            }
+        } else {
+            $updateValues['raid_leader_role_id'] = null;
+            if ($guild->raid_leader_role_id) {
+                $role = $guild->roles->where('discord_id', $guild->raid_leader_role_id)->first();
+                if ($role) {
+                    $role->permissions()->detach();
+                }
+            }
+        }
+
         $updateValues['member_role_ids'] = implode(array_filter(request()->input('member_roles')), ",");
 
         $guild->update($updateValues);

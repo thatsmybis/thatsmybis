@@ -42,7 +42,7 @@
                     </a>
                     <br>
                     <small class="text-muted">
-                        Fetches roles from the Discord server and adds them to the list of usable roles on the website
+                        Fetches roles from your Discord server and adds them to the list of usable roles on here
                     </small>
                 </div>
             </div>
