@@ -53,7 +53,6 @@ Route::group([
         'middleware' => ['seeUser', 'checkGuildPermissions'],
         'prefix'     => '{guildSlug}'
     ], function () {
-    Route::get( '/',                'DashboardController@home')          ->name('guild.home');
 
     Route::get( '/news',            'DashboardController@news')          ->name('guild.news');
     Route::get( '/calendar',        'DashboardController@calendar')      ->name('guild.calendar');

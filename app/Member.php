@@ -51,10 +51,24 @@ class Member extends Model
         return $this->belongsTo(Guild::class);
     }
 
+    /**
+     * Users can have many roles.
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
     public function roles()
     {
-        // Why are we using role_user and not role_member? The library we're using assumes our model is called 'user' is why.
-        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id');
+        return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->withTimestamps();
+    }
+
+    /**
+     * Users can have many permissions overridden from permissions.
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function permissions()
+    {
+        return $this->belongsToMany(Permission::class, 'permission_user', 'user_id', 'permission_id')->withTimestamps();
     }
 
     public function user() {
@@ -75,7 +89,7 @@ class Member extends Model
 
         if ($discordMember) {
             // Attach the member's current roles from the guild discord
-            $member = self::syncRoles($member, $discordMember);
+            $member->syncRoles($guild, $discordMember);
         }
 
         return $member;

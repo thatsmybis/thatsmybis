@@ -28,7 +28,7 @@ class Role extends Model
         'description',
         'color',
         'position',
-        'permissions',
+        'discord_permissions',
     ];
 
     /**
@@ -36,12 +36,10 @@ class Role extends Model
      *
      * @var string
      */
-    protected $table;
+    protected $table = 'roles';
 
     public function __construct(array $attributes = [])
     {
-        $this->table = config('acl.db_prefix') . 'roles';
-
         parent::__construct($attributes);
     }
 
@@ -196,14 +194,14 @@ class Role extends Model
             if (!$localRoles->contains('discord_id', $remoteRole->id)) {
             // Role not found in local: Add role to local
                 Role::create([
-                    'name'        => $remoteRole->name,
-                    'guild_id'    => $guild->id,
-                    'discord_id'  => (int)$remoteRole->id,
-                    'permissions' => $remoteRole->permissions,
-                    'position'    => $remoteRole->position,
-                    'color'       => $remoteRole->color,
-                    'slug'        => slug($remoteRole->name),
-                    'description' => '',
+                    'name'                => $remoteRole->name,
+                    'guild_id'            => $guild->id,
+                    'discord_id'          => (int)$remoteRole->id,
+                    'discord_permissions' => $remoteRole->permissions,
+                    'position'            => $remoteRole->position,
+                    'color'               => $remoteRole->color,
+                    'slug'                => slug($remoteRole->name),
+                    'description'         => '',
                 ]);
                 $addedCount++;
             } else {

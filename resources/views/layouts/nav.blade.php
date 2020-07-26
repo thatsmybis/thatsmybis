@@ -86,9 +86,12 @@
                             <a class="dropdown-item" href="{{ route('guild.roles', ['guildSlug' => $guild->slug]) }}">
                                 Roles
                             </a>
-                            <a class="dropdown-item" href="{{ route('guild.settings', ['guildSlug' => $guild->slug]) }}">
-                                Settings
-                            </a>
+                            @if ($currentMember->hasPermission('edit.guild'))
+                                <a class="dropdown-item" href="{{ route('guild.settings', ['guildSlug' => $guild->slug]) }}">
+                                    Settings
+                                </a>
+                            @endif
+
                             <a class="dropdown-item" href="{{ route('guild.raids', ['guildSlug' => $guild->slug]) }}">
                                 Raids
                             </a>

@@ -97,6 +97,7 @@ class DashboardController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+
         return redirect()->route('member.show', [
             'guildSlug' => $guild->slug,
             'username'  => $currentMember->username

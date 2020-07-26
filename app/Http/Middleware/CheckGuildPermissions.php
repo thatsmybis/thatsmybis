@@ -23,7 +23,7 @@ class CheckGuildPermissions
         if ($request->route('guildSlug') !== null) {
             $guild = Guild::where('slug', $request->route('guildSlug'))->with([
                 'members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id())->with('roles');
+                    return $query->where('members.user_id', Auth::id());
                 },
             ])->first();
 

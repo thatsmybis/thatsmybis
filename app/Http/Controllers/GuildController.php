@@ -68,8 +68,8 @@ class GuildController extends Controller
         // Go through each of the user's roles, and check to see if any of them have admin or management permissions
         // We're only going to let the user register this server if they have one of those permissions
         foreach ($discordMember->roles as $role) {
-            $permissions = $roles[array_search($role, array_column($roles, 'id'))]->permissions;
-            if (($permissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) { // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
+            $discordPermissions = $roles[array_search($role, array_column($roles, 'id'))]->permissions;
+            if (($discordPermissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) { // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
                 $hasPermissions = true;
                 break;
             }
@@ -94,13 +94,13 @@ class GuildController extends Controller
         foreach ($roles as $role) {
             $role = Role::firstOrCreate(['discord_id' => $role->id],
                 [
-                    'name'        => $role->name,
-                    'guild_id'    => $guild->id,
-                    'slug'        => slug($role->name),
-                    'description' => null,
-                    'color'       => $role->color ? $role->color : null,
-                    'position'    => $role->position,
-                    'permissions' => $role->permissions,
+                    'name'                => $role->name,
+                    'guild_id'            => $guild->id,
+                    'slug'                => slug($role->name),
+                    'description'         => null,
+                    'color'               => $role->color ? $role->color : null,
+                    'position'            => $role->position,
+                    'discord_permissions' => $role->permissions,
                 ]);
         }
 
@@ -121,16 +121,17 @@ class GuildController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        if (!$currentMember->hasPermission('edit.guild')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
+
         $guild->load(['roles']);
-
-        // TODO: Validate can view settings page for this guild
-
-        $permissions = Permission::all();
 
         return view('guild.settings', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
-            'permissions'   => $permissions,
+            'permissions'   => Permission::all(),
         ]);
     }
 
@@ -144,9 +145,12 @@ class GuildController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load('roles');
+        if (!$currentMember->hasPermission('edit.guild')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit that guild.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
-        // TODO: Validate user can update settings for this guild
+        $guild->load('roles');
 
         $validationRules =  [
             'name'                => 'string|max:36|unique:guilds,name,' . $guild->id,

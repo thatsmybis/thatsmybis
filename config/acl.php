@@ -24,7 +24,7 @@ return [
     */
 
     'role'       => App\Role::class,
-    'permission' => Kodeine\Acl\Models\Eloquent\Permission::class,
+    'permission' => App\Permission::class,
 
     /*
     |--------------------------------------------------------------------------
