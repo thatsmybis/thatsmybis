@@ -49,16 +49,18 @@
                 <div class="row">
                     <div class="col-12 mt-3 mb-3 bg-light rounded">
                         @for ($i = 0; $i < 125; $i++)
-                            <div class="row striped-light pb-4 pt-4 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $i > 2 ? 'display:none;' : '' }}">
+                            <div class="row striped-light pb-5 pt-5 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $i > 2 ? 'display:none;' : '' }}">
 
                                 <div class="col-sm-6 col-12">
                                     <div class="form-group mb-0 {{ $errors->has('items.*') ? 'has-error' : '' }}">
-                                        @if ($i == 0)
+
                                             <label for="name" class="font-weight-bold">
                                                 <span class="fas fa-fw fa-sack text-success"></span>
-                                                Item
+                                                @if ($i == 0)
+                                                    Item
+                                                @endif
                                             </label>
-                                        @endif
+
 
                                         <input data-max-length="50" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text js-show-next form-control" autocomplete="off">
                                         <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
@@ -86,12 +88,15 @@
 
                                 <div class="col-sm-6 col-12">
                                     <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
-                                        @if ($i == 0)
+
                                             <label for="member_id" class="font-weight-bold d-none d-sm-block">
-                                                <span class="fas fa-fw fa-user text-muted"></span>
-                                                Character
+                                                &nbsp;
+                                                @if ($i == 0)
+                                                    <span class="fas fa-fw fa-user text-muted"></span>
+                                                    Character
+                                                @endif
                                             </label>
-                                        @endif
+
                                         <select name="items[{{ $i }}][character_id]" class="js-show-next form-control selectpicker" data-live-search="true" autocomplete="off">
                                             <option value="" class="bg-tag">
                                                 —

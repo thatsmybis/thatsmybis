@@ -29,10 +29,10 @@
             </span>
         @endif
     </li>
-    @if (isset($user->roles) && $user->roles->count() > 0)
+    @if (isset($member->roles) && $member->roles->count() > 0)
         <li class="mt-2">
             <ul class="list-inline">
-                @foreach ($user->roles as $role)
+                @foreach ($member->roles as $role)
                     <li class="list-inline-item">
                         <span class="tag" style="border-color:{{ $role->getColor() }};"><span class="role-circle" style="background-color:{{ $role->getColor() }}"></span>{{ $role->name }}</span>
                     </li>

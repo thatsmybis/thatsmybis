@@ -25,10 +25,16 @@ class PermissionsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function permissions()
+    public function permissions($guildSlug)
     {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load(['roles']);
+
         $permissions = Permission::with('roles')->get();
         return view('guild.permissions', [
+            'guild'       => $guild,
             'permissions' => $permissions,
         ]);
     }

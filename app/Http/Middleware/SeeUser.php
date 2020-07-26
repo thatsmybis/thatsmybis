@@ -30,13 +30,6 @@ class SeeUser
                 abort(403, 'You have been banned.');
             }
 
-            try {
-                // Sync the user's role(s)
-                // $user->fetchAndSyncRoles();
-            } catch (\GuzzleHttp\Command\Exception\CommandClientException $e) {
-                abort(404, "Doesn't look like you're in the guild Discord server.");
-            }
-
             // Store the user for later access.
             $request->attributes->add(['currentUser' => $user]);
         }

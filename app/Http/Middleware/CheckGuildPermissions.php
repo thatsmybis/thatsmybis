@@ -23,7 +23,7 @@ class CheckGuildPermissions
         if ($request->route('guildSlug') !== null) {
             $guild = Guild::where('slug', $request->route('guildSlug'))->with([
                 'members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id());
+                    return $query->where('members.user_id', Auth::id())->with('roles');
                 },
             ])->first();
 
@@ -37,19 +37,23 @@ class CheckGuildPermissions
                 return redirect()->route('login');
             }
 
-            // Guild owner doesn't have to go through this process
-            // This ensures they never lock themselves out due to messing with roles
-            if ($user->id != $guild->user_id) {
-                $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+            $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
 
-                // Check if current user is on that guild's Discord
-                try {
-                    $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$guild->discord_id, 'user.id' => (int)$user->discord_id]);
-                } catch (Exception $e) {
+            $discordMember = null;
+
+            // Check if current user is on that guild's Discord
+            try {
+                $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$guild->discord_id, 'user.id' => (int)$user->discord_id]);
+            } catch (Exception $e) {
+                if ($user->id != $guild->user_id) { // Guild owner is excempt
                     request()->session()->flash('status', 'You don\'t appear to be a member of that guild\'s  Discord.');
                     return redirect()->route('home');
                 }
+            }
 
+            // Guild owner doesn't have to go through this process
+            // This ensures they never lock themselves out due to messing with roles
+            if ($user->id != $guild->user_id) {
                 // Check that the Discord user has one of the role(s) required to access this guild
                 $matchingRoles = array_intersect($guild->getMemberRoleIds(), $discordMember->roles);
 
@@ -67,6 +71,18 @@ class CheckGuildPermissions
             if (!$currentMember) {
                 // Don't have a member object? Let's create one...
                 $currentMember = Member::create($user, $discordMember, $guild);
+            } else if ($discordMember) {
+                // Does the member have any new/missing roles since we last checked?
+                $storedRoles = $currentMember->roles->keyBy('discord_id')->keys()->toArray();
+
+                // Compare Discord's roles vs. our DB's roles
+                $diffRoles = array_merge(array_diff($storedRoles, $discordMember->roles), array_diff($discordMember->roles, $storedRoles));
+
+                // The roles we have vs. what Discord has differ.
+                if ($diffRoles) {
+                    // Sync their roles with the db
+                    $currentMember->syncRoles($guild, $discordMember);
+                }
             }
 
             // Store the guild and current member for later access.

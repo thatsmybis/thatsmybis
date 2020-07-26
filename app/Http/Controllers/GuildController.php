@@ -69,7 +69,7 @@ class GuildController extends Controller
         // We're only going to let the user register this server if they have one of those permissions
         foreach ($discordMember->roles as $role) {
             $permissions = $roles[array_search($role, array_column($roles, 'id'))]->permissions;
-            if (($permissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS) {
+            if (($permissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) { // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
                 $hasPermissions = true;
                 break;
             }
@@ -77,7 +77,7 @@ class GuildController extends Controller
 
         if (!$hasPermissions) {
             $error = \Illuminate\Validation\ValidationException::withMessages([
-               'permissions' => ["We couldn't find admin or management permissions on your account for that server. Have someone with one of those permissions register your guild."],
+               'permissions' => ["We couldn't find admin permissions on your account for that server. Have someone with one of those permissions register your guild."],
             ]);
             throw $error;
         }
@@ -123,7 +123,7 @@ class GuildController extends Controller
 
         $guild->load(['raids', 'roles']);
 
-        // TODO: Validate can view this page for this guild
+        // TODO: Validate can view settings page for this guild
 
         return view('guild.settings', ['currentMember' => $currentMember, 'guild' => $guild]);
     }

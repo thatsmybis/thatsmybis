@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Roles - ' . config('app.name'))
+@section('title', 'Discord Roles - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">

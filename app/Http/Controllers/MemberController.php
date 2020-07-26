@@ -37,7 +37,7 @@ class MemberController extends Controller
             },
         ]);
 
-        // TODO: Validate user can edit this character in this guild
+        // TODO: Validate user can edit this character
 
         $member = $guild->members->first();
 
@@ -71,6 +71,7 @@ class MemberController extends Controller
                     ->with([
                         'characters',
                         'characters.recipes',
+                        'roles',
                         // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
                     ]);
             },
@@ -82,11 +83,7 @@ class MemberController extends Controller
             abort(404, 'Member not found.');
         }
 
-        $user = User::where('id', $member->user_id)->with([
-            'roles' => function ($query) use($guild) {
-                return $query->where('guild_id', $guild->id);
-            },
-            ])->first();
+        $user = User::where('id', $member->user_id)->first();
 
         $recipes = collect();
         foreach ($member->characters as $character) {
@@ -101,7 +98,7 @@ class MemberController extends Controller
             'guild'            => $guild,
             'member'           => $member,
             'recipes'          => $recipes,
-            'showOfficerNote'  => false, // TODO permissions for this
+            'showOfficerNote'  => true, // TODO permissions for showing officer note
             'showPersonalNote' => ($currentMember->id == $member->id),
             'user'             => $user,
         ]);
@@ -133,8 +130,6 @@ class MemberController extends Controller
         if ($sameNameMember && ($selectedMember->id != $sameNameMember->id)) {
             abort(403, 'Name taken.');
         }
-
-        // TODO: Validate user has permissions to update this member in this guild
 
         $validationRules = [
             'id'            => 'required|integer|exists:members,id',
@@ -187,8 +182,6 @@ class MemberController extends Controller
                 return $query->where('members.user_id', request()->input('id'));
             },
         ]);
-
-        // TODO: Validate user can update this member's note
 
         $validationRules = [
             'id'            => 'required|integer|exists:members,id',

@@ -114,8 +114,8 @@ Route::group([
         Route::post('/settings',  'GuildController@submitSettings')->name('guild.submitSettings');
 
         // Can't get the permissions working right now (2019-12-02), so I'm disabling this.
-        // Route::get( '/permissions', 'PermissionsController@permissions')->name('guild.permissions');
-        // Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');
+        Route::get( '/permissions', 'PermissionsController@permissions')->name('guild.permissions');
+        Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');
     });
 });
 

@@ -35,8 +35,6 @@ class DashboardController extends Controller
         // TODO: Change this if we re-implement the news section
         $user = request()->get('guild')->load('roles');
 
-        // TODO: Permissions
-
         $category = request()->input('category');
 
         if (!$category) {
@@ -116,8 +114,6 @@ class DashboardController extends Controller
         $currentMember = request()->get('currentMember');
 
         $guild->load(['raids']);
-
-        // TODO: Validate user can view this roster
 
         $characterFields = [
             'characters.id',

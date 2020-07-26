@@ -32,7 +32,7 @@ class RaidController extends Controller
 
         $guild->load(['raids', 'raids.role']);
 
-        // TODO: Validate user can view/edit this raid
+        // TODO: Validate can edit this raid
 
         $raid = null;
 
@@ -61,7 +61,7 @@ class RaidController extends Controller
 
         $guild->load(['raids']);
 
-        // TODO: Validate user can create a raid in this guild
+        // TODO: Validate user can create a raid
 
         $validationRules = [
             'name'    => 'string|max:255',
@@ -109,7 +109,7 @@ class RaidController extends Controller
             abort(404, 'Raid not found.');
         }
 
-        // TODO: Validate user has permissions to disable this raid
+        // TODO: Validate has permissions to disable raid
 
         $validationRules = [
             'id' => 'required|integer|exists:raids,id'
@@ -139,7 +139,7 @@ class RaidController extends Controller
 
         $guild->load(['allRaids', 'allRaids.role']);
 
-        // TODO: Validate user can view this guild's raids
+        // TODO: Validate can view raids
 
         return view('guild.raids.list', [
             'currentMember' => $currentMember,
@@ -157,7 +157,7 @@ class RaidController extends Controller
 
         $guild->load(['raids']);
 
-        // TODO: Validate a user can update a raid in this guild
+        // TODO: Validate can update a raid
 
         $validationRules =  [
             'id'      => 'required|integer|exists:raids,id',

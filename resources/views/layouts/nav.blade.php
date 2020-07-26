@@ -84,13 +84,13 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="adminNavDropdown">
                             <a class="dropdown-item" href="{{ route('guild.roles', ['guildSlug' => $guild->slug]) }}">
-                                Discord Roles
+                                Roles
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.settings', ['guildSlug' => $guild->slug]) }}">
-                                Guild Settings
+                                Settings
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids', ['guildSlug' => $guild->slug]) }}">
-                                Raid Groups
+                                Raids
                             </a>
                             <!-- Can't get permissions working right now, so I'm disabling this
                                 <a class="dropdown-item" href="">Permissions</a> -->

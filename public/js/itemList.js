@@ -161,6 +161,7 @@ function getCharacterList(data, type, itemId) {
         characters += `
             <li data-raid-id="${ character.raid_id }" class="js-item-wishlist-character list-inline-item font-weight-normal mb-1">
                 <a href="/${ guild.slug }/c/${ character.name }"
+                    title="${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     ${ character.name }
                 </a>

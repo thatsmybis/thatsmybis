@@ -12,7 +12,7 @@ return [
     */
 
     'db_prefix'   => '',
-    'users_table' => 'users',
+    'users_table' => 'members',
 
     /*
     |--------------------------------------------------------------------------
@@ -43,5 +43,5 @@ return [
      * Set the minutes that roles and permissions will be cached.
      */
 
-    'cacheMinutes' => 0,
+    'cacheMinutes' => env('ACL_CACHE_MINUTES', 0),
 ];

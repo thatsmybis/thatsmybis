@@ -68,8 +68,6 @@ class CharacterController extends Controller
             abort(403, 'Name taken.');
         }
 
-        // TODO: Validate user has permissions to create a character in this guild
-
         $validationRules = $this->getValidationRules();
 
         $validationMessages = [];
@@ -138,7 +136,7 @@ class CharacterController extends Controller
             $character = Character::where(['name' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
         }
 
-        // TODO: Validate user can edit this character in this guild
+        // TODO: Validate user can edit this character
 
         return view('character.edit', [
             'character'     => $character,
@@ -157,15 +155,13 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // TODO: Permissions
-
         $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with(['member', 'received', 'recipes', 'wishlist'])->first();
 
         if (!$character) {
             $character = Character::where(['name' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
         }
 
-        // TODO: Validate user can edit this character's loot in this guild
+        // TODO: Validate user can edit this character's loot
 
         return view('character.loot', [
             'character'     => $character,
@@ -194,8 +190,6 @@ class CharacterController extends Controller
             $character = Character::where(['name' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
         }
 
-        // TODO: Validate user can view this character in this guild
-
         return view('character.show', [
             'character'        => $character,
             'currentMember'    => $currentMember,
@@ -214,8 +208,6 @@ class CharacterController extends Controller
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
-
-        // TODO: Validate user can create a character in this guild
 
         return view('character.edit', [
             'character'     => null,
@@ -256,8 +248,6 @@ class CharacterController extends Controller
         if ($sameNameCharacter && ($currentCharacter->id != $sameNameCharacter->id)) {
             abort(403, 'Name taken.');
         }
-
-        // TODO: Validate user has permissions to update this character in this guild
 
         $validationRules = $this->getValidationRules();
         $validationRules['id'] = 'required|integer|exists:characters,id';

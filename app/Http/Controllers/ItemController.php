@@ -60,8 +60,6 @@ class ItemController extends Controller
             ])
             ->get();
 
-        // TODO: Permissions to view this guild's items
-
         return view('item.list', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
@@ -86,7 +84,7 @@ class ItemController extends Controller
             'raids',
         ]);
 
-        // TODO: Validate user can view this guild's raids
+        // TODO: Validate user can view the mass input page
 
         return view('item.massInput', [
             'currentMember' => $currentMember,
@@ -143,10 +141,6 @@ class ItemController extends Controller
                     ]);
             },
         ])->firstOrFail();
-
-        // TODO: Permissions to view this guild's item entry..
-        // I did a check here, not sure if it's what I'll use as a standard.
-        // Leave it if it's fine, replace it if it's not.
 
         $itemSlug = slug($item->name);
 
@@ -216,7 +210,7 @@ class ItemController extends Controller
                         'character_id' => $item['character_id'],
                         'added_by'     => $currentMember->id,
                         'type'         => Item::TYPE_RECEIVED,
-                        'order'        => '0', // Top of the list
+                        'order'        => '0', // Put this item at the top of the list
                         'created_at'   => $now,
                     ];
                     $detachRows[] = [
@@ -276,7 +270,7 @@ class ItemController extends Controller
 
         $existingRelationship = $guild->items()->find(request()->input('id'));
 
-        // TODO: If has permissions to edit items for this guild
+        // TODO: If has permissions to edit item notes
         if (false) {
             abort(403, "You do not have permission to edit someone else's character.");
         }

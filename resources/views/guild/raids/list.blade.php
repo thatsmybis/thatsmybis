@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Raids - ' . config('app.name'))
+@section('title', 'Raid Groups - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">

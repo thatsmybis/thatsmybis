@@ -32,7 +32,7 @@
 
             <h2 id="getting-started">How do I get started?</h2>
             <p>
-                Start by <a href="{{ route('guild.showRegister') }}">registering your guild's Discord server</a>, which requires you have Administrator or Management permissions on your Discord server. Fill out the basic guild settings in the admin section once registered.
+                Start by <a href="{{ route('guild.showRegister') }}">registering your guild's Discord server</a>, which requires you have Administrator permissions on your Discord server. Fill out the basic guild settings in the admin section once registered.
             </p>
             <p>
                 Once you've done this preparation, you can then share the link to your guild's page with your guild members who are on your guild Discord server. Provided they have one of the allowed roles (you should have filled one or more of these out in your guild settings), they will be allowed to register on this website and then join your guild.

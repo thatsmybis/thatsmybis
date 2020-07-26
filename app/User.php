@@ -2,16 +2,15 @@
 
 namespace App;
 
-use App\{Guild, Member, Role};
+use App\{Guild, Member};
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Kodeine\Acl\Traits\HasRole;
 use RestCord\DiscordClient;
 
 class User extends Authenticatable
 {
-    use Notifiable, HasRole;
+    use Notifiable;
 
     /**
      * The attributes that are mass assignable.
@@ -57,19 +56,5 @@ class User extends Authenticatable
 
     public function members() {
         return $this->hasMany(Member::class, 'user_id');
-    }
-
-    public function roles()
-    {
-        return $this->belongsToMany(Role::class, 'role_user');
-    }
-
-    // TODO
-    // Fetch the user's roles from Discord and sync them
-    public function fetchAndSyncRoles() {
-        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
-        $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)env('GUILD_ID'), 'user.id' => (int)$this->discord_id]);
-        $roles = Role::whereIn('discord_id', $discordMember->roles)->get()->keyBy('id')->keys()->toArray();
-        $this->syncRoles($roles);
     }
 }

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', (!$raid ? "Create" : "Edit") . " Raid - " . config('app.name'))
+@section('title', (!$raid ? "Create" : "Edit") . " Raid Group - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">

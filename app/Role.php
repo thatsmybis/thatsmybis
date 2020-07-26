@@ -2,9 +2,15 @@
 
 namespace App;
 
+use App\{Member};
 use Illuminate\Database\Eloquent\Model;
 use Kodeine\Acl\Traits\HasPermission;
-
+use RestCord\DiscordClient;
+/**
+ * I copied over the Role class from the kodeine\laravel-acl library because... reasons?
+ * I did this a while back. Not sure why. But here it is!
+ * Maybe it was just an easier way to inherit/modify it?
+ */
 class Role extends Model
 {
     use HasPermission;
@@ -56,7 +62,8 @@ class Role extends Model
      */
     public function users()
     {
-        return $this->belongsToMany(config('auth.providers.users.model', config('auth.model')))->withTimestamps();
+        // Why are we using role_user and not role_member? The library we're using assumes our model is called 'user' is why.
+        return $this->belongsToMany(Member::class, 'role_users', 'role_id', 'user_id')->withTimestamps();
     }
 
     /**
@@ -144,6 +151,8 @@ class Role extends Model
     }
 
     /**
+     * Gets the color inherited from Discord
+     *
      * @return string A hex value
      */
     public function getColor() {
@@ -160,5 +169,82 @@ class Role extends Model
             $color = 'FFF';
         }
         return '#' . $color;
+    }
+
+    /**
+     * Sync the database's roles with those found on a guild's Discord server.
+     *
+     * @param App\Guild $guild A guild, ideally eager loaded with its existing roles() association.
+     *
+     * @return array Counts of the number of roles added, removed, and updated. Also the updated guild object.
+     */
+    public static function syncWithDiscord($guild) {
+        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+
+        // List of roles that we already have (local)
+        $localRoles = $guild->roles;
+
+        // List of roles fetched from Discord (remote)
+        $remoteRoles = $discord->guild->getGuildRoles(['guild.id' => $guild->discord_id]);
+
+        $updatedCount = 0;
+        $addedCount   = 0;
+        $removedCount = 0;
+
+        // Iterate over the roles in remote
+        foreach ($remoteRoles as $remoteRole) {
+            if (!$localRoles->contains('discord_id', $remoteRole->id)) {
+            // Role not found in local: Add role to local
+                Role::create([
+                    'name'        => $remoteRole->name,
+                    'guild_id'    => $guild->id,
+                    'discord_id'  => (int)$remoteRole->id,
+                    'permissions' => $remoteRole->permissions,
+                    'position'    => $remoteRole->position,
+                    'color'       => $remoteRole->color,
+                    'slug'        => slug($remoteRole->name),
+                    'description' => '',
+                ]);
+                $addedCount++;
+            } else {
+            // Role found in local: Update role in local to match remote
+                $localRole = $localRoles->where('discord_id', $remoteRole->id)->first();
+
+                $localRole->color = $remoteRole->color ? $remoteRole->color : null;
+                $localRole->name = $remoteRole->name;
+                $localRole->slug = slug($remoteRole->name);
+                $localRole->position = $remoteRole->position;
+
+                $localRole->save();
+                $updatedCount++;
+            }
+        }
+
+        // Iterate over the roles in local
+        foreach ($localRoles as $localRole) {
+            $found = false;
+            foreach ($remoteRoles as $remoteRole) {
+                if ($remoteRole->id == $localRole->discord_id) {
+                    $found = true;
+                    break;
+                }
+            }
+
+            // Role in local doesn't exist in remote: delete local role
+            if (!$found) {
+                $localRole->delete();
+                $removedCount++;
+            }
+        }
+
+        // Eager load the guild object with the latest roles before passing it back
+        $guild->load('roles');
+
+        return [
+            'addedCount'   => $addedCount,
+            'updatedCount' => $updatedCount,
+            'removedCount' => $removedCount,
+            'guild'        => $guild,
+        ];
     }
 }

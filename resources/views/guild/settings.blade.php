@@ -60,6 +60,30 @@
                             </div>
                         </div>
 
+                        <div class="row">
+                            <div class="col-md-8 col-12">
+                                <div class="form-group">
+                                    <label for="expansion">
+                                        <span class="text-muted">Expansion</span>
+                                        <small class="text-muted">
+                                            locked
+                                        </small>
+                                    </label>
+                                    <select disabled name="expansion" class="form-control">
+                                        <option value="1" selected>
+                                            Classic
+                                        </option>
+                                        <option value="2" {{ old('expansion') && old('expansion') == 2 ? 'selected' : '' }}>
+                                            Burning Crusade
+                                        </option>
+                                        <option value="3" {{ old('expansion') && old('expansion') == 3 ? 'selected' : '' }}>
+                                            Wrath of the Lich King
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
                         <!-- Yes, this calendar feature is functional. It's been cut to minimize clutter.
                         <div class="row">
                             <div class="col-12">
