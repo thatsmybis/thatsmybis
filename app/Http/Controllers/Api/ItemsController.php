@@ -6,6 +6,7 @@ use App\Item;
 use Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
+use \Illuminate\Support\Facades\Log;
 
 class ItemsController extends \App\Http\Controllers\Controller
 {
@@ -46,14 +47,15 @@ class ItemsController extends \App\Http\Controllers\Controller
                     //     "MATCH(`items`.`name`) AGAINST(? IN BOOLEAN MODE)",
                     //     ['+' . $query . ''] // note the prefixed or suffixed character(s) https://dev.mysql.com/doc/refman/5.5/en/fulltext-boolean.html
                     // )
-                    ->limit(100)
+                    ->orderByDesc('weight')
+                    ->limit(15)
                     ->get();
 
                 // For testing the query time:
                 // $start = microtime(true);
                 // $results = $results->get();
                 // $end = microtime(true);
-                // logThis($query . " (FULLTEXT): " . round(($end - $start) * 1000, 3) . "ms");
+                // Log::debug($query . " (FULLTEXT): " . round(($end - $start) * 1000, 3) . "ms");
 
                 // We just want the names in a plain old array; not key:value.
                 $results = $results->transform(function ($item) {
