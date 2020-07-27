@@ -45,6 +45,12 @@
                             {{ $character->raid->name }}
                         </span>
                     </li>
+                @elseif ($character->raid_name)
+                    <li class="list-inline-item font-weight-bold">
+                        <span class="tag d-inline" style="border-color:{{ $character->raid_color ? getHexColorFromDec($character->raid_color) : '' }};"><span class="role-circle" style="background-color:{{ $character->raid_color ? getHexColorFromDec($character->raid_color) : '' }}"></span>
+                            {{ $character->raid_name }}
+                        </span>
+                    </li>
                 @endif
                 <li class="list-inline-item">
                     {{ $character->class ? $character->class : '' }}

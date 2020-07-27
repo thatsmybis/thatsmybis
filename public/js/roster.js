@@ -34,22 +34,10 @@ $(document).ready( function () {
         // Refresh wowhead links to show stlying.
         // wowhead's script previously ignored these links if they weren't visible
         makeWowheadLinks();
+        addClippedItemHandlers();
     });
 
-    $(".js-show-clipped-items").click(function () {
-        let id = $(this).data("id");
-        let type = $(this).data("type");
-        $(".js-clipped-item[data-id='" + id + "'][data-type='" + type + "']").show();
-        $(".js-show-clipped-items[data-id='" + id + "'][data-type='" + type + "']").hide();
-        $(".js-hide-clipped-items[data-id='" + id + "'][data-type='" + type + "']").show();
-    });
-    $(".js-hide-clipped-items").click(function () {
-        let id = $(this).data("id");
-        let type = $(this).data("type");
-        $(".js-clipped-item[data-id='" + id + "'][data-type='" + type + "']").hide();
-        $(".js-show-clipped-items[data-id='" + id + "'][data-type='" + type + "']").show();
-        $(".js-hide-clipped-items[data-id='" + id + "'][data-type='" + type + "']").hide();
-    });
+    addClippedItemHandlers();
 });
 
 function createTable() {
@@ -229,6 +217,23 @@ function createTable() {
         }
     });
     return memberTable;
+}
+
+function addClippedItemHandlers() {
+    $(".js-show-clipped-items").click(function () {
+        let id = $(this).data("id");
+        let type = $(this).data("type");
+        $(".js-clipped-item[data-id='" + id + "'][data-type='" + type + "']").show();
+        $(".js-show-clipped-items[data-id='" + id + "'][data-type='" + type + "']").hide();
+        $(".js-hide-clipped-items[data-id='" + id + "'][data-type='" + type + "']").show();
+    });
+    $(".js-hide-clipped-items").click(function () {
+        let id = $(this).data("id");
+        let type = $(this).data("type");
+        $(".js-clipped-item[data-id='" + id + "'][data-type='" + type + "']").hide();
+        $(".js-show-clipped-items[data-id='" + id + "'][data-type='" + type + "']").show();
+        $(".js-hide-clipped-items[data-id='" + id + "'][data-type='" + type + "']").hide();
+    });
 }
 
 // Gets an HTML list of items with pretty wowhead formatting

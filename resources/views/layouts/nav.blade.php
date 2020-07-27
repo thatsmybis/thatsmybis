@@ -110,6 +110,14 @@
                 @endif
             @endif
         </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item mr-3">
+                <a href="" class="nav-link active font-weight-bold">
+                    <span class="fas fa-fw fa-heart"></span>
+                    Donate
+                </a>
+            </li>
+        </ul>
         <div class="my-2 my-lg-0">
             @if (Auth::guest())
                 <a class="text-white" href="{{ route('discordLogin') }}" title="Sign in with Discord" rel="nofollow">

@@ -38,6 +38,7 @@
             </div>
 
             <div class="mt-5 mb-5 pt-5">
+                <!-- Patreon -->
             </div>
         </div>
     </div>

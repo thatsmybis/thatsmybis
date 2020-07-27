@@ -48,7 +48,15 @@ class Item extends Model
 
     public function characters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
+            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color'])
             ->whereNull('characters.inactive_at')
+
+            ->leftJoin('raids', function ($join) {
+                $join->on('raids.id', 'characters.raid_id');
+            })
+            ->leftJoin('roles AS raid_roles', function ($join) {
+                $join->on('raid_roles.id', 'raids.role_id');
+            })
             ->withTimeStamps()
             ->withPivot('type')
             ->orderBy('characters.name');
@@ -67,7 +75,14 @@ class Item extends Model
     public function receivedCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['type' => self::TYPE_RECEIVED])
+            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color'])
             ->whereNull('characters.inactive_at')
+            ->leftJoin('raids', function ($join) {
+                $join->on('raids.id', 'characters.raid_id');
+            })
+            ->leftJoin('roles AS raid_roles', function ($join) {
+                $join->on('raid_roles.id', 'raids.role_id');
+            })
             ->withTimeStamps()
             ->withPivot('type')
             ->orderBy('characters.name');
@@ -76,7 +91,15 @@ class Item extends Model
     public function receivedAndRecipeCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->whereIn('type', [self::TYPE_RECEIVED, self::TYPE_RECIPE])
+            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color'])
             ->whereNull('characters.inactive_at')
+
+            ->leftJoin('raids', function ($join) {
+                $join->on('raids.id', 'characters.raid_id');
+            })
+            ->leftJoin('roles AS raid_roles', function ($join) {
+                $join->on('raid_roles.id', 'raids.role_id');
+            })
             ->withTimeStamps()
             ->withPivot('type')
             ->orderBy('characters.name');
@@ -85,7 +108,15 @@ class Item extends Model
     public function wishlistCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['type' => self::TYPE_WISHLIST])
+            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color'])
             ->whereNull('characters.inactive_at')
+
+            ->leftJoin('raids', function ($join) {
+                $join->on('raids.id', 'characters.raid_id');
+            })
+            ->leftJoin('roles AS raid_roles', function ($join) {
+                $join->on('raid_roles.id', 'raids.role_id');
+            })
             ->withTimeStamps()
             ->withPivot('type')
             ->orderBy('characters.name');

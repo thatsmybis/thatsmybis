@@ -170,7 +170,6 @@ class ItemController extends Controller
                     ])
                     ->groupBy(['character_items.character_id'])
                     ->with([
-                        'raid',
                         'received',
                         'recipes',
                         'wishlist',
@@ -183,7 +182,6 @@ class ItemController extends Controller
                     ])
                     ->groupBy(['character_items.character_id'])
                     ->with([
-                        'raid',
                         'received',
                         'recipes',
                         'wishlist',
