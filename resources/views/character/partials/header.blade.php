@@ -33,10 +33,10 @@
         <li>
             <ul class="list-inline">
                 {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
-                @if ($character->relationLoaded('raid'))
+                @if ($character->relationLoaded('raid') && $character->raid)
                     @php
                         $raidColor = null;
-                        if ($character->raid && $character->raid->relationLoaded('role')) {
+                        if ($character->raid->relationLoaded('role')) {
                             $raidColor = $character->raid->getColor();
                         }
                     @endphp
