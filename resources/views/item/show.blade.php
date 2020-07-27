@@ -142,7 +142,7 @@
 
 @section('scripts')
 <script>
-    var characters = {!! $wishlistCharacters->makeVisible('officer_note')->toJson() !!};
+    var characters = {!! $showOfficerNote ? $wishlistCharacters->makeVisible('officer_note')->toJson() : $wishlistCharacters->toJson() !!};
     var guild      = {!! $guild->toJson() !!};
     var raids      = {!! $raids->toJson() !!};
     var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};;

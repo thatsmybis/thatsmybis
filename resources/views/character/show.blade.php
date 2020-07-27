@@ -7,17 +7,19 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
-                    @include('character/partials/header', ['headerSize' => 1, 'showEdit' => true, 'showIcon' => false])
+                    @include('character/partials/header', ['headerSize' => 1, 'showEdit' => $showEdit, 'showIcon' => false])
                 </div>
             </div>
 
             <div class="row mb-3 pt-3 bg-light rounded">
-                <div class="col-12 mb-4">
-                    <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-4">
-                        <span class="fas fa-fw fa-pencil"></span>
-                        edit loot
-                    </a>
-                </div>
+                @if ($showEditLoot)
+                    <div class="col-12 mb-4">
+                        <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-4">
+                            <span class="fas fa-fw fa-pencil"></span>
+                            edit loot
+                        </a>
+                    </div>
+                @endif
 
                 <div class="col-12 mb-2">
                     <span class="text-legendary font-weight-bold">

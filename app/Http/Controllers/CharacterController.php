@@ -199,8 +199,17 @@ class CharacterController extends Controller
                 'member', 'raid', 'raid.role',
             ])->firstOrFail();
 
-        $showOfficerNote = false;
+        $showEdit = false;
+        if ($character->member_id == $currentMember->id || $currentMember->hasPermission('edit.characters')) {
+            $showEdit = true;
+        }
 
+        $showEditLoot = false;
+        if ($character->member_id == $currentMember->id || $currentMember->hasPermission('loot.characters')) {
+            $showEditLoot = true;
+        }
+
+        $showOfficerNote = false;
         if ($currentMember->hasPermission('view.officer-notes')) {
             $showOfficerNote = true;
         }
@@ -209,6 +218,8 @@ class CharacterController extends Controller
             'character'        => $character,
             'currentMember'    => $currentMember,
             'guild'            => $guild,
+            'showEdit'         => $showEdit,
+            'showEditLoot'     => $showEditLoot,
             'showOfficerNote'  => $showOfficerNote,
             'showPersonalNote' => ($currentMember->id == $character->member_id),
         ]);

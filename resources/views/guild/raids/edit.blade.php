@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
-                        <span class="fas fa-fw fa-users-crown text-muted"></span>
+                        <span class="fas fa-fw fa-helmet-battle text-dk"></span>
                         {{ $raid ? 'Edit' : 'Create' }} Raid Group
                     </h1>
                 </div>
@@ -52,7 +52,7 @@
                             <div class="col-md-6 col-sm-8 col-12">
                                 <div class="form-group">
                                     <label for="role_id" class="font-weight-bold">
-                                        <span class="fab fa-fw fa-discord text-muted"></span>
+                                        <span class="fab fa-fw fa-discord text-discord"></span>
                                         Discord Role
                                     </label>
                                     <small class="text-muted">

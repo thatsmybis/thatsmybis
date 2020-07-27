@@ -159,7 +159,7 @@
                     <div class="col-sm-6 col-12">
                         <div class="form-group">
                             <label for="raid_id" class="font-weight-bold">
-                                <span class="text-muted fas fa-fw fa-users"></span>
+                                <span class="fas fa-fw fa-helmet-battle text-dk"></span>
                                 Raid Group
                             </label>
                             <div class="form-group">
@@ -277,7 +277,7 @@
                         </div>
                     </div>
 
-                    @if ($currentMember->hasPermission('edit.officer-note'))
+                    @if ($currentMember->hasPermission('edit.officer-notes'))
                         <div class="col-12 mt-4">
                             <div class="form-group">
                                 <label for="officer_note" class="font-weight-bold">
@@ -306,7 +306,7 @@
                     --}}
                 </div>
 
-                @if ($currentMember->hasPermission('inactive.characters') && $character && $currentMember->id == $character->member_id)
+                @if ($character && ($currentMember->hasPermission('inactive.characters') || $currentMember->id == $character->member_id))
                     <div class="row mb-3 pt-2 pb-1 bg-light rounded">
                         <div class="col-12">
                             <div class="form-group mb-0">

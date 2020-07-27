@@ -136,6 +136,23 @@ class ItemController extends Controller
 
         $guild->load(['raids']);
 
+        $characterFields = [
+            'characters.raid_id',
+            'characters.name',
+            'characters.level',
+            'characters.race',
+            'characters.spec',
+            'characters.class',
+            'members.username',
+            'raids.name AS raid_name',
+            'raid_roles.color AS raid_color',
+        ];
+
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes')) {
+            $showOfficerNote = true;
+        }
+
         $item = Item::where('item_id', $id)->with([
             'guilds' => function ($query) use($guild) {
                 return $query->select([
@@ -208,6 +225,7 @@ class ItemController extends Controller
             'raids'              => $guild->raids,
             'receivedCharacters' => $item->receivedCharacters,
             'showNoteEdit'       => $showNoteEdit,
+            'showOfficerNote'    => $showOfficerNote,
             'wishlistCharacters' => $item->wishlistCharacters,
             'itemJson'           => self::getItemWowheadJson($item->item_id),
         ]);

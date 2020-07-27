@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
-                        <span class="fas fa-fw fa-users text-muted"></span>
+                        <span class="fas fa-fw fa-users-crown text-gold"></span>
                         Guild Settings
                     </h1>
                 </div>

@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
-                        <span class="fab fa-fw fa-discord text-muted"></span>
+                        <span class="fab fa-fw fa-discord text-discord"></span>
                         Discord Roles
                     </h1>
                     <p>

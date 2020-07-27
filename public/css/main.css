@@ -1,6 +1,6 @@
 @font-face {
-    font-family: Blizz, 'Segoe UI', Segoe, Arial, sans-serif;
-    src: url("../fonts/FrizQuadrata.woff2")  format("woff2");
+    font-family: Blizz;
+    src: url("../fonts/FrizQuadrata.woff2");
 }
 
 @font-face {

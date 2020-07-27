@@ -17,6 +17,9 @@
         </ul>
     </li>
     <li>
+        Member
+    </li>
+    <li>
         {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
         @if (isset($guild) && $guild)
             <span class="text-uncommon">

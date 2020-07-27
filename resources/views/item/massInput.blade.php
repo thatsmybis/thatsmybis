@@ -9,7 +9,7 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
-                        <span class="fas fa-fw fa-axe-battle text-gold"></span>
+                        <span class="fas fa-fw fa-helmet-battle text-dk"></span>
                         Raid Time!
                     </h1>
                     <small>
@@ -19,7 +19,7 @@
 
                 <div class="col-sm-6 col-12 pt-2 mb-2">
                     <label for="raid_filter font-weight-light">
-                        <span class="text-muted fas fa-fw fa-users"></span>
+                        <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                         Raid
                     </label>
                     <select id="raid_filter" class="form-control">

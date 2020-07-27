@@ -41,9 +41,14 @@ class MemberController extends Controller
             },
         ]);
 
-        $member = $guild->members->firstOrFail();
+        $member = $guild->members->first();
 
-        if (!$currentMember->hasPermission('edit.characters')) {
+        if (!$member) {
+            request()->session()->flash('status', 'Member not found.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
+
+        if ($member->id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else.');
             return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         }
@@ -100,8 +105,17 @@ class MemberController extends Controller
             }
         }
 
-        $showOfficerNote = false;
+        $showEdit = false;
+        if ($member->id == $currentMember->id || $currentMember->hasPermission('edit.characters')) {
+            $showEdit = true;
+        }
 
+        $showEditLoot = false;
+        if ($member->id == $currentMember->id || $currentMember->hasPermission('loot.characters')) {
+            $showEditLoot = true;
+        }
+
+        $showOfficerNote = false;
         if ($currentMember->hasPermission('view.officer-notes')) {
             $showOfficerNote = true;
         }
@@ -112,6 +126,8 @@ class MemberController extends Controller
             'guild'            => $guild,
             'member'           => $member,
             'recipes'          => $recipes,
+            'showEdit'         => $showEdit,
+            'showEditLoot'     => $showEditLoot,
             'showOfficerNote'  => $showOfficerNote,
             'showPersonalNote' => ($currentMember->id == $member->id),
             'user'             => $user,
