@@ -41,14 +41,24 @@ class MemberController extends Controller
             },
         ]);
 
-        // TODO: Validate user can edit this character
+        $member = $guild->members->firstOrFail();
 
-        $member = $guild->members->first();
+        if (!$currentMember->hasPermission('edit.characters')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit someone else.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
+
+        $showOfficerNote = false;
+
+        if ($currentMember->hasPermission('view.officer-notes')) {
+            $showOfficerNote = true;
+        }
 
         return view('member.edit', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'member'        => $member,
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'member'          => $member,
+            'showOfficerNote' => $showOfficerNote,
         ]);
     }
 
@@ -71,7 +81,6 @@ class MemberController extends Controller
                         'characters.raid.role',
                         'characters.recipes',
                         'roles',
-                        // Not grabbing member.user and member.user.roles here because the code is messier than just doing it in a separate call
                     ]);
             },
         ]);
@@ -91,13 +100,19 @@ class MemberController extends Controller
             }
         }
 
+        $showOfficerNote = false;
+
+        if ($currentMember->hasPermission('view.officer-notes')) {
+            $showOfficerNote = true;
+        }
+
         return view('member.show', [
             'characters'       => $member->characters,
             'currentMember'    => $currentMember,
             'guild'            => $guild,
             'member'           => $member,
             'recipes'          => $recipes,
-            'showOfficerNote'  => true, // TODO permissions for showing officer note
+            'showOfficerNote'  => $showOfficerNote,
             'showPersonalNote' => ($currentMember->id == $member->id),
             'user'             => $user,
         ]);
@@ -118,16 +133,18 @@ class MemberController extends Controller
             },
         ]);
 
-        $selectedMember = $guild->members->where('id', request()->input('id'))->first();
+        $member = $guild->members->where('id', request()->input('id'))->first();
         $sameNameMember = $guild->members->where('username', request()->input('username'))->first();
 
-        if (!$selectedMember) {
+        if (!$member) {
             abort(404, 'Guild member not found.');
         }
 
         // Can't create a duplicate name
-        if ($sameNameMember && ($selectedMember->id != $sameNameMember->id)) {
+        if ($sameNameMember && ($member->id != $sameNameMember->id)) {
             abort(403, 'Name taken.');
+            request()->session()->flash('status', 'Name taken.');
+            return redirect()->back();
         }
 
         $validationRules = [
@@ -144,28 +161,27 @@ class MemberController extends Controller
 
         $updateValues = [];
 
-        // TODO: Permissions for officer note
-        if (true) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
-        // TODO: Permissions for editing someone else
-        if ($currentMember->id != $selectedMember->id && false) {
-            abort(403, "You do not have permission to edit someone else.");
+        if ($currentMember->id != $member->id && $currentMember->hasPermission('edit.characters')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit that member.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         }
 
         $updateValues['username']    = request()->input('username');
         $updateValues['public_note'] = request()->input('public_note');
 
         // User is editing their own character
-        if ($currentMember->id == $selectedMember->id) {
+        if ($currentMember->id == $member->id) {
             $updateValues['personal_note'] = request()->input('personal_note');
         }
 
-        $selectedMember->update($updateValues);
+        $member->update($updateValues);
 
         request()->session()->flash('status', 'Successfully updated profile.');
-        return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $selectedMember->username]);
+        return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $member->username]);
     }
 
     /**
@@ -201,12 +217,11 @@ class MemberController extends Controller
 
         $updateValues = [];
 
-        // TODO: If has permissions, allow to change who owns character or modify someone else's character
-        // TODO: Also if they can edit officer note
-        if (true) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
-        } else if ($currentMember->id != $member->id) {
-            abort(403, "You do not have permission to edit someone else.");
+        } else if ($currentMember->id != $member->id && !$currentMember->hasPermission('edit.character')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit that member.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         }
 
         $updateValues['public_note'] = request()->input('public_note');

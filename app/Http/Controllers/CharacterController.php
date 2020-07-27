@@ -11,7 +11,7 @@ use RestCord\DiscordClient;
 
 class CharacterController extends Controller
 {
-    const MAX_RECEIVED_ITEMS = 100;
+    const MAX_RECEIVED_ITEMS = 200;
     const MAX_RECIPES        = 50;
     const MAX_WISHLIST_ITEMS = 16;
 
@@ -76,21 +76,19 @@ class CharacterController extends Controller
 
         $createValues = [];
 
-        // TODO: If has permissions, allow to create characters tied to other members
-        // TODO: also if they can edit officer note
-        if (true) {
+        // Assign character to a different member
+        if ($request->input('member_id') && ($request->input('member_id') != $currentMember->id) && $currentMember->hasPermission('edit.characters')) {
             $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
-            // if (!$selectedMember) {
-            //     abort(403, 'Guild member not found.');
-            // }
 
             if ($selectedMember) {
-                $createValues['member_id']    = $selectedMember->id;
+                $createValues['member_id'] = $selectedMember->id;
             }
-            $createValues['officer_note'] = request()->input('officer_note');
         } else {
-        // Assign to current user's member object for this guild
             $createValues['member_id'] = $currentMember->id;
+        }
+
+        if (request()->input('officer_note') && $currentMember->hasPermission('edit.officer-notes')) {
+            $createValues['officer_note'] = request()->input('officer_note');
         }
 
         $createValues['name']          = request()->input('name');
@@ -125,20 +123,19 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($guildSlug, $id)
+    public function edit($guildSlug, $name)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         $guild->load(['raids', 'raids.role']);
 
-        $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with('member')->first();
+        $character = Character::where(['name' => $name], ['guild_id' => $guild->id])->with('member')->firstOrFail();
 
-        if (!$character) {
-            $character = Character::where(['name' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
+        if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         }
-
-        // TODO: Validate user can edit this character
 
         return view('character.edit', [
             'character'     => $character,
@@ -152,23 +149,29 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function loot($guildSlug, $id)
+    public function loot($guildSlug, $name)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['id' => $id], ['guild_id' => $guild->id])->with(['member', 'received', 'recipes', 'wishlist'])->first();
+        $character = Character::where(['name' => $name], ['guild_id' => $guild->id])->with('member')->firstOrFail();
 
-        if (!$character) {
-            $character = Character::where(['name' => $id], ['guild_id' => $guild->id])->with('member')->firstOrFail();
+        if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         }
 
-        // TODO: Validate user can edit this character's loot
+        $showOfficerNote = false;
+
+        if ($currentMember->hasPermission('view.officer-notes')) {
+            $showOfficerNote = true;
+        }
 
         return view('character.loot', [
-            'character'     => $character,
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
+            'character'       => $character,
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'showOfficerNote' => $showOfficerNote,
 
             'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
             'maxRecipes'       => self::MAX_RECIPES,
@@ -191,12 +194,17 @@ class CharacterController extends Controller
                 'member', 'raid', 'raid.role',
             ])->firstOrFail();
 
+        $showOfficerNote = false;
+
+        if ($currentMember->hasPermission('view.officer-notes')) {
+            $showOfficerNote = true;
+        }
 
         return view('character.show', [
             'character'        => $character,
             'currentMember'    => $currentMember,
             'guild'            => $guild,
-            'showOfficerNote'  => false, // TODO permissions for this
+            'showOfficerNote'  => $showOfficerNote,
             'showPersonalNote' => ($currentMember->id == $character->member_id),
         ]);
     }
@@ -237,18 +245,18 @@ class CharacterController extends Controller
             'raids',
         ]);
 
-        $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
-
-        $currentCharacter  = $guild->allCharacters->where('id', request()->input('id'))->first();
+        $character = $guild->allCharacters->where('id', request()->input('id'))->first();
         $sameNameCharacter = $guild->allCharacters->where('name', request()->input('name'))->first();
 
-        if (!$currentCharacter) {
-            abort(404, 'Character not found.');
+        if (!$character) {
+            request()->session()->flash('status', 'Character not found.');
+            return redirect()->back();
         }
 
         // Can't create a duplicate name
-        if ($sameNameCharacter && ($currentCharacter->id != $sameNameCharacter->id)) {
-            abort(403, 'Name taken.');
+        if ($sameNameCharacter && ($character->id != $sameNameCharacter->id)) {
+            request()->session()->flash('status', 'Name taken.');
+            return redirect()->back();
         }
 
         $validationRules = $this->getValidationRules();
@@ -260,21 +268,21 @@ class CharacterController extends Controller
 
         $updateValues = [];
 
-        // TODO: If has permissions, allow to change who owns character or modify someone else's character
-        // TODO: Also if they can edit officer note
-        if (true) {
-            // if (!$selectedMember) {
-            //     abort(404, 'Guild member not found.');
-            // }
+        // Can you edit someone else's character?
+        if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')){
+            request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
-            $updateValues['member_id']    = ($selectedMember ? $selectedMember->id : null);
+        // Can you change the character owner?
+        if (request()->input('member_id') && $currentMember->hasPermission('edit.characters')) {
+            $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
+            $updateValues['member_id'] = ($selectedMember ? $selectedMember->id : null);
+        }
+
+        // Can you edit the officer notes?
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
-        } else if (!$selectedMember) {
-            abort(403, "You do not have permissions to create a character that isn't assigned to a player.");
-        } else if ($currentCharacter->member_id != $currentMember->id) {
-            abort(403, "You do not have permission to edit someone else's character.");
-        } else if ($selectedMember->id != $currentMember->id) {
-            abort(403, 'You do not have permission to change who owns this character.');
         }
 
         $updateValues['name']         = request()->input('name');
@@ -291,16 +299,16 @@ class CharacterController extends Controller
         $updateValues['inactive_at']  = (request()->input('inactive_at') == 1 ? getDateTime() : null);
 
         // User is editing their own character
-        if ($currentCharacter->member_id == $currentMember->id) {
+        if ($character->member_id == $currentMember->id) {
             $updateValues['personal_note'] = request()->input('personal_note');
             $updateValues['order']         = request()->input('order');
         }
 
-        $currentCharacter->update($updateValues);
+        $character->update($updateValues);
 
         request()->session()->flash('status', 'Successfully updated ' . $updateValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
 
-        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $currentCharacter->name]);
+        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]);
     }
 
     /**
@@ -338,14 +346,16 @@ class CharacterController extends Controller
 
         $this->validate(request(), $validationRules);
 
-        // TODO: permissions; can user edit this character's loot?
+        if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
         $updateValues = [];
 
         $updateValues['public_note']   = request()->input('public_note');
 
-        // TODO: Permissions for who can edit officer note
-        if (true) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note']   = request()->input('officer_note');
         }
 
@@ -408,9 +418,7 @@ class CharacterController extends Controller
 
         $updateValues = [];
 
-        // TODO: If has permissions, allow to change who owns character or modify someone else's character
-        // TODO: Also if they can edit officer note
-        if (true) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if ($currentMember->id != $character->member_id) {
             abort(403, "You do not have permission to edit someone else's character.");

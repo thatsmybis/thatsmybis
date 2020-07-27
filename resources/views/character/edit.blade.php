@@ -49,30 +49,31 @@
                                 </div>
                             </div>
 
-                            <!-- TODO: Permissions for who can see/set this -->
-                            <div class="col-sm-6 col-12">
-                                <div class="form-group">
-                                    <label for="member_id" class="font-weight-bold">
-
-                                        Guild Member
-                                    </label>
+                            @if ($currentMember->hasPermission('edit.characters'))
+                                <div class="col-sm-6 col-12">
                                     <div class="form-group">
-                                        <select name="member_id" class="form-control selectpicker" data-live-search="true">
-                                            <option value="">
-                                                —
-                                            </option>
+                                        <label for="member_id" class="font-weight-bold">
 
-                                            @foreach ($guild->members as $member)
-                                                <option value="{{ $member->id }}"
-                                                    data-tokens="{{ $member->id }}"
-                                                    {{ old('member_id') ? (old('member_id') == $member->id ? 'selected' : '') : ($character && $character->member_id == $member->id ? 'selected' : '') }}>
-                                                    {{ $member->username }}
+                                            Guild Member
+                                        </label>
+                                        <div class="form-group">
+                                            <select name="member_id" class="form-control selectpicker" data-live-search="true">
+                                                <option value="">
+                                                    —
                                                 </option>
-                                            @endforeach
-                                        </select>
+
+                                                @foreach ($guild->members as $member)
+                                                    <option value="{{ $member->id }}"
+                                                        data-tokens="{{ $member->id }}"
+                                                        {{ old('member_id') ? (old('member_id') == $member->id ? 'selected' : '') : ($character && $character->member_id == $member->id ? 'selected' : '') }}>
+                                                        {{ $member->username }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
 
                         <div class="row mb-4">
@@ -276,17 +277,18 @@
                         </div>
                     </div>
 
-                    <!-- TODO: Permissions for who can see/set this -->
-                    <div class="col-12 mt-4">
-                        <div class="form-group">
-                            <label for="officer_note" class="font-weight-bold">
-                                <span class="text-muted fas fa-fw fa-shield"></span>
-                                Officer Note
-                                <small class="text-muted">only officers can see this</small>
-                            </label>
-                            <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                    @if ($currentMember->hasPermission('edit.officer-note')
+                        <div class="col-12 mt-4">
+                            <div class="form-group">
+                                <label for="officer_note" class="font-weight-bold">
+                                    <span class="text-muted fas fa-fw fa-shield"></span>
+                                    Officer Note
+                                    <small class="text-muted">only officers can see this</small>
+                                </label>
+                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                     {{--
                         @if ($currentMember->id == $character->member_id)
@@ -304,8 +306,7 @@
                     --}}
                 </div>
 
-                <!-- TODO: Permissions for who can see/set this -->
-                @if ($character && $currentMember->id == $character->member_id)
+                @if ($currentMember->hasPermission('inactive.characters') && $character && $currentMember->id == $character->member_id)
                     <div class="row mb-3 pt-2 pb-1 bg-light rounded">
                         <div class="col-12">
                             <div class="form-group mb-0">

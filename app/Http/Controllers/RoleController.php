@@ -28,9 +28,12 @@ class RoleController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load('roles');
+        if (!$currentMember->hasPermission('view.discord-roles')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
-        // TODO: validate user can view this page
+        $guild->load('roles');
 
         return view('guild.roles', [
             'currentMember' => $currentMember,
@@ -48,9 +51,12 @@ class RoleController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['roles']);
+        if (!$currentMember->hasPermission('sync.discord-roles')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
-        // TODO: Validate user can do sync these roles
+        $guild->load(['roles']);
 
         $result = Role::syncWithDiscord($guild);
 

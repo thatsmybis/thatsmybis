@@ -145,29 +145,31 @@
                         </div>
                     </div>
 
-                    <!-- TODO: Permissions for who can see/set this -->
-                    <div class="col-12 mb-4">
-                        <div class="form-group">
-                            <label for="officer_note" class="font-weight-bold">
-                                <span class="text-muted fas fa-fw fa-shield"></span>
-                                Officer Note
-                                <small class="text-muted">only officers can see this</small>
-                            </label>
-                            <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                    @if ($showOfficerNote)
+                        <div class="col-12 mb-4">
+                            <div class="form-group">
+                                <label for="officer_note" class="font-weight-bold">
+                                    <span class="text-muted fas fa-fw fa-shield"></span>
+                                    Officer Note
+                                    <small class="text-muted">only officers can see this</small>
+                                </label>
+                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
-                    <!-- TODO: Permissions for who can see/set this -->
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="personal_note" class="font-weight-bold">
-                                <span class="text-muted fas fa-fw fa-eye-slash"></span>
-                                Personal Note
-                                <small class="text-muted">only you can see this</small>
-                            </label>
-                            <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
+                    {{-- cut feature
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label for="personal_note" class="font-weight-bold">
+                                    <span class="text-muted fas fa-fw fa-eye-slash"></span>
+                                    Personal Note
+                                    <small class="text-muted">only you can see this</small>
+                                </label>
+                                <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
+                            </div>
                         </div>
-                    </div>
+                    --}}
                 </div>
 
                 <div class="form-group">

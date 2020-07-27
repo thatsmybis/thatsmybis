@@ -31,8 +31,8 @@ class DashboardController extends Controller
 
         $guild->load(['raids', 'roles']);
 
-        // TODO: We want member not user
-        // TODO: Change this if we re-implement the news section
+        // if we reimplement: We want member not user
+        // if we reimplement this: Change this if we re-implement the news section
         $user = request()->get('guild')->load('roles');
 
         $category = request()->input('category');
@@ -137,9 +137,11 @@ class DashboardController extends Controller
             'raid_roles.color AS raid_color',
         ];
 
-        // TODO permissions for showing officer note
-        if (true) {
+        $showOfficerNote = false;
+
+        if ($currentMember->hasPermission('view.officer-notes')) {
             $characterFields[] = 'characters.officer_note';
+            $showOfficerNote = true;
         }
 
         $characters = Character::select($characterFields)
@@ -159,10 +161,11 @@ class DashboardController extends Controller
             ->get();
 
         return view('roster', [
-            'characters'    => $characters,
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'raids'         => $guild->raids,
+            'characters'      => $characters,
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'raids'           => $guild->raids,
+            'showOfficerNote' => $showOfficerNote,
         ]);
     }
 }

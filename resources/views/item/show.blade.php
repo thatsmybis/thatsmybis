@@ -145,8 +145,7 @@
     var characters = {!! $wishlistCharacters->makeVisible('officer_note')->toJson() !!};
     var guild      = {!! $guild->toJson() !!};
     var raids      = {!! $raids->toJson() !!};
-    {{-- TODO PERMISSIONS FOR NOTE --}}
-    var showOfficerNote = true;
+    var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};;
 </script>
 <script src="{{ asset('js/roster.js') }}"></script>
 @endsection

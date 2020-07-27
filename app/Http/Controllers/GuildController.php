@@ -7,7 +7,6 @@ use Auth;
 use Exception;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
-// use Kodeine\Acl\Models\Eloquent\Permission;
 
 class GuildController extends Controller
 {

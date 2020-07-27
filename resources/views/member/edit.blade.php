@@ -54,20 +54,20 @@
                         </div>
                     </div>
 
-                    <!-- TODO: Permissions for who can see/set this -->
-                    <div class="col-12 mb-4">
-                        <div class="form-group">
-                            <label for="officer_note" class="font-weight-bold">
-                                <span class="text-muted fas fa-fw fa-shield"></span>
-                                Officer Note
-                                <small class="text-muted">only officers can see this</small>
-                            </label>
-                            <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
+                    @if ($showOfficerNote)
+                        <div class="col-12 mb-4">
+                            <div class="form-group">
+                                <label for="officer_note" class="font-weight-bold">
+                                    <span class="text-muted fas fa-fw fa-shield"></span>
+                                    Officer Note
+                                    <small class="text-muted">only officers can see this</small>
+                                </label>
+                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
+                            </div>
                         </div>
-                    </div>
+                    @endif
 
                     {{--
-                        <!-- TODO: Permissions for who can see/set this -->
                         <div class="col-12">
                             <div class="form-group">
                                 <label for="personal_note" class="font-weight-bold">

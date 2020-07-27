@@ -71,32 +71,40 @@
                 </li>
                 -->
 
-                @if (true) <!-- TODO PERMISSIONS -->
+                @if ($currentMember->hasPermission('edit.raid-loot'))
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['item.massInput']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('item.massInput', ['guildSlug' => $guild->slug]) }}">Raid Time!</a>
                     </li>
                 @endif
 
-                @if (true) <!-- TODO permissions -->
+                @php
+                    $viewRoles = $currentMember->hasPermission('view.discord-roles');
+                    $viewRaids = $currentMember->hasPermission('view.raids');
+                    $editGuild = $currentMember->hasPermission('edit.guild');
+                @endphp
+
+                @if ($viewRoles || $viewRaids || $editGuild)
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin
                         </a>
                         <div class="dropdown-menu" aria-labelledby="adminNavDropdown">
-                            <a class="dropdown-item" href="{{ route('guild.roles', ['guildSlug' => $guild->slug]) }}">
-                                Roles
-                            </a>
-                            @if ($currentMember->hasPermission('edit.guild'))
+                            @if ($viewRoles)
+                                <a class="dropdown-item" href="{{ route('guild.roles', ['guildSlug' => $guild->slug]) }}">
+                                    Roles
+                                </a>
+                            @endif
+                            @if ($editGuild)
                                 <a class="dropdown-item" href="{{ route('guild.settings', ['guildSlug' => $guild->slug]) }}">
                                     Settings
                                 </a>
                             @endif
 
-                            <a class="dropdown-item" href="{{ route('guild.raids', ['guildSlug' => $guild->slug]) }}">
-                                Raids
-                            </a>
-                            <!-- Can't get permissions working right now, so I'm disabling this
-                                <a class="dropdown-item" href="">Permissions</a> -->
+                            @if ($viewRaids)
+                                <a class="dropdown-item" href="{{ route('guild.raids', ['guildSlug' => $guild->slug]) }}">
+                                    Raids
+                                </a>
+                            @endif
                         </div>
                     </li>
                 @endif

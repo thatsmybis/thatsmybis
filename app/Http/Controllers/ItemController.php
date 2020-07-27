@@ -33,6 +33,24 @@ class ItemController extends Controller
 
         $instance = Instance::where('slug', $instanceSlug)->firstOrFail();
 
+        $characterFields = [
+            'characters.raid_id',
+            'characters.name',
+            'characters.level',
+            'characters.race',
+            'characters.spec',
+            'characters.class',
+            'members.username',
+            'raids.name AS raid_name',
+            'raid_roles.color AS raid_color',
+        ];
+
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes')) {
+            $characterFields[] = 'characters.officer_note';
+            $showOfficerNote = true;
+        }
+
         $items = Item::select([
                 'items.item_id',
                 'items.name',
@@ -53,18 +71,8 @@ class ItemController extends Controller
             ->where('item_sources.instance_id', $instance->id)
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
-            ->with(['wishlistCharacters' => function ($query) use($guild) {
-                return $query->select([
-                        'characters.raid_id',
-                        'characters.name',
-                        'characters.level',
-                        'characters.race',
-                        'characters.spec',
-                        'characters.class',
-                        'members.username',
-                        'raids.name AS raid_name',
-                        'raid_roles.color AS raid_color',
-                    ])
+            ->with(['wishlistCharacters' => function ($query) use($guild, $characterFields) {
+                return $query->select($characterFields)
                     ->leftJoin('members', function ($join) {
                         $join->on('members.id', 'characters.member_id');
                     })
@@ -81,11 +89,12 @@ class ItemController extends Controller
             ->get();
 
         return view('item.list', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'instance'      => $instance,
-            'items'         => $items,
-            'raids'         => $guild->raids,
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'instance'        => $instance,
+            'items'           => $items,
+            'raids'           => $guild->raids,
+            'showOfficerNote' => $showOfficerNote,
         ]);
     }
 
@@ -104,7 +113,10 @@ class ItemController extends Controller
             'raids',
         ]);
 
-        // TODO: Validate user can view the mass input page
+        if (!$currentMember->hasPermission('edit.raid-loot')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
         return view('item.massInput', [
             'currentMember' => $currentMember,
@@ -182,6 +194,12 @@ class ItemController extends Controller
             $notes['priority'] = $item->guilds->first()->pivot->priority;
         }
 
+        $showNoteEdit = false;
+
+        if ($currentMember->hasPermission('edit.items')) {
+            $showNoteEdit = true;
+        }
+
         return view('item.show', [
             'currentMember'      => $currentMember,
             'guild'              => $guild,
@@ -189,7 +207,7 @@ class ItemController extends Controller
             'notes'              => $notes,
             'raids'              => $guild->raids,
             'receivedCharacters' => $item->receivedCharacters,
-            'showNoteEdit'       => true, // TODO PERMISSIONS
+            'showNoteEdit'       => $showNoteEdit,
             'wishlistCharacters' => $item->wishlistCharacters,
             'itemJson'           => self::getItemWowheadJson($item->item_id),
         ]);
@@ -212,7 +230,10 @@ class ItemController extends Controller
 
         $this->validate(request(), $validationRules);
 
-        // TODO: permissions for mass assigning items in this guild?
+        if (!$currentMember->hasPermission('edit.raid-loot')) {
+            request()->session()->flash('status', 'You don\'t have permissions to submit that.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
         $warnings   = '';
         $newRows    = [];
@@ -274,6 +295,11 @@ class ItemController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        if (!$currentMember->hasPermission('edit.items')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit items.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
+
         $guild->load(['raids', 'roles']);
 
         $validationRules = [
@@ -289,11 +315,6 @@ class ItemController extends Controller
         $item = Item::findOrFail(request()->input('id'));
 
         $existingRelationship = $guild->items()->find(request()->input('id'));
-
-        // TODO: If has permissions to edit item notes
-        if (false) {
-            abort(403, "You do not have permission to edit someone else's character.");
-        }
 
         $noticeVerb = null;
 

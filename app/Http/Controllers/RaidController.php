@@ -30,13 +30,16 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        if (!$currentMember->hasPermission('edit.raids')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
+
         $guild->load([
             'allRaids' => function ($query) use ($id) {
                 return $query->where('id', $id);
             },
             'allRaids.role']);
-
-        // TODO: Validate can edit this raid
 
         $raid = null;
 
@@ -63,9 +66,12 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids', 'roles']);
+        if (!$currentMember->hasPermission('create.raids')) {
+            request()->session()->flash('status', 'You don\'t have permissions to create raids.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
-        // TODO: Validate user can create a raid
+        $guild->load(['raids', 'roles']);
 
         $validationRules = [
             'name'    => 'string|max:255',
@@ -122,7 +128,10 @@ class RaidController extends Controller
             abort(404, 'Raid not found.');
         }
 
-        // TODO: Validate has permissions to disable raid
+        if (!$currentMember->hasPermission('disable.raids')) {
+            request()->session()->flash('status', 'You don\'t have permissions to disable/enable raids.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
         $validationRules = [
             'id' => 'required|integer|exists:raids,id'
@@ -150,9 +159,12 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['allRaids', 'allRaids.role']);
+        if (!$currentMember->hasPermission('view.raids')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
-        // TODO: Validate can view raids
+        $guild->load(['allRaids', 'allRaids.role']);
 
         return view('guild.raids.list', [
             'currentMember' => $currentMember,
@@ -168,7 +180,10 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // TODO: Validate can update a raid
+        if (!$currentMember->hasPermission('edit.raids')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit raids.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
 
         $validationRules =  [
             'id'      => 'required|integer|exists:raids,id',
