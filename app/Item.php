@@ -110,7 +110,6 @@ class Item extends Model
             ->where(['type' => self::TYPE_WISHLIST])
             ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color'])
             ->whereNull('characters.inactive_at')
-
             ->leftJoin('raids', function ($join) {
                 $join->on('raids.id', 'characters.raid_id');
             })

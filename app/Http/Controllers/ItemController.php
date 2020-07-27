@@ -76,12 +76,6 @@ class ItemController extends Controller
                     ->leftJoin('members', function ($join) {
                         $join->on('members.id', 'characters.member_id');
                     })
-                    ->leftJoin('raids', function ($join) use ($guild) {
-                        $join->on('raids.id', 'characters.raid_id');
-                    })
-                    ->join('roles AS raid_roles', function ($join) {
-                        $join->on('raid_roles.id', 'raids.role_id');
-                    })
                     ->where('characters.guild_id', $guild->id)
                     ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 }
