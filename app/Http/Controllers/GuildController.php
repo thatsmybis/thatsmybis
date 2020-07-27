@@ -24,6 +24,19 @@ class GuildController extends Controller
     }
 
     /**
+     * Default page for landing on a guild
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function home($guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+    }
+
+    /**
      * Show the guild registration.
      *
      * @return \Illuminate\Http\Response
