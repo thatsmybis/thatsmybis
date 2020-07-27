@@ -225,7 +225,7 @@ class GuildController extends Controller
             }
         }
 
-        $updateValues['member_role_ids'] = implode(array_filter(request()->input('member_roles')), ",");
+        $updateValues['member_role_ids'] = implode(",", array_filter(request()->input('member_roles')));
 
         $guild->update($updateValues);
 
