@@ -163,7 +163,7 @@ class ItemController extends Controller
                 ])
                 ->where('guilds.id', $guild->id);
             },
-            'receivedCharacters' => function ($query) use($guild) {
+            'receivedAndRecipeCharacters' => function ($query) use($guild) {
                 return $query
                     ->where([
                         'characters.guild_id' => $guild->id,
@@ -218,16 +218,16 @@ class ItemController extends Controller
         }
 
         return view('item.show', [
-            'currentMember'      => $currentMember,
-            'guild'              => $guild,
-            'item'               => $item,
-            'notes'              => $notes,
-            'raids'              => $guild->raids,
-            'receivedCharacters' => $item->receivedCharacters,
-            'showNoteEdit'       => $showNoteEdit,
-            'showOfficerNote'    => $showOfficerNote,
-            'wishlistCharacters' => $item->wishlistCharacters,
-            'itemJson'           => self::getItemWowheadJson($item->item_id),
+            'currentMember'               => $currentMember,
+            'guild'                       => $guild,
+            'item'                        => $item,
+            'notes'                       => $notes,
+            'raids'                       => $guild->raids,
+            'receivedAndRecipeCharacters' => $item->receivedAndRecipeCharacters,
+            'showNoteEdit'                => $showNoteEdit,
+            'showOfficerNote'             => $showOfficerNote,
+            'wishlistCharacters'          => $item->wishlistCharacters,
+            'itemJson'                    => self::getItemWowheadJson($item->item_id),
         ]);
     }
 

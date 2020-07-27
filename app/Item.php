@@ -73,6 +73,15 @@ class Item extends Model
             ->orderBy('characters.name');
     }
 
+    public function receivedAndRecipeCharacters() {
+        return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
+            ->whereIn('type', [self::TYPE_RECEIVED, self::TYPE_RECIPE])
+            ->whereNull('characters.inactive_at')
+            ->withTimeStamps()
+            ->withPivot('type')
+            ->orderBy('characters.name');
+    }
+
     public function wishlistCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['type' => self::TYPE_WISHLIST])

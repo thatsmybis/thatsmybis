@@ -121,9 +121,9 @@
     <div class="row mr-1 ml-1 mb-3 pt-1  bg-lightest rounded">
         <div class="col-12">
             <h2>Have It</h2>
-            @if ($receivedCharacters->count() > 0)
+            @if ($receivedAndRecipeCharacters->count() > 0)
                 <ul class="list-inline striped">
-                    @foreach ($receivedCharacters as $character)
+                    @foreach ($receivedAndRecipeCharacters as $character)
                         <li class="list-inline-item rounded pt-2 pl-3 pb-3 pr-3">
                             @include('character/partials/header', ['showDetails' => false, 'showEdit' => false, 'showOwner' => false])
                         </li>
