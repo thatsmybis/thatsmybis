@@ -125,14 +125,3 @@ Route::group([
     Route::post('/updateContent/{id?}', 'ContentController@update')->where('id', '[0-9]+')->name('updateContent');
     Route::post('/removeContent/{id}',  'ContentController@remove')->where('id', '[0-9]+')->name('removeContent');
 });
-
-Route::post('/{id}/updateAll',          'ProfileController@submit')->where('id', '[0-9]+')            ->name('updateUser');
-Route::post('/{id}/updatePersonalNote', 'ProfileController@submitPersonalNote')->where('id', '[0-9]+')->name('updateUserPersonalNote');
-
-Route::get( '/ban/{id}', [
-        'uses'       => 'ProfileController@ban',
-        'middleware' => 'acl',
-        'is'         => 'admin|guild_master|officer|raider',
-    ])->where('id', '[0-9]+')               ->name('banUser');
-
-Route::get( '/{username}',      'ProfileController@findByUsername')->name('findUserByUsername');

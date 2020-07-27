@@ -1,7 +1,13 @@
 <?php
 
+// Gets date+time formated like 2020-12-31 23:59:59
 function getDateTime($format = 'Y-m-d H:i:s') {
     return (new \DateTime())->format($format);
+}
+
+// Check the request for whether or not we stored the bool isSuperAdmin as true or false
+function isSuper() {
+    return request()->get('isSuperAdmin');
 }
 
 /**

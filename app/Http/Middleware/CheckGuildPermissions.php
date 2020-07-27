@@ -89,6 +89,7 @@ class CheckGuildPermissions
             $request->attributes->add([
                 'currentMember' => $currentMember,
                 'guild'         => $guild,
+                'isSuperAdmin'  => ($guild->user_id == $currentMember->user_id),
             ]);
         }
 

@@ -55,8 +55,9 @@ class CharacterController extends Controller
         $currentMember = request()->get('currentMember');
 
         $guild->load([
-            'members' => function ($query) {
-                return $query->Where('members.id', request()->input('member_id'));
+            'members' => function ($query) use ($currentMember) {
+                return $query->where('members.id', request()->input('member_id'))
+                    ->orWhere('members.id', $currentMember->id);
             },
             'allCharacters' => function ($query) {
                 return $query->where('characters.name', request()->input('name'));
@@ -77,7 +78,7 @@ class CharacterController extends Controller
         $createValues = [];
 
         // Assign character to a different member
-        if ($request->input('member_id') && ($request->input('member_id') != $currentMember->id) && $currentMember->hasPermission('edit.characters')) {
+        if (request()->input('member_id') && (request()->input('member_id') != $currentMember->id) && $currentMember->hasPermission('edit.characters')) {
             $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
 
             if ($selectedMember) {
@@ -135,6 +136,10 @@ class CharacterController extends Controller
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
             return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
+
+        if ($currentMember->hasPermission('edit.characters')) {
+            $guild->load('members');
         }
 
         return view('character.edit', [
@@ -219,6 +224,10 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        if ($currentMember->hasPermission('edit.characters')) {
+            $guild->load('members');
+        }
+
         return view('character.edit', [
             'character'     => null,
             'currentMember' => $currentMember,
@@ -269,7 +278,7 @@ class CharacterController extends Controller
         $updateValues = [];
 
         // Can you edit someone else's character?
-        if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')){
+        if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
             return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         }

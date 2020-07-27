@@ -145,13 +145,15 @@ sudo service mysql restart
 
 # Permissions
 
-Permissions are initially loaded in a kinda janky manner, but it works for now. They're loaded in PermissionsController::addPermissions(). The permissions page has a button to call this method.
+kodeine\acl library was used for the permissions.
+
+**NOTEWORTHY:** That library expected the User model to be the one with the roles and permissions. We did not use the User model. We used the Member model. Because of that, some references to 'user' or 'user_id' might not make any sense whatsoever. Have fun with that. I sure did. /s
+
+**ALSO:** There's an override. The CheckGuildPermissions middleware will flag someone as a SUPER ADMIN if they're the guild's owner in the DB or (if I implement it), if they're one of the devs. the `hasPermissions()` function in the Member model will allow this flag to override the normal permissions. Science!
 
 # Roles
 
 Roles are loaded from the Discord server.
-
-There are some variables in the .env file that expect certain roles to exist. Add their ID's to this config before running the 'Sync Roles' command on the Roles page.
 
 ## Laraval Custom Configurations
 

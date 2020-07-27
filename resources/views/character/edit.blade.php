@@ -277,7 +277,7 @@
                         </div>
                     </div>
 
-                    @if ($currentMember->hasPermission('edit.officer-note')
+                    @if ($currentMember->hasPermission('edit.officer-note'))
                         <div class="col-12 mt-4">
                             <div class="form-group">
                                 <label for="officer_note" class="font-weight-bold">

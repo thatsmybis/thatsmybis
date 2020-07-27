@@ -9,7 +9,11 @@ use Kodeine\Acl\Traits\HasRole;
 
 class Member extends Model
 {
-    use HasRole;
+    use HasRole {
+        // Rename a function from this so that we can override it and still call it.
+        // (see hasPermission())
+        hasPermission as protected traitHasPermission;
+    }
 
     /**
      * The attributes that are mass assignable.
@@ -49,6 +53,12 @@ class Member extends Model
 
     public function guild() {
         return $this->belongsTo(Guild::class);
+    }
+
+    public function hasPermission($permission, $operator = null) {
+        // Call the function from our trait, but override it if the current user is a
+        // badass SUPER ADMIN!
+        return ($this->traitHasPermission($permission, $operator = null) || isSuper());
     }
 
     /**
