@@ -151,7 +151,7 @@ class DashboardController extends Controller
             ->leftJoin('raids', function ($join) use ($guild) {
                 $join->on('raids.id', 'characters.raid_id');
             })
-            ->join('roles AS raid_roles', function ($join) {
+            ->leftJoin('roles AS raid_roles', function ($join) {
                 $join->on('raid_roles.id', 'raids.role_id');
             })
             ->where('characters.guild_id', $guild->id)
