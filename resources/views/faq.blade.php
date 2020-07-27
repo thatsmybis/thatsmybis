@@ -8,6 +8,7 @@
             <h1>Frequently Asked Questions</h1>
 
             <ol>
+                <li><a href="#how-to-loot-council">How do I loot council?</a></li>
                 <li><a href="#what-does-this-do">What does this website do?</a></li>
                 <li><a href="#getting-started">How do I get started?</a></li>
                 <li><a href="#role-whitelisting">Why do my Discord users need a specific role to join?</a></li>
@@ -17,6 +18,13 @@
                 <li><a href="#feature-request">Can you add feature XYZ?</a></li>
                 <li><a href="#how-to-help">I'd like to help out</a></li>
             </ol>
+
+            <hr class="light">
+
+            <h2 id="getting-started">How do I loot council?</h2>
+            <p>
+                We're glad you asked. This is the most comprehensive guide we could find: <a href="https://www.reddit.com/r/classicwow/comments/hnjsge/how_to_loot_council/" target="_none">How To Loot Council</a>
+            </p>
 
             <hr class="light">
 

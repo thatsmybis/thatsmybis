@@ -17,8 +17,8 @@
 <div id="stars3"></div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-lg-12 text-center mb-5">
-            <h1 class="mt-5 mb-5 text-1">
+        <div class="col-lg-12 text-center mt-5 mb-5 pt-5">
+            <h1 class="mt-5 mb-5 pt-5 text-1">
                 <span class="font-weight-bold">{{ env('APP_NAME') }}</span>
             </h1>
         <p class="mt-1 font-weight-normal mb-5 text-3">
@@ -38,8 +38,6 @@
             </div>
 
             <div class="mt-5 mb-5 pt-5">
-                <blockquote class="reddit-card"><a href="https://www.reddit.com/r/classicwow/comments/hnjsge/how_to_loot_council/">How To Loot Council</a> from <a href="http://www.reddit.com/r/classicwow">r/classicwow</a></blockquote>
-                <script async src="//embed.redditmedia.com/widgets/platform.js" charset="UTF-8"></script>
             </div>
         </div>
     </div>
