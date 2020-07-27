@@ -52,7 +52,7 @@
                                     $itemCharacter = $characters->find($item->pivot->character_id);
                                 @endphp
                                 <li class="">
-                                    @include('partials/item', ['wowheadLink' => true])
+                                    @include('partials/item', ['wowheadLink' => false])
                                     <small class="text-muted">
                                         on
                                         <a href="{{route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}"
