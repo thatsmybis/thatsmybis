@@ -16,7 +16,7 @@ class CreateContentTable extends Migration
         Schema::create('content', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('title');
-            $table->string('slug')->unique();
+            $table->string('slug', 50)->unique();
             $table->boolean('is_news')->default(0);
             $table->text('content')->nullable();
             $table->bigInteger('user_id')->unsigned();

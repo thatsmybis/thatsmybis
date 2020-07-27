@@ -36,7 +36,7 @@
                 @if ($character->relationLoaded('raid'))
                     @php
                         $raidColor = null;
-                        if ($character->raid->relationLoaded('role')) {
+                        if ($character->raid && $character->raid->relationLoaded('role')) {
                             $raidColor = $character->raid->getColor();
                         }
                     @endphp
