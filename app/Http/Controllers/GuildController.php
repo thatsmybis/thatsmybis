@@ -60,17 +60,25 @@ class GuildController extends Controller
             abort(403, "Insufficient server privileges to register that guild.");
         }
 
+        $discordGuild = $discord->guild->getGuild(['guild.id' => (int)$input['discord_id']]);
+
         $hasPermissions = false;
 
         $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$input['discord_id']]);
 
-        // Go through each of the user's roles, and check to see if any of them have admin or management permissions
-        // We're only going to let the user register this server if they have one of those permissions
-        foreach ($discordMember->roles as $role) {
-            $discordPermissions = $roles[array_search($role, array_column($roles, 'id'))]->permissions;
-            if (($discordPermissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) { // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
-                $hasPermissions = true;
-                break;
+
+        if ($discordMember->user->id == $discordGuild->owner_id) {
+            // You own the server... come right in.
+            $hasPermissions = true;
+        } else {
+            // Go through each of the user's roles, and check to see if any of them have admin or management permissions
+            // We're only going to let the user register this server if they have one of those permissions
+            foreach ($discordMember->roles as $role) {
+                $discordPermissions = $roles[array_search($role, array_column($roles, 'id'))]->permissions;
+                if (($discordPermissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) { // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
+                    $hasPermissions = true;
+                    break;
+                }
             }
         }
 
