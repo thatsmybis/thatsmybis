@@ -38,7 +38,9 @@
             </div>
 
             <div class="mt-5 mb-5 pt-5">
-                <!-- Patreon -->
+                <a href="{{ env('LINK_PATREON') }}" target="_blank" class="lead text-white font-weight-bold">
+                    Support this project on Patreon
+                </a>
             </div>
         </div>
     </div>

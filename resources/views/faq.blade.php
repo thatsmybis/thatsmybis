@@ -30,10 +30,13 @@
 
             <h2 id="what-does-this-do">What does this website do?</h2>
             <p>
-                This website aims to offer a solution for keeping track of who has looted what in your guild and raids. It also aims to allow your raid members to let your guild's leadership know which items they are going for. Our solution to these problems is primarily aimed at guilds which use a loot council system, as opposed to something such as Dragon Kill Points (DKP).
+                We aim to give loot councils an easy way to fairly distribute loot by providing them with the necessary information for them to make their decisions. At a glance, you can see which members are going for which items, what loot they've received in the past, any notes they may have, and all packaged in a clean and easy to read interface.
             </p>
             <p>
-                It is our hope that we can offer a better solution when compared to using spreadsheets to manage this logistical problem. If you have any suggestions for how we can do this better or would like to help out, please reach out to us <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a>.
+                For raiders, you can clearly and easily communicate to loot council and fellow raiders what loot you're going for, making it much harder to be accidentally overlooked. You can even use our system to identify loot that the rest of your raid may have overlooked, giving you an edge in snagging some extra gear!
+            </p>
+            <p>
+                If you have any questions or would like to help out, please reach out to us <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a>.
             </p>
 
             <hr class="light">
@@ -43,7 +46,7 @@
                 Start by <a href="{{ route('guild.showRegister') }}">registering your guild's Discord server</a>, which requires you have Administrator permissions on your Discord server. Fill out the basic guild settings in the admin section once registered.
             </p>
             <p>
-                Once you've done this preparation, you can then share the link to your guild's page with your guild members who are on your guild Discord server. Provided they have one of the allowed roles (you should have filled one or more of these out in your guild settings), they will be allowed to register on this website and then join your guild.
+                Once you've done this preparation, you can then share the link to your guild's page with your guild members who are on your guild Discord server. Provided they have one of the allowed roles (you should have filled one or more of these out in your guild settings), they will be able to join your guild's page.
             </p>
 
             <hr class="light">
@@ -94,7 +97,10 @@
 
             <h2 id="name-origin">Where'd you get your name?</h2>
             <p>
-                It's an ongoing meme (and reality) that many players and classes in World of Warcraft Classic will attempt to claim pretty much every item as their Best in Slot ("That's my BIS"). We thought it sounded like an appropriate name for this website. Here's a <a href="https://www.youtube.com/watch?v=3lCC3r-Bxzk" target="_blank">tasteful little song</a> about this meme.
+                It's an ongoing meme (and reality) that many players and classes in World of Warcraft Classic will attempt to claim pretty much every item as their Best in Slot ("That's my BIS"). We thought it sounded like an appropriate name for this website, as we've literally designed it to help raiders tell their loot council "Hey, that's my BIS, give it here."
+            </p>
+            <p>
+                Someone even made a <a href="https://www.youtube.com/watch?v=3lCC3r-Bxzk" target="_blank">tasteful little song</a> about this meme.
             </p>
 
             <hr class="light">
