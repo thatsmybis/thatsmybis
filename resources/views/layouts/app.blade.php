@@ -6,13 +6,13 @@
     <meta property="og:title" content="@yield('title', env('APP_NAME'))" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:type" content="website" />
-    <meta property="og:description" content="@yield('description', 'A tool for loot council guilds.')" />
+    <meta property="og:description" content="@yield('description', 'A tool for loot council guilds - easily keep track of your raid's loot distribution')" />
     <meta property="og:determiner" content="" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="en_CA" />
     <meta property="og:locale:alternate" content="en_GB" />
-    <meta property="og:image" content="@yield('image', 'https://random-content.s3.amazonaws.com/thatsmybis_logo.jpeg')" />
-    <meta property="og:image:url" content="@yield('image', 'https://random-content.s3.amazonaws.com/thatsmybis_logo.jpeg')" />
+    <meta property="og:image" content="@yield('image', 'https://random-content.s3.amazonaws.com/thatsmybis_logo.png')" />
+    <meta property="og:image:url" content="@yield('image', 'https://random-content.s3.amazonaws.com/thatsmybis_logo.png')" />
     <meta property="og:image:type" content="image/png" />
     <meta property="fb:app_id" content="" />
 
@@ -39,6 +39,15 @@
     <meta name="description" content="@yield('description', 'An online gaming community.')" />
     <meta name="keywords" content="@yield('keywords', "thatsmybis,that's my bis,thatsmybis wow,thatsmybis classic,faerlina,horde,faerlina horde,wow streamers,warcraft streamers,faerlina streamer,faerlina streamers")" />
     <meta name="author" content="https://github.com/Lemmings19/">
+
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="/images/favicon/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon/favicon-16x16.png">
+    <link rel="manifest" href="/site.webmanifest">
+    <link rel="mask-icon" href="/images/favicon/safari-pinned-tab.svg" color="#282447">
+    <meta name="msapplication-TileColor" content="#282447">
+    <meta name="theme-color" content="#282447">
 
     <!-- Global site tag (gtag.js) - Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id={{ env('GOOGLE_ANALYTICS_KEY') }}"></script>
