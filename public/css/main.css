@@ -66,6 +66,10 @@ body {
     font-family: Blizz;
 }
 
+.d-inline-grid {
+    display: inline-grid;
+}
+
 .bg-gradient {
     background: linear-gradient(to top, #473967 20%, #1c1b3a 80%);
 }
@@ -223,24 +227,6 @@ body {
     max-height: 32px;
 }
 
-/* Nice well contrasted backgrounds with the dark theme */
-.dropdown-menu {
-    background-color: #2a2947;
-}
-.dropdown-menu a, .dropdown-menu a:hover {
-    color: #fff;
-}
-.dropdown-item:hover {
-    background-color: #201f3c;
-}
-.dropdown-item.selected.active{
-    background-color: #161523;
-}
-
-.form-control:focus {
-  box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 128, 0);
-}
-
 .nav-item.active {
     font-weight: 700 !important;
 }
@@ -258,7 +244,7 @@ ol.no-indent, ul.no-indent {
 }
 
 ul.striped > li:nth-of-type(odd), ol.striped > li:nth-of-type(odd) {
-    background: #ffffff0c;
+    background: #28264f;
 }
 
 div.striped:nth-of-type(odd) {
@@ -266,7 +252,7 @@ div.striped:nth-of-type(odd) {
 }
 
 div.striped-light:nth-of-type(odd) {
-    background: #2b2951;
+    background: #28264f;
 }
 
 .cursor-pointer {
@@ -292,6 +278,54 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
     text-decoration: underline;
 }
 
+/* Nice well contrasted backgrounds with the dark theme */
+.dropdown-menu {
+    background-color: #32305c;
+}
+.dropdown-menu a, .dropdown-menu a:hover {
+    color: #fff;
+}
+.dropdown-item:hover {
+    background-color: #201f3c;
+}
+.dropdown-item.selected.active{
+    background-color: #161523;
+}
+
+.form-control:focus, .btn-light.focus, .btn-light:focus {
+  box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 128, 0);
+}
+
+input.dark, select.dark, textarea.dark {
+    background-color: #32305c;
+    color: #dbdbdb;
+    border-color: #6865b9;
+}
+
+input.dark:focus, select.dark:focus, textarea.dark:focus {
+    background-color: #3a386d;
+    color: #fff;
+    border-color: #6460b0;
+}
+
+select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
+    background-color: #1d1b37;;
+    color: #8f8f8f;
+    border-color: #5e5ba6;
+}
+
+.dropdown-toggle.btn-light {
+    background-color: #32305c;
+    border-color: #6865b9;
+    color: #dbdbdb;
+}
+
+.dropdown-toggle.btn-light:active, .dropdown-toggle.btn-light:hover, .dropdown-toggle.btn-light:focus, .show > .dropdown-toggle.btn-light {
+    background-color: #3a386d;
+    border-color: #6460b0;
+    color: #fff;
+}
+
 .tag {
     display: block;
     width: max-content;
@@ -306,7 +340,7 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
 }
 
 .bg-tag {
-    background-color: #2a2947;
+    background-color: #252344;
     color: #fff;
 }
 
@@ -327,8 +361,9 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
 }
 
 .input-item {
+    color: #dbdbdb;
     padding: 1px 4px 5px 3px;
-    border: solid 1px;
+    border: solid 1px #837dea;
     border-radius: 5px;
     margin-bottom: 10px;
 }
@@ -353,6 +388,11 @@ button.close {
 
 button.close:hover {
     color: #e5e5e5;
+}
+
+.top-divider {
+    border-top: 2px solid #4b498c;
+    box-shadow: inset 0px 11px 10px -10px #4b498c;
 }
 
 /* DATATABLES OVERRIDE */

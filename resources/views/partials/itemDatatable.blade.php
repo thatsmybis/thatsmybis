@@ -5,10 +5,10 @@
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                 Raid
             </label>
-            <select id="raid_filter" class="form-control">
-                <option value="" class="bg-tag">—</option>
+            <select id="raid_filter" class="form-control dark">
+                <option value="">—</option>
                 @foreach ($raids as $raid)
-                    <option value="{{ $raid->id }}" class="bg-tag" style="color:{{ $raid->getColor() }};">
+                    <option value="{{ $raid->id }}" style="color:{{ $raid->getColor() }};">
                         {{ $raid->name }}
                     </option>
                 @endforeach

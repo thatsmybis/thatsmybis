@@ -43,7 +43,7 @@
                                     <input name="name"
                                         maxlength="40"
                                         type="text"
-                                        class="form-control"
+                                        class="form-control dark"
                                         placeholder="eg. Gurgthock"
                                         value="{{ old('name') ? old('name') : ($character ? $character->name : '') }}" />
                                 </div>
@@ -57,7 +57,7 @@
                                             Guild Member
                                         </label>
                                         <div class="form-group">
-                                            <select name="member_id" class="form-control selectpicker" data-live-search="true">
+                                            <select name="member_id" class="form-control dark selectpicker" data-live-search="true">
                                                 <option value="">
                                                     —
                                                 </option>
@@ -83,13 +83,13 @@
                                         Class
                                     </label>
                                     <div class="form-group">
-                                        <select name="class" class="form-control">
-                                            <option value="" class="bg-tag">
+                                        <select name="class" class="form-control dark">
+                                            <option value="">
                                                 —
                                             </option>
 
                                             @foreach (App\Character::classes() as $class)
-                                                <option value="{{ $class }}" class="bg-tag text-{{ strtolower($class) }}-important"
+                                                <option value="{{ $class }}" class="text-{{ strtolower($class) }}-important"
                                                     {{ old('class') ? (old('class') == $class ? 'selected' : '') : ($character && $character->class == $class ? 'selected' : '') }}>
                                                     {{ $class }}
                                                 </option>
@@ -107,7 +107,7 @@
                                     <input name="spec"
                                         maxlength="50"
                                         type="text"
-                                        class="form-control"
+                                        class="form-control dark"
                                         placeholder="eg. Fury Prot"
                                         value="{{ old('spec') ? old('spec') : ($character ? $character->spec : '') }}" />
                                 </div>
@@ -121,7 +121,7 @@
                                         Race
                                     </label>
                                     <div class="form-group">
-                                        <select name="race" class="form-control">
+                                        <select name="race" class="form-control dark">
                                             <option value="" selected>
                                                 —
                                             </option>
@@ -146,7 +146,7 @@
                                         type="number"
                                         min="1"
                                         max="60"
-                                        class="form-control"
+                                        class="form-control dark"
                                         placeholder="0"
                                         value="{{ old('level') ? old('level') : ($character ? $character->level : '60') }}" />
                                 </div>
@@ -163,14 +163,14 @@
                                 Raid Group
                             </label>
                             <div class="form-group">
-                                <select name="raid_id" class="form-control">
-                                    <option value="" selected class="bg-tag">
+                                <select name="raid_id" class="form-control dark">
+                                    <option value="" selected>
                                         —
                                     </option>
 
                                     @foreach ($guild->raids as $raid)
                                         <option value="{{ $raid->id }}"
-                                            class="bg-tag" style="color:{{ $raid->getColor() }};"
+                                            style="color:{{ $raid->getColor() }};"
                                             {{ old('raid_id') ? (old('raid_id') == $raid->id ? 'selected' : '') : ($character && $character->raid_id == $raid->id ? 'selected' : '') }}>
                                             {{ $raid->name }}
                                         </option>
@@ -191,7 +191,7 @@
                                         Profession 1
                                     </label>
                                     <div class="form-group">
-                                        <select name="profession_1" class="form-control">
+                                        <select name="profession_1" class="form-control dark">
                                             <option value="" selected>
                                                 —
                                             </option>
@@ -212,7 +212,7 @@
                                         Profession 2
                                     </label>
                                     <div class="form-group">
-                                        <select name="profession_2" class="form-control">
+                                        <select name="profession_2" class="form-control dark">
                                             <option value="" selected>
                                                 —
                                             </option>
@@ -240,7 +240,7 @@
                                         type="number"
                                         min="1"
                                         max="14"
-                                        class="form-control"
+                                        class="form-control dark"
                                         placeholder="—"
                                         value="{{ old('rank') ? old('rank') : ($character ? $character->rank : '') }}" />
                                 </div>
@@ -256,7 +256,7 @@
                                         type="number"
                                         min="1"
                                         max="14"
-                                        class="form-control"
+                                        class="form-control dark"
                                         placeholder="—"
                                         value="{{ old('rank_goal') ? old('rank_goal') : ($character ? $character->rank_goal : '') }}" />
                                 </div>
@@ -273,7 +273,7 @@
                                 Public Note
                                 <small class="text-muted">anyone in the guild can see this</small>
                             </label>
-                            <textarea data-max-length="144" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
+                            <textarea data-max-length="144" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
                         </div>
                     </div>
 
@@ -285,7 +285,7 @@
                                     Officer Note
                                     <small class="text-muted">only officers can see this</small>
                                 </label>
-                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
                             </div>
                         </div>
                     @endif
@@ -299,7 +299,7 @@
                                         Personal Note
                                         <small class="text-muted">only you can see this</small>
                                     </label>
-                                    <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
+                                    <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
                                 </div>
                             </div>
                         @endif

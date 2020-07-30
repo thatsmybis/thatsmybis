@@ -45,7 +45,7 @@
                         </label>
 
                         <div class="{{ $errors->has('wishlist.*') ? 'has-error' : '' }}">
-                            <input id="wishlist" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control">
+                            <input id="wishlist" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
                             <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
                             <ul class="js-sortable no-bullet no-indent mb-0">
@@ -78,7 +78,7 @@
                         </label>
 
                         <div class="{{ $errors->has('received.*') ? 'has-error' : '' }}">
-                            <input id="received" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control">
+                            <input id="received" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
                             <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
                             <ul class="js-sortable no-bullet no-indent mb-0">
@@ -111,7 +111,7 @@
                         </label>
 
                         <div class="{{ $errors->has('recipes.*') ? 'has-error' : '' }}">
-                            <input id="recipes" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control">
+                            <input id="recipes" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
                             <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
                             <ul class="js-sortable no-bullet no-indent mb-0">
@@ -141,7 +141,7 @@
                                 Public Note
                                 <small class="text-muted">anyone in the guild can see this</small>
                             </label>
-                            <textarea data-max-length="144" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
+                            <textarea data-max-length="144" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
                         </div>
                     </div>
 
@@ -153,7 +153,7 @@
                                     Officer Note
                                     <small class="text-muted">only officers can see this</small>
                                 </label>
-                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
                             </div>
                         </div>
                     @endif
@@ -166,7 +166,7 @@
                                     Personal Note
                                     <small class="text-muted">only you can see this</small>
                                 </label>
-                                <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
+                                <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
                             </div>
                         </div>
                     --}}

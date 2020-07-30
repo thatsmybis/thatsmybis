@@ -22,10 +22,10 @@
                         <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                         Raid
                     </label>
-                    <select id="raid_filter" class="form-control">
-                        <option value="" class="bg-tag">—</option>
+                    <select id="raid_filter" class="form-control dark">
+                        <option value="">—</option>
                         @foreach ($guild->raids as $raid)
-                            <option value="{{ $raid->id }}" class="bg-tag" style="color:{{ $raid->getColor() }};">
+                            <option value="{{ $raid->id }}" style="color:{{ $raid->getColor() }};">
                                 {{ $raid->name }}
                             </option>
                         @endforeach
@@ -49,20 +49,20 @@
                 <div class="row">
                     <div class="col-12 mt-3 mb-3 bg-light rounded">
                         @for ($i = 0; $i < 125; $i++)
-                            <div class="row striped-light pb-5 pt-5 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $i > 2 ? 'display:none;' : '' }}">
+                            <div class="row striped-light pb-4 pt-4 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $i > 2 ? 'display:none;' : '' }}">
 
                                 <div class="col-sm-6 col-12">
-                                    <div class="form-group mb-0 {{ $errors->has('items.*') ? 'has-error' : '' }}">
+                                    <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.id') ? 'text-danger font-weight-bold' : '' }}">
 
-                                            <label for="name" class="font-weight-bold">
-                                                <span class="fas fa-fw fa-sack text-success"></span>
-                                                @if ($i == 0)
-                                                    Item
-                                                @endif
-                                            </label>
+                                        <label for="name" class="font-weight-bold">
+                                            <span class="fas fa-fw fa-sack text-success"></span>
+                                            @if ($i == 0)
+                                                Item
+                                            @endif
+                                        </label>
 
 
-                                        <input data-max-length="50" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text js-show-next form-control" autocomplete="off">
+                                        <input data-max-length="50" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text js-show-next form-control dark" autocomplete="off">
                                         <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
                                         <ul class="no-bullet no-indent mb-0">
@@ -89,16 +89,16 @@
                                 <div class="col-sm-6 col-12">
                                     <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
 
-                                            <label for="member_id" class="font-weight-bold d-none d-sm-block">
-                                                &nbsp;
-                                                @if ($i == 0)
-                                                    <span class="fas fa-fw fa-user text-muted"></span>
-                                                    Character
-                                                @endif
-                                            </label>
+                                        <label for="member_id" class="font-weight-bold d-none d-sm-block">
+                                            &nbsp;
+                                            @if ($i == 0)
+                                                <span class="fas fa-fw fa-user text-muted"></span>
+                                                Character
+                                            @endif
+                                        </label>
 
-                                        <select name="items[{{ $i }}][character_id]" class="js-show-next form-control selectpicker" data-live-search="true" autocomplete="off">
-                                            <option value="" class="bg-tag">
+                                        <select name="items[{{ $i }}][character_id]" class="js-show-next form-control dark selectpicker" data-live-search="true" autocomplete="off">
+                                            <option value="">
                                                 —
                                             </option>
 
@@ -106,7 +106,7 @@
                                                 <option value="{{ $character->id }}"
                                                     data-tokens="{{ $character->id }}"
                                                     data-raid-id="{{ $character->raid_id }}"
-                                                    class="js-character-option bg-tag text-{{ strtolower($character->class) }}-important"
+                                                    class="js-character-option text-{{ strtolower($character->class) }}-important"
                                                     {{ old('items.' . $loop->iteration . '.character_id') && old('items.' . $loop->iteration . '.character_id') == $character->id  ? 'selected' : '' }}>
                                                     {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }}
                                                 </option>

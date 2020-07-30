@@ -93,6 +93,134 @@ class ItemController extends Controller
     }
 
     /**
+     * List the items
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listWithGuildEdit($guildSlug, $instanceSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.items')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
+
+        $instance = Instance::where('slug', $instanceSlug)
+            ->with('itemSources')
+            ->firstOrFail();
+
+        $items = Item::select([
+                'items.item_id',
+                'items.name',
+                'item_sources.name AS source_name',
+                'guild_items.note AS guild_note',
+                'guild_items.priority AS guild_priority',
+            ])
+            ->join('item_item_sources', function ($join) {
+                $join->on('item_item_sources.item_id', 'items.item_id');
+            })
+            ->join('item_sources', function ($join) {
+                $join->on('item_sources.id', 'item_item_sources.item_source_id');
+            })
+            ->leftJoin('guild_items', function ($join) use ($guild) {
+                $join->on('guild_items.item_id', 'items.item_id')
+                    ->where('guild_items.guild_id', $guild->id);
+            })
+            ->where('item_sources.instance_id', $instance->id)
+            // Without this, we'd get the same item listed multiple times from multiple sources in some cases
+            // This is problematic because the notes entered may differ, but we can only take one.
+            ->groupBy('items.item_id')
+            ->orderBy('item_sources.order')
+            ->orderBy('items.name')
+            ->get();
+
+        return view('item.listEdit', [
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'instance'        => $instance,
+            'items'           => $items,
+        ]);
+    }
+
+    /**
+     * List the items
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listWithGuildSubmit($guildSlug, $instanceSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.items')) {
+            request()->session()->flash('status', 'You don\'t have permissions to submit that.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        }
+
+        $validationRules =  [
+            'items.*.id'       => 'required|integer|exists:items,item_id',
+            'items.*.note'     => 'nullable|string|max:144',
+            'items.*.priority' => 'nullable|string|max:144',
+        ];
+
+        $this->validate(request(), $validationRules);
+
+        $instance = Instance::where('slug', $instanceSlug)->firstOrFail();
+
+        $guild->load([
+            'items' => function ($query) use ($instance) {
+                return $query
+                    ->join('item_item_sources', function ($join) {
+                        $join->on('item_item_sources.item_id', 'items.item_id');
+                    })
+                    ->join('item_sources', function ($join) {
+                        $join->on('item_sources.id', 'item_item_sources.item_source_id');
+                    })
+                    ->groupBy('items.item_id')
+                    ->where('item_sources.instance_id', $instance->id);
+            }
+        ]);
+
+        $existingItems = $guild->items;
+        $addedCount = 0;
+        $updatedCount = 0;
+
+        // Perform updates and inserts. Note who performed the update. Don't update/insert unchanged/empty rows.
+        foreach (request()->input('items') as $item) {
+            $existingItem = $guild->items->where('item_id', $item['id'])->first();
+
+            // Note or priority has changed; update it
+            if ($existingItem && ($item['note'] != $existingItem->pivot->note || $item['priority'] != $existingItem->pivot->priority)) {
+                dd($existingItem->toArray(), $item['note'], $item['priority']);
+                $guild->items()->updateExistingPivot($existingItem->item_id, [
+                    'note'       => $item['note'],
+                    'priority'   => $item['priority'],
+                    'updated_by' => $currentMember->id,
+                ]);
+                $updatedCount++;
+
+            // Note is totally new; insert it
+            } else if (!$existingItem && ($item['note'] || $item['priority'])) {
+                $guild->items()->attach($item['id'], [
+                    'note'       => $item['note'],
+                    'priority'   => $item['priority'],
+                    'created_by' => $currentMember->id,
+                ]);
+                $addedCount++;
+            }
+        }
+
+        request()->session()->flash('status', 'Successfully updated notes. ' . $addedCount . ' added, ' . $updatedCount . ' updated.');
+
+        return redirect()->route('guild.item.list', [
+            'guildSlug'    => $guild->slug,
+            'instanceSlug' => $instance->slug,
+        ]);
+    }
+
+    /**
      * Show the mass input page
      *
      * @return \Illuminate\Http\Response

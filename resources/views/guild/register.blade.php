@@ -17,7 +17,7 @@
                 to your guild's Discord server. <span class="small text-muted">(requires guild permissions)</span> This allows us to verify who's on the server and their permissions. You need to leave the bot on the server so long as you want to keep using <span class="">{{ env('APP_NAME') }}</span>.
             </p>
             <p class="pt-3 text-4">
-                Then, you're going to want to fill out this little form here:
+                Then, you're going to want to fill out this little form:
             </p>
         </div>
         <div class="col-12 col-lg-6 offset-lg-3">

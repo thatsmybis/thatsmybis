@@ -35,7 +35,7 @@
                                         <span class="fas fa-fw fa-users text-muted"></span>
                                         Guild Name
                                     </label>
-                                    <input name="name" maxlength="36" type="text" class="form-control" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
+                                    <input name="name" maxlength="36" type="text" class="form-control dark" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
                                 </div>
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                                         name="discord_id"
                                         maxlength="255"
                                         type="text"
-                                        class="form-control"
+                                        class="form-control dark"
                                         placeholder="paste your guild's Discord ID here"
                                         value="{{ old('discord_id') ? old('discord_id') : $guild->discord_id }}" />
                                 </div>
@@ -69,7 +69,7 @@
                                             locked
                                         </small>
                                     </label>
-                                    <select disabled name="expansion" class="form-control">
+                                    <select disabled name="expansion" class="form-control dark">
                                         <option value="1" selected>
                                             Classic
                                         </option>
@@ -97,7 +97,7 @@
                                         name="calendar_link"
                                         maxlength="255"
                                         type="text"
-                                        class="form-control"
+                                        class="form-control dark"
                                         placeholder="paste the calendar's public URL"
                                         value="{{ old('calendar_link') ? old('calendar_link') : $guild->calendar_link }}" />
                                     <small class="text-muted">
@@ -123,14 +123,14 @@
                             <div class="col-md-6 col-sm-8 col-12">
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <select name="gm_role_id" class="form-control">
-                                            <option value="" selected class="bg-tag">
+                                        <select name="gm_role_id" class="form-control dark">
+                                            <option value="" selected>
                                                 —
                                             </option>
 
                                             @foreach ($guild->roles as $role)
                                                 <option value="{{ $role->discord_id }}"
-                                                    class="bg-tag" style="color:{{ $role->getColor() }};"
+                                                    style="color:{{ $role->getColor() }};"
                                                     {{ old('gm_role_id') && old('gm_role_id') == $role->discord_id ? 'selected' : ($guild->gm_role_id == $role->discord_id ? 'selected' : '') }}>
                                                     {{ $role->name }}
                                                 </option>
@@ -164,14 +164,14 @@
                             <div class="col-md-6 col-sm-8 col-12">
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <select name="officer_role_id" class="form-control">
-                                            <option value="" selected class="bg-tag">
+                                        <select name="officer_role_id" class="form-control dark">
+                                            <option value="" selected>
                                                 —
                                             </option>
 
                                             @foreach ($guild->roles as $role)
                                                 <option value="{{ $role->discord_id }}"
-                                                    class="bg-tag" style="color:{{ $role->getColor() }};"
+                                                    style="color:{{ $role->getColor() }};"
                                                     {{ old('officer_role_id') && old('officer_role_id') == $role->discord_id ? 'selected' : ($guild->officer_role_id == $role->discord_id ? 'selected' : '') }}>
                                                     {{ $role->name }}
                                                 </option>
@@ -205,14 +205,14 @@
                             <div class="col-md-6 col-sm-8 col-12">
                                 <div class="form-group">
                                     <div class="form-group">
-                                        <select name="raid_leader_role_id" class="form-control">
-                                            <option value="" selected class="bg-tag">
+                                        <select name="raid_leader_role_id" class="form-control dark">
+                                            <option value="" selected>
                                                 —
                                             </option>
 
                                             @foreach ($guild->roles as $role)
                                                 <option value="{{ $role->discord_id }}"
-                                                    class="bg-tag" style="color:{{ $role->getColor() }};"
+                                                    style="color:{{ $role->getColor() }};"
                                                     {{ old('raid_leader_role_id') && old('raid_leader_role_id') == $role->discord_id ? 'selected' : ($guild->raid_leader_role_id == $role->discord_id ? 'selected' : '') }}>
                                                     {{ $role->name }}
                                                 </option>
@@ -258,14 +258,14 @@
 
                                     @for ($i = 0; $i < 12; $i++)
                                         <div class="form-group {{ $i > 1 ? 'js-hide-empty' : '' }}" style="{{ $i > 1 ? 'display:none;' : '' }}">
-                                            <select name="member_roles[]" class="form-control {{ $i > 0 ? 'js-show-next' : '' }}">
-                                                <option value="" selected class="bg-tag">
+                                            <select name="member_roles[]" class="form-control dark {{ $i > 0 ? 'js-show-next' : '' }}">
+                                                <option value="" selected>
                                                     —
                                                 </option>
 
                                                 @foreach ($guild->roles as $role)
                                                     <option value="{{ $role->discord_id }}"
-                                                        class="bg-tag" style="color:{{ $role->getColor() }};"
+                                                        style="color:{{ $role->getColor() }};"
                                                         {{ old('member_roles.' . $i) ? (old('member_roles.' . $i) == $role->discord_id ? 'selected' : '') : ($memberRoleLength >= $i && $memberRoleIds[$i] == $role->discord_id ? 'selected' : '') }}>
                                                         {{ $role->name }}
                                                     </option>

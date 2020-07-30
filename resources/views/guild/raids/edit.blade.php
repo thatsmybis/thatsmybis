@@ -41,7 +41,7 @@
                                     <input name="name"
                                         maxlength="255"
                                         type="text"
-                                        class="form-control"
+                                        class="form-control dark"
                                         placeholder="eg. Raid 1"
                                         value="{{ old('name') ? old('name') : ($raid ? $raid->name : '') }}" />
                                 </div>
@@ -59,14 +59,14 @@
                                     </small>
 
                                     <div class="form-group">
-                                        <select name="role_id" class="form-control">
-                                            <option value="" selected class="bg-tag">
+                                        <select name="role_id" class="form-control dark">
+                                            <option value="" selected>
                                                 —
                                             </option>
 
                                             @foreach ($guild->roles as $role)
                                                 <option value="{{ $role->id }}"
-                                                    class="bg-tag" style="color:{{ $role->getColor() }};"
+                                                    style="color:{{ $role->getColor() }};"
                                                     {{ old('role_id') ? (old('role_id') == $role->id ? 'selected' : '') : ($raid && $raid->role_id && $raid->role_id == $role->id ? 'selected' : '') }}>
                                                     {{ $role->name }}
                                                 </option>

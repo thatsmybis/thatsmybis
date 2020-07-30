@@ -5,10 +5,10 @@
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                 Raid
             </label>
-            <select id="raid_filter" class="form-control">
-                <option value="" class="bg-tag">—</option>
+            <select id="raid_filter" class="form-control dark">
+                <option value="">—</option>
                 @foreach ($raids as $raid)
-                    <option value="{{ $raid->name }}" class="bg-tag" style="color:{{ $raid->getColor() }};">
+                    <option value="{{ $raid->name }}" style="color:{{ $raid->getColor() }};">
                         {{ $raid->name }}
                     </option>
                 @endforeach
@@ -19,10 +19,10 @@
                 <span class="text-muted fas fa-fw fa-axe-battle"></span>
                 Class
             </label>
-            <select id="class_filter" class="form-control">
-                <option value="" class="bg-tag">—</option>
+            <select id="class_filter" class="form-control dark">
+                <option value="">—</option>
                 @foreach (App\Character::classes() as $class)
-                    <option value="{{ $class }}" class="bg-tag text-{{ strtolower($class) }}-important">
+                    <option value="{{ $class }}" class="text-{{ strtolower($class) }}-important">
                         {{ $class }}
                     </option>
                 @endforeach

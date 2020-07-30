@@ -81,6 +81,7 @@
                     $viewRoles = $currentMember->hasPermission('view.discord-roles');
                     $viewRaids = $currentMember->hasPermission('view.raids');
                     $editGuild = $currentMember->hasPermission('edit.guild');
+                    $editItems = $currentMember->hasPermission('edit.items');
                 @endphp
 
                 @if ($viewRoles || $viewRaids || $editGuild)
@@ -104,6 +105,38 @@
                                 <a class="dropdown-item" href="{{ route('guild.raids', ['guildSlug' => $guild->slug]) }}">
                                     Raids
                                 </a>
+                            @endif
+
+                            @if ($editItems)
+                                <a class="dropdown-item dropdown-toggle" href="#" id="adminItemDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Items
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="adminItemDropdown">
+                                    <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildSlug' => $guild->slug, 'instanceSlug' => 'zulgurub']) }}">
+                                        Zul'Gurub
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
+                                        Ruins of Ahn'Qiraj
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildSlug' => $guild->slug, 'instanceSlug' => 'world-bosses']) }}">
+                                        World Bosses
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildSlug' => $guild->slug, 'instanceSlug' => 'molten-core']) }}">
+                                        Molten Core
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair']) }}">
+                                        Onyxia's Lair
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-lair']) }}">
+                                        Blackwing Lair
+                                    </a>
+                                    <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
+                                        Temple of Ahn'Qiraj
+                                    </a>
+                                    <span class="dropdown-item text-muted" href="{{ route('guild.item.list', ['guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
+                                        Naxxramas
+                                    </span>
+                                </div>
                             @endif
                         </div>
                     </li>
