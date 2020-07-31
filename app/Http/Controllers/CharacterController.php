@@ -129,9 +129,9 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids', 'raids.role']);
-
         $character = Character::where(['name' => $name, 'guild_id' => $guild->id])->with('member')->firstOrFail();
+
+        $guild->load(['raids', 'raids.role']);
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
@@ -159,7 +159,7 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['name' => $name], ['guild_id' => $guild->id])->with(['member', 'raid', 'raid.role'])->firstOrFail();
+        $character = Character::where(['name' => $name, 'guild_id' => $guild->id])->with(['member', 'raid', 'raid.role'])->firstOrFail();
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
