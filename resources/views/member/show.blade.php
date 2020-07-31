@@ -47,7 +47,7 @@
                 <div class="col-12">
                     @if ($recipes->count() > 0)
                         <ol class="mb-0">
-                            @foreach ($recipes as $item)
+                            @foreach ($recipes->sortBy('name') as $item)
                                 @php
                                     $itemCharacter = $characters->find($item->pivot->character_id);
                                 @endphp
