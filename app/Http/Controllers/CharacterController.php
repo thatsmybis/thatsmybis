@@ -131,7 +131,7 @@ class CharacterController extends Controller
 
         $guild->load(['raids', 'raids.role']);
 
-        $character = Character::where(['name' => $name], ['guild_id' => $guild->id])->with('member')->firstOrFail();
+        $character = Character::where(['name' => $name, 'guild_id' => $guild->id])->with('member')->firstOrFail();
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
