@@ -15,24 +15,24 @@
                 <div class="col-12 mb-2">
                     <span class="font-weight-bold">
                         <span class="fas fa-fw fa-user text-muted"></span>
-                        <a href="{{ route('character.showCreate', ['guildSlug' => $guild->slug]) }}" class="text-white">
-                            Characters
-                        </a>
+                        Characters
                     </span>
                 </div>
                 <div class="col-12">
                     <ol class="striped no-bullet no-indent">
+                        @if ($showEdit)
+                            <li class="pt-3 pl-3 pb-3 pr-3 rounded">
+                                <a href="{{ route('character.showCreate', ['guildSlug' => $guild->slug]) }}" class="font-weight-medium">
+                                    <span class="fas fa-plus"></span>
+                                    create character
+                                </a>
+                            </li>
+                        @endif
                         @foreach ($characters as $character)
                             <li class="pt-2 pl-3 pb-3 pr-3 rounded">
                                 @include('character/partials/header', ['character' => $character, 'showEdit' => $showEdit, 'showEditLoot' => $showEditLoot, 'showIcon' => false, 'showOwner' => false])
                             </li>
                         @endforeach
-                        <li class="pt-3 pl-3 pb-3 pr-3 rounded">
-                            <a href="{{ route('character.showCreate', ['guildSlug' => $guild->slug]) }}" class="font-weight-medium">
-                                <span class="fas fa-plus"></span>
-                                create character
-                            </a>
-                        </li>
                     </ol>
                 </div>
             </div>
