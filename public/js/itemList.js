@@ -163,7 +163,7 @@ function getCharacterList(data, type, itemId) {
                 <a href="/${ guild.slug }/c/${ character.name }"
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
-                    <span class="role-circle" style="background-color:${ character.raid_color ? getColorFromDec(parseInt(character.raid_color)) : '' }"></span>${ character.name }
+                    <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_color) }"></span>${ character.name }
                 </a>
             </li>`;
     });

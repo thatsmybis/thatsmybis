@@ -148,7 +148,7 @@ class DashboardController extends Controller
             ->leftJoin('members', function ($join) {
                 $join->on('members.id', 'characters.member_id');
             })
-            ->leftJoin('raids', function ($join) use ($guild) {
+            ->leftJoin('raids', function ($join) {
                 $join->on('raids.id', 'characters.raid_id');
             })
             ->leftJoin('roles AS raid_roles', function ($join) {

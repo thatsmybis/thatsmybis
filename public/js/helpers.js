@@ -57,6 +57,7 @@ function decToHex(number) {
  * Pass a number, get back a hex color complete with leading hash to make it HTML friendly
  */
 function getColorFromDec(color) {
+    color = parseInt(color);
     if (color) {
         color = decToHex(color);
         // If it's too short, keep adding prefixed zero's until it's long enough
