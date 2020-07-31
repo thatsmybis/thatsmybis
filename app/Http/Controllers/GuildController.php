@@ -70,7 +70,10 @@ class GuildController extends Controller
         try {
             $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$input['discord_id'], 'user.id' => (int)$user->discord_id]);
         } catch (Exception $e) {
-            abort(403, "Insufficient server privileges to register that guild.");
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+               'permissions' => ["Insufficient server privileges to register that guild or bot is missing. Make sure you have the correct Discord Server ID."],
+            ]);
+            throw $error;
         }
 
         $discordGuild = $discord->guild->getGuild(['guild.id' => (int)$input['discord_id']]);
