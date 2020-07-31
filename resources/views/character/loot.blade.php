@@ -145,7 +145,7 @@
                         </div>
                     </div>
 
-                    @if ($showOfficerNote)
+                    @if ($currentMember->hasPermission('edit.officer-notes'))
                         <div class="col-12 mb-4">
                             <div class="form-group">
                                 <label for="officer_note" class="font-weight-bold">
@@ -153,7 +153,11 @@
                                     Officer Note
                                     <small class="text-muted">only officers can see this</small>
                                 </label>
-                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                                @if (isStreamerMode())
+                                    Hidden in streamer mode
+                                @else
+                                    <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                                @endif
                             </div>
                         </div>
                     @endif

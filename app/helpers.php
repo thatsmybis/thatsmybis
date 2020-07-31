@@ -20,6 +20,11 @@ function getDateTime($format = 'Y-m-d H:i:s') {
 }
 
 // Check the request for whether or not we stored the bool isSuperAdmin as true or false
+function isStreamerMode() {
+    return request()->get('isStreamerMode');
+}
+
+// Check the request for whether or not we stored the bool isSuperAdmin as true or false
 function isSuper() {
     return request()->get('isSuperAdmin');
 }

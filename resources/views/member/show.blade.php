@@ -95,11 +95,11 @@
                     </div>
                     <div class="col-12 mb-3 pl-4">
                         {{ $member->public_note ? $member->public_note : '—' }}
-                        @if ($showOfficerNote || $showPersonalNote)
+                        @if ($currentMember->id == $member->id || $currentMember->hasPermission('edit.officer-notes'))
                             <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                         @endif
                     </div>
-                    @if ($showOfficerNote || $showPersonalNote)
+                    @if ($currentMember->id == $member->id || $currentMember->hasPermission('edit.officer-notes'))
                         <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                             <div class="form-group">
                                 <label for="public_note" class="font-weight-bold">
@@ -111,7 +111,7 @@
                         </div>
                     @endif
 
-                    @if ($showOfficerNote)
+                    @if ($currentMember->hasPermission('view.officer-notes'))
                         <div class="col-12">
                             <span class="text-muted font-weight-bold">
                                 <span class="fas fa-fw fa-shield"></span>
@@ -119,18 +119,26 @@
                             </span>
                         </div>
                         <div class="col-12 mb-3 pl-4">
-                            {{ $member->officer_note ? $member->officer_note : '—' }}
-                            <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
+                            @if (!isStreamerMode())
+                                {{ $member->officer_note ? $member->officer_note : '—' }}
+                                @if ($currentMember->hasPermission('edit.officer-notes'))
+                                    <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
+                                @endif
+                            @else
+                                Hidden in streamer mode
+                            @endif
                         </div>
-                        <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
-                            <div class="form-group">
-                                <label for="officer_note" class="font-weight-bold">
-                                    <span class="sr-only">Officer Note</span>
-                                    <small class="text-muted">only officers can see this</small>
-                                </label>
-                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
+                        @if ($currentMember->hasPermission('edit.officer-notes') && !isStreamerMode())
+                            <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
+                                <div class="form-group">
+                                    <label for="officer_note" class="font-weight-bold">
+                                        <span class="sr-only">Officer Note</span>
+                                        <small class="text-muted">only officers can see this</small>
+                                    </label>
+                                    <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
+                                </div>
                             </div>
-                        </div>
+                        @endif
                     @endif
 
                     {{--

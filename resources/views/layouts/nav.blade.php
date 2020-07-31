@@ -1,5 +1,15 @@
 <nav class="navbar navbar-expand-md navbar-dark">
-    <a class="navbar-brand" href="{{ route('home') }}"><span class="text-white font-weight-bold">{{ isset($guild) && $guild->name ? $guild->name : env('APP_NAME') }}</span></a>
+    <span class="navbar-brand" href="{{ route('home') }}">
+        <span class="font-weight-bold">
+            <a href="{{ route('home') }}" class="text-white">
+                {!! isset($guild) && $guild->name ? $guild->name : env('APP_NAME') !!}
+            </a>
+            <a href="{{ route('toggleStreamerMode') }}" class="text-white">
+                <span class="fa-fw {!! isStreamerMode() ? 'fas fa-shield-alt' : 'fal fa-shield' !!}"></span>
+            </a>
+        </span>
+    </span>
+
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>

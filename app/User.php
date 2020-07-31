@@ -24,6 +24,7 @@ class User extends Authenticatable
         'discord_id',
         'discord_username',
         'discord_avatar',
+        'is_streamer_mode',
         'banned_at',
         'password',
     ];

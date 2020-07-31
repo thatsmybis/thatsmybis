@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Character, Content, Guild, Raid, Role, User};
+use App\{Character, Content, Guild, Member, Raid, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -53,17 +53,10 @@ class MemberController extends Controller
             return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         }
 
-        $showOfficerNote = false;
-
-        if ($currentMember->hasPermission('view.officer-notes')) {
-            $showOfficerNote = true;
-        }
-
         return view('member.edit', [
             'currentMember'   => $currentMember,
             'guild'           => $guild,
             'member'          => $member,
-            'showOfficerNote' => $showOfficerNote,
         ]);
     }
 
@@ -77,20 +70,15 @@ class MemberController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load([
-            'members' => function ($query) use($username) {
-                return $query->where('members.username', $username)
-                    ->with([
-                        'characters',
-                        'characters.raid',
-                        'characters.raid.role',
-                        'characters.recipes',
-                        'roles',
-                    ]);
-            },
-        ]);
-
-        $member = $guild->members->where('username', $username)->first();
+        $member = Member::where(['guild_id' => $guild->id, 'username' => $username])
+            ->with([
+                'characters',
+                'characters.raid',
+                'characters.raid.role',
+                'characters.recipes',
+                'roles',
+            ])
+            ->firstOrFail();
 
         if (!$member) {
             abort(404, 'Member not found.');
@@ -115,11 +103,6 @@ class MemberController extends Controller
             $showEditLoot = true;
         }
 
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes')) {
-            $showOfficerNote = true;
-        }
-
         return view('member.show', [
             'characters'       => $member->characters,
             'currentMember'    => $currentMember,
@@ -128,10 +111,24 @@ class MemberController extends Controller
             'recipes'          => $recipes,
             'showEdit'         => $showEdit,
             'showEditLoot'     => $showEditLoot,
-            'showOfficerNote'  => $showOfficerNote,
             'showPersonalNote' => ($currentMember->id == $member->id),
             'user'             => $user,
         ]);
+    }
+
+    /**
+     * Toggle streamer mode on and off
+     * @return
+     */
+    public function toggleStreamerMode() {
+        $user = request()->get('currentUser');
+
+        $toggle = ($user->is_streamer_mode ? 0 : 1);
+
+        $user->update(['is_streamer_mode' => $toggle]);
+
+        request()->session()->flash('status', 'Streamer mode ' . ($toggle ? 'on' : 'off') . '. Officer notes ' . ($toggle ? 'hidden' : 'visible') . '.');
+        return redirect()->route('home');
     }
 
     /**
@@ -177,7 +174,7 @@ class MemberController extends Controller
 
         $updateValues = [];
 
-        if ($currentMember->hasPermission('edit.officer-notes')) {
+        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
@@ -233,7 +230,7 @@ class MemberController extends Controller
 
         $updateValues = [];
 
-        if ($currentMember->hasPermission('edit.officer-notes')) {
+        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if ($currentMember->id != $member->id && !$currentMember->hasPermission('edit.character')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit that member.');

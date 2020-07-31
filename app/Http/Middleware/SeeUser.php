@@ -31,7 +31,8 @@ class SeeUser
             }
 
             // Store the user for later access.
-            $request->attributes->add(['currentUser' => $user]);
+            $request->attributes->add(['currentUser'  => $user]);
+            $request->attributes->add(['isStreamerMode' => $user->is_streamer_mode]);
         }
 
         return $next($request);

@@ -46,7 +46,7 @@ class ItemController extends Controller
         ];
 
         $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes')) {
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
             $characterFields[] = 'characters.officer_note';
             $showOfficerNote = true;
         }
@@ -271,7 +271,7 @@ class ItemController extends Controller
         ];
 
         $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes')) {
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
             $showOfficerNote = true;
         }
 

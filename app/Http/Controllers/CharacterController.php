@@ -159,24 +159,17 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['name' => $name], ['guild_id' => $guild->id])->with('member')->firstOrFail();
+        $character = Character::where(['name' => $name], ['guild_id' => $guild->id])->with(['member', 'raid', 'raid.role'])->firstOrFail();
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
             return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         }
 
-        $showOfficerNote = false;
-
-        if ($currentMember->hasPermission('view.officer-notes')) {
-            $showOfficerNote = true;
-        }
-
         return view('character.loot', [
             'character'       => $character,
             'currentMember'   => $currentMember,
             'guild'           => $guild,
-            'showOfficerNote' => $showOfficerNote,
 
             'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
             'maxRecipes'       => self::MAX_RECIPES,
@@ -210,7 +203,7 @@ class CharacterController extends Controller
         }
 
         $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes')) {
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
             $showOfficerNote = true;
         }
 
@@ -221,7 +214,6 @@ class CharacterController extends Controller
             'showEdit'         => $showEdit,
             'showEditLoot'     => $showEditLoot,
             'showOfficerNote'  => $showOfficerNote,
-            'showPersonalNote' => ($currentMember->id == $character->member_id),
         ]);
     }
 
@@ -301,7 +293,7 @@ class CharacterController extends Controller
         }
 
         // Can you edit the officer notes?
-        if ($currentMember->hasPermission('edit.officer-notes')) {
+        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
@@ -375,7 +367,7 @@ class CharacterController extends Controller
 
         $updateValues['public_note']   = request()->input('public_note');
 
-        if ($currentMember->hasPermission('edit.officer-notes')) {
+        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
             $updateValues['officer_note']   = request()->input('officer_note');
         }
 
@@ -438,7 +430,7 @@ class CharacterController extends Controller
 
         $updateValues = [];
 
-        if ($currentMember->hasPermission('edit.officer-notes')) {
+        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if ($currentMember->id != $character->member_id) {
             abort(403, "You do not have permission to edit someone else's character.");

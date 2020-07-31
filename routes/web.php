@@ -45,6 +45,8 @@ Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 Route::get( '/register-guild', 'GuildController@showRegister')->name('guild.showRegister');
 Route::post('/submit-guild',   'GuildController@register')    ->name('guild.register');
 
+Route::get('/streamer-mode', 'MemberController@toggleStreamerMode')->name('toggleStreamerMode');
+
 // Route::group(['prefix' => 'item'], function () {
 //     Route::get( '/{item_id}/{slug?}', 'ItemController@show')->name('item.show');
 // });
