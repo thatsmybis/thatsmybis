@@ -100,7 +100,7 @@ class GuildController extends Controller
 
         if (!$hasPermissions) {
             $error = \Illuminate\Validation\ValidationException::withMessages([
-               'permissions' => ["We couldn't find admin permissions on your account for that server. Have someone with one of those permissions register your guild."],
+               'permissions' => ["We couldn't find admin permissions on your account for that server. Have someone with admin permissions register your guild."],
             ]);
             throw $error;
         }

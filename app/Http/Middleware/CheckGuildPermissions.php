@@ -21,11 +21,7 @@ class CheckGuildPermissions
     public function handle($request, Closure $next)
     {
         if ($request->route('guildSlug') !== null) {
-            $guild = Guild::where('slug', $request->route('guildSlug'))->with([
-                'members' => function ($query) {
-                    return $query->where('members.user_id', Auth::id());
-                },
-            ])->first();
+            $guild = Guild::where('slug', $request->route('guildSlug'))->first();
 
             if (!$guild) {
                 abort(404, 'Guild not found.');
@@ -66,7 +62,7 @@ class CheckGuildPermissions
             }
 
             // Fetch their existing member object
-            $currentMember = $guild->members->where('user_id', Auth::id())->first();
+            $currentMember = Member::where(['guild_id' => $guild->id, 'user_id' => Auth::id()])->first();
 
             if (!$currentMember) {
                 // Don't have a member object? Let's create one...
