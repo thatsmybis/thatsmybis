@@ -88,7 +88,7 @@
                 @endif
 
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.auditLog']) ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('guild.auditLog', ['guildSlug' => $guild->slug]) }}">Audit Log</a>
+                    <a class="nav-link" href="{{ route('guild.auditLog', ['guildSlug' => $guild->slug]) }}">Audit</a>
                 </li>
 
                 @php
