@@ -209,7 +209,7 @@ class MemberController extends Controller
 
         if ($auditMessage && $currentMember->id == $member->id) {
             AuditLog::create([
-                'description'     => $currentMember->username . ' updated their own page' . ($auditMessage ? $auditMessage : ''),
+                'description'     => $currentMember->username . ' updated their own profile' . ($auditMessage ? $auditMessage : ''),
                 'member_id'       => $currentMember->id,
                 'guild_id'        => $guild->id,
                 'other_member_id' => null,
