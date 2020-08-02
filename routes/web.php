@@ -58,6 +58,7 @@ Route::group([
 
     Route::get( '/',                'GuildController@home')              ->name('guild.home');
 
+    Route::get( '/audit-log',       'AuditLogController@index')          ->name('guild.auditLog');
     Route::get( '/news',            'DashboardController@news')          ->name('guild.news');
     Route::get( '/calendar',        'DashboardController@calendar')      ->name('guild.calendar');
     Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');

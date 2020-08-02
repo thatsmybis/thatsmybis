@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Guild, Member, Permission, Role, User};
+use App\{AuditLog, Guild, Member, Permission, Role, User};
 use Auth;
 use Exception;
 use Illuminate\Http\Request;
@@ -129,6 +129,12 @@ class GuildController extends Controller
 
         $member = Member::create($user, $discordMember, $guild);
 
+        AuditLog::create([
+            'description'     => $member->username . ' registered the guild',
+            'member_id'       => $member->id,
+            'guild_id'        => $guild->id,
+        ]);
+
         // Redirect to guild settings page; prompting the user to finish setup
         request()->session()->flash('status', 'Successfully registered guild.');
         return redirect()->route('guild.settings', ['guildSlug' => $guild->slug]);
@@ -188,9 +194,9 @@ class GuildController extends Controller
 
         $permissions = Permission::all();
 
-        $updateValues['name']            = request()->input('name');
-        $updateValues['slug']            = slug(request()->input('name'));
-        $updateValues['calendar_link']   = request()->input('calendar_link');
+        $updateValues['name']          = request()->input('name');
+        $updateValues['slug']          = slug(request()->input('name'));
+        $updateValues['calendar_link'] = request()->input('calendar_link');
 
         if (request()->input('gm_role_id')) {
             // Let's make sure that role exists...
@@ -251,7 +257,41 @@ class GuildController extends Controller
 
         $updateValues['member_role_ids'] = implode(",", array_filter(request()->input('member_roles')));
 
+        $auditMessage = '';
+
+        if ($updateValues['name'] != $guild->name) {
+            $auditMessage .= ' (guild name changed to ' . $updateValues['name'] . ')';
+        }
+
+        if (array_key_exists('gm_role_id', $updateValues) && $updateValues['gm_role_id'] != $guild->gm_role_id) {
+            $role = $guild->roles->where('discord_id', $updateValues['gm_role_id'])->first();
+            $auditMessage .= ' (GM role changed to ' . ($role ? $role->name : 'none') . ')';
+        }
+        if (array_key_exists('officer_role_id', $updateValues) && $updateValues['officer_role_id'] != $guild->officer_role_id) {
+            $role = $guild->roles->where('discord_id', $updateValues['officer_role_id'])->first();
+            $auditMessage .= ' (Officer role changed to ' . ($role ? $role->name : 'none') . ')';
+        }
+        if (array_key_exists('raid_leader_role_id', $updateValues) && $updateValues['raid_leader_role_id'] != $guild->raid_leader_role_id) {
+            $role = $guild->roles->where('discord_id', $updateValues['raid_leader_role_id'])->first();
+            $auditMessage .= ' (Raid Leader role changed to ' . ($role ? $role->name : 'none') . ')';
+        }
+
+        if ($updateValues['member_role_ids'] != $guild->member_role_ids) {
+            $memberRoles = $guild->roles->whereIn('discord_id', request()->input('member_roles'));
+            $memberRoleMessage = '';
+            foreach ($memberRoles as $memberRole) {
+                $memberRoleMessage .= $memberRole->name .', ';
+            }
+            $auditMessage .= ' (whitelisted member roles changed to ' . ($memberRoleMessage ? trim($memberRoleMessage, ', ') : 'none') . ')';
+        }
+
         $guild->update($updateValues);
+
+        AuditLog::create([
+            'description'     => $currentMember->username . ' modified guild settings' . $auditMessage,
+            'member_id'       => $currentMember->id,
+            'guild_id'        => $guild->id,
+        ]);
 
         request()->session()->flash('status', 'Guild settings updated.');
         return redirect()->route('guild.settings', ['guildSlug' => $guild->slug]);

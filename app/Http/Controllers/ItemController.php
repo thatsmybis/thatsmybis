@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Guild, Instance, Item};
+use App\{AuditLog, Guild, Instance, Item};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -187,19 +187,29 @@ class ItemController extends Controller
         $addedCount = 0;
         $updatedCount = 0;
 
+        $audits = [];
+        $now = getDateTime();
+
         // Perform updates and inserts. Note who performed the update. Don't update/insert unchanged/empty rows.
         foreach (request()->input('items') as $item) {
             $existingItem = $guild->items->where('item_id', $item['id'])->first();
 
             // Note or priority has changed; update it
             if ($existingItem && ($item['note'] != $existingItem->pivot->note || $item['priority'] != $existingItem->pivot->priority)) {
-                dd($existingItem->toArray(), $item['note'], $item['priority']);
                 $guild->items()->updateExistingPivot($existingItem->item_id, [
                     'note'       => $item['note'],
                     'priority'   => $item['priority'],
                     'updated_by' => $currentMember->id,
                 ]);
                 $updatedCount++;
+
+                $audits[] = [
+                    'description'  => $currentMember->username . ' changed item note/priority',
+                    'member_id'    => $currentMember->id,
+                    'guild_id'     => $currentMember->guild_id,
+                    'item_id'      => $existingItem->item_id,
+                    'created_at'   => $now,
+                ];
 
             // Note is totally new; insert it
             } else if (!$existingItem && ($item['note'] || $item['priority'])) {
@@ -209,8 +219,18 @@ class ItemController extends Controller
                     'created_by' => $currentMember->id,
                 ]);
                 $addedCount++;
+
+                $audits[] = [
+                    'description'  => $currentMember->username . ' added item note/priority',
+                    'member_id'    => $currentMember->id,
+                    'guild_id'     => $currentMember->guild_id,
+                    'item_id'      => $item['id'],
+                    'created_at'   => $now,
+                ];
             }
         }
+
+        AuditLog::insert($audits);
 
         request()->session()->flash('status', 'Successfully updated notes. ' . $addedCount . ' added, ' . $updatedCount . ' updated.');
 
@@ -381,6 +401,9 @@ class ItemController extends Controller
         $addedCount  = 0;
         $failedCount = 0;
 
+        $audits = [];
+        $now = getDateTime();
+
         foreach (request()->input('items') as $item) {
             if ($item['id']) {
                 if ($guild->allCharacters->contains('id', $item['character_id'])) {
@@ -398,6 +421,15 @@ class ItemController extends Controller
                         'type'         => Item::TYPE_WISHLIST,
                     ];
                     $addedCount++;
+
+                    $audits[] = [
+                        'description'  => $currentMember->username . ' assigned item to character',
+                        'member_id'    => $currentMember->id,
+                        'character_id' => $item['character_id'],
+                        'guild_id'     => $currentMember->guild_id,
+                        'item_id'      => $item['id'],
+                        'created_at'   => $now,
+                    ];
                 } else {
                     $warnings .= (isset($item['label']) ? $item['label'] : $item['id']) . ' to character ID ' . $item['character_id'] . ', ';
                     $failedCount++;
@@ -407,6 +439,8 @@ class ItemController extends Controller
 
         // Add the items to the character's received list
         DB::table('character_items')->insert($newRows);
+
+        AuditLog::insert($audits);
 
         // For each item added, attempt to delete a matching item from the character's wishlist
         foreach ($detachRows as $detachRow) {
@@ -464,6 +498,13 @@ class ItemController extends Controller
                 'priority'   => request()->input('priority'),
                 'updated_by' => $currentMember->id,
             ]);
+
+            AuditLog::create([
+                'description'  => $currentMember->username . ' changed item note/priority',
+                'member_id'    => $currentMember->id,
+                'guild_id'     => $currentMember->guild_id,
+                'item_id'      => $item->item_id,
+            ]);
         } else {
             $noticeVerb = 'created';
 
@@ -471,6 +512,13 @@ class ItemController extends Controller
                 'note'       => request()->input('note'),
                 'priority'   => request()->input('priority'),
                 'created_by' => $currentMember->id,
+            ]);
+
+            AuditLog::create([
+                'description'  => $currentMember->username . ' added item note/priority',
+                'member_id'    => $currentMember->id,
+                'guild_id'     => $currentMember->guild_id,
+                'item_id'      => $item->item_id,
             ]);
         }
 

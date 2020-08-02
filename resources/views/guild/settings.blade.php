@@ -36,6 +36,9 @@
                                         Guild Name
                                     </label>
                                     <input name="name" maxlength="36" type="text" class="form-control dark" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
+                                    <span class="text-muted small">
+                                        Changing this breaks existing links to the guild
+                                    </span>
                                 </div>
                             </div>
                         </div>

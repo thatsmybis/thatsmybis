@@ -87,6 +87,10 @@
                     </li>
                 @endif
 
+                <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.auditLog']) ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('guild.auditLog', ['guildSlug' => $guild->slug]) }}">Audit Log</a>
+                </li>
+
                 @php
                     $viewRoles = $currentMember->hasPermission('view.discord-roles');
                     $viewRaids = $currentMember->hasPermission('view.raids');

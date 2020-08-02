@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Character, Content, Guild, Member, Raid, Role, User};
+use App\{AuditLog, Character, Content, Guild, Member, Raid, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -178,7 +178,7 @@ class MemberController extends Controller
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
-        if ($currentMember->id != $member->id && $currentMember->hasPermission('edit.characters')) {
+        if ($currentMember->id != $member->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit that member.');
             return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         }
@@ -186,12 +186,42 @@ class MemberController extends Controller
         $updateValues['username']    = request()->input('username');
         $updateValues['public_note'] = request()->input('public_note');
 
-        // User is editing their own character
+        // User is editing their own member
         if ($currentMember->id == $member->id) {
             $updateValues['personal_note'] = request()->input('personal_note');
         }
 
+        $auditMessage = '';
+
+        if ($updateValues['username'] != $member->username) {
+            $auditMessage .= ' (renamed from ' . $member->username . ' to ' . $updateValues['username'] . ')';
+        }
+
+        if ($updateValues['public_note'] != $member->public_note) {
+            $auditMessage .= ' (public note)';
+        }
+
+        if (isset($updateValues['officer_note']) && ($updateValues['officer_note'] != $member->officer_note)) {
+            $auditMessage .= ' (officer note)';
+        }
+
         $member->update($updateValues);
+
+        if ($auditMessage && $currentMember->id == $member->id) {
+            AuditLog::create([
+                'description'     => $currentMember->username . ' updated their own page' . ($auditMessage ? $auditMessage : ''),
+                'member_id'       => $currentMember->id,
+                'guild_id'        => $guild->id,
+                'other_member_id' => null,
+            ]);
+        } else if ($auditMessage && $currentMember->id != $member->id) {
+            AuditLog::create([
+                'description'     => $currentMember->username . ' updated member ' . ($auditMessage ? $auditMessage : ''),
+                'member_id'       => $currentMember->id,
+                'guild_id'        => $guild->id,
+                'other_member_id' => $member->id,
+            ]);
+        }
 
         request()->session()->flash('status', 'Successfully updated profile.');
         return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $member->username]);
@@ -207,7 +237,7 @@ class MemberController extends Controller
 
         $guild->load([
             'members' => function ($query) {
-                return $query->where('members.user_id', request()->input('id'));
+                return $query->where('members.id', request()->input('id'));
             },
         ]);
 
@@ -225,7 +255,8 @@ class MemberController extends Controller
         $member = $guild->members->where('id', request()->input('id'))->first();
 
         if (!$member) {
-            abort(404, "Member not found.");
+            request()->session()->flash('status', 'Member not found.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $member->username]);
         }
 
         $updateValues = [];
@@ -234,7 +265,7 @@ class MemberController extends Controller
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if ($currentMember->id != $member->id && !$currentMember->hasPermission('edit.character')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit that member.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $member->username]);
         }
 
         $updateValues['public_note'] = request()->input('public_note');
@@ -244,7 +275,33 @@ class MemberController extends Controller
             $updateValues['personal_note'] = request()->input('personal_note');
         }
 
+        $auditMessage = '';
+
+        if ($updateValues['public_note'] != $member->public_note) {
+            $auditMessage .= ' (public note)';
+        }
+
+        if (isset($updateValues['officer_note']) && ($updateValues['officer_note'] != $member->officer_note)) {
+            $auditMessage .= ' (officer note)';
+        }
+
         $member->update($updateValues);
+
+        if ($auditMessage && $currentMember->id == $member->id) {
+            AuditLog::create([
+                'description'     => $currentMember->username . ' updated their own notes' . ($auditMessage ? $auditMessage : ''),
+                'member_id'       => $currentMember->id,
+                'guild_id'        => $guild->id,
+                'other_member_id' => null,
+            ]);
+        } else if ($auditMessage && $currentMember->id != $member->id) {
+            AuditLog::create([
+                'description'     => $currentMember->username . ' updated  notes' . ($auditMessage ? $auditMessage : ''),
+                'member_id'       => $currentMember->id,
+                'guild_id'        => $guild->id,
+                'other_member_id' => $member->id,
+            ]);
+        }
 
         request()->session()->flash('status', "Successfully updated " . $member->username ."'s note.");
         return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $member->username]);

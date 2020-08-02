@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Guild, Raid, User};
+use App\{AuditLog, Guild, Raid, User};
 use Auth;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
@@ -102,7 +102,14 @@ class RaidController extends Controller
         $createValues['role_id']  = request()->input('role_id');
         $createValues['guild_id'] = $guild->id;
 
-        Raid::create($createValues);
+        $raid = Raid::create($createValues);
+
+        AuditLog::create([
+            'description' => $currentMember->username . ' created a raid',
+            'member_id'   => $currentMember->id,
+            'guild_id'    => $guild->id,
+            'raid_id'     => $raid->id,
+        ]);
 
         request()->session()->flash('status', 'Successfully created raid.');
         return redirect()->route('guild.raids', ['guildSlug' => $guild->slug]);
@@ -144,6 +151,13 @@ class RaidController extends Controller
         $updateValues['disabled_at']  = $disabledAt;
 
         $raid->update($updateValues);
+
+        AuditLog::create([
+            'description' => $currentMember->username . ($disabledAt ? ' disabled' : ' enabled') . ' a raid',
+            'member_id'   => $currentMember->id,
+            'guild_id'    => $guild->id,
+            'raid_id'     => $raid->id,
+        ]);
 
         request()->session()->flash('status', 'Successfully ' . ($disabledAt ? 'disabled' : 'enabled') . ' ' . $raid->name . '.');
         return redirect()->route('guild.raids', ['guildSlug' => $guild->slug]);
@@ -220,7 +234,20 @@ class RaidController extends Controller
         $updateValues['slug']    = slug(request()->input('name'));
         $updateValues['role_id'] = request()->input('role_id');
 
+        $auditMessage = '';
+
+        if ($updateValues['name'] != $raid->name) {
+            $auditMessage .= ' (renamed to ' . $updateValues['name'] . ')';
+        }
+
         $raid->update($updateValues);
+
+        AuditLog::create([
+            'description' => $currentMember->username . ' updated a raid' . $auditMessage,
+            'member_id'   => $currentMember->id,
+            'guild_id'    => $guild->id,
+            'raid_id'     => $raid->id,
+        ]);
 
         request()->session()->flash('status', 'Successfully updated ' . $raid->name . '.');
         return redirect()->route('guild.raids', ['guildSlug' => $guild->slug]);

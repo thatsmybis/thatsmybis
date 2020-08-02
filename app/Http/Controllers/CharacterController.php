@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Character, Content, Guild, Item, Raid, Role, User};
+use App\{AuditLog, Character, Content, Guild, Item, Raid, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -104,7 +104,7 @@ class CharacterController extends Controller
         $createValues['raid_id']       = request()->input('raid_id');
         $createValues['public_note']   = request()->input('public_note');
 
-        // User is editing their own character
+        // User is creating their own character
         if (isset($createValues['member_id']) && $createValues['member_id'] == $currentMember->id) {
             $createValues['personal_note'] = request()->input('personal_note');
             $createValues['order']         = request()->input('order');
@@ -113,6 +113,13 @@ class CharacterController extends Controller
         $createValues['guild_id']      = $guild->id;
 
         $character = Character::create($createValues);
+
+        AuditLog::create([
+            'description'  => $currentMember->username . ' created a character',
+            'member_id'    => $currentMember->id,
+            'guild_id'     => $guild->id,
+            'character_id' => $character->id,
+        ]);
 
         request()->session()->flash('status', 'Successfully created ' . $createValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
 
@@ -271,6 +278,11 @@ class CharacterController extends Controller
             return redirect()->back();
         }
 
+        if (!$guild->raids->where('id', request()->input('raid_id'))->first()) {
+            request()->session()->flash('status', 'Raid not found.');
+            return redirect()->back();
+        }
+
         $validationRules = $this->getValidationRules();
         $validationRules['id'] = 'required|integer|exists:characters,id';
 
@@ -316,7 +328,32 @@ class CharacterController extends Controller
             $updateValues['order']         = request()->input('order');
         }
 
+        $auditMessage = '';
+
+        if ($updateValues['name'] != $character->name) {
+            $auditMessage .= ' (renamed from ' . $character->name . ' to ' . $updateValues['name'] . ')';
+        }
+
+        if ($updateValues['raid_id'] != $character->raid_id) {
+            $auditMessage .= ' (changed to ' . $guild->raids->where('id', $updateValues['raid_id'])->first()->name . ')';
+        }
+
+        if ($updateValues['public_note'] != $character->public_note) {
+            $auditMessage .= ' (public note)';
+        }
+
+        if (isset($updateValues['officer_note']) && ($updateValues['officer_note'] != $character->officer_note)) {
+            $auditMessage .= ' (officer note)';
+        }
+
         $character->update($updateValues);
+
+        AuditLog::create([
+            'description'  => $currentMember->username . ' updated a character ' . ($auditMessage ? $auditMessage : ''),
+            'member_id'    => $currentMember->id,
+            'guild_id'     => $guild->id,
+            'character_id' => $character->id,
+        ]);
 
         request()->session()->flash('status', 'Successfully updated ' . $updateValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
 
@@ -377,7 +414,26 @@ class CharacterController extends Controller
             $updateValues['order']         = request()->input('order');
         }
 
+        $auditMessage = '';
+
+        if ($updateValues['public_note'] != $character->public_note) {
+            $auditMessage .= ' (public note)';
+        }
+
+        if (isset($updateValues['officer_note']) && ($updateValues['officer_note'] != $character->officer_note)) {
+            $auditMessage .= ' (officer note)';
+        }
+
         $character->update($updateValues);
+
+        if ($auditMessage) {
+            AuditLog::create([
+                'description'  => $currentMember->username . ' updated a character\'s notes' . ($auditMessage ? $auditMessage : ''),
+                'member_id'    => $currentMember->id,
+                'guild_id'     => $guild->id,
+                'character_id' => $character->id,
+            ]);
+        }
 
         if (request()->input('wishlist')) {
             $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember);
@@ -390,7 +446,6 @@ class CharacterController extends Controller
         } else {
             $character->received()->detach();
         }
-
 
         if (request()->input('recipes')) {
             $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember);
@@ -443,7 +498,26 @@ class CharacterController extends Controller
             $updateValues['personal_note'] = request()->input('personal_note');
         }
 
+        $auditMessage = '';
+
+        if ($updateValues['public_note'] != $character->public_note) {
+            $auditMessage .= ' (public note)';
+        }
+
+        if (isset($updateValues['officer_note']) && ($updateValues['officer_note'] != $character->officer_note)) {
+            $auditMessage .= ' (officer note)';
+        }
+
         $character->update($updateValues);
+
+        if ($auditMessage) {
+            AuditLog::create([
+                'description'  => $currentMember->username . ' updated a character\s notes' . ($auditMessage ? $auditMessage : ''),
+                'member_id'    => $currentMember->id,
+                'guild_id'     => $guild->id,
+                'character_id' => $character->id,
+            ]);
+        }
 
         request()->session()->flash('status', "Successfully updated " . $character->name ."'s note.");
 
@@ -472,6 +546,8 @@ class CharacterController extends Controller
 
         $now = getDateTime();
 
+        $audits = [];
+
         /**
          * Go over all the items we already have in the database.
          * If any of these are found in the set sent from the input, we're going to update them with new metadata.
@@ -487,12 +563,13 @@ class CharacterController extends Controller
                 // We found a match
                 if (!isset($inputItems[$inputItemKey]['resolved']) && $existingItem->item_id == $inputItem['item_id']) {
                     $found = true;
-                    // Update the metadata
-                    $toUpdate[] = [
-                        'id'    => $existingItem->pivot->id,
-                        'order' => $i,
-                    ];
-                    $existingItem->pivot->order = $i;
+                    if ($existingItem->pivot->order != $i) {
+                        // Update the metadata
+                        $toUpdate[] = [
+                            'id'    => $existingItem->pivot->id,
+                            'order' => $i,
+                        ];
+                    }
                     // Mark the input item as resolved so that we don't go over it again (we've already resolved what to do with this item)
                     $inputItems[$inputItemKey]['resolved'] = true;
                     break;
@@ -505,6 +582,15 @@ class CharacterController extends Controller
                 $toDrop[] = $existingItem->pivot->id;
                 // Also remove it from the collection... for good measure I guess.
                 $existingItems->forget($existingItemKey);
+
+                $audits[] = [
+                    'description'  => $currentMember->username . ' removed item from a character (' . $itemType . ')' . ' (prio ' . $existingItem->pivot->order . ')',
+                    'member_id'    => $currentMember->id,
+                    'guild_id'     => $currentMember->guild_id,
+                    'character_id' => $character->id,
+                    'item_id'      => $existingItem->item_id,
+                    'created_at'   => $now,
+                ];
             }
         }
 
@@ -527,6 +613,15 @@ class CharacterController extends Controller
                     'created_at'   => $now,
                     'updated_at'   => $now,
                 ];
+
+                $audits[] = [
+                    'description'  => $currentMember->username . ' added item to a character (' . $itemType . ')',
+                    'member_id'    => $currentMember->id,
+                    'guild_id'     => $currentMember->guild_id,
+                    'character_id' => $character->id,
+                    'item_id'      => $inputItem['item_id'],
+                    'created_at'   => $now,
+                ];
             }
         }
 
@@ -543,9 +638,31 @@ class CharacterController extends Controller
                     'order'      => $item['order'],
                     'updated_at' => $now,
                 ]);
+
+            // If we want to log EVERY prio change (this has a cascading effect and can result in hundreds of audits)
+            // $audits[] = [
+            //     'description'  => $currentMember->username . ' updated item on ' . $character->name . ' (' . $itemType . ')' . ' (prio set to ' . $item['order'] . ')',
+            //     'member_id'    => $currentMember->id,
+            //     'guild_id'     => $currentMember->guild_id,
+            //     'character_id' => $character->id,
+            //     'item_id'      => $item['id'],
+            // ];
+        }
+
+        if (count($toUpdate) > 0) {
+            $audits[] = [
+                'description'  => $currentMember->username . ' changed item priority(s) for a character (' . $itemType . ')',
+                'member_id'    => $currentMember->id,
+                'guild_id'     => $currentMember->guild_id,
+                'character_id' => $character->id,
+                'item_id'      => null,
+                'created_at'   => $now,
+            ];
         }
 
         // Insert...
         DB::table('character_items')->insert($toAdd);
+
+        AuditLog::insert($audits);
     }
 }
