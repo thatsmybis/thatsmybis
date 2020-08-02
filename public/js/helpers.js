@@ -119,7 +119,7 @@ function trackTimestamps(rate = 15000) {
             since = "over 2 weeks";
         } else {
         // < 2 weeks
-            since = moment(timestamp).fromNow(true);
+            since = moment.utc(timestamp).fromNow(true);
         }
 
         if ($(this).is("abbr")) {
@@ -135,12 +135,21 @@ function trackTimestamps(rate = 15000) {
             timestamp = timestamp * 1000;
         }
         let format    = ($(this).data("format") ? $(this).data("format") : "dddd, MMMM Do YYYY, h:mm a");
-        let since     = moment(timestamp).format(format);
+        let since     = moment.utc(timestamp).format(format);
         if ($(this).is("abbr")) {
             $(this).prop("title", since);
         } else {
             $(this).html(since);
         }
+    });
+
+    $(".js-timestamp-title").each(function () {
+        let timestamp = $(this).data("timestamp");
+        if (timestamp < 1000000000000) {
+            timestamp = timestamp * 1000;
+        }
+        let time = moment.utc(timestamp).local().format("dddd, MMMM Do YYYY, h:mm a");
+        $(this).prop("title", time);
     });
 
     timestampUpdateInterval ? clearInterval(timestampUpdateInterval) : null;
@@ -163,7 +172,7 @@ function trackTimestamps(rate = 15000) {
                 since = "over 2 weeks";
             } else {
             // < 2 weeks
-                since = moment(timestamp).fromNow(true);
+                since = moment.utc(timestamp).fromNow(true);
             }
 
             if ($(this).is("abbr")) {

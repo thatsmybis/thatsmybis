@@ -21,17 +21,14 @@
                         @foreach ($logs as $log)
                             <li class="p-1 pl-3 rounded">
                                 <div class="row">
-                                    <div class="col-md-2 col-12">
+                                    <div class="col-md-2 col-12 text-muted small">
                                         @if ($log->member_id)
                                             <a href="{{ route('member.show', ['guildSlug' => $guild->slug, 'username' => $log->member_username]) }}"
-                                                class="text-muted small"
-                                                title="{{ $log->created_at }} {{ $log->member_username }}">
-                                                {{ $log->created_at }}
+                                                class="text-muted">
+                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago
                                             </a>
                                         @else
-                                            <span title="{{ $log->created_at }}" class="text-muted small">
-                                                {{ $log->created_at }}
-                                            </span>
+                                            <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago
                                         @endif
                                     </div>
 
