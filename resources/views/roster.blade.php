@@ -20,5 +20,5 @@
     var raids      = {!! $raids->toJson() !!};
     var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
 </script>
-<script src="{{ asset('js/roster.js') }}"></script>
+<script src="{{ env('APP_ENV') == 'local' ? asset('/js/roster.js') : mix('js/processed/roster.js') }}"></script>
 @endsection

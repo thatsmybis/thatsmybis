@@ -299,5 +299,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('js/guildSettings.js') }}"></script>
+<script src="{{ env('APP_ENV') == 'local' ? asset('/js/guildSettings.js') : mix('js/processed/guildSettings.js') }}"></script>
 @endsection

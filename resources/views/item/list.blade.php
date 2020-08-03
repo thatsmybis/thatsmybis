@@ -24,5 +24,5 @@
     var guild = {!! $guild->toJson() !!};
     var raids = {!! $raids->toJson() !!};
 </script>
-<script src="{{ asset('js/itemList.js') }}"></script>
+<script src="{{ env('APP_ENV') == 'local' ? asset('/js/itemList.js') : mix('js/processed/itemList.js') }}"></script>
 @endsection

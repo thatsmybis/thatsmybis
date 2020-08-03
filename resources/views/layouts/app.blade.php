@@ -64,7 +64,7 @@
 
     <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.13.1/css/all.css" integrity="sha384-B9BoFFAuBaCfqw6lxWBZrhg/z4NkwqdBci+E+Sc2XlK/Rz25RYn8Fetb+Aw5irxa" crossorigin="anonymous">
 
-    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="{{ env('APP_ENV') == 'local' ? '/css/main.css' : mix('css/processed/main.css') }}">
 
     @yield('css')
 
@@ -152,10 +152,8 @@
     <script src="https://wow.zamimg.com/widgets/power.js"></script>
     <style>.q3 {color: #057ffa !important;} .q4 {color: #ab4aed !important;}/* override wowhead epic color to be higher contrast */</style>
 
-    <script src="{{ asset('/js/wowheadPower.js') }}"></script>
-    <script src="{{ asset('/js/helpers.js') }}"></script>
-    <script src="{{ asset('/js/main.js') }}"></script>
-    <script src="{{ asset('/js/autocomplete.js') }}"></script>
+    <script src="{{ env('APP_ENV') == 'local' ? asset('/js/helpers.js') : mix('js/processed/helpers.js') }}"></script>
+    <script src="{{ env('APP_ENV') == 'local' ? asset('/js/autocomplete.js') : mix('js/processed/autocomplete.js') }}"></script>
 
     @yield('scripts')
 

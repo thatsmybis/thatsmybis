@@ -1,0 +1,1 @@
+function showNext(t){""!=$(t).val()&&($(t).show(),$(t).parent().next(".js-hide-empty").show())}$(".js-show-next").change(function(){showNext(this)}).change(),$(".js-show-next").keyup(function(){showNext(this)});

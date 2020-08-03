@@ -137,5 +137,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{ asset('js/itemMassInput.js') }}"></script>
+<script src="{{ env('APP_ENV') == 'local' ? asset('/js/itemMassInput.js') : mix('js/processed/itemMassInput.js') }}"></script>
 @endsection
