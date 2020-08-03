@@ -395,6 +395,14 @@ button.close:hover {
     box-shadow: inset 0px 11px 10px -10px #4b498c;
 }
 
+/* Button to open the bug report page */
+#reportBug {
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 99;
+}
+
 /* DATATABLES OVERRIDE */
 .dataTables_wrapper .dataTables_filter,
 .dataTables_wrapper .dataTables_info,
