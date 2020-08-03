@@ -43,7 +43,44 @@ class GuildController extends Controller
      */
     public function showRegister()
     {
-        return view('guild.register', []);
+        $user = request()->get('currentUser');
+
+        $guildArray = [];
+
+        // Fetch guilds the user can join that already exist on this website
+        if ($user->discord_token) {
+            $discord = new DiscordClient([
+                'token' => $user->discord_token,
+                'tokenType' => 'OAuth',
+            ]);
+
+            $guilds = $discord->user->getCurrentUserGuilds();
+
+            if ($guilds) {
+                foreach ($guilds as $guild) {
+                    // only add guilds they have admin permissions for
+                    if (($guild->permissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) {
+                        $guildArray[$guild->id] = [
+                            'id'          => $guild->id,
+                            'name'        => $guild->name,
+                            'registered'  => false,
+                            'permissions' => $guild->permissions,
+                        ];
+                    }
+                }
+
+                $existingGuilds = Guild::whereIn('discord_id', array_keys($guildArray))->get();
+
+                // Flag guilds that are already registered
+                foreach ($existingGuilds as $guild) {
+                    if (isset($guildArray[$guild->discord_id])) {
+                        $guildArray[$guild->discord_id]['registered'] = true;
+                    }
+                }
+            }
+        }
+
+        return view('guild.register', ['guilds' => $guildArray]);
     }
 
     /**
@@ -54,9 +91,13 @@ class GuildController extends Controller
     public function register()
     {
         $validationRules =  [
-            'name'       => 'string|max:36|unique:guilds,name',
-            'discord_id' => 'string|max:255|unique:guilds,discord_id',
-            'bot_added'  => 'numeric|gte:1',
+            'name'              => 'string|max:36|unique:guilds,name',
+            'discord_id_select' => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id',
+            'discord_id'        => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id_select',
+            'bot_added'         => 'numeric|gte:1',
+        ];
+
+        $validationMessages = [
         ];
 
         $this->validate(request(), $validationRules);
@@ -64,23 +105,31 @@ class GuildController extends Controller
         $input = request()->all();
         $user = Auth::user();
 
+        $discordId = null;
+
+        if ($input['discord_id']) {
+            $discordId = $input['discord_id'];
+        } else if ($input['discord_id_select']) {
+            $discordId = $input['discord_id_select'];
+        }
+
         // Verify that the bot is on the server
         $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
 
         try {
-            $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$input['discord_id'], 'user.id' => (int)$user->discord_id]);
+            $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$discordId, 'user.id' => (int)$user->discord_id]);
         } catch (Exception $e) {
             $error = \Illuminate\Validation\ValidationException::withMessages([
-               'permissions' => ["Insufficient server privileges to register that guild or bot is missing. Make sure you have the correct Discord Server ID."],
+               'permissions' => ["Unable to find you on that server, or the bot is missing. Make sure you have the correct Discord Server ID and the bot has been added."],
             ]);
             throw $error;
         }
 
-        $discordGuild = $discord->guild->getGuild(['guild.id' => (int)$input['discord_id']]);
+        $discordGuild = $discord->guild->getGuild(['guild.id' => (int)$discordId]);
 
         $hasPermissions = false;
 
-        $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$input['discord_id']]);
+        $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$discordId]);
 
 
         if ($discordMember->user->id == $discordGuild->owner_id) {
@@ -110,7 +159,7 @@ class GuildController extends Controller
             [
                 'slug'       => slug($input['name']),
                 'user_id'    => $user->id,
-                'discord_id' => $input['discord_id'],
+                'discord_id' => $discordId,
             ]);
 
         // Insert the roles associated with this Discord

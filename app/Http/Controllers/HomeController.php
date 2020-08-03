@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\{User};
+use App\{Guild, User};
 use Auth;
 use Illuminate\Http\Request;
+use RestCord\DiscordClient;
 
 class HomeController extends Controller
 {
@@ -58,9 +59,44 @@ class HomeController extends Controller
     {
         if (Auth::check() && Auth::user()) {
         // Authenticated users default to a different page
-            request()->session()->reflash();
-            $user = User::with(['members', 'members.characters', 'members.characters.raid', 'members.guild'])->findOrFail(Auth::id());
-            return view('dashboard', ['user' => $user]);
+            $user = request()->get('currentUser');
+            $user->load([
+                'members',
+                'members.characters',
+                'members.characters.raid',
+                'members.guild',
+            ]);
+
+            $existingGuilds = null;
+
+            // Fetch guilds the user can join that already exist on this website
+            if ($user->discord_token) {
+                $discord = new DiscordClient([
+                    'token' => $user->discord_token,
+                    'tokenType' => 'OAuth',
+                ]);
+
+                $guilds = $discord->user->getCurrentUserGuilds();
+
+                if ($guilds) {
+                    $guildIds = [];
+                    foreach ($guilds as $guild) {
+                        $guildIds[$guild->id] = $guild->id;
+                    }
+
+                    // Remove guilds they're already a member of
+                    foreach ($user->members as $member) {
+                        unset($guildIds[$member->guild->discord_id]);
+                    }
+
+                    $existingGuilds = Guild::whereIn('discord_id', $guildIds)->get();
+                }
+            }
+
+            return view('dashboard', [
+                'existingGuilds' => $existingGuilds,
+                'user'           => $user,
+            ]);
         } else {
             return view('home');
         }

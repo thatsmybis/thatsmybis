@@ -44,7 +44,7 @@ class LoginController extends Controller
         return Socialite::driver('discord')
             // Don't require Discord to send back and email
             // https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes
-            ->setScopes(['identify'])
+            ->setScopes(['identify', 'guilds'])
             // Don't prompt the user to accept our app's usage of their Discord profile EVERY time (only on first signup)
             // https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-authorization-url-example
             ->with(['prompt' => 'none'])
@@ -79,15 +79,25 @@ class LoginController extends Controller
                 abort(403, 'You have been banned.');
             }
             Auth::login($authUser, true);
+
+            Auth::user()->update([
+                'discord_token'         => $unauthUser->token,
+                'discord_refresh_token' => $unauthUser->refreshToken,
+                'discord_token_expiry'  => date('Y-m-d H:i:s', time() + $unauthUser->expiresIn),
+            ]);
+
             return redirect()->route('home');
         } else if ($unauthUser) {
             $user = User::create([
-                'username'         => $unauthUser->getName(),
-                // 'email'            => $unauthUser->getEmail(),
-                'discord_username' => $unauthUser->getNickname(),
-                'discord_id'       => $id,
-                'discord_avatar'   => $unauthUser->getAvatar(),
-                'password'         => null,
+                'username'              => $unauthUser->getName(),
+                // 'email'                 => $unauthUser->getEmail(),
+                'discord_username'      => $unauthUser->getNickname(),
+                'discord_id'            => $id,
+                'discord_avatar'        => $unauthUser->getAvatar(),
+                'discord_token'         => $unauthUser->token,
+                'discord_refresh_token' => $unauthUser->refreshToken,
+                'discord_token_expiry'  => date('Y-m-d H:i:s', time() + $unauthUser->expiresIn),
+                'password'              => null,
             ]);
 
             Auth::login($user, true);

@@ -100,6 +100,11 @@ class Guild extends Model
     }
 
     public function getMemberRoleIds() {
-        return explode(',', $this->member_role_ids);
+        if ($this->member_role_ids) {
+            return explode(',', $this->member_role_ids);
+        } else {
+            return null;
+        }
+
     }
 }

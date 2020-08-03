@@ -58,6 +58,30 @@
             @endif
         </div>
 
+        @if ($existingGuilds)
+            <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mt-5 mb-5">
+                <ul class="no-bullet no-indent">
+                    @foreach ($existingGuilds as $existingGuild)
+                        <li class="bg-lightest mt-3 mb-3 p-3">
+                            <h2>
+                                <span class="text-uncommon font-weight-medium">
+                                    &lt;{{ $existingGuild->name }}&gt;
+                                </span>
+                            </h2>
+                            <ul class="list-inline">
+                                <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
+                                    <a href="{{ route('guild.home', ['guildSlug' => $existingGuild->slug]) }}">
+                                        <span class="fas fa-plus"></span>
+                                        Join Guild
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
+
         <div class="col-12 text-center mb-5">
             <div class="mt-5 mb-5">
                 <p class="font-weight-normal pt-3 text-4">

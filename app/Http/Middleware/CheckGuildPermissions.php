@@ -50,12 +50,14 @@ class CheckGuildPermissions
             // Guild owner doesn't have to go through this process
             // This ensures they never lock themselves out due to messing with roles
             if ($user->id != $guild->user_id) {
-                // Check that the Discord user has one of the role(s) required to access this guild
-                $matchingRoles = array_intersect($guild->getMemberRoleIds(), $discordMember->roles);
+                if ($guild->getMemberRoleIds()) {
+                    // Check that the Discord user has one of the role(s) required to access this guild
+                    $matchingRoles = array_intersect($guild->getMemberRoleIds(), $discordMember->roles);
 
-                if (count($matchingRoles) <= 0) {
-                    request()->session()->flash('status', 'Insufficient Discord role to access that guild.');
-                    return redirect()->route('home');
+                    if (count($matchingRoles) <= 0) {
+                        request()->session()->flash('status', 'Insufficient Discord role to access that guild.');
+                        return redirect()->route('home');
+                    }
                 }
 
                 // They're on the Discord and they have an appropriate role if they get this far
