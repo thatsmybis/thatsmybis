@@ -103,7 +103,7 @@ class Guild extends Model
         if ($this->member_role_ids) {
             return explode(',', $this->member_role_ids);
         } else {
-            return null;
+            return [];
         }
 
     }
