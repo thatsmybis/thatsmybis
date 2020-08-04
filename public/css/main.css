@@ -1,6 +1,6 @@
 @font-face {
     font-family: Blizz;
-    src: url("../fonts/FrizQuadrata.woff2");
+    src: url("../fonts/FrizQuadrata.woff2"), url("../../fonts/FrizQuadrata.woff2");
 }
 
 @font-face {
