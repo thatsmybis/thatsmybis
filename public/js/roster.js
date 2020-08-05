@@ -261,11 +261,13 @@ function getItemList(data, type, characterId) {
                     data-wowhead="item=${ item.item_id }?domain=classic">
                     ${ item.name }
                 </a>
+                <!--
                 <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
                     data-timestamp="${ item.pivot.created_at }"
                     data-title="added by ${ item.added_by_username } at"
                     data-is-short="1">
                 </span>
+                -->
             </li>`;
     });
 
