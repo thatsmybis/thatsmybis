@@ -335,7 +335,7 @@ class CharacterController extends Controller
         }
 
         if ($updateValues['raid_id'] != $character->raid_id) {
-            $auditMessage .= ' (changed to ' . $guild->raids->where('id', $updateValues['raid_id'])->first()->name . ')';
+            $auditMessage .= ' (changed raid to ' . $guild->raids->where('id', $updateValues['raid_id'])->first()->name . ')';
         }
 
         if ($updateValues['public_note'] != $character->public_note) {
@@ -512,7 +512,7 @@ class CharacterController extends Controller
 
         if ($auditMessage) {
             AuditLog::create([
-                'description'  => $currentMember->username . ' updated a character\s notes' . ($auditMessage ? $auditMessage : ''),
+                'description'  => $currentMember->username . ' updated a character\'s notes' . ($auditMessage ? $auditMessage : ''),
                 'member_id'    => $currentMember->id,
                 'guild_id'     => $guild->id,
                 'character_id' => $character->id,

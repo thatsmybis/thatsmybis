@@ -209,6 +209,10 @@ body {
     font-weight: 600 !important;
 }
 
+.smaller {
+    font-size: 70%;
+}
+
 .nowrap {
     white-space: nowrap;
 }

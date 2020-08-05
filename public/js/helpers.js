@@ -109,6 +109,29 @@ function slug(string) {
  */
 function trackTimestamps(rate = 15000) {
     $(".js-watchable-timestamp").each(function () {
+        let isShort = $(this).data("isShort");
+
+        if (isShort) {
+            moment
+            .locale('en', {
+                relativeTime: {
+                    past: '%s ago',
+                    s:  'seconds',
+                    ss: '%ss',
+                    m:  '~1m',
+                    mm: '%dm',
+                    h:  '~1h',
+                    hh: '%dh',
+                    d:  '~1d',
+                    dd: '%dd',
+                    M:  '~1mo',
+                    MM: '%dM',
+                    y:  '~1y',
+                    yy: '%dY'
+                }
+            });
+        }
+
         let timestamp = $(this).data("timestamp");
         if (timestamp < 1000000000000) { // <-- Potential y33.658k bug [that's a y2k joke]
             timestamp = timestamp * 1000; // convert from seconds to milliseconds
@@ -125,7 +148,10 @@ function trackTimestamps(rate = 15000) {
             since = "over 2 weeks";
         } else {
         // < 2 weeks
-            since = moment.utc(timestamp).fromNow(true);
+            since = moment
+                .utc(timestamp)
+                .fromNow(true);
+                console.log(since);
         }
 
         if ($(this).is("abbr")) {
@@ -150,12 +176,18 @@ function trackTimestamps(rate = 15000) {
     });
 
     $(".js-timestamp-title").each(function () {
+        let title = $(this).data("title");
+
         let timestamp = $(this).data("timestamp");
         if (timestamp < 1000000000000) {
             timestamp = timestamp * 1000;
         }
         let time = moment.utc(timestamp).local().format("dddd, MMMM Do YYYY, h:mm a");
-        $(this).prop("title", time);
+        if (title) {
+            $(this).prop("title", (title + ' ' + time));
+        } else {
+            $(this).prop("title", time);
+        }
     });
 
     timestampUpdateInterval ? clearInterval(timestampUpdateInterval) : null;

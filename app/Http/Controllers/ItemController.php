@@ -43,6 +43,7 @@ class ItemController extends Controller
             'members.username',
             'raids.name AS raid_name',
             'raid_roles.color AS raid_color',
+            'added_by_members.username AS added_by_username',
         ];
 
         $showOfficerNote = false;

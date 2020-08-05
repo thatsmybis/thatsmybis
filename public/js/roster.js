@@ -35,9 +35,11 @@ $(document).ready( function () {
         // wowhead's script previously ignored these links if they weren't visible
         makeWowheadLinks();
         addClippedItemHandlers();
+        trackTimestamps();
     });
 
     addClippedItemHandlers();
+    trackTimestamps();
 });
 
 function createTable() {
@@ -94,7 +96,7 @@ function createTable() {
                 "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Loot Received',
                 "data"   : "received",
                 "render" : function (data, type, row) {
-                    return data.length ? getItemList(data, 'received', row.id) : '—';
+                    return data && data.length ? getItemList(data, 'received', row.id) : '—';
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -104,7 +106,7 @@ function createTable() {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
-                    return data.length ? getItemList(data, 'wishlist', row.id) : '—';
+                    return data && data.length ? getItemList(data, 'wishlist', row.id) : '—';
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -114,7 +116,7 @@ function createTable() {
                 "title"  : '<span class="text-gold fas fa-fw fa-book"></span> Recipes',
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
-                    return data.length ? getItemList(data, 'recipes', row.id) : '—';
+                    return data && data.length ? getItemList(data, 'recipes', row.id) : '—';
                 },
                 "orderable" : false,
                 "visible" : false,
@@ -259,6 +261,11 @@ function getItemList(data, type, characterId) {
                     data-wowhead="item=${ item.item_id }?domain=classic">
                     ${ item.name }
                 </a>
+                <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+                    data-timestamp="${ item.pivot.created_at }"
+                    data-title="added by ${ item.added_by_username } at"
+                    data-is-short="1">
+                </span>
             </li>`;
     });
 

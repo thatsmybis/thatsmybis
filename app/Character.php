@@ -86,6 +86,10 @@ class Character extends Model
     public function recipes() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
+            ->select(['items.*', 'added_by_members.username AS added_by_username'])
+            ->leftJoin('members AS added_by_members', function ($join) {
+                $join->on('added_by_members.id', 'character_items.added_by');
+            })
             ->where('character_items.type', 'recipe')
             ->orderBy('order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'created_at'])
@@ -97,6 +101,10 @@ class Character extends Model
     public function received() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
+            ->select(['items.*', 'added_by_members.username AS added_by_username'])
+            ->leftJoin('members AS added_by_members', function ($join) {
+                $join->on('added_by_members.id', 'character_items.added_by');
+            })
             ->where('character_items.type', 'received')
             ->orderBy('order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'created_at'])
@@ -108,6 +116,10 @@ class Character extends Model
     public function wishlist() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
+            ->select(['items.*', 'added_by_members.username AS added_by_username'])
+            ->leftJoin('members AS added_by_members', function ($join) {
+                $join->on('added_by_members.id', 'character_items.added_by');
+            })
             ->where('character_items.type', 'wishlist')
             ->orderBy('order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'created_at'])

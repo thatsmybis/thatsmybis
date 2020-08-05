@@ -33,6 +33,11 @@
                             @foreach ($character->wishlist as $item)
                                 <li class="">
                                     @include('partials/item', ['wowheadLink' => false])
+                                    <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+                                        data-timestamp="{{ $item->pivot->created_at }}"
+                                        data-title="added by {{ $item->added_by_username }} at"
+                                        data-is-short="1">
+                                    </span>
                                 </li>
                             @endforeach
                         </ol>
@@ -55,6 +60,11 @@
                             @foreach ($character->received as $item)
                                 <li class="">
                                     @include('partials/item', ['wowheadLink' => false])
+                                    <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+                                        data-timestamp="{{ $item->pivot->created_at }}"
+                                        data-title="added by {{ $item->added_by_username }} at"
+                                        data-is-short="1">
+                                    </span>
                                 </li>
                             @endforeach
                         </ol>
@@ -77,6 +87,11 @@
                             @foreach ($character->recipes as $item)
                                 <li class="">
                                     @include('partials/item', ['wowheadLink' => false])
+                                    <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+                                        data-timestamp="{{ $item->pivot->created_at }}"
+                                        data-title="added by {{ $item->added_by_username }} at"
+                                        data-is-short="1">
+                                    </span>
                                 </li>
                             @endforeach
                         </ol>

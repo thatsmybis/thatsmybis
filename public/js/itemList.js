@@ -32,6 +32,7 @@ $(document).ready( function () {
         // Refresh wowhead links to show stlying.
         // wowhead's script previously ignored these links if they weren't visible
         makeWowheadLinks();
+        trackTimestamps();
     });
 
     // Filter out characters based on the raid they are in
@@ -45,6 +46,8 @@ $(document).ready( function () {
             $(".js-item-wishlist-character").show();
         }
     }).change();
+
+    trackTimestamps();
 });
 
 function createTable(lastSource) {
@@ -164,6 +167,11 @@ function getCharacterList(data, type, itemId) {
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_color) }"></span>${ character.name }
+
+                    <span class="js-watchable-timestamp smaller text-muted"
+                        data-timestamp="${ character.pivot.created_at }"
+                        data-is-short="1">
+                    </span>
                 </a>
             </li>`;
     });

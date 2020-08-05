@@ -53,6 +53,7 @@
                 Wishlist
             </span>
         </li>
+        <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
@@ -60,6 +61,7 @@
                 Recipes
             </span>
         </li>
+        -->
         <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
