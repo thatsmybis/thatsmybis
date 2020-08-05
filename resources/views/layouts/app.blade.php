@@ -133,7 +133,7 @@
 
     <!-- Button that sticks to bottom right of page -->
     <a id="reportBug" href="{{ env('APP_DISCORD') }}" target="_blank" class="btn btn-sm btn-light" title="Report a bug">
-        Report Bug <span class="text-danger fal fa-fw fa-bug"></span>
+        Give Feedback <span class="text-success fal fa-fw fa-comment-dots"></span>
     </a>
 
     <!-- Scripts -->
