@@ -278,7 +278,13 @@ class CharacterController extends Controller
             return redirect()->back();
         }
 
-        if (!$guild->raids->where('id', request()->input('raid_id'))->first()) {
+        $raid = null;
+
+        if (request()->input('raid_id')) {
+            $raid = $guild->raids->where('id', request()->input('raid_id'))->first();
+        }
+
+        if (request()->input('raid_id') && !$raid) {
             request()->session()->flash('status', 'Raid not found.');
             return redirect()->back();
         }
@@ -335,7 +341,7 @@ class CharacterController extends Controller
         }
 
         if ($updateValues['raid_id'] != $character->raid_id) {
-            $auditMessage .= ' (changed raid to ' . $guild->raids->where('id', $updateValues['raid_id'])->first()->name . ')';
+            $auditMessage .= ' (changed raid to ' . ($raid ? $raid->name : 'none') . ')';
         }
 
         if ($updateValues['public_note'] != $character->public_note) {

@@ -3,7 +3,7 @@
 namespace App\Http\Middleware;
 
 use Auth, Closure;
-use App\{Guild, Member};
+use App\{AuditLog, Guild, Member};
 use Exception;
 use RestCord\DiscordClient;
 
@@ -69,6 +69,12 @@ class CheckGuildPermissions
             if (!$currentMember) {
                 // Don't have a member object? Let's create one...
                 $currentMember = Member::create($user, $discordMember, $guild);
+
+                AuditLog::create([
+                    'description'     => $currentMember->username . ' joined',
+                    'member_id'       => $currentMember->id,
+                    'guild_id'        => $guild->id,
+                ]);
             } else if ($discordMember) {
                 // Does the member have any new/missing roles since we last checked?
                 $storedRoles = $currentMember->roles->keyBy('discord_id')->keys()->toArray();
