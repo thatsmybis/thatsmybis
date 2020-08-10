@@ -11,9 +11,9 @@
                 <li><a href="#how-to-loot-council">How do I loot council?</a></li>
                 <li><a href="#what-does-this-do">What does this website do?</a></li>
                 <li><a href="#getting-started">How do I get started?</a></li>
-                <li><a href="#role-whitelisting">Why do my Discord users need a specific role to join?</a></li>
                 <li><a href="#discord-requirement">Do I <em>need</em> to use Discord?</a></li>
                 <!--<li><a href="#google-calendar">Google Calendar?</a></li>-->
+                <li><a href="#privacy">What information do you collect?</a></li>
                 <li><a href="#name-origin">Where'd you get your name?</a></li>
                 <li><a href="#feature-request">Can you add feature XYZ?</a></li>
                 <li><a href="#how-to-help">I'd like to help out</a></li>
@@ -46,20 +46,7 @@
                 Start by <a href="{{ route('guild.showRegister') }}">registering your guild's Discord server</a>, which requires you have Administrator permissions on your Discord server. Fill out the basic guild settings in the admin section once registered.
             </p>
             <p>
-                Once you've done this preparation, you can then share the link to your guild's page with your guild members who are on your guild Discord server. Provided they have one of the allowed roles (you should have filled one or more of these out in your guild settings), they will be able to join your guild's page.
-            </p>
-
-            <hr class="light">
-
-            <h2 id="role-whitelisting">Why do my Discord users need a specific role to join?</h2>
-            <p>
-                We require you to whitelist which members of your Discord server are allowed to register by giving them whitelisted roles that you choose. This is to prevent literally anyone who joins your Discord from crashing your guild on this website, which could be destructive.
-            </p>
-            <p>
-                To set this up, you will need to create roles on your Discord server and assign them to your members. We recommend adding a 'Member' or 'Raider' role at the very least. Beyond that, we also suggest adding roles for 'Guild Master', 'Officer', and 'Raid Leader'. It is not required that your guild have this structure; it is simply how <em>most</em> successful guilds are structured.
-            </p>
-            <p>
-                Once that's done, you might need to sync your Discord roles from the Roles page. Then, select the roles you want to whitelist in Guild Settings page. (only the guild's owner or guild master can see these pages)
+                Once you've done this preparation, you can then share the link to your guild's page with your guild members who are on your guild Discord server. Provided they have one of the allowed roles (if specified any in your guild settings), they will be able to join your guild's page.
             </p>
 
             <hr class="light">
@@ -70,6 +57,22 @@
             </p>
             <p>
                 We suggest you have a Discord server for your guild. We also suggest you create roles on your Discord server which you then assign to your guild members (roles such as 'Guild Master', 'Officer', 'Class Leader', 'Raider', 'Member'). These roles can then be imported onto this website and be used to define who has access to what (ie. a Raid Leader can assign loot to a raider, but a standard Member cannot).
+            </p>
+
+            <hr class="light">
+
+            <h2 id="privacy">What information do you collect?</h2>
+            <p>
+                TL;DR Your Discord username, ID, avatar ID, and roles for any servers you register/join.
+            </p>
+            <p>
+                Your username and ID are so we can verify it's you when you're logging in. Roles are so we can give you the proper permissions in your guild if you're a raider, raid leader, officer, or guild master.
+            </p>
+            <p>
+                Of the available Discord <a href="https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes" target="_blank">OAuth2 Scopes</a> (info you can allow Discord to share), we're only using 'identify' and 'guilds'. Guilds scope data isn't stored anywhere; it's only used to (a) identify which guilds are registered on the system that you belong to, and (b) provide a dropdown of available servers when a guild master is registering their guild.
+            </p>
+            <p>
+                We're also using Google Analytics to keep track of how the site is doing. Firefox has built-in features to block Google Analytics, which should be enabled by default. (I doubt Google Chrome does this however; go figure)
             </p>
 
             <hr class="light">

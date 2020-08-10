@@ -22,19 +22,19 @@
                             <a href="{{ route('terms') }}" class="text-white">terms</a>
                         </li>
                         <li class="list-inline-item">&sdot;</li>
+                    --}}
                         <li class="list-inline-item">
                             <a href="{{ route('privacy') }}" class="text-white">privacy</a>
                         </li>
-                        --}}
+                        <li class="list-inline-item">
+                            <a href="{{ route('faq') }}" class="text-white">FAQ</a>
+                        </li>
                     </ul>
                     <!-- <p class="text-muted small mb-4 mb-lg-0">&copy; {{ env('APP_NAME') }} 2019. All Rights Reserved.</p> -->
                 </div>
 
                 <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
                     <ul class="list-inline mb-0">
-                        <li class="list-inline-item">
-                            <a href="{{ route('faq') }}" class="text-white">FAQ</a>
-                        </li>
                         {{--
                             <li class="list-inline-item mr-3">
                                 <a href="#">
