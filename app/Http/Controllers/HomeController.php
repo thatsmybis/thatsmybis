@@ -71,7 +71,7 @@ class HomeController extends Controller
 
             // Fetch guilds the user can join that already exist on this website
             if ($user->discord_token) {
-                // TODO: Refresh token if expired (use discord_refresh_token, discord_token_expiry in user object)
+
                 $discord = new DiscordClient([
                     'token' => $user->discord_token,
                     'tokenType' => 'OAuth',

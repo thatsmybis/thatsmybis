@@ -44,7 +44,7 @@ class LoginController extends Controller
         return Socialite::driver('discord')
             // Don't require Discord to send back and email
             // https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes
-            ->setScopes(['identify', 'guilds'])
+            ->setScopes(['identify', 'guilds']) // If changing these scopes, update the call to refresh a user's access (search 'refresh_token')
             // Don't prompt the user to accept our app's usage of their Discord profile EVERY time (only on first signup)
             // https://discord.com/developers/docs/topics/oauth2#authorization-code-grant-authorization-url-example
             ->with(['prompt' => 'none'])
