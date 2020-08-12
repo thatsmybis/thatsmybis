@@ -1,43 +1,45 @@
 # That's My BIS; a tool for managing loot council guilds in World of Warcraft Classic
-This project serves as a place to host resources and crap for the guild. Links to stuff. Links to polls. Calendars, etc. It aims to delegate all of the user management to the guild's Discord server.
 
-This project shouldn't become a place for active communication (ie. chatting); instead, the guild Discord should maintian that role.
+This project was started to give raiders a stronger voice in how loot council distributes loot, help loot council make more informed decisions, and to provide transparency in decision making back to raiders.
 
-Part of the goal of this project is to make it so our members won't miss important information posted to the Discord server. Ideally, this will be done in the form of a bot that grabs important announcements from Discord and saves them onto the site. (that bot doesn't exist as of this writing - Nov 16, 2019)
+In general, decisions made in the development of this project should reflect those objectives. Features that may obfuscates actions and needlessly hide data from raiders should only be implemented with careful consideration, as they may harm the overall objective of this project.
 
-PHP was chosen as the language for this project. Why? Simply because the person who took the initiative of making this project was most familiar with PHP.
+We want to lessen the gap between raiders and raid management, not increase it. Raid management is there to support everyone else in the raid, not act above them.
 
-Laravel was chosen as the framework for the project. Why? It's a very popular PHP framework with a lot of nice tools, and the guy who made this repo was familiar with it.
+# Some Technical Details
 
-(Nov 16, 2019) A CMS for Laravel hasn't been chosen yet, but one will be chosen and added in.
+If you have any questions, reach out on the project's Discord server: [https://discord.gg/HWNUMKK](https://discord.gg/HWNUMKK)
 
-## FAQ
+Stack:
 
-### Q: How can I contribute?
-Clone the repo, create a new branch (don't use `master`), push it to github, open a new pull request, and let me (Lemmings19) know that you'd like me to review your contribution. If it's all good, we'll merge it into master.
+- Linux (server is running Ubuntu)
+- PHP (Laravel is the framework)
+- MaraiDB (almost 1:1 identical to MySQL)
+- Nginx
+- Javascript (jQuery, DataTables library)
+- CSS (Bootstrap 4)
 
-### Q: Where are the docs for the framework being used?
-This project uses [Laravel](https://laravel.com/). It's pretty powerful and has some nice docs. You can read through them [here](https://laravel.com/docs/6.x).
+[Laravel Docs](https://laravel.com/docs/7.x). Laravel dictates the file structure of the project and how almost everything is implemented, so they're very useful.
 
-### Q: Where are the pages?
-`/resources/views`. They're PHP templates made with the [Blade](https://laravel.com/docs/6.x/blade) templating engine, so you'll see some non-html stuff mixed in there.
+Environment variables are stored in `.env`. These will generally need to be configured when setting up a new environment, and an existing dev can assist you in populating them.
 
-### Q: Where's the Javascript?
-`/public/js`. Right now, (2019-11-21) there's nothing setup to minify, transpile, or cache bust it. Just a barebones implementation.
+[Composer](https://getcomposer.org/) will need to be run (`composer update`, `composer install`) when setting up a new environment.
 
-For some pages, it's at the bottom of the template. This **does not** follow best practices, but was instead done in the interest of saving time and pushing out a quick MVP.
+The list of routes and what controller functions they map to are located in `routes/web.php`, or `routes/api.php` for API endpoints. These files are a good place to start for learning how to navigate the project for the first time.
 
-### Q: Where's the CSS?
-`/public/css`. Not using SASS, minifying, or any of that jazz just yet. (2019-11-21)
+Models are located in the `app` directory.
 
-### Q: How do I add a page?
-Start by adding it into `/routes/web.php` ([docs here](https://laravel.com/docs/6.x/routing)), then handle it in the appropriate controller in `/app/Http/Controllers`. It's possible to skip using a controller and do it inline in the `web.php` file, but that can get messy.
+Controllers are located in the `app/Http/Controllers` directory.
 
-### Q: How do I access the database?
-There isn't a GUI yet (such as phpMyAdmin), so you'll need to use the terminal or set up a GUI yourself.
+Views are located in the `resources/views` directory.
 
-### Q: I have more questions.
-Reach out to Lemmings19 here on GitHub or on Discord if you can find me. :)
+Helper functions are loaded in from `app/helpers.php` and accessible almost anywhere when writing PHP.
+
+Similarly, there are Javascript helper functions stored in `public/js/helpers.js`.
+
+The 'master' template for all page views is `views/layoutes/app.blade.php`. All other pages use this template, populating the 'content' section at the very least.
+
+Javascript and CSS goes through a preprocessor/transpiler before being used in production. These files are stored in `public/js/processed` and `public/css/processed` (though this may change if someone implements a more dynamic system). These **are not** currently (2020-08-12) generated server-side, but rather need to be generated by the developer before merging into master. Generate them with `npm run production` from the root folder.
 
 ## Local Environment Setup
 The easiest way to get a local envrionment setup is with Laravel's configuration for Vagrant. Vagrant is a tool that makes it relatively painless to spin up a virtual machine containing a standardized dev environment for a specific project. This means that rather than configuring your operating system to have the appropriate packages, webserver, databases, and other requirements for this project, you just download and boot up a virtual machine that already has all that crap set up. This allows many developers to run the same dev environment, reducing troubleshooting and headaches, and putting more focus on the project itself.
@@ -46,7 +48,7 @@ Now, there's still going to be a little bit of work and learning curve involved 
 
 Laravel has a custom environment for Vagrant. They call their environment 'Homestead', and that's what we're going to be setting up. It's easiest to get this up and running on Linux, but it's not much more work to get it running on Windows.
 
-Best place to start? [RTFM](https://www.urbandictionary.com/define.php?term=RTFM): https://laravel.com/docs/6.x/homestead
+Best place to start? [RTFM](https://www.urbandictionary.com/define.php?term=RTFM): https://laravel.com/docs/7.x/homestead
 
 tl;dr
 
@@ -62,10 +64,10 @@ tl;dr
     cpus: 2
     provider: virtualbox
 
-    authorize: C:\Users\Joe\.ssh\id_rsa.pub
+    authorize: C:\Users\your_username\.ssh\id_rsa.pub
 
     keys:
-        - C:\Users\Joe\.ssh\id_rsa
+        - C:\Users\your_username\.ssh\id_rsa
 
     folders:
         - map: C:\projects\thatsmybis
@@ -90,60 +92,13 @@ tl;dr
     #       to: 777
     #       protocol: udp
     ```
-- Make sure the hosts have been setup (read Hostname Resolution in the [docs](https://laravel.com/docs/6.x/homestead#configuring-homestead))
+- Make sure the hosts have been setup (read Hostname Resolution in the [docs](https://laravel.com/docs/7.x/homestead#configuring-homestead))
 - Run `vagrant up` while in the Homestead directory.
 - Run `vagrant ssh`
 - Run `composer install` from `/home/vagrant/code/thatsmybis`
 - Create a file named `.env` in `/home/vagrant/code/thatsmybis`. Base it off of `.env.example` or ask another dev for what details to fill in.
 
-## Server Environment Setup
-
-I used Ubuntu 18.04. Here's some notes for stuff I had to install and configure:
-
-```
-sudo apt update
-sudo apt install
-sudo apt install apache2
-sudo apt install software-properties-common
-sudo add-apt-repository ppa:ondrej/php
-sudo apt update
-sudo apt install php7.3-fpm
-sudo apt install php7.3
-sudo apt install mysql-server
-sudo mysql_secure_installation
-sudo service apache2 restart
-sudo apt-get install php7.3-mbstring
-sudo apt-get install php7.3-dom
-sudo apt-get install php7.3-zip
-sudo apt-get install php7.3-curl
-sudo apt-get install php7.3-mysql
-sudo a2enmod rewrite
-sudo nano /etc/apache2/apache2.conf
-    > modified `<Directory /var/www/>` to have `AllowOverride All` instead of `AllowOverride None`
-sudo service apache2 restart
-cd /var/www/html
-sudo mkdir thatsmybis
-sudo chown ubuntu: thatsmybis
-git clone https://github.com/Lemmings19/thatsmybis.git thatsmybis
-cd thatsmybis
-git config --global credential.helper store
-git pull
-chmod -R 777 storage
-    > this is probably bad
-touch .env
-nano .env
-    > copy in environment settings
-composer install
-sudo mysql -u root -p
-    > CREATE USER 'laravel'@'localhost' IDENTIFIED BY 'enter_a_password_here';
-    > GRANT ALL PRIVILEGES ON *.* TO 'laravel'@'localhost';
-    > UPDATE user SET plugin='mysql_native_password' WHERE User='laravel';
-    > FLUSH PRIVILEGES;
-    > exit;
-sudo service mysql restart
-```
-
-# Permissions
+## Permissions
 
 kodeine\acl library was used for the permissions.
 
@@ -151,7 +106,7 @@ kodeine\acl library was used for the permissions.
 
 **ALSO:** There's an override. The CheckGuildPermissions middleware will flag someone as a SUPER ADMIN if they're the guild's owner in the DB or (if I implement it), if they're one of the devs. the `hasPermissions()` function in the Member model will allow this flag to override the normal permissions. Science!
 
-# Roles
+## Roles
 
 Roles are loaded from the Discord server.
 
