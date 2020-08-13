@@ -24,7 +24,6 @@ class CreateMembersTable extends Migration
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('guild_id')->references('id')->on('guilds');
         });
     }
 
