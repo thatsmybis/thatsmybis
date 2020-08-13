@@ -83,7 +83,7 @@
 
                 @if ($currentMember->hasPermission('edit.raid-loot'))
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['item.massInput']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('item.massInput', ['guildSlug' => $guild->slug]) }}">Raid Time!</a>
+                        <a class="nav-link" href="{{ route('item.massInput', ['guildSlug' => $guild->slug]) }}">Assign Loot</a>
                     </li>
                 @endif
 

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Raid Time! - " . config('app.name'))
+@section('title', "Assign Loot - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -10,7 +10,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                        Raid Time!
+                        Assign Loot
                     </h1>
                     <small>
                         <strong>Hint:</strong> Keep the roster and/or item pages open in another window to review who deserves what
