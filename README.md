@@ -100,6 +100,19 @@ tl;dr
 - Run `composer install` from `/home/vagrant/code/thatsmybis`
 - Create a file named `.env` in `/home/vagrant/code/thatsmybis`. Base it off of `.env.example` or ask another dev for what details to fill in.
 
+## Items Table
+
+The items table must be populated manually once your database is up and running. (create the database by running `php artisan migrate` once your environment is ready and you've already created your the empty database in mysql)
+
+Find these insert statements in the DB repo: https://github.com/thatsmybis/classic-wow-item-db/tree/master/thatsmybis
+
+Run the raw SQL from these files in mysql (in this order):
+
+1. Insert items.
+2. Insert instances.
+3. Insert item_sources.
+4. Insert item_item_sources.
+
 ## Permissions
 
 kodeine\acl library was used for the permissions.
