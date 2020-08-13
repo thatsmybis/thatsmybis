@@ -17,7 +17,7 @@
             <ol class="lead">
                 <li>
                     Add
-                    <a href="https://discord.com/api/oauth2/authorize?client_id=645311036785950721&permissions=0&redirect_uri=https%3A%2F%2Fthatsmybis.com%2Fauth%2Fdiscord%2Fcallback&scope=bot"
+                    <a href="https://discord.com/api/oauth2/authorize?client_id={{ env('DISCORD_KEY') }}&permissions=0&redirect_uri=https%3A%2F%2Fthatsmybis.com%2Fauth%2Fdiscord%2Fcallback&scope=bot"
                         target="_blank" class="font-weight-bold">this bot</a>
                     to your Discord server.
                     <span class="text-muted">(requires server admin or management permissions)</span>
