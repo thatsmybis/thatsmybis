@@ -331,7 +331,7 @@ class ItemController extends Controller
                     ]);
             },
         ])->firstOrFail();
-
+        
         $itemSlug = slug($item->name);
 
         if ($slug && $slug != $itemSlug) {
