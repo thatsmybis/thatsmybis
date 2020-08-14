@@ -28,7 +28,7 @@ class CharacterController extends Controller
     private function getValidationRules() {
         return [
             'member_id'     => 'nullable|integer|exists:members,id',
-            'name'          => 'string|min:2|max:32',
+            'name'          => 'required|string|min:2|max:32',
             'level'         => 'nullable|integer|min:1|max:60',
             'race'          => ['nullable', 'string', Rule::in(Character::races())],
             'class'         => ['nullable', 'string', Rule::in(Character::classes())],
@@ -482,8 +482,11 @@ class CharacterController extends Controller
             abort(404, "Character not found.");
         }
 
-        $validationRules = $this->getValidationRules();
-        $validationRules['id'] = 'required|integer|exists:characters,id';
+        $validationRules = [
+            'id' => 'required|integer|exists:characters,id',
+            'public_note'   => 'nullable|string|max:144',
+            'officer_note'  => 'nullable|string|max:144',
+        ];
 
         $validationMessages = [];
 
