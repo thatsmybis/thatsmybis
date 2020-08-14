@@ -8,7 +8,6 @@
         </ul>
     </li>
     @endif
-    <li/>
     <li>
         <ul class="list-inline">
             @if (isset($showIcon) && $showIcon && $character->class)
