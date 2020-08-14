@@ -28,7 +28,7 @@ class CharacterController extends Controller
     private function getValidationRules() {
         return [
             'member_id'     => 'nullable|integer|exists:members,id',
-            'name'          => 'nullable|string|min:2|max:32',
+            'name'          => 'string|min:2|max:32',
             'level'         => 'nullable|integer|min:1|max:60',
             'race'          => ['nullable', 'string', Rule::in(Character::races())],
             'class'         => ['nullable', 'string', Rule::in(Character::classes())],
@@ -53,7 +53,7 @@ class CharacterController extends Controller
     public function create($guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
-
+        
         $guild->load([
             'members' => function ($query) use ($currentMember) {
                 return $query->where('members.id', request()->input('member_id'))
