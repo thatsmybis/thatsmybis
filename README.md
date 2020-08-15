@@ -128,3 +128,91 @@ Roles are loaded from the Discord server.
 ## Laraval Custom Configurations
 
 - `ONLY_FULL_GROUP_BY` for SQL has been disabled in `database.php` by changing `strict` to `false`. This is to allow for writing simpler `GROUP BY` clauses in queries. If you can fix the `group by` complications caused by `strict`, you're welcome to turn it back on. I tried. It required mutilating my `SELECT` statements, and even then I couldn't get it to 100% work the way it did before 5.7 when it just assumed `ANY_VALUE()` on non-aggregated columns (even when I told it to use `ANY_VALUE()`). Good luck. ([SO thread](https://stackoverflow.com/questions/34115174/error-related-to-only-full-group-by-when-executing-a-query-in-mysql))
+
+
+## Docker Compose Local Development Environment
+
+The laravel development environment can be bootstrapped by utilizing the bitnami laravel docker images to stand up laravel and mariadb. 
+
+Requirements: Docker Desktop 
+
+In the root of the project directory, there is a file called `docker-compose.yml`. This file contains the configuration for standing up the development environment. When the image starts, it is mapping in the the directory and sub directories of where it is located.
+
+Run this in the root of the project to start the environment:
+```
+docker=compose up
+```
+
+This will run through and restore all of the project dependencies, start mariadb and the application and run the migration scripts.
+
+Once Complete the following line will be printed:
+```
+ Laravel development server started: http://0.0.0.0:3000
+```
+This is a bit misleading as we have modified the docker-compose file to use port 80 instead of port 3000. Just remove the port and you should be able to load the page. 
+
+There is still a requirement to insert all of the items, instances, item_sources and item_item_sources from the db project. See section `Items Table` above. 
+
+Note: You can insert the items table by doing two things.
+
+- You can connect to the container through docker and run commands inside of it. 
+Example: `docker exec -it <container-id> bash`
+
+- You can download a database management suite and connect to it to manage it. Example: MySQL Workbench, Adminer etc.. The connection endpoint will be `localhost:3306`
+
+In order to see what containers you have running you can run `docker container ls`
+
+Example Output:
+```
+CONTAINER ID        IMAGE                            COMMAND                  CREATED             STATUS              PORTS                    NAMES
+56196af43aea        bitnami/laravel:7-debian-10      "/app-entrypoint.sh …"   26 hours ago        Up 5 minutes        0.0.0.0:80->3000/tcp     thatsmybis_thatsmybis_1
+463541b65e80        bitnami/mariadb:10.1-debian-10   "/opt/bitnami/script…"   2 days ago          Up 5 minutes        0.0.0.0:3306->3306/tcp   thatsmybis_mariadb_1
+```
+
+## Docker Development with Visual Studio Code
+
+A quick an dirty way to develop is to use Visual Studio Code with the PHP plugin which does intelisense and syntax highlighting. The laravel app will most times pick up the changes immediately if you refresh the page. 
+
+
+## Docker Development Laravel Development Commands
+
+Commands can be launched inside the `thatsmybis` Laravel Development Container with `docker-compose` using the [exec](https://docs.docker.com/compose/reference/exec/) command.
+
+> **Note**:
+>
+> The `exec` command was added to `docker-compose` in release [1.7.0](https://github.com/docker/compose/blob/master/CHANGELOG.md#170-2016-04-13). Please ensure that you're using `docker-compose` version `1.7.0` or higher.
+
+The general structure of the `exec` command is:
+
+```console
+$ docker-compose exec <service> <command>
+```
+
+, where `<service>` is the name of the container service as described in the `docker-compose.yml` file and `<command>` is the command you want to launch inside the service.
+
+Following are a few examples of launching some commonly used Laravel development commands inside the `thatsmybis` service container.
+
+- List all `artisan` commands:
+
+  ```console
+  $ docker-compose exec thatsmybis php artisan list
+  ```
+
+- List all registered routes:
+
+  ```console
+  $ docker-compose exec thatsmybis php artisan route:list
+  ```
+
+- Create a new application controller named `UserController`:
+
+  ```console
+  $ docker-compose exec thatsmybis php artisan make:controller UserController
+  ```
+
+- Installing a new composer package called `phpmailer/phpmailer` with version `5.2.*`:
+
+  ```console
+  $ docker-compose exec thatsmybis composer require phpmailer/phpmailer:5.2.*
+  ```
+
