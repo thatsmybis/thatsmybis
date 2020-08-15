@@ -140,7 +140,7 @@ In the root of the project directory, there is a file called `docker-compose.yml
 
 Run this in the root of the project to start the environment:
 ```
-docker=compose up
+docker-compose up
 ```
 
 This will run through and restore all of the project dependencies, start mariadb and the application and run the migration scripts.
