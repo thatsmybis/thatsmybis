@@ -26,10 +26,7 @@ jobs:
     steps:
       - checkout
       - run: sudo apt update
-      - run: sudo apt install software-properties-common
-      - run: sudo add-apt-repository ppa:ondrej/php
-      - run: sudo apt update
-      - run: sudo apt install php7.3-mysql
+      - run: sudo apt-get install mysql-client
       - run: sudo docker-php-ext-install zip
       
       
