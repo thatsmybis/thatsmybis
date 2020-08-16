@@ -14,7 +14,7 @@ class AddRaidIdToCharacterItems extends Migration
     public function up()
     {
         Schema::table('character_items', function (Blueprint $table) {
-            $table->bigInteger('raid_id')->nullable()->unsigned();
+            $table->bigInteger('raid_id')->nullable()->unsigned()->after('character_id');
             $table->foreign('raid_id')->references('id')->on('raids')->onDelete('cascade');
         });
     }
