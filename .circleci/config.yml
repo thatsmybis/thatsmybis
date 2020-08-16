@@ -66,7 +66,5 @@ jobs:
       # prepare the database
       - run: php artisan migrate --force
 
-      # run tests with phpunit or codecept
-      #- run: ./vendor/bin/phpunit
-      - run: ./vendor/bin/codecept build
-      - run: ./vendor/bin/codecept run
+      - run: npm run production
+
