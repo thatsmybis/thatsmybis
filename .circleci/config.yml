@@ -26,7 +26,8 @@ jobs:
     steps:
       - checkout
 
-      - run: sudo apt update && sudo apt install php7-mysql
+      - run: sudo apt update
+      - run: sudo apt-get install php7.3-mysql
       - run: sudo docker-php-ext-install zip
 
       # Download and cache dependencies
