@@ -26,8 +26,8 @@ jobs:
     steps:
       - checkout
       - run: sudo apt update
-      - run: sudo apt-get install mysql-client
       - run: sudo docker-php-ext-install zip
+      - run: sudo docker-php-ext-install php7.3-mysql
       
       
 
