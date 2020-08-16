@@ -1,3 +1,6 @@
+
+![CircleCI Build Status](https://circleci.com/gh/thatsmybis/thatsmybis.svg?style=shield "CircleCI Build Status")
+
 # That's My BIS; a tool for managing loot council guilds in World of Warcraft Classic
 
 This project was started to give raiders a stronger voice in how loot council distributes loot, help loot council make more informed decisions, and to provide transparency in decision making back to raiders.
