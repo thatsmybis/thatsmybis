@@ -15,6 +15,7 @@ jobs:
       # Using the RAM variation mitigates I/O contention
       # for database intensive operations.
       - image: docker.io/bitnami/mariadb:10.1-debian-10
+        name: mariadb
         environment:
         - ALLOW_EMPTY_PASSWORD=yes
         - MARIADB_USER=my_user
