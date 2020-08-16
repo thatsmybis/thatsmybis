@@ -27,7 +27,6 @@ jobs:
       - checkout
       - run: sudo apt update
       - run: sudo docker-php-ext-install zip
-      - run: sudo docker-php-ext-install php7.3-mysql
       
       
 
