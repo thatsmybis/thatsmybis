@@ -25,7 +25,7 @@ jobs:
 
     steps:
       - checkout
-      - run: suto apt update
+      - run: sudo apt update
       - run: sudo apt install software-properties-common
       - run: sudo add-apt-repository ppa:ondrej/php
       - run: sudo apt update
