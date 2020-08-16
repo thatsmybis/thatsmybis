@@ -14,7 +14,12 @@ jobs:
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # Using the RAM variation mitigates I/O contention
       # for database intensive operations.
-      # - image: circleci/mysql:5.7-ram
+      - image: docker.io/bitnami/mariadb:10.1-debian-10
+        environment:
+        - ALLOW_EMPTY_PASSWORD=yes
+        - MARIADB_USER=my_user
+        - MARIADB_DATABASE=thatsmybis_1
+        - MARIADB_PASSWORD=my_password
       #
       # - image: redis:2.8.19
 
@@ -52,7 +57,7 @@ jobs:
       - run:
           name: "Create Environment file and generate app key"
           command: |
-            mv .env.testing .env
+            mv .env.circleci .env
             php artisan key:generate
             
       # prepare the database
