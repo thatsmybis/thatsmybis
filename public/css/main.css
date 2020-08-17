@@ -360,6 +360,14 @@ select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
     margin-right: 4px;
 }
 
+.role-circle-large {
+    display: inline-block;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
+    margin-right: 4px;
+}
+
 .js-markdown img {
     max-width: 100%;
 }

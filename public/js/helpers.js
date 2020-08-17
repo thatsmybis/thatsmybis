@@ -15,6 +15,9 @@ marked.setOptions({
 });
 
 $(document).ready(function () {
+    // Add support for better nav dropdowns
+    addNestedDropdownSupport();
+
     // Format any markdown fields
     parseMarkdown();
 
@@ -36,6 +39,36 @@ $(document).ready(function () {
         $(".js-content[data-id=" + id + "]").toggle();
     });
 });
+
+// Copied from https://stackoverflow.com/a/61222302/1196517
+function addNestedDropdownSupport() {
+    $.fn.dropdown = (function() {
+        var $bsDropdown = $.fn.dropdown;
+        return function(config) {
+            if (typeof config === 'string' && config === 'toggle') { // dropdown toggle trigged
+                $('.has-child-dropdown-show').removeClass('has-child-dropdown-show');
+                $(this).closest('.dropdown').parents('.dropdown').addClass('has-child-dropdown-show');
+            }
+            var ret = $bsDropdown.call($(this), config);
+            $(this).off('click.bs.dropdown'); // Turn off dropdown.js click event, it will call 'this.toggle()' internal
+            return ret;
+        }
+    })();
+
+    $(function() {
+        $('.dropdown [data-toggle="dropdown"]').on('click', function(e) {
+            $(this).dropdown('toggle');
+            e.stopPropagation();
+        });
+        $('.dropdown').on('hide.bs.dropdown', function(e) {
+            if ($(this).is('.has-child-dropdown-show')) {
+                $(this).removeClass('has-child-dropdown-show');
+                e.preventDefault();
+            }
+            e.stopPropagation();
+        });
+    });
+}
 
 /**
  * Prevents inputs from submitting their form when enter is pressed.

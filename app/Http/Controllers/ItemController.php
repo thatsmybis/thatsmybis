@@ -138,10 +138,10 @@ class ItemController extends Controller
             ->get();
 
         return view('item.listEdit', [
-            'currentMember'   => $currentMember,
-            'guild'           => $guild,
-            'instance'        => $instance,
-            'items'           => $items,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'instance'      => $instance,
+            'items'         => $items,
         ]);
     }
 
@@ -331,7 +331,7 @@ class ItemController extends Controller
                     ]);
             },
         ])->firstOrFail();
-        
+
         $itemSlug = slug($item->name);
 
         if ($slug && $slug != $itemSlug) {

@@ -110,6 +110,12 @@ Route::group([
             Route::post('/toggle-disable', 'RaidController@toggleDisable')->name('guild.raid.toggleDisable');
             Route::post('/update',         'RaidController@update')       ->name('guild.raid.update');
             Route::post('/',               'RaidController@create')       ->name('guild.raid.create');
+
+            Route::group(['prefix' => 'prio'], function () {
+                Route::get( '/{instanceSlug}',          'PrioController@chooseRaid')     ->name('guild.prios.chooseRaid');
+                Route::get( '/{instanceSlug}/{raidId}', 'PrioController@massInput')      ->name('guild.prios.massInput');
+                Route::post('/',                        'PrioController@submitMassInput')->name('guild.prios.massInput.submit');
+            });
         });
 
         Route::get( '/roles',     'RoleController@roles')    ->name('guild.roles');
