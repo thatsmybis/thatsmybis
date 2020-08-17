@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class PrioController extends Controller
 {
-    const MAX_PRIOS = 40;
+    const MAX_PRIOS = 20;
 
     /**
      * Create a new controller instance.
@@ -129,6 +129,53 @@ class PrioController extends Controller
     }
 
     public function submitMassInput($guildSlug) {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        // if (!$currentMember->hasPermission('edit.raid-prios')) {
+        //     request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+        //     return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        // }
+
+        $validationRules =  [
+            'instance_id'           => 'required|exists:instances,id',
+            'items.*.id'            => 'nullable|integer|exists:items,item_id',
+            'items.*.characters.id' => 'nullable|integer|exists:characters,id',
+            'raid_id'               => 'required|exists:raids,id',
+        ];
+
+        $this->validate(request(), $validationRules);
+
+        $raid = Raid::where(['guild_id' => $guild->id, 'id' => request()->input('raid_id')])->firstOrFail();
+
+        $instance = Instance::findOrFail(request()->input('instance_id'));
+
+        dd(request()->input());
+
+        // get existing prios for that raid
+
+        // iterate over items
+            // are there input prios for this item?
+            // yes
+                // were there db prios?
+                // yes
+                    // syncPrios()
+                        // copy from charactercontroller
+                        // toAdd, toUpdate, toDrop
+                        // audit log
+                // no
+                    // add the new ones
+                    // audit log that we added them
+            // no
+                // were there db prios?
+                // yes
+                    // remove them
+                    // audit log that we removed them
+                // no
+                    // do nothing
+    }
+
+    private function syncPrios() {
         // todo
     }
 }

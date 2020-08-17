@@ -53,7 +53,7 @@ class CharacterController extends Controller
     public function create($guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
-        
+
         $guild->load([
             'members' => function ($query) use ($currentMember) {
                 return $query->where('members.id', request()->input('member_id'))
@@ -444,18 +444,21 @@ class CharacterController extends Controller
         if (request()->input('wishlist')) {
             $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember);
         } else {
+            // TODO: Audit log!
             $character->wishlist()->detach();
         }
 
         if (request()->input('received')) {
             $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember);
         } else {
+            // TODO: Audit log!
             $character->received()->detach();
         }
 
         if (request()->input('recipes')) {
             $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember);
         } else {
+            // TODO: Audit log!
             $character->recipes()->detach();
         }
 
