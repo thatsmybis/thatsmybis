@@ -14,11 +14,11 @@ class AddMemberCharacterSlug extends Migration
     public function up()
     {
         Schema::table('characters', function (Blueprint $table) {
-            $table->string('slug')->nullable()->after('name');
+            $table->string('slug', 50)->after('name')->index();
         });
 
         Schema::table('members', function (Blueprint $table) {
-            $table->string('slug')->nullable()->after('username');
+            $table->string('slug', 50)->after('username')->index();
         });
     }
 
@@ -29,7 +29,11 @@ class AddMemberCharacterSlug extends Migration
      */
     public function down()
     {
-        Schema::table('permissions', function (Blueprint $table) {
+        Schema::table('characters', function (Blueprint $table) {
+            //
+        });
+
+        Schema::table('members', function (Blueprint $table) {
             //
         });
     }
