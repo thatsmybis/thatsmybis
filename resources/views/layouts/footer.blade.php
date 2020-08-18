@@ -29,6 +29,12 @@
                         <li class="list-inline-item">
                             <a href="{{ route('faq') }}" class="text-white">FAQ</a>
                         </li>
+                        <li class="list-inline-item">
+                            <a href="{{ env('LINK_PATREON') }}" target="_blank" class="nav-link active font-weight-bold">
+                                <span class="fas fa-fw fa-heart"></span>
+                                Donate
+                            </a>
+                        </li>
                     </ul>
                     <!-- <p class="text-muted small mb-4 mb-lg-0">&copy; {{ env('APP_NAME') }} 2019. All Rights Reserved.</p> -->
                 </div>
