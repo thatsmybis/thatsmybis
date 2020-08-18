@@ -38,9 +38,16 @@
             @endif
         </ul>
     </li>
-    @if ($character->raid_id || $character->class)
+    @if ($character->raid_id || $character->class || $character->is_alt)
         <li>
             <ul class="list-inline">
+                @if ($character->is_alt)
+                <li class="list-inline-item font-weight-bold">
+                    <span class="tag d-inline" style="color: orange;">
+                        Alt
+                    </span>
+                </li>
+                @endif
                 {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
                 @if ($character->relationLoaded('raid') && $character->raid)
                     @php
@@ -80,7 +87,7 @@
             </li>
         @endif
 
-        @if ($character->rank || $character->profession_1 || $character->profession_2)
+        @if ($character->rank || $character->profession_1 || $character->profession_2 || $character->is_alt)
             <li>
                 <small>
                     {{ $character->rank         ? 'Rank ' . $character->rank . ($character->profession_1 || $character->profession_2 ? ',' : '') : '' }}
