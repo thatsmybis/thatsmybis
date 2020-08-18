@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-12">
+                                <div class="col-lg-5 col-12">
                                     <label for="items[details]" class="font-weight-bold {{ $loop->iteration > 1 ? 'd-none' : '' }}">
                                         @if ($loop->first)
                                             <span class="fas fa-fw fa-question text-muted"></span>
@@ -90,21 +90,21 @@
                                     <ul class="fa-ul">
                                         @if ($item->guild_note)
                                             <li title="Note">
-                                                <span class="fa-li"><span class="fas fa-fw fa- text-muted"></span></span>
+                                                <span class="fa-li"><span class="fal fa-fw fa-sticky-note text-muted"></span></span>
                                                 {{ $item->guild_note }}
                                             </li>
                                         @endif
 
                                         @if ($item->guild_priority)
                                             <li title="Priority note">
-                                                <span class="fa-li"><span class="fas fa-fw fa-sort-amount-down text-muted"></span></span>
+                                                <span class="fa-li"><span class="fal fa-fw fa-sort-amount-down text-muted"></span></span>
                                                 {{ $item->guild_priority }}
                                             </li>
                                         @endif
 
                                         @if ($item->wishlistCharacters->count() > 0)
                                             <li title="Characters who have it wishlisted">
-                                                <span class="fa-li"><span class="fas fa-fw fa-scroll-old text-legendary"></span></span>
+                                                <span class="fa-li"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
                                                 <ul class="list-inline">
                                                     @foreach ($item->wishlistCharacters as $character)
                                                         <li class="list-inline-item">
@@ -119,7 +119,7 @@
 
                                         @if ($item->receivedAndRecipeCharacters->count() > 0)
                                             <li title="Characters who have received it">
-                                                <span class="fa-li"><span class="fas fa-fw fa-sack text-success"></span></span>
+                                                <span class="fa-li"><span class="fal fa-fw fa-sack text-success"></span></span>
                                                 <ul class="list-inline">
                                                     @foreach ($item->receivedAndRecipeCharacters as $character)
                                                         <li class="list-inline-item">
@@ -134,8 +134,8 @@
                                     </ul>
                                 </div>
 
-                                <div class="col-lg-4 col-12 {{ $errors->has('items.' . $item->item_id . '.*') ? 'bg-danger rounded font-weight-bold' : '' }}">
-                                    <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
+                                <div class="col-lg-3 col-12 {{ $errors->has('items.' . $item->item_id . '.*') ? 'bg-danger rounded font-weight-bold' : '' }}">
+                                    <div class="form-group mb-2">
                                         <label for="items[{{ $item->item_id }}][characters]" class="font-weight-bold {{ $loop->iteration > 1 ? 'd-none' : '' }}">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-sort-amount-down text-muted"></span>

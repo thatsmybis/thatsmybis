@@ -22,22 +22,29 @@
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2" href="">
-                <span class="text-muted fas fa-fw fa-scroll-old"></span>
-                Wishlist
+                <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
+                Prio's
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
-                <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
-                Notes
+                <span class="text-muted fal fa-fw fa-scroll-old"></span>
+                Wishlist
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4" href="">
-                <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
-                Priority
+                <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
+                Notes
+            </span>
+        </li>
+        <li class="list-inline-item">&sdot;</li>
+        <li class="list-inline-item">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="5" href="">
+                <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
+                Prio Notes
             </span>
         </li>
     </ul>

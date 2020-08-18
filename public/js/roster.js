@@ -3,11 +3,12 @@ var table = null;
 var colName = 0;
 var colLoot = 1;
 var colWishlist = 2;
-var colRecipes = 3;
-var colRoles = 4;
-var colNotes = 5;
-var colClass = 6;
-var colRaid = 7;
+var colPrios = 3;
+var colRecipes = 4;
+var colRoles = 5;
+var colNotes = 6;
+var colClass = 7;
+var colRaid = 8;
 
 $(document).ready( function () {
    table = createTable();
@@ -107,6 +108,16 @@ function createTable() {
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
                     return data && data.length ? getItemList(data, 'wishlist', row.id) : '—';
+                },
+                "orderable" : false,
+                "visible" : true,
+                "width"   : "280px",
+            },
+            {
+                "title"  : '<span class="text-gold fas fa-fw fa-sort-amount-down"></span> Prio\'s',
+                "data"   : "prios",
+                "render" : function (data, type, row) {
+                    return data && data.length ? getItemList(data, 'prio', row.id, true) : '—';
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -239,7 +250,7 @@ function addClippedItemHandlers() {
 }
 
 // Gets an HTML list of items with pretty wowhead formatting
-function getItemList(data, type, characterId) {
+function getItemList(data, type, characterId, useOrder = false) {
     let items = `<ol class="no-indent js-item-list mb-2" data-type="${ type }" data-id="${ characterId }">`;
     let initialLimit = 4;
 
@@ -255,6 +266,7 @@ function getItemList(data, type, characterId) {
 
         items += `
             <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }" data-type="${ type }" data-id="${ characterId }"
+                value="${ useOrder ? item.pivot.order : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
                 <a href="/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"
                     data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"

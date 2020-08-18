@@ -156,10 +156,10 @@ class DashboardController extends Controller
             })
             ->where('characters.guild_id', $guild->id)
             ->whereNull('characters.inactive_at')
-            ->with(['received', 'wishlist']) // 'recipes',
+            ->with(['prios', 'received', 'wishlist']) // 'recipes',
             ->orderBy('characters.name')
             ->get();
-// dd($characters->toArray());
+
         return view('roster', [
             'characters'      => $characters,
             'currentMember'   => $currentMember,

@@ -79,7 +79,7 @@ class Item extends Model
             ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raids', function ($join) {
-                $join->on('raids.id', 'character_items.raid_id');
+                $join->on('raids.id', 'characters.raid_id');
             })
             ->leftJoin('roles AS raid_roles', function ($join) {
                 $join->on('raid_roles.id', 'raids.role_id');

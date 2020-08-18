@@ -2,9 +2,10 @@ var table = null;
 
 var colSource = 0;
 var colName = 1;
-var colWishlist = 2;
-var colNotes = 3;
-var colPriority = 4;
+var colPrios = 2;
+var colWishlist = 3;
+var colNotes = 4;
+var colPriority = 5;
 
 // For keeping track of the loot's source
 var lastSource = null;
@@ -23,6 +24,7 @@ $(document).ready( function () {
 
         table.column(colName)    .visible(true);
         table.column(colWishlist).visible(true);
+        table.column(colPrios)   .visible(true);
         table.column(colNotes)   .visible(true);
         table.column(colPriority).visible(true);
    });
@@ -106,10 +108,20 @@ function createTable(lastSource) {
                 "width"   : "330px",
             },
             {
+                "title"  : '<span class="fas fa-fw fa-sort-amount-down text-gold"></span> Prio\'s',
+                "data"   : "priod_characters",
+                "render" : function (data, type, row) {
+                    return data.length ? getCharacterList(data, 'prio', row.item_id, false, false) : '—';
+                },
+                "orderable" : false,
+                "visible" : true,
+                "width"   : "150px",
+            },
+            {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
                 "data"   : "wishlist_characters",
                 "render" : function (data, type, row) {
-                    return data.length ? getCharacterList(data, 'wishlist', row.id) : '—';
+                    return data.length ? getCharacterList(data, 'wishlist', row.item_id) : '—';
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -126,7 +138,7 @@ function createTable(lastSource) {
                 "width"   : "200px",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-sort-amount-down"></span> Priority',
+                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Prio Notes',
                 "data"   : "guild_priority",
                 "render" : function (data, type, row) {
                     return (data ? nl2br(data) : '—');
@@ -156,13 +168,13 @@ function createTable(lastSource) {
 }
 
 // Gets an HTML list of characters
-function getCharacterList(data, type, itemId) {
-    let characters = `<ul class="list-inline js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
+function getCharacterList(data, type, itemId, inline = true, ul = true) {
+    let characters = `<${ ul ? 'ul' : 'ol' } class="${ inline ? 'list-inline' : 'lesser-indent' } js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
     let initialLimit = 4;
 
     $.each(data, function (index, character) {
         characters += `
-            <li data-raid-id="${ character.raid_id }" class="js-item-wishlist-character list-inline-item font-weight-normal mb-1">
+            <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }" class="js-item-wishlist-character ${ inline ? 'list-inline-item' : '' } font-weight-normal mb-1">
                 <a href="/${ guild.slug }/c/${ character.name }"
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
@@ -175,6 +187,6 @@ function getCharacterList(data, type, itemId) {
             </li>`;
     });
 
-    characters += `</ul>`;
+    characters += `</${ ul ? 'ul' : 'ol' }>`;
     return characters;
 }

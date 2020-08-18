@@ -72,7 +72,11 @@ class ItemController extends Controller
             ->where('item_sources.instance_id', $instance->id)
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
-            ->with(['wishlistCharacters' => function ($query) use($guild, $characterFields) {
+            ->with([
+                'priodCharacters' => function ($query) use ($guild) {
+                    return $query->where('characters.guild_id', $guild->id);
+                },
+                'wishlistCharacters' => function ($query) use($guild, $characterFields) {
                 return $query->select($characterFields)
                     ->leftJoin('members', function ($join) {
                         $join->on('members.id', 'characters.member_id');

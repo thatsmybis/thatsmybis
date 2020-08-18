@@ -196,7 +196,13 @@ class CharacterController extends Controller
 
         $character = Character::where(['name' => $name, 'guild_id' => $guild->id])
             ->with([
-                'member', 'raid', 'raid.role',
+                'member',
+                'prios',
+                'raid',
+                'raid.role',
+                'received',
+                'recipes',
+                'wishlist',
             ])->firstOrFail();
 
         $showEdit = false;

@@ -11,14 +11,6 @@
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-12 mb-3">
-                    <small>
-                        <span class="font-weight-bold">Hint:</span> Your top 4 items are displayed first; make them count
-                    </small>
-                </div>
-            </div>
-
             @if (count($errors) > 0)
                 <ul class="alert alert-danger">
                     @foreach ($errors->all() as $error)
@@ -33,6 +25,43 @@
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $character->id }}" />
+
+                <div class="row mb-3 pt-2 bg-light rounded">
+                    <div class="col-12 mb-2">
+                        <span class="text-gold font-weight-bold">
+                            <span class="fas fa-fw fa-sort-amount-down"></span>
+                            Prio's
+                        </span>
+                    </div>
+                    <div class="col-12 pb-3">
+                        @if ($character->prios->count() > 0)
+                            <ol class="">
+                                @foreach ($character->prios as $item)
+                                    <li class="" value="{{ $item->pivot->order }}">
+                                        @include('partials/item', ['wowheadLink' => false])
+                                        <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+                                            data-timestamp="{{ $item->pivot->created_at }}"
+                                            data-title="added by {{ $item->added_by_username }} at"
+                                            data-is-short="1">
+                                        </span>
+                                    </li>
+                                @endforeach
+                            </ol>
+                        @else
+                            <div class="pl-4">
+                                —
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 mb-3">
+                        <small>
+                            <span class="font-weight-bold">Hint:</span> Your top 4 items are displayed first; make them count
+                        </small>
+                    </div>
+                </div>
 
                 <div class="row mb-3 pt-2 bg-light rounded">
                     <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
