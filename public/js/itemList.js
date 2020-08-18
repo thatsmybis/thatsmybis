@@ -171,6 +171,11 @@ function getCharacterList(data, type, itemId) {
                         data-timestamp="${ character.pivot.created_at }"
                         data-is-short="1">
                     </span>
+                    ${character.is_alt ? `
+                        <span class="font-weight-bold">
+                            <span class="role-circle" style="color:orange">Alt</span>
+                        </span>
+                    ` : ''}
                 </a>
             </li>`;
     });

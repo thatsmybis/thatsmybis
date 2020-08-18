@@ -130,6 +130,7 @@ class DashboardController extends Controller
             'characters.rank',
             'characters.rank_goal',
             'characters.raid_id',
+            'characters.is_alt',
             'characters.public_note',
             'characters.inactive_at',
             'members.username',

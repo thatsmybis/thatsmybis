@@ -43,7 +43,6 @@ class CharacterController extends Controller
             'personal_note' => 'nullable|string|max:2000',
             'order'         => 'nullable|integer|min:0|max:50',
             'is_inactive'   => 'nullable|boolean',
-            'is_alt'        => 'nullable|boolean'
         ];
     }
 
@@ -89,7 +88,7 @@ class CharacterController extends Controller
             $createValues['member_id'] = $currentMember->id;
         }
 
-        if (request()->input('officer_note') && $currentMember->hasPermission('edit.officer-notes')) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $createValues['officer_note'] = request()->input('officer_note');
         }
 
@@ -104,7 +103,7 @@ class CharacterController extends Controller
         $createValues['rank_goal']     = request()->input('rank_goal');
         $createValues['raid_id']       = request()->input('raid_id');
         $createValues['public_note']   = request()->input('public_note');
-        $createValues['is_alt']        = request()->input('is_alt');
+        $createValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
 
         // User is creating their own character
         if (isset($createValues['member_id']) && $createValues['member_id'] == $currentMember->id) {
@@ -313,7 +312,7 @@ class CharacterController extends Controller
         }
 
         // Can you edit the officer notes?
-        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
@@ -329,8 +328,8 @@ class CharacterController extends Controller
         $updateValues['raid_id']      = request()->input('raid_id');
         $updateValues['public_note']  = request()->input('public_note');
         $updateValues['inactive_at']  = (request()->input('inactive_at') == 1 ? getDateTime() : null);
-        $updateValues['is_alt']       = request()->input('is_alt');
-
+        $updateValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
+        
         // User is editing their own character
         if ($character->member_id == $currentMember->id) {
             $updateValues['personal_note'] = request()->input('personal_note');
@@ -497,7 +496,7 @@ class CharacterController extends Controller
 
         $updateValues = [];
 
-        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if ($currentMember->id != $character->member_id) {
             abort(403, "You do not have permission to edit someone else's character.");

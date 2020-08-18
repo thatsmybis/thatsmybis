@@ -14,7 +14,7 @@ class AddCharacterAltBoolean extends Migration
     public function up()
     {
         Schema::table('characters', function (Blueprint $table) {
-            $table->boolean('is_alt')->nullable()->after('order');
+            $table->boolean('is_alt')->default(0)->after('order');
         });
     }
 
@@ -27,6 +27,7 @@ class AddCharacterAltBoolean extends Migration
     {
         Schema::table('characters', function (Blueprint $table) {
             //
+            
         });
     }
 }

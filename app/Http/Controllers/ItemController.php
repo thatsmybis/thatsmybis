@@ -40,6 +40,7 @@ class ItemController extends Controller
             'characters.race',
             'characters.spec',
             'characters.class',
+            'characters.is_alt',
             'members.username',
             'raids.name AS raid_name',
             'raid_roles.color AS raid_color',
