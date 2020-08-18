@@ -60,7 +60,8 @@ class PrioController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // if (!$currentMember->hasPermission('edit.raid-prios')) {
+        // TODO:
+        // if (!$currentMember->hasPermission('edit.item-prios')) {
         //     request()->session()->flash('status', 'You don\'t have permissions to view that page.');
         //     return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         // }
@@ -136,7 +137,8 @@ class PrioController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // if (!$currentMember->hasPermission('edit.raid-prios')) {
+        // TODO:
+        // if (!$currentMember->hasPermission('edit.item-prios')) {
         //     request()->session()->flash('status', 'You don\'t have permissions to view that page.');
         //     return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
         // }

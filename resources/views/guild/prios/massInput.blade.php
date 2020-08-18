@@ -81,7 +81,6 @@
                                 <div class="col-lg-5 col-12">
                                     <label for="items[details]" class="font-weight-bold {{ $loop->iteration > 1 ? 'd-none' : '' }}">
                                         @if ($loop->first)
-                                            <span class="fas fa-fw fa-question text-muted"></span>
                                             Details
                                         @else
                                             <span class="sr-only">Details</span>

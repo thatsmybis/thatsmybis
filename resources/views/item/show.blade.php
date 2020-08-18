@@ -70,7 +70,7 @@
                                 <div class="col-12">
                                     <span class="text-muted font-weight-bold">
                                         <span class="fas fa-fw fa-sort-amount-down"></span>
-                                        Guild Priority
+                                        Guild Prio Note
                                     </span>
                                 </div>
                                 <div class="col-12 mb-3 pl-4">
@@ -96,10 +96,48 @@
                             </div>
                         </form>
                     </li>
+                    @if ($showPrioEdit)
+                        <li class="list-inline-item bg-lightest rounded p-3 mt-3 align-top item-notes">
+                            <div class="dropdown">
+                                <a class="btn btn-success dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Edit Prios
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                                    @foreach ($raids as $raid)
+                                        <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'raidId' => $raid->id]) }}">
+                                            {{ $raid->name }}
+                                        </a>
+                                    @endforeach
+                                    <a class="dropdown-item" href="{{ route('guild.raid.edit', ['guildSlug' => $guild->slug]) }}">
+                                        <span class="fas fa-fw fa-plus"></span> Create New Raid
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                    @endif
                 @endif
             </ul>
         </div>
     </div>
+
+    {{--
+    <div class="row pt-2 mb-3 bg-lightest rounded">
+        <div class="col-12">
+            <h2 class="font-weight-bold pl-2">Prio'd</h2>
+        </div>
+        <div class="col-12 pr-0 pl-0">
+            @if ($priodCharacters->count() > 0)
+                @include('partials/characterDatatable', ['characters' => $priodCharacters])
+            @else
+                <ul>
+                    <li class="lead no-bullet">
+                        <em>nobody has been prio'd for this item yet</em>
+                    </li>
+                </ul>
+            @endif
+        </div>
+    </div>
+    --}}
 
     <div class="row pt-2 mb-3 bg-lightest rounded">
         <div class="col-12">
@@ -143,9 +181,10 @@
 @section('scripts')
 <script>
     var characters = {!! $showOfficerNote ? $wishlistCharacters->makeVisible('officer_note')->toJson() : $wishlistCharacters->toJson() !!};
-    var guild      = {!! $guild->toJson() !!};
-    var raids      = {!! $raids->toJson() !!};
-    var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};;
+    // var priodCharacters    = {!! $showOfficerNote ? $priodCharacters->makeVisible('officer_note')->toJson() : $priodCharacters->toJson() !!};
+    var guild              = {!! $guild->toJson() !!};
+    var raids              = {!! $raids->toJson() !!};
+    var showOfficerNote    = {{ $showOfficerNote ? 'true' : 'false' }};;
 </script>
 <script src="{{ env('APP_ENV') == 'local' ? asset('/js/roster.js') : mix('js/processed/roster.js') }}"></script>
 @endsection

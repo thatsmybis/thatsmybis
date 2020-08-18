@@ -79,8 +79,10 @@ Route::group([
     Route::post('/loot/{instanceSlug}/edit', 'ItemController@listWithGuildSubmit')->name('guild.item.list.submit');
 
     Route::group(['prefix' => 'i'], function () {
-        Route::get( '/{item_id}/{slug?}', 'ItemController@showWithGuild')->name('guild.item.show');
-        Route::post('/note/update',       'ItemController@updateNote')   ->name('guild.item.updateNote');
+        Route::get( '/{item_id}/{slug?}',        'ItemController@showWithGuild') ->name('guild.item.show');
+        Route::get( '/{item_id}/{raidId}/prios', 'ItemController@showPrioEdit')  ->name('guild.item.prios');
+        Route::post('/prios',                    'ItemController@submitPrioEdit')->name('guild.item.prios.submit');
+        Route::post('/note/update',              'ItemController@updateNote')    ->name('guild.item.updateNote');
     });
 
     Route::group(['prefix' => 'u'], function () {

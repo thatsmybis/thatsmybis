@@ -64,10 +64,12 @@ function createTable() {
 
                         ${ row.raid_name || row.class ? `
                             <li>
-                                <span class="font-weight-bold">
-                                    <span class="role-circle" style="background-color:${ row.raid_color ? getColorFromDec(parseInt(row.raid_color)) : '' }"></span>
-                                    ${ row.raid_name ? row.raid_name : '' }
-                                </span>
+                                ${ row.raid_name ? `
+                                    <span class="font-weight-bold">
+                                        <span class="role-circle" style="background-color:${ row.raid_color ? getColorFromDec(parseInt(row.raid_color)) : '' }"></span>
+                                        ${ row.raid_name ? row.raid_name : '' }
+                                    </span>
+                                ` : ``}
                                 ${ row.class ? row.class : '' }
                             </li>` : `` }
 
