@@ -494,7 +494,7 @@ class CharacterController extends Controller
 
         $updateValues = [];
 
-        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if ($currentMember->id != $character->member_id) {
             abort(403, "You do not have permission to edit someone else's character.");
