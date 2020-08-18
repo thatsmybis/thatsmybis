@@ -167,14 +167,6 @@
         </ul>
         <ul class="navbar-nav">
             <li class="nav-item mr-3">
-                <a href="{{ env('LINK_GITHUB_BUG') }}" target="_blank" class="nav-link active font-weight-bold">
-                    <span class="fas fa-bug"></span>
-                    Report Bug
-                </a>
-            </li>
-        </ul>
-        <ul class="navbar-nav">
-            <li class="nav-item mr-3">
                 <a href="{{ env('LINK_PATREON') }}" target="_blank" class="nav-link active font-weight-bold">
                     <span class="fas fa-fw fa-heart"></span>
                     Donate
