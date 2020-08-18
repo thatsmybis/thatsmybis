@@ -174,7 +174,7 @@ class MemberController extends Controller
 
         $updateValues = [];
 
-        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
@@ -261,7 +261,7 @@ class MemberController extends Controller
 
         $updateValues = [];
 
-        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if ($currentMember->id != $member->id && !$currentMember->hasPermission('edit.character')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit that member.');

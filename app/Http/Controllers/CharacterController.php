@@ -88,7 +88,7 @@ class CharacterController extends Controller
             $createValues['member_id'] = $currentMember->id;
         }
 
-        if (request()->input('officer_note') && $currentMember->hasPermission('edit.officer-notes')) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $createValues['officer_note'] = request()->input('officer_note');
         }
 
@@ -311,7 +311,7 @@ class CharacterController extends Controller
         }
 
         // Can you edit the officer notes?
-        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
