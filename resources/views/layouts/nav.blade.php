@@ -20,7 +20,7 @@
 
                 @if (isset($currentMember) && $currentMember)
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['member.edit', 'member.show']) && $currentMember->id == (isset($member) ? $member->id : null) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]) }}">
+                        <a class="nav-link" href="{{ route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]) }}">
                             Profile
                         </a>
                     </li>

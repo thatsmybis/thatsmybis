@@ -54,7 +54,7 @@ function createTable() {
                     return `
                     <ul class="no-bullet no-indent mb-2">
                         <li>
-                            <a href="/${ guild.slug }/c/${ row.name }"
+                            <a href="/${ guild.slug }/c/${ row.slug }"
                                 class="text-4 text-${ row.class ? row.class.toLowerCase() : ''} font-weight-bold"
                                 title="${ row.member ? row.member.username : '' }">
                                 ${ row.name }

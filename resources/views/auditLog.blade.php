@@ -23,7 +23,7 @@
                                 <div class="row">
                                     <div class="col-md-2 col-12 text-muted small">
                                         @if ($log->member_id)
-                                            <a href="{{ route('member.show', ['guildSlug' => $guild->slug, 'username' => $log->member_username]) }}"
+                                            <a href="{{ route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $log->member_slug]) }}"
                                                 class="text-muted">
                                                 <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago
                                             </a>
@@ -45,14 +45,14 @@
                                             @endif
                                             @if ($log->other_member_id)
                                                 <li class="list-inline-item">
-                                                    <a href="{{ route('member.show', ['guildSlug' => $guild->slug, 'username' => $log->other_member_username]) }}" class="text-muted">
+                                                    <a href="{{ route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $log->other_member_slug]) }}" class="text-muted">
                                                         {{ $log->other_member_username }}
                                                     </a>
                                                 </li>
                                             @endif
                                             @if ($log->character_id)
                                                 <li class="list-inline-item">
-                                                    <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $log->character_name]) }}" class="text-muted">
+                                                    <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $log->character_slug]) }}" class="text-muted">
                                                         {{ $log->character_name }}
                                                     </a>
                                                 </li>

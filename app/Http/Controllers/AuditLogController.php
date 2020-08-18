@@ -35,13 +35,16 @@ class AuditLogController extends Controller
         $query = AuditLog::select([
                 'audit_logs.*',
                 'characters.name        AS character_name',
+                'characters.slug        AS character_slug',
                 'characters.class       AS character_class',
                 'instances.name         AS instance_name',
                 'instances.slug         AS instance_slug',
                 'items.name             AS item_name',
                 'item_sources.name      AS item_source_name',
                 'members.username       AS member_username',
+                'members.slug           AS member_slug',
                 'other_members.username AS other_member_username',
+                'other_members.slug     AS other_member_slug',
                 'raids.name             AS raid_name',
                 'roles.name             AS role_name',
             ])

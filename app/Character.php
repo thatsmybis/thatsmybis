@@ -16,6 +16,7 @@ class Character extends Model
         'member_id',
         'guild_id',
         'name',
+        'slug',
         'level',
         'race',
         'class',
