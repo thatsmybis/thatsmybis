@@ -195,7 +195,7 @@ class PrioController extends Controller
                 $existingPrios = $existingItem->priodCharacters;
 
                 $toUpdateCount = 0;
-                // dd($inputItem, $inputPrios, $existingPrios);
+
                 /**
                  * Go over all the prios we already have in the database.
                  * If any of these are found in the set sent from the input, we're going to update them with new metadata.
@@ -228,10 +228,10 @@ class PrioController extends Controller
                         // We'll drop them all at once later on, rather than executing individual queries
                         $toDrop[] = $existingPrio->pivot->id;
                         // Also remove it from the collection... for good measure I guess.
-                        $existingItems->forget($existingPrioKey);
+                        $existingPrios->forget($existingPrioKey);
 
                         $audits[] = [
-                            'description'  => $currentMember->username . ' removed a prio from a character (#' . $existingPrio->pivot->order . ')',
+                            'description'  => $currentMember->username . ' removed a prio from a character (' . $existingPrio->pivot->order . ')',
                             'member_id'    => $currentMember->id,
                             'guild_id'     => $currentMember->guild_id,
                             'character_id' => $existingPrio->id,
@@ -263,7 +263,7 @@ class PrioController extends Controller
                         ];
 
                         $audits[] = [
-                            'description'  => $currentMember->username . ' prio\'d an item to a character (#' . $i . ')',
+                            'description'  => $currentMember->username . ' prio\'d an item to a character (' . $i . ')',
                             'member_id'    => $currentMember->id,
                             'guild_id'     => $currentMember->guild_id,
                             'character_id' => $inputPrio['character_id'],
@@ -279,6 +279,7 @@ class PrioController extends Controller
                         'description'  => $currentMember->username . ' altered ' . $toUpdateCount . ' prios for an item',
                         'member_id'    => $currentMember->id,
                         'guild_id'     => $currentMember->guild_id,
+                        'character_id' => null,
                         'item_id'      => $inputItem['item_id'],
                         'raid_id'      => $raid->id,
                         'created_at'   => $now,
