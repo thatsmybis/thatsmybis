@@ -150,7 +150,7 @@
                                         placeholder="0"
                                         value="{{ old('level') ? old('level') : ($character ? $character->level : '60') }}" />
                                 </div>
-                            </div>
+                            </div>                            
                         </div>
                     </div>
                 </div>
@@ -312,13 +312,37 @@
 
                 @if ($character && ($currentMember->hasPermission('inactive.characters') || $currentMember->id == $character->member_id))
                     <div class="row mb-3 pt-2 pb-1 bg-light rounded">
-                        <div class="col-12">
+                        <div class="col-6">
                             <div class="form-group mb-0">
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="inactive_at" value="1" class="" autocomplete="off"
                                             {{ old('inactive_at') && old('inactive_at') == 1 ? 'checked' : ($character->inactive_at ? 'checked' : '') }}>
                                             Inactive <small class="text-muted">no longer visible</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group mb-0">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="is_alt" value="1" class="" autocomplete="off"
+                                            {{ old('is_alt') && old('is_alt') == 1 ? 'checked' : ($character->is_alt ? 'checked' : '') }}>
+                                            Alt Character <small class="text-muted">will be tagged as an alt</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @else
+                    <div class="row mb-3 pt-2 pb-1 bg-light rounded">
+                        <div class="col-12">
+                            <div class="form-group mb-0">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="is_alt" value="1" class="" autocomplete="off">
+                                            Alt Character <small class="text-muted">will be tagged as an alt</small>
                                     </label>
                                 </div>
                             </div>
