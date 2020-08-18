@@ -22,6 +22,7 @@ class Member extends Model
      */
     protected $fillable = [
         'username',
+        'slug',
         'user_id',
         'guild_id',
         'public_note',
@@ -94,7 +95,7 @@ class Member extends Model
      */
     public static function create($user, $discordMember, $guild) {
         // Create a member for the user
-        $member = self::firstOrCreate(['user_id' => $user->id, 'guild_id' => $guild->id], ['username' => $user->username]);
+        $member = self::firstOrCreate(['user_id' => $user->id, 'guild_id' => $guild->id], ['username' => $user->username, 'slug' => slug($user->username)]);
         $member->load('roles');
 
         if ($discordMember) {

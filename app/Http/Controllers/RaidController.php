@@ -32,7 +32,7 @@ class RaidController extends Controller
 
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -68,7 +68,7 @@ class RaidController extends Controller
 
         if (!$currentMember->hasPermission('create.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to create raids.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load(['raids', 'roles']);
@@ -137,7 +137,7 @@ class RaidController extends Controller
 
         if (!$currentMember->hasPermission('disable.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to disable/enable raids.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $validationRules = [
@@ -175,7 +175,7 @@ class RaidController extends Controller
 
         if (!$currentMember->hasPermission('view.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load(['allRaids', 'allRaids.role']);
@@ -196,7 +196,7 @@ class RaidController extends Controller
 
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit raids.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [

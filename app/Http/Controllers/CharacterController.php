@@ -93,6 +93,7 @@ class CharacterController extends Controller
         }
 
         $createValues['name']          = request()->input('name');
+        $createValues['slug']          = slug(request()->input('name'));
         $createValues['level']         = request()->input('level');
         $createValues['race']          = request()->input('race');
         $createValues['class']         = request()->input('class');
@@ -123,7 +124,7 @@ class CharacterController extends Controller
 
         request()->session()->flash('status', 'Successfully created ' . $createValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
 
-        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]);
+        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]);
     }
 
     /**
@@ -131,18 +132,18 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($guildSlug, $name)
+    public function edit($guildSlug, $nameSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['name' => $name, 'guild_id' => $guild->id])->with('member')->firstOrFail();
+        $character = Character::where(['slug' => $nameSlug, 'guild_id' => $guild->id])->with('member')->firstOrFail();
 
         $guild->load(['raids', 'raids.role']);
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         if ($currentMember->hasPermission('edit.characters')) {
@@ -161,16 +162,16 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function loot($guildSlug, $name)
+    public function loot($guildSlug, $nameSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['name' => $name, 'guild_id' => $guild->id])->with(['member', 'raid', 'raid.role'])->firstOrFail();
+        $character = Character::where(['slug' => $nameSlug, 'guild_id' => $guild->id])->with(['member', 'raid', 'raid.role'])->firstOrFail();
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         return view('character.loot', [
@@ -189,12 +190,12 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($guildSlug, $name)
+    public function show($guildSlug, $nameSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['name' => $name, 'guild_id' => $guild->id])
+        $character = Character::where(['slug' => $nameSlug, 'guild_id' => $guild->id])
             ->with([
                 'member', 'raid', 'raid.role',
             ])->firstOrFail();
@@ -301,7 +302,7 @@ class CharacterController extends Controller
         // Can you edit someone else's character?
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         // Can you change the character owner?
@@ -316,6 +317,7 @@ class CharacterController extends Controller
         }
 
         $updateValues['name']         = request()->input('name');
+        $updateValues['slug']         = slug(request()->input('name'));
         $updateValues['level']        = request()->input('level');
         $updateValues['race']         = request()->input('race');
         $updateValues['class']        = request()->input('class');
@@ -363,7 +365,7 @@ class CharacterController extends Controller
 
         request()->session()->flash('status', 'Successfully updated ' . $updateValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
 
-        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]);
+        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]);
     }
 
     /**
@@ -403,7 +405,7 @@ class CharacterController extends Controller
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $updateValues = [];
@@ -459,7 +461,7 @@ class CharacterController extends Controller
             $character->recipes()->detach();
         }
 
-        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]);
+        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]);
     }
 
     /**
@@ -530,7 +532,7 @@ class CharacterController extends Controller
 
         request()->session()->flash('status', "Successfully updated " . $character->name ."'s note.");
 
-        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]);
+        return redirect()->route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]);
     }
 
     /**

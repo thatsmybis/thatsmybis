@@ -163,7 +163,7 @@ function getCharacterList(data, type, itemId) {
     $.each(data, function (index, character) {
         characters += `
             <li data-raid-id="${ character.raid_id }" class="js-item-wishlist-character list-inline-item font-weight-normal mb-1">
-                <a href="/${ guild.slug }/c/${ character.name }"
+                <a href="/${ guild.slug }/c/${ character.slug }"
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_color) }"></span>${ character.name }

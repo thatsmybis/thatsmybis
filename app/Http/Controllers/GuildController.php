@@ -33,7 +33,7 @@ class GuildController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+        return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
     }
 
     /**
@@ -201,7 +201,7 @@ class GuildController extends Controller
 
         if (!$currentMember->hasPermission('edit.guild')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load(['roles']);
@@ -225,7 +225,7 @@ class GuildController extends Controller
 
         if (!$currentMember->hasPermission('edit.guild')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit that guild.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load('roles');

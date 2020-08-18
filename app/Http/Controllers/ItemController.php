@@ -36,6 +36,7 @@ class ItemController extends Controller
         $characterFields = [
             'characters.raid_id',
             'characters.name',
+            'characters.slug',
             'characters.level',
             'characters.race',
             'characters.spec',
@@ -105,7 +106,7 @@ class ItemController extends Controller
 
         if (!$currentMember->hasPermission('edit.items')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $instance = Instance::where('slug', $instanceSlug)
@@ -157,7 +158,7 @@ class ItemController extends Controller
 
         if (!$currentMember->hasPermission('edit.items')) {
             request()->session()->flash('status', 'You don\'t have permissions to submit that.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->Slug]);
         }
 
         $validationRules =  [
@@ -258,7 +259,7 @@ class ItemController extends Controller
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         return view('item.massInput', [
@@ -391,7 +392,7 @@ class ItemController extends Controller
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
             request()->session()->flash('status', 'You don\'t have permissions to submit that.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $warnings   = '';
@@ -456,7 +457,7 @@ class ItemController extends Controller
 
         return redirect()->route('member.show', [
             'guildSlug' => $guild->slug,
-            'username'  => $currentMember->username
+            'usernameSlug'  => $currentMember->slug
         ]);
     }
 
@@ -470,7 +471,7 @@ class ItemController extends Controller
 
         if (!$currentMember->hasPermission('edit.items')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit items.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load(['raids', 'roles']);

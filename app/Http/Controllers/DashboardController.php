@@ -100,7 +100,7 @@ class DashboardController extends Controller
 
         return redirect()->route('member.show', [
             'guildSlug' => $guild->slug,
-            'username'  => $currentMember->username
+            'usernameSlug'  => $currentMember->slug
         ]);
     }
 
@@ -121,6 +121,7 @@ class DashboardController extends Controller
             'characters.member_id',
             'characters.guild_id',
             'characters.name',
+            'characters.slug',
             'characters.level',
             'characters.race',
             'characters.class',

@@ -14,7 +14,7 @@
             <div class="row mb-3 pt-3 bg-light rounded">
                 @if ($showEditLoot)
                     <div class="col-12 mb-4">
-                        <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-4">
+                        <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}" class="text-4">
                             <span class="fas fa-fw fa-pencil"></span>
                             edit loot
                         </a>
