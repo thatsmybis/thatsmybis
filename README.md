@@ -125,16 +125,16 @@ kodeine\acl library was used for the permissions.
 
 Roles are loaded from the Discord server.
 
-## Laraval Custom Configurations
+## Custom Configurations
 
 - `ONLY_FULL_GROUP_BY` for SQL has been disabled in `database.php` by changing `strict` to `false`. This is to allow for writing simpler `GROUP BY` clauses in queries. If you can fix the `group by` complications caused by `strict`, you're welcome to turn it back on. I tried. It required mutilating my `SELECT` statements, and even then I couldn't get it to 100% work the way it did before 5.7 when it just assumed `ANY_VALUE()` on non-aggregated columns (even when I told it to use `ANY_VALUE()`). Good luck. ([SO thread](https://stackoverflow.com/questions/34115174/error-related-to-only-full-group-by-when-executing-a-query-in-mysql))
-
+- `max_input_vars` in `php.ini` (PHP's config) has been increased from 1000 to 5000. This is to support some pages with an absurd amount of inputs. (ie. 120 items with 40 input fields each = 4800 inputs)
 
 ## Docker Compose Local Development Environment
 
-The laravel development environment can be bootstrapped by utilizing the bitnami laravel docker images to stand up laravel and mariadb. 
+The laravel development environment can be bootstrapped by utilizing the bitnami laravel docker images to stand up laravel and mariadb.
 
-Requirements: Docker Desktop 
+Requirements: Docker Desktop
 
 In the root of the project directory, there is a file called `docker-compose.yml`. This file contains the configuration for standing up the development environment. When the image starts, it is mapping in the the directory and sub directories of where it is located.
 
@@ -149,13 +149,13 @@ Once Complete the following line will be printed:
 ```
  Laravel development server started: http://0.0.0.0:3000
 ```
-This is a bit misleading as we have modified the docker-compose file to use port 80 instead of port 3000. Just remove the port and you should be able to load the page. 
+This is a bit misleading as we have modified the docker-compose file to use port 80 instead of port 3000. Just remove the port and you should be able to load the page.
 
-There is still a requirement to insert all of the items, instances, item_sources and item_item_sources from the db project. See section `Items Table` above. 
+There is still a requirement to insert all of the items, instances, item_sources and item_item_sources from the db project. See section `Items Table` above.
 
 Note: You can insert the items table by doing two things.
 
-- You can connect to the container through docker and run commands inside of it. 
+- You can connect to the container through docker and run commands inside of it.
 Example: `docker exec -it <container-id> bash`
 
 - You can download a database management suite and connect to it to manage it. Example: MySQL Workbench, Adminer etc.. The connection endpoint will be `localhost:3306`
@@ -171,7 +171,7 @@ CONTAINER ID        IMAGE                            COMMAND                  CR
 
 ## Docker Development with Visual Studio Code
 
-A quick an dirty way to develop is to use Visual Studio Code with the PHP plugin which does intelisense and syntax highlighting. The laravel app will most times pick up the changes immediately if you refresh the page. 
+A quick an dirty way to develop is to use Visual Studio Code with the PHP plugin which does intelisense and syntax highlighting. The laravel app will most times pick up the changes immediately if you refresh the page.
 
 
 ## Docker Development Laravel Development Commands
