@@ -65,11 +65,11 @@
                             @endif
                             <div class="row striped-light pb-2 pt-3 rounded">
 
-                                <input hidden name="items[{{ $loop->iteration }}][id]" value="{{ $item->item_id }}">
+                                <input hidden name="items[{{ $item->item_id }}][item_id]" value="{{ $item->item_id }}">
 
                                 <div class="col-lg-4 col-12">
                                     <div class="d-inline-grid align-middle text-5 mb-2">
-                                        <label for="items[{{ $loop->iteration }}][name]" class="font-weight-bold d-none d-sm-block">
+                                        <label for="items[{{ $item->item_id }}][name]" class="font-weight-bold d-none d-sm-block">
                                             <span class="sr-only">
                                                 Item Name
                                             </span>
@@ -134,9 +134,9 @@
                                     </ul>
                                 </div>
 
-                                <div class="col-lg-4 col-12 {{ $errors->has('items.' . $loop->iteration . '.*') || $errors->has('items.' . $loop->iteration . '.id') ? 'bg-danger rounded font-weight-bold' : '' }}">
+                                <div class="col-lg-4 col-12 {{ $errors->has('items.' . $item->item_id . '.*') ? 'bg-danger rounded font-weight-bold' : '' }}">
                                     <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
-                                        <label for="items[{{ $loop->iteration }}][character_ids]" class="font-weight-bold {{ $loop->iteration > 1 ? 'd-none' : '' }}">
+                                        <label for="items[{{ $item->item_id }}][characters]" class="font-weight-bold {{ $loop->iteration > 1 ? 'd-none' : '' }}">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
                                                 Prio'd Characters
@@ -155,36 +155,36 @@
                                                     data-tokens="{{ $character->id }}"
                                                     data-raid-id="{{ $character->raid_id }}"
                                                     class="js-character-option text-{{ strtolower($character->class) }}-important"
-                                                    {{ old('items.' . $loop->iteration . '.character_id') && old('items.' . $loop->iteration . '.character_id') == $character->id  ? 'selected' : '' }}>
+                                                    {{ old('items.' . $item->item_id . '.character_id') && old('items.' . $item->item_id . '.character_id') == $character->id  ? 'selected' : '' }}>
                                                     {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }}
                                                 </option>
                                             @endforeach
                                         </select>
 
-                                        <ul class="js-sortable-lazy no-bullet no-indent mt-3 mb-0">
+                                        <ol class="js-sortable-lazy no-indent mt-3 mb-0">
                                             @for ($i = 0; $i < $maxPrios; $i++)
-                                                <li class="input-item {{ $errors->has('items.' . $loop->iteration . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}"
-                                                    style="{{ old('items.' . $loop->iteration . '.characters.' . $i) || $item->priodCharacters->get($i) ? '' : 'display:none;' }}">
+                                                <li class="input-item {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}"
+                                                    style="{{ old('items.' . $item->item_id . '.characters.' . $i) || $item->priodCharacters->get($i) ? '' : 'display:none;' }}">
 
-                                                    <input type="checkbox" checked name="items[{{ $loop->iteration }}][characters][{{ $i }}][id]"
-                                                        value="{{ old('items.' . $loop->iteration . '.characters.' . $i . '.id') ? old('items.' . $loop->iteration . '.characters.' . $i . '.id') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->id : '') }}" style="display:none;">
-                                                    <input type="checkbox" checked name="items[{{ $loop->iteration }}][characters][{{ $i }}][label]"
-                                                        value="{{ old('items.' . $loop->iteration . '.characters.' . $i . '.label') ? old('items.' . $loop->iteration . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}" style="display:none;">
+                                                    <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][character_id]"
+                                                        value="{{ old('items.' . $item->item_id . '.characters.' . $i . '.character_id') ? old('items.' . $item->item_id . '.characters.' . $i . '.character_id') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->id : '') }}" style="display:none;">
+                                                    <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][label]"
+                                                        value="{{ old('items.' . $item->item_id . '.characters.' . $i . '.label') ? old('items.' . $item->item_id . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}" style="display:none;">
                                                     <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                                    <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('items.' . $loop->iteration . '.characters.' . $i . '.label') ? old('items.' . $loop->iteration . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}</span>&nbsp;
+                                                    <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('items.' . $item->item_id . '.characters.' . $i . '.label') ? old('items.' . $item->item_id . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}</span>&nbsp;
 
                                                 </li>
-                                                @if ($errors->has('items.' . $loop->iteration . '.characters.*'))
+                                                @if ($errors->has('items.' . $item->item_id . '.characters.*'))
                                                     <li class="'text-danger font-weight-bold'">
-                                                        {{ $errors->first('items.' . $loop->iteration . '.characters.*') }}
+                                                        {{ $errors->first('items.' . $item->item_id . '.characters.*') }}
                                                     </li>
                                                 @endif
                                             @endfor
-                                        </ul>
+                                        </ol>
 
-                                        @if ($errors->has('items.' . $loop->iteration . '.*'))
+                                        @if ($errors->has('items.' . $item->item_id . '.*'))
                                             <div class="'text-danger font-weight-bold'">
-                                                {{ $errors->first('items.' . $loop->iteration . '.*') }}
+                                                {{ $errors->first('items.' . $item->item_id . '.*') }}
                                             </div>
                                         @endif
                                     </div>
@@ -221,7 +221,7 @@
 
         value = $(this).find(":selected").val();
         label = $(this).find(":selected").html().trim();
-        $nextInput = $(this).parent().next("ul").children("li").children("input[value='']").first();
+        $nextInput = $(this).parent().next("ol").children("li").children("input[value='']").first();
 
         if ($nextInput.val() == "") {
         // Add the item.

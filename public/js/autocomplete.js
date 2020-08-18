@@ -7,7 +7,6 @@ $(document).ready(function () {
     // sortable() is slow to initialize when applied to hundreds of elements, so this solves for that scenario
     $(".js-sortable-lazy").one("mouseenter", function() {
         $(this).sortable({handle: ".js-sort-handle"});
-
     });
 });
 

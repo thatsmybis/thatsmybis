@@ -96,8 +96,8 @@ Route::group([
 
     Route::get( '/roster',          'DashboardController@roster')->name('guild.roster');
 
-    Route::get( '/raid-time', 'ItemController@massInput')      ->name('item.massInput');
-    Route::post('/raid-time', 'ItemController@submitMassInput')->name('item.massInput.submit');
+    Route::get( '/assign-loot', 'ItemController@massInput')      ->name('item.massInput');
+    Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
 
     Route::group([
         // 'middleware' => 'acl',

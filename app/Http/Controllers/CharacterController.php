@@ -563,7 +563,7 @@ class CharacterController extends Controller
         /**
          * Go over all the items we already have in the database.
          * If any of these are found in the set sent from the input, we're going to update them with new metadata.
-         * If any of these aren't found in the input, they shouldn' exist anymore so we'll drop them.
+         * If any of these aren't found in the input, they shouldn't exist anymore so we'll drop them.
          */
         foreach ($existingItems as $existingItemKey => $existingItem) {
             $found = false;

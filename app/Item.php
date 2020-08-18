@@ -88,8 +88,8 @@ class Item extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'raid_id', 'type'])
-            ->orderBy('characters.name');
+            ->withPivot(['id', 'added_by', 'raid_id', 'type', 'order', 'created_at'])
+            ->orderBy('character_items.order');
     }
 
     public function receivedCharacters() {

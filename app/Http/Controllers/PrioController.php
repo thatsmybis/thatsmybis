@@ -5,10 +5,11 @@ namespace App\Http\Controllers;
 use App\{AuditLog, Character, Guild, Instance, Item, Raid};
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PrioController extends Controller
 {
-    const MAX_PRIOS = 20;
+    const MAX_PRIOS = 10;
 
     /**
      * Create a new controller instance.
@@ -101,6 +102,9 @@ class PrioController extends Controller
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
             ->with([
+                'priodCharacters' => function ($query) use ($raid) {
+                    return $query->where('character_items.raid_id', $raid->id);
+                },
                 'receivedAndRecipeCharacters' => function ($query) use($guild) {
                     return $query
                         ->where([
@@ -146,36 +150,171 @@ class PrioController extends Controller
 
         $this->validate(request(), $validationRules);
 
+        $guild->load('characters');
+
         $raid = Raid::where(['guild_id' => $guild->id, 'id' => request()->input('raid_id')])->firstOrFail();
 
         $instance = Instance::findOrFail(request()->input('instance_id'));
 
-        dd(request()->input());
+        // Get items for the specified instance WITH any existing prios
+        $itemsWithExistingPrios = Item::select(['items.*'])
+            ->join('item_item_sources', function ($join) {
+                $join->on('item_item_sources.item_id', 'items.item_id');
+            })
+            ->join('item_sources', function ($join) {
+                $join->on('item_sources.id', 'item_item_sources.item_source_id');
+            })
+            ->where([
+                'item_sources.instance_id' => $instance->id,
+            ])
+            ->with([
+                'priodCharacters' => function ($query) use ($raid) {
+                    return $query->where('character_items.raid_id', $raid->id);
+                },
+            ])
+            ->get();
 
-        // get existing prios for that raid
+        $toAdd    = [];
+        $toUpdate = [];
+        $toDrop   = [];
 
-        // iterate over items
-            // are there input prios for this item?
-            // yes
-                // were there db prios?
-                // yes
-                    // syncPrios()
-                        // copy from charactercontroller
-                        // toAdd, toUpdate, toDrop
-                        // audit log
-                // no
-                    // add the new ones
-                    // audit log that we added them
-            // no
-                // were there db prios?
-                // yes
-                    // remove them
-                    // audit log that we removed them
-                // no
-                    // do nothing
-    }
+        $now = getDateTime();
 
-    private function syncPrios() {
-        // todo
+        $audits = [];
+
+        // We only iterate over items that we were able to fetch from the database for this instance.
+        // The means if a user attempts to add new items to the page, they will be ignored.
+        // We're already making potentially thousands of iterations (items*prios), this helps ensure this limit.
+        foreach ($itemsWithExistingPrios as $existingItem) {
+            $inputItem = request()->input('items')[$existingItem->item_id];
+
+            if ($inputItem) {
+                // Filter out empty inputs
+                $inputPrios = array_filter($inputItem['characters'], function ($value) {return $value['character_id'];});
+
+                $existingPrios = $existingItem->priodCharacters;
+
+                $toUpdateCount = 0;
+                // dd($inputItem, $inputPrios, $existingPrios);
+                /**
+                 * Go over all the prios we already have in the database.
+                 * If any of these are found in the set sent from the input, we're going to update them with new metadata.
+                 * If any of these aren't found in the input, they shouldn't exist anymore so we'll drop them.
+                 */
+                foreach ($existingPrios as $existingPrioKey => $existingPrio) {
+                    $found = false;
+                    $i = 0;
+                    foreach ($inputPrios as $inputPrioKey => $inputPrio) {
+                        $i++;
+                        // We found a match
+                        if (!isset($inputPrios[$inputPrioKey]['resolved']) && $existingPrio->id == $inputPrio['character_id']) {
+                            $found = true;
+                            if ($existingPrio->pivot->order != $i) {
+                                // Update the metadata
+                                $toUpdate[] = [
+                                    'id'         => $existingPrio->pivot->id,
+                                    'order'      => $i,
+                                ];
+                                $toUpdateCount++;
+                            }
+                            // Mark the input item as resolved so that we don't go over it again (we've already resolved what to do with this item)
+                            $inputPrios[$inputPrioKey]['resolved'] = true;
+                            break;
+                        }
+                    }
+
+                    // We didn't find this item in the input, so we should get rid of it
+                    if (!$found) {
+                        // We'll drop them all at once later on, rather than executing individual queries
+                        $toDrop[] = $existingPrio->pivot->id;
+                        // Also remove it from the collection... for good measure I guess.
+                        $existingItems->forget($existingPrioKey);
+
+                        $audits[] = [
+                            'description'  => $currentMember->username . ' removed a prio from a character (#' . $existingPrio->pivot->order . ')',
+                            'member_id'    => $currentMember->id,
+                            'guild_id'     => $currentMember->guild_id,
+                            'character_id' => $existingPrio->id,
+                            'item_id'      => $existingItem->item_id,
+                            'raid_id'      => $raid->id,
+                            'created_at'   => $now,
+                        ];
+                    }
+                }
+
+                /**
+                 * Now we're left with just the prios from the form that didn't already exist in the database.
+                 * We're going to add these to the database.
+                 */
+                $i = 0;
+                foreach ($inputPrios as $inputPrio) {
+                    $i++;
+
+                    if (!isset($inputPrio['resolved'])) {
+                        $toAdd[] = [
+                            'item_id'      => $inputItem['item_id'],
+                            'character_id' => $inputPrio['character_id'],
+                            'added_by'     => $currentMember->id,
+                            'raid_id'      => $raid->id,
+                            'type'         => Item::TYPE_PRIO,
+                            'order'        => $i,
+                            'created_at'   => $now,
+                            'updated_at'   => $now,
+                        ];
+
+                        $audits[] = [
+                            'description'  => $currentMember->username . ' prio\'d an item to a character (#' . $i . ')',
+                            'member_id'    => $currentMember->id,
+                            'guild_id'     => $currentMember->guild_id,
+                            'character_id' => $inputPrio['character_id'],
+                            'item_id'      => $inputItem['item_id'],
+                            'raid_id'      => $raid->id,
+                            'created_at'   => $now,
+                        ];
+                    }
+                }
+
+                if ($toUpdateCount > 0) {
+                    $audits[] = [
+                        'description'  => $currentMember->username . ' altered ' . $toUpdateCount . ' prios for an item',
+                        'member_id'    => $currentMember->id,
+                        'guild_id'     => $currentMember->guild_id,
+                        'item_id'      => $inputItem['item_id'],
+                        'raid_id'      => $raid->id,
+                        'created_at'   => $now,
+                    ];
+                }
+            }
+        }
+
+        // Delete...
+        DB::table('character_items')->whereIn('id', $toDrop)->delete();
+
+        // Update...
+        // I'm sure there's some clever way to perform an UPDATE statement with CASE statements... https://stackoverflow.com/questions/3432/multiple-updates-in-mysql
+        // Don't have time to implement that.
+        foreach ($toUpdate as $item) {
+            DB::table('character_items')
+                ->where('id', $item['id'])
+                ->update([
+                    'order'      => $item['order'],
+                    'updated_at' => $now,
+                ]);
+
+            // If we want to log EVERY prio change (this has a cascading effect and can result in thousands of audits)
+            // $audits[] = [
+            //     'description'  => $currentMember->username . ' updated prio order on a character (prio set to ' . $item['order'] . ')',
+            //     'member_id'    => $currentMember->id,
+            //     'guild_id'     => $currentMember->guild_id,
+            //     'item_id'      => $item['id'],
+            // ];
+        }
+
+        // Insert...
+        DB::table('character_items')->insert($toAdd);
+
+        AuditLog::insert($audits);
+
+        return redirect()->route('guild.prios.massInput', ['guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'raidId' => $raid->id]);
     }
 }
