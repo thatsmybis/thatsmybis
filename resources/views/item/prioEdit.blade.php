@@ -10,7 +10,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium font-blizz">
                         <span class="fas fa-fw fa-sack text-muted"></span>
-                        {{ $raid->name }} Prios for {{ $item->name }}
+                        {{ $raid->name }} Prios
                     </h1>
                 </div>
             </div>
