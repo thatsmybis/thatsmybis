@@ -196,6 +196,8 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $guild->load('raids');
+
         $character = Character::where(['slug' => $nameSlug, 'guild_id' => $guild->id])
             ->with([
                 'member',
@@ -337,7 +339,7 @@ class CharacterController extends Controller
         $updateValues['public_note']  = request()->input('public_note');
         $updateValues['inactive_at']  = (request()->input('inactive_at') == 1 ? getDateTime() : null);
         $updateValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
-        
+
         // User is editing their own character
         if ($character->member_id == $currentMember->id) {
             $updateValues['personal_note'] = request()->input('personal_note');

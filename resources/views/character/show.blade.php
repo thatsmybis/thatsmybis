@@ -30,7 +30,18 @@
                 <div class="col-12 pb-3">
                     @if ($character->prios->count() > 0)
                         <ol class="">
+                            @php
+                                $lastRaidId = null;
+                            @endphp
                             @foreach ($character->prios as $item)
+                                @if ($item->pivot->raid_id != $lastRaidId)
+                                    @php
+                                        $lastRaidId = $item->pivot->raid_id;
+                                    @endphp
+                                    <li class="text-muted no-bullet font-italic small">
+                                        {{ $guild->raids->find($item->pivot->raid_id)->name }}
+                                    </li>
+                                @endif
                                 <li class="" value="{{ $item->pivot->order }}">
                                     @include('partials/item', ['wowheadLink' => false])
                                     <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
