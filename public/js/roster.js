@@ -258,14 +258,23 @@ function getItemList(data, type, characterId, useOrder = false) {
     let items = `<ol class="no-indent js-item-list mb-2" data-type="${ type }" data-id="${ characterId }">`;
     let initialLimit = 4;
 
+    let lastRaidId = null;
     $.each(data, function (index, item) {
         let clipItem = false;
-
         if (index >= initialLimit) {
             clipItem = true;
             if (index == initialLimit) {
                 items += `<li class="js-show-clipped-items small cursor-pointer no-bullet " data-type="${ type }" data-id="${ characterId }">show ${ data.length - initialLimit } more…</li>`;
             }
+        }
+
+        if (type == 'prio' && item.pivot.raid_id && item.pivot.raid_id != lastRaidId) {
+            lastRaidId = item.pivot.raid_id;
+            items += `
+                <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small">
+                    ${ raids.find(val => val.id === item.pivot.raid_id).name }
+                </li>
+            `;
         }
 
         items += `

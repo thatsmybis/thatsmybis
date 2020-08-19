@@ -172,13 +172,13 @@ function getCharacterList(data, type, itemId) {
     let characters = `<ul class="list-inline js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
     let initialLimit = 4;
 
-    let lastRaid = null;
+    let lastRaidId = null;
     $.each(data, function (index, character) {
-        if (type == 'prio' && character.pivot.raid_id && character.pivot.raid_id != lastRaid) {
-            lastRaid = character.pivot.raid_id;
+        if (type == 'prio' && character.pivot.raid_id && character.pivot.raid_id != lastRaidId) {
+            lastRaidId = character.pivot.raid_id;
             characters += `
-                <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted small">
-                    <em>${ raids.find(val => val.id === character.pivot.raid_id).name }</em>
+                <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic  text-muted small">
+                    ${ raids.find(val => val.id === character.pivot.raid_id).name }
                 </li>
             `;
         }
