@@ -31,10 +31,10 @@ class PrioController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // if (!$currentMember->hasPermission('edit.raid-prios')) {
-        //     request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-        //     return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
-        // }
+        if (!$currentMember->hasPermission('edit.prios')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+        }
 
         $guild->load([
             'raids',
@@ -60,11 +60,10 @@ class PrioController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // TODO:
-        // if (!$currentMember->hasPermission('edit.item-prios')) {
-        //     request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-        //     return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
-        // }
+        if (!$currentMember->hasPermission('edit.prios')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+        }
 
         $guild->load([
             'characters',
@@ -133,15 +132,81 @@ class PrioController extends Controller
         ]);
     }
 
+    /**
+     * Show an item's character priorities for a specific raid for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function singleInput($guildSlug, $itemId, $raidId) {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.prios')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $guild->load('characters');
+
+        $raid = Raid::where(['guild_id' => $guild->id, 'id' => $raidId])->firstOrFail();
+
+        $item = Item::select([
+                'items.item_id',
+                'items.name',
+                'item_sources.name AS source_name',
+                'guild_items.note AS guild_note',
+                'guild_items.priority AS guild_priority',
+            ])
+            ->join('item_item_sources', function ($join) {
+                $join->on('item_item_sources.item_id', 'items.item_id');
+            })
+            ->join('item_sources', function ($join) {
+                $join->on('item_sources.id', 'item_item_sources.item_source_id');
+            })
+            ->leftJoin('guild_items', function ($join) use ($guild) {
+                $join->on('guild_items.item_id', 'items.item_id')
+                    ->where('guild_items.guild_id', $guild->id);
+            })
+            ->where('items.item_id', $itemId)
+            ->groupBy('items.item_id')
+            ->with([
+                'priodCharacters' => function ($query) use ($raid) {
+                    return $query->where('character_items.raid_id', $raid->id);
+                },
+                'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                    return $query
+                        ->where([
+                            'characters.guild_id' => $guild->id,
+                        ])
+                        ->groupBy(['character_items.character_id']);
+                },
+                'wishlistCharacters' => function ($query) use($guild) {
+                    return $query
+                        ->where([
+                            'characters.guild_id' => $guild->id,
+                        ])
+                        ->groupBy(['character_items.character_id']);
+                },
+            ])
+            ->firstOrFail();
+
+        return view('item.prioEdit', [
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'item'          => $item,
+            'maxPrios'      => \App\Http\Controllers\PrioController::MAX_PRIOS,
+            'raid'          => $raid,
+        ]);
+    }
+
     public function submitMassInput($guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // TODO:
-        // if (!$currentMember->hasPermission('edit.item-prios')) {
-        //     request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-        //     return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
-        // }
+        if (!$currentMember->hasPermission('edit.prios')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+        }
 
         $validationRules =  [
             'instance_id'           => 'required|exists:instances,id',
@@ -176,6 +241,70 @@ class PrioController extends Controller
             ])
             ->get();
 
+        $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
+
+        // TODO: Flash message
+        return redirect()->route('guild.prios.massInput', ['guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'raidId' => $raid->id]);
+    }
+
+    /**
+     * Submit priorities for an item
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function submitSingleInput($guildSlug) {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.prios')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $validationRules =  [
+            'item_id' => 'nullable|integer|exists:items,item_id',
+            'raid_id' => 'required|exists:raids,id',
+            'items.*.characters.id' => 'nullable|integer|exists:characters,id',
+        ];
+
+        $this->validate(request(), $validationRules);
+
+        $guild->load('characters');
+
+        $raid = Raid::where(['guild_id' => $guild->id, 'id' => request()->input('raid_id')])->firstOrFail();
+
+        $itemsWithExistingPrios = Item::
+            where([
+                'items.item_id' => request()->input('item_id'),
+            ])
+            ->with([
+                'priodCharacters' => function ($query) use ($raid) {
+                    return $query->where('character_items.raid_id', $raid->id);
+                },
+            ])
+            ->get();
+
+        $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
+
+        // TODO: flash message
+        return redirect()->route('guild.item.prios', ['guildSlug' => $guild->slug, 'item_id' => $itemsWithExistingPrios->first()->item_id, 'raidId' => $raid->id]);
+    }
+
+    /**
+     * A custom sync function that allows for duplicate entries. I didn't see a clear way
+     * to allow duplicates using Laravel's provided sync functions for collections. RIP.
+     *
+     * Heavy on the comments because my brain was having a hard time.
+     *
+     * @param Collection     $itemsWithExistingPrios A collection of items with their current prios
+     * @param Array          $inputItems    The items provided from the HTML form input.
+     * @param App\Member     $currentMember The member syncing these items.
+     * @param App\Characters $characters    The characters we're allowed to attach to.
+     * @param App\Raid       $raid          The raid to associate these prios with.
+     */
+    private static function syncPrios($itemsWithExistingPrios, $inputItems, $currentMember, $characters, $raid) {
+        $characters = $characters->keyBy('id');
+
         $toAdd    = [];
         $toUpdate = [];
         $toDrop   = [];
@@ -188,7 +317,7 @@ class PrioController extends Controller
         // The means if a user attempts to add new items to the page, they will be ignored.
         // We're already making potentially thousands of iterations (items*prios), this helps ensure this limit.
         foreach ($itemsWithExistingPrios as $existingItem) {
-            $inputItem = request()->input('items')[$existingItem->item_id];
+            $inputItem = $inputItems[$existingItem->item_id];
 
             if ($inputItem) {
                 // Filter out empty inputs
@@ -207,21 +336,26 @@ class PrioController extends Controller
                     $found = false;
                     $i = 0;
                     foreach ($inputPrios as $inputPrioKey => $inputPrio) {
-                        $i++;
-                        // We found a match
-                        if (!isset($inputPrios[$inputPrioKey]['resolved']) && $existingPrio->id == $inputPrio['character_id']) {
-                            $found = true;
-                            if ($existingPrio->pivot->order != $i) {
-                                // Update the metadata
-                                $toUpdate[] = [
-                                    'id'         => $existingPrio->pivot->id,
-                                    'order'      => $i,
-                                ];
-                                $toUpdateCount++;
+                        if (isset($characters[$inputPrio['character_id']])) {
+                            $i++;
+                            // We found a match
+                            if (!isset($inputPrios[$inputPrioKey]['resolved']) && $existingPrio->id == $inputPrio['character_id']) {
+                                $found = true;
+                                if ($existingPrio->pivot->order != $i) {
+                                    // Update the metadata
+                                    $toUpdate[] = [
+                                        'id'         => $existingPrio->pivot->id,
+                                        'order'      => $i,
+                                    ];
+                                    $toUpdateCount++;
+                                }
+                                // Mark the input item as resolved so that we don't go over it again (we've already resolved what to do with this item)
+                                $inputPrios[$inputPrioKey]['resolved'] = true;
+                                break;
                             }
-                            // Mark the input item as resolved so that we don't go over it again (we've already resolved what to do with this item)
-                            $inputPrios[$inputPrioKey]['resolved'] = true;
-                            break;
+                        } else {
+                            // Member isn't in allowed list of members; get rid of it.
+                            unset($inputPrios[$inputPrioKey]);
                         }
                     }
 
@@ -317,7 +451,5 @@ class PrioController extends Controller
         DB::table('character_items')->insert($toAdd);
 
         AuditLog::insert($audits);
-
-        return redirect()->route('guild.prios.massInput', ['guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'raidId' => $raid->id]);
     }
 }

@@ -273,73 +273,7 @@ class ItemController extends Controller
         ]);
     }
 
-    /**
-     * Show an item's character priorities for a specific raid for editing
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function showPrioEdit($guildSlug, $itemId, $raidId) {
-        $guild         = request()->get('guild');
-        $currentMember = request()->get('currentMember');
 
-        // TODO:
-        // if (!$currentMember->hasPermission('edit.item-prios')) {
-        //     request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-        //     return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
-        // }
-
-        $guild->load('characters');
-
-        $raid = Raid::where(['guild_id' => $guild->id, 'id' => $raidId])->firstOrFail();
-
-        $item = Item::select([
-                'items.item_id',
-                'items.name',
-                'item_sources.name AS source_name',
-                'guild_items.note AS guild_note',
-                'guild_items.priority AS guild_priority',
-            ])
-            ->join('item_item_sources', function ($join) {
-                $join->on('item_item_sources.item_id', 'items.item_id');
-            })
-            ->join('item_sources', function ($join) {
-                $join->on('item_sources.id', 'item_item_sources.item_source_id');
-            })
-            ->leftJoin('guild_items', function ($join) use ($guild) {
-                $join->on('guild_items.item_id', 'items.item_id')
-                    ->where('guild_items.guild_id', $guild->id);
-            })
-            ->where('items.item_id', $itemId)
-            ->groupBy('items.item_id')
-            ->with([
-                'priodCharacters' => function ($query) use ($raid) {
-                    return $query->where('character_items.raid_id', $raid->id);
-                },
-                'receivedAndRecipeCharacters' => function ($query) use($guild) {
-                    return $query
-                        ->where([
-                            'characters.guild_id' => $guild->id,
-                        ])
-                        ->groupBy(['character_items.character_id']);
-                },
-                'wishlistCharacters' => function ($query) use($guild) {
-                    return $query
-                        ->where([
-                            'characters.guild_id' => $guild->id,
-                        ])
-                        ->groupBy(['character_items.character_id']);
-                },
-            ])
-            ->firstOrFail();
-
-        return view('item.prioEdit', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'item'          => $item,
-            'maxPrios'      => \App\Http\Controllers\PrioController::MAX_PRIOS,
-            'raid'          => $raid,
-        ]);
-    }
 
 
     /**
@@ -442,11 +376,11 @@ class ItemController extends Controller
         }
 
         $showPrioEdit = true;
-        // TODO:
-        // if (!$currentMember->hasPermission('edit.item-prios')) {
-        //     request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-        //     return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
-        // }
+
+        if (!$currentMember->hasPermission('edit.prios')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+        }
 
         return view('item.show', [
             'currentMember'               => $currentMember,
@@ -550,28 +484,6 @@ class ItemController extends Controller
             'guildSlug' => $guild->slug,
             'usernameSlug'  => $currentMember->slug
         ]);
-    }
-
-
-
-    /**
-     * Submit priorities for an item
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function submitPrioEdit($guildSlug) {
-        $guild         = request()->get('guild');
-        $currentMember = request()->get('currentMember');
-
-        // TODO:
-        // if (!$currentMember->hasPermission('edit.item-prios')) {
-        //     request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-        //     return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]);
-        // }
-
-        // TODO: Take the functionality for processing a single itme from the mass input page, put it into a function, re-use it here
-
-        dd('TODO');
     }
 
     /**

@@ -107,7 +107,7 @@
                                                 <ul class="list-inline">
                                                     @foreach ($item->wishlistCharacters as $character)
                                                         <li class="list-inline-item">
-                                                            <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                                            <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
                                                                 {{ $character->name }}
                                                             </a>
                                                         </li>
@@ -122,7 +122,7 @@
                                                 <ul class="list-inline">
                                                     @foreach ($item->receivedAndRecipeCharacters as $character)
                                                         <li class="list-inline-item">
-                                                            <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                                            <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
                                                                 {{ $character->name }}
                                                             </a>
                                                         </li>
@@ -155,7 +155,7 @@
                                                     data-raid-id="{{ $character->raid_id }}"
                                                     class="js-character-option text-{{ strtolower($character->class) }}-important"
                                                     {{ old('items.' . $item->item_id . '.character_id') && old('items.' . $item->item_id . '.character_id') == $character->id  ? 'selected' : '' }}>
-                                                    {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }}
+                                                    {{ $character->name }} {{ $character->class ? '(' . $character->class . ')' : '' }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -163,14 +163,14 @@
                                         <ol class="js-sortable-lazy no-indent mt-3 mb-0">
                                             @for ($i = 0; $i < $maxPrios; $i++)
                                                 <li class="input-item {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}"
-                                                    style="{{ old('items.' . $item->item_id . '.characters.' . $i) || $item->priodCharacters->get($i) ? '' : 'display:none;' }}">
+                                                    style="{{ old('items.' . $item->item_id . '.characters.' . $i) && old('items.' . $item->item_id . '.characters.' . $i)['character_id']  || $item->priodCharacters->get($i) ? '' : 'display:none;' }}">
 
                                                     <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][character_id]"
                                                         value="{{ old('items.' . $item->item_id . '.characters.' . $i . '.character_id') ? old('items.' . $item->item_id . '.characters.' . $i . '.character_id') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->id : '') }}" style="display:none;">
                                                     <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][label]"
                                                         value="{{ old('items.' . $item->item_id . '.characters.' . $i . '.label') ? old('items.' . $item->item_id . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}" style="display:none;">
                                                     <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                                    <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('items.' . $item->item_id . '.characters.' . $i . '.label') ? old('items.' . $item->item_id . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}</span>&nbsp;
+                                                    <span class="js-sort-handle js-input-label move-cursor text-unselectable">{!! old('items.' . $item->item_id . '.characters.' . $i . '.label') ? old('items.' . $item->item_id . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name . ' (' . $item->priodCharacters->get($i)->class . ')' : '') !!}</span>&nbsp;
 
                                                 </li>
                                                 @if ($errors->has('items.' . $item->item_id . '.characters.*'))

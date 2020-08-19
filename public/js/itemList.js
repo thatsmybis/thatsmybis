@@ -181,7 +181,7 @@ function getCharacterList(data, type, itemId, inline = true, ul = true) {
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_color) }"></span>${ character.name }
                     ${ character.is_alt ? `
-                        <span class="text-legendary font-weight-bold">Alt</span>
+                        <span class="text-legendary">alt</span>
                     ` : '' }
                     <span class="js-watchable-timestamp smaller text-muted"
                         data-timestamp="${ character.pivot.created_at }"

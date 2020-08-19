@@ -29,7 +29,8 @@
                 {{ csrf_field() }}
 
                 <input hidden name="raid_id" value="{{ $raid->id }}">
-                <input hidden name="item_id" value="{{ $item->id }}">
+                <input hidden name="item_id" value="{{ $item->item_id }}">
+                <input hidden name="items[{{ $item->item_id }}][item_id]" value="{{ $item->item_id }}">
 
                 <div class="row mt-3 mb-3 bg-light rounded">
                     <div class="col-lg-4 col-12">
@@ -69,7 +70,7 @@
                                     <ul class="list-inline">
                                         @foreach ($item->wishlistCharacters as $character)
                                             <li class="list-inline-item">
-                                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
                                                     {{ $character->name }}
                                                 </a>
                                             </li>
@@ -84,7 +85,7 @@
                                     <ul class="list-inline">
                                         @foreach ($item->receivedAndRecipeCharacters as $character)
                                             <li class="list-inline-item">
-                                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
                                                     {{ $character->name }}
                                                 </a>
                                             </li>
@@ -97,7 +98,7 @@
 
                     <div class="col-lg-3 col-12 {{ $errors->has('item.*') ? 'bg-danger rounded font-weight-bold' : '' }}">
                         <div class="form-group mb-2">
-                            <label for="item[characters]" class="font-weight-bold">
+                            <label for="items[{{ $item->item_id }}][characters]" class="font-weight-bold">
                                 <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
                                 Prio'd Characters
                             </label>
@@ -119,20 +120,20 @@
 
                             <ol class="js-sortable-lazy no-indent mt-3 mb-0">
                                 @for ($i = 0; $i < $maxPrios; $i++)
-                                    <li class="input-item {{ $errors->has('item.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}"
-                                        style="{{ old('item.characters.' . $i) || $item->priodCharacters->get($i) ? '' : 'display:none;' }}">
+                                    <li class="input-item {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}"
+                                        style="{{ old('items.' . $item->item_id . '.characters.' . $i) && old('items.' . $item->item_id . '.characters.' . $i)['character_id'] || $item->priodCharacters->get($i) ? '' : 'display:none;' }}">
 
-                                        <input type="checkbox" checked name="item[characters][{{ $i }}][character_id]"
-                                            value="{{ old('item.characters.' . $i . '.character_id') ? old('item.characters.' . $i . '.character_id') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->id : '') }}" style="display:none;">
-                                        <input type="checkbox" checked name="item[characters][{{ $i }}][label]"
-                                            value="{{ old('item.characters.' . $i . '.label') ? old('item.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}" style="display:none;">
+                                        <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][character_id]"
+                                            value="{{ old('items.' . $item->item_id . '.characters.' . $i . '.character_id') ? old('item.' . $item->item_id . '.characters.' . $i . '.character_id') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->id : '') }}" style="display:none;">
+                                        <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][label]"
+                                            value="{{ old('items.' . $item->item_id . '.characters.' . $i . '.label') ? old('items.' . $item->item_id . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}" style="display:none;">
                                         <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                        <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('item.characters.' . $i . '.label') ? old('item.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}</span>&nbsp;
+                                        <span class="js-sort-handle js-input-label move-cursor text-unselectable">{!! old('items.' . $item->item_id . '.characters.' . $i . '.label') ? old('items.' . $item->item_id . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name . ' (' . $item->priodCharacters->get($i)->class . ')' : '') !!}</span>&nbsp;
 
                                     </li>
-                                    @if ($errors->has('item.characters.*'))
+                                    @if ($errors->has('items.' . $item->item_id . '.characters.*'))
                                         <li class="'text-danger font-weight-bold'">
-                                            {{ $errors->first('item.characters.*') }}
+                                            {{ $errors->first('items.' . $item->item_id . '.characters.*') }}
                                         </li>
                                     @endif
                                 @endfor
