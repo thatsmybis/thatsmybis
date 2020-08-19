@@ -315,23 +315,13 @@ class ItemController extends Controller
                 ])
                 ->where('guilds.id', $guild->id);
             },
-            // 'priodCharacters' => function ($query) use ($guild) {
-            //     return $query
-            //         ->where([
-            //             'characters.guild_id' => $guild->id,
-            //         ])
-            //         ->with([
-            //             'prios',
-            //             'received',
-            //             'recipes',
-            //             'wishlist',
-            //         ]);
-            // },
+            'priodCharacters' => function ($query) use ($guild) {
+                return $query
+                    ->where(['characters.guild_id' => $guild->id]);
+            },
             'receivedAndRecipeCharacters' => function ($query) use($guild) {
                 return $query
-                    ->where([
-                        'characters.guild_id' => $guild->id,
-                    ])
+                    ->where(['characters.guild_id' => $guild->id])
                     ->groupBy(['character_items.character_id']);
             },
             'wishlistCharacters' => function ($query) use($guild) {
@@ -376,7 +366,7 @@ class ItemController extends Controller
         }
 
         $showPrioEdit = false;
-        if (!$currentMember->hasPermission('edit.prios')) {
+        if ($currentMember->hasPermission('edit.prios')) {
             $showPrioEdit = true;
         }
 

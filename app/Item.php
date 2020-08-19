@@ -89,6 +89,7 @@ class Item extends Model
             })
             ->withTimeStamps()
             ->withPivot(['id', 'added_by', 'raid_id', 'type', 'order', 'created_at'])
+            ->orderBy('character_items.raid_id')
             ->orderBy('character_items.order');
     }
 

@@ -289,6 +289,9 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
 .dropdown-menu a, .dropdown-menu a:hover {
     color: #fff;
 }
+.dropdown-item {
+    color: #fff;
+}
 .dropdown-item:hover {
     background-color: #201f3c;
 }

@@ -241,10 +241,10 @@ class PrioController extends Controller
             ])
             ->get();
 
-        $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
+        $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
 
-        // TODO: Flash message
-        return redirect()->route('guild.prios.massInput', ['guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'raidId' => $raid->id]);
+        request()->session()->flash('status', 'Successfully updated prios for ' . $modifiedCount . ' items in ' . $raid->name . '.');
+        return redirect()->route('guild.item.list', ['guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]);
     }
 
     /**
@@ -284,10 +284,14 @@ class PrioController extends Controller
             ])
             ->get();
 
-        $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
+        $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
 
-        // TODO: flash message
-        return redirect()->route('guild.item.prios', ['guildSlug' => $guild->slug, 'item_id' => $itemsWithExistingPrios->first()->item_id, 'raidId' => $raid->id]);
+        request()->session()->flash('status', ($modifiedCount ? 'Successfully updated prios for ' : 'No changes made to prios for ') . $itemsWithExistingPrios->first()->name . ' in ' . $raid->name . '.');
+        return redirect()->route('guild.item.show', [
+            'guildSlug' => $guild->slug,
+            'item_id' => $itemsWithExistingPrios->first()->item_id,
+            'slug' => slug($itemsWithExistingPrios->first()->name),
+        ]);
     }
 
     /**
@@ -301,6 +305,8 @@ class PrioController extends Controller
      * @param App\Member     $currentMember The member syncing these items.
      * @param App\Characters $characters    The characters we're allowed to attach to.
      * @param App\Raid       $raid          The raid to associate these prios with.
+     *
+     * @return int The number of items that had their prios modified.
      */
     private static function syncPrios($itemsWithExistingPrios, $inputItems, $currentMember, $characters, $raid) {
         $characters = $characters->keyBy('id');
@@ -309,9 +315,10 @@ class PrioController extends Controller
         $toUpdate = [];
         $toDrop   = [];
 
-        $now = getDateTime();
+        $modifiedCount = 0;
 
         $audits = [];
+        $now = getDateTime();
 
         // We only iterate over items that we were able to fetch from the database for this instance.
         // The means if a user attempts to add new items to the page, they will be ignored.
@@ -326,6 +333,8 @@ class PrioController extends Controller
                 $existingPrios = $existingItem->priodCharacters;
 
                 $toUpdateCount = 0;
+
+                $isModified = false;
 
                 /**
                  * Go over all the prios we already have in the database.
@@ -366,6 +375,7 @@ class PrioController extends Controller
                         // Also remove it from the collection... for good measure I guess.
                         $existingPrios->forget($existingPrioKey);
 
+                        $isModified = true;
                         $audits[] = [
                             'description'  => $currentMember->username . ' removed a prio from a character (' . $existingPrio->pivot->order . ')',
                             'member_id'    => $currentMember->id,
@@ -398,6 +408,7 @@ class PrioController extends Controller
                             'updated_at'   => $now,
                         ];
 
+                        $isModified = true;
                         $audits[] = [
                             'description'  => $currentMember->username . ' prio\'d an item to a character (' . $i . ')',
                             'member_id'    => $currentMember->id,
@@ -411,6 +422,7 @@ class PrioController extends Controller
                 }
 
                 if ($toUpdateCount > 0) {
+                    $isModified = true;
                     $audits[] = [
                         'description'  => $currentMember->username . ' altered ' . $toUpdateCount . ' prios for an item',
                         'member_id'    => $currentMember->id,
@@ -420,6 +432,10 @@ class PrioController extends Controller
                         'raid_id'      => $raid->id,
                         'created_at'   => $now,
                     ];
+                }
+
+                if ($isModified) {
+                    $modifiedCount++;
                 }
             }
         }
@@ -451,5 +467,7 @@ class PrioController extends Controller
         DB::table('character_items')->insert($toAdd);
 
         AuditLog::insert($audits);
+
+        return $modifiedCount;
     }
 }

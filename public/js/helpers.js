@@ -104,7 +104,7 @@ function getColorFromDec(color) {
             color = '0' + color;
         }
     } else {
-        color = 'FFF';
+        color = 'FFFFFF00';
     }
     return '#' + color;
 }
@@ -149,18 +149,18 @@ function trackTimestamps(rate = 15000) {
             .locale('en', {
                 relativeTime: {
                     past: '%s ago',
-                    s:  'seconds',
+                    s:  'just now',
                     ss: '%ss',
-                    m:  '~1m',
+                    m:  '%dm',
                     mm: '%dm',
-                    h:  '~1h',
+                    h:  '%dh',
                     hh: '%dh',
-                    d:  '~1d',
+                    d:  '%dd',
                     dd: '%dd',
-                    M:  '~1mo',
-                    MM: '%dM',
-                    y:  '~1y',
-                    yy: '%dY'
+                    M:  '%dmo',
+                    MM: '%dmo',
+                    y:  '%dy',
+                    yy: '%dy'
                 }
             });
         }

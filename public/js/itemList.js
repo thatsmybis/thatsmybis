@@ -174,7 +174,6 @@ function getCharacterList(data, type, itemId, inline = true, ul = true) {
 
     $.each(data, function (index, character) {
         characters += `
-
             <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }" class="js-item-wishlist-character ${ inline ? 'list-inline-item' : '' } font-weight-normal mb-1">
                 <a href="/${ guild.slug }/c/${ character.slug }"
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
