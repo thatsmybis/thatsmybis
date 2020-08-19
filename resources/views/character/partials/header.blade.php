@@ -1,12 +1,12 @@
 <ul class="no-bullet no-indent">
     @if (isset($character->pivot->created_at))
-    <li>
-        <ul class="list-inline">
-            <li class="list-inline-item text-muted small">
-                  Recieved: <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->created_at }}"></span> ago
-            </li>
-        </ul>
-    </li>
+        <li>
+            <ul class="list-inline">
+                <li class="list-inline-item text-muted small">
+                    Recieved: <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->created_at }}"></span> ago
+                </li>
+            </ul>
+        </li>
     @endif
     <li>
         <ul class="list-inline">
@@ -42,11 +42,11 @@
         <li>
             <ul class="list-inline">
                 @if ($character->is_alt)
-                <li class="list-inline-item font-weight-bold">
-                    <span class="tag d-inline" style="color: orange;">
-                        Alt
-                    </span>
-                </li>
+                    <li class="list-inline-item font-weight-bold">
+                        <span class="tag d-inline" style="color: orange;">
+                            Alt
+                        </span>
+                    </li>
                 @endif
                 {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
                 @if ($character->relationLoaded('raid') && $character->raid)
