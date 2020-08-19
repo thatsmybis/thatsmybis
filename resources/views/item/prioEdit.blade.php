@@ -160,40 +160,7 @@
 @endsection
 
 @section('scripts')
-<script>
-    /**
-     * Move the selected value to the list under the select.
-     * Change the selected value back to the default value.
-     **/
-    $(".js-input-select").change(function () {
-        $(this).find(":selected").val();
-        $(this).find(":selected").html().trim();
-
-        value = $(this).find(":selected").val();
-        label = $(this).find(":selected").html().trim();
-        $nextInput = $(this).parent().next("ol").children("li").children("input[value='']").first();
-
-        if ($nextInput.val() == "") {
-        // Add the item.
-            $nextInput.parent("li").show();
-            // Populate the ID
-            $nextInput.val(value);
-            $nextInput.siblings(".js-input-label").html(" " + label);
-            // Populate the label
-            $label = $nextInput.next("input").first();
-            $label.val(label);
-
-            // Reset the select
-            $(this).val("");
-            $(this).find("option:first").text("—");
-        } else {
-        // Can't add any more.
-            $(this).val("");
-            // If a select input triggered this
-            $(this).find("option:first").text("maximum added");
-        }
-    });
-</script>
+<script src="{{ env('APP_ENV') == 'local' ? asset('/js/autocomplete.js') : mix('js/processed/autocomplete.js') }}"></script>
 @endsection
 
 @section('wowheadIconSize', 'medium')

@@ -177,8 +177,8 @@ function getCharacterList(data, type, itemId) {
         if (type == 'prio' && character.pivot.raid_id && character.pivot.raid_id != lastRaid) {
             lastRaid = character.pivot.raid_id;
             characters += `
-                <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted">
-                    ${ raids.find(val => val.id === character.pivot.raid_id).name }
+                <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted small">
+                    <em>${ raids.find(val => val.id === character.pivot.raid_id).name }</em>
                 </li>
             `;
         }
