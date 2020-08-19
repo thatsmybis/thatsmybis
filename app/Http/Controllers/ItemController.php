@@ -273,9 +273,6 @@ class ItemController extends Controller
         ]);
     }
 
-
-
-
     /**
      * Show an item
      *

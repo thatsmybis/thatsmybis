@@ -205,7 +205,7 @@
             @else
                 <ul>
                     <li class="lead no-bullet">
-                        <em>Nobody has this item to their wishlist yet</em>
+                        <em>Nobody has this item in their wishlist yet</em>
                     </li>
                 </ul>
             @endif

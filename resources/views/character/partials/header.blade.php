@@ -3,7 +3,7 @@
         <li>
             <ul class="list-inline">
                 <li class="list-inline-item text-muted small">
-                      Received <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->created_at }}"></span> ago
+                    Received <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->created_at }}"></span> ago
                 </li>
             </ul>
         </li>
