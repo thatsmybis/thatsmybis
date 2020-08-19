@@ -55,15 +55,17 @@ function createTable() {
                     return `
                     <ul class="no-bullet no-indent mb-2">
                         <li>
-                            <a href="/${ guild.slug }/c/${ row.name }"
+                            <a href="/${ guild.slug }/c/${ row.slug }"
                                 class="text-4 text-${ row.class ? row.class.toLowerCase() : ''} font-weight-bold"
                                 title="${ row.member ? row.member.username : '' }">
                                 ${ row.name }
                             </a>
                         </li>
-
-                        ${ row.raid_name || row.class ? `
+                        ${ row.is_alt || row.raid_name || row.class ? `
                             <li>
+                                ${ row.is_alt ? `
+                                    <span class="text-legendary font-weight-bold">Alt</span>&nbsp;
+                                ` : '' }
                                 ${ row.raid_name ? `
                                     <span class="font-weight-bold">
                                         <span class="role-circle" style="background-color:${ row.raid_color ? getColorFromDec(parseInt(row.raid_color)) : '' }"></span>

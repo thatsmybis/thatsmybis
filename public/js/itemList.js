@@ -174,11 +174,15 @@ function getCharacterList(data, type, itemId, inline = true, ul = true) {
 
     $.each(data, function (index, character) {
         characters += `
+
             <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }" class="js-item-wishlist-character ${ inline ? 'list-inline-item' : '' } font-weight-normal mb-1">
-                <a href="/${ guild.slug }/c/${ character.name }"
+                <a href="/${ guild.slug }/c/${ character.slug }"
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_color) }"></span>${ character.name }
+                    ${ character.is_alt ? `
+                        <span class="text-legendary font-weight-bold">Alt</span>
+                    ` : '' }
                     <span class="js-watchable-timestamp smaller text-muted"
                         data-timestamp="${ character.pivot.created_at }"
                         data-is-short="1">

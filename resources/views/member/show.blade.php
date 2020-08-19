@@ -55,7 +55,7 @@
                                     @include('partials/item', ['wowheadLink' => false])
                                     <small class="text-muted">
                                         on
-                                        <a href="{{route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}"
+                                        <a href="{{route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $itemCharacter->slug]) }}"
                                             class="text-{{ $itemCharacter->class ? strtolower($itemCharacter->class) : '' }}">
                                             {{ $itemCharacter->name }}
                                         </a>

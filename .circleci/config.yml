@@ -1,0 +1,70 @@
+# PHP CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-php/ for more details
+#
+version: 2
+jobs:
+  build:
+    docker:
+      # Specify the version you desire here
+      - image: circleci/php:7.4-node-browsers
+
+      # Specify service dependencies here if necessary
+      # CircleCI maintains a library of pre-built images
+      # documented at https://circleci.com/docs/2.0/circleci-images/
+      # Using the RAM variation mitigates I/O contention
+      # for database intensive operations.
+      - image: docker.io/bitnami/mariadb:10.1-debian-10
+        name: mariadb
+        environment:
+        - ALLOW_EMPTY_PASSWORD=yes
+        - MARIADB_USER=my_user
+        - MARIADB_DATABASE=thatsmybis_1
+        - MARIADB_PASSWORD=my_password
+      #
+      # - image: redis:2.8.19
+
+    steps:
+      - checkout
+      - run: sudo apt update
+      - run: sudo docker-php-ext-install zip
+      - run: sudo docker-php-ext-install pdo_mysql
+      
+      
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            # "composer.lock" can be used if it is committed to the repo
+            - v1-dependencies-{{ checksum "composer.json" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      - run: composer install -n --prefer-dist
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "composer.json" }}
+          paths:
+            - ./vendor
+      - restore_cache:
+          keys:
+            - node-v1-{{ checksum "package.json" }}
+            - node-v1-
+      - run: yarn install
+      - save_cache:
+          key: node-v1-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+
+      # prepare the database
+      - run:
+          name: "Create Environment file and generate app key"
+          command: |
+            mv .env.circleci .env
+            php artisan key:generate
+            
+      # prepare the database
+      - run: php artisan migrate --force
+
+      - run: npm run production
+

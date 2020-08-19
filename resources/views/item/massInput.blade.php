@@ -108,7 +108,7 @@
                                                     data-raid-id="{{ $character->raid_id }}"
                                                     class="js-character-option text-{{ strtolower($character->class) }}-important"
                                                     {{ old('items.' . $loop->iteration . '.character_id') && old('items.' . $loop->iteration . '.character_id') == $character->id  ? 'selected' : '' }}>
-                                                    {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }}
+                                                    {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? "Alt" : '' }}
                                                 </option>
                                             @endforeach
                                         </select>

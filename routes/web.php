@@ -66,12 +66,12 @@ Route::group([
     Route::group(['prefix' => 'c'], function () {
         Route::get( '/create',      'CharacterController@showCreate')->name('character.showCreate');
         Route::post('/create',      'CharacterController@create')    ->name('character.create');
-        Route::get( '/{name}/edit', 'CharacterController@edit')      ->name('character.edit');
-        Route::get( '/{name}/loot', 'CharacterController@loot')      ->name('character.loot');
+        Route::get( '/{nameSlug}/edit', 'CharacterController@edit')      ->name('character.edit');
+        Route::get( '/{nameSlug}/loot', 'CharacterController@loot')      ->name('character.loot');
         Route::post('/update',      'CharacterController@update')    ->name('character.update');
         Route::post('/loot/update', 'CharacterController@updateLoot')->name('character.updateLoot');
         Route::post('/note/update', 'CharacterController@updateNote')->name('character.updateNote');
-        Route::get( '/{name}',      'CharacterController@show')      ->name('character.show');
+        Route::get( '/{nameSlug}',      'CharacterController@show')      ->name('character.show');
     });
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')->name('guild.item.list');
@@ -86,10 +86,10 @@ Route::group([
     });
 
     Route::group(['prefix' => 'u'], function () {
-        Route::get( '/{username}/edit', 'MemberController@edit')      ->name('member.edit');
+        Route::get( '/{usernameSlug}/edit', 'MemberController@edit')      ->name('member.edit');
         Route::post('/update',          'MemberController@update')    ->name('member.update');
         Route::post('/note/update',     'MemberController@updateNote')->name('member.updateNote');
-        Route::get( '/{username}',      'MemberController@show')      ->name('member.show');
+        Route::get( '/{usernameSlug}',      'MemberController@show')      ->name('member.show');
     });
 
     Route::get( '/resources',        'ContentController@index')->name('contentIndex');

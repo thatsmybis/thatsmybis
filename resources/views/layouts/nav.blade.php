@@ -20,7 +20,7 @@
 
                 @if (isset($currentMember) && $currentMember)
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['member.edit', 'member.show']) && $currentMember->id == (isset($member) ? $member->id : null) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('member.show', ['guildSlug' => $guild->slug, 'username' => $currentMember->username]) }}">
+                        <a class="nav-link" href="{{ route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]) }}">
                             Profile
                         </a>
                     </li>
@@ -193,9 +193,9 @@
         </ul>
         <ul class="navbar-nav">
             <li class="nav-item mr-3">
-                <a href="{{ env('LINK_PATREON') }}" target="_blank" class="nav-link active font-weight-bold">
-                    <span class="fas fa-fw fa-heart"></span>
-                    Donate
+                <a href="{{ env('LINK_GITHUB') }}" target="_blank" class="nav-link active font-weight-bold">
+                    <span class="fab fa-github"></span>
+                    Contribute
                 </a>
             </li>
         </ul>

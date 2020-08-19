@@ -1,12 +1,12 @@
 <ul class="no-bullet no-indent">
     @if (isset($character->pivot->created_at))
-    <li>
-        <ul class="list-inline">
-            <li class="list-inline-item text-muted small">
-                  Received <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->created_at }}"></span> ago
-            </li>
-        </ul>
-    </li>
+        <li>
+            <ul class="list-inline">
+                <li class="list-inline-item text-muted small">
+                      Received <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->created_at }}"></span> ago
+                </li>
+            </ul>
+        </li>
     @endif
     <li>
         <ul class="list-inline">
@@ -17,12 +17,12 @@
             @endif
             <li class="list-inline-item">
                 <h{{ isset($headerSize) && $headerSize ? $headerSize : '2' }} class="font-weight-bold">
-                    {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{route('character.show', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}" class="text-{{ $character->class ? strtolower($character->class) : '' }}">{{ $character->name }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
+                    {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}" class="text-{{ $character->class ? strtolower($character->class) : '' }}">{{ $character->name }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
                 </h{{ isset($headerSize) && $headerSize ? $headerSize : '2' }}>
             </li>
             @if (isset($showEdit) && $showEdit)
                 <li class="list-inline-item">
-                    <a href="{{ route('character.edit', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">
+                    <a href="{{ route('character.edit', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}">
                         <span class="fas fa-fw fa-pencil"></span>
                         edit
                     </a>
@@ -30,7 +30,7 @@
             @endif
             @if (isset($showEditLoot) && $showEditLoot)
                 <li class="list-inline-item">
-                    <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'name' => $character->name]) }}">
+                    <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}">
                         <span class="fas fa-fw fa-sack"></span>
                         loot
                     </a>
@@ -38,9 +38,16 @@
             @endif
         </ul>
     </li>
-    @if ($character->raid_id || $character->class)
+    @if ($character->raid_id || $character->class || $character->is_alt)
         <li>
             <ul class="list-inline">
+                @if ($character->is_alt)
+                    <li class="list-inline-item font-weight-bold">
+                        <span class="tag d-inline" style="color: orange;">
+                            Alt
+                        </span>
+                    </li>
+                @endif
                 {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
                 @if ($character->relationLoaded('raid') && $character->raid)
                     @php
@@ -80,7 +87,7 @@
             </li>
         @endif
 
-        @if ($character->rank || $character->profession_1 || $character->profession_2)
+        @if ($character->rank || $character->profession_1 || $character->profession_2 || $character->is_alt)
             <li>
                 <small>
                     {{ $character->rank         ? 'Rank ' . $character->rank . ($character->profession_1 || $character->profession_2 ? ',' : '') : '' }}
@@ -97,7 +104,7 @@
                 @if ($character->member_id)
                     {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
                     @if ($character->relationLoaded('member'))
-                        <a href="{{route('member.show', ['guildSlug' => $guild->slug, 'username' => $character->member->username]) }}" class="">
+                        <a href="{{route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $character->member->slug]) }}" class="">
                             {{ $character->member->username }}'s character
                         </a>
                     @endif
