@@ -128,7 +128,7 @@ class Item extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'raid_id', 'type'])
+            ->withPivot(['added_by', 'raid_id', 'type', 'order'])
             ->orderBy('characters.name');
     }
 
@@ -147,7 +147,7 @@ class Item extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'raid_id', 'type'])
+            ->withPivot(['added_by', 'raid_id', 'type', 'order'])
             ->orderBy('characters.name');
     }
 }

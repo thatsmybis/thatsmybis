@@ -165,7 +165,6 @@
      * Move the selected value to the list under the select.
      * Change the selected value back to the default value.
      **/
-     that = null;
     $(".js-input-select").change(function () {
         $(this).find(":selected").val();
         $(this).find(":selected").html().trim();

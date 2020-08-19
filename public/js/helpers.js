@@ -184,7 +184,6 @@ function trackTimestamps(rate = 15000) {
             since = moment
                 .utc(timestamp)
                 .fromNow(true);
-                console.log(since);
         }
 
         if ($(this).is("abbr")) {

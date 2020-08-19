@@ -111,11 +111,11 @@ function createTable(lastSource) {
                 "title"  : '<span class="fas fa-fw fa-sort-amount-down text-gold"></span> Prio\'s',
                 "data"   : "priod_characters",
                 "render" : function (data, type, row) {
-                    return data.length ? getCharacterList(data, 'prio', row.item_id, false, false) : '—';
+                    return data.length ? getCharacterList(data, 'prio', row.item_id) : '—';
                 },
                 "orderable" : false,
                 "visible" : true,
-                "width"   : "150px",
+                "width"   : "300px",
             },
             {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
@@ -168,16 +168,28 @@ function createTable(lastSource) {
 }
 
 // Gets an HTML list of characters
-function getCharacterList(data, type, itemId, inline = true, ul = true) {
-    let characters = `<${ ul ? 'ul' : 'ol' } class="${ inline ? 'list-inline' : 'lesser-indent' } js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
+function getCharacterList(data, type, itemId) {
+    let characters = `<ul class="list-inline js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
     let initialLimit = 4;
 
+    let lastRaid = null;
     $.each(data, function (index, character) {
+        if (type == 'prio' && character.pivot.raid_id && character.pivot.raid_id != lastRaid) {
+            lastRaid = character.pivot.raid_id;
+            characters += `
+                <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted">
+                    ${ raids.find(val => val.id === character.pivot.raid_id).name }
+                </li>
+            `;
+        }
         characters += `
-            <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }" class="js-item-wishlist-character ${ inline ? 'list-inline-item' : '' } font-weight-normal mb-1">
+            <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }"
+                value="${ type == 'prio' ? character.pivot.order : '' }"
+                class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0">
                 <a href="/${ guild.slug }/c/${ character.slug }"
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
+                    <span class="text-muted">${ character.pivot.order ? character.pivot.order : '' }</span>
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_color) }"></span>${ character.name }
                     ${ character.is_alt ? `
                         <span class="text-legendary">alt</span>
@@ -190,6 +202,6 @@ function getCharacterList(data, type, itemId, inline = true, ul = true) {
             </li>`;
     });
 
-    characters += `</${ ul ? 'ul' : 'ol' }>`;
+    characters += `</ul>`;
     return characters;
 }

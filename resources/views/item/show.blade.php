@@ -236,11 +236,10 @@
 
 @section('scripts')
 <script>
-    var characters = {!! $showOfficerNote ? $wishlistCharacters->makeVisible('officer_note')->toJson() : $wishlistCharacters->toJson() !!};
-    // var priodCharacters    = {!! $showOfficerNote ? $priodCharacters->makeVisible('officer_note')->toJson() : $priodCharacters->toJson() !!};
-    var guild              = {!! $guild->toJson() !!};
-    var raids              = {!! $raids->toJson() !!};
-    var showOfficerNote    = {{ $showOfficerNote ? 'true' : 'false' }};;
+    var characters      = {!! $showOfficerNote ? $wishlistCharacters->makeVisible('officer_note')->toJson() : $wishlistCharacters->toJson() !!};
+    var guild           = {!! $guild->toJson() !!};
+    var raids           = {!! $raids->toJson() !!};
+    var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};;
 </script>
 <script src="{{ env('APP_ENV') == 'local' ? asset('/js/roster.js') : mix('js/processed/roster.js') }}"></script>
 @endsection
