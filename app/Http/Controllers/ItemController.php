@@ -375,11 +375,9 @@ class ItemController extends Controller
             $showNoteEdit = true;
         }
 
-        $showPrioEdit = true;
-
+        $showPrioEdit = false;
         if (!$currentMember->hasPermission('edit.prios')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            $showPrioEdit = true;
         }
 
         return view('item.show', [
