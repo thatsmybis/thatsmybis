@@ -62,11 +62,9 @@ function createTable() {
                         </li>
                         ${ row.is_alt || row.raid_name || row.class ? `
                             <li>
-                                ${row.is_alt ? `
-                                <span class="font-weight-bold">
-                                    <span class="role-circle" style="color:orange">Alt</span>
-                                </span>
-                                ` : ''}
+                                ${ row.is_alt ? `
+                                    <span class="text-legendary font-weight-bold">Alt</span>&nbsp;
+                                ` : '' }
                                 <span class="font-weight-bold">
                                     <span class="role-circle" style="background-color:${ row.raid_color ? getColorFromDec(parseInt(row.raid_color)) : '' }"></span>
                                     ${ row.raid_name ? row.raid_name : '' }
