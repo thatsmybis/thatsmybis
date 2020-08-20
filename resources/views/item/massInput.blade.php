@@ -14,6 +14,8 @@
                     </h1>
                     <small>
                         <strong>Hint:</strong> Keep the roster and/or item pages open in another window to review who deserves what
+                        <br>
+                        <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their wishlist/prios
                     </small>
                 </div>
 

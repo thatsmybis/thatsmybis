@@ -106,10 +106,10 @@
                             <li class="list-inline-item">
                                 @if ($showPrioEdit)
                                     <div class="dropdown">
-                                        <a class="dropdown-toggle" href="#" role="button" id="editPrioLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="dropdown-toggle text-link" role="button" id="editPrioLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                             <span class="fas fa-fw fa-pencil"></span>
                                             edit
-                                        </a>
+                                        </span>
                                         <div class="dropdown-menu" aria-labelledby="editPrioLink">
                                             @foreach ($raids as $raid)
                                                 <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'raidId' => $raid->id]) }}">

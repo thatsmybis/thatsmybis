@@ -12,6 +12,9 @@
                         <span class="fas fa-fw fa-sack text-muted"></span>
                         {{ $raid->name }} Prios
                     </h1>
+                    <small>
+                        <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their prios
+                    </small>
                 </div>
             </div>
 
@@ -101,6 +104,7 @@
                             <label for="items[{{ $item->item_id }}][characters]" class="font-weight-bold">
                                 <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
                                 Prio'd Characters
+                                <span class="text-muted font-weight-normal small">max {{ $maxPrios }}</span>
                             </label>
 
                             <select name="" class="js-input-select form-control dark selectpicker" data-live-search="true" autocomplete="off">

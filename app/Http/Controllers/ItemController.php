@@ -430,7 +430,6 @@ class ItemController extends Controller
                     $detachRows[] = [
                         'item_id'      => $item['id'],
                         'character_id' => $item['character_id'],
-                        'type'         => Item::TYPE_WISHLIST,
                     ];
                     $addedCount++;
 
@@ -454,13 +453,40 @@ class ItemController extends Controller
 
         AuditLog::insert($audits);
 
-        // For each item added, attempt to delete a matching item from the character's wishlist
+        // For each item added, attempt to delete a matching item from the character's wishlist and their prios
         foreach ($detachRows as $detachRow) {
+            // Remove from wishlist
             DB::table('character_items')->where([
                 'item_id'      => $detachRow['item_id'],
                 'character_id' => $detachRow['character_id'],
-                'type'         => $detachRow['type'],
-            ])->limit(1)->delete();
+                'type'         => Item::TYPE_WISHLIST,
+            ])->limit(1)->orderBy('order')->delete();
+
+            // Find prio for this item
+            $row = DB::table('character_items')->where([
+                'item_id'      => $detachRow['item_id'],
+                'character_id' => $detachRow['character_id'],
+                'type'         => Item::TYPE_PRIO,
+            ])->orderBy('order')->first();
+
+            // Does a prio exist
+            if ($row) {
+                // Delete the first one we find
+                DB::table('character_items')->where([
+                    'item_id'      => $detachRow['item_id'],
+                    'character_id' => $detachRow['character_id'],
+                    'type'         => Item::TYPE_PRIO,
+                ])->orderBy('order')->limit(1)->delete();
+
+                // Now correct the ordder on the remaning prios for that item in that raid
+                DB::table('character_items')->where([
+                        'item_id' => $row->item_id,
+                        'raid_id' => $row->raid_id,
+                        'type'    => Item::TYPE_PRIO,
+                    ])
+                    ->where('order', '>', $row->order)
+                    ->update(['order' => DB::raw('`order` - 1')]);
+            }
         }
 
         request()->session()->flash('status', 'Successfully added ' . $addedCount . ' items. ' . $failedCount . ' failures' . ($warnings ? ': ' . rtrim($warnings, ', ') : '.'));

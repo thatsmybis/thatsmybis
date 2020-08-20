@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 
 class PrioController extends Controller
 {
-    const MAX_PRIOS = 10;
+    const MAX_PRIOS = 15;
 
     /**
      * Create a new controller instance.

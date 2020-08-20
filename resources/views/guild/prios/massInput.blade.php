@@ -12,6 +12,9 @@
                         <span class="fas fa-fw fa-dungeon text-muted"></span>
                         {{ $raid->name }} Prios for {{ $instance->name }}
                     </h1>
+                    <small>
+                        <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their prios
+                    </small>
                 </div>
             </div>
 
@@ -139,8 +142,9 @@
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
                                                 Prio'd Characters
+                                                <span class="text-muted font-weight-normal small">max {{ $maxPrios }}</span>
                                             @else
-                                                <span class="sr-only">Priority Characters</span>
+                                                <span class="sr-only">Priority Characters (max {{ $maxPrios }})</span>
                                             @endif
                                         </label>
 
