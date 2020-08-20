@@ -469,7 +469,6 @@ class ItemController extends Controller
                 'type'         => Item::TYPE_PRIO,
             ])->orderBy('order')->first();
 
-            // Does a prio exist
             if ($row) {
                 // Delete the first one we find
                 DB::table('character_items')->where([
@@ -478,7 +477,7 @@ class ItemController extends Controller
                     'type'         => Item::TYPE_PRIO,
                 ])->orderBy('order')->limit(1)->delete();
 
-                // Now correct the ordder on the remaning prios for that item in that raid
+                // Now correct the order on the remaning prios for that item in that raid
                 DB::table('character_items')->where([
                         'item_id' => $row->item_id,
                         'raid_id' => $row->raid_id,
