@@ -4,6 +4,10 @@ $(document).ready(function () {
     addItemRemoveHandler();
     addTagInputHandlers();
     $(".js-sortable").sortable({handle: ".js-sort-handle"});
+    // sortable() is slow to initialize when applied to hundreds of elements, so this solves for that scenario
+    $(".js-sortable-lazy").one("mouseenter", function() {
+        $(this).sortable({handle: ".js-sort-handle"});
+    });
 });
 
 // Adds autocomplete for items!
@@ -78,6 +82,39 @@ function addItemListSelectHandler() {
             // Useful if submission fails on the server side and the server wants to send the label back
             $nextInput.siblings("input[value='']").first().val(label);
             $nextInput.siblings(".js-input-label").html(" " + label);
+            $(this).val("");
+            $(this).find("option:first").text("—");
+        } else {
+        // Can't add any more.
+            $(this).val("");
+            // If a select input triggered this
+            $(this).find("option:first").text("maximum added");
+        }
+    });
+
+    /**
+     * Move the selected value to the list under the select.
+     * Change the selected value back to the default value.
+     **/
+    $(".js-input-select").change(function () {
+        $(this).find(":selected").val();
+        $(this).find(":selected").html().trim();
+
+        value = $(this).find(":selected").val();
+        label = $(this).find(":selected").html().trim();
+        $nextInput = $(this).parent().next("ol").children("li").children("input[value='']").first();
+
+        if ($nextInput.val() == "") {
+        // Add the item.
+            $nextInput.parent("li").show();
+            // Populate the ID
+            $nextInput.val(value);
+            $nextInput.siblings(".js-input-label").html(" " + label);
+            // Populate the label
+            $label = $nextInput.next("input").first();
+            $label.val(label);
+
+            // Reset the select
             $(this).val("");
             $(this).find("option:first").text("—");
         } else {

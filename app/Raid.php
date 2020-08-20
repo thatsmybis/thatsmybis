@@ -31,6 +31,25 @@ class Raid extends Model
     protected $hidden = [
     ];
 
+    public function priodCharacters() {
+        return $this->belongsToMany(Character::class, 'character_items', 'raid_id', 'character_id')
+            ->where(['character_items.type' => self::TYPE_PRIO])
+            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
+            ->whereNull('characters.inactive_at')
+            ->leftJoin('raids', function ($join) {
+                $join->on('raids.id', 'character_items.raid_id');
+            })
+            ->leftJoin('roles AS raid_roles', function ($join) {
+                $join->on('raid_roles.id', 'raids.role_id');
+            })
+            ->leftJoin('members AS added_by_members', function ($join) {
+                $join->on('added_by_members.id', 'character_items.added_by');
+            })
+            ->withTimeStamps()
+            ->withPivot(['added_by', 'raid_id', 'type'])
+            ->orderBy('characters.name');
+    }
+
     public function role() {
         return $this->belongsTo(Role::class);
     }

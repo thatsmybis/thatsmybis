@@ -22,6 +22,44 @@
                 @endif
 
                 <div class="col-12 mb-2">
+                    <span class="text-gold font-weight-bold">
+                        <span class="fas fa-fw fa-sort-amount-down"></span>
+                        Prio's
+                    </span>
+                </div>
+                <div class="col-12 pb-3">
+                    @if ($character->prios->count() > 0)
+                        <ol class="">
+                            @php
+                                $lastRaidId = null;
+                            @endphp
+                            @foreach ($character->prios as $item)
+                                @if ($item->pivot->raid_id != $lastRaidId)
+                                    @php
+                                        $lastRaidId = $item->pivot->raid_id;
+                                    @endphp
+                                    <li class="text-muted no-bullet font-italic small">
+                                        {{ $guild->raids->find($item->pivot->raid_id)->name }}
+                                    </li>
+                                @endif
+                                <li class="" value="{{ $item->pivot->order }}">
+                                    @include('partials/item', ['wowheadLink' => false])
+                                    <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+                                        data-timestamp="{{ $item->pivot->created_at }}"
+                                        data-title="added by {{ $item->added_by_username }} at"
+                                        data-is-short="1">
+                                    </span>
+                                </li>
+                            @endforeach
+                        </ol>
+                    @else
+                        <div class="pl-4">
+                            —
+                        </div>
+                    @endif
+                </div>
+
+                <div class="col-12 mb-2">
                     <span class="text-legendary font-weight-bold">
                         <span class="fas fa-fw fa-scroll-old"></span>
                         Wishlist

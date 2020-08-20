@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Guild, Instance, Item};
+use App\{AuditLog, Guild, Instance, Item, Raid};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -74,7 +74,11 @@ class ItemController extends Controller
             ->where('item_sources.instance_id', $instance->id)
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
-            ->with(['wishlistCharacters' => function ($query) use($guild, $characterFields) {
+            ->with([
+                'priodCharacters' => function ($query) use ($guild) {
+                    return $query->where('characters.guild_id', $guild->id);
+                },
+                'wishlistCharacters' => function ($query) use($guild, $characterFields) {
                 return $query->select($characterFields)
                     ->leftJoin('members', function ($join) {
                         $join->on('members.id', 'characters.member_id');
@@ -140,10 +144,10 @@ class ItemController extends Controller
             ->get();
 
         return view('item.listEdit', [
-            'currentMember'   => $currentMember,
-            'guild'           => $guild,
-            'instance'        => $instance,
-            'items'           => $items,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'instance'      => $instance,
+            'items'         => $items,
         ]);
     }
 
@@ -308,17 +312,14 @@ class ItemController extends Controller
                 ])
                 ->where('guilds.id', $guild->id);
             },
+            'priodCharacters' => function ($query) use ($guild) {
+                return $query
+                    ->where(['characters.guild_id' => $guild->id]);
+            },
             'receivedAndRecipeCharacters' => function ($query) use($guild) {
                 return $query
-                    ->where([
-                        'characters.guild_id' => $guild->id,
-                    ])
-                    ->groupBy(['character_items.character_id'])
-                    ->with([
-                        'received',
-                        'recipes',
-                        'wishlist',
-                    ]);
+                    ->where(['characters.guild_id' => $guild->id])
+                    ->groupBy(['character_items.character_id']);
             },
             'wishlistCharacters' => function ($query) use($guild) {
                 return $query
@@ -327,13 +328,14 @@ class ItemController extends Controller
                     ])
                     ->groupBy(['character_items.character_id'])
                     ->with([
+                        'prios',
                         'received',
                         'recipes',
                         'wishlist',
                     ]);
             },
         ])->firstOrFail();
-        
+
         $itemSlug = slug($item->name);
 
         if ($slug && $slug != $itemSlug) {
@@ -360,15 +362,22 @@ class ItemController extends Controller
             $showNoteEdit = true;
         }
 
+        $showPrioEdit = false;
+        if ($currentMember->hasPermission('edit.prios')) {
+            $showPrioEdit = true;
+        }
+
         return view('item.show', [
             'currentMember'               => $currentMember,
             'guild'                       => $guild,
             'item'                        => $item,
             'notes'                       => $notes,
+            'priodCharacters'             => $item->priodCharacters,
             'raids'                       => $guild->raids,
             'receivedAndRecipeCharacters' => $item->receivedAndRecipeCharacters,
             'showNoteEdit'                => $showNoteEdit,
             'showOfficerNote'             => $showOfficerNote,
+            'showPrioEdit'                => $showPrioEdit,
             'wishlistCharacters'          => $item->wishlistCharacters,
             'itemJson'                    => self::getItemWowheadJson($item->item_id),
         ]);
@@ -421,7 +430,6 @@ class ItemController extends Controller
                     $detachRows[] = [
                         'item_id'      => $item['id'],
                         'character_id' => $item['character_id'],
-                        'type'         => Item::TYPE_WISHLIST,
                     ];
                     $addedCount++;
 
@@ -430,6 +438,7 @@ class ItemController extends Controller
                         'member_id'    => $currentMember->id,
                         'character_id' => $item['character_id'],
                         'guild_id'     => $currentMember->guild_id,
+                        'raid_id'      => null,
                         'item_id'      => $item['id'],
                         'created_at'   => $now,
                     ];
@@ -443,16 +452,48 @@ class ItemController extends Controller
         // Add the items to the character's received list
         DB::table('character_items')->insert($newRows);
 
-        AuditLog::insert($audits);
-
-        // For each item added, attempt to delete a matching item from the character's wishlist
+        // For each item added, attempt to delete a matching item from the character's wishlist and their prios
         foreach ($detachRows as $detachRow) {
+            // Remove from wishlist
             DB::table('character_items')->where([
                 'item_id'      => $detachRow['item_id'],
                 'character_id' => $detachRow['character_id'],
-                'type'         => $detachRow['type'],
-            ])->limit(1)->delete();
+                'type'         => Item::TYPE_WISHLIST,
+            ])->limit(1)->orderBy('order')->delete();
+
+            // Find prio for this item
+            $row = DB::table('character_items')->where([
+                'item_id'      => $detachRow['item_id'],
+                'character_id' => $detachRow['character_id'],
+                'type'         => Item::TYPE_PRIO,
+            ])->orderBy('order')->first();
+
+            if ($row) {
+                // Delete the one we found
+                DB::table('character_items')->where(['id' => $row->id])->limit(1)->delete();
+
+                // Now correct the order on the remaning prios for that item in that raid
+                DB::table('character_items')->where([
+                        'item_id' => $row->item_id,
+                        'raid_id' => $row->raid_id,
+                        'type'    => Item::TYPE_PRIO,
+                    ])
+                    ->where('order', '>', $row->order)
+                    ->update(['order' => DB::raw('`order` - 1')]);
+
+                $audits[] = [
+                    'description'  => 'System removed 1 item prio after character was assigned item',
+                    'member_id'    => $currentMember->id,
+                    'character_id' => $row->character_id,
+                    'guild_id'     => $currentMember->guild_id,
+                    'raid_id'      => $row->raid_id,
+                    'item_id'      => $row->item_id,
+                    'created_at'   => $now,
+                ];
+            }
         }
+
+        AuditLog::insert($audits);
 
         request()->session()->flash('status', 'Successfully added ' . $addedCount . ' items. ' . $failedCount . ' failures' . ($warnings ? ': ' . rtrim($warnings, ', ') : '.'));
 

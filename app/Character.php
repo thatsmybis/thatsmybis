@@ -92,9 +92,9 @@ class Character extends Model
             ->leftJoin('members AS added_by_members', function ($join) {
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
-            ->where('character_items.type', 'recipe')
+            ->where('character_items.type', Item::TYPE_RECIPE)
             ->orderBy('order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'created_at'])
+            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
         return ($query);
@@ -107,9 +107,25 @@ class Character extends Model
             ->leftJoin('members AS added_by_members', function ($join) {
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
-            ->where('character_items.type', 'received')
+            ->where('character_items.type', Item::TYPE_RECEIVED)
             ->orderBy('order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'created_at'])
+            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
+            ->withTimeStamps();
+
+        return ($query);
+    }
+
+    public function prios() {
+        $query = $this
+            ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
+            ->select(['items.*', 'added_by_members.username AS added_by_username'])
+            ->leftJoin('members AS added_by_members', function ($join) {
+                $join->on('added_by_members.id', 'character_items.added_by');
+            })
+            ->where('character_items.type', Item::TYPE_PRIO)
+            ->orderBy('character_items.raid_id')
+            ->orderBy('character_items.order')
+            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
         return ($query);
@@ -122,9 +138,9 @@ class Character extends Model
             ->leftJoin('members AS added_by_members', function ($join) {
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
-            ->where('character_items.type', 'wishlist')
+            ->where('character_items.type', Item::TYPE_WISHLIST)
             ->orderBy('order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'created_at'])
+            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
         return ($query);

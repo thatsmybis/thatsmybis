@@ -289,6 +289,9 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
 .dropdown-menu a, .dropdown-menu a:hover {
     color: #fff;
 }
+.dropdown-item {
+    color: #fff;
+}
 .dropdown-item:hover {
     background-color: #201f3c;
 }
@@ -357,6 +360,14 @@ select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
     border-radius: 50%;
     width: 12px;
     height: 12px;
+    margin-right: 4px;
+}
+
+.role-circle-large {
+    display: inline-block;
+    border-radius: 50%;
+    width: 16px;
+    height: 16px;
     margin-right: 4px;
 }
 

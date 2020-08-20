@@ -79,8 +79,11 @@ Route::group([
     Route::post('/loot/{instanceSlug}/edit', 'ItemController@listWithGuildSubmit')->name('guild.item.list.submit');
 
     Route::group(['prefix' => 'i'], function () {
-        Route::get( '/{item_id}/{slug?}', 'ItemController@showWithGuild')->name('guild.item.show');
-        Route::post('/note/update',       'ItemController@updateNote')   ->name('guild.item.updateNote');
+        Route::get( '/{item_id}/{slug?}',        'ItemController@showWithGuild')    ->name('guild.item.show');
+        Route::post('/note/update',              'ItemController@updateNote')       ->name('guild.item.updateNote');
+
+        Route::get( '/{item_id}/{raidId}/prios', 'PrioController@singleInput')      ->name('guild.item.prios');
+        Route::post('/prios',                    'PrioController@submitSingleInput')->name('guild.item.prios.submit');
     });
 
     Route::group(['prefix' => 'u'], function () {
@@ -96,8 +99,8 @@ Route::group([
 
     Route::get( '/roster',          'DashboardController@roster')->name('guild.roster');
 
-    Route::get( '/raid-time', 'ItemController@massInput')      ->name('item.massInput');
-    Route::post('/raid-time', 'ItemController@submitMassInput')->name('item.massInput.submit');
+    Route::get( '/assign-loot', 'ItemController@massInput')      ->name('item.massInput');
+    Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
 
     Route::group([
         // 'middleware' => 'acl',
@@ -110,6 +113,12 @@ Route::group([
             Route::post('/toggle-disable', 'RaidController@toggleDisable')->name('guild.raid.toggleDisable');
             Route::post('/update',         'RaidController@update')       ->name('guild.raid.update');
             Route::post('/',               'RaidController@create')       ->name('guild.raid.create');
+
+            Route::group(['prefix' => 'prio'], function () {
+                Route::get( '/{instanceSlug}',          'PrioController@chooseRaid')     ->name('guild.prios.chooseRaid');
+                Route::get( '/{instanceSlug}/{raidId}', 'PrioController@massInput')      ->name('guild.prios.massInput');
+                Route::post('/',                        'PrioController@submitMassInput')->name('guild.prios.massInput.submit');
+            });
         });
 
         Route::get( '/roles',     'RoleController@roles')    ->name('guild.roles');

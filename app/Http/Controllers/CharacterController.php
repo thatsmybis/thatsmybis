@@ -53,7 +53,7 @@ class CharacterController extends Controller
     public function create($guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
-        
+
         $guild->load([
             'members' => function ($query) use ($currentMember) {
                 return $query->where('members.id', request()->input('member_id'))
@@ -196,9 +196,17 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $guild->load('raids');
+
         $character = Character::where(['slug' => $nameSlug, 'guild_id' => $guild->id])
             ->with([
-                'member', 'raid', 'raid.role',
+                'member',
+                'prios',
+                'raid',
+                'raid.role',
+                'received',
+                'recipes',
+                'wishlist',
             ])->firstOrFail();
 
         $showEdit = false;
@@ -331,7 +339,7 @@ class CharacterController extends Controller
         $updateValues['public_note']  = request()->input('public_note');
         $updateValues['inactive_at']  = (request()->input('inactive_at') == 1 ? getDateTime() : null);
         $updateValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
-        
+
         // User is editing their own character
         if ($character->member_id == $currentMember->id) {
             $updateValues['personal_note'] = request()->input('personal_note');
@@ -448,18 +456,21 @@ class CharacterController extends Controller
         if (request()->input('wishlist')) {
             $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember);
         } else {
+            // TODO: Audit log!
             $character->wishlist()->detach();
         }
 
         if (request()->input('received')) {
             $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember);
         } else {
+            // TODO: Audit log!
             $character->received()->detach();
         }
 
         if (request()->input('recipes')) {
             $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember);
         } else {
+            // TODO: Audit log!
             $character->recipes()->detach();
         }
 
@@ -564,7 +575,7 @@ class CharacterController extends Controller
         /**
          * Go over all the items we already have in the database.
          * If any of these are found in the set sent from the input, we're going to update them with new metadata.
-         * If any of these aren't found in the input, they shouldn' exist anymore so we'll drop them.
+         * If any of these aren't found in the input, they shouldn't exist anymore so we'll drop them.
          */
         foreach ($existingItems as $existingItemKey => $existingItem) {
             $found = false;

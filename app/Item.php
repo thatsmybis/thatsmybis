@@ -34,8 +34,9 @@ class Item extends Model
         'set_id',
     ];
 
+    const TYPE_PRIO     = 'prio';
     const TYPE_RECEIVED = 'received';
-    const TYPE_RECIPE = 'recipe';
+    const TYPE_RECIPE   = 'recipe';
     const TYPE_WISHLIST = 'wishlist';
 
     /**
@@ -72,9 +73,9 @@ class Item extends Model
         return $this->belongsToMany(ItemSource::class, 'item_item_sources', 'item_id', 'item_source_id');
     }
 
-    public function receivedCharacters() {
+    public function priodCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
-            ->where(['type' => self::TYPE_RECEIVED])
+            ->where(['character_items.type' => self::TYPE_PRIO])
             ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raids', function ($join) {
@@ -87,13 +88,33 @@ class Item extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'type'])
+            ->withPivot(['id', 'added_by', 'raid_id', 'type', 'order', 'created_at'])
+            ->orderBy('character_items.raid_id')
+            ->orderBy('character_items.order');
+    }
+
+    public function receivedCharacters() {
+        return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
+            ->where(['character_items.type' => self::TYPE_RECEIVED])
+            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
+            ->whereNull('characters.inactive_at')
+            ->leftJoin('raids', function ($join) {
+                $join->on('raids.id', 'characters.raid_id');
+            })
+            ->leftJoin('roles AS raid_roles', function ($join) {
+                $join->on('raid_roles.id', 'raids.role_id');
+            })
+            ->leftJoin('members AS added_by_members', function ($join) {
+                $join->on('added_by_members.id', 'character_items.added_by');
+            })
+            ->withTimeStamps()
+            ->withPivot(['added_by', 'raid_id', 'type'])
             ->orderBy('characters.name');
     }
 
     public function receivedAndRecipeCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
-            ->whereIn('type', [self::TYPE_RECEIVED, self::TYPE_RECIPE])
+            ->whereIn('character_items.type', [self::TYPE_RECEIVED, self::TYPE_RECIPE])
             ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
             ->whereNull('characters.inactive_at')
 
@@ -107,13 +128,13 @@ class Item extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'type'])
+            ->withPivot(['added_by', 'raid_id', 'type', 'order'])
             ->orderBy('characters.name');
     }
 
     public function wishlistCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
-            ->where(['type' => self::TYPE_WISHLIST])
+            ->where(['character_items.type' => self::TYPE_WISHLIST])
             ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raids', function ($join) {
@@ -126,7 +147,7 @@ class Item extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'type'])
+            ->withPivot(['added_by', 'raid_id', 'type', 'order'])
             ->orderBy('characters.name');
     }
 }

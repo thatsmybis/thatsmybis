@@ -2,9 +2,10 @@ var table = null;
 
 var colSource = 0;
 var colName = 1;
-var colWishlist = 2;
-var colNotes = 3;
-var colPriority = 4;
+var colPrios = 2;
+var colWishlist = 3;
+var colNotes = 4;
+var colPriority = 5;
 
 // For keeping track of the loot's source
 var lastSource = null;
@@ -23,6 +24,7 @@ $(document).ready( function () {
 
         table.column(colName)    .visible(true);
         table.column(colWishlist).visible(true);
+        table.column(colPrios)   .visible(true);
         table.column(colNotes)   .visible(true);
         table.column(colPriority).visible(true);
    });
@@ -106,10 +108,20 @@ function createTable(lastSource) {
                 "width"   : "330px",
             },
             {
+                "title"  : '<span class="fas fa-fw fa-sort-amount-down text-gold"></span> Prio\'s',
+                "data"   : "priod_characters",
+                "render" : function (data, type, row) {
+                    return data.length ? getCharacterList(data, 'prio', row.item_id) : '—';
+                },
+                "orderable" : false,
+                "visible" : true,
+                "width"   : "300px",
+            },
+            {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
                 "data"   : "wishlist_characters",
                 "render" : function (data, type, row) {
-                    return data.length ? getCharacterList(data, 'wishlist', row.id) : '—';
+                    return data.length ? getCharacterList(data, 'wishlist', row.item_id) : '—';
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -126,7 +138,7 @@ function createTable(lastSource) {
                 "width"   : "200px",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-sort-amount-down"></span> Priority',
+                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Prio Notes',
                 "data"   : "guild_priority",
                 "render" : function (data, type, row) {
                     return (data ? nl2br(data) : '—');
@@ -160,15 +172,27 @@ function getCharacterList(data, type, itemId) {
     let characters = `<ul class="list-inline js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
     let initialLimit = 4;
 
+    let lastRaidId = null;
     $.each(data, function (index, character) {
+        if (type == 'prio' && character.pivot.raid_id && character.pivot.raid_id != lastRaidId) {
+            lastRaidId = character.pivot.raid_id;
+            characters += `
+                <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic  text-muted small">
+                    ${ raids.find(val => val.id === character.pivot.raid_id).name }
+                </li>
+            `;
+        }
         characters += `
-            <li data-raid-id="${ character.raid_id }" class="js-item-wishlist-character list-inline-item font-weight-normal mb-1">
+            <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }"
+                value="${ type == 'prio' ? character.pivot.order : '' }"
+                class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0">
                 <a href="/${ guild.slug }/c/${ character.slug }"
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
+                    <span class="text-muted">${ character.pivot.order ? character.pivot.order : '' }</span>
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_color) }"></span>${ character.name }
                     ${ character.is_alt ? `
-                        <span class="text-legendary font-weight-bold">Alt</span>
+                        <span class="text-legendary">alt</span>
                     ` : '' }
                     <span class="js-watchable-timestamp smaller text-muted"
                         data-timestamp="${ character.pivot.created_at }"
