@@ -9,7 +9,7 @@ function getHexColorFromDec($color) {
             $color = '0' . $color;
         }
     } else {
-        $color = 'FFFFFF00';
+        $color = 'FFF';
     }
     return '#' . $color;
 }
