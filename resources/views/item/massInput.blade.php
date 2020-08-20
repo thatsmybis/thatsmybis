@@ -15,7 +15,7 @@
                     <small>
                         <strong>Hint:</strong> Keep the roster and/or item pages open in another window to review who deserves what
                         <br>
-                        <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their wishlist/prios
+                        <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their wishlist/prios. If they have the same item prio'd in multiple raids, we'll remove only the first one we find.
                     </small>
                 </div>
 

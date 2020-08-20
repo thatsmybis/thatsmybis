@@ -438,6 +438,7 @@ class ItemController extends Controller
                         'member_id'    => $currentMember->id,
                         'character_id' => $item['character_id'],
                         'guild_id'     => $currentMember->guild_id,
+                        'raid_id'      => null,
                         'item_id'      => $item['id'],
                         'created_at'   => $now,
                     ];
@@ -450,8 +451,6 @@ class ItemController extends Controller
 
         // Add the items to the character's received list
         DB::table('character_items')->insert($newRows);
-
-        AuditLog::insert($audits);
 
         // For each item added, attempt to delete a matching item from the character's wishlist and their prios
         foreach ($detachRows as $detachRow) {
@@ -470,12 +469,8 @@ class ItemController extends Controller
             ])->orderBy('order')->first();
 
             if ($row) {
-                // Delete the first one we find
-                DB::table('character_items')->where([
-                    'item_id'      => $detachRow['item_id'],
-                    'character_id' => $detachRow['character_id'],
-                    'type'         => Item::TYPE_PRIO,
-                ])->orderBy('order')->limit(1)->delete();
+                // Delete the one we found
+                DB::table('character_items')->where(['id' => $row->id])->limit(1)->delete();
 
                 // Now correct the order on the remaning prios for that item in that raid
                 DB::table('character_items')->where([
@@ -485,8 +480,20 @@ class ItemController extends Controller
                     ])
                     ->where('order', '>', $row->order)
                     ->update(['order' => DB::raw('`order` - 1')]);
+
+                $audits[] = [
+                    'description'  => 'System removed 1 item prio after character was assigned item',
+                    'member_id'    => $currentMember->id,
+                    'character_id' => $row->character_id,
+                    'guild_id'     => $currentMember->guild_id,
+                    'raid_id'      => $row->raid_id,
+                    'item_id'      => $row->item_id,
+                    'created_at'   => $now,
+                ];
             }
         }
+
+        AuditLog::insert($audits);
 
         request()->session()->flash('status', 'Successfully added ' . $addedCount . ' items. ' . $failedCount . ' failures' . ($warnings ? ': ' . rtrim($warnings, ', ') : '.'));
 
