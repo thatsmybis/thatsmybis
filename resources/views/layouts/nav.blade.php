@@ -96,9 +96,10 @@
                     $viewRaids = $currentMember->hasPermission('view.raids');
                     $editGuild = $currentMember->hasPermission('edit.guild');
                     $editItems = $currentMember->hasPermission('edit.items');
+                    $editPrios = $currentMember->hasPermission('edit.prios');
                 @endphp
 
-                @if ($viewRoles || $viewRaids || $editGuild)
+                @if ($viewRoles || $viewRaids || $editGuild || $editPrios)
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin
@@ -155,37 +156,39 @@
                                 </div>
                             @endif
 
-                            <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="adminPrioDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Item Prios
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="adminPrioDropdown">
-                                    <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'zulgurub']) }}">
-                                        Zul'Gurub
+                            @if ($editPrios)
+                                <div class="dropdown dropright">
+                                    <a class="dropdown-item dropdown-toggle" href="#" id="adminPrioDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        Item Prios
                                     </a>
-                                    <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
-                                        Ruins of Ahn'Qiraj
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'world-bosses']) }}">
-                                        World Bosses
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'molten-core']) }}">
-                                        Molten Core
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair']) }}">
-                                        Onyxia's Lair
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-lair']) }}">
-                                        Blackwing Lair
-                                    </a>
-                                    <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
-                                        Temple of Ahn'Qiraj
-                                    </a>
-                                    <span class="dropdown-item text-muted" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
-                                        Naxxramas
-                                    </span>
+                                    <div class="dropdown-menu" aria-labelledby="adminPrioDropdown">
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'zulgurub']) }}">
+                                            Zul'Gurub
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
+                                            Ruins of Ahn'Qiraj
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'world-bosses']) }}">
+                                            World Bosses
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'molten-core']) }}">
+                                            Molten Core
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair']) }}">
+                                            Onyxia's Lair
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-lair']) }}">
+                                            Blackwing Lair
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
+                                            Temple of Ahn'Qiraj
+                                        </a>
+                                        <span class="dropdown-item text-muted" href="{{ route('guild.prios.chooseRaid', ['guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
+                                            Naxxramas
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
+                            @endif
                         </div>
                     </li>
                 @endif
