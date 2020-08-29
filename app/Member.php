@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Character, Content, Guild, Role, User};
+use App\{Character, Content, Guild, Role, User, Raid};
 use Illuminate\Database\Eloquent\Model;
 use \Illuminate\Support\Facades\Log;
 use Kodeine\Acl\Traits\HasRole;
@@ -70,6 +70,12 @@ class Member extends Model
     public function roles()
     {
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->orderByDesc('position')->withTimestamps();
+    }
+
+    public function canViewWishPrioList() {
+        
+        return false;
+        //return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->orderByDesc('position')->withTimestamps();
     }
 
     /**

@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
 use RestCord\DiscordClient;
+use \Illuminate\Support\Facades\Log;
+
 
 class CharacterController extends Controller
 {
@@ -197,7 +199,7 @@ class CharacterController extends Controller
         $currentMember = request()->get('currentMember');
 
         $guild->load('raids');
-
+        
         $character = Character::where(['slug' => $nameSlug, 'guild_id' => $guild->id])
             ->with([
                 'member',
@@ -208,6 +210,28 @@ class CharacterController extends Controller
                 'recipes',
                 'wishlist',
             ])->firstOrFail();
+
+
+        $raid = Raid::where(['id' => $character->raid_id])->firstOrFail();
+        $restrictLootList = $raid->restrict_wish_prio_list;
+        $raidListRole = $raid->restrict_wish_prio_list_role;
+
+        if($restrictLootList) {
+            $hasListViewRole = false;
+            foreach ($currentMember->roles as $role) {
+                //Log::info("canView: " . $hasListViewRole . "\tuserRole: " . $role->id . "\traidListRole " . $raidListRole);
+                if ($role->id == $raidListRole) {
+                    $hasListViewRole = true;
+                }
+            }
+
+            $showPrioWishList = false;
+            if ($character->member_id == $currentMember->id || $hasListViewRole) {
+                $showPrioWishList = true;
+            }
+        } else {
+            $showPrioWishList = true;
+        }
 
         $showEdit = false;
         if ($character->member_id == $currentMember->id || $currentMember->hasPermission('edit.characters')) {
@@ -231,6 +255,7 @@ class CharacterController extends Controller
             'showEdit'         => $showEdit,
             'showEditLoot'     => $showEditLoot,
             'showOfficerNote'  => $showOfficerNote,
+            'showPrioWishList' => $showPrioWishList,
         ]);
     }
 

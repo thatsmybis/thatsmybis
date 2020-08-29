@@ -8,7 +8,7 @@
     ],
     "license": "",
     "require": {
-        "php": "^7.4",
+        "php": "^7.3",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "fruitcake/laravel-cors": "^2.0",

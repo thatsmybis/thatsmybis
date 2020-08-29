@@ -146,6 +146,12 @@ class DashboardController extends Controller
             $showOfficerNote = true;
         }
 
+        $showWishPrioList = false;
+        if ($currentMember->hasPermission('view.view-wish-prio-list') && !isStreamerMode()) {
+            $characterFields[] = 'characters.officer_note';
+            $showWishPrioList = true;
+        }
+
         $characters = Character::select($characterFields)
             ->leftJoin('members', function ($join) {
                 $join->on('members.id', 'characters.member_id');

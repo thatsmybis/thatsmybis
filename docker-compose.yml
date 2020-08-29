@@ -10,10 +10,12 @@ services:
       - MARIADB_PASSWORD=my_password
     ports:
       - 3306:3306
+    volumes:
+      - ./:/app
 
   thatsmybis:
     tty: true
-    image: docker.io/bitnami/laravel:7-debian-10
+    image: docker.io/pyrodius/thatsmybis-laravel:7.4
     environment:
       - DB_HOST=mariadb
       - DB_USERNAME=my_user

@@ -21,6 +21,8 @@ class Raid extends Model
         'role_id',
         'guild_id',
         'disabled_at',
+        'restrict_wish_prio_list',
+        'restrict_wish_prio_list_role',
     ];
 
     /**

@@ -19,7 +19,9 @@
                             edit loot
                         </a>
                     </div>
-                @endif
+                @endif                 
+                
+                @if ($showPrioWishList)
 
                 <div class="col-12 mb-2">
                     <span class="text-gold font-weight-bold">
@@ -85,7 +87,7 @@
                         </div>
                     @endif
                 </div>
-
+                @endif
                 <div class="col-12 mb-2">
                     <span class="text-success font-weight-bold">
                         <span class="fas fa-fw fa-sack"></span>

@@ -30,6 +30,7 @@
                 <input hidden name="id" value="{{ $raid ? $raid->id : '' }}" />
 
                 <div class="row">
+                    
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="row">
                             <div class="col-6">
@@ -76,6 +77,70 @@
                                 </div>
                             </div>
                         </div>
+
+
+
+
+
+                        <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                            <div class="row">
+                                <div class="col-1">
+                                                    @if ($raid) 
+                                                        <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:toggleVisibility(this,'restrictListsToRole');" autocomplete="off" {{ $raid->restrict_wish_prio_list ? 'checked' : '' }}> </div>
+                                                    @else
+                                                    <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:toggleVisibility(this,'restrictListsToRole');" autocomplete="off"> </div>
+                                                    @endif
+                                <div class="col-11">
+                                <div class="form-group">
+                                    <label for="name" class="ml-12">
+                                        Restrict Access to Wish and Prio list 
+                                    </label>
+                                    
+                                </div>
+                            </div>
+                        </div>
+
+
+                        @if ($raid)
+                            <div id="restrictListsToRole" class="row mb-3" style="visibility:  {{ $raid->restrict_wish_prio_list ? 'visible' : 'hidden' }}">
+                        @else
+                            <div id="restrictListsToRole" class="row mb-3" style="visibility: hidden">
+                        @endif 
+
+                            <div class="col-md-6 col-sm-8 col-12">
+                                <div class="form-group">
+                                    <label for="restrict_wish_prio_list_role" class="font-weight-bold">
+                                        <span class="fab fa-fw fa-discord text-discord"></span>
+                                        Restrict to Discord Role
+                                    </label>
+                                    <small class="text-muted">
+                                    </small>
+
+                                    <div class="form-group">
+                                        <select name="restrict_wish_prio_list_role" class="form-control dark">
+                                            <option value="" selected>
+                                                —
+                                            </option>
+
+                                            @foreach ($guild->roles as $role)
+                                                <option value="{{ $role->id }}"
+                                                    style="color:{{ $role->getColor() }};"
+                                                    {{ old('restrict_wish_prio_list_role') ? (old('restrict_wish_prio_list_role') == $role->id ? 'selected' : '') : ($raid && $raid->restrict_wish_prio_list_role && $raid->restrict_wish_prio_list_role == $role->id ? 'selected' : '') }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+
+
+            
+
+
                     </div>
                 </div>
 
@@ -86,4 +151,16 @@
         </div>
     </div>
 </div>
+
+<script language="JavaScript">
+
+            function toggleVisibility(eventsender, idOfObjectToToggle){
+                var newState = "hidden";
+                if (eventsender.checked === true){
+                    newState = "visible";
+                }
+
+                document.getElementById(idOfObjectToToggle).style.visibility = newState;
+            }       
+        </script>
 @endsection
