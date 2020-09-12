@@ -139,7 +139,14 @@ class Character extends Model
     public function wishlist() {
         // check if self
         $currentMember = request()->get('currentMember');        
+        $myCharacters = array();
 
+        //todo: fix this - no clue why $currentMember->characters returns all characters oO
+        foreach($currentMember->characters as $chars) {
+            Log::info($currentMember->name);
+            array_push($myCharacters, $chars->id);
+        }
+        
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->select(['items.*', 'added_by_members.username AS added_by_username'])
@@ -148,12 +155,14 @@ class Character extends Model
             })
             ->where('character_items.type', Item::TYPE_WISHLIST)
             ->whereIn('character_items.raid_id', $currentMember->raidsWithViewPermissions())
+            ->orWhereIn('character_items.character_id', $myCharacters)
             ->orderBy('order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
         return ($query);
     }
+
 
     static public function classes() {
         return [
