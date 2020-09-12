@@ -70,8 +70,9 @@ class AuditLogController extends Controller
             ->leftJoin('members as other_members', function ($join) {
                     $join->on('other_members.id', '=', 'audit_logs.other_member_id');
                 })
-            ->leftJoin('raids', function ($join) {
+            ->leftJoin('raids', function ($join) use ($currentMember) {
                     $join->on('raids.id', '=', 'audit_logs.raid_id');
+                    $join->whereIn('raids.id', $currentMember->raidsWithViewPermissions());
                 })
             ->leftJoin('roles', function ($join) {
                     $join->on('roles.id', '=', 'audit_logs.role_id');
