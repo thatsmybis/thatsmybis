@@ -22,22 +22,22 @@ Route::post('logout', 'Auth\LoginController@logout')       ->name('logout');
 Route::get( 'register',             'Auth\RegisterController@showRegistrationForm')->name('register');
 Route::post('register',             'Auth\RegisterController@register');
 // Password Reset routes:
-Route::get( 'password/reset',         'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
-Route::post('password/email',         'Auth\ForgotPasswordController@sendResetLinkEmail') ->name('password.email');
-Route::get( 'password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')       ->name('password.reset');
-Route::post('password/reset',         'Auth\ResetPasswordController@reset');
+// Route::get( 'password/reset',         'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+// Route::post('password/email',         'Auth\ForgotPasswordController@sendResetLinkEmail') ->name('password.email');
+// Route::get( 'password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')       ->name('password.reset');
+// Route::post('password/reset',         'Auth\ResetPasswordController@reset');
 // Email Validation routes
-Route::get('email/verify',      'Auth\VerificationController@show')   ->name('verification.notice');
-Route::get('email/verify/{id}', 'Auth\VerificationController@verify') ->name('verification.verify');
-Route::get('email/resend',      'Auth\VerificationController@resend') ->name('verification.resend');
+// Route::get('email/verify',      'Auth\VerificationController@show')   ->name('verification.notice');
+// Route::get('email/verify/{id}', 'Auth\VerificationController@verify') ->name('verification.verify');
+// Route::get('email/resend',      'Auth\VerificationController@resend') ->name('verification.resend');
 Route::group(['prefix' => 'auth'], function () {
     // Discord sign-in
     Route::get('/discord',          'Auth\LoginController@redirectToDiscord')    ->name('discordLogin');
     Route::get('/discord/callback', 'Auth\LoginController@handleDiscordCallback');
 });
 
-Route::get( '/about',   'HomeController@about')  ->name('about');
-Route::get( '/contact', 'HomeController@contact')->name('contact');
+// Route::get( '/about',   'HomeController@about')  ->name('about');
+// Route::get( '/contact', 'HomeController@contact')->name('contact');
 Route::get( '/faq',     'HomeController@faq')    ->name('faq');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
@@ -51,27 +51,30 @@ Route::get('/streamer-mode', 'MemberController@toggleStreamerMode')->name('toggl
 //     Route::get( '/{item_id}/{slug?}', 'ItemController@show')->name('item.show');
 // });
 
+Route::get('/{guildSlug}', 'GuildController@find')->name('guild.find');
+
 Route::group([
         'middleware' => ['seeUser', 'checkGuildPermissions'],
-        'prefix'     => '{guildSlug}'
+        'prefix'     => '{id}/{guildSlug}'
     ], function () {
 
     Route::get( '/',                'GuildController@home')              ->name('guild.home');
 
     Route::get( '/audit-log',       'AuditLogController@index')          ->name('guild.auditLog');
-    Route::get( '/news',            'DashboardController@news')          ->name('guild.news');
-    Route::get( '/calendar',        'DashboardController@calendar')      ->name('guild.calendar');
-    Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
+    // Route::get( '/news',            'DashboardController@news')          ->name('guild.news');
+    // Route::get( '/calendar',        'DashboardController@calendar')      ->name('guild.calendar');
+    // Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
 
     Route::group(['prefix' => 'c'], function () {
-        Route::get( '/create',      'CharacterController@showCreate')->name('character.showCreate');
-        Route::post('/create',      'CharacterController@create')    ->name('character.create');
-        Route::get( '/{nameSlug}/edit', 'CharacterController@edit')      ->name('character.edit');
-        Route::get( '/{nameSlug}/loot', 'CharacterController@loot')      ->name('character.loot');
-        Route::post('/update',      'CharacterController@update')    ->name('character.update');
-        Route::post('/loot/update', 'CharacterController@updateLoot')->name('character.updateLoot');
-        Route::post('/note/update', 'CharacterController@updateNote')->name('character.updateNote');
-        Route::get( '/{nameSlug}',      'CharacterController@show')      ->name('character.show');
+        Route::get( '/create',               'CharacterController@showCreate')->name('character.showCreate');
+        Route::post('/create',               'CharacterController@create')    ->name('character.create');
+        Route::get( '/{id}/{nameSlug}/edit', 'CharacterController@edit')      ->name('character.edit');
+        Route::get( '/{id}/{nameSlug}/loot', 'CharacterController@loot')      ->name('character.loot');
+        Route::post('/update',               'CharacterController@update')    ->name('character.update');
+        Route::post('/loot/update',          'CharacterController@updateLoot')->name('character.updateLoot');
+        Route::post('/note/update',          'CharacterController@updateNote')->name('character.updateNote');
+        Route::get( '/{id}/{nameSlug}',      'CharacterController@show')      ->name('character.show');
+        Route::get( '/{nameSlug}',           'CharacterController@find')      ->name('character.find');
     });
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')->name('guild.item.list');
@@ -87,15 +90,16 @@ Route::group([
     });
 
     Route::group(['prefix' => 'u'], function () {
-        Route::get( '/{usernameSlug}/edit', 'MemberController@edit')      ->name('member.edit');
-        Route::post('/update',          'MemberController@update')    ->name('member.update');
-        Route::post('/note/update',     'MemberController@updateNote')->name('member.updateNote');
-        Route::get( '/{usernameSlug}',      'MemberController@show')      ->name('member.show');
+        Route::get( '/{id}/{usernameSlug}/edit', 'MemberController@edit')      ->name('member.edit');
+        Route::post('/update',                   'MemberController@update')    ->name('member.update');
+        Route::post('/note/update',              'MemberController@updateNote')->name('member.updateNote');
+        Route::get( '/{id}/{usernameSlug}',      'MemberController@show')      ->name('member.show');
+        Route::get( '/{usernameSlug}',           'MemberController@find')      ->name('member.find');
     });
 
-    Route::get( '/resources',        'ContentController@index')->name('contentIndex');
-    Route::get( '/resources/{slug}', 'ContentController@show') ->name('showContent');
-    Route::get( '/posts/{slug}',     'ContentController@show') ->name('showPost');
+    // Route::get( '/resources',        'ContentController@index')->name('contentIndex');
+    // Route::get( '/resources/{slug}', 'ContentController@show') ->name('showContent');
+    // Route::get( '/posts/{slug}',     'ContentController@show') ->name('showPost');
 
     Route::get( '/roster',          'DashboardController@roster')->name('guild.roster');
 
@@ -134,10 +138,10 @@ Route::group([
     });
 });
 
-Route::group([
-        'middleware' => 'acl',
-        'is'         => env('PERMISSION_CLASS_LEADER'),
-    ], function () {
-    Route::post('/updateContent/{id?}', 'ContentController@update')->where('id', '[0-9]+')->name('updateContent');
-    Route::post('/removeContent/{id}',  'ContentController@remove')->where('id', '[0-9]+')->name('removeContent');
-});
+// Route::group([
+//         'middleware' => 'acl',
+//         'is'         => env('PERMISSION_CLASS_LEADER'),
+//     ], function () {
+//     Route::post('/updateContent/{id?}', 'ContentController@update')->where('id', '[0-9]+')->name('updateContent');
+//     Route::post('/removeContent/{id}',  'ContentController@remove')->where('id', '[0-9]+')->name('removeContent');
+// });
