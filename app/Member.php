@@ -88,7 +88,7 @@ class Member extends Model
             $raidsWithListViewPermissions = array();
             foreach ($this->roles as $myRole) {
                 foreach($raids as $raid) { 
-                    if ($myRole->id == $raid->restrict_wish_prio_list_role) {
+                    if ($myRole->id === $raid->restrict_wish_prio_list_role) {
                         array_push($raidsWithListViewPermissions, $raid->id);
                     }
                 }
@@ -96,7 +96,13 @@ class Member extends Model
             return $raidsWithListViewPermissions;
         }
         
-        return $raids->id;
+        //todo: use some php function that does the same instead of a loop
+        $allRaids = array();
+        foreach($raids as $raid) {
+            array_push($allRaids, $raid->id);
+        }
+
+        return $allRaids;
     }
 
     /**
