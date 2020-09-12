@@ -74,6 +74,7 @@ class ItemController extends Controller
             ->where('item_sources.instance_id', $instance->id)
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
+            
             ->with([
                 'priodCharacters' => function ($query) use ($guild) {
                     return $query->where('characters.guild_id', $guild->id);
@@ -87,6 +88,7 @@ class ItemController extends Controller
                     ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 }
             ])
+            
             ->get();
 
         return view('item.list', [
@@ -321,11 +323,13 @@ class ItemController extends Controller
                     ->where(['characters.guild_id' => $guild->id])
                     ->groupBy(['character_items.character_id']);
             },
-            'wishlistCharacters' => function ($query) use($guild) {
+            'wishlistCharacters' => function ($query) use($guild, $currentMember) {
+
                 return $query
                     ->where([
                         'characters.guild_id' => $guild->id,
                     ])
+                    ->whereIn('characters.raid_id', $currentMember->raidsWithViewPermissions())
                     ->groupBy(['character_items.character_id'])
                     ->with([
                         'prios',
