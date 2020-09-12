@@ -25,7 +25,7 @@
                 </li>
                 @if ($guild)
                     <li class="list-inline-item bg-lightest rounded p-3 mt-3 align-top item-notes">
-                        <form role="form" method="POST" action="{{ route('guild.item.updateNote', ['guildSlug' => $guild->slug]) }}">
+                        <form role="form" method="POST" action="{{ route('guild.item.updateNote', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             {{ csrf_field() }}
 
                             <input hidden name="id" value="{{ $item->item_id }}" />
@@ -112,11 +112,11 @@
                                         </span>
                                         <div class="dropdown-menu" aria-labelledby="editPrioLink">
                                             @foreach ($raids as $raid)
-                                                <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'raidId' => $raid->id]) }}">
+                                                <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'raidId' => $raid->id]) }}">
                                                     {{ $raid->name }}
                                                 </a>
                                             @endforeach
-                                            <a class="dropdown-item" href="{{ route('guild.raid.edit', ['guildSlug' => $guild->slug]) }}">
+                                            <a class="dropdown-item" href="{{ route('guild.raid.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                                 <span class="fas fa-fw fa-plus"></span> Create New Raid
                                             </a>
                                         </div>
@@ -145,7 +145,7 @@
                                                 </li>
                                     @endif
                                         <li data-raid-id="{{ $character->pivot->raid_id }}" class="js-item-wishlist-character font-weight-normal mb-1" value="{{ $character->pivot->order }}">
-                                            <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}"
+                                            <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                                 title="{{ $character->raid_name ? $character->raid_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}"
                                                 class="text-{{ $character->class ? strtolower($character->class) : ''}}-important tag d-inline">
                                                 <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_color ? $character->raid_color : '')) }}"></span>{{ $character->name }}

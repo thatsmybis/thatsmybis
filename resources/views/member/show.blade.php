@@ -22,7 +22,7 @@
                     <ol class="striped no-bullet no-indent">
                         @if ($showEdit)
                             <li class="pt-3 pl-3 pb-3 pr-3 rounded">
-                                <a href="{{ route('character.showCreate', ['guildSlug' => $guild->slug]) }}" class="font-weight-medium">
+                                <a href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="font-weight-medium">
                                     <span class="fas fa-plus"></span>
                                     create character
                                 </a>
@@ -55,7 +55,7 @@
                                     @include('partials/item', ['wowheadLink' => false])
                                     <small class="text-muted">
                                         on
-                                        <a href="{{route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $itemCharacter->slug]) }}"
+                                        <a href="{{route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $itemCharacter->id, 'nameSlug' => $itemCharacter->slug]) }}"
                                             class="text-{{ $itemCharacter->class ? strtolower($itemCharacter->class) : '' }}">
                                             {{ $itemCharacter->name }}
                                         </a>
@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <form role="form" method="POST" action="{{ route('member.updateNote', ['guildSlug' => $guild->slug]) }}">
+            <form role="form" method="POST" action="{{ route('member.updateNote', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $member->id }}" />

@@ -24,7 +24,7 @@
                 </ul>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ route(($raid ? 'guild.raid.update' : 'guild.raid.create'), ['guildSlug' => $guild->slug]) }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ route(($raid ? 'guild.raid.update' : 'guild.raid.create'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $raid ? $raid->id : '' }}" />

@@ -21,11 +21,11 @@ class PermissionsController extends Controller
     }
 
     /**
-     * Show the raids page.
+     * Show the permissions page.
      *
      * @return \Illuminate\Http\Response
      */
-    public function permissions($guildSlug)
+    public function permissions($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');

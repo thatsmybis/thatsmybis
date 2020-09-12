@@ -24,7 +24,7 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function news($guildSlug)
+    public function news($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -63,7 +63,7 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function calendar($guildSlug)
+    public function calendar($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -76,9 +76,8 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function calendarIframe($guildSlug)
+    public function calendarIframe($guildId, $guildSlug)
     {
-        // $guild = Guild::where('slug', $guildSlug)->firstOrFail();
         $guild = request()->get('guild');
 
         $iframe = file_get_contents($guild->calendar_link); // 'https://calendar.google.com/calendar/embed?' .
@@ -92,15 +91,16 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function home($guildSlug)
+    public function home($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-
         return redirect()->route('member.show', [
-            'guildSlug' => $guild->slug,
-            'usernameSlug'  => $currentMember->slug
+            'guildId'      => $guild->id,
+            'guildSlug'    => $guild->slug,
+            'memberId'     => $currentMember->id,
+            'usernameSlug' => $currentMember->slug
         ]);
     }
 
@@ -109,7 +109,7 @@ class DashboardController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function roster($guildSlug)
+    public function roster($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');

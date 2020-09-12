@@ -289,7 +289,7 @@
                     </button>
                     <div class="small text-muted mb-3">
                         Not seeing all of your roles?
-                        <a href="{{ route('guild.roles', ['guildSlug' => $guild->slug]) }}#role-whitelisting">sync roles</a>
+                        <a href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}#role-whitelisting">sync roles</a>
                     </div>
                 </div>
             </form>

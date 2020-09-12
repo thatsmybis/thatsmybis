@@ -44,7 +44,7 @@
                 </ul>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.item.list.submit', ['guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.item.list.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
                 {{ csrf_field() }}
 
                 <div class="row">

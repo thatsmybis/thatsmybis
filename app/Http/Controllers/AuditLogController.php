@@ -25,7 +25,7 @@ class AuditLogController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($guildSlug)
+    public function index($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');

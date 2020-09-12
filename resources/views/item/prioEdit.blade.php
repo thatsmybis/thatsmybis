@@ -28,7 +28,7 @@
                 </ul>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.item.prios.submit', ['guildSlug' => $guild->slug]) }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.item.prios.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="raid_id" value="{{ $raid->id }}">
@@ -73,7 +73,7 @@
                                     <ul class="list-inline">
                                         @foreach ($item->wishlistCharacters as $character)
                                             <li class="list-inline-item">
-                                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
                                                     {{ $character->name }}
                                                 </a>
                                             </li>
@@ -88,7 +88,7 @@
                                     <ul class="list-inline">
                                         @foreach ($item->receivedAndRecipeCharacters as $character)
                                             <li class="list-inline-item">
-                                                <a href="{{ route('character.show', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
                                                     {{ $character->name }}
                                                 </a>
                                             </li>

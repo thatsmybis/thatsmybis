@@ -51,11 +51,9 @@ Route::get('/streamer-mode', 'MemberController@toggleStreamerMode')->name('toggl
 //     Route::get( '/{item_id}/{slug?}', 'ItemController@show')->name('item.show');
 // });
 
-Route::get('/{guildSlug}', 'GuildController@find')->name('guild.find');
-
 Route::group([
         'middleware' => ['seeUser', 'checkGuildPermissions'],
-        'prefix'     => '{id}/{guildSlug}'
+        'prefix'     => '{guildId}/{guildSlug}'
     ], function () {
 
     Route::get( '/',                'GuildController@home')              ->name('guild.home');
@@ -66,15 +64,15 @@ Route::group([
     // Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
 
     Route::group(['prefix' => 'c'], function () {
-        Route::get( '/create',               'CharacterController@showCreate')->name('character.showCreate');
-        Route::post('/create',               'CharacterController@create')    ->name('character.create');
-        Route::get( '/{id}/{nameSlug}/edit', 'CharacterController@edit')      ->name('character.edit');
-        Route::get( '/{id}/{nameSlug}/loot', 'CharacterController@loot')      ->name('character.loot');
-        Route::post('/update',               'CharacterController@update')    ->name('character.update');
-        Route::post('/loot/update',          'CharacterController@updateLoot')->name('character.updateLoot');
-        Route::post('/note/update',          'CharacterController@updateNote')->name('character.updateNote');
-        Route::get( '/{id}/{nameSlug}',      'CharacterController@show')      ->name('character.show');
-        Route::get( '/{nameSlug}',           'CharacterController@find')      ->name('character.find');
+        Route::get( '/create',                        'CharacterController@showCreate')->name('character.showCreate');
+        Route::post('/create',                        'CharacterController@create')    ->name('character.create');
+        Route::get( '/{characterId}/{nameSlug}/edit', 'CharacterController@edit')      ->name('character.edit');
+        Route::get( '/{characterId}/{nameSlug}/loot', 'CharacterController@loot')      ->name('character.loot');
+        Route::post('/update',                        'CharacterController@update')    ->name('character.update');
+        Route::post('/loot/update',                   'CharacterController@updateLoot')->name('character.updateLoot');
+        Route::post('/note/update',                   'CharacterController@updateNote')->name('character.updateNote');
+        Route::get( '/{characterId}/{nameSlug}',      'CharacterController@show')      ->name('character.show');
+        Route::get( '/{nameSlug}',                    'CharacterController@find')      ->name('character.find');
     });
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')->name('guild.item.list');
@@ -90,11 +88,11 @@ Route::group([
     });
 
     Route::group(['prefix' => 'u'], function () {
-        Route::get( '/{id}/{usernameSlug}/edit', 'MemberController@edit')      ->name('member.edit');
-        Route::post('/update',                   'MemberController@update')    ->name('member.update');
-        Route::post('/note/update',              'MemberController@updateNote')->name('member.updateNote');
-        Route::get( '/{id}/{usernameSlug}',      'MemberController@show')      ->name('member.show');
-        Route::get( '/{usernameSlug}',           'MemberController@find')      ->name('member.find');
+        Route::get( '/{memberId}/{usernameSlug}/edit', 'MemberController@edit')      ->name('member.edit');
+        Route::post('/update',                         'MemberController@update')    ->name('member.update');
+        Route::post('/note/update',                    'MemberController@updateNote')->name('member.updateNote');
+        Route::get( '/{memberId}/{usernameSlug}',      'MemberController@show')      ->name('member.show');
+        Route::get( '/{usernameSlug}',                 'MemberController@find')      ->name('member.find');
     });
 
     // Route::get( '/resources',        'ContentController@index')->name('contentIndex');
@@ -106,37 +104,35 @@ Route::group([
     Route::get( '/assign-loot', 'ItemController@massInput')      ->name('item.massInput');
     Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
 
-    Route::group([
-        // 'middleware' => 'acl',
-        // 'is'         => 'admin|guild_master|officer|raider',
-    ], function () {
-        Route::group(['prefix' => 'raid'], function () {
-            Route::get( '/',               'RaidController@raids')        ->name('guild.raids');
-            Route::get( '/create',         'RaidController@edit')         ->name('guild.raid.create');
-            Route::get( '/edit/{id?}',     'RaidController@edit')         ->name('guild.raid.edit');
-            Route::post('/toggle-disable', 'RaidController@toggleDisable')->name('guild.raid.toggleDisable');
-            Route::post('/update',         'RaidController@update')       ->name('guild.raid.update');
-            Route::post('/',               'RaidController@create')       ->name('guild.raid.create');
 
-            Route::group(['prefix' => 'prio'], function () {
-                Route::get( '/{instanceSlug}',          'PrioController@chooseRaid')     ->name('guild.prios.chooseRaid');
-                Route::get( '/{instanceSlug}/{raidId}', 'PrioController@massInput')      ->name('guild.prios.massInput');
-                Route::post('/',                        'PrioController@submitMassInput')->name('guild.prios.massInput.submit');
-            });
+    Route::group(['prefix' => 'raid'], function () {
+        Route::get( '/',               'RaidController@raids')        ->name('guild.raids');
+        Route::get( '/create',         'RaidController@edit')         ->name('guild.raid.create');
+        Route::get( '/edit/{id?}',     'RaidController@edit')         ->name('guild.raid.edit');
+        Route::post('/toggle-disable', 'RaidController@toggleDisable')->name('guild.raid.toggleDisable');
+        Route::post('/update',         'RaidController@update')       ->name('guild.raid.update');
+        Route::post('/',               'RaidController@create')       ->name('guild.raid.create');
+
+        Route::group(['prefix' => 'prio'], function () {
+            Route::get( '/{instanceSlug}',          'PrioController@chooseRaid')     ->name('guild.prios.chooseRaid');
+            Route::get( '/{instanceSlug}/{raidId}', 'PrioController@massInput')      ->name('guild.prios.massInput');
+            Route::post('/',                        'PrioController@submitMassInput')->name('guild.prios.massInput.submit');
         });
-
-        Route::get( '/roles',     'RoleController@roles')    ->name('guild.roles');
-        Route::get( '/syncRoles', 'RoleController@syncRoles')->name('guild.syncRoles');
-
-        Route::get( '/settings',  'GuildController@settings')->name('guild.settings');
-
-        Route::post('/settings',  'GuildController@submitSettings')->name('guild.submitSettings');
-
-        // Can't get the permissions working right now (2019-12-02), so I'm disabling this.
-        Route::get( '/permissions', 'PermissionsController@permissions')->name('guild.permissions');
-        Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');
     });
+
+    Route::get( '/roles',     'RoleController@roles')    ->name('guild.roles');
+    Route::get( '/syncRoles', 'RoleController@syncRoles')->name('guild.syncRoles');
+
+    Route::get( '/settings',  'GuildController@settings')->name('guild.settings');
+
+    Route::post('/settings',  'GuildController@submitSettings')->name('guild.submitSettings');
+
+    // Can't get the permissions working right now (2019-12-02), so I'm disabling this.
+    Route::get( '/permissions', 'PermissionsController@permissions')->name('guild.permissions');
+    Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');
 });
+
+Route::get('/{guildSlug}', 'GuildController@find')->name('guild.find');
 
 // Route::group([
 //         'middleware' => 'acl',

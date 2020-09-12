@@ -23,21 +23,21 @@
                     @foreach ($user->members as $member)
                         <li class="bg-lightest mt-3 mb-3 p-3">
                             <h2>
-                                <a href="{{ route('member.show', ['guildSlug' => $member->guild->slug, 'usernameSlug' => $member->slug]) }}" class="text-uncommon font-weight-medium">
+                                <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}" class="text-uncommon font-weight-medium">
                                     &lt;{{ $member->guild->name }}&gt;
                                 </a>
                             </h2>
                             <ul class="list-inline">
                                 @foreach ($member->characters as $character)
                                     <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
-                                        <a href="{{route('character.show', ['guildSlug' => $member->guild->slug, 'nameSlug' => $character->slug]) }}"
+                                        <a href="{{route('character.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                             class="text-{{ $character->class ? strtolower($character->class) : '' }}">
                                             {{ $character->name }}
                                         </a>
                                     </li>
                                 @endforeach
                                 <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
-                                    <a href="{{ route('character.showCreate', ['guildSlug' => $member->guild->slug]) }}">
+                                    <a href="{{ route('character.showCreate', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}">
                                         <span class="fas fa-plus"></span>
                                         create character
                                     </a>
@@ -70,7 +70,7 @@
                             </h2>
                             <ul class="list-inline">
                                 <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
-                                    <a href="{{ route('guild.home', ['guildSlug' => $existingGuild->slug]) }}"
+                                    <a href="{{ route('guild.home', ['guildId' => $existingGuild->id, 'guildSlug' => $existingGuild->slug]) }}"
                                         class="btn btn-success">
                                         <span class="fas fa-plus"></span>
                                         Join Guild

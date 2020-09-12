@@ -20,11 +20,15 @@ class CheckGuildPermissions
      */
     public function handle($request, Closure $next)
     {
-        if ($request->route('guildSlug') !== null) {
-            $guild = Guild::where('slug', $request->route('guildSlug'))->first();
+        if ($request->route('guildId') !== null) {
+            $guild = Guild::where('id', $request->route('guildId'))->first();
 
             if (!$guild) {
                 abort(404, 'Guild not found.');
+            }
+
+            if ($guild->slug !== $request->route('guildSlug')) {
+                $request->route()->setParameter('guildSlug', $guild->slug);
             }
 
             $user = request()->get('currentUser');

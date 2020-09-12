@@ -26,7 +26,7 @@
                     @endforeach
                 </ul>
             @endif
-            <form class="form-horizontal" role="form" method="POST" action="{{ route(($character ? 'character.update' : 'character.create'), ['guildSlug' => $guild->slug]) }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ route(($character ? 'character.update' : 'character.create'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $character ? $character->id : '' }}" />
@@ -150,7 +150,7 @@
                                         placeholder="0"
                                         value="{{ old('level') ? old('level') : ($character ? $character->level : '60') }}" />
                                 </div>
-                            </div>                            
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -345,7 +345,7 @@
                         </div>
                     </div>
                 @endif
-                </div>        
+                </div>
                 <div class="form-group">
                     <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
                 </div>
