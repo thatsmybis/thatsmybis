@@ -45,7 +45,7 @@
                 </ul>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('item.massInput.submit', ['guildSlug' => $guild->slug]) }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ route('item.massInput.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <div class="row">

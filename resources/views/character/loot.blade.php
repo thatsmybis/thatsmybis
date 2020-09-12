@@ -21,7 +21,7 @@
                 </ul>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('character.updateLoot', ['guildSlug' => $guild->slug]) }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ route('character.updateLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $character->id }}" />

@@ -28,12 +28,31 @@ class GuildController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function home($guildSlug)
+    public function home($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+    }
+
+    /**
+     * Find a guild by ID.
+     *
+     * @param int $id The ID of the guild to find.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function find($guildSlug)
+    {
+        $guild = Guild::select(['id', 'slug'])->where('slug', $guildSlug)->first();
+
+        if (!$guild) {
+            request()->session()->flash('status', 'Could not find guild.');
+            return redirect()->route('home');
+        }
+
+        return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
     }
 
     /**
@@ -186,7 +205,7 @@ class GuildController extends Controller
 
         // Redirect to guild settings page; prompting the user to finish setup
         request()->session()->flash('status', 'Successfully registered guild.');
-        return redirect()->route('guild.settings', ['guildSlug' => $guild->slug]);
+        return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
     /**
@@ -194,14 +213,14 @@ class GuildController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function settings($guildSlug)
+    public function settings($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.guild')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load(['roles']);
@@ -218,14 +237,14 @@ class GuildController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function submitSettings($guildSlug)
+    public function submitSettings($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.guild')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit that guild.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load('roles');
@@ -343,6 +362,6 @@ class GuildController extends Controller
         ]);
 
         request()->session()->flash('status', 'Guild settings updated.');
-        return redirect()->route('guild.settings', ['guildSlug' => $guild->slug]);
+        return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 }

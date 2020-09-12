@@ -27,13 +27,13 @@
                                     </small>
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
-                                            <a href="{{ route('guild.raid.edit', ['guildSlug' => $guild->slug, 'id' => $raid->id]) }}">
+                                            <a href="{{ route('guild.raid.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raid->id]) }}">
                                                 <span class="fas fa-fw fa-pencil"></span>
                                                 edit
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <form class="form-inline" role="form" method="POST" action="{{ route('guild.raid.toggleDisable', ['guildSlug' => $guild->slug]) }}">
+                                            <form class="form-inline" role="form" method="POST" action="{{ route('guild.raid.toggleDisable', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                                 {{ csrf_field() }}
                                                 <input hidden name="id" value="{{ $raid->id }}">
                                                 <input hidden type="checkbox" name="disabled_at" value="1" class="" autocomplete="off"
@@ -57,7 +57,7 @@
                     @endif
                 </div>
                 <div class="col-12 mt-3">
-                    <a href="{{ route('guild.raid.edit', ['guildSlug' => $guild->slug]) }}" class="btn btn-success">
+                    <a href="{{ route('guild.raid.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
                         <span class="fas fa-fw fa-plus"></span> Create New Raid
                     </a>
                 </div>

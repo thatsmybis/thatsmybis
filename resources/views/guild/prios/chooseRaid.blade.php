@@ -20,7 +20,7 @@
                         <ol class="no-bullet no-indent striped">
                             @foreach ($guild->raids as $raid)
                                 <li class="p-3 mb-3 rounded">
-                                    <a href="{{ route('guild.prios.massInput', ['guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'raidId' => $raid->id]) }}" class="tag text-4">
+                                    <a href="{{ route('guild.prios.massInput', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'raidId' => $raid->id]) }}" class="tag text-4">
                                         <span class="role-circle-large" style="{{ $raid->role ? 'background-color:' . $raid->role->getColor() : '' }}" title="{{ $raid->role ? $raid->role->getColor() : ''}}"></span>
                                         <span class="font-weight-bold text-danger">{{ $raid->disabled_at ? 'DISABLED' : '' }}</span>
                                         <span title="{{ $raid->slug }}">{{ $raid->name }}</span>
@@ -32,7 +32,7 @@
                     @else
                     <p class="text-4">
                         No raid groups yet
-                        <a href="{{ route('guild.raid.edit', ['guildSlug' => $guild->slug]) }}" class="btn btn-success">
+                        <a href="{{ route('guild.raid.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
                             <span class="fas fa-fw fa-plus"></span> Create New Raid
                         </a>
                     </p>

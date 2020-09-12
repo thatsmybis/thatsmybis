@@ -26,14 +26,14 @@ class PrioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function chooseRaid($guildSlug, $instanceSlug)
+    public function chooseRaid($guildId, $guildSlug, $instanceSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.prios')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -55,14 +55,14 @@ class PrioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function massInput($guildSlug, $instanceSlug, $raidId)
+    public function massInput($guildId, $guildSlug, $instanceSlug, $raidId)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.prios')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -137,13 +137,13 @@ class PrioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function singleInput($guildSlug, $itemId, $raidId) {
+    public function singleInput($guildId, $guildSlug, $itemId, $raidId) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.prios')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load('characters');
@@ -199,13 +199,13 @@ class PrioController extends Controller
         ]);
     }
 
-    public function submitMassInput($guildSlug) {
+    public function submitMassInput($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.prios')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [
@@ -244,7 +244,7 @@ class PrioController extends Controller
         $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
 
         request()->session()->flash('status', 'Successfully updated prios for ' . $modifiedCount . ' items in ' . $raid->name . '.');
-        return redirect()->route('guild.item.list', ['guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]);
+        return redirect()->route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]);
     }
 
     /**
@@ -252,13 +252,13 @@ class PrioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function submitSingleInput($guildSlug) {
+    public function submitSingleInput($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.prios')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [
@@ -288,9 +288,10 @@ class PrioController extends Controller
 
         request()->session()->flash('status', ($modifiedCount ? 'Successfully updated prios for ' : 'No changes made to prios for ') . $itemsWithExistingPrios->first()->name . ' in ' . $raid->name . '.');
         return redirect()->route('guild.item.show', [
+            'guildId'   => $guild->id,
             'guildSlug' => $guild->slug,
-            'item_id' => $itemsWithExistingPrios->first()->item_id,
-            'slug' => slug($itemsWithExistingPrios->first()->name),
+            'item_id'   => $itemsWithExistingPrios->first()->item_id,
+            'slug'      => slug($itemsWithExistingPrios->first()->name),
         ]);
     }
 

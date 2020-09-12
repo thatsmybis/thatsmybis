@@ -25,14 +25,14 @@ class MemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($guildSlug, $usernameSlug)
+    public function edit($guildId, $guildSlug, $memberId, $usernameSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         $guild->load([
-            'members' => function ($query) use($usernameSlug) {
-                return $query->where('members.slug', $usernameSlug)
+            'members' => function ($query) use($memberId) {
+                return $query->where('members.id', $memberId)
                 ->with([
                     'roles',
                     'user',
@@ -45,12 +45,12 @@ class MemberController extends Controller
 
         if (!$member) {
             request()->session()->flash('status', 'Member not found.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         if ($member->id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         return view('member.edit', [
@@ -61,16 +61,35 @@ class MemberController extends Controller
     }
 
     /**
+     * Find a member by ID.
+     *
+     * @param int $id The ID of the guild to find.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function find($usernameSlug)
+    {
+        $member = Member::select(['id', 'slug'])->where('slug', $usernameSlug)->first();
+
+        if (!$member) {
+            request()->session()->flash('status', 'Could not find member.');
+            return redirect()->route('home');
+        }
+
+        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guildSlug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]);
+    }
+
+    /**
      * Show a member
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($guildSlug, $usernameSlug)
+    public function show($guildId, $guildSlug, $memberId, $usernameSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $member = Member::where(['guild_id' => $guild->id, 'slug' => $usernameSlug])
+        $member = Member::where(['guild_id' => $guild->id, 'id' => $memberId])
             ->with([
                 'characters',
                 'characters.raid',
@@ -78,10 +97,11 @@ class MemberController extends Controller
                 'characters.recipes',
                 'roles',
             ])
-            ->firstOrFail();
+            ->first();
 
         if (!$member) {
-            abort(404, 'Member not found.');
+            request()->session()->flash('status', 'Member not found.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $user = User::where('id', $member->user_id)->first();
@@ -135,7 +155,7 @@ class MemberController extends Controller
      * Update a member
      * @return
      */
-    public function update($guildSlug) {
+    public function update($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -180,7 +200,7 @@ class MemberController extends Controller
 
         if ($currentMember->id != $member->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit that member.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]);
         }
 
         $updateValues['username']    = request()->input('username');
@@ -225,14 +245,14 @@ class MemberController extends Controller
         }
 
         request()->session()->flash('status', 'Successfully updated profile.');
-        return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $member->slug]);
+        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]);
     }
 
     /**
      * Update a character's note(s) only
      * @return
      */
-    public function updateNote($guildSlug) {
+    public function updateNote($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -257,7 +277,7 @@ class MemberController extends Controller
 
         if (!$member) {
             request()->session()->flash('status', 'Member not found.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $member->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $updateValues = [];
@@ -266,7 +286,7 @@ class MemberController extends Controller
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if ($currentMember->id != $member->id && !$currentMember->hasPermission('edit.character')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit that member.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $member->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]);
         }
 
         $updateValues['public_note'] = request()->input('public_note');
@@ -305,6 +325,6 @@ class MemberController extends Controller
         }
 
         request()->session()->flash('status', "Successfully updated " . $member->username ."'s note.");
-        return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $member->slug]);
+        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]);
     }
 }

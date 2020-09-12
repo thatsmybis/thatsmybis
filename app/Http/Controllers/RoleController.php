@@ -23,14 +23,14 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function roles($guildSlug)
+    public function roles($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('view.discord-roles')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load('roles');
@@ -46,14 +46,14 @@ class RoleController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function syncRoles($guildSlug)
+    public function syncRoles($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('sync.discord-roles')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildSlug' => $guild->slug, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $guild->load(['roles']);
@@ -61,6 +61,6 @@ class RoleController extends Controller
         $result = Role::syncWithDiscord($guild);
 
         request()->session()->flash('status', $result['updatedCount'] . ' roles synced. ' . $result['addedCount'] . ' roles added. ' . $result['removedCount'] . ' roles removed.');
-        return redirect()->route('guild.roles', ['guildSlug' => $guild->slug]);
+        return redirect()->route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 }

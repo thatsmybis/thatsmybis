@@ -20,7 +20,7 @@
                     @endforeach
                 </ul>
             @endif
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('member.update', ['guildSlug' => $guild->slug]) }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ route('member.update', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $member->id }}" />

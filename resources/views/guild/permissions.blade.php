@@ -25,7 +25,7 @@
                 </li>
             @endforeach
         </ul>
-        <a class="btn btn-danger" href="{{ route('guild.addPermissions', ['guildSlug' => $guild->slug]) }}" onclick="return confirm('Are you sure? This only needs to be run once or when a developer is ready to update the permissions.')">
+        <a class="btn btn-danger" href="{{ route('guild.addPermissions', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" onclick="return confirm('Are you sure? This only needs to be run once or when a developer is ready to update the permissions.')">
             (danger) Load Permissions
         </a>
     </div>

@@ -14,7 +14,7 @@
             <div class="row mb-3 pt-3 bg-light rounded">
                 @if ($showEditLoot)
                     <div class="col-12 mb-4">
-                        <a href="{{ route('character.loot', ['guildSlug' => $guild->slug, 'nameSlug' => $character->slug]) }}" class="text-4">
+                        <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-4">
                             <span class="fas fa-fw fa-pencil"></span>
                             edit loot
                         </a>
@@ -141,7 +141,7 @@
                 </div>
             </div>
 
-            <form role="form" method="POST" action="{{ route('character.updateNote', ['guildSlug' => $guild->slug]) }}">
+            <form role="form" method="POST" action="{{ route('character.updateNote', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $character->id }}" />
