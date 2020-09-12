@@ -103,6 +103,10 @@ tl;dr
 - Run `composer install` from `/home/vagrant/code/thatsmybis`
 - Create a file named `.env` in `/home/vagrant/code/thatsmybis`. Base it off of `.env.example` or ask another dev for what details to fill in.
 
+### Getting the `The server requested authentication method unknown to the client` error after spinning up Homestead?
+
+Try running this in MySQL on your local environemtn: `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'secret';`
+
 ## Items Table
 
 The items table must be populated manually once your database is up and running. (create the database by running `php artisan migrate` once your environment is ready and you've already created your the empty database in mysql)
