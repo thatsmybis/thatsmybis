@@ -72,10 +72,31 @@ class Member extends Model
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->orderByDesc('position')->withTimestamps();
     }
 
-    public function canViewWishPrioList() {
+    public function raidsWithViewPermissions() {
+
+        $raids = $this->guild->raids;
+        $restrictWishPrioList = false;
         
-        return false;
-        //return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->orderByDesc('position')->withTimestamps();
+        // check if we have to restrict the wish/prio list
+        foreach($raids as $raid) {
+            if( $raid->restrict_wish_prio_list_role) {
+                $restrictWishPrioList=true;
+            }
+        }
+
+        if ($restrictWishPrioList) {
+            $raidsWithListViewPermissions = array();
+            foreach ($this->roles as $myRole) {
+                foreach($raids as $raid) { 
+                    if ($myRole->id == $raid->restrict_wish_prio_list_role) {
+                        array_push($raidsWithListViewPermissions, $raid->id);
+                    }
+                }
+            }
+            return $raidsWithListViewPermissions;
+        }
+        
+        return $raids->id;
     }
 
     /**

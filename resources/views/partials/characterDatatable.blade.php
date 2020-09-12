@@ -46,6 +46,7 @@
                 Loot Received
             </span>
         </li>
+        
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2" href="">
@@ -60,6 +61,7 @@
                 Prio's
             </span>
         </li>
+        
         <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">

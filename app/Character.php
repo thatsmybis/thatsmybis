@@ -4,6 +4,8 @@ namespace App;
 
 use App\{Item, Guild, Member, Raid};
 use Illuminate\Database\Eloquent\Model;
+use \Illuminate\Support\Facades\Log;
+
 
 class Character extends Model
 {
@@ -116,6 +118,8 @@ class Character extends Model
     }
 
     public function prios() {
+        $currentMember = request()->get('currentMember');
+
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->select(['items.*', 'added_by_members.username AS added_by_username'])
@@ -123,6 +127,7 @@ class Character extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->where('character_items.type', Item::TYPE_PRIO)
+            ->whereIn('character_items.raid_id', $currentMember->raidsWithViewPermissions())
             ->orderBy('character_items.raid_id')
             ->orderBy('character_items.order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
@@ -132,6 +137,9 @@ class Character extends Model
     }
 
     public function wishlist() {
+        // check if self
+        $currentMember = request()->get('currentMember');        
+
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->select(['items.*', 'added_by_members.username AS added_by_username'])
@@ -139,6 +147,7 @@ class Character extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->where('character_items.type', Item::TYPE_WISHLIST)
+            ->whereIn('character_items.raid_id', $currentMember->raidsWithViewPermissions())
             ->orderBy('order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
             ->withTimeStamps();

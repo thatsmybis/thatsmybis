@@ -213,14 +213,12 @@ class CharacterController extends Controller
 
 
         $raid = Raid::where(['id' => $character->raid_id])->firstOrFail();
-        $restrictLootList = $raid->restrict_wish_prio_list;
-        $raidListRole = $raid->restrict_wish_prio_list_role;
+        $restrictLootList = $raid->restrict_wish_prio_list_role;
 
         if($restrictLootList) {
             $hasListViewRole = false;
             foreach ($currentMember->roles as $role) {
-                //Log::info("canView: " . $hasListViewRole . "\tuserRole: " . $role->id . "\traidListRole " . $raidListRole);
-                if ($role->id == $raidListRole) {
+                if ($role->id == $restrictLootList) {
                     $hasListViewRole = true;
                 }
             }

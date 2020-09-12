@@ -6,6 +6,7 @@ use App\{Character, Content, Guild, Member, Raid, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
+use \Illuminate\Support\Facades\Log;
 
 class DashboardController extends Controller
 {
@@ -146,12 +147,6 @@ class DashboardController extends Controller
             $showOfficerNote = true;
         }
 
-        $showWishPrioList = false;
-        if ($currentMember->hasPermission('view.view-wish-prio-list') && !isStreamerMode()) {
-            $characterFields[] = 'characters.officer_note';
-            $showWishPrioList = true;
-        }
-
         $characters = Character::select($characterFields)
             ->leftJoin('members', function ($join) {
                 $join->on('members.id', 'characters.member_id');
@@ -166,8 +161,12 @@ class DashboardController extends Controller
             ->whereNull('characters.inactive_at')
             ->with(['prios', 'received', 'wishlist']) // 'recipes',
             ->orderBy('characters.name')
-            ->get();
+            ->with(['received']);
+            
+        
+        $characters = $characters->get();
 
+        
         return view('roster', [
             'characters'      => $characters,
             'currentMember'   => $currentMember,
