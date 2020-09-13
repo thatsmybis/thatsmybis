@@ -72,7 +72,6 @@ class AuditLogController extends Controller
                 })
             ->leftJoin('raids', function ($join) use ($currentMember) {
                     $join->on('raids.id', '=', 'audit_logs.raid_id');
-                    $join->whereIn('raids.id', $currentMember->raidsWithViewPermissions());
                 })
             ->leftJoin('roles', function ($join) {
                     $join->on('roles.id', '=', 'audit_logs.role_id');
@@ -95,6 +94,7 @@ class AuditLogController extends Controller
         }
 
         $logs = $query->where(['audit_logs.guild_id' => $guild->id])
+            ->whereIn('characters.raid_id', $currentMember->raidsWithViewPermissions())
             ->orderBy('audit_logs.created_at', 'desc')
             ->paginate(self::RESULTS_PER_PAGE);
 
