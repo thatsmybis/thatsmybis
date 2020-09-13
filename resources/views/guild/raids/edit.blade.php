@@ -86,9 +86,9 @@
                             <div class="row">
                                 <div class="col-1">
                                                     @if ($raid) 
-                                                        <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:toggleVisibility(this,'restrictListsToRole');" autocomplete="off" {{ $raid->restrict_wish_prio_list_role ? 'checked' : '' }}> </div>
+                                                        <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:updateWishListPrioRole(this,'restrictListsToRole');" autocomplete="off" {{ $raid->restrict_wish_prio_list_role ? 'checked' : '' }}> </div>
                                                     @else
-                                                        <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:toggleVisibility(this,'restrictListsToRole');" autocomplete="off"> </div>
+                                                        <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:updateWishListPrioRole(this,'restrictListsToRole');" autocomplete="off"> </div>
                                                     @endif
                                 <div class="col-11">
                                 <div class="form-group">
@@ -118,7 +118,7 @@
 
                                     <div class="form-group">
                                         <select name="restrict_wish_prio_list_role" class="form-control dark">
-                                            <option value="" selected>
+                                            <option id="noWishPrioList" value="" selected>
                                                 —
                                             </option>
 
@@ -154,13 +154,16 @@
 
 <script language="JavaScript">
 
-            function toggleVisibility(eventsender, idOfObjectToToggle){
+            function updateWishListPrioRole(eventsender, idOfObjectToToggle){
                 var newState = "hidden";
                 if (eventsender.checked === true){
                     newState = "visible";
+                } else {
+                    document.getElementById("noWishPrioList").selected=true;
                 }
 
                 document.getElementById(idOfObjectToToggle).style.visibility = newState;
+
             }       
         </script>
 @endsection
