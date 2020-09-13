@@ -76,7 +76,6 @@ class RaidController extends Controller
         $validationRules = [
             'name'    => 'string|max:255',
             'role_id' => 'nullable|integer|exists:roles,id',
-            'restrict_wish_prio_list' => 'nullable|boolean',
             'restrict_wish_prio_list_role' => 'nullable|integer|exists:roles,id'
         ];
 
