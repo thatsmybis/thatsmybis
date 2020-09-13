@@ -73,14 +73,12 @@ class Member extends Model
     }
 
     public function raidsWithViewPermissions() {
-
-        $raids = $this->guild->raids;
-        $restrictWishPrioList = false;
         
-        /*
+        $currentMember = request()->get('currentMember');
+
         // get all raids
         // where restrict_wish_prio_list is null (disabled) or I have the actual role
-        $someRaids = $this->guild->raids
+        return Raid::select('raids.id')
             ->leftJoin('characters', function ($join) {
                 $join->on('characters.raid_id', 'raids.id');
             })
@@ -90,11 +88,17 @@ class Member extends Model
             ->leftJoin('role_user', function ($join) {
                 $join->on('role_user.user_id', 'members.id');
             })
+            //not sure if that below condition is actually needed
+            ->where('members.id', '=', $currentMember->id)
             ->whereNull('restrict_wish_prio_list_role')
-            ->orWhere('raids.restrict_wish_prio_list_role', '=', 'role_user.role_id');                      
-
-        Log::info($someRaids);
-        */
+            ->orWhereIn('raids.restrict_wish_prio_list_role', $this->roles)         
+            ->distinct()
+            ->get()->toArray();           
+        
+        
+        /*
+        $raids = $this->guild->raids;
+        $restrictWishPrioList = false;
 
         // check if we have to restrict the wish/prio list
         foreach($raids as $raid) {
@@ -102,7 +106,6 @@ class Member extends Model
                 $restrictWishPrioList=true;
             }
         }
-
         if ($restrictWishPrioList) {
             $raidsWithListViewPermissions = array();
             foreach ($this->roles as $myRole) {
@@ -112,13 +115,11 @@ class Member extends Model
                     }
                 }
             }
-            return $raidsWithListViewPermissions;
+            //return $raidsWithListViewPermissions;
         }
-        
-        
- 
 
         return $raids->keyBy('id')->keys();
+        */
     }
 
     /**
