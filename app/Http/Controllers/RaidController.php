@@ -234,14 +234,12 @@ class RaidController extends Controller
 
         $updateValues = [];
 
-        $role = null;
         $role = $guild->roles->where('id', request()->input('restrict_wish_prio_list_role'));
         if (!$role && request()->input('restrict_wish_prio_list_role') != null) {
             abort(404, 'Role for Wish/Prio list not found.');
         } else {
             $updateValues['restrict_wish_prio_list_role'] = request()->input('restrict_wish_prio_list_role');
         }
-        
 
         $updateValues['name']    = request()->input('name');
         $updateValues['slug']    = slug(request()->input('name'));
