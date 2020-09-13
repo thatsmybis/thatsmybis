@@ -34,6 +34,7 @@ class ItemController extends Controller
         $instance = Instance::where('slug', $instanceSlug)->firstOrFail();
 
         $characterFields = [
+            'characters.id',
             'characters.raid_id',
             'characters.name',
             'characters.slug',

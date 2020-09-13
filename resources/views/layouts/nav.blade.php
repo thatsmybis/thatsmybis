@@ -62,24 +62,24 @@
                     <a class="nav-link" href="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Roster</a>
                 </li>
 
-                <!-- Why hello there... yes. Yes, there is a 'news' page. No, I don't quite think it's ready for the mainstream yet.
+                {{-- Why hello there... yes. Yes, there is a 'news' page. No, I don't quite think it's ready for the mainstream yet.
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.news']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('guild.news', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">News</a>
                 </li>
-                -->
+                --}}
 
-                <!-- Yep, there's support for a calendar...
+                {{-- Yep, there's support for a calendar...
                 @if ($guild->calendar_link)
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.calendar']) ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('guild.calendar', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Calendar</a>
                     </li>
                 @endif
-                -->
-                <!-- Why yes, there's a section for hosting resources such as guides... but it's just not time yet!
+                --}}
+                {{-- Why yes, there's a section for hosting resources such as guides... but it's just not time yet!
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['contentIndex', 'showContent']) ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('contentIndex', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Resources</a>
                 </li>
-                -->
+                --}}
 
                 @if ($currentMember->hasPermission('edit.raid-loot'))
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['item.massInput']) ? 'active' : '' }}">

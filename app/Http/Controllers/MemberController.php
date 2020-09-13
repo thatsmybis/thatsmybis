@@ -67,9 +67,11 @@ class MemberController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function find($usernameSlug)
+    public function find($guildId, $guildSlug, $usernameSlug)
     {
-        $member = Member::select(['id', 'slug'])->where('slug', $usernameSlug)->first();
+        $guild  = request()->get('guild');
+
+        $member = Member::select(['id', 'slug', 'guild_id'])->where(['slug' => $usernameSlug, 'guild_id' => $guild->id])->first();
 
         if (!$member) {
             request()->session()->flash('status', 'Could not find member.');
