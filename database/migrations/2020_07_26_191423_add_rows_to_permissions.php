@@ -23,8 +23,6 @@ class AddRowsToPermissions extends Migration
                 (null, "officer-notes",           "{\"view\":true,\"edit\":true,\"create\":true}",                                  "View and edit officer notes",                          "officer",      "2020-07-26 00:00:00"),
                 (null, "items",                   "{\"edit\":true}",                                                                "Edit item notes",                                      "officer",      "2020-07-26 00:00:00"),
                 (null, "raid-loot",               "{\"view\":true,\"edit\":true,\"create\":true}",                                  "Assign raid loot",                                     "raid_leader",  "2020-07-26 00:00:00"),
-                (null, "view-wishlist",           "{\"view\":true,\"edit\":false,\"create\":false}",                                "View Wishlists of other people\'s characters",         "raid_leader",  "2020-07-26 00:00:00")
-
                 ;');
         });
     }
