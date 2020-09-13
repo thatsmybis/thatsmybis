@@ -180,9 +180,10 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function find($nameSlug)
+    public function find($guildId, $guildSlug, $nameSlug)
     {
-        $character = Character::select(['id', 'slug'])->where('slug', $nameSlug)->first();
+        $guild     = request()->get('guild');
+        $character = Character::select(['id', 'slug'])->where(['slug' => $nameSlug, 'guild_id' => $guild->id])->first();
 
         if (!$character) {
             request()->session()->flash('status', 'Could not find character.');
@@ -197,12 +198,12 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function loot($guildId, $guildSlug, $nameSlug)
+    public function loot($guildId, $guildSlug, $characterId, $nameSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['slug' => $nameSlug, 'guild_id' => $guild->id])->with(['member', 'raid', 'raid.role'])->firstOrFail();
+        $character = Character::where(['id' => $characterId, 'guild_id' => $guild->id])->with(['member', 'raid', 'raid.role'])->firstOrFail();
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
@@ -225,14 +226,14 @@ class CharacterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($guildId, $guildSlug, $nameSlug)
+    public function show($guildId, $guildSlug, $characterId, $nameSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         $guild->load('raids');
 
-        $character = Character::where(['slug' => $nameSlug, 'guild_id' => $guild->id])
+        $character = Character::where(['id' => $characterId, 'guild_id' => $guild->id])
             ->with([
                 'member',
                 'prios',

@@ -86,7 +86,7 @@ function createTable(lastSource) {
                     return `
                     <ul class="no-bullet no-indent mb-0">
                         <li>
-                            <a href="/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }"
+                            <a href="/${ guild.id }/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }"
                                 class=""
                                 data-wowhead-link="https://classic.wowhead.com/item=${ row.item_id }"
                                 data-wowhead="item=${ row.item_id }?domain=classic">
@@ -186,7 +186,7 @@ function getCharacterList(data, type, itemId) {
             <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }"
                 value="${ type == 'prio' ? character.pivot.order : '' }"
                 class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0">
-                <a href="/${ guild.slug }/c/${ character.slug }"
+                <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     <span class="text-muted">${ character.pivot.order ? character.pivot.order : '' }</span>
