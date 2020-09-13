@@ -14,7 +14,7 @@ class CreateWishlistPermissionsTable extends Migration
     public function up()
     {
         Schema::table('raids', function (Blueprint $table) {
-            $table->integer('restrict_wish_prio_list_role')->unsigned()->index()->foreign()->references("id")->on("roles")->onDelete("cascade");
+            $table->integer('restrict_wish_prio_list_role')->nullable()->unsigned()->index()->foreign()->references("id")->on("roles")->onDelete("cascade");
         });
     }
 
@@ -25,7 +25,7 @@ class CreateWishlistPermissionsTable extends Migration
      */
     public function down()
     {
-        Schema::table('raid', function (Blueprint $table) {
+        Schema::table('raids', function (Blueprint $table) {
             $table->dropColumn('restrict_wish_prio_list_role');
         });
     }

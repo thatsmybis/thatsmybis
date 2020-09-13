@@ -117,9 +117,7 @@ class Character extends Model
         return ($query);
     }
 
-    public function prios() {
-        $currentMember = request()->get('currentMember');
-
+    public function unfiltered_prios() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->select(['items.*', 'added_by_members.username AS added_by_username'])
@@ -127,7 +125,6 @@ class Character extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->where('character_items.type', Item::TYPE_PRIO)
-            ->whereIn('character_items.raid_id', $currentMember->raidsWithViewPermissions())
             ->orderBy('character_items.raid_id')
             ->orderBy('character_items.order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
@@ -136,17 +133,31 @@ class Character extends Model
         return ($query);
     }
 
-    public function wishlist() {
-        // check if self
-        $currentMember = request()->get('currentMember');        
-        $myCharacters = array();
+    public function prios() {
+        $currentMember = request()->get('currentMember');
+        //todo: fix wishlist() and implement same logic for members own characters
+        $query = $this
+            ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
+            ->select(['items.*', 'added_by_members.username AS added_by_username'])
+            ->leftJoin('members AS added_by_members', function ($join) {
+                $join->on('added_by_members.id', 'character_items.added_by');
+            })
+            // character_item.raid_id is only not null after assigning an item 
+            ->leftJoin('characters', function ($join) {
+                $join->on('characters.id', 'character_items.character_id');
+            })
+            ->where('character_items.type', Item::TYPE_PRIO)
+            ->whereIn('characters.raid_id', $currentMember->raidsWithViewPermissions())
+            ->orderBy('character_items.raid_id')
+            ->orderBy('character_items.order')
+            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
+            ->withTimeStamps();
 
-        //todo: fix this - no clue why $currentMember->characters returns all characters oO
-        foreach($currentMember->characters as $chars) {
-            Log::info($currentMember->name);
-            array_push($myCharacters, $chars->id);
-        }
-        
+        return ($query);
+    }
+
+    public function unfiltered_wishlist() {
+
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->select(['items.*', 'added_by_members.username AS added_by_username'])
@@ -154,9 +165,30 @@ class Character extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->where('character_items.type', Item::TYPE_WISHLIST)
-            ->whereIn('character_items.raid_id', $currentMember->raidsWithViewPermissions())
-            ->orWhereIn('character_items.character_id', $myCharacters)
             ->orderBy('order')
+            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
+            ->withTimeStamps();
+
+        return ($query);
+    }
+
+    public function wishlist() {
+        // check if self
+        $currentMember = request()->get('currentMember');   
+        
+        $query = $this
+            ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
+            ->select(['items.*', 'added_by_members.username AS added_by_username'])
+            ->leftJoin('members AS added_by_members', function ($join) {
+                $join->on('added_by_members.id', 'character_items.added_by');
+            })
+            // character_item.raid_id is only not null after assigning an item 
+            ->leftJoin('characters', function ($join) {
+                $join->on('characters.id', 'character_items.character_id');
+            })
+            ->where('character_items.type', Item::TYPE_WISHLIST)
+            ->whereIn('characters.raid_id', $currentMember->raidsWithViewPermissions())
+            ->orderBy('character_items.order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
             ->withTimeStamps();
 

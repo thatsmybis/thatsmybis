@@ -104,7 +104,6 @@ class RaidController extends Controller
         $createValues['slug']     = slug(request()->input('name'));
         $createValues['role_id']  = request()->input('role_id');
         $createValues['guild_id'] = $guild->id;
-        $createValues['restrict_wish_prio_list'] = request()->input('restrict_wish_prio_list_role');
         $createValues['restrict_wish_prio_list_role'] = request()->input('restrict_wish_prio_list_role');
 
 
@@ -209,13 +208,10 @@ class RaidController extends Controller
             'id'      => 'required|integer|exists:raids,id',
             'name'    => 'string|max:255',
             'role_id' => 'nullable|integer|exists:roles,id',
-            'restrict_wish_prio_list' => 'nullable|boolean',
             'restrict_wish_prio_list_role' => 'nullable|integer|exists:roles,id'
         ];
 
         $this->validate(request(), $validationRules);
-
-      
 
         $id = request()->input('id');
         $guild->load([
@@ -237,8 +233,6 @@ class RaidController extends Controller
             }
         }
 
-
-
         $updateValues = [];
 
         $role = null;
@@ -251,15 +245,10 @@ class RaidController extends Controller
             }
         }
 
-        if (request()->input('restrict_wish_prio_list') == 0) {
-            $updateValues['restrict_wish_prio_list_role'] = null;
-        }
-
         $updateValues['name']    = request()->input('name');
         $updateValues['slug']    = slug(request()->input('name'));
         $updateValues['role_id'] = request()->input('role_id');
-        $updateValues['restrict_wish_prio_list'] = request()->input('restrict_wish_prio_list');
-        
+
         $auditMessage = '';
 
         if ($updateValues['name'] != $raid->name) {

@@ -86,9 +86,9 @@
                             <div class="row">
                                 <div class="col-1">
                                                     @if ($raid) 
-                                                        <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:toggleVisibility(this,'restrictListsToRole');" autocomplete="off" {{ $raid->restrict_wish_prio_list ? 'checked' : '' }}> </div>
+                                                        <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:toggleVisibility(this,'restrictListsToRole');" autocomplete="off" {{ $raid->restrict_wish_prio_list_role ? 'checked' : '' }}> </div>
                                                     @else
-                                                    <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:toggleVisibility(this,'restrictListsToRole');" autocomplete="off"> </div>
+                                                        <input type="checkbox" name="restrict_wish_prio_list" value="1" class="" onClick="JavaScript:toggleVisibility(this,'restrictListsToRole');" autocomplete="off"> </div>
                                                     @endif
                                 <div class="col-11">
                                 <div class="form-group">
@@ -102,7 +102,7 @@
 
 
                         @if ($raid)
-                            <div id="restrictListsToRole" class="row mb-3" style="visibility:  {{ $raid->restrict_wish_prio_list ? 'visible' : 'hidden' }}">
+                            <div id="restrictListsToRole" class="row mb-3" style="visibility:  {{ $raid->restrict_wish_prio_list_role ? 'visible' : 'hidden' }}">
                         @else
                             <div id="restrictListsToRole" class="row mb-3" style="visibility: hidden">
                         @endif 

@@ -77,6 +77,25 @@ class Member extends Model
         $raids = $this->guild->raids;
         $restrictWishPrioList = false;
         
+        /*
+        // get all raids
+        // where restrict_wish_prio_list is null (disabled) or I have the actual role
+        $someRaids = $this->guild->raids
+            ->leftJoin('characters', function ($join) {
+                $join->on('characters.raid_id', 'raids.id');
+            })
+            ->leftJoin('members', function ($join) {
+                $join->on('members.id', 'characters.member_id');
+            })
+            ->leftJoin('role_user', function ($join) {
+                $join->on('role_user.user_id', 'members.id');
+            })
+            ->whereNull('restrict_wish_prio_list_role')
+            ->orWhere('raids.restrict_wish_prio_list_role', '=', 'role_user.role_id');                      
+
+        Log::info($someRaids);
+        */
+
         // check if we have to restrict the wish/prio list
         foreach($raids as $raid) {
             if( $raid->restrict_wish_prio_list_role) {
@@ -87,8 +106,8 @@ class Member extends Model
         if ($restrictWishPrioList) {
             $raidsWithListViewPermissions = array();
             foreach ($this->roles as $myRole) {
-                foreach($raids as $raid) { 
-                    if ($myRole->id === $raid->restrict_wish_prio_list_role) {
+                foreach($raids as $raid) {  
+                    if ($myRole->id === $raid->restrict_wish_prio_list_role || !$raid->restrict_wish_prio_list_role) { // if only one raid has filtering active for whatever reason
                         array_push($raidsWithListViewPermissions, $raid->id);
                     }
                 }
@@ -96,13 +115,10 @@ class Member extends Model
             return $raidsWithListViewPermissions;
         }
         
-        //todo: use some php function that does the same instead of a loop
-        $allRaids = array();
-        foreach($raids as $raid) {
-            array_push($allRaids, $raid->id);
-        }
+        
+ 
 
-        return $allRaids;
+        return $raids->keyBy('id')->keys();
     }
 
     /**
