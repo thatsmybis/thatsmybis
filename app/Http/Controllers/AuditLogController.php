@@ -95,6 +95,7 @@ class AuditLogController extends Controller
 
         $logs = $query->where(['audit_logs.guild_id' => $guild->id])
             ->whereIn('characters.raid_id', $currentMember->raidsWithViewPermissions())
+            ->orWhereIn('raids.id', $currentMember->raidsWithViewPermissions())
             ->orderBy('audit_logs.created_at', 'desc')
             ->paginate(self::RESULTS_PER_PAGE);
 
