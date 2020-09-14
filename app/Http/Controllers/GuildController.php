@@ -37,9 +37,9 @@ class GuildController extends Controller
     }
 
     /**
-     * Find a guild by ID.
+     * Find a guild by slug.
      *
-     * @param int $id The ID of the guild to find.
+     * @param int $guildSlug The slug of the guild to find.
      *
      * @return \Illuminate\Http\Response
      */
