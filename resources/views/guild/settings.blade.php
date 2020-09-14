@@ -22,7 +22,7 @@
                     @endforeach
                 </ul>
             @endif
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.submitSettings', $guild->slug) }}">
+            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.submitSettings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <div class="row">
@@ -37,7 +37,7 @@
                                     </label>
                                     <input name="name" maxlength="36" type="text" class="form-control dark" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
                                     <span class="text-muted small">
-                                        Changing this breaks existing links to the guild
+                                        Changing this can break existing links to the guild
                                     </span>
                                 </div>
                             </div>
