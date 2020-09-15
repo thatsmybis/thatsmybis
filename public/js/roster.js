@@ -111,7 +111,7 @@ function createTable() {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
-                        return data && data.length ? getItemList(data, 'wishlist', row.id) : '—';
+                    return data && data.length ? getItemList(data, 'wishlist', row.id) : '—';
                 },
                 "orderable" : false,
                 "visible" : showWishlist ? true : false,
