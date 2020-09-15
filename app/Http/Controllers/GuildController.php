@@ -251,6 +251,8 @@ class GuildController extends Controller
 
         $validationRules =  [
             'name'                => 'string|max:36|unique:guilds,name,' . $guild->id,
+            'is_prio_private'     => 'nullable|boolean',
+            'is_wishlist_private' => 'nullable|boolean',
             'calendar_link'       => 'nullable|string|max:255',
             'gm_role_id'          => 'nullable|integer|exists:roles,discord_id',
             'officer_role_id'     => 'nullable|integer|exists:roles,discord_id',
@@ -262,9 +264,11 @@ class GuildController extends Controller
 
         $permissions = Permission::all();
 
-        $updateValues['name']          = request()->input('name');
-        $updateValues['slug']          = slug(request()->input('name'));
-        $updateValues['calendar_link'] = request()->input('calendar_link');
+        $updateValues['name'] = request()->input('name');
+        $updateValues['slug'] = slug(request()->input('name'));
+        $updateValues['is_prio_private']     = request()->input('is_prio_private') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_private'] = request()->input('is_wishlist_private') == 1 ? 1 : 0;
+        $updateValues['calendar_link']       = request()->input('calendar_link');
 
         if (request()->input('gm_role_id')) {
             // Let's make sure that role exists...
@@ -279,7 +283,7 @@ class GuildController extends Controller
             $updateValues['gm_role_id'] = null;
             if ($guild->gm_role_id) {
                 // Not anymore you're not!
-                // Strip this role of all it's ill-gotten permissions! Walk the plank, ya scurvy dog!
+                // Strip this role of all its ill-gotten permissions! Walk the plank, ya scurvy dog!
                 $role = $guild->roles->where('discord_id', $guild->gm_role_id)->first();
                 if ($role) {
                     $role->permissions()->detach();
