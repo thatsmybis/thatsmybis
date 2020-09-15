@@ -30,6 +30,16 @@ class AuditLogController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $showPrios = false;
+        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+            $showPrios = true;
+        }
+
+        $showWishlist = false;
+        if (!$guild->is_wishlist_private  || $currentMember->hasPermission('view.wishlist')) {
+            $showWishlist = true;
+        }
+
         $select = 'audit_logs.*';
 
         $query = AuditLog::select([
@@ -77,6 +87,14 @@ class AuditLogController extends Controller
                     $join->on('roles.id', '=', 'audit_logs.role_id');
                 });
 
+        if (!$showPrios && !$showWishlist) {
+            $query = $query->where([['audit_logs.type', '!=', Item::TYPE_PRIO], ['audit_logs.type', '!=', Item::TYPE_WISHLIST]])->orWhereNull('audit_logs.type');
+        } else if (!$showPrios) {
+            $query = $query->where('audit_logs.type', '!=', Item::TYPE_PRIO)->orWhereNull('audit_logs.type');
+        } else if (!$showWishlist) {
+            $query = $query->where('audit_logs.type', '!=', Item::TYPE_WISHLIST)->orWhereNull('audit_logs.type');
+        }
+
         if (!empty($params['character_id'])) {
             $query = $query->where('characters.id', $params['character_id']);
         }
@@ -101,6 +119,8 @@ class AuditLogController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'logs'          => $logs,
+            'showPrios'     => $showPrios,
+            'showWishlist'  => $showWishlist,
         ]);
     }
 }
