@@ -111,10 +111,10 @@ function createTable() {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
-                    return data && data.length ? getItemList(data, 'wishlist', row.id) : '—';
+                        return data && data.length ? getItemList(data, 'wishlist', row.id) : '—';
                 },
                 "orderable" : false,
-                "visible" : true,
+                "visible" : showWishlist ? true : false,
                 "width"   : "280px",
             },
             {
@@ -124,7 +124,7 @@ function createTable() {
                     return data && data.length ? getItemList(data, 'prio', row.id, true) : '—';
                 },
                 "orderable" : false,
-                "visible" : true,
+                "visible" : showPrios ? true : false,
                 "width"   : "280px",
             },
             {
