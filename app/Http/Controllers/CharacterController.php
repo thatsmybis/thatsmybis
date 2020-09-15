@@ -236,13 +236,23 @@ class CharacterController extends Controller
         $character = Character::where(['id' => $characterId, 'guild_id' => $guild->id])
             ->with([
                 'member',
-                'prios',
                 'raid',
                 'raid.role',
                 'received',
                 'recipes',
-                'wishlist',
             ])->firstOrFail();
+
+        $showPrios = false;
+        if (!$guild->is_prio_private || $character->member_id == $currentMember->id || $currentMember->hasPermission('view.prios')) {
+            $showPrios = true;
+            $character = $character->load('prios');
+        }
+
+        $showWishlist = false;
+        if (!$guild->is_wishlist_private || $character->member_id == $currentMember->id || $currentMember->hasPermission('view.wishlist')) {
+            $showWishlist = true;
+            $character = $character->load('wishlist');
+        }
 
         $showEdit = false;
         if ($character->member_id == $currentMember->id || $currentMember->hasPermission('edit.characters')) {
@@ -266,6 +276,8 @@ class CharacterController extends Controller
             'showEdit'         => $showEdit,
             'showEditLoot'     => $showEditLoot,
             'showOfficerNote'  => $showOfficerNote,
+            'showPrios'        => $showPrios,
+            'showWishlist'     => $showWishlist,
         ]);
     }
 
