@@ -278,7 +278,6 @@ class GuildController extends Controller
                 $rolePermissions = $permissions->whereIn('role_note', ['guild_master', 'officer', 'raid_leader']);
                 $role->permissions()->sync($rolePermissions->keyBy('id')->keys()->toArray());
                 $updateValues['gm_role_id'] = request()->input('gm_role_id');
-                // Detach the old permissions
             }
         } else {
             $updateValues['gm_role_id'] = null;
