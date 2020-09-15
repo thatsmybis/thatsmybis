@@ -32,6 +32,8 @@ class Guild extends Model
         'class_leader_role_id',
         'member_role_ids',
         'calendar_link',
+        'is_prio_private',
+        'is_wishlist_private',
     ];
 
     /**
