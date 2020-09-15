@@ -656,6 +656,7 @@ class CharacterController extends Controller
 
                 $audits[] = [
                     'description'  => $currentMember->username . ' removed item from a character (' . $itemType . ')' . ' (prio ' . $existingItem->pivot->order . ')',
+                    'type'         => $itemType,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,
                     'character_id' => $character->id,
@@ -687,6 +688,7 @@ class CharacterController extends Controller
 
                 $audits[] = [
                     'description'  => $currentMember->username . ' added item to a character (' . $itemType . ')',
+                    'type'         => $itemType,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,
                     'character_id' => $character->id,
@@ -723,6 +725,7 @@ class CharacterController extends Controller
         if (count($toUpdate) > 0) {
             $audits[] = [
                 'description'  => $currentMember->username . ' changed item priority(s) for a character (' . $itemType . ')',
+                'type'         => $itemType,
                 'member_id'    => $currentMember->id,
                 'guild_id'     => $currentMember->guild_id,
                 'character_id' => $character->id,
