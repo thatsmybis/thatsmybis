@@ -278,16 +278,18 @@ class GuildController extends Controller
                 $rolePermissions = $permissions->whereIn('role_note', ['guild_master', 'officer', 'raid_leader']);
                 $role->permissions()->sync($rolePermissions->keyBy('id')->keys()->toArray());
                 $updateValues['gm_role_id'] = request()->input('gm_role_id');
+                // Detach the old permissions
             }
         } else {
             $updateValues['gm_role_id'] = null;
-            if ($guild->gm_role_id) {
-                // Not anymore you're not!
-                // Strip this role of all its ill-gotten permissions! Walk the plank, ya scurvy dog!
-                $role = $guild->roles->where('discord_id', $guild->gm_role_id)->first();
-                if ($role) {
-                    $role->permissions()->detach();
-                }
+        }
+
+        // The old GM role doesn't match the new GM role.
+        if ($guild->gm_role_id && $guild->gm_role_id != request()->input('gm_role_id')) {
+            // Strip this role of all its ill-gotten permissions! Walk the plank, ya scurvy dog!
+            $role = $guild->roles->where('discord_id', $guild->gm_role_id)->first();
+            if ($role) {
+                $role->permissions()->detach();
             }
         }
 
@@ -301,11 +303,11 @@ class GuildController extends Controller
             }
         } else {
             $updateValues['officer_role_id'] = null;
-            if ($guild->officer_role_id) {
-                $role = $guild->roles->where('discord_id', $guild->officer_role_id)->first();
-                if ($role) {
-                    $role->permissions()->detach();
-                }
+        }
+        if ($guild->officer_role_id && $guild->officer_role_id != request()->input('officer_role_id')) {
+            $role = $guild->roles->where('discord_id', $guild->officer_role_id)->first();
+            if ($role) {
+                $role->permissions()->detach();
             }
         }
 
@@ -319,11 +321,11 @@ class GuildController extends Controller
             }
         } else {
             $updateValues['raid_leader_role_id'] = null;
-            if ($guild->raid_leader_role_id) {
-                $role = $guild->roles->where('discord_id', $guild->raid_leader_role_id)->first();
-                if ($role) {
-                    $role->permissions()->detach();
-                }
+        }
+        if ($guild->raid_leader_role_id && $guild->raid_leader_role_id != request()->input('raid_leader_role_id')) {
+            $role = $guild->roles->where('discord_id', $guild->raid_leader_role_id)->first();
+            if ($role) {
+                $role->permissions()->detach();
             }
         }
 
