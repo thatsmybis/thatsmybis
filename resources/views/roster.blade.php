@@ -19,6 +19,8 @@
     var guild      = {!! $guild->toJson() !!};
     var raids      = {!! $raids->toJson() !!};
     var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
+    var showPrios       = {{ $showPrios ? 'true' : 'false' }};
+    var showWishlist    = {{ $showWishlist ? 'true' : 'false' }};
 </script>
 <script src="{{ env('APP_ENV') == 'local' ? asset('/js/roster.js') : mix('js/processed/roster.js') }}"></script>
 @endsection

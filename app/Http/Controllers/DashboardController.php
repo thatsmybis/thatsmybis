@@ -140,7 +140,6 @@ class DashboardController extends Controller
         ];
 
         $showOfficerNote = false;
-
         if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
             $characterFields[] = 'characters.officer_note';
             $showOfficerNote = true;
@@ -158,9 +157,22 @@ class DashboardController extends Controller
             })
             ->where('characters.guild_id', $guild->id)
             ->whereNull('characters.inactive_at')
-            ->with(['prios', 'received', 'wishlist']) // 'recipes',
-            ->orderBy('characters.name')
-            ->get();
+            ->with(['received']) // 'recipes',
+            ->orderBy('characters.name');
+
+        $showPrios = false;
+        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+            $characters = $characters->with('prios');
+            $showPrios = true;
+        }
+
+        $showWishlist = false;
+        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
+            $characters = $characters->with('wishlist');
+            $showWishlist = true;
+        }
+
+        $characters = $characters->get();
 
         return view('roster', [
             'characters'      => $characters,
@@ -168,6 +180,8 @@ class DashboardController extends Controller
             'guild'           => $guild,
             'raids'           => $guild->raids,
             'showOfficerNote' => $showOfficerNote,
+            'showPrios'       => $showPrios,
+            'showWishlist'    => $showWishlist,
         ]);
     }
 }
