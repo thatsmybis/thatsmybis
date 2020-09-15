@@ -11,9 +11,21 @@
                         <span class="fas fa-fw fa-scroll-old text-gold"></span>
                         Audit Log
                     </h1>
-                    <p>
-                        Whodunit?
-                    </p>
+                    <ul class="small">
+                        <li class="no-bullet font-italic">
+                            Whodunit?
+                        </li>
+                        @if (!$showPrios)
+                            <li class="text-danger">
+                                Prios are hidden by your guild master
+                            </li>
+                        @endif
+                        @if (!$showWishlist)
+                            <li class="text-danger">
+                                Wishlists are hidden by your guild master
+                            </li>
+                        @endif
+                    </ul>
                 </div>
 
                 <div class="col-12">
