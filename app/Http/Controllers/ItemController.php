@@ -342,29 +342,45 @@ class ItemController extends Controller
                 ])
                 ->where('guilds.id', $guild->id);
             },
-            'priodCharacters' => function ($query) use ($guild) {
-                return $query
-                    ->where(['characters.guild_id' => $guild->id]);
-            },
             'receivedAndRecipeCharacters' => function ($query) use($guild) {
                 return $query
                     ->where(['characters.guild_id' => $guild->id])
                     ->groupBy(['character_items.character_id']);
             },
-            'wishlistCharacters' => function ($query) use($guild) {
-                return $query
-                    ->where([
-                        'characters.guild_id' => $guild->id,
-                    ])
-                    ->groupBy(['character_items.character_id'])
-                    ->with([
-                        'prios',
-                        'received',
-                        'recipes',
-                        'wishlist',
-                    ]);
-            },
-        ])->firstOrFail();
+        ]);
+
+        $showPrios = false;
+        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+            $item = $item->with([
+                'priodCharacters' => function ($query) use ($guild) {
+                    return $query
+                        ->where(['characters.guild_id' => $guild->id]);
+                },
+            ]);
+            $showPrios = true;
+        }
+
+        $showWishlist = false;
+        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
+            $item = $item->with([
+                'wishlistCharacters' => function ($query) use($guild) {
+                    return $query
+                        ->where([
+                            'characters.guild_id' => $guild->id,
+                        ])
+                        ->groupBy(['character_items.character_id'])
+                        ->with([
+                            'prios',
+                            'received',
+                            'recipes',
+                            'wishlist',
+                        ]);
+                },
+            ]);
+            $showWishlist = true;
+        }
+
+        $item = $item->firstOrFail();
 
         $itemSlug = slug($item->name);
 
@@ -403,13 +419,15 @@ class ItemController extends Controller
             'guild'                       => $guild,
             'item'                        => $item,
             'notes'                       => $notes,
-            'priodCharacters'             => $item->priodCharacters,
+            'priodCharacters'             => $item->relationLoaded('priodCharacters') ? $item->priodCharacters : null,
             'raids'                       => $guild->raids,
             'receivedAndRecipeCharacters' => $item->receivedAndRecipeCharacters,
             'showNoteEdit'                => $showNoteEdit,
             'showOfficerNote'             => $showOfficerNote,
             'showPrioEdit'                => $showPrioEdit,
-            'wishlistCharacters'          => $item->wishlistCharacters,
+            'showPrios'                   => $showPrios,
+            'showWishlist'                => $showWishlist,
+            'wishlistCharacters'          => $item->relationLoaded('wishlistCharacters') ? $item->wishlistCharacters : null,
             'itemJson'                    => self::getItemWowheadJson($item->item_id),
         ]);
     }

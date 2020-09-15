@@ -46,20 +46,24 @@
                 Loot Received
             </span>
         </li>
-        <li class="list-inline-item">&sdot;</li>
-        <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2" href="">
-                <span class="text-muted fal fa-fw fa-scroll-old"></span>
-                Wishlist
-            </span>
-        </li>
-        <li class="list-inline-item">&sdot;</li>
-        <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
-                <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
-                Prio's
-            </span>
-        </li>
+        @if ($showWishlist)
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2" href="">
+                    <span class="text-muted fal fa-fw fa-scroll-old"></span>
+                    Wishlist
+                </span>
+            </li>
+        @endif
+        @if ($showPrios)
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
+                    <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
+                    Prio's
+                </span>
+            </li>
+        @endif
         <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
