@@ -55,6 +55,16 @@ class ItemController extends Controller
             $showOfficerNote = true;
         }
 
+        $showPrios = false;
+        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+            $showPrios = true;
+        }
+
+        $showWishlist = false;
+        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
+            $showWishlist = true;
+        }
+
         $items = Item::select([
                 'items.item_id',
                 'items.name',
@@ -76,9 +86,23 @@ class ItemController extends Controller
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
             ->with([
+
+            ]);
+
+        $showPrios = false;
+        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+            $showPrios = true;
+            $items = $items->with([
                 'priodCharacters' => function ($query) use ($guild) {
                     return $query->where('characters.guild_id', $guild->id);
-                },
+                }
+            ]);
+        }
+
+        $showWishlist = false;
+        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
+            $showWishlist = true;
+            $items = $items->with([
                 'wishlistCharacters' => function ($query) use($guild, $characterFields) {
                 return $query->select($characterFields)
                     ->leftJoin('members', function ($join) {
@@ -87,8 +111,10 @@ class ItemController extends Controller
                     ->where('characters.guild_id', $guild->id)
                     ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 }
-            ])
-            ->get();
+            ]);
+        }
+
+        $items = $items->get();
 
         return view('item.list', [
             'currentMember'   => $currentMember,
@@ -97,6 +123,8 @@ class ItemController extends Controller
             'items'           => $items,
             'raids'           => $guild->raids,
             'showOfficerNote' => $showOfficerNote,
+            'showPrios'       => $showPrios,
+            'showWishlist'    => $showWishlist,
         ]);
     }
 

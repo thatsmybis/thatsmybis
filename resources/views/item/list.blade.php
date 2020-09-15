@@ -23,6 +23,9 @@
     var items = {!! $items->toJson() !!};
     var guild = {!! $guild->toJson() !!};
     var raids = {!! $raids->toJson() !!};
+    var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
+    var showPrios       = {{ $showPrios ? 'true' : 'false' }};
+    var showWishlist    = {{ $showWishlist ? 'true' : 'false' }};
 </script>
 <script src="{{ env('APP_ENV') == 'local' ? asset('/js/itemList.js') : mix('js/processed/itemList.js') }}"></script>
 @endsection

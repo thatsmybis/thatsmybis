@@ -111,20 +111,20 @@ function createTable(lastSource) {
                 "title"  : '<span class="fas fa-fw fa-sort-amount-down text-gold"></span> Prio\'s',
                 "data"   : "priod_characters",
                 "render" : function (data, type, row) {
-                    return data.length ? getCharacterList(data, 'prio', row.item_id) : '—';
+                    return data && data.length ? getCharacterList(data, 'prio', row.item_id) : '—';
                 },
                 "orderable" : false,
-                "visible" : true,
+                "visible" : showPrios ? true : false,
                 "width"   : "300px",
             },
             {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
                 "data"   : "wishlist_characters",
                 "render" : function (data, type, row) {
-                    return data.length ? getCharacterList(data, 'wishlist', row.item_id) : '—';
+                    return data && data.length ? getCharacterList(data, 'wishlist', row.item_id) : '—';
                 },
                 "orderable" : false,
-                "visible" : true,
+                "visible" : showWishlist ? true : false,
                 "width"   : "400px",
             },
             {
