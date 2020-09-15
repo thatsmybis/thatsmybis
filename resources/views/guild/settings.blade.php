@@ -118,6 +118,35 @@
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="row">
                             <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
+                                                {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
+                                                Limit <strong>wishlist visibility</strong> to Raid Leaders
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
+                                                {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
+                                                Limit <strong>prio visibility</strong> to Raid Leaders
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="row">
+                            <div class="col-12">
                                 <label for="gm_role_id" class="font-weight-bold">
                                     <span class="fas fa-fw fa-crown text-gold"></span>
                                     Guild Master Role
