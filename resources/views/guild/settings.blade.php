@@ -134,7 +134,7 @@
                                         <label>
                                             <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
                                                 {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
-                                                Limit <strong>prio visibility</strong> to Raid Leaders
+                                                Limit <strong>prio visibility</strong> to Raid Leaders <small>(Prio Notes remain visible to raiders; only assigned characters are hidden)</small>
                                         </label>
                                     </div>
                                 </div>
