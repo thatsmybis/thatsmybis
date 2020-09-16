@@ -102,7 +102,7 @@
                             <input class="form-check-input" type="checkbox" value="1" id="bot_added" onclick="toggleSubmit()">
                             <label class="form-check-label" for="bot_added">
                                 I've added
-                                <a href="https://discord.com/api/oauth2/authorize?client_id=645311036785950721&permissions=0&redirect_uri=https%3A%2F%2Fthatsmybis.com%2Fauth%2Fdiscord%2Fcallback&scope=bot"
+                                <a href="https://discord.com/api/oauth2/authorize?client_id={{ env('DISCORD_KEY') }}&permissions=0&redirect_uri={{ env('DISCORD_REDIRECT_URI') }}&scope=bot"
                                     target="_blank">
                                     the bot
                                 </a>

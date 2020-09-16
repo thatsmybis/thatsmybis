@@ -17,12 +17,20 @@
                         </li>
                         @if (!$showPrios)
                             <li class="text-danger">
-                                Prios are hidden by your guild master
+                                Prios are hidden by your guild master(s)
+                            </li>
+                        @elseif ($guild->is_prio_private)
+                            <li class="text-warning">
+                                Prios are hidden from raiders
                             </li>
                         @endif
                         @if (!$showWishlist)
                             <li class="text-danger">
-                                Wishlists are hidden by your guild master
+                                Wishlists are hidden by your guild master(s)
+                            </li>
+                        @elseif ($guild->is_wishlist_private)
+                            <li class="text-warning">
+                                Wishlists are hidden from raiders
                             </li>
                         @endif
                     </ul>
