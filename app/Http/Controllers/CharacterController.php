@@ -243,7 +243,7 @@ class CharacterController extends Controller
             ])->firstOrFail();
 
         $showPrios = false;
-        if (!$guild->is_prio_private || $character->member_id == $currentMember->id || $currentMember->hasPermission('view.prios')) {
+        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
             $showPrios = true;
             $character = $character->load('prios');
         }
