@@ -8,33 +8,54 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-wight-medium">
-                        <span class="fas fa-fw fa-scroll-old text-gold"></span>
+                        <span class="fas fa-fw fa-clipboard-list-check text-gold"></span>
                         Audit Log
+                        @if ($resourceName)
+                            for {{ $resourceName }}
+                        @endif
                     </h1>
-                    <ul class="small">
-                        <li class="no-bullet font-italic">
+                    <ul>
+                        <li class="small no-bullet font-italic">
                             Whodunit?
                         </li>
                         @if (!$showPrios)
-                            <li class="text-danger">
+                            <li class="small text-danger">
                                 Prios are hidden by your guild master(s)
                             </li>
                         @elseif ($guild->is_prio_private)
-                            <li class="text-warning">
+                            <li class="small text-warning">
                                 Prios are hidden from raiders
                             </li>
                         @endif
                         @if (!$showWishlist)
-                            <li class="text-danger">
+                            <li class="small text-danger">
                                 Wishlists are hidden by your guild master(s)
                             </li>
                         @elseif ($guild->is_wishlist_private)
-                            <li class="text-warning">
+                            <li class="small text-warning">
                                 Wishlists are hidden from raiders
                             </li>
                         @endif
                     </ul>
                 </div>
+
+                @if ($resource)
+                    <div class="col-12 pb-3">
+                        <div class="bg-light rounded pt-1 pb-1 pl-3 pr-3">
+                            @if($resource instanceof \App\Character)
+                                @include('character/partials/header', ['character' => $resource, 'headerSize' => 1, 'showEdit' => false, 'showIcon' => false])
+                            @elseif($resource instanceof \App\Item)
+                                @include('partials/item', ['item' => $resource, 'wowheadLink' => false])
+                            @elseif($resource instanceof \App\Member)
+                                @include('member/partials/header', ['member' => $resource, 'discordUsername' => $resource->user->discord_username, 'headerSize' => 1, 'showEdit' => false, 'titlePrefix' => null])
+                            @elseif($resource instanceof \App\Raid)
+                                <span class="font-weight-bold">
+                                    @include('partials/raid', ['raid' => $resource, 'raidColor' => $resource->getColor()])
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+                @endif
 
                 <div class="col-12">
                     <ol class="no-bullet no-indent striped">
@@ -89,7 +110,9 @@
                                             @endif
                                             @if ($log->raid_id)
                                                 <li class="list-inline-item text-muted">
-                                                    {{ $log->raid_name }}
+                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $log->raid_id]) }}" class="text-muted">
+                                                        {{ $log->raid_name }}
+                                                    </a>
                                                 </li>
                                             @endif
                                             @if ($log->role_id)
