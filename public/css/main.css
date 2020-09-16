@@ -333,6 +333,17 @@ select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
     color: #fff;
 }
 
+.btn-paypal {
+    width: 300px;
+    padding-top: 14px;
+    background-color: #ffc439;
+    color: #009cde;
+}
+
+.btn-paypal:hover {
+    background-color: #f2ba36;
+}
+
 .tag {
     display: block;
     width: max-content;
