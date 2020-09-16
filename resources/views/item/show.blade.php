@@ -8,17 +8,26 @@
         <div class="col-12">
             <ul class="list-inline">
                 <li class="list-inline-item bg-lightest rounded pl-3 pb-3 pr-3 mt-3 item-tooltip align-top">
-                    <h1 class="font-weight-bold">
-                        @if ($itemJson)
-                            {{-- %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want --}}
-                            <a class="q{!! $itemJson->quality !!}" href="https://classic.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
-                                <span class="iconlarge">
-                                    <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <h1 class="font-weight-bold">
+                                @if ($itemJson)
+                                    {{-- %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want --}}
+                                    <a class="q{!! $itemJson->quality !!}" href="https://classic.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
+                                        <span class="iconlarge">
+                                            <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
+                                    </a>
+                                @else
+                                    @include('partials/item', ['wowheadLink' => true])
+                                @endif
+                            </h1>
+                        </li>
+                        <li class="list-inline-item">
+                            <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id]) }}">
+                                <span class="fas fa-fw fa-clipboard-list-check"></span>logs
                             </a>
-                        @else
-                            @include('partials/item', ['wowheadLink' => true])
-                        @endif
-                    </h1>
+                        </li>
+                    </ul>
                     @if ($itemJson)
                         {!! $itemJson->tooltip !!}
                     @endif

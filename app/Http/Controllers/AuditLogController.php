@@ -30,6 +30,9 @@ class AuditLogController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $resource = null;
+        $resourceName = null;
+
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
             $showPrios = true;
@@ -95,20 +98,28 @@ class AuditLogController extends Controller
             $query = $query->where('audit_logs.type', '!=', Item::TYPE_WISHLIST)->orWhereNull('audit_logs.type');
         }
 
-        if (!empty($params['character_id'])) {
-            $query = $query->where('characters.id', $params['character_id']);
+        if (!empty(request()->input('character_id'))) {
+            $query = $query->where('characters.id', request()->input('character_id'));
+            $resource = Character::where([['guild_id', $guild->id], ['id', request()->input('character_id')]])->with('member')->first();
+            $resourceName = $resource->name;
         }
 
-        if (!empty($params['item_id'])) {
-            $query = $query->where('items.item_id', $params['item_id']);
+        if (!empty(request()->input('item_id'))) {
+            $query = $query->where('items.item_id', request()->input('item_id'));
+            $resource = Item::find(request()->input('item_id'));
+            $resourceName = $resource->name;
         }
 
-        if (!empty($params['member_id'])) {
-            $query = $query->where('members.id', $params['member_id']);
+        if (!empty(request()->input('member_id'))) {
+            $query = $query->where('members.id', request()->input('member_id'));
+            $resource = Member::where([['guild_id', $guild->id], ['id', request()->input('member_id')]])->with('user')->first();
+            $resourceName = $resource->name;
         }
 
-        if (!empty($params['raid_id'])) {
-            $query = $query->where('raids.id', $params['raid_id']);
+        if (!empty(request()->input('raid_id'))) {
+            $query = $query->where('raids.id', request()->input('raid_id'));
+            $resource = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])->with('role')->first();
+            $resourceName = $resource->name;
         }
 
         $logs = $query->where(['audit_logs.guild_id' => $guild->id])
@@ -119,6 +130,8 @@ class AuditLogController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'logs'          => $logs,
+            'resource'      => $resource,
+            'resourceName'  => $resourceName,
             'showPrios'     => $showPrios,
             'showWishlist'  => $showWishlist,
         ]);

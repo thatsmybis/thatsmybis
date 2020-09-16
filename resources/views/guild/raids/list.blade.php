@@ -28,8 +28,12 @@
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
                                             <a href="{{ route('guild.raid.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raid->id]) }}">
-                                                <span class="fas fa-fw fa-pencil"></span>
-                                                edit
+                                                <span class="fas fa-fw fa-pencil"></span>edit
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item">
+                                            <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
+                                                <span class="fas fa-fw fa-clipboard-list-check"></span>logs
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
@@ -41,8 +45,7 @@
                                                 <button type="submit"
                                                     class="btn btn-link text-{{ $raid->disabled_at ? 'success' : 'danger' }} p-0 m-0 ml-3"
                                                     title="{{ $raid->disabled_at ? 'Raid is shown in dropdowns again' : 'Raid is no longer shown in dropdowns. Characters already assigned to this raid will remain assigned to it.' }}">
-                                                    <span class="fas fa-fw fa-{{ $raid->disabled_at ? 'trash-undo' : 'trash' }}"></span>
-                                                    {{ $raid->disabled_at ? 'enable' : 'disable' }}
+                                                    <span class="fas fa-fw fa-{{ $raid->disabled_at ? 'trash-undo' : 'trash' }}"></span>{{ $raid->disabled_at ? 'enable' : 'disable' }}
                                                 </button>
                                             </form>
                                         </li>

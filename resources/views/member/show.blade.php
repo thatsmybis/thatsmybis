@@ -7,7 +7,7 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
-                    @include('member/partials/header', ['discordUsername' => $member->user->discord_username, 'headerSize' => 1, 'showEdit' => $showEdit, 'titlePrefix' => null])
+                    @include('member/partials/header', ['discordUsername' => $member->user->discord_username, 'headerSize' => 1, 'showEdit' => $showEdit, 'titlePrefix' => null, 'showLogs' => true])
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                         @endif
                         @foreach ($characters as $character)
                             <li class="pt-2 pl-3 pb-3 pr-3 rounded">
-                                @include('character/partials/header', ['character' => $character, 'showEdit' => $showEdit, 'showEditLoot' => $showEditLoot, 'showIcon' => false, 'showOwner' => false])
+                                @include('character/partials/header', ['character' => $character, 'showEdit' => $showEdit, 'showEditLoot' => $showEditLoot, 'showIcon' => false, 'showOwner' => false, 'showLogs' => true])
                             </li>
                         @endforeach
                     </ol>
