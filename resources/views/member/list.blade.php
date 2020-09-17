@@ -11,7 +11,7 @@
                         <tr>
                             <th>
                                 <span class="fas fa-fw fa-user text-muted"></span>
-                                Name
+                                Member
                             </th>
                             <th>
                                 <span class="fas fa-fw fa-users text-muted"></span>
@@ -140,6 +140,12 @@ $(document).ready(function () {
     $("#members").DataTable({
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
         "paging" : false,
+        "columns" : [
+            null,
+            { "orderable" : false },
+            { "orderable" : false },
+            { "orderable" : false },
+        ]
     });
 });
 </script>
