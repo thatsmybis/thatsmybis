@@ -55,11 +55,33 @@ function createTable() {
                     return `
                     <ul class="no-bullet no-indent mb-2">
                         <li>
-                            <a href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }"
-                                class="text-4 text-${ row.class ? row.class.toLowerCase() : ''} font-weight-bold"
-                                title="${ row.member ? row.member.username : '' }">
-                                ${ row.name }
-                            </a>
+                            <div class="dropdown text-${ row.class ? row.class.toLowerCase() : ''}">
+                                <a class="dropdown-toggle text-4 font-weight-bold"
+                                    id="character${ row.id }Dropdown"
+                                    role="button"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    title="${ row.member ? row.member.username : '' }">
+                                    ${ row.name }
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="character${ row.id }Dropdown">
+                                    <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }" target="_blank">
+                                        Profile
+                                    </a>
+                                    <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/audit-log?character_id=${ row.id }" target="_blank">
+                                        Logs
+                                    </a>
+                                    ${ showEdit ?
+                                        `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/edit" target="_blank">
+                                            Edit
+                                        </a>
+                                        <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/loot" target="_blank">
+                                            Loot
+                                        </a>`
+                                        : `` }
+                                </div>
+                            </div>
                         </li>
                         ${ row.is_alt || row.raid_name || row.class ? `
                             <li>
@@ -163,7 +185,7 @@ function createTable() {
                 "data"   : "public_note",
                 "render" : function (data, type, row) {
                     return (row.public_note ? nl2br(row.public_note) : '—')
-                        + (row.officer_note ? '<br><small class="font-weight-bold"><u>Officer\'s Note</u></small><br><em>' + nl2br(row.officer_note) + '</em>' : '');
+                        + (row.officer_note ? '<br><small class="font-weight-bold">Officer\'s Note</small><br><em>' + nl2br(row.officer_note) + '</em>' : '');
                 },
                 "orderable" : false,
                 "visible" : true,
