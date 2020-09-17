@@ -303,6 +303,52 @@ class CharacterController extends Controller
     }
 
     /**
+     * Show a page for creating many characters at once
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showCreateMany($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.characters')) {
+            request()->session()->flash('status', 'You don\'t have permissions to access that page.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $guild->load('members');
+
+        return view('character.createMany', [
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+        ]);
+    }
+
+    /**
+     * Show a page for listing a guild's characters
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showGuildList($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.characters')) {
+            request()->session()->flash('status', 'You don\'t have permissions to access that page.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $guild->load(['characters', 'characters.member']);
+
+        return view('character.list', [
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+        ]);
+    }
+
+    /**
      * Update a character
      * @return
      */
