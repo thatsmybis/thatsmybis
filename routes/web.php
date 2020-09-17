@@ -64,15 +64,15 @@ Route::group([
     // Route::get( '/calendar/iframe', 'DashboardController@calendarIframe')->name('guild.calendarIframe');
 
     Route::group(['prefix' => 'c'], function () {
-        Route::get( '/create',                        'CharacterController@showCreate')    ->name('character.showCreate');
-        Route::post('/create',                        'CharacterController@create')        ->name('character.create');
-        Route::get( '/{characterId}/{nameSlug}/edit', 'CharacterController@edit')          ->name('character.edit');
-        Route::get( '/{characterId}/{nameSlug}/loot', 'CharacterController@loot')          ->name('character.loot');
-        Route::post('/update',                        'CharacterController@update')        ->name('character.update');
-        Route::post('/loot/update',                   'CharacterController@updateLoot')    ->name('character.updateLoot');
-        Route::post('/note/update',                   'CharacterController@updateNote')    ->name('character.updateNote');
-        Route::get( '/{characterId}/{nameSlug}',      'CharacterController@show')          ->name('character.show');
-        Route::get( '/{nameSlug}',                    'CharacterController@find')          ->name('character.find');
+        Route::get( '/create',                        'CharacterController@showCreate')->name('character.showCreate');
+        Route::post('/create',                        'CharacterController@create')    ->name('character.create');
+        Route::get( '/{characterId}/{nameSlug}/edit', 'CharacterController@edit')      ->name('character.edit');
+        Route::get( '/{characterId}/{nameSlug}/loot', 'CharacterController@loot')      ->name('character.loot');
+        Route::post('/update',                        'CharacterController@update')    ->name('character.update');
+        Route::post('/loot/update',                   'CharacterController@updateLoot')->name('character.updateLoot');
+        Route::post('/note/update',                   'CharacterController@updateNote')->name('character.updateNote');
+        Route::get( '/{characterId}/{nameSlug}',      'CharacterController@show')      ->name('character.show');
+        Route::get( '/{nameSlug}',                    'CharacterController@find')      ->name('character.find');
     });
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')      ->name('guild.item.list');
