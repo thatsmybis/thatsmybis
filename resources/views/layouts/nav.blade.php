@@ -92,11 +92,12 @@
                 </li>
 
                 @php
-                    $viewRoles = $currentMember->hasPermission('view.discord-roles');
-                    $viewRaids = $currentMember->hasPermission('view.raids');
-                    $editGuild = $currentMember->hasPermission('edit.guild');
-                    $editItems = $currentMember->hasPermission('edit.items');
-                    $editPrios = $currentMember->hasPermission('edit.prios');
+                    $viewRoles      = $currentMember->hasPermission('view.discord-roles');
+                    $viewRaids      = $currentMember->hasPermission('view.raids');
+                    $editCharacters = $currentMember->hasPermission('edit.characters');
+                    $editGuild      = $currentMember->hasPermission('edit.guild');
+                    $editItems      = $currentMember->hasPermission('edit.items');
+                    $editPrios      = $currentMember->hasPermission('edit.prios');
                 @endphp
 
                 @if ($viewRoles || $viewRaids || $editGuild || $editPrios)
@@ -105,11 +106,8 @@
                             Admin
                         </a>
                         <div class="dropdown-menu" aria-labelledby="adminNavDropdown">
-                            @if ($viewRoles)
-                                <a class="dropdown-item" href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                    Roles
-                                </a>
-                            @endif
+
+
                             @if ($editGuild)
                                 <a class="dropdown-item" href="{{ route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                     Settings
@@ -119,6 +117,22 @@
                             @if ($viewRaids)
                                 <a class="dropdown-item" href="{{ route('guild.raids', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                     Raids
+                                </a>
+                            @endif
+
+                            @if ($editCharacters)
+                                <a class="dropdown-item" href="{{ route('guild.characters.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                    Characters
+                                </a>
+                            @endif
+
+                            <a class="dropdown-item" href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                Members
+                            </a>
+
+                            @if ($viewRoles)
+                                <a class="dropdown-item" href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                    Roles
                                 </a>
                             @endif
 

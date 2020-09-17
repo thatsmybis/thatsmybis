@@ -139,6 +139,36 @@ class MemberController extends Controller
     }
 
     /**
+     * Show a list of members for a guild
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showList($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load(['members', 'members.characters', 'members.roles', 'raids', 'raids.role']);
+
+        $showEdit = false;
+        if ($currentMember->hasPermission('edit.characters')) {
+            $showEdit = true;
+        }
+
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes')) {
+            $showOfficerNote = true;
+        }
+
+        return view('member.list', [
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'showEdit'        => $showEdit,
+            'showOfficerNote' => $showOfficerNote,
+        ]);
+    }
+
+    /**
      * Toggle streamer mode on and off
      * @return
      */
