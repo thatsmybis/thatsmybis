@@ -203,17 +203,27 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['id' => $characterId, 'guild_id' => $guild->id])->with(['member', 'raid', 'raid.role'])->firstOrFail();
+        $character = Character::where(['id' => $characterId, 'guild_id' => $guild->id])->firstOrFail();
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
             return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
         }
 
+        $character = $character->load(['member', 'raid', 'raid.role', 'received', 'recipes', 'wishlist']);
+
+        $showPrios = false;
+        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+            $showPrios = true;
+            $character = $character->load('prios');
+        }
+
         return view('character.loot', [
             'character'       => $character,
             'currentMember'   => $currentMember,
             'guild'           => $guild,
+
+            'showPrios'       => $showPrios,
 
             'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
             'maxRecipes'       => self::MAX_RECIPES,
