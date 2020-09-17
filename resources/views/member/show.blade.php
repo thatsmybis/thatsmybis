@@ -30,7 +30,7 @@
                         @endif
                         @foreach ($characters as $character)
                             <li class="pt-2 pl-3 pb-3 pr-3 rounded">
-                                @include('character/partials/header', ['character' => $character, 'showEdit' => $showEdit, 'showEditLoot' => $showEditLoot, 'showIcon' => false, 'showOwner' => false, 'showLogs' => true])
+                                @include('character/partials/header', ['character' => $character, 'showEdit' => $showEdit, 'showEditLoot' => $showEditLoot, 'showIcon' => false, 'showOwner' => false, 'showLogs' => true, 'useDropdown' => true])
                             </li>
                         @endforeach
                     </ol>
