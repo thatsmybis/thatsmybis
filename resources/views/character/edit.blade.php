@@ -30,6 +30,7 @@
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $character ? $character->id : '' }}" />
+                <input hidden name="create_more" value="{{ $createMore ? 1 : 0 }}" />
 
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">

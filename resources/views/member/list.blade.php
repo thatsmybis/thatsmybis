@@ -143,6 +143,5 @@ $(document).ready(function () {
     });
 });
 </script>
-<script src="{{ env('APP_ENV') == 'local' ? asset('/js/roster.js') : mix('js/processed/roster.js') }}"></script>
 @endsection
 

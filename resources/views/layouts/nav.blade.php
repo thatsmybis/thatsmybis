@@ -114,25 +114,25 @@
                                 </a>
                             @endif
 
+                            <a class="dropdown-item" href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                Members
+                            </a>
+
                             @if ($viewRaids)
                                 <a class="dropdown-item" href="{{ route('guild.raids', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                     Raids
                                 </a>
                             @endif
 
-                            @if ($editCharacters)
-                                <a class="dropdown-item" href="{{ route('guild.characters.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                    Characters
-                                </a>
-                            @endif
-
-                            <a class="dropdown-item" href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Members
-                            </a>
-
                             @if ($viewRoles)
                                 <a class="dropdown-item" href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                     Roles
+                                </a>
+                            @endif
+
+                            @if ($editCharacters)
+                                <a class="dropdown-item" href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'create_more' => 1]) }}">
+                                    Create Characters
                                 </a>
                             @endif
 
