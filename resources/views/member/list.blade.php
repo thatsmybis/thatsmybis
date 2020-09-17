@@ -18,7 +18,11 @@
                                 Characters
                             </th>
                             <th>
-                                Roles
+                                <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
+                                Notes
+                            </th>
+                            <th>
+                                Roles (<abbr title="these get updated when the user loads a page and may be cached for up to several minutes between page loads">cached</abbr>)
                             </th>
                         </tr>
                     </thead>
@@ -37,6 +41,9 @@
                                             <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}" target="_blank">
                                                 Logs
                                             </a>
+                                            <a class="dropdown-item" href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}" target="_blank">
+                                                Edit
+                                            </a>
                                         </div>
                                     </div>
                                     <span class="text-discord">
@@ -49,26 +56,37 @@
                                             @php
                                                 $raid = ($character->raid_id ? $guild->raids->where('id', $character->raid_id)->first() : null);
                                             @endphp
-                                            <li class="list-inline-item text-{{ strtolower($character->class) }}">
+                                            <li class="list-inline-item text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}">
                                                 <div class="dropdown">
                                                     <a class="dropdown-toggle" id="character{{ $character->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                         <span class="role-circle" style="background-color:{{ $raid ? $raid->getColor() : null }}"></span>
                                                         {{ $character->name }}
                                                     </a>
                                                     <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
-                                                        <span class="dropdown-item">
-                                                            @if ($raid)
-                                                                @include('partials/raid', ['raidColor' => $raid->getColor()])
-                                                            @else
-                                                                no raid
-                                                            @endif
-                                                        </span>
                                                         <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
                                                             Profile
                                                         </a>
                                                         <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}" target="_blank">
                                                             Logs
                                                         </a>
+                                                        <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
+                                                            Edit
+                                                        </a>
+                                                        <a class="dropdown-item" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
+                                                            Loot
+                                                        </a>
+                                                        <span class="dropdown-item disabled">
+                                                            @if ($raid)
+                                                                @include('partials/raid', ['raidColor' => $raid->getColor()])
+                                                            @else
+                                                                no raid
+                                                            @endif
+                                                        </span>
+                                                        @if ($character->inactive_at)
+                                                            <span class="dropdown-item disabled font-weight-bold text-danger">
+                                                                INACTIVE
+                                                            </span>
+                                                        @endif
                                                     </div>
                                                 </div>
                                             </li>
@@ -76,10 +94,32 @@
                                     </ul>
                                 </td>
                                 <td>
+                                    <div>
+                                        {{ $member->public_note ? $member->public_note : '—' }}
+                                    </div>
+                                    @if ($showOfficerNote)
+                                        <div>
+                                            <span class="font-weight-bold small font-underline">Officer's note</span>
+                                            <br>
+                                            <em>{{ $member->officer_note ? $member->officer_note : '—' }}</em>
+                                        </div>
+                                    @endif
+                                </td>
+                                <td>
                                     <ul class="list-inline">
-                                        @foreach($member->roles as $role)
+                                        @foreach($member->roles->sortBy('name') as $role)
                                             <li class="list-inline-item">
-                                                {{ $role->name }}
+                                                @if (in_array($role->discord_id, [$guild->admin_role_id, $guild->gm_role_id, $guild->officer_role_id, $guild->raid_leader_role_id, $guild->class_leader_role_id]))
+                                                    <span class="font-weight-bold text-gold">
+                                                        {{ $role->name }}
+                                                    </span>
+                                                @elseif(in_array($role->discord_id, $guild->getMemberRoleIds()))
+                                                    <span class="font-weight-bold">
+                                                        {{ $role->name }}
+                                                    </span>
+                                                @else
+                                                    {{ $role->name }}
+                                                @endif
                                             </li>
                                         @endforeach
                                     </ul>

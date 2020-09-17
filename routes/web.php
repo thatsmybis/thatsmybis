@@ -76,8 +76,8 @@ Route::group([
     });
 
     Route::group(['prefix' => 'characters'], function () {
-        Route::get( '/',           'CharacterController@showGuildList') ->name('guild.characters.list');
-        Route::get( '/createMany', 'CharacterController@showCreateMany')->name('guild.characters.showCreateMany');
+        Route::get( '/',           'CharacterController@showGuildEditList')->name('guild.characters.list');
+        Route::get( '/createMany', 'CharacterController@showCreateMany')   ->name('guild.characters.showCreateMany');
     });
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')      ->name('guild.item.list');

@@ -156,7 +156,7 @@ class MemberController extends Controller
         }
 
         $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes')) {
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
             $showOfficerNote = true;
         }
 

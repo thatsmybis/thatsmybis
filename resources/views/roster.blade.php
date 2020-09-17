@@ -18,6 +18,7 @@
     var characters = {!! $characters->makeVisible('officer_note')->toJson() !!};
     var guild      = {!! $guild->toJson() !!};
     var raids      = {!! $raids->toJson() !!};
+    var showEdit        = {{ $showEdit ? 'true' : 'false' }};
     var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
     var showPrios       = {{ $showPrios ? 'true' : 'false' }};
     var showWishlist    = {{ $showWishlist ? 'true' : 'false' }};

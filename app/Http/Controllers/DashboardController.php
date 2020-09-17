@@ -172,6 +172,11 @@ class DashboardController extends Controller
             $showWishlist = true;
         }
 
+        $showEdit = false;
+        if ($currentMember->hasPermission('edit.characters')) {
+            $showEdit = true;
+        }
+
         $characters = $characters->get();
 
         return view('roster', [
@@ -179,6 +184,7 @@ class DashboardController extends Controller
             'currentMember'   => $currentMember,
             'guild'           => $guild,
             'raids'           => $guild->raids,
+            'showEdit'        => $showEdit,
             'showOfficerNote' => $showOfficerNote,
             'showPrios'       => $showPrios,
             'showWishlist'    => $showWishlist,
