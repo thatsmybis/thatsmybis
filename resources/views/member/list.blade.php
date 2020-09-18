@@ -100,11 +100,9 @@
                                                         {{ $role->name }}
                                                     </span>
                                                 @elseif(in_array($role->discord_id, $guild->getMemberRoleIds()))
-                                                    <span class="font-weight-bold">
+                                                    <span>
                                                         {{ $role->name }}
                                                     </span>
-                                                @else
-                                                    {{ $role->name }}
                                                 @endif
                                             </li>
                                         @endforeach
