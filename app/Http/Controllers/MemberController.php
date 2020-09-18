@@ -150,6 +150,12 @@ class MemberController extends Controller
 
         $guild->load(['members', 'members.characters', 'members.roles', 'raids', 'raids.role']);
 
+        $unassignedCharacters = Character::where([
+                ['guild_id', $guild->id],
+            ])
+        ->whereNull('member_id')
+        ->get();
+
         $showEdit = false;
         if ($currentMember->hasPermission('edit.characters')) {
             $showEdit = true;
@@ -161,10 +167,11 @@ class MemberController extends Controller
         }
 
         return view('member.list', [
-            'currentMember'   => $currentMember,
-            'guild'           => $guild,
-            'showEdit'        => $showEdit,
-            'showOfficerNote' => $showOfficerNote,
+            'currentMember'        => $currentMember,
+            'guild'                => $guild,
+            'showEdit'             => $showEdit,
+            'showOfficerNote'      => $showOfficerNote,
+            'unassignedCharacters' => $unassignedCharacters,
         ]);
     }
 
