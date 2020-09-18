@@ -143,7 +143,7 @@ class CharacterController extends Controller
         $currentMember = request()->get('currentMember');
 
         $guild->load([
-            'characters' => function ($query) use($characterId) {
+            'allCharacters' => function ($query) use($characterId) {
                 return $query->where('characters.id', $characterId)
                 ->with([
                     'member',
@@ -152,7 +152,7 @@ class CharacterController extends Controller
             },
         ]);
 
-        $character = $guild->characters->first();
+        $character = $guild->allCharacters->first();
 
         if (!$character) {
             request()->session()->flash('status', 'Character not found.');
