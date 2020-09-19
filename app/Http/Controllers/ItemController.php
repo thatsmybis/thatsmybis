@@ -403,8 +403,12 @@ class ItemController extends Controller
             $notes['priority'] = $item->guilds->first()->pivot->priority;
         }
 
-        $showNoteEdit = false;
+        $showEdit = false;
+        if ($currentMember->hasPermission('edit.characters')) {
+            $showEdit = true;
+        }
 
+        $showNoteEdit = false;
         if ($currentMember->hasPermission('edit.items')) {
             $showNoteEdit = true;
         }
@@ -422,6 +426,7 @@ class ItemController extends Controller
             'priodCharacters'             => $item->relationLoaded('priodCharacters') ? $item->priodCharacters : null,
             'raids'                       => $guild->raids,
             'receivedAndRecipeCharacters' => $item->receivedAndRecipeCharacters,
+            'showEdit'                    => $showEdit,
             'showNoteEdit'                => $showNoteEdit,
             'showOfficerNote'             => $showOfficerNote,
             'showPrioEdit'                => $showPrioEdit,
