@@ -251,7 +251,8 @@
     var characters      = {!! $showWishlist ? ($showOfficerNote ? $wishlistCharacters->makeVisible('officer_note')->toJson() : $wishlistCharacters->toJson()) : null !!};
     var guild           = {!! $guild->toJson() !!};
     var raids           = {!! $raids->toJson() !!};
-    var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};;
+    var showEdit        = {{ $showEdit ? 'true' : 'false' }};
+    var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
     var showPrios       = {{ $showPrios ? 'true' : 'false' }};
     var showWishlist    = {{ $showWishlist ? 'true' : 'false' }};
 </script>
