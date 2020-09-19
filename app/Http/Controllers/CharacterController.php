@@ -223,11 +223,17 @@ class CharacterController extends Controller
             $character = $character->load('prios');
         }
 
+        $lockWishlist = false;
+        if ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
+            $lockWishlist = true;
+        }
+
         return view('character.loot', [
             'character'       => $character,
             'currentMember'   => $currentMember,
             'guild'           => $guild,
 
+            'lockWishlist'    => $lockWishlist,
             'showPrios'       => $showPrios,
 
             'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,

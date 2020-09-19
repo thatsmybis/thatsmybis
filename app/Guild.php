@@ -34,6 +34,7 @@ class Guild extends Model
         'calendar_link',
         'is_prio_private',
         'is_wishlist_private',
+        'is_wishlist_locked',
     ];
 
     /**
