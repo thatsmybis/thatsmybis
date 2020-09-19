@@ -152,7 +152,7 @@
                                         <label>
                                             <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
                                                 {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
-                                                Lock wishlists
+                                                Lock wishlists <small>(Raid Leader and above can still edit)</small>
                                         </label>
                                     </div>
                                 </div>
