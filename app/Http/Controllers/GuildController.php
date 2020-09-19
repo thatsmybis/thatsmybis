@@ -253,6 +253,7 @@ class GuildController extends Controller
             'name'                => 'string|max:36|unique:guilds,name,' . $guild->id,
             'is_prio_private'     => 'nullable|boolean',
             'is_wishlist_private' => 'nullable|boolean',
+            'is_wishlist_locked'  => 'nullable|boolean',
             'calendar_link'       => 'nullable|string|max:255',
             'gm_role_id'          => 'nullable|integer|exists:roles,discord_id',
             'officer_role_id'     => 'nullable|integer|exists:roles,discord_id',
@@ -268,6 +269,7 @@ class GuildController extends Controller
         $updateValues['slug'] = slug(request()->input('name'));
         $updateValues['is_prio_private']     = request()->input('is_prio_private') == 1 ? 1 : 0;
         $updateValues['is_wishlist_private'] = request()->input('is_wishlist_private') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_locked']  = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
         $updateValues['calendar_link']       = request()->input('calendar_link');
 
         if (request()->input('gm_role_id')) {

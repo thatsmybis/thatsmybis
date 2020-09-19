@@ -72,29 +72,58 @@
                                 <span class="fas fa-fw fa-scroll-old"></span>
                                 Wishlist
                             </span>
-                            <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
+                            @if ($lockWishlist)
+                                <small class="text-warning font-weight-normal">locked by your guild master(s)</small>
+                            @elseif ($guild->is_wishlist_locked)
+                                <small class="text-warning font-weight-normal">locked for raiders</small> <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
+                            @else
+                                <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
+                            @endif
                         </label>
 
-                        <div class="{{ $errors->has('wishlist.*') ? 'has-error' : '' }}">
-                            <input id="wishlist" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
-                            <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+                        @if ($lockWishlist)
+                            <div class="col-12 pb-3">
+                                @if ($character->wishlist->count() > 0)
+                                    <ol class="">
+                                        @foreach ($character->wishlist as $item)
+                                            <li class="" value="{{ $item->pivot->order }}">
+                                                @include('partials/item', ['wowheadLink' => false])
+                                                <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+                                                    data-timestamp="{{ $item->pivot->created_at }}"
+                                                    data-title="added by {{ $item->added_by_username }} at"
+                                                    data-is-short="1">
+                                                </span>
+                                            </li>
+                                        @endforeach
+                                    </ol>
+                                @else
+                                    <div class="pl-4">
+                                        —
+                                    </div>
+                                @endif
+                            </div>
+                        @else
+                            <div class="{{ $errors->has('wishlist.*') ? 'has-error' : '' }}">
+                                <input id="wishlist" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
+                                <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
-                            <ul class="js-sortable no-bullet no-indent mb-0">
-                                @for ($i = 0; $i < $maxWishlistItems; $i++)
-                                    <li class="input-item {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('wishlist.' . $i . '.item_id') || ($character->wishlist && $character->wishlist->get($i)) ? '' : 'display:none;' }}">
-                                        <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ old('wishlist.' . $i . '.item_id') ? old('wishlist.' . $i . '.item_id') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->item_id : '') }}" style="display:none;">
-                                        <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ old('wishlist.' . $i . '.label') ? old('wishlist.' . $i . '.label') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}" style="display:none;">
-                                        <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                        <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('wishlist.' . $i . '.label') ? old('wishlist.' . $i . '.label') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}</span>&nbsp;
-                                    </li>
-                                    @if ($errors->has('wishlist.' . $i . '.item_id'))
-                                        <li class="'text-danger font-weight-bold'">
-                                            {{ $errors->first('wishlist.' . $i . '.item_id') }}
+                                <ul class="js-sortable no-bullet no-indent mb-0">
+                                    @for ($i = 0; $i < $maxWishlistItems; $i++)
+                                        <li class="input-item {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('wishlist.' . $i . '.item_id') || ($character->wishlist && $character->wishlist->get($i)) ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ old('wishlist.' . $i . '.item_id') ? old('wishlist.' . $i . '.item_id') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->item_id : '') }}" style="display:none;">
+                                            <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ old('wishlist.' . $i . '.label') ? old('wishlist.' . $i . '.label') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}" style="display:none;">
+                                            <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('wishlist.' . $i . '.label') ? old('wishlist.' . $i . '.label') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}</span>&nbsp;
                                         </li>
-                                    @endif
-                                @endfor
-                            </ul>
-                        </div>
+                                        @if ($errors->has('wishlist.' . $i . '.item_id'))
+                                            <li class="'text-danger font-weight-bold'">
+                                                {{ $errors->first('wishlist.' . $i . '.item_id') }}
+                                            </li>
+                                        @endif
+                                    @endfor
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
 

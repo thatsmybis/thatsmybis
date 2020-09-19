@@ -147,6 +147,24 @@
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="row">
                             <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
+                                                {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
+                                                Lock wishlists
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="row">
+                            <div class="col-12">
                                 <label for="gm_role_id" class="font-weight-bold">
                                     <span class="fas fa-fw fa-crown text-gold"></span>
                                     Guild Master Role
