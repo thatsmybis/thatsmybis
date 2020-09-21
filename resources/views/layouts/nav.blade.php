@@ -52,9 +52,9 @@
                         <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
                             Temple of Ahn'Qiraj
                         </a>
-                        <span class="dropdown-item text-muted" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
+                        <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
                             Naxxramas
-                        </span>
+                        </a>
                     </div>
                 </li>
 
@@ -163,9 +163,9 @@
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
                                             Temple of Ahn'Qiraj
                                         </a>
-                                        <span class="dropdown-item text-muted" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
                                             Naxxramas
-                                        </span>
+                                        </a>
                                     </div>
                                 </div>
                             @endif
@@ -197,9 +197,9 @@
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
                                             Temple of Ahn'Qiraj
                                         </a>
-                                        <span class="dropdown-item text-muted" href="{{ route('guild.prios.chooseRaid', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
                                             Naxxramas
-                                        </span>
+                                        </a>
                                     </div>
                                 </div>
                             @endif
