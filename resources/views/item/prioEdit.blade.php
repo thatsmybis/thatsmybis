@@ -50,7 +50,7 @@
                     <div class="col-lg-5 col-12">
                         <label for="items[details]" class="font-weight-bold">
                             <span class="fas fa-fw fa- text-muted"></span>
-                            Details
+                            Notes
                         </label>
                         <ul class="fa-ul">
                             @if ($item->guild_note)

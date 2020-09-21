@@ -239,6 +239,7 @@ class PrioController extends Controller
                     return $query->where('character_items.raid_id', $raid->id);
                 },
             ])
+            ->groupBy('items.item_id')
             ->get();
 
         $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
