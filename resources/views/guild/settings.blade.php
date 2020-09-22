@@ -116,28 +116,20 @@
 
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group mb-0">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
-                                                {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
-                                                Limit <strong>wishlist visibility</strong> to Raid Leaders
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="form-group mb-0">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
+                                        Limit <strong>wishlist visibility</strong> to Raid Leaders
+                                </label>
                             </div>
-                            <div class="col-12">
-                                <div class="form-group mb-0">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
-                                                {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
-                                                Limit <strong>prio visibility</strong> to Raid Leaders <small>(Prio Notes remain visible to raiders; only assigned characters are hidden)</small>
-                                        </label>
-                                    </div>
-                                </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
+                                        {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
+                                        Limit <strong>prio visibility</strong> to Raid Leaders <small>(Prio Notes remain visible to raiders; only assigned characters are hidden)</small>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -145,17 +137,13 @@
 
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group mb-0">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
-                                                {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
-                                                Lock wishlists <small>(Raid Leader and above can still edit)</small>
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="form-group mb-0">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
+                                        Lock wishlists <small>(Raid Leader and above can still edit)</small>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -163,26 +151,20 @@
 
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="form-group mb-0">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="is_prio_autopurged" value="1" class="" autocomplete="off"
-                                                {{ old('is_prio_autopurged') && old('is_prio_autopurged') == 1 ? 'checked' : ($guild->is_prio_autopurged ? 'checked' : '') }}>
-                                                By default, delete items from prio lists when they are distributed
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group mb-0">
-                                    <div class="checkbox">
-                                        <label>
-                                            <input type="checkbox" name="is_wishlist_autopurged" value="1" class="" autocomplete="off"
-                                                {{ old('is_wishlist_autopurged') && old('is_wishlist_autopurged') == 1 ? 'checked' : ($guild->is_wishlist_autopurged ? 'checked' : '') }}>
-                                                By default, delete items from wishlists when they are distributed
-                                        </label>
-                                    </div>
-                                </div>
+                        <div class="form-group mb-0">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_prio_autopurged" value="1" class="" autocomplete="off"
+                                        {{ old('is_prio_autopurged') && old('is_prio_autopurged') == 1 ? 'checked' : ($guild->is_prio_autopurged ? 'checked' : '') }}>
+                                        By default, delete items from prio lists when they are distributed
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_wishlist_autopurged" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_autopurged') && old('is_wishlist_autopurged') == 1 ? 'checked' : ($guild->is_wishlist_autopurged ? 'checked' : '') }}>
+                                        By default, delete items from wishlists when they are distributed
+                                </label>
                             </div>
                         </div>
                     </div>
