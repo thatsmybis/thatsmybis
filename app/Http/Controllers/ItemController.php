@@ -55,16 +55,6 @@ class ItemController extends Controller
             $showOfficerNote = true;
         }
 
-        $showPrios = false;
-        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
-            $showPrios = true;
-        }
-
-        $showWishlist = false;
-        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
-            $showWishlist = true;
-        }
-
         $items = Item::select([
                 'items.item_id',
                 'items.name',
@@ -108,7 +98,10 @@ class ItemController extends Controller
                     ->leftJoin('members', function ($join) {
                         $join->on('members.id', 'characters.member_id');
                     })
-                    ->where('characters.guild_id', $guild->id)
+                    ->where([
+                            ['characters.guild_id', $guild->id],
+                            ['character_items.is_received', 0],
+                        ])
                     ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 }
             ]);
@@ -366,7 +359,8 @@ class ItemController extends Controller
                 'wishlistCharacters' => function ($query) use($guild) {
                     return $query
                         ->where([
-                            'characters.guild_id' => $guild->id,
+                            ['characters.guild_id', $guild->id],
+                            ['character_items.is_received', 0],
                         ])
                         ->groupBy(['character_items.character_id'])
                         ->with([
@@ -449,7 +443,8 @@ class ItemController extends Controller
         $validationRules =  [
             'items.*.id'            => 'nullable|integer|exists:items,item_id',
             'items.*.character_id'  => 'nullable|integer|exists:characters,id',
-
+            'delete_wishlist_items' => 'nullable|boolean',
+            'delete_prio_items'     => 'nullable|boolean',
         ];
 
         $this->validate(request(), $validationRules);
@@ -458,6 +453,9 @@ class ItemController extends Controller
             request()->session()->flash('status', 'You don\'t have permissions to submit that.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
+
+        $deleteWishlist = request()->input('delete_wishlist_items') ? true : false;
+        $deletePrio     = request()->input('delete_prio_items') ? true : false;
 
         $warnings   = '';
         $newRows    = [];
@@ -506,42 +504,85 @@ class ItemController extends Controller
         // Add the items to the character's received list
         DB::table('character_items')->insert($newRows);
 
-        // For each item added, attempt to delete a matching item from the character's wishlist and their prios
+        // For each item added, attempt to delete or flag a matching item from the character's wishlist and prios
         foreach ($detachRows as $detachRow) {
-            // Remove from wishlist
-            DB::table('character_items')->where([
+            // Find wishlist for this item
+            $wishlistRow = DB::table('character_items')->where([
                 'item_id'      => $detachRow['item_id'],
                 'character_id' => $detachRow['character_id'],
                 'type'         => Item::TYPE_WISHLIST,
-            ])->limit(1)->orderBy('order')->delete();
+            ])->limit(1)->orderBy('order')->first();
+
+            if ($wishlistRow) {
+                if ($deleteWishlist) {
+                    // Delete the one we found
+                    DB::table('character_items')->where(['id' => $wishlistRow->id])->delete();
+                    $audits[] = [
+                        'description'  => 'System removed 1 wishlist item after character was assigned item',
+                        'member_id'    => $currentMember->id,
+                        'character_id' => $wishlistRow->character_id,
+                        'guild_id'     => $currentMember->guild_id,
+                        'raid_id'      => $wishlistRow->raid_id,
+                        'item_id'      => $wishlistRow->item_id,
+                        'created_at'   => $now,
+                    ];
+                } else {
+                    DB::table('character_items')->where(['id' => $wishlistRow->id])
+                        ->update([
+                            'is_received' => 1,
+                            'received_at' => getDateTime()
+                        ]);
+
+                    $audits[] = [
+                        'description'  => 'System flagged 1 wishlist item as received after character was assigned item',
+                        'member_id'    => $currentMember->id,
+                        'character_id' => $wishlistRow->character_id,
+                        'guild_id'     => $currentMember->guild_id,
+                        'raid_id'      => $wishlistRow->raid_id,
+                        'item_id'      => $wishlistRow->item_id,
+                        'created_at'   => $now,
+                    ];
+                }
+            }
 
             // Find prio for this item
-            $row = DB::table('character_items')->where([
+            $prioRow = DB::table('character_items')->where([
                 'item_id'      => $detachRow['item_id'],
                 'character_id' => $detachRow['character_id'],
                 'type'         => Item::TYPE_PRIO,
             ])->orderBy('order')->first();
 
-            if ($row) {
-                // Delete the one we found
-                DB::table('character_items')->where(['id' => $row->id])->limit(1)->delete();
+            if ($prioRow) {
+                $auditMessage = '';
+                if ($deletePrio) {
+                    // Delete the one we found
+                    DB::table('character_items')->where(['id' => $prioRow->id])->delete();
 
-                // Now correct the order on the remaning prios for that item in that raid
-                DB::table('character_items')->where([
-                        'item_id' => $row->item_id,
-                        'raid_id' => $row->raid_id,
-                        'type'    => Item::TYPE_PRIO,
-                    ])
-                    ->where('order', '>', $row->order)
-                    ->update(['order' => DB::raw('`order` - 1')]);
+                    // Now correct the order on the remaning prios for that item in that raid
+                    DB::table('character_items')->where([
+                            'item_id' => $prioRow->item_id,
+                            'raid_id' => $prioRow->raid_id,
+                            'type'    => Item::TYPE_PRIO,
+                        ])
+                        ->where('order', '>', $prioRow->order)
+                        ->update(['order' => DB::raw('`order` - 1')]);
+                    $auditMessage = 'removed 1 prio item';
+                } else {
+                    DB::table('character_items')->where(['id' => $prioRow->id])
+                        ->update([
+                            'is_received' => 1,
+                            'received_at' => getDateTime()
+                        ]);
+                    $auditMessage = 'flagged 1 item prio as received';
+                }
 
                 $audits[] = [
-                    'description'  => 'System removed 1 item prio after character was assigned item',
+                    'description'  => 'System ' . $auditMessage . ' after character was assigned item',
                     'member_id'    => $currentMember->id,
-                    'character_id' => $row->character_id,
+                    'character_id' => $prioRow->character_id,
                     'guild_id'     => $currentMember->guild_id,
-                    'raid_id'      => $row->raid_id,
-                    'item_id'      => $row->item_id,
+                    'raid_id'      => $prioRow->raid_id,
+                    'item_id'      => $prioRow->item_id,
                     'created_at'   => $now,
                 ];
             }

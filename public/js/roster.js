@@ -300,7 +300,9 @@ function getItemList(data, type, characterId, useOrder = false) {
         }
 
         items += `
-            <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }" data-type="${ type }" data-id="${ characterId }"
+            <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' } ${ item.pivot.is_received ? 'font-strikethrough' : '' }"
+                data-type="${ type }"
+                data-id="${ characterId }"
                 value="${ useOrder ? item.pivot.order : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"

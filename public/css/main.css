@@ -225,6 +225,11 @@ body {
     font-weight: 600 !important;
 }
 
+.font-strikethrough {
+    text-decoration: line-through !important;
+    text-decoration-color: #8e959b !important;
+}
+
 .smaller {
     font-size: 70%;
 }

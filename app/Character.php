@@ -125,7 +125,7 @@ class Character extends Model
             ->where('character_items.type', Item::TYPE_PRIO)
             ->orderBy('character_items.raid_id')
             ->orderBy('character_items.order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
+            ->withPivot(['id', 'added_by', 'type', 'order', 'is_received', 'received_at', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
         return ($query);
@@ -140,7 +140,7 @@ class Character extends Model
             })
             ->where('character_items.type', Item::TYPE_WISHLIST)
             ->orderBy('order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
+            ->withPivot(['id', 'added_by', 'type', 'order', 'is_received', 'received_at', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
         return ($query);
