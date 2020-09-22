@@ -38,7 +38,7 @@
                             @if ($character->prios->count() > 0)
                                 <ol class="">
                                     @foreach ($character->prios as $item)
-                                        <li class="" value="{{ $item->pivot->order }}">
+                                        <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : ''}}" value="{{ $item->pivot->order }}">
                                             @include('partials/item', ['wowheadLink' => false])
                                             <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
                                                 data-timestamp="{{ $item->pivot->created_at }}"
@@ -86,7 +86,7 @@
                                 @if ($character->wishlist->count() > 0)
                                     <ol class="">
                                         @foreach ($character->wishlist as $item)
-                                            <li class="" value="{{ $item->pivot->order }}">
+                                            <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : ''}}" value="{{ $item->pivot->order }}">
                                                 @include('partials/item', ['wowheadLink' => false])
                                                 <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
                                                     data-timestamp="{{ $item->pivot->created_at }}"
@@ -109,7 +109,8 @@
 
                                 <ul class="js-sortable no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxWishlistItems; $i++)
-                                        <li class="input-item {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('wishlist.' . $i . '.item_id') || ($character->wishlist && $character->wishlist->get($i)) ? '' : 'display:none;' }}">
+                                        <li class="input-item {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }} {{ $character->wishlist && $character->wishlist->get($i) && $character->wishlist->get($i)->pivot->is_received ? 'font-strikethrough' : '' }}"
+                                            style="{{ old('wishlist.' . $i . '.item_id') || ($character->wishlist && $character->wishlist->get($i)) ? '' : 'display:none;' }}">
                                             <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ old('wishlist.' . $i . '.item_id') ? old('wishlist.' . $i . '.item_id') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->item_id : '') }}" style="display:none;">
                                             <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ old('wishlist.' . $i . '.label') ? old('wishlist.' . $i . '.label') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;

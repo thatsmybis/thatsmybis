@@ -154,7 +154,9 @@
                                                         {{ $raids->where('id', $character->pivot->raid_id)->first()->name }}
                                                     </li>
                                         @endif
-                                            <li data-raid-id="{{ $character->pivot->raid_id }}" class="js-item-wishlist-character font-weight-normal mb-1" value="{{ $character->pivot->order }}">
+                                            <li data-raid-id="{{ $character->pivot->raid_id }}"
+                                                class="js-item-wishlist-character font-weight-normal mb-1 {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}"
+                                                value="{{ $character->pivot->order }}">
                                                 <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                                     title="{{ $character->raid_name ? $character->raid_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}"
                                                     class="text-{{ $character->class ? strtolower($character->class) : ''}}-important tag d-inline">
@@ -231,6 +233,13 @@
                 <ul class="list-inline striped">
                     @foreach ($receivedAndRecipeCharacters as $character)
                         <li class="list-inline-item rounded pt-2 pl-3 pb-3 pr-3">
+                            @if (isset($character->pivot->created_at))
+                                <ul class="list-inline">
+                                    <li class="list-inline-item text-muted small">
+                                        Received <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->created_at }}"></span> ago
+                                    </li>
+                                </ul>
+                            @endif
                             @include('character/partials/header', ['showDetails' => false, 'showEdit' => false, 'showOwner' => false])
                         </li>
                     @endforeach

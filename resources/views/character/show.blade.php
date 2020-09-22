@@ -43,7 +43,7 @@
                                             {{ $guild->raids->find($item->pivot->raid_id)->name }}
                                         </li>
                                     @endif
-                                    <li class="" value="{{ $item->pivot->order }}">
+                                    <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : '' }}" value="{{ $item->pivot->order }}">
                                         @include('partials/item', ['wowheadLink' => false])
                                         <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
                                             data-timestamp="{{ $item->pivot->created_at }}"
@@ -72,7 +72,7 @@
                         @if ($character->relationLoaded('wishlist') && $character->wishlist->count() > 0)
                             <ol class="">
                                 @foreach ($character->wishlist as $item)
-                                    <li class="">
+                                    <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : '' }}">
                                         @include('partials/item', ['wowheadLink' => false])
                                         <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
                                             data-timestamp="{{ $item->pivot->created_at }}"

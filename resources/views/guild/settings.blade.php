@@ -165,6 +165,33 @@
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="row">
                             <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="is_prio_autopurged" value="1" class="" autocomplete="off"
+                                                {{ old('is_prio_autopurged') && old('is_prio_autopurged') == 1 ? 'checked' : ($guild->is_prio_autopurged ? 'checked' : '') }}>
+                                                By default, delete items from prio lists when they are distributed
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group mb-0">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="is_wishlist_autopurged" value="1" class="" autocomplete="off"
+                                                {{ old('is_wishlist_autopurged') && old('is_wishlist_autopurged') == 1 ? 'checked' : ($guild->is_wishlist_autopurged ? 'checked' : '') }}>
+                                                By default, delete items from wishlists when they are distributed
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="row">
+                            <div class="col-12">
                                 <label for="gm_role_id" class="font-weight-bold">
                                     <span class="fas fa-fw fa-crown text-gold"></span>
                                     Guild Master Role

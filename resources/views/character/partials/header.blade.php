@@ -1,13 +1,4 @@
 <ul class="no-bullet no-indent">
-    @if (isset($character->pivot->created_at))
-        <li>
-            <ul class="list-inline">
-                <li class="list-inline-item text-muted small">
-                    Received <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->created_at }}"></span> ago
-                </li>
-            </ul>
-        </li>
-    @endif
     <li>
         @if (isset($useDropdown) && $useDropdown)
             <div class="dropdown">
