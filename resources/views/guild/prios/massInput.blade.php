@@ -166,7 +166,8 @@
 
                                         <ol class="js-sortable-lazy no-indent mt-3 mb-0">
                                             @for ($i = 0; $i < $maxPrios; $i++)
-                                                <li class="input-item {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}"
+                                                <li class="input-item {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}
+                                                    {{ (!old('items.' . $item->item_id . '.characters.' . $i) && $item->priodCharacters->get($i)) || (old('items.' . $item->item_id . '.characters.' . $i) && $item->priodCharacters->get($i) && old('items.' . $item->item_id . '.characters.' . $i . 'character_id') == $item->priodCharacters->get($i)->id) ? ($item->priodCharacters->get($i)->pivot->received_at ? 'font-strikethrough' : '') : '' }}"
                                                     style="{{ old('items.' . $item->item_id . '.characters.' . $i) && old('items.' . $item->item_id . '.characters.' . $i)['character_id']  || $item->priodCharacters->get($i) ? '' : 'display:none;' }}">
 
                                                     <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][character_id]"

@@ -185,7 +185,7 @@ function getCharacterList(data, type, itemId) {
         characters += `
             <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }"
                 value="${ type == 'prio' ? character.pivot.order : '' }"
-                class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0">
+                class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0 ${ character.pivot.received_at ? 'font-strikethrough' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">

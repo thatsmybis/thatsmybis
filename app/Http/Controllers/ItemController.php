@@ -84,7 +84,10 @@ class ItemController extends Controller
             $showPrios = true;
             $items = $items->with([
                 'priodCharacters' => function ($query) use ($guild) {
-                    return $query->where('characters.guild_id', $guild->id);
+                    return $query->where([
+                        ['characters.guild_id', $guild->id],
+                        ['character_items.is_received', 0],
+                    ]);
                 }
             ]);
         }

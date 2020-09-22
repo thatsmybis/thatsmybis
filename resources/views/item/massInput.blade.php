@@ -15,14 +15,14 @@
                     <small>
                         <strong>Hint:</strong> Keep the roster and/or item pages open in another window to review who deserves what
                         <br>
-                        <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their wishlist/prios. If they have the same item prio'd in multiple raids, we'll remove only the first one we find.
+                        <strong>Note:</strong> If a character has the same item prio'd in multiple raids, we'll only remove/flag the first one we find.
                     </small>
                 </div>
 
                 <div class="col-sm-6 col-12 pt-2 mb-2">
                     <label for="raid_filter font-weight-light">
                         <span class="text-muted fas fa-fw fa-helmet-battle"></span>
-                        Raid
+                        Filter character dropdown by raid
                     </label>
                     <select id="raid_filter" class="form-control dark">
                         <option value="">—</option>
@@ -127,20 +127,24 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="delete_wishlist_items" value="1" class="" autocomplete="off"
-                                {{ (old('delete_wishlist_items') && old('delete_wishlist_items') == 1) || (!old('delete_wishlist_items') && $guild->is_wishlist_autopurged) ? 'checked' : '' }}>
-                                Delete assigned items from character's wishlist <abbr title="if unchecked, corresponding wishlist items will be flagged as received but still be visible">?</abbr>
-                        </label>
-                    </div>
-                    <div class="checkbox">
-                        <label>
-                            <input type="checkbox" name="delete_prio_items" value="1" class="" autocomplete="off"
-                                {{ (old('delete_prio_items') && old('delete_prio_items') == 1) || (!old('delete_prio_items') && $guild->is_prio_autopurged) ? 'checked' : '' }}>
-                                Delete assigned items from character's prio list <abbr title="if unchecked, corresponding prio will be flagged as received but still be visible">?</abbr>
-                        </label>
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="form-group mb-0">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="delete_wishlist_items" value="1" class="" autocomplete="off"
+                                        {{ (old('delete_wishlist_items') && old('delete_wishlist_items') == 1) || (!old('delete_wishlist_items') && $guild->is_wishlist_autopurged) ? 'checked' : '' }}>
+                                        Delete assigned items from each character's wishlist <abbr title="if unchecked, corresponding wishlist items will be flagged as received but still be visible">?</abbr>
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="delete_prio_items" value="1" class="" autocomplete="off"
+                                        {{ (old('delete_prio_items') && old('delete_prio_items') == 1) || (!old('delete_prio_items') && $guild->is_prio_autopurged) ? 'checked' : '' }}>
+                                        Delete assigned items from each character's prio list <abbr title="if unchecked, corresponding prio will be flagged as received but still be visible">?</abbr>
+                                </label>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="form-group">
