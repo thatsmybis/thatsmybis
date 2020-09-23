@@ -39,7 +39,7 @@ class AuditLogController extends Controller
         }
 
         $showWishlist = false;
-        if (!$guild->is_wishlist_private  || $currentMember->hasPermission('view.wishlist')) {
+        if (!$guild->is_wishlist_private  || $currentMember->hasPermission('view.wishlists')) {
             $showWishlist = true;
         }
 
@@ -123,6 +123,7 @@ class AuditLogController extends Controller
         }
 
         $logs = $query->where(['audit_logs.guild_id' => $guild->id])
+            // WARNING: This line was added as a quick bugfix. It creates an OR statement in the where clause, meaning any previous WHERE statements are ignored unless repeated here.
             ->orWhereNull('audit_logs.type')->where(['audit_logs.guild_id' => $guild->id])
             ->orderBy('audit_logs.created_at', 'desc')
             ->paginate(self::RESULTS_PER_PAGE);
