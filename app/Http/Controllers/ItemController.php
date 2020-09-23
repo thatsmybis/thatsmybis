@@ -569,14 +569,14 @@ class ItemController extends Controller
                         ])
                         ->where('order', '>', $prioRow->order)
                         ->update(['order' => DB::raw('`order` - 1')]);
-                    $auditMessage = 'removed 1 prio item';
+                    $auditMessage = 'removed 1 prio ';
                 } else {
                     DB::table('character_items')->where(['id' => $prioRow->id])
                         ->update([
                             'is_received' => 1,
                             'received_at' => getDateTime()
                         ]);
-                    $auditMessage = 'flagged 1 item prio as received';
+                    $auditMessage = 'flagged 1 prio as received';
                 }
 
                 $audits[] = [
