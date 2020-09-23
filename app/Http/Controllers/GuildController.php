@@ -265,8 +265,6 @@ class GuildController extends Controller
 
         $this->validate(request(), $validationRules);
 
-        $permissions = Permission::all();
-
         $updateValues['name'] = request()->input('name');
         $updateValues['slug'] = slug(request()->input('name'));
         $updateValues['is_prio_private']        = request()->input('is_prio_private') == 1 ? 1 : 0;
@@ -275,66 +273,9 @@ class GuildController extends Controller
         $updateValues['is_prio_autopurged']     = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
         $updateValues['is_wishlist_autopurged'] = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
         $updateValues['calendar_link']          = request()->input('calendar_link');
-
-        if (request()->input('gm_role_id')) {
-            // Let's make sure that role exists...
-            $role = $guild->roles->where('discord_id', request()->input('gm_role_id'))->first();
-            if ($role && $role->discord_id != $guild->gm_role_id) { // Don't bother if this role is already there; this will be duplicating the effort
-                // Attach the appropriate permissions to that role!
-                $rolePermissions = $permissions->whereIn('role_note', ['guild_master', 'officer', 'raid_leader']);
-                $role->permissions()->sync($rolePermissions->keyBy('id')->keys()->toArray());
-                $updateValues['gm_role_id'] = request()->input('gm_role_id');
-            }
-        } else {
-            $updateValues['gm_role_id'] = null;
-        }
-
-        // The old GM role doesn't match the new GM role.
-        if ($guild->gm_role_id && $guild->gm_role_id != request()->input('gm_role_id')) {
-            // Strip this role of all its ill-gotten permissions! Walk the plank, ya scurvy dog!
-            $role = $guild->roles->where('discord_id', $guild->gm_role_id)->first();
-            if ($role) {
-                $role->permissions()->detach();
-            }
-        }
-
-        // Copy of the GM code seen above
-        if (request()->input('officer_role_id')) {
-            $role = $guild->roles->where('discord_id', request()->input('officer_role_id'))->first();
-            if ($role && $role->discord_id != $guild->officer_role_id) {
-                $rolePermissions = $permissions->whereIn('role_note', ['officer', 'raid_leader']);
-                $role->permissions()->sync($rolePermissions->keyBy('id')->keys()->toArray());
-                $updateValues['officer_role_id'] = request()->input('officer_role_id');
-            }
-        } else {
-            $updateValues['officer_role_id'] = null;
-        }
-        if ($guild->officer_role_id && $guild->officer_role_id != request()->input('officer_role_id')) {
-            $role = $guild->roles->where('discord_id', $guild->officer_role_id)->first();
-            if ($role) {
-                $role->permissions()->detach();
-            }
-        }
-
-        // Copy of the GM code seen above
-        if (request()->input('raid_leader_role_id')) {
-            $role = $guild->roles->where('discord_id', request()->input('raid_leader_role_id'))->first();
-            if ($role && $role->discord_id != $guild->raid_leader_role_id) { // Don't bother if this role is already there
-                $rolePermissions = $permissions->whereIn('role_note', ['raid_leader']);
-                $role->permissions()->sync($rolePermissions->keyBy('id')->keys()->toArray());
-                $updateValues['raid_leader_role_id'] = request()->input('raid_leader_role_id');
-            }
-        } else {
-            $updateValues['raid_leader_role_id'] = null;
-        }
-        if ($guild->raid_leader_role_id && $guild->raid_leader_role_id != request()->input('raid_leader_role_id')) {
-            $role = $guild->roles->where('discord_id', $guild->raid_leader_role_id)->first();
-            if ($role) {
-                $role->permissions()->detach();
-            }
-        }
-
         $updateValues['member_role_ids'] = implode(",", array_filter(request()->input('member_roles')));
+
+        $updateValues = $this->flushRoles($guild, $updateValues);
 
         $auditMessage = '';
 
@@ -374,5 +315,75 @@ class GuildController extends Controller
 
         request()->session()->flash('status', 'Guild settings updated.');
         return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+    }
+
+    /**
+     * Wipes out ALL old role permissions and re-adds them.
+     *
+     * @param $guild        The guild object we're working on, with its roles relationship eager loaded.
+     * @param $updateValues An array of the values the guild will be updated with. We'll add our values and pass this back.
+     *
+     * @return array An updated version of the $updateValues param
+     */
+    private function flushRoles($guild, $updateValues) {
+        $permissions = Permission::all();
+
+        // Flush out the old role permissions
+        if ($guild->gm_role_id) {
+            $role = $guild->roles->where('discord_id', $guild->gm_role_id)->first();
+            if ($role) {
+                $role->permissions()->detach();
+            }
+        }
+        if ($guild->officer_role_id) {
+            $role = $guild->roles->where('discord_id', $guild->officer_role_id)->first();
+            if ($role) {
+                $role->permissions()->detach();
+            }
+        }
+        if ($guild->raid_leader_role_id) {
+            $role = $guild->roles->where('discord_id', $guild->raid_leader_role_id)->first();
+            if ($role) {
+                $role->permissions()->detach();
+            }
+        }
+
+        // Copy of the role code seen above
+        if (request()->input('gm_role_id')) {
+            // Let's make sure that role exists...
+            $role = $guild->roles->where('discord_id', request()->input('gm_role_id'))->first();
+            if ($role) {
+                // Attach the appropriate permissions to that role
+                $rolePermissions = $permissions->whereIn('role_note', ['guild_master', 'officer', 'raid_leader']);
+                $role->permissions()->syncWithoutDetaching($rolePermissions->keyBy('id')->keys()->toArray());
+                $updateValues['gm_role_id'] = request()->input('gm_role_id');
+            }
+        } else {
+            $updateValues['gm_role_id'] = null;
+        }
+        // Copy of the role code seen above
+        if (request()->input('officer_role_id')) {
+            $role = $guild->roles->where('discord_id', request()->input('officer_role_id'))->first();
+            if ($role) {
+                $rolePermissions = $permissions->whereIn('role_note', ['officer', 'raid_leader']);
+                $role->permissions()->syncWithoutDetaching($rolePermissions->keyBy('id')->keys()->toArray());
+                $updateValues['officer_role_id'] = request()->input('officer_role_id');
+            }
+        } else {
+            $updateValues['officer_role_id'] = null;
+        }
+        // Copy of the role code seen above
+        if (request()->input('raid_leader_role_id')) {
+            $role = $guild->roles->where('discord_id', request()->input('raid_leader_role_id'))->first();
+            if ($role) {
+                $rolePermissions = $permissions->whereIn('role_note', ['raid_leader']);
+                $role->permissions()->syncWithoutDetaching($rolePermissions->keyBy('id')->keys()->toArray());
+                $updateValues['raid_leader_role_id'] = request()->input('raid_leader_role_id');
+            }
+        } else {
+            $updateValues['raid_leader_role_id'] = null;
+        }
+
+        return $updateValues;
     }
 }
