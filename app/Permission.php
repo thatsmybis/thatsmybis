@@ -22,6 +22,10 @@ class Permission extends Model
         'inherit_id',
     ];
 
+    const GUILD_MASTER = 'guild_master';
+    const OFFICER      = 'officer';
+    const RAID_LEADER  = 'raid_leader';
+
     /**
      * The database table used by the model.
      *

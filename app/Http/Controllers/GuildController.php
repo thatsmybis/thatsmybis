@@ -348,13 +348,11 @@ class GuildController extends Controller
             }
         }
 
-        // Copy of the role code seen above
         if (request()->input('gm_role_id')) {
-            // Let's make sure that role exists...
             $role = $guild->roles->where('discord_id', request()->input('gm_role_id'))->first();
             if ($role) {
                 // Attach the appropriate permissions to that role
-                $rolePermissions = $permissions->whereIn('role_note', ['guild_master', 'officer', 'raid_leader']);
+                $rolePermissions = $permissions->whereIn('role_note', [Permission::GUILD_MASTER, Permission::OFFICER, Permission::RAID_LEADER]);
                 $role->permissions()->syncWithoutDetaching($rolePermissions->keyBy('id')->keys()->toArray());
                 $updateValues['gm_role_id'] = request()->input('gm_role_id');
             }
@@ -365,7 +363,7 @@ class GuildController extends Controller
         if (request()->input('officer_role_id')) {
             $role = $guild->roles->where('discord_id', request()->input('officer_role_id'))->first();
             if ($role) {
-                $rolePermissions = $permissions->whereIn('role_note', ['officer', 'raid_leader']);
+                $rolePermissions = $permissions->whereIn('role_note', [Permission::OFFICER, Permission::RAID_LEADER]);
                 $role->permissions()->syncWithoutDetaching($rolePermissions->keyBy('id')->keys()->toArray());
                 $updateValues['officer_role_id'] = request()->input('officer_role_id');
             }
@@ -376,7 +374,7 @@ class GuildController extends Controller
         if (request()->input('raid_leader_role_id')) {
             $role = $guild->roles->where('discord_id', request()->input('raid_leader_role_id'))->first();
             if ($role) {
-                $rolePermissions = $permissions->whereIn('role_note', ['raid_leader']);
+                $rolePermissions = $permissions->whereIn('role_note', [Permission::RAID_LEADER]);
                 $role->permissions()->syncWithoutDetaching($rolePermissions->keyBy('id')->keys()->toArray());
                 $updateValues['raid_leader_role_id'] = request()->input('raid_leader_role_id');
             }
