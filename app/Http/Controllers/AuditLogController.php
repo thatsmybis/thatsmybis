@@ -91,11 +91,11 @@ class AuditLogController extends Controller
                 });
 
         if (!$showPrios && !$showWishlist) {
-            $query = $query->where([['audit_logs.type', '!=', Item::TYPE_PRIO], ['audit_logs.type', '!=', Item::TYPE_WISHLIST]])->orWhereNull('audit_logs.type');
+            $query = $query->where([['audit_logs.type', '!=', Item::TYPE_PRIO], ['audit_logs.type', '!=', Item::TYPE_WISHLIST]]);
         } else if (!$showPrios) {
-            $query = $query->where('audit_logs.type', '!=', Item::TYPE_PRIO)->orWhereNull('audit_logs.type');
+            $query = $query->where('audit_logs.type', '!=', Item::TYPE_PRIO);
         } else if (!$showWishlist) {
-            $query = $query->where('audit_logs.type', '!=', Item::TYPE_WISHLIST)->orWhereNull('audit_logs.type');
+            $query = $query->where('audit_logs.type', '!=', Item::TYPE_WISHLIST);
         }
 
         if (!empty(request()->input('character_id'))) {
@@ -123,6 +123,7 @@ class AuditLogController extends Controller
         }
 
         $logs = $query->where(['audit_logs.guild_id' => $guild->id])
+            ->orWhereNull('audit_logs.type')->where(['audit_logs.guild_id' => $guild->id])
             ->orderBy('audit_logs.created_at', 'desc')
             ->paginate(self::RESULTS_PER_PAGE);
 
