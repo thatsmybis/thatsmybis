@@ -536,43 +536,18 @@ class CharacterController extends Controller
         if (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters')) {
             if (request()->input('wishlist')) {
                 $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember);
-            } else {
-                $character->wishlist()->detach();
-                AuditLog::create([
-                    'description'  => $currentMember->username . ' removed all wishlist items from a character',
-                    'member_id'    => $currentMember->id,
-                    'guild_id'     => $guild->id,
-                    'character_id' => $character->id,
-                ]);
             }
         }
 
         if (!$guild->is_received_locked || $currentMember->hasPermission('loot.characters')) {
             if (request()->input('received')) {
                 $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember);
-            } else {
-                $character->received()->detach();
-                AuditLog::create([
-                    'description'  => $currentMember->username . ' removed all received items from a character',
-                    'member_id'    => $currentMember->id,
-                    'guild_id'     => $guild->id,
-                    'character_id' => $character->id,
-                ]);
             }
         }
 
         if (request()->input('recipes')) {
             $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember);
-        } else {
-            $character->recipes()->detach();
-            AuditLog::create([
-                'description'  => $currentMember->username . ' removed all recipes from a character',
-                'member_id'    => $currentMember->id,
-                'guild_id'     => $guild->id,
-                'character_id' => $character->id,
-            ]);
         }
-
         return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
     }
 
