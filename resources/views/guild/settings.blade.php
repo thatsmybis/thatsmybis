@@ -121,7 +121,7 @@
                                 <label>
                                     <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
                                         {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
-                                        Limit <strong>wishlist visibility</strong> to Raid Leaders
+                                        Limit <strong>wishlist visibility</strong> to Raid Leaders <small>(members can still see <em>their own</em> characters' wishlists)</small>
                                 </label>
                             </div>
                             <div class="checkbox">

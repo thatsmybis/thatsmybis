@@ -682,9 +682,7 @@ class CharacterController extends Controller
                 $existingItems->forget($existingItemKey);
 
                 $message = '';
-                if ($existingItem->pivot->type == Item::TYPE_PRIO) {
-                    $message = ' (prio ' . $existingItem->pivot->order . ')';
-                } else if ($existingItem->pivot->type == Item::TYPE_WISHLIST) {
+                if (in_array($existingItem->pivot->type, [Item::TYPE_PRIO, Item::TYPE_WISHLIST])) {
                     $message = ' (rank ' . $existingItem->pivot->order . ')';
                 }
 

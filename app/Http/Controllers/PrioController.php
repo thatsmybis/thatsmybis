@@ -379,7 +379,7 @@ class PrioController extends Controller
 
                         $isModified = true;
                         $audits[] = [
-                            'description'  => $currentMember->username . ' removed a prio from a character (' . $existingPrio->pivot->order . ')',
+                            'description'  => $currentMember->username . ' removed a prio from a character (rank ' . $existingPrio->pivot->order . ')',
                             'type'         => Item::TYPE_PRIO,
                             'member_id'    => $currentMember->id,
                             'guild_id'     => $currentMember->guild_id,
