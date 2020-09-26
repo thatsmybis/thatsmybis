@@ -33,6 +33,7 @@ class Guild extends Model
         'member_role_ids',
         'calendar_link',
         'is_prio_private',
+        'is_received_locked',
         'is_wishlist_private',
         'is_wishlist_locked',
         'is_prio_autopurged',

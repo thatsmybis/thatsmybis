@@ -252,6 +252,7 @@ class GuildController extends Controller
         $validationRules =  [
             'name'                   => 'string|max:36|unique:guilds,name,' . $guild->id,
             'is_prio_private'        => 'nullable|boolean',
+            'is_received_locked'     => 'nullable|boolean',
             'is_wishlist_private'    => 'nullable|boolean',
             'is_wishlist_locked'     => 'nullable|boolean',
             'is_prio_autopurged'     => 'nullable|boolean',
@@ -268,6 +269,7 @@ class GuildController extends Controller
         $updateValues['name'] = request()->input('name');
         $updateValues['slug'] = slug(request()->input('name'));
         $updateValues['is_prio_private']        = request()->input('is_prio_private') == 1 ? 1 : 0;
+        $updateValues['is_received_locked']     = request()->input('is_received_locked') == 1 ? 1 : 0;
         $updateValues['is_wishlist_private']    = request()->input('is_wishlist_private') == 1 ? 1 : 0;
         $updateValues['is_wishlist_locked']     = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
         $updateValues['is_prio_autopurged']     = request()->input('is_prio_autopurged') == 1 ? 1 : 0;

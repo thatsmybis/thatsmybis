@@ -223,6 +223,11 @@ class CharacterController extends Controller
             $character = $character->load('prios');
         }
 
+        $lockReceived = false;
+        if ($guild->is_received_locked && !$currentMember->hasPermission('loot.characters')) {
+            $lockReceived = true;
+        }
+
         $lockWishlist = false;
         if ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
             $lockWishlist = true;
@@ -233,6 +238,7 @@ class CharacterController extends Controller
             'currentMember'   => $currentMember,
             'guild'           => $guild,
 
+            'lockReceived'    => $lockReceived,
             'lockWishlist'    => $lockWishlist,
             'showPrios'       => $showPrios,
 
@@ -527,25 +533,44 @@ class CharacterController extends Controller
             ]);
         }
 
-        if (request()->input('wishlist')) {
-            $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember);
-        } else {
-            // TODO: Audit log!
-            $character->wishlist()->detach();
+        if (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters')) {
+            if (request()->input('wishlist')) {
+                $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember);
+            } else {
+                $character->wishlist()->detach();
+                AuditLog::create([
+                    'description'  => $currentMember->username . ' removed all wishlist items from a character',
+                    'member_id'    => $currentMember->id,
+                    'guild_id'     => $guild->id,
+                    'character_id' => $character->id,
+                ]);
+            }
         }
 
-        if (request()->input('received')) {
-            $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember);
-        } else {
-            // TODO: Audit log!
-            $character->received()->detach();
+        if (!$guild->is_received_locked || $currentMember->hasPermission('loot.characters')) {
+            if (request()->input('received')) {
+                $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember);
+            } else {
+                $character->received()->detach();
+                AuditLog::create([
+                    'description'  => $currentMember->username . ' removed all received items from a character',
+                    'member_id'    => $currentMember->id,
+                    'guild_id'     => $guild->id,
+                    'character_id' => $character->id,
+                ]);
+            }
         }
 
         if (request()->input('recipes')) {
             $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember);
         } else {
-            // TODO: Audit log!
             $character->recipes()->detach();
+            AuditLog::create([
+                'description'  => $currentMember->username . ' removed all recipes from a character',
+                'member_id'    => $currentMember->id,
+                'guild_id'     => $guild->id,
+                'character_id' => $character->id,
+            ]);
         }
 
         return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
@@ -681,8 +706,15 @@ class CharacterController extends Controller
                 // Also remove it from the collection... for good measure I guess.
                 $existingItems->forget($existingItemKey);
 
+                $message = '';
+                if ($existingItem->pivot->type == Item::TYPE_PRIO) {
+                    $message = ' (prio ' . $existingItem->pivot->order . ')';
+                } else if ($existingItem->pivot->type == Item::TYPE_WISHLIST) {
+                    $message = ' (rank ' . $existingItem->pivot->order . ')';
+                }
+
                 $audits[] = [
-                    'description'  => $currentMember->username . ' removed item from a character (' . $itemType . ')' . ' (prio ' . $existingItem->pivot->order . ')',
+                    'description'  => $currentMember->username . ' removed item from a character (' . $itemType . ')' . $message,
                     'type'         => $itemType,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,

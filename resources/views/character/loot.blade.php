@@ -135,29 +135,59 @@
                                 <span class="fas fa-fw fa-sack"></span>
                                 Loot Received
                             </span>
-                            <small class="text-muted font-weight-normal">Max {{ $maxReceivedItems }}</small>
+
+                            @if ($lockReceived)
+                                <small class="text-warning font-weight-normal">locked by your guild master(s)</small>
+                            @elseif ($guild->is_received_locked)
+                                <small class="text-warning font-weight-normal">locked for raiders</small> <small class="text-muted font-weight-normal">max {{ $maxReceivedItems }}</small>
+                            @else
+                                <small class="text-muted font-weight-normal">max {{ $maxReceivedItems }}</small>
+                            @endif
                         </label>
 
-                        <div class="{{ $errors->has('received.*') ? 'has-error' : '' }}">
-                            <input id="received" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
-                            <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+                        @if ($lockReceived)
+                            <div class="col-12 pb-3">
+                                @if ($character->received->count() > 0)
+                                    <ol class="">
+                                        @foreach ($character->received as $item)
+                                            <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : ''}}" value="{{ $item->pivot->order ? $item->pivot->order : '' }}">
+                                                @include('partials/item', ['wowheadLink' => false])
+                                                <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+                                                    data-timestamp="{{ $item->pivot->created_at }}"
+                                                    data-title="added by {{ $item->added_by_username }} at"
+                                                    data-is-short="1">
+                                                </span>
+                                            </li>
+                                        @endforeach
+                                    </ol>
+                                @else
+                                    <div class="pl-4">
+                                        —
+                                    </div>
+                                @endif
+                            </div>
+                        @else
+                            <div class="{{ $errors->has('received.*') ? 'has-error' : '' }}">
+                                <input id="received" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
+                                <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
-                            <ul class="js-sortable no-bullet no-indent mb-0">
-                                @for ($i = 0; $i < $maxReceivedItems; $i++)
-                                    <li class="input-item {{ $errors->has('received.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('received.' . $i . '.item_id') || ($character->received && $character->received->get($i)) ? '' : 'display:none;' }}">
-                                        <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ old('received.' . $i . '.item_id') ? old('received.' . $i . '.item_id') : ($character->received && $character->received->get($i) ? $character->received->get($i)->item_id : '') }}" style="display:none;">
-                                        <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ old('received.' . $i . '.label') ? old('received.' . $i . '.label') : ($character->received && $character->received->get($i) ? $character->received->get($i)->name : '') }}" style="display:none;">
-                                        <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                        <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('received.' . $i . '.label') ? old('received.' . $i . '.label') : ($character->received && $character->received->get($i) ? $character->received->get($i)->name : '') }}</span>&nbsp;
-                                    </li>
-                                    @if ($errors->has('received.' . $i . '.item_id'))
-                                        <li class="'text-danger font-weight-bold'">
-                                            {{ $errors->first('received.' . $i . '.item_id') }}
+                                <ul class="js-sortable no-bullet no-indent mb-0">
+                                    @for ($i = 0; $i < $maxReceivedItems; $i++)
+                                        <li class="input-item {{ $errors->has('received.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('received.' . $i . '.item_id') || ($character->received && $character->received->get($i)) ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ old('received.' . $i . '.item_id') ? old('received.' . $i . '.item_id') : ($character->received && $character->received->get($i) ? $character->received->get($i)->item_id : '') }}" style="display:none;">
+                                            <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ old('received.' . $i . '.label') ? old('received.' . $i . '.label') : ($character->received && $character->received->get($i) ? $character->received->get($i)->name : '') }}" style="display:none;">
+                                            <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('received.' . $i . '.label') ? old('received.' . $i . '.label') : ($character->received && $character->received->get($i) ? $character->received->get($i)->name : '') }}</span>&nbsp;
                                         </li>
-                                    @endif
-                                @endfor
-                            </ul>
-                        </div>
+                                        @if ($errors->has('received.' . $i . '.item_id'))
+                                            <li class="'text-danger font-weight-bold'">
+                                                {{ $errors->first('received.' . $i . '.item_id') }}
+                                            </li>
+                                        @endif
+                                    @endfor
+                                </ul>
+                            </div>
+                        @endif
                     </div>
                 </div>
 
