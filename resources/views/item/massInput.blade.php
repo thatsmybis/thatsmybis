@@ -2,9 +2,9 @@
 @section('title', "Assign Loot - " . config('app.name'))
 
 @section('content')
-<div class="container-fluid container-width-capped">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
+        <div class="col-12">
 
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
@@ -19,10 +19,43 @@
                     </small>
                 </div>
 
-                <div class="col-sm-6 col-12 pt-2 mb-2">
-                    <label for="raid_filter font-weight-light">
+                <div class="col-12 pt-2">
+                    <div class="form-group mb-0">
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="toggle_dates" value="1" class="" autocomplete="off"
+                                    {{ old('toggle_dates') && old('toggle_dates') == 1 ? 'checked' : '' }}>
+                                    Show date inputs <span class="text-muted small">current date used by default</span>
+                            </label>
+                        </div>
+                        <div class="checkbox">
+                            <label>
+                                <input type="checkbox" name="toggle_notes" value="1" class="" autocomplete="off"
+                                    {{ old('toggle_notes') && old('toggle_notes') != 1 ? '' : 'checked' }}>
+                                    Show note inputs
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
+                    <label for="raid_id font-weight-light">
                         <span class="text-muted fas fa-fw fa-helmet-battle"></span>
-                        Filter character dropdown by raid
+                        Raid
+                    </label>
+                    <select id="raid_id" class="form-control dark">
+                        <option value="">—</option>
+                        @foreach ($guild->raids as $raid)
+                            <option value="{{ $raid->id }}" style="color:{{ $raid->getColor() }};">
+                                {{ $raid->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
+                    <label for="raid_filter font-weight-light">
+                        <span class="text-muted">Character filter</span>
                     </label>
                     <select id="raid_filter" class="form-control dark">
                         <option value="">—</option>
@@ -50,19 +83,26 @@
 
                 <div class="row">
                     <div class="col-12 mt-3 mb-3 bg-light rounded">
+                        @php
+                            $maxDate = (new \DateTime())->modify('+1 day')->format('Y-m-d');
+                        @endphp
                         @for ($i = 0; $i < 125; $i++)
                             <div class="row striped-light pb-4 pt-4 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $i > 2 ? 'display:none;' : '' }}">
 
-                                <div class="col-sm-6 col-12">
+                                <!-- Item input -->
+                                <div class="col-lg-3 col-sm-6 col-12">
                                     <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.id') ? 'text-danger font-weight-bold' : '' }}">
 
                                         <label for="name" class="font-weight-bold">
                                             <span class="fas fa-fw fa-sack text-success"></span>
                                             @if ($i == 0)
                                                 Item
+                                            @else
+                                                <span class="sr-only">
+                                                    Item
+                                                </span>
                                             @endif
                                         </label>
-
 
                                         <input data-max-length="50" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text js-show-next form-control dark" autocomplete="off">
                                         <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
@@ -88,14 +128,19 @@
                                     </div>
                                 </div>
 
-                                <div class="col-sm-6 col-12">
+                                <!-- Character dropdown -->
+                                <div class="col-lg-3 col-sm-6 col-12">
                                     <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
 
-                                        <label for="member_id" class="font-weight-bold d-none d-sm-block">
-                                            &nbsp;
+                                        <label for="member_id" class="font-weight-bold">
                                             @if ($i == 0)
                                                 <span class="fas fa-fw fa-user text-muted"></span>
                                                 Character
+                                            @else
+                                                &nbsp;
+                                                <span class="sr-only">
+                                                    Character
+                                                </span>
                                             @endif
                                         </label>
 
@@ -120,6 +165,66 @@
                                                 {{ $errors->first('items.' . $i) }}
                                             </div>
                                         @endif
+                                    </div>
+                                </div>
+
+                                <!-- Note -->
+                                <div class="js-note col-lg-3 col-sm-6 col-12">
+                                    <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.note') ? 'text-danger font-weight-bold' : '' }}">
+
+                                        <label for="note" class="font-weight-bold">
+                                            @if ($i == 0)
+                                                <span class="fas fa-fw fa-scroll text-muted"></span>
+                                                Note
+                                                <span class="text-muted small">optional</span>
+                                            @else
+                                                &nbsp;
+                                                <span class="sr-only">
+                                                    Optional Note
+                                                </span>
+                                            @endif
+                                        </label>
+                                        <input name="note" data-max-length="140" type="text" placeholder="brief public note" class="js-show-next form-control dark" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <!-- Officer Note -->
+                                <div class="js-note col-lg-3 col-sm-6 col-12">
+                                    <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.officer_note') ? 'text-danger font-weight-bold' : '' }}">
+
+                                        <label for="officer_note" class="font-weight-bold">
+                                            @if ($i == 0)
+                                                <span class="fas fa-fw fa-scroll text-muted"></span>
+                                                Officer Note
+                                                <span class="text-muted small">optional</span>
+                                            @else
+                                                &nbsp;
+                                                <span class="sr-only">
+                                                    Optional Officer Note
+                                                </span>
+                                            @endif
+                                        </label>
+                                        <input name="officer_note" data-max-length="140" type="text" placeholder="officer note" class="js-show-next form-control dark" autocomplete="off">
+                                    </div>
+                                </div>
+
+                                <!-- Date -->
+                                <div class="js-date col-lg-3 col-sm-6 col-12" style="display:none;">
+                                    <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.received_at') ? 'text-danger font-weight-bold' : '' }}">
+
+                                        <label for="received_at" class="font-weight-bold">
+                                            @if ($i == 0)
+                                                <span class="fas fa-fw fa-calendar-alt text-muted"></span>
+                                                Date
+                                                <span class="text-muted small">optional</span>
+                                            @else
+                                                &nbsp;
+                                                <span class="sr-only">
+                                                    Optional Date
+                                                </span>
+                                            @endif
+                                        </label>
+                                        <input name="received_at" min="2019-08-26" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="js-show-next form-control dark" autocomplete="off">
                                     </div>
                                 </div>
                             </div>

@@ -109,7 +109,7 @@ class Character extends Model
             })
             ->where('character_items.type', Item::TYPE_RECEIVED)
             ->orderBy('order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
+            ->withPivot(['id', 'added_by', 'type', 'order', 'note', 'officer_note', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
         return ($query);
