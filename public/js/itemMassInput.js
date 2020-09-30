@@ -26,4 +26,20 @@ $(document).ready(function () {
         }
         $(".selectpicker").selectpicker("refresh");
     }).change();
+
+    $("[name=toggle_notes]").on('change', function () {
+        if (this.checked) {
+            $(".js-note").show();
+        } else {
+            $(".js-note").hide();
+        }
+    }).change();
+
+    $("[name=toggle_dates]").on('change', function () {
+        if (this.checked) {
+            $(".js-date").show();
+        } else {
+            $(".js-date").hide();
+        }
+    }).change();
 });
