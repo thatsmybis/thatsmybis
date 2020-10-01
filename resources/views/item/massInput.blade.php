@@ -215,7 +215,7 @@
 
                                         <label for="items[{{ $i }}][note]" class="font-weight-bold">
                                             @if ($i == 0)
-                                                <span class="fas fa-fw fa-scroll text-muted"></span>
+                                                <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
                                                 Note
                                                 <span class="text-muted small">optional</span>
                                             @else
@@ -236,7 +236,7 @@
 
                                         <label for="items[{{ $i }}][officer_note]" class="font-weight-bold">
                                             @if ($i == 0)
-                                                <span class="fas fa-fw fa-scroll text-muted"></span>
+                                                <span class="fas fa-fw fa-shield text-muted"></span>
                                                 Officer Note
                                                 <span class="text-muted small">optional</span>
                                             @else
