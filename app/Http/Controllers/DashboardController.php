@@ -139,12 +139,6 @@ class DashboardController extends Controller
             'raid_roles.color AS raid_color',
         ];
 
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
-            $characterFields[] = 'characters.officer_note';
-            $showOfficerNote = true;
-        }
-
         $characters = Character::select($characterFields)
             ->leftJoin('members', function ($join) {
                 $join->on('members.id', 'characters.member_id');
@@ -157,8 +151,14 @@ class DashboardController extends Controller
             })
             ->where('characters.guild_id', $guild->id)
             ->whereNull('characters.inactive_at')
-            ->with(['received']) // 'recipes',
-            ->orderBy('characters.name');
+            ->orderBy('characters.name')
+            ->with(['received']);
+
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $characterFields[] = 'characters.officer_note';
+            $showOfficerNote = true;
+        }
 
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
@@ -178,6 +178,15 @@ class DashboardController extends Controller
         }
 
         $characters = $characters->get();
+
+        if (!$showOfficerNote) {
+            // Hide officer notes on item assignments
+            $characters->each(function ($character) {
+                $character->received->each(function ($item) {
+                    $item->pivot->makeHidden(['officer_note']);
+                });
+            });
+        }
 
         return view('roster', [
             'characters'      => $characters,

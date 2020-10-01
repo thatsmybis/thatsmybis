@@ -233,6 +233,11 @@ class CharacterController extends Controller
             $lockWishlist = true;
         }
 
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
         return view('character.loot', [
             'character'       => $character,
             'currentMember'   => $currentMember,
@@ -240,6 +245,7 @@ class CharacterController extends Controller
 
             'lockReceived'    => $lockReceived,
             'lockWishlist'    => $lockWishlist,
+            'showOfficerNote' => $showOfficerNote,
             'showPrios'       => $showPrios,
 
             'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
