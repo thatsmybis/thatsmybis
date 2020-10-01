@@ -36,15 +36,11 @@
                         </div>
                         <div class="col-12 pb-3">
                             @if ($character->prios->count() > 0)
-                                <ol class="">
+                                <ol class="lesser-indent">
                                     @foreach ($character->prios as $item)
-                                        <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : ''}}" value="{{ $item->pivot->order }}">
-                                            @include('partials/item', ['wowheadLink' => false])
-                                            <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
-                                                data-timestamp="{{ $item->pivot->created_at }}"
-                                                data-title="added by {{ $item->added_by_username }} at"
-                                                data-is-short="1">
-                                            </span>
+                                        <li value="{{ $item->pivot->order }}">
+                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                         </li>
                                     @endforeach
                                 </ol>
@@ -82,26 +78,20 @@
                         </label>
 
                         @if ($lockWishlist)
-                            <div class="col-12 pb-3">
-                                @if ($character->wishlist->count() > 0)
-                                    <ol class="">
-                                        @foreach ($character->wishlist as $item)
-                                            <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : ''}}" value="{{ $item->pivot->order }}">
-                                                @include('partials/item', ['wowheadLink' => false])
-                                                <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
-                                                    data-timestamp="{{ $item->pivot->created_at }}"
-                                                    data-title="added by {{ $item->added_by_username }} at"
-                                                    data-is-short="1">
-                                                </span>
-                                            </li>
-                                        @endforeach
-                                    </ol>
-                                @else
-                                    <div class="pl-4">
-                                        —
-                                    </div>
-                                @endif
-                            </div>
+                            @if ($character->wishlist->count() > 0)
+                                <ol class="lesser-indent">
+                                    @foreach ($character->wishlist as $item)
+                                        <li class="mb-2" value="{{ $item->pivot->order }}">
+                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                        </li>
+                                    @endforeach
+                                </ol>
+                            @else
+                                <div class="pl-4">
+                                    —
+                                </div>
+                            @endif
                         @else
                             <div class="{{ $errors->has('wishlist.*') ? 'has-error' : '' }}">
                                 <input id="wishlist" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
@@ -109,12 +99,33 @@
 
                                 <ul class="js-sortable no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxWishlistItems; $i++)
-                                        <li class="input-item {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }} {{ $character->wishlist && $character->wishlist->get($i) && $character->wishlist->get($i)->pivot->is_received ? 'font-strikethrough' : '' }}"
-                                            style="{{ old('wishlist.' . $i . '.item_id') || ($character->wishlist && $character->wishlist->get($i)) ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ old('wishlist.' . $i . '.item_id') ? old('wishlist.' . $i . '.item_id') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->item_id : '') }}" style="display:none;">
-                                            <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ old('wishlist.' . $i . '.label') ? old('wishlist.' . $i . '.label') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}" style="display:none;">
+                                        @php
+                                            $item      = null;
+                                            $itemId    = null;
+                                            $itemLabel = null;
+
+                                            if (old('wishlist.' . $i . '.item_id')) {
+                                                $itemId    = old('wishlist.' . $i . '.item_id');
+                                                if (old('wishlist.' . $i . '.label')) {
+                                                    $itemLabel = old('wishlist.' . $i . '.label');
+                                                } else {
+                                                    $itemLabel = $itemId;
+                                                }
+                                            } else if ($character->wishlist && $character->wishlist->get($i)) {
+                                                $item      = $character->wishlist->get($i);
+                                                $itemId    = $item->item_id;
+                                                $itemLabel = $item->name;
+                                            }
+                                        @endphp
+                                        <li class="input-item {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
+                                            style="{{ $itemId ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
+                                            <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('wishlist.' . $i . '.label') ? old('wishlist.' . $i . '.label') : ($character->wishlist && $character->wishlist->get($i) ? $character->wishlist->get($i)->name : '') }}</span>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable d-inline-block">
+                                                @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? $item->pivot->created_at : null), 'itemUsername' => ($item ? $item->added_by_username : null), 'strikeThrough' => ($item ? $item->pivot->is_received : null)])
+                                                @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                            </span>&nbsp;
                                         </li>
                                         @if ($errors->has('wishlist.' . $i . '.item_id'))
                                             <li class="'text-danger font-weight-bold'">
@@ -146,26 +157,20 @@
                         </label>
 
                         @if ($lockReceived)
-                            <div class="col-12 pb-3">
-                                @if ($character->received->count() > 0)
-                                    <ol class="">
-                                        @foreach ($character->received as $item)
-                                            <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : ''}}" value="{{ $item->pivot->order ? $item->pivot->order : '' }}">
-                                                @include('partials/item', ['wowheadLink' => false])
-                                                <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
-                                                    data-timestamp="{{ $item->pivot->created_at }}"
-                                                    data-title="added by {{ $item->added_by_username }} at"
-                                                    data-is-short="1">
-                                                </span>
-                                            </li>
-                                        @endforeach
-                                    </ol>
-                                @else
-                                    <div class="pl-4">
-                                        —
-                                    </div>
-                                @endif
-                            </div>
+                            @if ($character->received->count() > 0)
+                                <ul class="lesser-indent no-bullet">
+                                    @foreach ($character->received as $item)
+                                        <li class="mb-2" value="{{ $item->pivot->order ? $item->pivot->order : '' }}">
+                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username])
+                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @else
+                                <div class="pl-4">
+                                    —
+                                </div>
+                            @endif
                         @else
                             <div class="{{ $errors->has('received.*') ? 'has-error' : '' }}">
                                 <input id="received" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
@@ -173,11 +178,32 @@
 
                                 <ul class="js-sortable no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxReceivedItems; $i++)
-                                        <li class="input-item {{ $errors->has('received.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('received.' . $i . '.item_id') || ($character->received && $character->received->get($i)) ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ old('received.' . $i . '.item_id') ? old('received.' . $i . '.item_id') : ($character->received && $character->received->get($i) ? $character->received->get($i)->item_id : '') }}" style="display:none;">
-                                            <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ old('received.' . $i . '.label') ? old('received.' . $i . '.label') : ($character->received && $character->received->get($i) ? $character->received->get($i)->name : '') }}" style="display:none;">
+                                        @php
+                                            $item      = null;
+                                            $itemId    = null;
+                                            $itemLabel = null;
+
+                                            if (old('received.' . $i . '.item_id')) {
+                                                $itemId    = old('received.' . $i . '.item_id');
+                                                if (old('received.' . $i . '.label')) {
+                                                    $itemLabel = old('received.' . $i . '.label');
+                                                } else {
+                                                    $itemLabel = $itemId;
+                                                }
+                                            } else if ($character->received && $character->received->get($i)) {
+                                                $item      = $character->received->get($i);
+                                                $itemId    = $item->item_id;
+                                                $itemLabel = $item->name;
+                                            }
+                                        @endphp
+                                        <li class="input-item {{ $errors->has('received.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ $itemId ? '' : 'display:none;' }}">
+                                            <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
+                                            <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('received.' . $i . '.label') ? old('received.' . $i . '.label') : ($character->received && $character->received->get($i) ? $character->received->get($i)->name : '') }}</span>&nbsp;
+                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable d-inline-block">
+                                                @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? $item->pivot->created_at : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
+                                                @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                            </span>&nbsp;
                                         </li>
                                         @if ($errors->has('received.' . $i . '.item_id'))
                                             <li class="'text-danger font-weight-bold'">
@@ -207,11 +233,32 @@
 
                             <ul class="js-sortable no-bullet no-indent mb-0">
                                 @for ($i = 0; $i < $maxRecipes; $i++)
-                                    <li class="input-item {{ $errors->has('recipes.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('recipes.' . $i . '.item_id') || ($character->recipes && $character->recipes->get($i)) ? '' : 'display:none;' }}">
-                                        <input type="checkbox" checked name="recipes[{{ $i }}][item_id]" value="{{ old('recipes.' . $i . '.item_id') ? old('recipes.' . $i . '.item_id') : ($character->recipes && $character->recipes->get($i) ? $character->recipes->get($i)->item_id : '') }}" style="display:none;">
-                                        <input type="checkbox" checked name="recipes[{{ $i }}][label]" value="{{ old('recipes.' . $i . '.label') ? old('recipes.' . $i . '.label') : ($character->recipes && $character->recipes->get($i) ? $character->recipes->get($i)->name : '') }}" style="display:none;">
+                                    @php
+                                        $item      = null;
+                                        $itemId    = null;
+                                        $itemLabel = null;
+
+                                        if (old('recipes.' . $i . '.item_id')) {
+                                            $itemId    = old('recipes.' . $i . '.item_id');
+                                            if (old('recipes.' . $i . '.label')) {
+                                                $itemLabel = old('recipes.' . $i . '.label');
+                                            } else {
+                                                $itemLabel = $itemId;
+                                            }
+                                        } else if ($character->recipes && $character->recipes->get($i)) {
+                                            $item      = $character->recipes->get($i);
+                                            $itemId    = $item->item_id;
+                                            $itemLabel = $item->name;
+                                        }
+                                    @endphp
+                                    <li class="input-item {{ $errors->has('recipes.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ $itemId ? '' : 'display:none;' }}">
+                                        <input type="checkbox" checked name="recipes[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
+                                        <input type="checkbox" checked name="recipes[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
                                         <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                        <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('recipes.' . $i . '.label') ? old('recipes.' . $i . '.label') : ($character->recipes && $character->recipes->get($i) ? $character->recipes->get($i)->name : '') }}</span>&nbsp;
+                                        <span class="js-sort-handle js-input-label move-cursor text-unselectable d-inline-block">
+                                            @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? $item->pivot->created_at : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
+                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                        </span>&nbsp;
                                     </li>
                                     @if ($errors->has('recipes.' . $i . '.item_id'))
                                         <li class="'text-danger font-weight-bold'">
@@ -236,7 +283,7 @@
                         </div>
                     </div>
 
-                    @if ($currentMember->hasPermission('edit.officer-notes'))
+                    @if ($showOfficerNote)
                         <div class="col-12 mb-4">
                             <div class="form-group">
                                 <label for="officer_note" class="font-weight-bold">
@@ -244,11 +291,7 @@
                                     Officer Note
                                     <small class="text-muted">only officers can see this</small>
                                 </label>
-                                @if (isStreamerMode())
-                                    Hidden in streamer mode
-                                @else
-                                    <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
-                                @endif
+                                <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
                             </div>
                         </div>
                     @endif
@@ -274,4 +317,10 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    var guild = {!! $guild->toJson() !!};
+</script>
 @endsection

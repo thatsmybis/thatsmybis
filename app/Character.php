@@ -103,13 +103,16 @@ class Character extends Model
     public function received() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
-            ->select(['items.*', 'added_by_members.username AS added_by_username'])
+            ->select(['items.*', 'added_by_members.username AS added_by_username', 'raids.name AS raid_name'])
             ->leftJoin('members AS added_by_members', function ($join) {
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
+            ->leftJoin('raids', function ($join) {
+                $join->on('raids.id', 'character_items.raid_id');
+            })
             ->where('character_items.type', Item::TYPE_RECEIVED)
             ->orderBy('order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'note', 'officer_note', 'is_offspec', 'raid_id', 'created_at'])
+            ->withPivot(['id', 'added_by', 'type', 'order', 'note', 'officer_note', 'is_offspec', 'raid_id', 'received_at', 'created_at'])
             ->withTimeStamps();
 
         return ($query);
@@ -140,7 +143,7 @@ class Character extends Model
             })
             ->where('character_items.type', Item::TYPE_WISHLIST)
             ->orderBy('order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'is_received', 'received_at', 'raid_id', 'created_at'])
+            ->withPivot(['id', 'added_by', 'type', 'order', 'is_offspec', 'is_received', 'received_at', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
         return ($query);

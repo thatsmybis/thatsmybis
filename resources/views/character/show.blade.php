@@ -39,17 +39,13 @@
                                         @php
                                             $lastRaidId = $item->pivot->raid_id;
                                         @endphp
-                                        <li class="text-muted no-bullet font-italic small">
+                                        <li class="text-muted no-bullet font-italic small font-weight-bold">
                                             {{ $guild->raids->find($item->pivot->raid_id)->name }}
                                         </li>
                                     @endif
-                                    <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : '' }}" value="{{ $item->pivot->order }}">
-                                        @include('partials/item', ['wowheadLink' => false])
-                                        <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
-                                            data-timestamp="{{ $item->pivot->created_at }}"
-                                            data-title="added by {{ $item->added_by_username }} at"
-                                            data-is-short="1">
-                                        </span>
+                                    <li value="{{ $item->pivot->order }}">
+                                        @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true, 'hideRaid' => true])
                                     </li>
                                 @endforeach
                             </ol>
@@ -72,13 +68,9 @@
                         @if ($character->relationLoaded('wishlist') && $character->wishlist->count() > 0)
                             <ol class="">
                                 @foreach ($character->wishlist as $item)
-                                    <li class="{{ $item->pivot->is_received ? 'font-strikethrough' : '' }}">
-                                        @include('partials/item', ['wowheadLink' => false])
-                                        <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
-                                            data-timestamp="{{ $item->pivot->created_at }}"
-                                            data-title="added by {{ $item->added_by_username }} at"
-                                            data-is-short="1">
-                                        </span>
+                                    <li>
+                                        @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                     </li>
                                 @endforeach
                             </ol>
@@ -101,12 +93,8 @@
                         <ol class="">
                             @foreach ($character->received as $item)
                                 <li class="">
-                                    @include('partials/item', ['wowheadLink' => false])
-                                    <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
-                                        data-timestamp="{{ $item->pivot->created_at }}"
-                                        data-title="added by {{ $item->added_by_username }} at"
-                                        data-is-short="1">
-                                    </span>
+                                    @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username])
+                                    @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                 </li>
                             @endforeach
                         </ol>
@@ -128,12 +116,8 @@
                         <ol class="">
                             @foreach ($character->recipes as $item)
                                 <li class="">
-                                    @include('partials/item', ['wowheadLink' => false])
-                                    <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
-                                        data-timestamp="{{ $item->pivot->created_at }}"
-                                        data-title="added by {{ $item->added_by_username }} at"
-                                        data-is-short="1">
-                                    </span>
+                                    @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username])
+                                    @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                 </li>
                             @endforeach
                         </ol>

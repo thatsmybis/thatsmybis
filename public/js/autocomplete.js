@@ -217,12 +217,13 @@ function addTag($this, value, label) {
             if (guild) {
                 link = ` <a href="/${ guild.id }/${ guild.slug }/i/${ value }/${ slug(label) }"
                     target="_blank"
+                    class="font-weight-medium"
                     data-wowhead-link="https://classic.wowhead.com/item=${ value }"
                     data-wowhead="item=${ value }?domain=classic">
                     ${ label }
                 </a>`;
             } else {
-                link = `<a href="https://classic.wowhead.com/item=${ value }" target="_blank">${ label }</a>`;
+                link = `<a href="https://classic.wowhead.com/item=${ value }" target="_blank" class="font-weight-medium">${ label }</a>`;
             }
             $nextInput.siblings(".js-input-label").html(link);
             $($this).val("");

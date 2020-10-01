@@ -233,13 +233,20 @@
                 <ul class="list-inline striped">
                     @foreach ($receivedAndRecipeCharacters as $character)
                         <li class="list-inline-item rounded pt-2 pl-3 pb-3 pr-3">
-                            @if (isset($character->pivot->created_at))
-                                <ul class="list-inline">
-                                    <li class="list-inline-item text-muted small">
-                                        Received <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->created_at }}"></span> ago
+                            <ul class="list-inline">
+                                @if ($character->pivot->is_offspec)
+                                    <li class="list-inline-item font-weight-bold">
+                                        <span title="offspec item">OS</span>
                                     </li>
-                                </ul>
-                            @endif
+                                @endif
+                                @if ($character->pivot->received_at || $character->pivot->created_at)
+                                    <li class="list-inline-item text-muted small">
+                                        received
+                                        <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->received_at ? $character->pivot->received_at : $character->pivot->created_at }}"></span>
+                                        ago
+                                    </li>
+                                @endif
+                            </ul>
                             @include('character/partials/header', ['showDetails' => false, 'showEdit' => false, 'showOwner' => false])
                         </li>
                     @endforeach

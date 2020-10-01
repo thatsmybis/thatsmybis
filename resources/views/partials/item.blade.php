@@ -5,7 +5,7 @@ if (isset($item)) {
 }
 @endphp
 
-<span class="font-weight-{{ isset($fontWeight) && $fontWeight ? $fontWeight : 'medium' }}">
+<span class="font-weight-{{ isset($fontWeight) && $fontWeight ? $fontWeight : 'medium' }} {{ isset($strikeThrough) && $strikeThrough ? 'font-strikethrough' : '' }}">
     @if (isset($wowheadLink) && $wowheadLink)
         <a href="https://classic.wowhead.com/item={{ $itemId }}" target="_blank">{{ $itemName }}</a>
     @elseif (isset($guild) && $guild)
@@ -24,3 +24,13 @@ if (isset($item)) {
         </a>
     @endif
 </span>
+
+@if (isset($itemDate) && $itemDate)
+    <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+        data-timestamp="{{ $itemDate }}"
+        @if (isset($itemUsername) && $itemUsername)
+            data-title="added by {{ $itemUsername }} at"
+        @endif
+        data-is-short="1">
+    </span>
+@endif
