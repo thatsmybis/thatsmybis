@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\{AuditLog, Guild, Instance, Item, Raid};
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
@@ -18,6 +19,9 @@ class ItemController extends Controller
     {
         $this->middleware(['auth', 'seeUser']);
     }
+
+    // Maximum number of items that can be added at any one time
+    const MAX_ITEMS = 100;
 
     /**
      * List the items
@@ -296,6 +300,7 @@ class ItemController extends Controller
         return view('item.massInput', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'maxItems'      => self::MAX_ITEMS,
         ]);
     }
 
@@ -470,7 +475,7 @@ class ItemController extends Controller
         ]);
 
         $raid = $guild->raids->first();
-dd($raidInputId, $raid);
+
         $deleteWishlist = request()->input('delete_wishlist_items') ? true : false;
         $deletePrio     = request()->input('delete_prio_items') ? true : false;
         $raidId         = $raid ? $raid->id : null;
@@ -496,11 +501,11 @@ dd($raidInputId, $raid);
                         'raid_id'      => $raidId,
                         'type'         => Item::TYPE_RECEIVED,
                         'order'        => '0', // Put this item at the top of the list
-                        'is_offspec'   => ($item['is_offspec']   ? 1 : 0),
+                        'is_offspec'   => (isset($item['is_offspec']) && $item['is_offspec'] == true ? 1 : 0),
                         'is_received'  => 1,
                         'note'         => ($item['note']         ? $item['note'] : null),
                         'officer_note' => ($item['officer_note'] ? $item['officer_note'] : null),
-                        'received_at'  => ($item['received_at']  ? $item['received_at'] : null),
+                        'received_at'  => ($item['received_at']  ? Carbon::parse($item['received_at'])->toDateTimeString() : null),
                         'created_at'   => $now,
                     ];
                     $detachRows[] = [
@@ -511,7 +516,7 @@ dd($raidInputId, $raid);
 
                     $description = $currentMember->username . ' assigned item to character';
 
-                    if ($item['is_offspec'] == 1) {
+                    if (isset($item['is_offspec']) && $item['is_offspec'] == 1) {
                         $description .= ' (OS)';
                     }
 
@@ -626,11 +631,9 @@ dd($raidInputId, $raid);
 
         request()->session()->flash('status', 'Successfully added ' . $addedCount . ' items. ' . $failedCount . ' failures' . ($warnings ? ': ' . rtrim($warnings, ', ') : '.'));
 
-        return redirect()->route('member.show', [
+        return redirect()->route('guild.auditLog', [
             'guildId'      => $guild->id,
             'guildSlug'    => $guild->slug,
-            'memberId'     => $currentMember->id,
-            'usernameSlug' => $currentMember->slug
         ]);
     }
 
