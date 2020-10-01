@@ -179,13 +179,16 @@ function addItemRemoveHandler() {
         $(this).parent("li").hide();
 
         // Remove the select's warning message.
-        $(this).parent("li").parent("ul").siblings(".js-input-select").find("option:first").text("—");
+        let select = $(this).parent("li").parent("ul").siblings(".js-input-select");
+        select.find("option:first").text("—");
+        select.show();
 
         // Remove the input's warning message, only if it is present.
-        textInput = $(this).parent("li").parent("ul").siblings(".js-input-text");
+        let textInput = $(this).parent("li").parent("ul").siblings(".js-input-text");
         if (textInput.val() && textInput.val().match("^maximum") && textInput.val().match("added$")) {
             textInput.val("");
         }
+        textInput.show();
     });
 }
 
@@ -209,8 +212,24 @@ function addTag($this, value, label) {
             // Populate the hidden input's sibling that holds onto the label
             // Useful if submission fails on the server side and the server wants to send the label back
             $nextInput.siblings("input[value='']").first().val(label);
-            $nextInput.siblings(".js-input-label").html(" " + label);
+
+            let link = "";
+            if (guild) {
+                link = ` <a href="/${ guild.id }/${ guild.slug }/i/${ value }/${ slug(label) }"
+                    target="_blank"
+                    data-wowhead-link="https://classic.wowhead.com/item=${ value }"
+                    data-wowhead="item=${ value }?domain=classic">
+                    ${ label }
+                </a>`;
+            } else {
+                link = `<a href="https://classic.wowhead.com/item=${ value }" target="_blank">${ label }</a>`;
+            }
+            $nextInput.siblings(".js-input-label").html(link);
             $($this).val("");
+            if ($($this).data("isSingleInput")) {
+                $($this).hide();
+            }
+            makeWowheadLinks();
             return true;
         } else {
             $($this).val("maximum items added");
