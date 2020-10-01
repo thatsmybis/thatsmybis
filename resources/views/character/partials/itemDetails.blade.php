@@ -15,11 +15,6 @@
                 <strong>Officer Note:</strong> {{ $item->pivot->officer_note }}
             </li>
         @endif
-        @if ((!isset($hideRaid) || !$hideRaid) && $item->raid_name)
-            <li>
-                $item->raid_name
-            </li>
-        @endif
         @if ((!isset($hideCreatedAt) || !$hideCreatedAt) && $item->pivot->created_at)
             <li class="cursor-pointer js-timestamp-title" data-timestamp="{{ $item->pivot->created_at }}">
                 added <span class="js-watchable-timestamp" data-timestamp="{{ $item->pivot->created_at }}"></span> ago
@@ -34,9 +29,13 @@
             </li>
         @endif
         <li>
-            by <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $item->pivot->added_by, 'usernameSlug' => slug($item->added_by_username)]) }}" class="text-muted" target="_blank">
-                    {{ $item->added_by_username }}
-                </a>
+            by
+            <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $item->pivot->added_by, 'usernameSlug' => slug($item->added_by_username)]) }}" class="text-muted" target="_blank">
+                {{ $item->added_by_username }}
+            </a>
+            @if ((!isset($hideRaid) || !$hideRaid) && $item->raid_name)
+                / {{ $item->raid_name }}
+            @endif
         </li>
     </ul>
 @endif

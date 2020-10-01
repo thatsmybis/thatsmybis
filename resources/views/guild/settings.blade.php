@@ -121,14 +121,14 @@
                                 <label>
                                     <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
                                         {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
-                                        Limit <strong>wishlist visibility</strong> to Raid Leaders <small>(members can still see <em>their own</em> characters' wishlists)</small>
+                                        Limit <strong>wishlist visibility</strong> to Raid Leaders <span class="text-muted small">members can still see <em>their own</em> characters' wishlists</span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
                                         {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
-                                        Limit <strong>prio visibility</strong> to Raid Leaders <small>(Prio Notes remain visible to raiders; only assigned characters are hidden)</small>
+                                        Limit <strong>prio visibility</strong> to Raid Leaders <span class="text-muted small">character prios are hidden, but prio notes on items are still visible</span>
                                 </label>
                             </div>
                         </div>
@@ -142,14 +142,14 @@
                                 <label>
                                     <input type="checkbox" name="is_received_locked" value="1" class="" autocomplete="off"
                                         {{ old('is_received_locked') && old('is_received_locked') == 1 ? 'checked' : ($guild->is_received_locked ? 'checked' : '') }}>
-                                        Lock loot received <small>(Raid Leader and above can still edit)</small>
+                                        Lock loot received <span class="text-muted small">Raid Leader and above can still edit</span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
                                         {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
-                                        Lock wishlists <small>(Raid Leader and above can still edit)</small>
+                                        Lock wishlists <span class="text-muted small">Raid Leader and above can still edit</span>
                                 </label>
                             </div>
                         </div>

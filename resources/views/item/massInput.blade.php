@@ -30,14 +30,14 @@
                         <div class="col-12">
                             <div class="form-group mb-0">
                                 <div class="checkbox">
-                                    <label>
+                                    <label class="text-muted">
                                         <input type="checkbox" name="toggle_notes" value="1" class="" autocomplete="off"
                                             {{ old('toggle_notes') && old('toggle_notes') != 1 ? '' : 'checked' }}>
                                             Show note inputs
                                     </label>
                                 </div>
                                 <div class="checkbox">
-                                    <label>
+                                    <label class="text-muted">
                                         <input type="checkbox" name="toggle_dates" value="1" class="" autocomplete="off"
                                             {{ old('toggle_dates') && old('toggle_dates') == 1 ? 'checked' : '' }}>
                                             Show date inputs <span class="text-muted small">for backdating old loot</span>
@@ -51,7 +51,7 @@
                             <div class="form-group">
                                 <label for="date_default" class="font-weight-bold">
                                     <span class="fas fa-fw fa-calendar-alt text-muted"></span>
-                                    Set default date <span class="text-muted small">optional, overwrites all dates</span>
+                                    Set default date <span class="text-muted small">optional, overwrites all date inputs</span>
                                 </label>
                                 <input name="date_default" min="2019-08-26" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="form-control dark" autocomplete="off">
                             </div>
@@ -68,7 +68,7 @@
                             <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                             Raid
                         </label>
-                        <select id="raid_id" class="form-control dark">
+                        <select name="raid_id" class="form-control dark">
                             <option value="">—</option>
                             @foreach ($guild->raids as $raid)
                                 <option value="{{ $raid->id }}" style="color:{{ $raid->getColor() }};">
@@ -105,7 +105,7 @@
 
                 <div class="row">
                     <div class="col-12 mt-3 mb-3 bg-light rounded">
-                        @for ($i = 0; $i < 125; $i++)
+                        @for ($i = 0; $i < $maxItems; $i++)
                             <div class="row striped-light pb-4 pt-4 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $i > 2 ? 'display:none;' : '' }}">
 
                                 <!-- Item input -->
@@ -189,7 +189,7 @@
 
                                 <div class="col-lg-1 col-sm-2 col-2">
                                     <div class="form-group">
-                                        <label class="font-weight-bold">
+                                        <label for="items[{{ $i }}][is_offspec]" class="font-weight-bold">
                                             @if ($i == 0)
                                                 Offspec
                                             @else
@@ -277,17 +277,17 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                    <div class="col-12 pt-2 pb-1 mt-4 mb-4 bg-light rounded">
                         <div class="form-group mb-0">
                             <div class="checkbox">
-                                <label>
+                                <label class="text-muted">
                                     <input type="checkbox" name="delete_wishlist_items" value="1" class="" autocomplete="off"
                                         {{ (old('delete_wishlist_items') && old('delete_wishlist_items') == 1) || (!old('delete_wishlist_items') && $guild->is_wishlist_autopurged) ? 'checked' : '' }}>
                                         Delete assigned items from each character's wishlist <abbr title="if unchecked, corresponding wishlist items will be flagged as received but still be visible">?</abbr>
                                 </label>
                             </div>
                             <div class="checkbox">
-                                <label>
+                                <label class="text-muted">
                                     <input type="checkbox" name="delete_prio_items" value="1" class="" autocomplete="off"
                                         {{ (old('delete_prio_items') && old('delete_prio_items') == 1) || (!old('delete_prio_items') && $guild->is_prio_autopurged) ? 'checked' : '' }}>
                                         Delete assigned items from each character's prio list <abbr title="if unchecked, corresponding prio will be flagged as received but still be visible">?</abbr>
