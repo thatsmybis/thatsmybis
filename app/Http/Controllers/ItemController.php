@@ -438,14 +438,14 @@ class ItemController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // Allow adding items to inactive characters as well
-        // Perhaps someone deactivated a character while the raid leader was still editing the form
-        // We don't want the submission to fail because of that
-        $guild->load(['allCharacters']);
-
         $validationRules =  [
+            'raid_id'               => 'nullable|integer|exists:raids,id',
             'items.*.id'            => 'nullable|integer|exists:items,item_id',
             'items.*.character_id'  => 'nullable|integer|exists:characters,id',
+            'items.*.is_offspec'    => 'nullable|boolean',
+            'items.*.note'          => 'nullable|string|max:140',
+            'items.*.officer_note'  => 'nullable|string|max:140',
+            'items.*.received_at'   => 'nullable|date|before:tomorrow|after:2019-09-26',
             'delete_wishlist_items' => 'nullable|boolean',
             'delete_prio_items'     => 'nullable|boolean',
         ];
@@ -457,8 +457,23 @@ class ItemController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
+        $raidInputId = request()->input('raid_id');
+
+        // Allow adding items to inactive characters as well
+        // Perhaps someone deactivated a character while the raid leader was still editing the form
+        // We don't want the submission to fail because of that
+        $guild->load([
+            'allCharacters',
+            'raids' => function ($query) use ($raidInputId) {
+                return $query->where('id', $raidInputId);
+            }
+        ]);
+
+        $raid = $guild->raids->first();
+dd($raidInputId, $raid);
         $deleteWishlist = request()->input('delete_wishlist_items') ? true : false;
         $deletePrio     = request()->input('delete_prio_items') ? true : false;
+        $raidId         = $raid ? $raid->id : null;
 
         $warnings   = '';
         $newRows    = [];
@@ -478,8 +493,14 @@ class ItemController extends Controller
                         'item_id'      => $item['id'],
                         'character_id' => $item['character_id'],
                         'added_by'     => $currentMember->id,
+                        'raid_id'      => $raidId,
                         'type'         => Item::TYPE_RECEIVED,
                         'order'        => '0', // Put this item at the top of the list
+                        'is_offspec'   => ($item['is_offspec']   ? 1 : 0),
+                        'is_received'  => 1,
+                        'note'         => ($item['note']         ? $item['note'] : null),
+                        'officer_note' => ($item['officer_note'] ? $item['officer_note'] : null),
+                        'received_at'  => ($item['received_at']  ? $item['received_at'] : null),
                         'created_at'   => $now,
                     ];
                     $detachRows[] = [
@@ -488,12 +509,22 @@ class ItemController extends Controller
                     ];
                     $addedCount++;
 
+                    $description = $currentMember->username . ' assigned item to character';
+
+                    if ($item['is_offspec'] == 1) {
+                        $description .= ' (OS)';
+                    }
+
+                    if ($item['received_at']) {
+                        $description .= ' (backdated ' . $item['received_at'] . ')';
+                    }
+
                     $audits[] = [
-                        'description'  => $currentMember->username . ' assigned item to character',
+                        'description'  => $description,
                         'member_id'    => $currentMember->id,
                         'character_id' => $item['character_id'],
                         'guild_id'     => $currentMember->guild_id,
-                        'raid_id'      => null,
+                        'raid_id'      => $raidId,
                         'item_id'      => $item['id'],
                         'created_at'   => $now,
                     ];

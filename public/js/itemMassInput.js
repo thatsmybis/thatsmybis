@@ -27,6 +27,7 @@ $(document).ready(function () {
         $(".selectpicker").selectpicker("refresh");
     }).change();
 
+    // Toggles visibility on the Note inputs
     $("[name=toggle_notes]").on('change', function () {
         if (this.checked) {
             $(".js-note").show();
@@ -35,11 +36,19 @@ $(document).ready(function () {
         }
     }).change();
 
+    // Toggles visibility on the Date inputs
     $("[name=toggle_dates]").on('change', function () {
         if (this.checked) {
             $(".js-date").show();
+            $("#default_datepicker").show();
         } else {
             $(".js-date").hide();
+            $("#default_datepicker").hide();
         }
     }).change();
+
+    // Sets all dates to the chosen date
+    $("[name=date_default]").on('change', function () {
+        $("[name*='received_at']").val($(this).val());
+    });
 });
