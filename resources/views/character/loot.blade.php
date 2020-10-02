@@ -105,7 +105,7 @@
                                             $itemLabel = null;
 
                                             if (old('wishlist.' . $i . '.item_id')) {
-                                                $itemId    = old('wishlist.' . $i . '.item_id');
+                                                $itemId = old('wishlist.' . $i . '.item_id');
                                                 if (old('wishlist.' . $i . '.label')) {
                                                     $itemLabel = old('wishlist.' . $i . '.label');
                                                 } else {
@@ -184,7 +184,7 @@
                                             $itemLabel = null;
 
                                             if (old('received.' . $i . '.item_id')) {
-                                                $itemId    = old('received.' . $i . '.item_id');
+                                                $itemId = old('received.' . $i . '.item_id');
                                                 if (old('received.' . $i . '.label')) {
                                                     $itemLabel = old('received.' . $i . '.label');
                                                 } else {
@@ -239,7 +239,7 @@
                                         $itemLabel = null;
 
                                         if (old('recipes.' . $i . '.item_id')) {
-                                            $itemId    = old('recipes.' . $i . '.item_id');
+                                            $itemId = old('recipes.' . $i . '.item_id');
                                             if (old('recipes.' . $i . '.label')) {
                                                 $itemLabel = old('recipes.' . $i . '.label');
                                             } else {

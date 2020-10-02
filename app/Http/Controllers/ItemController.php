@@ -467,10 +467,10 @@ class ItemController extends Controller
 
         $raidInputId = request()->input('raid_id');
 
-        // Allow adding items to inactive characters as well
-        // Perhaps someone deactivated a character while the raid leader was still editing the form
-        // We don't want the submission to fail because of that
         $guild->load([
+            // Allow adding items to inactive characters as well
+            // Perhaps someone deactivated a character while the raid leader was still editing the form
+            // We don't want the submission to fail because of that
             'allCharacters',
             'raids' => function ($query) use ($raidInputId) {
                 return $query->where('id', $raidInputId);

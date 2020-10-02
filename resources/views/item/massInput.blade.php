@@ -63,6 +63,20 @@
             <form class="form-horizontal" role="form" method="POST" action="{{ route('item.massInput.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
                 <div class="row mt-4 mb-4">
+
+                    @if (count($errors) > 0)
+                        <div class="col-12">
+                            <ul class="alert alert-danger">
+                                @foreach ($errors->all() as $error)
+                                    <li>
+                                        {{ $error }}
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+                    <!-- Raid -->
                     <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
                         <label for="raid_id font-weight-light">
                             <span class="text-muted fas fa-fw fa-helmet-battle"></span>
@@ -78,6 +92,7 @@
                         </select>
                     </div>
 
+                    <!-- Character select filter -->
                     <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
                         <label for="raid_filter font-weight-light">
                             <span class="text-muted">Character filter</span>
@@ -92,16 +107,6 @@
                         </select>
                     </div>
                 </div>
-
-                @if (count($errors) > 0)
-                    <ul class="alert alert-danger">
-                        @foreach ($errors->all() as $error)
-                            <li>
-                                {{ $error }}
-                            </li>
-                        @endforeach
-                    </ul>
-                @endif
 
                 <div class="row">
                     <div class="col-12 mt-3 mb-3 bg-light rounded">
@@ -197,6 +202,7 @@
                                     </div>
                                 </div>
 
+                                <!-- Offspec -->
                                 <div class="col-lg-1 col-sm-2 col-2">
                                     <div class="form-group">
                                         <label for="item[{{ $i }}][is_offspec]" class="font-weight-bold">

@@ -93,6 +93,6 @@
 </div>
 
 <div class="col-12 pb-3 pr-2 pl-2 rounded">
-    <table id="characterTable" class="col-xs-12 table table-border table-hover stripe">
+    <table id="characterTable" class="table table-border table-hover stripe">
     </table>
 </div>

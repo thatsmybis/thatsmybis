@@ -6,7 +6,7 @@
     <div class="row pt-2 mb-3">
         <div class="col-12 pr-0 pl-0">
             <div class="col-12 pb-3 pr-2 pl-2 rounded">
-                <table id="members" class="col-xs-12 table table-border table-hover stripe">
+                <table id="members" class="col-12 table table-border table-hover stripe">
                     <thead>
                         <tr>
                             <th>

@@ -35,7 +35,7 @@
                     </ol>
                 </div>
 
-                <div class="col-xs-12 mt-3">
+                <div class="col-12 mt-3">
                     <a class="btn btn-success" href="{{ route('guild.syncRoles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                         <span class="fas fa-fw fa-sync"></span>
                         Sync Roles
