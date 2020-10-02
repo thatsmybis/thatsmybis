@@ -91,40 +91,47 @@ class AuditLogController extends Controller
                 });
 
         if (!$showPrios && !$showWishlist) {
-            $query = $query->where([['audit_logs.type', '!=', Item::TYPE_PRIO], ['audit_logs.type', '!=', Item::TYPE_WISHLIST]]);
+            $query = $query->where(function ($query) {
+                return $query->where([['audit_logs.type', '!=', Item::TYPE_PRIO], ['audit_logs.type', '!=', Item::TYPE_WISHLIST]])
+                    ->orWhereNull('audit_logs.type');
+            });
         } else if (!$showPrios) {
-            $query = $query->where('audit_logs.type', '!=', Item::TYPE_PRIO);
+            $query = $query->where(function ($query) {
+                return $query->where([['audit_logs.type', '!=', Item::TYPE_PRIO]])
+                    ->orWhereNull('audit_logs.type');
+            });
         } else if (!$showWishlist) {
-            $query = $query->where('audit_logs.type', '!=', Item::TYPE_WISHLIST);
+            $query = $query->where(function ($query) {
+                return $query->where([['audit_logs.type', '!=', Item::TYPE_WISHLIST]])
+                    ->orWhereNull('audit_logs.type');
+            });
         }
 
         if (!empty(request()->input('character_id'))) {
             $query = $query->where('characters.id', request()->input('character_id'));
             $resource = Character::where([['guild_id', $guild->id], ['id', request()->input('character_id')]])->with('member')->first();
-            $resourceName = $resource->name;
+            $resourceName = $resource ? $resource->name : null;
         }
 
         if (!empty(request()->input('item_id'))) {
             $query = $query->where('items.item_id', request()->input('item_id'));
             $resource = Item::find(request()->input('item_id'));
-            $resourceName = $resource->name;
+            $resourceName = $resource ? $resource->name : null;
         }
 
         if (!empty(request()->input('member_id'))) {
             $query = $query->where('members.id', request()->input('member_id'));
             $resource = Member::where([['guild_id', $guild->id], ['id', request()->input('member_id')]])->with('user')->first();
-            $resourceName = $resource->name;
+            $resourceName = $resource ? $resource->name : null;
         }
 
         if (!empty(request()->input('raid_id'))) {
             $query = $query->where('raids.id', request()->input('raid_id'));
             $resource = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])->with('role')->first();
-            $resourceName = $resource->name;
+            $resourceName = $resource ? $resource->name : null;
         }
 
         $logs = $query->where(['audit_logs.guild_id' => $guild->id])
-            // WARNING: This line was added as a quick bugfix. It creates an OR statement in the where clause, meaning any previous WHERE statements are ignored unless repeated here.
-            ->orWhereNull('audit_logs.type')->where(['audit_logs.guild_id' => $guild->id])
             ->orderBy('audit_logs.created_at', 'desc')
             ->paginate(self::RESULTS_PER_PAGE);
 
