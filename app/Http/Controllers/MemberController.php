@@ -222,8 +222,8 @@ class MemberController extends Controller
         $validationRules = [
             'id'            => 'required|integer|exists:members,id',
             'username'      => 'nullable|string|min:2|max:32',
-            'public_note'   => 'nullable|string|max:144',
-            'officer_note'  => 'nullable|string|max:144',
+            'public_note'   => 'nullable|string|max:140',
+            'officer_note'  => 'nullable|string|max:140',
             'personal_note' => 'nullable|string|max:2000',
         ];
 
@@ -303,9 +303,9 @@ class MemberController extends Controller
 
         $validationRules = [
             'id'            => 'required|integer|exists:members,id',
-            'officer_note'  => 'nullable|string|max:144',
+            'officer_note'  => 'nullable|string|max:140',
             'personal_note' => 'nullable|string|max:2000',
-            'public_note'   => 'nullable|string|max:144',
+            'public_note'   => 'nullable|string|max:140',
         ];
 
         $validationMessages = [];

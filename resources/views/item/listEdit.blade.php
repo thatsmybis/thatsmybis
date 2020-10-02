@@ -88,7 +88,7 @@
                                         <input hidden name="items[{{ $loop->iteration }}][id]" value="{{ $item->item_id }}" />
 
 
-                                        <input name="items[{{ $loop->iteration }}][note]" data-max-length="144" type="text" placeholder="add a note" class="form-control dark"
+                                        <input name="items[{{ $loop->iteration }}][note]" maxlength="140" data-max-length="140" type="text" placeholder="add a note" class="form-control dark"
                                             value="{{ old('items.' . $loop->iteration . '.note') ? old('items.' . $loop->iteration . '.note') : ($item->guild_note ? $item->guild_note : '') }}">
 
                                         @if ($errors->has('items.' . $loop->iteration . '.note'))
@@ -111,7 +111,7 @@
                                             @endif
                                         </label>
 
-                                        <input name="items[{{ $loop->iteration }}][priority]" data-max-length="144" type="text" placeholder="eg. mage > warlock > boomkin" class="form-control dark"
+                                        <input name="items[{{ $loop->iteration }}][priority]" maxlength="140" data-max-length="140" type="text" placeholder="eg. mage > warlock > boomkin" class="form-control dark"
                                             value="{{ old('items.' . $loop->iteration . '.priority') ? old('items.' . $loop->iteration . '.priority') : ($item->guild_priority ? $item->guild_priority : '') }}">
 
                                         @if ($errors->has('items.' . $loop->iteration . '.priority'))

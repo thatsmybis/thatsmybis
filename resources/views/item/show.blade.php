@@ -71,7 +71,7 @@
                                             <label for="note" class="sr-only">
                                                 Item Priority
                                             </label>
-                                            <textarea data-max-length="144" name="note" rows="2" placeholder="add a note" class="form-control dark">{{ old('note') ? old('note') : ($item ? $notes['note'] : '') }}</textarea>
+                                            <textarea maxlength="140" data-max-length="140" name="note" rows="2" placeholder="add a note" class="form-control dark">{{ old('note') ? old('note') : ($item ? $notes['note'] : '') }}</textarea>
                                         </div>
                                     </div>
                                 @endif
@@ -94,7 +94,7 @@
                                             <label for="priority" class="sr-only">
                                                 Item Priority
                                             </label>
-                                            <textarea data-max-length="144" name="priority" rows="2" placeholder="eg. mage > warlock > boomkin > arcane shot hunter" class="form-control dark">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
+                                            <textarea maxlength="140" data-max-length="140" name="priority" rows="2" placeholder="eg. mage > warlock > boomkin > arcane shot hunter" class="form-control dark">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
                                         </div>
                                     </div>
                                 @endif

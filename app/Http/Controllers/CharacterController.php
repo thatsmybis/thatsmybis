@@ -38,8 +38,8 @@ class CharacterController extends Controller
             'rank'          => 'nullable|integer|min:1|max:14',
             'rank_goal'     => 'nullable|integer|min:1|max:14',
             'raid_id'       => 'nullable|integer|exists:raids,id',
-            'public_note'   => 'nullable|string|max:144',
-            'officer_note'  => 'nullable|string|max:144',
+            'public_note'   => 'nullable|string|max:140',
+            'officer_note'  => 'nullable|string|max:140',
             'personal_note' => 'nullable|string|max:2000',
             'order'         => 'nullable|integer|min:0|max:50',
             'is_inactive'   => 'nullable|boolean',
@@ -492,8 +492,8 @@ class CharacterController extends Controller
             'wishlist.*.item_id' => 'nullable|integer|exists:items,item_id',
             'received.*.item_id' => 'nullable|integer|exists:items,item_id',
             'recipes.*.item_id'  => 'nullable|integer|exists:items,item_id',
-            'public_note'        => 'nullable|string|max:144',
-            'officer_note'       => 'nullable|string|max:144',
+            'public_note'        => 'nullable|string|max:140',
+            'officer_note'       => 'nullable|string|max:140',
             'personal_note'      => 'nullable|string|max:2000',
         ];
 
@@ -579,8 +579,8 @@ class CharacterController extends Controller
 
         $validationRules = [
             'id' => 'required|integer|exists:characters,id',
-            'public_note'   => 'nullable|string|max:144',
-            'officer_note'  => 'nullable|string|max:144',
+            'public_note'   => 'nullable|string|max:140',
+            'officer_note'  => 'nullable|string|max:140',
         ];
 
         $validationMessages = [];

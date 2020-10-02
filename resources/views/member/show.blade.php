@@ -106,7 +106,7 @@
                                     <span class="sr-only">Public Note</span>
                                     <small class="text-muted">anyone in the guild can see this</small>
                                 </label>
-                                <textarea data-max-length="144" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($member ? $member->public_note : '') }}</textarea>
+                                <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($member ? $member->public_note : '') }}</textarea>
                             </div>
                         </div>
                     @endif
@@ -135,7 +135,7 @@
                                         <span class="sr-only">Officer Note</span>
                                         <small class="text-muted">only officers can see this</small>
                                     </label>
-                                    <textarea data-max-length="144" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
+                                    <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
                                 </div>
                             </div>
                         @endif
@@ -159,7 +159,7 @@
                                         <span class="sr-only">Personal Note</span>
                                         <small class="text-muted">only you can see this</small>
                                     </label>
-                                    <textarea data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($member ? $member->personal_note : '') }}</textarea>
+                                    <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($member ? $member->personal_note : '') }}</textarea>
                                 </div>
                             </div>
                         @endif
