@@ -8,6 +8,7 @@
             <h1>Frequently Asked Questions</h1>
 
             <ol>
+                <li><a href="#not-seeing-guild">Why can't I see my guild?</a></li>
                 <li><a href="#how-to-loot-council">How do I loot council?</a></li>
                 <li><a href="#what-does-this-do">What does this website do?</a></li>
                 <li><a href="#getting-started">How do I get started?</a></li>
@@ -21,7 +22,20 @@
 
             <hr class="light">
 
-            <h2 id="getting-started">How do I loot council?</h2>
+            <h2 id="not-seeing-guild">Why can't I see my guild?</h2>
+            <p>
+                If you're already logged in, double check that the username and <strong>last four characters</strong> at the top of <a href="{{ route('home') }}">the homepage</a> match your username and <strong>last four characters</strong> in your Discord client. It's pretty common for people to accidentally be logged into a different Discord account in their browser and not even know it!
+            </p>
+            <p>
+                If the username and/or last four characters on the homepage <strong>don't match</strong> your account in your Discord client, visit Discord's website and log out. Log back in to Discord, and make sure it gives you the right account. Log out of {{ env('APP_NAME') }} and back in, and you should be all set!
+            </p>
+            <p>
+                Still not working? Ask for help <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a>.
+            </p>
+
+            <hr class="light">
+
+            <h2 id="how-to-loot-council">How do I loot council?</h2>
             <p>
                 We're glad you asked. This is the most comprehensive guide we could find: <a href="https://www.reddit.com/r/classicwow/comments/hnjsge/how_to_loot_council/" target="_none">How To Loot Council</a>
             </p>
@@ -63,13 +77,13 @@
 
             <h2 id="privacy">What information do you collect?</h2>
             <p>
-                TL;DR Your Discord username, ID, avatar ID, and roles for any servers you register/join.
+                TL;DR Your Discord username, ID, avatar ID, and roles for any servers you register/join. Since this project is open source, you can review the data we collect <a href="https://github.com/thatsmybis/thatsmybis/blob/master/app/Http/Controllers/Auth/LoginController.php#L91" target="_blank">right here</a> and <a href="https://github.com/thatsmybis/thatsmybis/blob/master/app/Http/Controllers/Auth/LoginController.php#L45" target="_blank">here</a>.
             </p>
             <p>
                 Your username and ID are so we can verify it's you when you're logging in. Roles are so we can give you the proper permissions in your guild if you're a raider, raid leader, officer, or guild master.
             </p>
             <p>
-                Of the available Discord <a href="https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes" target="_blank">OAuth2 Scopes</a> (info you can allow Discord to share), we're only using 'identify' and 'guilds'. Guilds scope data isn't stored anywhere; it's only used to (a) identify which guilds are registered on the system that you belong to, and (b) provide a dropdown of available servers when a guild master is registering their guild.
+                Of the available Discord <a href="https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes" target="_blank">OAuth2 Scopes</a> (info you allow Discord to share with us when you register or sign in), we're only using 'identify' and 'guilds'. Guilds scope data isn't stored anywhere; it's only used to (a) identify which guilds are registered on the system that you belong to, and (b) provide a dropdown of available servers when a guild master is registering a guild.
             </p>
             <p>
                 We're also using Google Analytics to keep track of how the site is doing. Firefox has built-in features to block Google Analytics, which should be enabled by default. (I doubt Google Chrome does this however; go figure)
