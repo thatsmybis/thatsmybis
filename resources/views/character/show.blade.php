@@ -12,14 +12,6 @@
             </div>
 
             <div class="row mb-3 pt-3 bg-light rounded">
-                @if ($showEditLoot)
-                    <div class="col-12 mb-4">
-                        <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-4">
-                            <span class="fas fa-fw fa-pencil"></span>
-                            edit loot
-                        </a>
-                    </div>
-                @endif
 
                 @if ($showPrios)
                     <div class="col-12 mb-2">
@@ -59,10 +51,20 @@
 
                 @if ($showWishlist)
                     <div class="col-12 mb-2">
-                        <span class="text-legendary font-weight-bold">
-                            <span class="fas fa-fw fa-scroll-old"></span>
-                            Wishlist
-                        </span>
+                        @if ($showEditLoot)
+                            <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                                <span class="text-legendary font-weight-bold">
+                                    <span class="fas fa-fw fa-scroll-old"></span>
+                                    Wishlist
+                                </span>
+                                <span class="small align-text- fas fa-fw fa-pencil"></span>
+                            </a>
+                        @else
+                            <span class="text-legendary font-weight-bold">
+                                <span class="fas fa-fw fa-scroll-old"></span>
+                                Wishlist
+                            </span>
+                        @endif
                     </div>
                     <div class="col-12 pb-3">
                         @if ($character->relationLoaded('wishlist') && $character->wishlist->count() > 0)
@@ -83,10 +85,20 @@
                 @endif
 
                 <div class="col-12 mb-2">
-                    <span class="text-success font-weight-bold">
-                        <span class="fas fa-fw fa-sack"></span>
-                        Loot Received
-                    </span>
+                    @if ($showEditLoot)
+                        <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                            <span class="text-success font-weight-bold">
+                                <span class="fas fa-fw fa-sack"></span>
+                                Loot Received
+                            </span>
+                            <span class="small align-text- fas fa-fw fa-pencil"></span>
+                        </a>
+                    @else
+                        <span class="text-success font-weight-bold">
+                            <span class="fas fa-fw fa-sack"></span>
+                            Loot Received
+                        </span>
+                    @endif
                 </div>
                 <div class="col-12 pb-3">
                     @if ($character->received->count() > 0)
@@ -106,10 +118,20 @@
                 </div>
 
                 <div class="col-12 mb-2">
-                    <span class="text-gold font-weight-bold">
-                        <span class="fas fa-fw fa-book"></span>
-                        Recipes
-                    </span>
+                    @if ($showEditLoot)
+                        <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                            <span class="text-gold font-weight-bold">
+                                <span class="fas fa-fw fa-book"></span>
+                                Recipes
+                            </span>
+                            <span class="small align-text- fas fa-fw fa-pencil"></span>
+                        </a>
+                    @else
+                        <span class="text-gold font-weight-bold">
+                            <span class="fas fa-fw fa-book"></span>
+                            Recipes
+                        </span>
+                    @endif
                 </div>
                 <div class="col-12 pb-3">
                     @if ($character->recipes->count() > 0)
