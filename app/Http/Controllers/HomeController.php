@@ -41,6 +41,16 @@ class HomeController extends Controller
     }
 
     /**
+     * Show the donate page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function donate()
+    {
+        return view('donate');
+    }
+
+    /**
      * Show the faq page.
      *
      * @return \Illuminate\Http\Response
