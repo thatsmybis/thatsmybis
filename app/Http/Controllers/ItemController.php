@@ -345,8 +345,7 @@ class ItemController extends Controller
             },
             'receivedAndRecipeCharacters' => function ($query) use($guild) {
                 return $query
-                    ->where(['characters.guild_id' => $guild->id])
-                    ->groupBy(['character_items.character_id']);
+                    ->where(['characters.guild_id' => $guild->id]);
             },
         ]);
 
