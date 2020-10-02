@@ -86,7 +86,7 @@
                 Of the available Discord <a href="https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes" target="_blank">OAuth2 Scopes</a> (info you allow Discord to share with us when you register or sign in), we're only using 'identify' and 'guilds'. Guilds scope data isn't stored anywhere; it's only used to (a) identify which guilds are registered on the system that you belong to, and (b) provide a dropdown of available servers when a guild master is registering a guild.
             </p>
             <p>
-                We're also using Google Analytics to keep track of how the site is doing. Firefox has built-in features to block Google Analytics, which should be enabled by default. (however, I somehow doubt Google Chrome does this...)
+                We're also using Google Analytics to keep track of how the site is doing. Firefox has built-in features to block Google Analytics, which should be enabled by default. (however, I somehow doubt Google Chrome does the same...)
             </p>
 
             <hr class="light">
