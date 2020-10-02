@@ -130,7 +130,7 @@
                     </ol>
                 </div>
 
-                <div class="col-xs-12 mt-3">
+                <div class="col-12 mt-3">
                     {{ $logs->links() }}
                 </div>
             </div>

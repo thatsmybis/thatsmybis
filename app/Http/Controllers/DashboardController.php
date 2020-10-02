@@ -139,6 +139,12 @@ class DashboardController extends Controller
             'raid_roles.color AS raid_color',
         ];
 
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $characterFields[] = 'characters.officer_note';
+            $showOfficerNote = true;
+        }
+
         $characters = Character::select($characterFields)
             ->leftJoin('members', function ($join) {
                 $join->on('members.id', 'characters.member_id');
@@ -153,12 +159,6 @@ class DashboardController extends Controller
             ->whereNull('characters.inactive_at')
             ->orderBy('characters.name')
             ->with(['received']);
-
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
-            $characterFields[] = 'characters.officer_note';
-            $showOfficerNote = true;
-        }
 
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {

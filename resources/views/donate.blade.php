@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "FAQ - " . config('app.name'))
+@section('title', "Donate - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -29,6 +29,24 @@
                         <img alt="" border="0" src="https://www.paypal.com/en_CA/i/scr/pixel.gif" width="1" height="1" />
                     </form>
                 </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="row bg-light pt-5 pb-5 mb-5 rounded">
+        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
+            <h2>Donors</h2>
+            <ul>
+               <li>
+                    Calaris (Patreon)
+               </li>
+               <li>
+                    mattyp237 (Patreon)
+               </li>
+               <li>
+                    niph (Paypal)
+               </li>
+            </ul>
         </div>
     </div>
 </div>

@@ -92,7 +92,10 @@ class AuditLogController extends Controller
 
         if (!$showPrios && !$showWishlist) {
             $query = $query->where(function ($query) {
-                return $query->where([['audit_logs.type', '!=', Item::TYPE_PRIO], ['audit_logs.type', '!=', Item::TYPE_WISHLIST]])
+                return $query->where([
+                        ['audit_logs.type', '!=', Item::TYPE_PRIO],
+                        ['audit_logs.type', '!=', Item::TYPE_WISHLIST]
+                    ])
                     ->orWhereNull('audit_logs.type');
             });
         } else if (!$showPrios) {
@@ -122,7 +125,7 @@ class AuditLogController extends Controller
         if (!empty(request()->input('member_id'))) {
             $query = $query->where('members.id', request()->input('member_id'));
             $resource = Member::where([['guild_id', $guild->id], ['id', request()->input('member_id')]])->with('user')->first();
-            $resourceName = $resource ? $resource->name : null;
+            $resourceName = $resource ? $resource->username : null;
         }
 
         if (!empty(request()->input('raid_id'))) {
