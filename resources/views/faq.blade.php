@@ -86,7 +86,7 @@
                 Of the available Discord <a href="https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes" target="_blank">OAuth2 Scopes</a> (info you allow Discord to share with us when you register or sign in), we're only using 'identify' and 'guilds'. Guilds scope data isn't stored anywhere; it's only used to (a) identify which guilds are registered on the system that you belong to, and (b) provide a dropdown of available servers when a guild master is registering a guild.
             </p>
             <p>
-                We're also using Google Analytics to keep track of how the site is doing. Firefox has built-in features to block Google Analytics, which should be enabled by default. (I doubt Google Chrome does this however; go figure)
+                We're also using Google Analytics to keep track of how the site is doing. Firefox has built-in features to block Google Analytics, which should be enabled by default. (however, I somehow doubt Google Chrome does this...)
             </p>
 
             <hr class="light">
@@ -124,14 +124,14 @@
 
             <h2 id="feature-request">Can you add feature XYZ?</h2>
             <p>
-                Maybe. Let us know <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a> what you'd like to see, and we'll see if we can add it.
+                Maybe. Let us know <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a> what you'd like to see, and we'll see if we can add it. Almost all <a href="https://github.com/thatsmybis/thatsmybis/projects/1" target="_blank">features added</a> post-launch have come from user requests.
             </p>
 
             <hr class="light">
 
             <h2 id="how-to-help">I'd like to help out</h2>
             <p>
-                Reach out to us <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a> and we'll see if we can work together.
+                Reach out to us <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a> and we'll see if we can work together. Or, jump straight into the <a href="https://github.com/thatsmybis/thatsmybis" target="_blank">source code</a>.
             </p>
         </div>
     </div>

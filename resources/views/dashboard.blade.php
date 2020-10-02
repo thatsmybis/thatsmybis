@@ -11,9 +11,11 @@
             <h2 class="">
                 Welcome, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
             </h2>
-            Find a <strong>change log</strong> and <strong>announcements</strong> on this project's
+            <strong>Change log</strong> and <strong>announcements</strong> are on our
             <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="text-discord font-weight-bold">
-                Discord</a>.
+                Discord</a>
+            <br>
+            We run on <a href="{{ route('donate') }}">donations</a>, so thank you to our donors!
         </div>
 
         <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mt-4">
