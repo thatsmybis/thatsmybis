@@ -106,11 +106,15 @@
                 <div class="row">
                     <div class="col-12 mt-3 mb-3 bg-light rounded">
                         @for ($i = 0; $i < $maxItems; $i++)
-                            <div class="row striped-light pb-4 pt-4 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $i > 2 ? 'display:none;' : '' }}">
+                            @php
+                                $itemId    = 'item.' . $i . '.id';
+                                $itemLabel = 'item.' . $i . '.label';
+                            @endphp
+                            <div class="row striped-light pb-4 pt-4 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ ($i > 2) && old('item.' . $i . '.id') == null && old('item.' . $i . '.character_id') == null ? 'display:none;' : '' }}">
 
                                 <!-- Item input -->
                                 <div class="col-lg-3 col-sm-6 col-12">
-                                    <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.id') ? 'text-danger font-weight-bold' : '' }}">
+                                    <div class="form-group mb-0 {{ $errors->has($itemId) ? 'text-danger font-weight-bold' : '' }}">
 
                                         <label for="name" class="font-weight-bold">
                                             <span class="fas fa-fw fa-sack text-success"></span>
@@ -123,19 +127,25 @@
                                             @endif
                                         </label>
 
-                                        <input data-max-length="50" data-is-single-input="1" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text js-show-next form-control dark" autocomplete="off">
+                                        <input maxlength="50" data-max-length="50" data-is-single-input="1" type="text" placeholder="item name"
+                                            class="js-item-autocomplete js-input-text js-show-next form-control dark {{ $errors->has($itemId) ? 'form-danger' : '' }}" autocomplete="off"
+                                            style="{{ old($itemId) ? 'display:none;' : '' }}">
                                         <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
                                         <ul class="no-bullet no-indent mb-0">
-                                            <li class="input-item {{ $errors->has('items.' . $i . '.id') ? 'text-danger font-weight-bold' : '' }}" style="{{ old('items.' . $i . '.id') ? '' : 'display:none;' }}">
-                                                <input type="checkbox" checked name="items[{{ $i }}][id]" value="{{ old('items.' . $i . '.id') ? old('items.' . $i . '.id') : '' }}" autocomplete="off" style="display:none;">
-                                                <input type="checkbox" checked name="items[{{ $i }}][label]" value="{{ old('items.' . $i . '.label') ? old('items.' . $i . '.label') : '' }}" autocomplete="off" style="display:none;">
+                                            <li class="input-item {{ $errors->has($itemId) ? 'text-danger font-weight-bold' : '' }} {{ $errors->has($itemId) ? 'form-danger' : '' }}" style="{{ old($itemId) ? '' : 'display:none;' }}">
+                                                <input type="checkbox" checked name="item[{{ $i }}][id]" value="{{ old($itemId) ? old($itemId) : '' }}" autocomplete="off" style="display:none;">
+                                                <input type="checkbox" checked name="item[{{ $i }}][label]" value="{{ old($itemLabel) ? old($itemLabel) : '' }}" autocomplete="off" style="display:none;">
                                                 <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                                <span class="js-sort-handle js-input-label move-cursor text-unselectable">{{ old('items.' . $i . '.label') ? old('items.' . $i . '.label') : '' }}</span>&nbsp;
+                                                <span class="js-sort-handle js-input-label move-cursor text-unselectable">
+                                                    @if (old($itemId))
+                                                        @include('partials/item', ['itemName' =>  old($itemLabel), 'itemId' =>  old($itemId)])
+                                                    @endif
+                                                </span>&nbsp;
                                             </li>
-                                            @if ($errors->has('items.' . $i . '.id'))
+                                            @if ($errors->has($itemId))
                                                 <li class="'text-danger font-weight-bold'">
-                                                    {{ $errors->first('items.' . $i . '.id') }}
+                                                    {{ $errors->first($itemId) }}
                                                 </li>
                                             @endif
                                             @if ($i == 124)
@@ -149,7 +159,7 @@
 
                                 <!-- Character dropdown -->
                                 <div class="col-lg-2 col-sm-4 col-10">
-                                    <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
+                                    <div class="form-group mb-0 {{ $errors->has('item.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
 
                                         <label for="member_id" class="font-weight-bold">
                                             @if ($i == 0)
@@ -163,7 +173,7 @@
                                             @endif
                                         </label>
 
-                                        <select name="items[{{ $i }}][character_id]" class="js-show-next form-control dark selectpicker" data-live-search="true" autocomplete="off">
+                                        <select name="item[{{ $i }}][character_id]" class="js-show-next form-control dark selectpicker {{ $errors->has('item.' . $i . '.character_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
                                             <option value="">
                                                 —
                                             </option>
@@ -173,15 +183,15 @@
                                                     data-tokens="{{ $character->id }}"
                                                     data-raid-id="{{ $character->raid_id }}"
                                                     class="js-character-option text-{{ strtolower($character->class) }}-important"
-                                                    {{ old('items.' . $i . '.character_id') && old('items.' . $i . '.character_id') == $character->id  ? 'selected' : '' }}>
+                                                    {{ old('item.' . $i . '.character_id') && old('item.' . $i . '.character_id') == $character->id  ? 'selected' : '' }}>
                                                     {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? "Alt" : '' }}
                                                 </option>
                                             @endforeach
                                         </select>
 
-                                        @if ($errors->has('items.' . $i))
+                                        @if ($errors->has('item.' . $i))
                                             <div class="'text-danger font-weight-bold'">
-                                                {{ $errors->first('items.' . $i) }}
+                                                {{ $errors->first('item.' . $i) }}
                                             </div>
                                         @endif
                                     </div>
@@ -189,7 +199,7 @@
 
                                 <div class="col-lg-1 col-sm-2 col-2">
                                     <div class="form-group">
-                                        <label for="items[{{ $i }}][is_offspec]" class="font-weight-bold">
+                                        <label for="item[{{ $i }}][is_offspec]" class="font-weight-bold">
                                             @if ($i == 0)
                                                 Offspec
                                             @else
@@ -201,8 +211,8 @@
                                         </label>
                                         <div class="checkbox">
                                             <label title="item is offspec">
-                                                <input type="checkbox" name="items[{{ $i }}][is_offspec]" value="1" class="" autocomplete="off"
-                                                    {{ old('items.' . $i . '.is_offspec') && old('items.' . $i . '.is_offspec') == 1  ? 'checked' : '' }}>
+                                                <input type="checkbox" name="item[{{ $i }}][is_offspec]" value="1" class="" autocomplete="off"
+                                                    {{ old('item.' . $i . '.is_offspec') && old('item.' . $i . '.is_offspec') == 1  ? 'checked' : '' }}>
                                                     OS
                                             </label>
                                         </div>
@@ -211,9 +221,9 @@
 
                                 <!-- Note -->
                                 <div class="js-note col-lg-3 col-sm-6 col-12">
-                                    <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.note') ? 'text-danger font-weight-bold' : '' }}">
+                                    <div class="form-group mb-0 {{ $errors->has('item.' . $i . '.note') ? 'text-danger font-weight-bold' : '' }}">
 
-                                        <label for="items[{{ $i }}][note]" class="font-weight-bold">
+                                        <label for="item[{{ $i }}][note]" class="font-weight-bold">
                                             @if ($i == 0)
                                                 <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
                                                 Note
@@ -225,16 +235,17 @@
                                                 </span>
                                             @endif
                                         </label>
-                                        <input name="items[{{ $i }}][note]" data-max-length="140" type="text" placeholder="brief public note" class="js-show-next form-control dark" autocomplete="off"
-                                            {{ old('items.' . $i . '.note') ? old('items.' . $i . '.note') : '' }}>
+                                        <input name="item[{{ $i }}][note]" maxlength="140" data-max-length="140" type="text" placeholder="brief public note"
+                                            class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.note') ? 'form-danger' : '' }}" autocomplete="off"
+                                            value="{{ old('item.' . $i . '.note') ? old('item.' . $i . '.note') : '' }}">
                                     </div>
                                 </div>
 
                                 <!-- Officer Note -->
                                 <div class="js-note col-lg-3 col-sm-6 col-12">
-                                    <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.officer_note') ? 'text-danger font-weight-bold' : '' }}">
+                                    <div class="form-group mb-0 {{ $errors->has('item.' . $i . '.officer_note') ? 'text-danger font-weight-bold' : '' }}">
 
-                                        <label for="items[{{ $i }}][officer_note]" class="font-weight-bold">
+                                        <label for="item[{{ $i }}][officer_note]" class="font-weight-bold">
                                             @if ($i == 0)
                                                 <span class="fas fa-fw fa-shield text-muted"></span>
                                                 Officer Note
@@ -246,16 +257,17 @@
                                                 </span>
                                             @endif
                                         </label>
-                                        <input name="items[{{ $i }}][officer_note]" data-max-length="140" type="text" placeholder="officer note" class="js-show-next form-control dark" autocomplete="off"
-                                            {{ old('items.' . $i . '.officer_note') ? old('items.' . $i . '.officer_note') : '' }}>
+                                        <input name="item[{{ $i }}][officer_note]" maxlength="140" data-max-length="140" type="text" placeholder="officer note"
+                                            class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.officer_note') ? 'form-danger' : '' }}" autocomplete="off"
+                                            value="{{ old('item.' . $i . '.officer_note') ? old('item.' . $i . '.officer_note') : '' }}">
                                     </div>
                                 </div>
 
                                 <!-- Date -->
-                                <div class="js-date col-lg-3 col-sm-6 col-12" style="{{ old('items.' . $i . '.received_at') ? '' : 'display:none;' }}">
-                                    <div class="form-group mb-0 {{ $errors->has('items.' . $i . '.received_at') ? 'text-danger font-weight-bold' : '' }}">
+                                <div class="js-date col-lg-3 col-sm-6 col-12" style="{{ old('item.' . $i . '.received_at') ? '' : 'display:none;' }}">
+                                    <div class="form-group mb-0 {{ $errors->has('item.' . $i . '.received_at') ? 'text-danger font-weight-bold' : '' }}">
 
-                                        <label for="items[{{ $i }}][received_at]" class="font-weight-bold">
+                                        <label for="item[{{ $i }}][received_at]" class="font-weight-bold">
                                             @if ($i == 0)
                                                 <span class="fas fa-fw fa-calendar-alt text-muted"></span>
                                                 Date
@@ -267,8 +279,9 @@
                                                 </span>
                                             @endif
                                         </label>
-                                        <input name="items[{{ $i }}][received_at]" min="2019-08-26" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="js-show-next form-control dark" autocomplete="off"
-                                            {{ old('items.' . $i . '.received_at') ? old('items.' . $i . '.received_at') : '' }}>
+                                        <input name="item[{{ $i }}][received_at]" min="2019-08-26" max="{{ $maxDate }}" type="date" placeholder="defaults to today"
+                                            class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.received_at') ? 'form-danger' : '' }}" autocomplete="off"
+                                            {{ old('item.' . $i . '.received_at') ? old('item.' . $i . '.received_at') : '' }}>
                                     </div>
                                 </div>
                             </div>

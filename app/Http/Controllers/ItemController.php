@@ -197,8 +197,8 @@ class ItemController extends Controller
 
         $validationRules =  [
             'items.*.id'       => 'required|integer|exists:items,item_id',
-            'items.*.note'     => 'nullable|string|max:144',
-            'items.*.priority' => 'nullable|string|max:144',
+            'items.*.note'     => 'nullable|string|max:140',
+            'items.*.priority' => 'nullable|string|max:140',
         ];
 
         $this->validate(request(), $validationRules);
@@ -443,19 +443,23 @@ class ItemController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $validationRules =  [
+        $validationRules = [
             'raid_id'               => 'nullable|integer|exists:raids,id',
-            'items.*.id'            => 'nullable|integer|exists:items,item_id',
-            'items.*.character_id'  => 'nullable|integer|exists:characters,id',
-            'items.*.is_offspec'    => 'nullable|boolean',
-            'items.*.note'          => 'nullable|string|max:140',
-            'items.*.officer_note'  => 'nullable|string|max:140',
-            'items.*.received_at'   => 'nullable|date|before:tomorrow|after:2019-09-26',
+            'item.*.id'             => 'nullable|integer|exists:items,item_id',
+            'item.*.character_id'   => 'nullable|required_with:item.*.id|integer|exists:characters,id',
+            'item.*.is_offspec'     => 'nullable|boolean',
+            'item.*.note'           => 'nullable|string|max:140',
+            'item.*.officer_note'   => 'nullable|string|max:140',
+            'item.*.received_at'    => 'nullable|date|before:tomorrow|after:2019-09-26',
             'delete_wishlist_items' => 'nullable|boolean',
             'delete_prio_items'     => 'nullable|boolean',
         ];
 
-        $this->validate(request(), $validationRules);
+        $validationMessages = [
+            'item.*.character_id.required_with' => ':values is missing a character.'
+        ];
+
+        $this->validate(request(), $validationRules, $validationMessages);
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
             request()->session()->flash('status', 'You don\'t have permissions to submit that.');
@@ -491,7 +495,7 @@ class ItemController extends Controller
         $audits = [];
         $now = getDateTime();
 
-        foreach (request()->input('items') as $item) {
+        foreach (request()->input('item') as $item) {
             if ($item['id']) {
                 if ($guild->allCharacters->contains('id', $item['character_id'])) {
                     $newRows[] = [
@@ -649,8 +653,8 @@ class ItemController extends Controller
 
         $validationRules = [
             'id'       => 'required|integer|exists:items,item_id',
-            'note'     => 'nullable|string|max:144',
-            'priority' => 'nullable|string|max:144',
+            'note'     => 'nullable|string|max:140',
+            'priority' => 'nullable|string|max:140',
         ];
 
         $validationMessages = [];

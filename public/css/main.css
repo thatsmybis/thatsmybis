@@ -321,7 +321,11 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
 }
 
 .form-control:focus, .btn-light.focus, .btn-light:focus {
-  box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 128, 0);
+    box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 128, 0);
+}
+
+.form-danger {
+    box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 0, 0);
 }
 
 input.dark, select.dark, textarea.dark {
