@@ -11,9 +11,12 @@
             <h2 class="">
                 Welcome, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
             </h2>
+            Find a <strong>change log</strong> and <strong>announcements</strong> on this project's
+            <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="text-discord font-weight-bold">
+                Discord</a>.
         </div>
 
-        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mt-5 mb-5">
+        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mt-4">
             @if ($user->members->count() > 0)
                 <h3 class="font-weight-normal mb-3">
                     <span class="fas fa-fw fa-users text-muted"></span>
@@ -47,19 +50,22 @@
                     @endforeach
                 </ul>
             @else
-                <div class="mt-5 mb-5">
+                <div class="mt-4 mb-4">
                     <p class="font-weight-normal pt-3 text-4">
                         You don't belong to any guilds yet
                     </p>
                     <p class="font-weight-normal pt-3 text-4">
                         Ask your guild leader for a link to your guild's page
                     </p>
+                    <p class="small font-weight-normal pt-3 text-4">
+                        Something wrong with this message? Check the <a href="{{ route('faq') }}">FAQ</a> for why you might be seeing this.
+                    </p>
                 </div>
             @endif
         </div>
 
         @if ($existingGuilds)
-            <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mt-5 mb-5">
+            <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mb-5">
                 <ul class="no-bullet no-indent">
                     @foreach ($existingGuilds as $existingGuild)
                         <li class="bg-lightest mt-3 mb-3 p-3">

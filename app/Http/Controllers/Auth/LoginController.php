@@ -42,7 +42,7 @@ class LoginController extends Controller
      */
     public function redirectToDiscord() {
         return Socialite::driver('discord')
-            // Don't require Discord to send back and email
+            // Don't require Discord to send back an email
             // https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes
             ->setScopes(['identify', 'guilds']) // If changing these scopes, update the call to refresh a user's access (search 'refresh_token')
             // Don't prompt the user to accept our app's usage of their Discord profile EVERY time (only on first signup)
@@ -90,7 +90,6 @@ class LoginController extends Controller
         } else if ($unauthUser) {
             $user = User::create([
                 'username'              => $unauthUser->getName(),
-                // 'email'                 => $unauthUser->getEmail(),
                 'discord_username'      => $unauthUser->getNickname(),
                 'discord_id'            => $id,
                 'discord_avatar'        => $unauthUser->getAvatar(),
