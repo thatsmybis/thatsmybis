@@ -8,8 +8,8 @@
             <h1>Donate &lt;3 &lt;3 &lt;3</h1>
             <ul class="no-bullet mt-5">
                 <li class="mb-5 rounded">
-                    <a class="text-4 text-white" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
-                        <span class="fab fa-fw fa-patreon"></span>
+                    <a class="text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
+                        <span class="fab fa-fw fa-patreon text-white"></span>
                         Patreon
                     </a>
                 </li>

@@ -221,6 +221,10 @@ body {
     color: #7289DA;
 }
 
+.text-patreon {
+    color: #ff5c50 !important;
+}
+
 .font-weight-medium {
     font-weight: 600 !important;
 }

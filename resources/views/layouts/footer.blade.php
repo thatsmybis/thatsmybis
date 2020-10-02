@@ -36,8 +36,8 @@
                                 Donate
                             </a>
                             <div class="dropdown-menu text-center" aria-labelledby="donateDropdown">
-                                <a class="dropdown-item text-4" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
-                                    <span class="fab fa-fw fa-patreon"></span>
+                                <a class="dropdown-item text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
+                                    <span class="fab fa-fw fa-patreon text-white"></span>
                                     Patreon
                                 </a>
                                 <span class="dropdown-item">
