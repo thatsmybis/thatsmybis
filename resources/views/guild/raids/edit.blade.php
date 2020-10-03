@@ -42,7 +42,7 @@
                                         maxlength="255"
                                         type="text"
                                         class="form-control dark"
-                                        placeholder="eg. Raid 1"
+                                        placeholder="eg. Raid One"
                                         value="{{ old('name') ? old('name') : ($raid ? $raid->name : '') }}" />
                                 </div>
                             </div>
