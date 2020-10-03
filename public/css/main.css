@@ -342,7 +342,7 @@ input[type='checkbox'] {
     vertical-align: text-bottom;
 }
 input[type='checkbox']:checked {
-    /*background: #fff;*/
+    /*can add a custom style if needed*/
 }
 input[type='checkbox']:checked::before {
     display: inline-block;
