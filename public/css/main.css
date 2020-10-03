@@ -352,7 +352,7 @@ input[type='checkbox']:checked::before {
     -webkit-font-smoothing: antialiased;
     font-weight: 900;
     font-family: 'Open Sans', 'Font Awesome 5 Pro', sans-serif;
-    content: "\f00c";
+    content: "\f00c"; /* f00c is check icon */
     transform: translateY(-16%);
 }
 
