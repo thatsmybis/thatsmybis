@@ -84,6 +84,16 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     <span class="fas fa-fw fa-times-circle"></span>
                                     Nevermind
                                 </button>
+                                <div id="loading-indicator" class="mt-3 ml-5" style="display:none;">
+                                    <div class="spinner-border" role="status">
+                                      <span class="sr-only">Loading...</span>
+                                    </div>
+                                </div>
+                                <div id="loaded-indicator" class="text-success font-weight-bold mt-3 ml-5" style="display:none;">
+                                    Finished
+                                </div>
+                                <div id="error-indicator" class="text-warning mt-3 ml-5" style="display:none;">
+                                </div>
                             </div>
                         </div>
                     </div>

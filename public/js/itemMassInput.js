@@ -110,49 +110,6 @@ $(document).ready(function () {
     });
 });
 
-// Prepares the form for a data import.
-// Clears out all old values.
-function prepareForm() {
-    // Set these to the values we want then trigger their change event.
-    $("[name=toggle_notes]").prop("checked", true).change();
-    $("[name=toggle_dates]").prop("checked", true).change();
-    $("[name=date_default]").val("").change();
-    $("[name=raid_filter]").val("").change();
-
-    // Resets the native form inputs, such as unticking checkboxes and emptying text inputs.
-    // But not all of our form inputs are native...
-    $("#itemForm")[0].reset();
-
-    // Clear hidden item checkbox values...
-    $("input[name^=item][name$=\\[id\\]]").val("");
-    $("input[name^=item][name$=\\[label\\]]").val("");
-    // Remove fancy links for items...
-    $(".js-input-label").empty();
-    // Now hide old items...
-    $(".input-item").hide();
-    // And show their old inputs...
-    $(".js-item-autocomplete").show();
-
-    // Refresh our fancypants select inputs.
-    $(".selectpicker").selectpicker("refresh");
-}
-
-function disableButton() {
-    $("#submitImport").prop('disabled', true);
-}
-
-function enableButton() {
-    $("#submitImport").prop('disabled', false);
-}
-
-function disableForm() {
-    $("#itemForm fieldset").prop("disabled", true);
-}
-
-function enableForm() {
-    $("#itemForm fieldset").prop("disabled", false);
-}
-
 /**
  * Parse a CSV and load it into the form.
  *
@@ -166,6 +123,10 @@ function parseCsv($this) {
     if ($($this).prop('disabled') == "true") {
         return;
     }
+
+    // Allow only one parse at a time
+    disableForm();
+    $("#error-indicator").html("").hide();
 
     stepped = 0;
     rowCount = 0;
@@ -195,10 +156,6 @@ function parseCsv($this) {
         input = $('#json').val();
     }
 
-    // Allow only one parse at a time
-    disableButton();
-    disableForm();
-
     if (!firstRun) {
         console.log("--------------------------------------------------");
     } else {
@@ -209,7 +166,6 @@ function parseCsv($this) {
         if (!$('#files')[0].files.length) {
             alert("Please choose at least one file to parse.");
             enableForm();
-            enableButton();
             return 0;
         }
 
@@ -229,7 +185,6 @@ function parseCsv($this) {
     } else if (inputType == "json") {
         if (!input) {
             alert("Please enter a valid JSON string to convert to CSV.");
-            enableButton();
             enableForm();
             return 0;
         }
@@ -245,10 +200,9 @@ function parseCsv($this) {
 
         console.log(csv);
 
-        setTimeout(function(){enableButton();enableForm();}, 100); // hackity-hack
+        setTimeout(function(){enableForm();}, 100); // hackity-hack
     } else if (inputType == "remote" && !input) {
         alert("Please enter the URL of a file to download and parse.");
-        enableButton();
         enableForm();
         return 0;
     } else {
@@ -267,7 +221,7 @@ function stepCsvImport(results, parser)
 
 function completeCsvImport(results)
 {
-    setTimeout(function(){}, 500); // hack
+    setTimeout(function(){}, 250); // hack
 
     if (results && results.errors)
     {
@@ -288,6 +242,10 @@ function completeCsvImport(results)
     console.log("    Meta:", results.meta);
     console.log("    Results:", results);
 
+    if (firstError) {
+        $("#error-indicator").html("Error: " + firstError.message).show();
+    }
+
     // Load the results into the form
     if (results.data.length > 0) {
         // Clear the form
@@ -303,13 +261,13 @@ function completeCsvImport(results)
     }
 
     // icky hack
-    setTimeout(function(){enableButton();enableForm();}, 100);
+    setTimeout(function(){enableForm();}, 100);
 }
 
 function errorCsvImport(err, file)
 {
     console.log("ERROR:", err, file);
-    enableButton();
+    $("#error-indicator").html("ERROR: " + err).show();
     enableForm();
 }
 
@@ -429,4 +387,52 @@ function loadItemToForm(item, i) {
     if (date) {
         $("[name=item\\[" + i + "\\]\\[received_at\\]]").val(date).change();
     }
+}
+
+// Prepares the form for a data import.
+// Clears out all old values.
+function prepareForm() {
+    // Set these to the values we want then trigger their change event.
+    $("[name=toggle_notes]").prop("checked", true).change();
+    $("[name=toggle_dates]").prop("checked", true).change();
+    $("[name=date_default]").val("").change();
+    $("[name=raid_filter]").val("").change();
+
+    // Resets the native form inputs, such as unticking checkboxes and emptying text inputs.
+    // But not all of our form inputs are native...
+    $("#itemForm")[0].reset();
+
+    // Clear hidden item checkbox values...
+    $("input[name^=item][name$=\\[id\\]]").val("");
+    $("input[name^=item][name$=\\[label\\]]").val("");
+    // Remove fancy links for items...
+    $(".js-input-label").empty();
+    // Now hide old items...
+    $(".input-item").hide();
+    // And show their old inputs...
+    $(".js-item-autocomplete").show();
+
+    // Refresh our fancypants select inputs.
+    $(".selectpicker").selectpicker("refresh");
+}
+
+function disableForm() {
+    $("#loading-indicator").show();
+    $("#submitImport").prop('disabled', true);
+    $("#itemForm fieldset").prop("disabled", true);
+    $(".js-toggle-import").prop("disabled", true);
+}
+
+function enableForm() {
+    setTimeout(function () {
+        $("#itemForm fieldset").prop("disabled", false);
+
+        $("#loading-indicator").hide();
+        $("#loaded-indicator").show();
+        setTimeout(function () {
+            $("#submitImport").prop('disabled', false);
+            $(".js-toggle-import").prop("disabled", false);
+            $("#loaded-indicator").hide();
+        }, 5000); // Let this drag on a bit longer, otherwise it can disappear quicker than the user can notice it sometimes
+    }, 1000);
 }
