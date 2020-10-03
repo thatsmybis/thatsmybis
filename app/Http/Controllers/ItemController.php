@@ -21,7 +21,7 @@ class ItemController extends Controller
     }
 
     // Maximum number of items that can be added at any one time
-    const MAX_ITEMS = 100;
+    const MAX_ITEMS = 115;
 
     /**
      * List the items

@@ -29,7 +29,7 @@
                     <div class="row">
                         <div id="toggleImportArea" class="col-12 mt-3">
                             <div class="form-group">
-                                <button class="js-toggle-import btn btn-primary">
+                                <button type="button" class="js-toggle-import btn btn-primary">
                                     <span class="fas fa-fw fa-file-import"></span>
                                     Import Loot
                                 </button>
@@ -39,6 +39,7 @@
                             <label for="import_textarea" class="font-weight-bold">
                                 <span class="fas fa-fw fa-align-left text-muted"></span>
                                 Paste your <abbr title="Comma Separated Value">CSV</abbr> data
+                                <span class="small text-muted">max {{ $maxItems }} rows</span>
                             </label>
                             <!-- For supporting other input methods
                             <div class="tabs">
@@ -76,11 +77,11 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                 <p class="text-danger font-weight-bold">
                                     WARNING!!! Loading this will remove any items you've already added to this page.
                                 </p>
-                                <button id="submitImport" class="btn btn-warning">
+                                <button type="button" id="submitImport" class="btn btn-warning">
                                     <span class="fas fa-fw fa-file-export"></span>
                                     Load Data
                                 </button>
-                                <button class="js-toggle-import btn btn-primary">
+                                <button type="button" class="js-toggle-import btn btn-primary">
                                     <span class="fas fa-fw fa-times-circle"></span>
                                     Nevermind
                                 </button>
@@ -395,7 +396,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                         </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-success" onclick="return confirm('All done?');"><span class="fas fa-fw fa-save"></span> Submit</button>
+                        <button class="btn btn-success" onclick="return showSubmitWarning();"><span class="fas fa-fw fa-save"></span> Submit</button>
                         <br>
                         <small>WARNING: This form expires if you don't submit it within {{ env('SESSION_LIFETIME') / 60 }} hours (security reasons)</small>
                     </div>
@@ -409,6 +410,19 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
 @section('scripts')
 <script>
     var guild = {!! $guild->toJson() !!};
+    function showSubmitWarning() {
+        let message = "Submit?";
+
+        if (!$("[name=raid_id]").val()) {
+            message += " Don't forget to set a raid group!";
+        }
+
+        if ($("[name=toggle_dates]")[0].checked) {
+            message += " Double-check the dates!";
+        }
+
+        return confirm(message);
+    }
 </script>
 <script src="{{ env('APP_ENV') == 'local' ? asset('/js/itemMassInput.js') : mix('js/processed/itemMassInput.js') }}"></script>
 @endsection

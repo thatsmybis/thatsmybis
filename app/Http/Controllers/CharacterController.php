@@ -60,7 +60,8 @@ class CharacterController extends Controller
                     ->orWhere('members.id', $currentMember->id);
             },
             'allCharacters' => function ($query) {
-                return $query->where('characters.name', request()->input('name'));
+                // Use comparison that takes accents into account... as so many WoW characters have accented names.
+                return $query->whereRaw('LOWER(characters.name) COLLATE utf8mb4_bin = (?)', strtolower(request()->input('name')));
             },
             'raids',
         ]);
@@ -77,13 +78,17 @@ class CharacterController extends Controller
 
         $createValues = [];
 
-        // Assign character to a different member
-        if (request()->input('member_id') && (request()->input('member_id') != $currentMember->id) && $currentMember->hasPermission('edit.characters')) {
-            $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
+        $canEditOthers = $currentMember->hasPermission('edit.characters');
 
+        // Assign character to a different member
+        if (request()->input('member_id') && (request()->input('member_id') != $currentMember->id) && $canEditOthers) {
+            $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
+            $createValues['member_id'] = null;
             if ($selectedMember) {
                 $createValues['member_id'] = $selectedMember->id;
             }
+        } else if (!request()->input('member_id') && $canEditOthers) {
+            $createValues['member_id'] = null;
         } else {
             $createValues['member_id'] = $currentMember->id;
         }
@@ -354,7 +359,7 @@ class CharacterController extends Controller
                 return $query->Where('members.id', request()->input('member_id'));
             },
             'allCharacters' => function ($query) {
-                return $query->where('name', request()->input('name'))
+                return $query->whereRaw('LOWER(characters.name) COLLATE utf8mb4_bin = (?)', strtolower(request()->input('name')))
                     ->orWhere('id', request()->input('id'));
             },
             'raids',
@@ -400,10 +405,21 @@ class CharacterController extends Controller
             return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
         }
 
-        // Can you change the character owner?
-        if (request()->input('member_id') && $currentMember->hasPermission('edit.characters')) {
+        $canEditOthers = $currentMember->hasPermission('edit.characters');
+        $selectedMember = null;
+
+        // Assign character to a different member
+        if (request()->input('member_id') && (request()->input('member_id') != $currentMember->id) && $canEditOthers) {
             $selectedMember = $guild->members->where('id', request()->input('member_id'))->first();
-            $updateValues['member_id'] = ($selectedMember ? $selectedMember->id : null);
+            $updateValues['member_id'] = null;
+            if ($selectedMember) {
+                $updateValues['member_id'] = $selectedMember->id;
+            }
+        } else if (!request()->input('member_id') && $canEditOthers) {
+            $updateValues['member_id'] = null;
+        } else {
+            $selectedMember = $currentMember;
+            $updateValues['member_id'] = $currentMember->id;
         }
 
         // Can you edit the officer notes?
@@ -440,6 +456,10 @@ class CharacterController extends Controller
 
         if ($updateValues['raid_id'] != $character->raid_id) {
             $auditMessage .= ' (changed raid to ' . ($raid ? $raid->name : 'none') . ')';
+        }
+
+        if (array_key_exists('member_id', $updateValues) && $updateValues['member_id'] != $character->member_id) {
+            $auditMessage .= ' (changed owner to ' . ($selectedMember ? $selectedMember->username : 'NONE') . ')';
         }
 
         if ($updateValues['public_note'] != $character->public_note) {

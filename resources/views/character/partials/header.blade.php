@@ -138,7 +138,9 @@
                         </a>
                     @endif
                 @else
-                    Unclaimed
+                    <span class="font-weight-bold text-danger">
+                        Unclaimed
+                    </span>
                 @endif
             </small>
         </li>
