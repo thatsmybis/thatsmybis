@@ -11,11 +11,17 @@ $(document).ready(function () {
         showNext(this);
     });
 
+    // Load only the visible pickers so that we don't have to initialize ALL of them on page load.
+    // The rest get lazy loaded when they're shown.
+    $("select[name^=item][name$=\\[character_id\\]]:visible").addClass("selectpicker").selectpicker();
+
     // If the current element has a value, show it and the next element that is hidden because it is empty
     function showNext(currentElement) {
         if ($(currentElement).val() != "") {
             $(currentElement).show();
-            $(currentElement).closest(".row").next(".js-hide-empty").show();
+            let nextElement = $(currentElement).closest(".row").next(".js-hide-empty");
+            nextElement.show();
+            nextElement.find("select[name^=item][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
         }
     }
 
