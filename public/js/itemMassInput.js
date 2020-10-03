@@ -3,8 +3,6 @@ var inputType = "string";
 var firstRun  = true;
 var stepped = 0, rowCount = 0, errorCount = 0, firstError;
 
-var test = null;
-
 $(document).ready(function () {
     $(".js-show-next").change(function() {
         showNext(this);
@@ -64,7 +62,8 @@ $(document).ready(function () {
         $("#importArea").toggle();
     });
 
-    // Tabs
+    // Tabs for changing between what to parse for the CSV parser.
+    // Implmented
     $('#tab-string').click(function()
     {
         $('.tab').removeClass('active');
@@ -74,7 +73,8 @@ $(document).ready(function () {
         $('#submit').text("Parse");
         inputType = "string";
     });
-
+    // Unused, but parseCsv() should be 80% implemented
+    // Reference https://www.papaparse.com/demo if you want to implement the front-end for any of these
     $('#tab-local').click(function()
     {
         $('.tab').removeClass('active');
@@ -84,7 +84,7 @@ $(document).ready(function () {
         $('#submit').text("Parse");
         inputType = "local";
     });
-
+    // Unused, but parseCsv() should be 80% implemented
     $('#tab-remote').click(function()
     {
         $('.tab').removeClass('active');
@@ -94,7 +94,7 @@ $(document).ready(function () {
         $('#submit').text("Parse");
         inputType = "remote";
     });
-
+    // Unused, but parseCsv() should be 80% implemented
     $('#tab-unparse').click(function()
     {
         $('.tab').removeClass('active');
@@ -162,7 +162,7 @@ function parseCsv($this) {
         firstRun = false;
     }
 
-    if (inputType == "local") {
+    if (inputType == "local") { // untested
         if (!$('#files')[0].files.length) {
             alert("Please choose at least one file to parse.");
             enableForm();
@@ -182,7 +182,7 @@ function parseCsv($this) {
             complete: function() {
             }
         });
-    } else if (inputType == "json") {
+    } else if (inputType == "json") { // untested
         if (!input) {
             alert("Please enter a valid JSON string to convert to CSV.");
             enableForm();
@@ -201,7 +201,7 @@ function parseCsv($this) {
         console.log(csv);
 
         setTimeout(function(){enableForm();}, 100); // hackity-hack
-    } else if (inputType == "remote" && !input) {
+    } else if (inputType == "remote" && !input) { // untested
         alert("Please enter the URL of a file to download and parse.");
         enableForm();
         return 0;
@@ -214,11 +214,13 @@ function parseCsv($this) {
     }
 }
 
+// Optional function that gets called on each row being parsed
 function stepCsvImport(results, parser)
 {
-    // Applied on each row.
+    //
 }
 
+// Called when the CSV import is completed.
 function completeCsvImport(results)
 {
     setTimeout(function(){}, 250); // hack
@@ -250,6 +252,7 @@ function completeCsvImport(results)
     if (results.data.length > 0) {
         // Clear the form
         prepareForm();
+        // Load the parsed items into the form
         for (let i = 0; i < results.data.length - 1; i++) {
             let item = results.data[i];
             loadItemToForm(item, i);
@@ -264,6 +267,7 @@ function completeCsvImport(results)
     setTimeout(function(){enableForm();}, 100);
 }
 
+// Called when the CSV import runs into an error
 function errorCsvImport(err, file)
 {
     console.log("ERROR:", err, file);
@@ -271,12 +275,18 @@ function errorCsvImport(err, file)
     enableForm();
 }
 
-// Takes in an item object with variable fields. Parses through it to gets the fields we want.
-// Loads those fields into the form.
-// RCLootCouncil addon formatting docs: https://github.com/evil-morfar/RCLootCouncil2/wiki/CSV-Import
-// (some of these variables are based on the RCLC fields)
+/**
+ * Takes in an item object with variable fields. Parses through it to gets the fields we want.
+ * Loads those fields into the form.
+ * RCLootCouncil addon formatting docs: https://github.com/evil-morfar/RCLootCouncil2/wiki/CSV-Import
+ * (some of these variables are based on the RCLC fields)
+ *
+ * @param item Array|Object An array/object containing keys for the object's properties.
+ * @param i    int          An integer indicating which input field this should correspond to
+ *
+ * @return item Array|Object The same item that was passed in.
+ */
 function loadItemToForm(item, i) {
-    console.log(item);
     let itemId        = null;
     let itemName      = null;
     let characterName = null;
@@ -387,6 +397,8 @@ function loadItemToForm(item, i) {
     if (date) {
         $("[name=item\\[" + i + "\\]\\[received_at\\]]").val(date).change();
     }
+
+    return item;
 }
 
 // Prepares the form for a data import.
@@ -433,6 +445,6 @@ function enableForm() {
             $("#submitImport").prop('disabled', false);
             $(".js-toggle-import").prop("disabled", false);
             $("#loaded-indicator").hide();
-        }, 5000); // Let this drag on a bit longer, otherwise it can disappear quicker than the user can notice it sometimes
+        }, 5000); // Let this drag on a bit longer, otherwise it can disappear too quickly to notice
     }, 1000);
 }
