@@ -48,6 +48,7 @@ function addItemAutocompleteHandler() {
                     // Only allow numbers (an item ID must be found)
                     if (Number.isInteger(value)) {
                         addTag(this, value, label);
+                        makeWowheadLinks();
                     }
 
                     // prevent autocomplete from autofilling this.val()
@@ -150,6 +151,7 @@ function addTagInputHandlers() {
             // Only allow numbers (an item ID must be found)
             if (Number.isInteger(value)) {
                 addTag(this, value, label);
+                makeWowheadLinks();
             }
         }
     });
@@ -164,6 +166,7 @@ function addTagInputHandlers() {
             // Only allow numbers (an item ID must be found)
             if (Number.isInteger(value)) {
                 addTag(this, value, label);
+                makeWowheadLinks();
             }
         }
     });
@@ -230,7 +233,6 @@ function addTag($this, value, label) {
             if ($($this).data("isSingleInput")) {
                 $($this).hide();
             }
-            makeWowheadLinks();
             return true;
         } else {
             $($this).val("maximum items added");
