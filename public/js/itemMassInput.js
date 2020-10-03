@@ -252,10 +252,20 @@ function completeCsvImport(results)
     if (results.data.length > 0) {
         // Clear the form
         prepareForm();
+
         // Load the parsed items into the form
-        for (let i = 0; i < results.data.length - 1; i++) {
+        let inputRow = 0;
+        for (let i = 0; i < results.data.length; i++) {
             let item = results.data[i];
-            loadItemToForm(item, i);
+            // Skip over requests to disenchant an item
+            let disenchantFlags = ['de', 'disenchant'];
+            if (item['response'] != undefined && disenchantFlags.includes(item['response'].toLowerCase())) {
+                console.log("Skipping row " + (i + 1) + ": Disenchant");
+                continue;
+            } else {
+                loadItemToForm(item, inputRow);
+                inputRow++;
+            }
         }
         // Load wowhead links for any items we just populated.
         makeWowheadLinks();
@@ -312,6 +322,16 @@ function loadItemToForm(item, i) {
         itemId = item['item_id'];
     }
 
+    // Convert item ID to the ID that we use, because having two of the same item is stupid.
+    if (itemId && itemId == 18423) { // 18423 = Head of Onyxia, Alliance version
+        itemId = 18422; // Head of Onyxia, Horde version
+    }
+
+    // Convert item ID to the ID that we use
+    if (itemId && itemId == 19003) { // 19003 = Head of Nefarian, Alliance version
+        itemId = 18422; // Head of Nefarian, Horde version
+    }
+
     if (item['item']) { // RCLC value
         itemName = item['item'];
     } else if (item['itemName']) {
@@ -354,18 +374,20 @@ function loadItemToForm(item, i) {
     officerNote = (votes ? "Votes: " + votes + " " : "") + (officerNote ? officerNote + " " : "") + (response ? '"' + response + '" ' : "") + (note ? '"' + note + '" ' : "");
     officerNote = officerNote.substr(0, 140);
 
+    let offspecFlags = ['os', 'offspec'];
+
     if ((item['offspec'] && item['offspec'] == 1)) {
         offspec = 1;
     } else if (item['offspec'] == undefined || (item['offspec'] !== 0 && item['offspec'].toLowerCase() !== 'false' && item['offspec'].toLowerCase() !== 'no')) {
-        if (item['note'] && item['note'].toLowerCase() == "os") {
+        if (item['note'] && offspecFlags.includes(item['note'].toLowerCase())) {
             offspec = 1;
-        } else if (item['response'] && item['response'].toLowerCase() == "os") {
+        } else if (item['response'] && offspecFlags.includes(item['response'].toLowerCase())) {
             offspec = 1;
-        } else if (item['publicNote'] && item['publicNote'].toLowerCase() == "os") {
+        } else if (item['publicNote'] && offspecFlags.includes(item['publicNote'].toLowerCase())) {
             offspec = 1;
-        } else if (item['officerNote'] && item['officerNote'].toLowerCase() == "os") {
+        } else if (item['officerNote'] && offspecFlags.includes(item['officerNote'].toLowerCase())) {
             offspec = 1;
-        } else if (item['officer_note'] && item['officer_note'].toLowerCase() == "os") {
+        } else if (item['officer_note'] && offspecFlags.includes(item['officer_note'].toLowerCase())) {
             offspec = 1;
         }
     }
@@ -410,9 +432,14 @@ function prepareForm() {
     $("[name=date_default]").val("").change();
     $("[name=raid_filter]").val("").change();
 
-    // Resets the native form inputs, such as unticking checkboxes and emptying text inputs.
-    // But not all of our form inputs are native...
-    $("#itemForm")[0].reset();
+    // Reset all native form elements
+    // $("#itemForm")[0].reset();
+
+    $("input[name^=item][name$=\\[note\\]]").val("");
+    $("input[name^=item][name$=\\[officer_note\\]]").val("");
+    $("select[name^=item][name$=\\[character_id\\]] option").prop("selected", false);
+    $("input[name^=item][name$=\\[is_offspec\\]]").prop("checked", false);
+    $(".js-item-autocomplete").val("");
 
     // Clear hidden item checkbox values...
     $("input[name^=item][name$=\\[id\\]]").val("");
