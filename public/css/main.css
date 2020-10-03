@@ -332,6 +332,30 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
     box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 0, 0);
 }
 
+input[type='checkbox'] {
+    -webkit-appearance:none;
+    width:20px;
+    height:20px;
+    background:#32305c;
+    border-radius:.25rem;
+    border:2px solid #6865b9;
+    vertical-align: text-bottom;
+}
+input[type='checkbox']:checked {
+    /*background: #fff;*/
+}
+input[type='checkbox']:checked::before {
+    display: inline-block;
+    font-style: normal;
+    font-variant: normal;
+    text-rendering: auto;
+    -webkit-font-smoothing: antialiased;
+    font-weight: 900;
+    font-family: 'Open Sans', 'Font Awesome 5 Pro', sans-serif;
+    content: "\f00c";
+    transform: translateY(-16%);
+}
+
 input.dark, select.dark, textarea.dark {
     background-color: #32305c;
     color: #dbdbdb;
