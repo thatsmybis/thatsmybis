@@ -126,7 +126,7 @@ class CharacterController extends Controller
         request()->session()->flash('status', 'Successfully created ' . $createValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
 
         if (request()->input('create_more')) {
-            return redirect()->route('character.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+            return redirect()->route('character.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'create_more' => 1]);
         } else {
             return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
         }
