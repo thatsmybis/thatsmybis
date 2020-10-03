@@ -257,7 +257,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                 @endif
                                             </label>
 
-                                            <select name="item[{{ $i }}][character_id]" class="js-show-next form-control dark selectpicker {{ $errors->has('item.' . $i . '.character_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
+                                            <select name="item[{{ $i }}][character_id]" class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.character_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
                                                 <option value="">
                                                     —
                                                 </option>
