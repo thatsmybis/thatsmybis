@@ -1,7 +1,14 @@
 // CSV import/parsing code ripped (and edited) from https://www.papaparse.com/demo
 var inputType = "string";
 var firstRun  = true;
-var stepped = 0, rowCount = 0, errorCount = 0, firstError;
+var addedCount      = 0;
+var skippedCount    = 0;
+var disenchantCount = 0;
+var offspecCount    = 0;
+var missingCharacters     = [];
+var missingCharacterCount = 0;
+let errorCount = 0;
+let firstError = undefined;
 
 $(document).ready(function () {
     $(".js-show-next").change(function() {
@@ -24,6 +31,14 @@ $(document).ready(function () {
             nextElement.find("select[name^=item][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
         }
     }
+
+    $("[name=raid_id]").on('change', function () {
+        if ($(this).val()) {
+            $("#raidWarning").hide();
+        } else {
+            $("#raidWarning").show();
+        }
+    }).change();
 
     // Filter out characters based on the raid they are in
     $("#raid_filter").on('change', function () {
@@ -132,12 +147,17 @@ function parseCsv($this) {
 
     // Allow only one parse at a time
     disableForm();
-    $("#error-indicator").html("").hide();
+    $("#status-message").html("").hide();
 
-    stepped = 0;
-    rowCount = 0;
     errorCount = 0;
     firstError = undefined;
+
+    addedCount        = 0;
+    skippedCount      = 0;
+    disenchantCount   = 0;
+    offspecCount      = 0;
+    missingCharacterCount = 0
+    missingCharacters     = [];
 
     var config = {
         delimiter:      "",
@@ -182,8 +202,6 @@ function parseCsv($this) {
             },
             error: function(err, file) {
                 console.log("ERROR:", err, file);
-                firstError = firstError || err;
-                errorCount++;
             },
             complete: function() {
             }
@@ -231,6 +249,8 @@ function completeCsvImport(results)
 {
     setTimeout(function(){}, 250); // hack
 
+    let rowCount = 0;
+
     if (results && results.errors)
     {
         if (results.errors)
@@ -249,10 +269,7 @@ function completeCsvImport(results)
     console.log("    First Error:", firstError);
     console.log("    Meta:", results.meta);
     console.log("    Results:", results);
-
-    if (firstError) {
-        $("#error-indicator").html("Error: " + firstError.message).show();
-    }
+    console.log("Loading data into form...");
 
     // Load the results into the form
     if (results.data.length > 0) {
@@ -267,16 +284,46 @@ function completeCsvImport(results)
             let disenchantFlags = ['de', 'disenchant'];
             if (item['response'] != undefined && disenchantFlags.includes(item['response'].toLowerCase())) {
                 console.log("Skipping row " + (i + 1) + ": Disenchant");
+                skippedCount++;
+                disenchantCount++;
                 continue;
             } else {
                 loadItemToForm(item, inputRow);
                 inputRow++;
+                addedCount++;
             }
         }
         // Load wowhead links for any items we just populated.
         makeWowheadLinks();
         // Update the fancy select for any select options we just chose.
         $(".selectpicker").selectpicker("refresh");
+    }
+
+    let statusMessages = "";
+
+    if (firstError) {
+        statusMessages += `<li class="text-danger">Error: ${ firstError.message }</li>`;
+    }
+
+    if (addedCount) {
+        statusMessages += `<li class="text-success">${ addedCount } item${ addedCount > 1 ? 's' : '' } loaded into form</li>`;
+    }
+
+    if (skippedCount) {
+        statusMessages += `<li class="text-warning">Skipped ${ skippedCount } item${ skippedCount > 1 ? 's' : '' } ${ disenchantCount ? "(" + disenchantCount + " items disenchanted)" : "" }</li>`;
+    }
+
+    if (offspecCount) {
+        statusMessages += `<li class="text-warning">${ offspecCount } item${ offspecCount > 1 ? 's' : '' } flagged as offspec</li>`;
+    }
+
+    if (missingCharacterCount) {
+        missingCharacters = missingCharacters.join(", ");
+        statusMessages += `<li class="text-danger">${ missingCharacterCount } character${ missingCharacterCount > 1 ? 's' : '' } not found: ${ missingCharacters }</li>`;
+    }
+
+    if (statusMessages) {
+        $("#status-message").html(`<ul>${statusMessages}</ul>`).show();
     }
 
     // icky hack
@@ -287,7 +334,7 @@ function completeCsvImport(results)
 function errorCsvImport(err, file)
 {
     console.log("ERROR:", err, file);
-    $("#error-indicator").html("ERROR: " + err).show();
+    $("#status-message").html("ERROR: " + err).show();
     enableForm();
 }
 
@@ -406,12 +453,27 @@ function loadItemToForm(item, i) {
 
     if (characterName) {
         // Select the character, 'i' should make it case INsensitve
-        $("[name=item\\[" + i + "\\]\\[character_id\\]]").find('option[data-name="' + characterName + '"i]').prop("selected", true).change();
+        let characterSelect = $("[name=item\\[" + i + "\\]\\[character_id\\]]");
+        let characterOption = characterSelect.find('option[data-name="' + characterName + '"i]');
+
+        if (characterOption.val()) {
+            characterOption.prop("selected", true).change();
+            characterSelect.parent().removeClass("form-danger");
+        } else if (missingCharacters.indexOf(characterName) == -1) {
+            console.log("Character not found for row " + (i + 1) + ": " + characterName);
+            missingCharacterCount++;
+            missingCharacters.push(characterName);
+
+            characterSelect.parent().addClass("form-danger");
+        }
     }
 
     if (offspec == 1) {
         // Check the checkbox
         $("[name=item\\[" + i + "\\]\\[is_offspec\\]]").prop("checked", true).change();
+
+        console.log("Flagged as offspec for row " + (i + 1));
+        offspecCount++;
     }
 
     if (publicNote) {
