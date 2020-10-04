@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 
 class AuditLogController extends Controller
 {
-    const RESULTS_PER_PAGE = 70;
+    const RESULTS_PER_PAGE = 50;
 
     /**
      * Create a new controller instance.
