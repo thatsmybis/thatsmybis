@@ -782,7 +782,7 @@ class CharacterController extends Controller
 
         if (count($toUpdate) > 0) {
             $audits[] = [
-                'description'  => $currentMember->username . ' changed item priority(s) for a character (' . $itemType . ')',
+                'description'  => $currentMember->username . ' re-ordered items for a character (' . $itemType . ' items)',
                 'type'         => $itemType,
                 'member_id'    => $currentMember->id,
                 'guild_id'     => $currentMember->guild_id,
