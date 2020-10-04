@@ -78,6 +78,9 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     autocomplete="off"></textarea>
                             </div>
                             <div class="form-group">
+                                <p class="small text-muted">
+                                    Doesn't match your data schema? Request support for it <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a>.
+                                </p>
                                 <p class="text-danger font-weight-bold">
                                     WARNING!!! Loading this will remove any items you've already added to this page.
                                 </p>
