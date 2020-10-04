@@ -503,6 +503,7 @@ function prepareForm() {
     // Reset all native form elements
     // $("#itemForm")[0].reset();
 
+    // Reset fields to empty...
     $("input[name^=item][name$=\\[note\\]]").val("");
     $("input[name^=item][name$=\\[officer_note\\]]").val("");
     $("select[name^=item][name$=\\[character_id\\]] option").prop("selected", false);
