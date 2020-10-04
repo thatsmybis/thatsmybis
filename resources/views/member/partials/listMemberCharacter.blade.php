@@ -3,7 +3,7 @@
 @endphp
 <li class="list-inline-item text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}">
     <div class="dropdown">
-        <a class="dropdown-toggle text-{{ strtolower($character->class) }}" id="character{{ $character->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="dropdown-toggle text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}" id="character{{ $character->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="role-circle" style="background-color:{{ $raid ? $raid->getColor() : null }}"></span>
             {{ $character->name }}
         </a>
