@@ -3,6 +3,10 @@
 
 @php
     $maxDate = (new \DateTime())->modify('+1 day')->format('Y-m-d');
+
+    // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
+    // So we're iterating over the characters only one time, saving the results, and printing them.
+    $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->characters]);
 @endphp
 
 @section('content')
@@ -262,16 +266,16 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                     —
                                                 </option>
 
-                                                @foreach ($guild->characters as $character)
-                                                    <option value="{{ $character->id }}"
-                                                        data-tokens="{{ $character->id }}"
-                                                        data-raid-id="{{ $character->raid_id }}"
-                                                        data-name="{{ $character->name }}"
-                                                        class="js-character-option text-{{ strtolower($character->class) }}-important"
-                                                        {{ old('item.' . $i . '.character_id') && old('item.' . $i . '.character_id') == $character->id  ? 'selected' : '' }}>
-                                                        {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? "Alt" : '' }}
-                                                    </option>
-                                                @endforeach
+                                                {{-- See the notes at the top for why the options look like this --}}
+                                                @if (old('item.' . $i . '.character_id'))
+                                                    @php
+                                                        // Select the correct option
+                                                        $options = str_replace('hack="' . old('item.' . $i . '.character_id') . '"', 'selected', $characterSelectOptions);
+                                                     @endphp
+                                                     {!! $options !!}
+                                                @else
+                                                    {!! $characterSelectOptions !!}
+                                                @endif
                                             </select>
 
                                             @if ($errors->has('item.' . $i))
