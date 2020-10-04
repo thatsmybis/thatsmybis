@@ -338,11 +338,17 @@ class CharacterController extends Controller
             $createMore = true;
         }
 
+        $memberId = null;
+        if (request()->input('member_id')) {
+            $memberId = request()->input('member_id');
+        }
+
         return view('character.edit', [
             'character'     => null,
             'createMore'    => $createMore,
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'memberId'      => $memberId,
         ]);
     }
 
