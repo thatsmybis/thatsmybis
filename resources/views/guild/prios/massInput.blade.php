@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('title', "Prios for " . $raid-> name . " " . $instance-> name . " - " . config('app.name'))
 
+@php
+    // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
+    // So we're iterating over the characters only one time, saving the results, and printing them.
+    $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->characters]);
+@endphp
+
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
@@ -153,15 +159,16 @@
                                                 —
                                             </option>
 
-                                            @foreach ($guild->characters as $character)
-                                                <option value="{{ $character->id }}"
-                                                    data-tokens="{{ $character->id }}"
-                                                    data-raid-id="{{ $character->raid_id }}"
-                                                    class="js-character-option text-{{ strtolower($character->class) }}-important"
-                                                    {{ old('items.' . $item->item_id . '.character_id') && old('items.' . $item->item_id . '.character_id') == $character->id  ? 'selected' : '' }}>
-                                                    {{ $character->name }} {{ $character->class ? '(' . $character->class . ')' : '' }}
-                                                </option>
-                                            @endforeach
+                                            {{-- See the notes at the top for why the options look like this --}}
+                                            @if (old('items.' . $item->item_id . '.character_id'))
+                                                @php
+                                                    // Select the correct option
+                                                    $options = str_replace('hack="' . old('items.' . $item->item_id . '.character_id') . '"', 'selected', $characterSelectOptions);
+                                                 @endphp
+                                                 {!! $options !!}
+                                            @else
+                                                {!! $characterSelectOptions !!}
+                                            @endif
                                         </select>
 
                                         <ol class="js-sortable-lazy no-indent mt-3 mb-0">
