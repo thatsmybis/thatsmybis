@@ -81,7 +81,7 @@
 
                                             @if ($log->item_id)
                                                 <li class="list-inline-item">
-                                                    @include('partials/item', ['wowheadLink' => false, 'itemId' => $log->item_id, 'itemName' => $log->item_name, 'fontWeight' => 'light'])
+                                                    @include('partials/item', ['wowheadLink' => false, 'auditLink' => true, 'itemId' => $log->item_id, 'itemName' => $log->item_name, 'fontWeight' => 'light'])
                                                 </li>
                                             @endif
                                             @if ($log->other_member_id)

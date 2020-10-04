@@ -9,12 +9,21 @@ if (isset($item)) {
     @if (isset($wowheadLink) && $wowheadLink)
         <a href="https://classic.wowhead.com/item={{ $itemId }}" target="_blank">{{ $itemName }}</a>
     @elseif (isset($guild) && $guild)
-        <a href="{{ route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId, 'slug' => slug($itemName)]) }}"
-            target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
-            data-wowhead="item={{ $itemId }}?domain=classic"
-            data-wowhead-link="https://classic.wowhead.com/item={{ $itemId }}">
-            {{ $itemName }}
-        </a>
+        @if (isset($auditLink) && $auditLink)
+            <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId]) }}"
+                target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
+                data-wowhead="item={{ $itemId }}?domain=classic"
+                data-wowhead-link="https://classic.wowhead.com/item={{ $itemId }}">
+                {{ $itemName }}
+            </a>
+        @else
+            <a href="{{ route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId, 'slug' => slug($itemName)]) }}"
+                target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
+                data-wowhead="item={{ $itemId }}?domain=classic"
+                data-wowhead-link="https://classic.wowhead.com/item={{ $itemId }}">
+                {{ $itemName }}
+            </a>
+        @endif
     @else
         <a href="{{ route('item.show', ['item_id' => $itemId, 'slug' => slug($itemName)]) }}"
             target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
