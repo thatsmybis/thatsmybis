@@ -236,7 +236,7 @@ function createTable() {
                             val = "(?=.*" + val + ")(?=.*" + $.fn.dataTable.util.escapeRegex(select2.val()) + ")";
                         }
                         column.search(val ? val : '', true, false).draw();
-                    });
+                    }).change();
 
                     if (select2) {
                         select2.on('change', function () {
@@ -246,7 +246,7 @@ function createTable() {
                                 val = "(?=.*" + val + ")(?=.*" + $.fn.dataTable.util.escapeRegex(select1.val()) + ")";
                             }
                             column.search(val ? val : '', true, false).draw();
-                        });
+                        }).change();
                     }
                 }
             } );
