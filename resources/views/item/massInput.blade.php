@@ -97,7 +97,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                 <div id="loaded-indicator" class="text-success font-weight-bold mt-3 ml-5" style="display:none;">
                                     Finished
                                 </div>
-                                <div id="error-indicator" class="text-warning mt-3 ml-5" style="display:none;">
+                                <div id="status-message" class="mt-3 ml-5" style="display:none;">
                                 </div>
                             </div>
                         </div>
@@ -400,9 +400,17 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                         </div>
                     </div>
                     <div class="form-group">
-                        <button class="btn btn-success" onclick="return showSubmitWarning();"><span class="fas fa-fw fa-save"></span> Submit</button>
-                        <br>
-                        <small>WARNING: This form expires if you don't submit it within {{ env('SESSION_LIFETIME') / 60 }} hours (security reasons)</small>
+                        <ul class="no-bullet no-indent">
+                            <li class="mb-2">
+                                <button class="btn btn-success" onclick="return showSubmitWarning();"><span class="fas fa-fw fa-save"></span> Submit</button>
+                            </li>
+                            <li id="raidWarning" style="display:none;">
+                                <span class="text-danger">No raid selected</span>
+                            </li>
+                            <li>
+                                <small>WARNING: This form expires if you don't submit it within {{ env('SESSION_LIFETIME') / 60 }} hours (security reasons)</small>
+                            </li>
+                        </ul>
                     </div>
                 </fieldset>
             </form>
