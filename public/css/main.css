@@ -230,8 +230,9 @@ body {
 }
 
 .font-strikethrough {
-    text-decoration: line-through !important;
+    text-decoration-line: line-through !important;
     text-decoration-color: #8e959b !important;
+    text-decoration-thickness: 12%;
 }
 
 .smaller {

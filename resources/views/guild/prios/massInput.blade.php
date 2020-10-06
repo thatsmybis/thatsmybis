@@ -116,7 +116,8 @@
                                                 <ul class="list-inline">
                                                     @foreach ($item->wishlistCharacters as $character)
                                                         <li class="list-inline-item">
-                                                            <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                                            <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                                                class="text-{{ strtolower($character->class) }} {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
                                                                 {{ $character->name }}
                                                             </a>
                                                         </li>
