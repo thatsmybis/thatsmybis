@@ -210,7 +210,11 @@
     @if ($showWishlist)
         <div class="row pt-2 mb-3 bg-lightest rounded">
             <div class="col-12">
-                <h2 class="font-weight-bold pl-2">Wishlisted</h2>
+                <h2 class="font-weight-bold pl-2">
+                    <span class="fas fa-fw fa-scroll-old text-legendary"></span>
+                    Wishlisted
+                    <span class="small text-muted">ordered by who ranked it higher</span>
+                </h2>
             </div>
             <div class="col-12 pr-0 pl-0">
                 @if ($wishlistCharacters && $wishlistCharacters->count() > 0)
@@ -228,7 +232,10 @@
 
     <div class="row mr-1 ml-1 mb-3 pt-1  bg-lightest rounded">
         <div class="col-12">
-            <h2>Have It</h2>
+            <h2>
+                <span class="fas fa-fw fa-sack text-success"></span>
+                Have It
+            </h2>
             @if ($receivedAndRecipeCharacters->count() > 0)
                 <ul class="list-inline striped">
                     @foreach ($receivedAndRecipeCharacters as $character)

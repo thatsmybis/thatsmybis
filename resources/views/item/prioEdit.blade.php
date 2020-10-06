@@ -72,9 +72,16 @@
                                     <span class="fa-li"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
                                     <ul class="list-inline">
                                         @foreach ($item->wishlistCharacters as $character)
-                                            <li class="list-inline-item">
-                                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                             <li class="list-inline-item">
+                                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                                    class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
+                                                    <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
+                                                    <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_color) }}"></span>-->
                                                     {{ $character->name }}
+                                                    <span class="js-watchable-timestamp smaller text-muted"
+                                                        data-timestamp="{{ $character->pivot->created_at }}"
+                                                        data-is-short="1">
+                                                    </span>
                                                 </a>
                                             </li>
                                         @endforeach
@@ -88,7 +95,8 @@
                                     <ul class="list-inline">
                                         @foreach ($item->receivedAndRecipeCharacters as $character)
                                             <li class="list-inline-item">
-                                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                                    class="tag text-{{ strtolower($character->class) }}" target="_blank">
                                                     {{ $character->name }}
                                                 </a>
                                             </li>

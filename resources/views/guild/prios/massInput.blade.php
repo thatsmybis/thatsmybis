@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Prios for " . $raid-> name . " " . $instance-> name . " - " . config('app.name'))
+@section('title', "Prios for " . $raid->name . " " . $instance->name . " - " . config('app.name'))
 
 @php
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
@@ -111,14 +111,20 @@
                                         @endif
 
                                         @if ($item->wishlistCharacters->count() > 0)
-                                            <li title="Characters who have it wishlisted">
-                                                <span class="fa-li"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
+                                            <li>
+                                                <span class="fa-li" title="Characters who have it wishlisted"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
                                                 <ul class="list-inline">
                                                     @foreach ($item->wishlistCharacters as $character)
                                                         <li class="list-inline-item">
                                                             <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                                                class="text-{{ strtolower($character->class) }} {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
+                                                                class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
+                                                                <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
+                                                                <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_color) }}"></span>-->
                                                                 {{ $character->name }}
+                                                                <span class="js-watchable-timestamp smaller text-muted"
+                                                                    data-timestamp="{{ $character->pivot->created_at }}"
+                                                                    data-is-short="1">
+                                                                </span>
                                                             </a>
                                                         </li>
                                                     @endforeach
@@ -127,12 +133,13 @@
                                         @endif
 
                                         @if ($item->receivedAndRecipeCharacters->count() > 0)
-                                            <li title="Characters who have received it">
-                                                <span class="fa-li"><span class="fal fa-fw fa-sack text-success"></span></span>
+                                            <li>
+                                                <span class="fa-li" title="Characters who have received it"><span class="fal fa-fw fa-sack text-success"></span></span>
                                                 <ul class="list-inline">
                                                     @foreach ($item->receivedAndRecipeCharacters as $character)
                                                         <li class="list-inline-item">
-                                                            <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ strtolower($character->class) }}" target="_blank">
+                                                            <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                                                class="tag text-{{ strtolower($character->class) }}" target="_blank">
                                                                 {{ $character->name }}
                                                             </a>
                                                         </li>
