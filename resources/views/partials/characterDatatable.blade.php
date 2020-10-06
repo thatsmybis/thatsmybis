@@ -89,6 +89,13 @@
                 Notes
             </span>
         </li>
+        <li class="list-inline-item">&sdot;</li>
+        <li class="list-inline-item">
+            <span class="js-show-all-clipped-items text-link cursor-pointer font-weight-light" data-column="6" href="">
+                <span class="text-muted fal fa-fw fa-eye"></span>
+                Show all loot
+            </span>
+        </li>
     </ul>
 </div>
 

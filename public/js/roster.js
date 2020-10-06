@@ -10,6 +10,8 @@ var colNotes = 6;
 var colClass = 7;
 var colRaid = 8;
 
+var allItemsVisible = false;
+
 $(document).ready( function () {
    table = createTable();
 
@@ -37,6 +39,21 @@ $(document).ready( function () {
         makeWowheadLinks();
         addClippedItemHandlers();
         trackTimestamps();
+    });
+
+    // Toggle visiblity for all of the clipped/hidden items on the page
+    $(".js-show-all-clipped-items").click(function () {
+        if (allItemsVisible) {
+            $(".js-clipped-item").hide();
+            $(".js-show-clipped-items").show();
+            $(".js-hide-clipped-items").hide();
+            allItemsVisible = false;
+        } else {
+            $(".js-clipped-item").show();
+            $(".js-show-clipped-items").hide();
+            $(".js-hide-clipped-items").show();
+            allItemsVisible = true;
+        }
     });
 
     addClippedItemHandlers();
