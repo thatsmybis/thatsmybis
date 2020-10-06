@@ -78,10 +78,7 @@ class ItemController extends Controller
             })
             ->where('item_sources.instance_id', $instance->id)
             ->orderBy('item_sources.order')
-            ->orderBy('items.name')
-            ->with([
-
-            ]);
+            ->orderBy('items.name');
 
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
@@ -101,15 +98,15 @@ class ItemController extends Controller
             $showWishlist = true;
             $items = $items->with([
                 'wishlistCharacters' => function ($query) use($guild, $characterFields) {
-                return $query->select($characterFields)
-                    ->leftJoin('members', function ($join) {
-                        $join->on('members.id', 'characters.member_id');
-                    })
-                    ->where([
-                            ['characters.guild_id', $guild->id],
-                            ['character_items.is_received', 0],
-                        ])
-                    ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                    return $query->select($characterFields)
+                        ->leftJoin('members', function ($join) {
+                            $join->on('members.id', 'characters.member_id');
+                        })
+                        ->where([
+                                ['characters.guild_id', $guild->id],
+                                ['character_items.is_received', 0],
+                            ])
+                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 }
             ]);
         }
