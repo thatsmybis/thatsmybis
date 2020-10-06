@@ -4,6 +4,7 @@ var firstRun  = true;
 var addedCount      = 0;
 var skippedCount    = 0;
 var disenchantCount = 0;
+var overLimitCount  = 0;
 var offspecCount    = 0;
 var missingCharacters     = [];
 var missingCharacterCount = 0;
@@ -155,6 +156,7 @@ function parseCsv($this) {
     addedCount        = 0;
     skippedCount      = 0;
     disenchantCount   = 0;
+    overLimitCount    = 0;
     offspecCount      = 0;
     missingCharacterCount = 0
     missingCharacters     = [];
@@ -282,7 +284,11 @@ function completeCsvImport(results)
             let item = results.data[i];
             // Skip over requests to disenchant an item
             let disenchantFlags = ['de', 'disenchant'];
-            if (item['response'] != undefined && disenchantFlags.includes(item['response'].toLowerCase())) {
+            if (i >= maxItems) {
+                skippedCount++;
+                overLimitCount++;
+                continue;
+            } else if (item['response'] != undefined && disenchantFlags.includes(item['response'].toLowerCase())) {
                 console.log("Skipping row " + (i + 1) + ": Disenchant");
                 skippedCount++;
                 disenchantCount++;
@@ -310,7 +316,7 @@ function completeCsvImport(results)
     }
 
     if (skippedCount) {
-        statusMessages += `<li class="text-warning">Skipped ${ skippedCount } item${ skippedCount > 1 ? 's' : '' } ${ disenchantCount ? "(" + disenchantCount + " items disenchanted)" : "" }</li>`;
+        statusMessages += `<li class="text-warning">Skipped ${ skippedCount } item${ skippedCount > 1 ? 's' : '' } ${ disenchantCount ? "(" + disenchantCount + " items disenchanted)" : "" } ${ overLimitCount ? "(" + overLimitCount + " items over the limit of " + maxItems + ")" : ""}</li>`;
     }
 
     if (offspecCount) {

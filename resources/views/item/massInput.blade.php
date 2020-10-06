@@ -424,7 +424,9 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
 
 @section('scripts')
 <script>
-    var guild = {!! $guild->toJson() !!};
+    var guild    = {!! $guild->toJson() !!};
+    var maxItems = {{ $maxItems }};
+
     function showSubmitWarning() {
         let message = "Submit?";
 
