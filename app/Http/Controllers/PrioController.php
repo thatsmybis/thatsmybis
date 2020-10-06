@@ -109,15 +109,13 @@ class PrioController extends Controller
                     return $query
                         ->where([
                             'characters.guild_id' => $guild->id,
-                        ])
-                        ->groupBy(['character_items.character_id']);
+                        ]);
                 },
                 'wishlistCharacters' => function ($query) use($guild) {
                     return $query
                         ->where([
                             'characters.guild_id' => $guild->id,
-                        ])
-                        ->groupBy(['character_items.character_id']);
+                        ]);
                 },
             ])
             ->get();
@@ -177,15 +175,13 @@ class PrioController extends Controller
                     return $query
                         ->where([
                             'characters.guild_id' => $guild->id,
-                        ])
-                        ->groupBy(['character_items.character_id']);
+                        ]);
                 },
                 'wishlistCharacters' => function ($query) use($guild) {
                     return $query
                         ->where([
                             'characters.guild_id' => $guild->id,
-                        ])
-                        ->groupBy(['character_items.character_id']);
+                        ]);
                 },
             ])
             ->firstOrFail();
