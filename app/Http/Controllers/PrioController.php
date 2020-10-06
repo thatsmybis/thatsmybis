@@ -115,6 +115,7 @@ class PrioController extends Controller
                     return $query
                         ->where([
                             'characters.guild_id' => $guild->id,
+                            'is_received'          => 0,
                         ]);
                 },
             ])
