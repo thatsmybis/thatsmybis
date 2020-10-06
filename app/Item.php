@@ -147,6 +147,6 @@ class Item extends Model
             })
             ->withTimeStamps()
             ->withPivot(['added_by', 'raid_id', 'type','is_received', 'received_at', 'order'])
-            ->orderBy('characters.name');
+            ->orderBy('character_items.order');
     }
 }
