@@ -44,7 +44,18 @@
                 @if ($resource)
                     <div class="col-12 pb-3">
                         <div class="bg-light rounded pt-1 pb-1 pl-3 pr-3">
-                            @if($resource instanceof \App\Character)
+                            @if($resource instanceof \App\Batch)
+                                @if ($resource->name)
+                                    {{ $resource->name }}
+                                @else
+                                    Batch {{ $resource->id }}
+                                @endif
+                                @if ($resource->note)
+                                    <p>
+                                        {{ $resource->note }}
+                                    </p>
+                                @endif
+                            @elseif($resource instanceof \App\Character)
                                 @include('character/partials/header', ['character' => $resource, 'headerSize' => 1, 'showEdit' => false, 'showIcon' => false])
                             @elseif($resource instanceof \App\Item)
                                 @include('partials/item', ['item' => $resource, 'wowheadLink' => false])
@@ -197,6 +208,13 @@
                                             @if ($log->role_id)
                                                 <li class="list-inline-item text-muted">
                                                     {{ $log->role_name }}
+                                                </li>
+                                            @endif
+                                            @if ($log->batch_id)
+                                                <li class="list-inline-item text-muted">
+                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $log->batch_id]) }}" class="text-muted">
+                                                        {{ $log->batch_name ? $log->batch_name : 'batch ' . $log->batch_id }}
+                                                    </a>
                                                 </li>
                                             @endif
                                         </ul>

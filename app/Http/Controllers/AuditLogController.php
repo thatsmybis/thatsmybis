@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Character, Guild, Instance, Item, ItemSource, Member, Raid, Role};
+use App\{AuditLog, Batch, Character, Guild, Instance, Item, ItemSource, Member, Raid, Role};
 use Auth;
 use Illuminate\Http\Request;
 
@@ -49,6 +49,7 @@ class AuditLogController extends Controller
 
         $query = AuditLog::select([
                 'audit_logs.*',
+                'batches.name           AS batch_name',
                 'characters.name        AS character_name',
                 'characters.slug        AS character_slug',
                 'characters.class       AS character_class',
@@ -63,6 +64,9 @@ class AuditLogController extends Controller
                 'raids.name             AS raid_name',
                 'roles.name             AS role_name',
             ])
+            ->leftJoin('batches', function ($join) {
+                    $join->on('batches.id', '=', 'audit_logs.batch_id');
+                })
             ->leftJoin('characters', function ($join) {
                     $join->on('characters.id', '=', 'audit_logs.character_id');
                 })
@@ -81,7 +85,6 @@ class AuditLogController extends Controller
             ->leftJoin('members', function ($join) {
                     $join->on('members.id', '=', 'audit_logs.member_id');
                 })
-
             ->leftJoin('members as other_members', function ($join) {
                     $join->on('other_members.id', '=', 'audit_logs.other_member_id');
                 })
@@ -110,6 +113,12 @@ class AuditLogController extends Controller
                 return $query->where([['audit_logs.type', '!=', Item::TYPE_WISHLIST]])
                     ->orWhereNull('audit_logs.type');
             });
+        }
+
+        if (!empty(request()->input('batch_id'))) {
+            $query = $query->where('batches.id', request()->input('batch_id'));
+            $resource = Batch::where([['guild_id', $guild->id], ['id', request()->input('batch_id')]])->with('member')->first();
+            $resourceName = $resource ? ($resource->name ? $resource->name : 'Batch ' . $resource->id) : null;
         }
 
         if (!empty(request()->input('character_id'))) {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Guild, Instance, Item, Raid};
+use App\{AuditLog, Batch, Guild, Instance, Item, Raid};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -540,6 +540,22 @@ class ItemController extends Controller
             }
         }
 
+        // Create a batch record for this job
+        $batch = Batch::create([
+            'name'      => request()->input('name') ? request()->input('name') : null,
+            'note'      => 'Assigned ' . count($newRows) . ' items',
+            'type'      => 'assign',
+            'guild_id'  => $guild->id,
+            'member_id' => $currentMember->id,
+            'raid_id'   => $raidId,
+            'user_id'   => $currentMember->user_id,
+        ]);
+
+        // Add the batch ID to the items we're going to insert
+        array_walk($newRows, function (&$value, $key) use ($batch) {
+            $value['batch_id'] = $batch->id;
+        });
+
         // Add the items to the character's received list
         DB::table('character_items')->insert($newRows);
 
@@ -626,6 +642,11 @@ class ItemController extends Controller
                 ];
             }
         }
+
+        // Add the batch ID to the audit log records
+        array_walk($audits, function (&$value, $key) use ($batch) {
+            $value['batch_id'] = $batch->id;
+        });
 
         AuditLog::insert($audits);
 
