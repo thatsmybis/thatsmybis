@@ -17,6 +17,7 @@ class AuditLog extends Model
         'type',
         'character_id',
         'guild_id',
+        'batch_id',
         'instance_id',
         'item_id',
         'item_source_id',

@@ -470,6 +470,10 @@ button.close:hover {
     color: #e5e5e5;
 }
 
+.list-timestamp {
+    min-width: 100px;
+}
+
 .top-divider {
     border-top: 2px solid #4b498c;
     box-shadow: inset 0px 11px 10px -10px #4b498c;

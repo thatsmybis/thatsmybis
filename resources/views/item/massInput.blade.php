@@ -252,7 +252,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     <div class="col-lg-2 col-sm-4 col-10">
                                         <div class="form-group mb-0 {{ $errors->has('item.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
 
-                                            <label for="member_id" class="font-weight-bold">
+                                            <label for="character_id" class="font-weight-bold">
                                                 @if ($i == 0)
                                                     <span class="fas fa-fw fa-user text-muted"></span>
                                                     Character

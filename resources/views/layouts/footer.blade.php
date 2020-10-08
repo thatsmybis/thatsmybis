@@ -24,10 +24,16 @@
                     <li class="list-inline-item">&sdot;</li>
                     --}}
                     <li class="list-inline-item">
+                        <a href="{{ route('faq') }}" class="text-white">FAQ</a>
+                    </li>
+                    <li class="list-inline-item">
                         <a href="{{ route('privacy') }}" class="text-white">privacy</a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="{{ route('faq') }}" class="text-white">FAQ</a>
+                        <a href="{{ env('LINK_GITHUB') }}" target="_blank" class="text-white">
+                            <span class="fab fa-github"></span>
+                            Github
+                        </a>
                     </li>
                     <li class="list-inline-item">
                         <div class="dropdown">

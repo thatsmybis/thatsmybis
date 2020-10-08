@@ -209,12 +209,6 @@
             @endif
         </ul>
         <ul class="navbar-nav">
-            <li class="nav-item mr-3">
-                <a href="{{ env('LINK_GITHUB') }}" target="_blank" class="nav-link active font-weight-bold">
-                    <span class="fab fa-github"></span>
-                    Contribute
-                </a>
-            </li>
         </ul>
         <div class="my-2 my-lg-0">
             @if (Auth::guest())
