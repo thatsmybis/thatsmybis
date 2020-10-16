@@ -377,6 +377,28 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                 {{ old('item.' . $i . '.received_at') ? old('item.' . $i . '.received_at') : '' }}>
                                         </div>
                                     </div>
+
+                                    <!-- Import ID -->
+                                    <div class="js-import-id col-lg-3 col-sm-6 col-12" style="{{ old('item.' . $i . '.import_id') ? '' : 'display:none;' }}">
+                                        <div class="form-group mb-0 {{ $errors->has('item.' . $i . '.received_at') ? 'text-danger font-weight-bold' : '' }}">
+
+                                            <label for="item[{{ $i }}][import_id]" class="font-weight-bold">
+                                                @if ($i == 0)
+                                                    <span class="fas fa-fw fa-fingerprint text-muted"></span>
+                                                        <abbr title="We use this to prevent your guild from loading duplicates of the same import data.">Unique Import ID</abbr>
+                                                    <span class="text-muted small">optional</span>
+                                                @else
+                                                    &nbsp;
+                                                    <span class="sr-only">
+                                                        Unique Import ID
+                                                    </span>
+                                                @endif
+                                            </label>
+                                            <input name="item[{{ $i }}][import_id]" maxlength="140" data-max-length="140" type="text" placeholder="unique ID from loot addon"
+                                                class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.import_id') ? 'form-danger' : '' }}" autocomplete="off"
+                                                value="{{ old('item.' . $i . '.import_id') ? old('item.' . $i . '.import_id') : '' }}">
+                                        </div>
+                                    </div>
                                 </div>
                             @endfor
                         </div>
@@ -426,6 +448,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
 <script>
     var guild    = {!! $guild->toJson() !!};
     var maxItems = {{ $maxItems }};
+    var preventDuplicates = false;
 
     function showSubmitWarning() {
         let message = "Submit?";

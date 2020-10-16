@@ -356,6 +356,7 @@ function errorCsvImport(err, file)
  * @return item Array|Object The same item that was passed in.
  */
 function loadItemToForm(item, i) {
+    let importId      = null;
     let itemId        = null;
     let itemName      = null;
     let characterName = null;
@@ -373,6 +374,10 @@ function loadItemToForm(item, i) {
         characterName = item['player'].split("-")[0]; // Split the character name and server name up, get just the character name.
     } else if (item['character']) {
         characterName = item['character'];
+    }
+
+    if (item['id']) { // RCLC value
+        importId = item['id'];
     }
 
     if (item['itemID']) { // RCLC value
@@ -494,6 +499,10 @@ function loadItemToForm(item, i) {
         $("[name=item\\[" + i + "\\]\\[received_at\\]]").val(date).change();
     }
 
+    if (preventDuplicates && importId) {
+        $("[name=item\\[" + i + "\\]\\[import_id\\]]").val(importId).change();
+    }
+
     return item;
 }
 
@@ -506,12 +515,17 @@ function prepareForm() {
     $("[name=date_default]").val("").change();
     $("[name=raid_filter]").val("").change();
 
+    if (preventDuplicates) {
+        $(".js-import-id").show();
+    }
+
     // Reset all native form elements
     // $("#itemForm")[0].reset();
 
     // Reset fields to empty...
     $("input[name^=item][name$=\\[note\\]]").val("");
     $("input[name^=item][name$=\\[officer_note\\]]").val("");
+    $("input[name^=item][name$=\\[import_id\\]]").val("");
     $("select[name^=item][name$=\\[character_id\\]] option").prop("selected", false);
     $("input[name^=item][name$=\\[is_offspec\\]]").prop("checked", false);
     $(".js-item-autocomplete").val("");

@@ -447,6 +447,18 @@ class ItemController extends Controller
             'item.*.note'           => 'nullable|string|max:140',
             'item.*.officer_note'   => 'nullable|string|max:140',
             'item.*.received_at'    => 'nullable|date|before:tomorrow|after:2019-09-26',
+            // 'item.*.import_id'      => 'nullable|string|max:20|unique:character_items,import_id,NULL,id,guild_id,item.*.character_id', // Composite unique
+            // 'item.*.import_id'      => [
+            //     'nullable',
+            //     'string',
+            //     'max:20',
+            //     Rule::unique('character_items', 'import_id')->where(function ($query) use ($guild) {
+            //         $query->where([
+            //             'guild_id' => $guild->id,
+            //             'import_id'
+            //         ]);
+            //     }),
+            // ],
             'delete_wishlist_items' => 'nullable|boolean',
             'delete_prio_items'     => 'nullable|boolean',
         ];
@@ -506,6 +518,7 @@ class ItemController extends Controller
                         'note'         => ($item['note']         ? $item['note'] : null),
                         'officer_note' => ($item['officer_note'] ? $item['officer_note'] : null),
                         'received_at'  => ($item['received_at']  ? Carbon::parse($item['received_at'])->toDateTimeString() : null),
+                        'import_id'    => ($item['import_id']    ? $item['import_id'] : null),
                         'created_at'   => $now,
                     ];
                     $detachRows[] = [
@@ -541,9 +554,10 @@ class ItemController extends Controller
         }
 
         // Create a batch record for this job
+        // Doing this right before we do the inserts just in case something went wrong beforehand
         $batch = Batch::create([
             'name'      => request()->input('name') ? request()->input('name') : null,
-            'note'      => 'Assigned ' . count($newRows) . ' items',
+            'note'      => $currentMember->username . ' assigned ' . count($newRows) . ' items' . ($raid ? ' on raid ' . $raid->name : ''),
             'type'      => 'assign',
             'guild_id'  => $guild->id,
             'member_id' => $currentMember->id,

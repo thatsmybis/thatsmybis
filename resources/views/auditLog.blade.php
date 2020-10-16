@@ -210,9 +210,10 @@
                                                     {{ $log->role_name }}
                                                 </li>
                                             @endif
+
                                             @if ($log->batch_id)
                                                 <li class="list-inline-item text-muted">
-                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $log->batch_id]) }}" class="text-muted">
+                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $log->batch_id]) }}" class="small text-muted">
                                                         {{ $log->batch_name ? $log->batch_name : 'batch ' . $log->batch_id }}
                                                     </a>
                                                 </li>
