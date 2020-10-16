@@ -113,7 +113,7 @@ class GuildController extends Controller
                     LEFT JOIN raids r ON r.id = c.raid_id
                     JOIN items i ON i.item_id = ci.item_id
                     LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
-                WHERE ci.type = 'wishlist' AND c.guild_id = 1
+                WHERE ci.type = 'wishlist' AND c.guild_id = {$guild->id}
                 ORDER BY r.name, c.name, ci.`order`;"));
 
         // output up to 5MB is kept in memory, if it becomes bigger it will automatically be written to a temporary file
