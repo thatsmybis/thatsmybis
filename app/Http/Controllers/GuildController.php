@@ -79,9 +79,9 @@ class GuildController extends Controller
         $header = [
                 "raid_name",
                 "character_name",
+                "sort_order",
                 "item_name",
                 "item_id",
-                "sort_order",
                 "note",
                 // "officer_note",
                 "received_at",
@@ -97,9 +97,9 @@ class GuildController extends Controller
                 "SELECT
                     r.name AS 'raid_name',
                     c.name AS 'character_name',
+                    ci.`order` AS 'sort_order',
                     i.name AS 'item_name',
                     ci.item_id AS 'item_id',
-                    ci.`order` AS 'sort_order',
                     ci.note AS 'note',
                     -- {$officerNote} AS 'officer_note',
                     ci.received_at AS 'received_at',
