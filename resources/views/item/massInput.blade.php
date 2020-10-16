@@ -137,7 +137,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     <span class="fas fa-fw fa-calendar-alt text-muted"></span>
                                     Set default date <span class="text-muted small">optional, overwrites all date inputs</span>
                                 </label>
-                                <input name="date_default" min="2019-08-26" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="form-control dark" autocomplete="off">
+                                <input name="date_default" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="form-control dark" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -372,7 +372,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                     </span>
                                                 @endif
                                             </label>
-                                            <input name="item[{{ $i }}][received_at]" min="2019-08-26" max="{{ $maxDate }}" type="date" placeholder="defaults to today"
+                                            <input name="item[{{ $i }}][received_at]" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="defaults to today"
                                                 class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.received_at') ? 'form-danger' : '' }}" autocomplete="off"
                                                 {{ old('item.' . $i . '.received_at') ? old('item.' . $i . '.received_at') : '' }}>
                                         </div>

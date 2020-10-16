@@ -446,7 +446,7 @@ class ItemController extends Controller
             'item.*.is_offspec'     => 'nullable|boolean',
             'item.*.note'           => 'nullable|string|max:140',
             'item.*.officer_note'   => 'nullable|string|max:140',
-            'item.*.received_at'    => 'nullable|date|before:tomorrow|after:2019-09-26',
+            'item.*.received_at'    => 'nullable|date|before:tomorrow|after:2004-09-22',
             // 'item.*.import_id'      => 'nullable|string|max:20|unique:character_items,import_id,NULL,id,guild_id,item.*.character_id', // Composite unique
             // 'item.*.import_id'      => [
             //     'nullable',
