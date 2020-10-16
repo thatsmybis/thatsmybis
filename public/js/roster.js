@@ -72,8 +72,8 @@ function createTable() {
                     return `
                     <ul class="no-bullet no-indent mb-2">
                         <li>
-                            <div class="dropdown text-${ row.class ? row.class.toLowerCase() : ''}">
-                                <a class="dropdown-toggle text-4 font-weight-bold text-${ row.class.toLowerCase() }"
+                            <div class="dropdown text-${ row.class ? row.class.toLowerCase() : '' }">
+                                <a class="dropdown-toggle text-4 font-weight-bold text-${ row.class ? row.class.toLowerCase() : '' }"
                                     id="character${ row.id }Dropdown"
                                     role="button"
                                     data-toggle="dropdown"
