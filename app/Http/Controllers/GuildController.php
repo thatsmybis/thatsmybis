@@ -83,11 +83,13 @@ class GuildController extends Controller
                 "item_id",
                 "sort_order",
                 "note",
-                "officer_note",
+                // "officer_note",
                 "received_at",
                 "import_id",
                 "created_at",
-                "updated_at"
+                "updated_at",
+                "item_note",
+                "item_prio_note",
             ];
 
         $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
@@ -99,15 +101,18 @@ class GuildController extends Controller
                     ci.item_id AS 'item_id',
                     ci.`order` AS 'sort_order',
                     ci.note AS 'note',
-                    {$officerNote} AS 'officer_note',
+                    -- {$officerNote} AS 'officer_note',
                     ci.received_at AS 'received_at',
                     ci.import_id AS 'import_id',
                     ci.created_at AS 'created_at',
-                    ci.updated_at AS 'updated_at'
+                    ci.updated_at AS 'updated_at',
+                    gi.note AS 'item_note',
+                    gi.priority AS 'item_prio_note'
                 FROM character_items ci
                 JOIN characters c ON c.id = ci.character_id
                 JOIN raids r ON r.id = c.raid_id
                 JOIN items i ON i.item_id = ci.item_id
+                JOIN guild_items gi ON gi.item_id = i.item_id
                 WHERE ci.type = 'wishlist' AND c.guild_id = 1
                 ORDER BY c.name, ci.`order`;"));
 
