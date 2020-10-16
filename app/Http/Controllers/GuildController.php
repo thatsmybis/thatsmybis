@@ -112,7 +112,7 @@ class GuildController extends Controller
                 JOIN characters c ON c.id = ci.character_id
                 JOIN raids r ON r.id = c.raid_id
                 JOIN items i ON i.item_id = ci.item_id
-                JOIN guild_items gi ON gi.item_id = i.item_id
+                JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
                 WHERE ci.type = 'wishlist' AND c.guild_id = 1
                 ORDER BY c.name, ci.`order`;"));
 
