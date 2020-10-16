@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\{AuditLog, Guild, Member, Permission, Role, User};
 use Auth;
 use Exception;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
 
@@ -53,6 +54,80 @@ class GuildController extends Controller
         }
 
         return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
+    }
+
+    /**
+     * Export a guild's wishlist data
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportWishlist($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view wishlists.');
+            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+        }
+
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
+        $header = [
+                "raid_name",
+                "character_name",
+                "item_name",
+                "item_id",
+                "sort_order",
+                "note",
+                "officer_note",
+                "received_at",
+                "import_id",
+                "created_at",
+                "updated_at"
+            ];
+
+        $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
+        $rows = DB::select(DB::raw(
+                "SELECT
+                    r.name AS 'raid_name',
+                    c.name AS 'character_name',
+                    i.name AS 'item_name',
+                    ci.item_id AS 'item_id',
+                    ci.`order` AS 'sort_order',
+                    ci.note AS 'note',
+                    {$officerNote} AS 'officer_note',
+                    ci.received_at AS 'received_at',
+                    ci.import_id AS 'import_id',
+                    ci.created_at AS 'created_at',
+                    ci.updated_at AS 'updated_at'
+                FROM character_items ci
+                JOIN characters c ON c.id = ci.character_id
+                JOIN raids r ON r.id = c.raid_id
+                JOIN items i ON i.item_id = ci.item_id
+                WHERE ci.type = 'wishlist' AND c.guild_id = 1
+                ORDER BY c.name, ci.`order`;"));
+
+        // output up to 5MB is kept in memory, if it becomes bigger it will automatically be written to a temporary file
+        $csv = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
+
+        fputcsv($csv, $header);
+        foreach ($rows as $row) {
+            // Convert from stdClass to array
+            $row = get_object_vars($row);
+            fputcsv($csv, $row);
+        }
+        rewind($csv);
+        $csv = stream_get_contents($csv);
+
+        return view('guild.export.generic', [
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'csv'           => $csv,
+        ]);
     }
 
     /**
