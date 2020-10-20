@@ -12,7 +12,7 @@
                 Welcome, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
             </h2>
             <strong>Change log</strong> and <strong>announcements</strong> are on our
-            <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="text-discord font-weight-bold">
+            <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">
                 Discord</a>
             <br>
             We run on <a href="{{ route('donate') }}">donations</a>; thank you to our donors!
@@ -28,26 +28,32 @@
                     @foreach ($user->members as $member)
                         <li class="bg-lightest mt-3 mb-3 p-3">
                             <h2>
-                                <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}" class="text-uncommon font-weight-medium">
+                                @if ($member->guild->disabled_at)
+                                    <span class="small text-muted">disabled</span>
+                                @endif
+                                <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}"
+                                    class="text-{{ $member->guild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
                                     &lt;{{ $member->guild->name }}&gt;
                                 </a>
                             </h2>
-                            <ul class="list-inline">
-                                @foreach ($member->characters as $character)
+                            @if (!$member->guild->disabled_at)
+                                <ul class="list-inline">
+                                    @foreach ($member->characters as $character)
+                                        <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
+                                            <a href="{{route('character.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                                class="text-{{ $character->class ? strtolower($character->class) : '' }}">
+                                                {{ $character->name }}
+                                            </a>
+                                        </li>
+                                    @endforeach
                                     <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
-                                        <a href="{{route('character.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                            class="text-{{ $character->class ? strtolower($character->class) : '' }}">
-                                            {{ $character->name }}
+                                        <a href="{{ route('character.showCreate', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}">
+                                            <span class="fas fa-plus"></span>
+                                            create character
                                         </a>
                                     </li>
-                                @endforeach
-                                <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
-                                    <a href="{{ route('character.showCreate', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}">
-                                        <span class="fas fa-plus"></span>
-                                        create character
-                                    </a>
-                                </li>
-                            </ul>
+                                </ul>
+                            @endif
                         </li>
                     @endforeach
                 </ul>
@@ -72,7 +78,7 @@
                     @foreach ($existingGuilds as $existingGuild)
                         <li class="bg-lightest mt-3 mb-3 p-3">
                             <h2>
-                                <span class="text-uncommon font-weight-medium">
+                                <span class="text-{{ $guild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
                                     &lt;{{ $existingGuild->name }}&gt;
                                 </span>
                             </h2>

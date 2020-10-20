@@ -67,6 +67,18 @@ class CheckGuildPermissions
                 // They're on the Discord and they have an appropriate role if they get this far
             }
 
+            // Check if the guild is disabled
+            if ($guild->disabled_at && $user->id != $guild->user_id) {
+                $message = '';
+                $message .= $guild->name . ' disabled by guild master.';
+                if ($guild->message) {
+                    $message .= '<br><strong>Message of the Day:</strong><br>' . nl2br($guild->message);
+                }
+
+                request()->session()->flash('status-danger',  $message);
+                return redirect()->route('home');
+            }
+
             // Fetch their existing member object
             $currentMember = Member::where(['guild_id' => $guild->id, 'user_id' => Auth::id()])->first();
 

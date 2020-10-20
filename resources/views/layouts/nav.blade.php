@@ -1,7 +1,8 @@
 <nav class="navbar navbar-expand-md navbar-dark">
     <span class="navbar-brand" href="{{ route('home') }}">
         <span class="font-weight-bold">
-            <a href="{{ route('home') }}" class="text-white">
+            <a href="{{ route('home') }}" class="text-{{ isset($guild) && $guild->disabled_at ? 'danger' : 'white' }}"
+                title="{{ isset($guild) && $guild->disabled_at ? 'guild is disabled' : '' }}">
                 {!! isset($guild) && $guild->name ? $guild->name : env('APP_NAME') !!}
             </a>
             <a href="{{ route('toggleStreamerMode') }}" class="text-white">

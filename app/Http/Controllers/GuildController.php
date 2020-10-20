@@ -331,6 +331,7 @@ class GuildController extends Controller
 
         $validationRules =  [
             'name'                   => 'string|max:36|unique:guilds,name,' . $guild->id,
+            'disabled_at'            => 'nullable|boolean',
             'is_prio_private'        => 'nullable|boolean',
             'is_received_locked'     => 'nullable|boolean',
             'is_wishlist_private'    => 'nullable|boolean',
@@ -348,8 +349,8 @@ class GuildController extends Controller
 
         $this->validate(request(), $validationRules);
 
-        $updateValues['name'] = request()->input('name');
-        $updateValues['slug'] = slug(request()->input('name'));
+        $updateValues['name']                   = request()->input('name');
+        $updateValues['slug']                   = slug(request()->input('name'));
         $updateValues['is_prio_private']        = request()->input('is_prio_private') == 1 ? 1 : 0;
         $updateValues['is_received_locked']     = request()->input('is_received_locked') == 1 ? 1 : 0;
         $updateValues['is_wishlist_private']    = request()->input('is_wishlist_private') == 1 ? 1 : 0;
@@ -368,7 +369,21 @@ class GuildController extends Controller
             $auditMessage .= ' (guild name changed to ' . $updateValues['name'] . ')';
         }
 
-        if (!request()->input('show_message')) {
+        // Guild disable/enable checks
+        if (Auth::id() == $guild->user_id) {
+            $isDisabled = request()->input('disabled_at') == 1 ? 1 : 0;
+            if ($isDisabled != ($guild->disabled_at != null)) {
+                if ($isDisabled) {
+                    $updateValues['disabled_at'] = getDateTime();
+                    $auditMessage .= ' (disabled guild)';
+                } else {
+                    $updateValues['disabled_at'] = null;
+                    $auditMessage .= ' (enabled guild)';
+                }
+            }
+        }
+
+        if (!request()->input('show_message') && $guild->message) {
             $auditMessage .= ' (MOTD updated)';
             $updateValues['message'] = null;
         } else if ($updateValues['message'] != $guild->message) {

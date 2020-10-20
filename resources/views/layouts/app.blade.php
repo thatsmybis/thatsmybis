@@ -95,12 +95,12 @@
             </div>
         </div>
     @endif
-    @if (session('status-success'))
+    @if (session('status-danger'))
         <div class="container-fluid container-width-capped">
             <div class="row">
                 <div class="col-12">
-                    <div class="alert alert-success">
-                        {!! session('status-success') !!}
+                    <div class="alert alert-danger">
+                        {!! session('status-danger') !!}
                     </div>
                 </div>
             </div>
@@ -117,18 +117,17 @@
             </div>
         </div>
     @endif
-    @if (session('status-danger'))
+    @if (session('status-success'))
         <div class="container-fluid container-width-capped">
             <div class="row">
                 <div class="col-12">
-                    <div class="alert alert-danger">
-                        {!! session('status-danger') !!}
+                    <div class="alert alert-success">
+                        {!! session('status-success') !!}
                     </div>
                 </div>
             </div>
         </div>
     @endif
-
     @if (isset($guild) && $guild->message)
         <div class="container-fluid container-width-capped">
             <div class="row">

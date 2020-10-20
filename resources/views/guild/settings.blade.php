@@ -40,6 +40,7 @@
                             </div>
                         </div>
 
+                        <!-- Discord ID -->
                         <div class="row">
                             <div class="col-md-8 col-12">
                                 <div class="form-group">
@@ -60,6 +61,22 @@
                             </div>
                         </div>
 
+                        <!-- Disable Guild -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="disabled_at" value="1" class="" autocomplete="off"
+                                                {{ old('disabled_at') && old('disabled_at') == 1 ? 'checked' : ($guild->disabled_at ? 'checked' : '') }}>
+                                                Disable guild <span class="text-muted small">members will only be shown the guild name and MOTD</span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Expansion -->
                         <div class="row">
                             <div class="col-md-8 col-12">
                                 <div class="form-group">
@@ -108,9 +125,10 @@
                         </div>
                         -->
 
+                        <!-- MOTD -->
                         <div class="row">
                             <div class="col-12">
-                                <div class="form-group mb-0">
+                                <div class="form-group">
                                     <div class="checkbox">
                                         <label>
                                             <input type="checkbox" name="show_message" value="1" class="" autocomplete="off"
@@ -327,7 +345,7 @@
                             <div class="col-12">
                                 <label for="member_roles" class="font-weight-bold">
                                     <span class="fas fa-fw fa-swords text-success"></span>
-                                    Raiders
+                                    Members
                                     <br>
                                     <small class="text-muted">
                                         Discord users with <strong>any</strong> of these roles are allowed to join
