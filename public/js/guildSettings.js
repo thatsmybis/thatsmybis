@@ -6,6 +6,14 @@ $(".js-show-next").keyup(function() {
     showNext(this);
 });
 
+$("[name=show_message]").change(function () {
+    if (this.checked) {
+        $("#message").show();
+    } else {
+        $("#message").hide();
+    }
+}).change();
+
 // If the current element has a value, show it and the next element that is hidden because it is empty
 function showNext(currentElement) {
     if ($(currentElement).val() != "") {

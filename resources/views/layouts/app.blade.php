@@ -86,36 +86,61 @@
 
     @if (session('status'))
         <div class="container-fluid container-width-capped">
-            <div class="col-12">
-                <div class="alert alert-success">
-                    {!! session('status') !!}
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success">
+                        {!! session('status') !!}
+                    </div>
                 </div>
             </div>
         </div>
     @endif
     @if (session('status-success'))
         <div class="container-fluid container-width-capped">
-            <div class="col-12">
-                <div class="alert alert-success">
-                    {!! session('status-success') !!}
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success">
+                        {!! session('status-success') !!}
+                    </div>
                 </div>
             </div>
         </div>
     @endif
     @if (session('status-warning'))
         <div class="container-fluid container-width-capped">
-            <div class="col-12">
-                <div class="alert alert-warning">
-                    {!! session('status-warning') !!}
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-warning">
+                        {!! session('status-warning') !!}
+                    </div>
                 </div>
             </div>
         </div>
     @endif
     @if (session('status-danger'))
         <div class="container-fluid container-width-capped">
-            <div class="col-12">
-                <div class="alert alert-danger">
-                    {!! session('status-danger') !!}
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-danger">
+                        {!! session('status-danger') !!}
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if (isset($guild) && $guild->message)
+        <div class="container-fluid container-width-capped">
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-info">
+                        <ul class="no-bullet no-indent mb-0">
+                            <li class="small font-weight-bold">
+                                Message of the Day
+                            </li>
+                            <li class="pre">{{ $guild->message }}</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

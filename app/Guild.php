@@ -31,6 +31,7 @@ class Guild extends Model
         'raid_leader_role_id',
         'class_leader_role_id',
         'member_role_ids',
+        'message',
         'calendar_link',
         'is_prio_private',
         'is_received_locked',

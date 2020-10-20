@@ -36,9 +36,6 @@
                                         Guild Name
                                     </label>
                                     <input name="name" maxlength="36" type="text" class="form-control dark" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
-                                    <span class="text-muted small">
-                                        Changing this can break existing links to the guild
-                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -110,6 +107,30 @@
                             </div>
                         </div>
                         -->
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="form-group mb-0">
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="show_message" value="1" class="" autocomplete="off"
+                                                {{ old('message') && old('message') == 1 ? 'checked' : ($guild->message ? 'checked' : '') }}>
+                                                Show a guild Message of the Day
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12" id="message" style="{{ $guild->message ? '' : 'display:none;' }}">
+                                <div class="form-group">
+                                    <label for="message" class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-megaphone"></span>
+                                        Message Of The Day
+                                        <small class="text-muted">your guildmates will see this</small>
+                                    </label>
+                                    <textarea maxlength="500" data-max-length="500" name="message" rows="2" placeholder="a short message about what's happening" class="form-control dark">{{ old('message') ? old('message') : $guild->message }}</textarea>
+                                </div>
+                            </div>
+                        </div>
 
                     </div>
                 </div>

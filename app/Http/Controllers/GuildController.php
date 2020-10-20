@@ -337,7 +337,9 @@ class GuildController extends Controller
             'is_wishlist_locked'     => 'nullable|boolean',
             'is_prio_autopurged'     => 'nullable|boolean',
             'is_wishlist_autopurged' => 'nullable|boolean',
-            'calendar_link'          => 'nullable|string|max:255',
+            'calendar_link'          => 'nullable|string|max:200',
+            'message'                => 'nullable|string|max:500',
+            'show_message'           => 'nullable|boolean',
             'gm_role_id'             => 'nullable|integer|exists:roles,discord_id',
             'officer_role_id'        => 'nullable|integer|exists:roles,discord_id',
             'raid_leader_role_id'    => 'nullable|integer|exists:roles,discord_id',
@@ -354,6 +356,7 @@ class GuildController extends Controller
         $updateValues['is_wishlist_locked']     = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
         $updateValues['is_prio_autopurged']     = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
         $updateValues['is_wishlist_autopurged'] = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
+        $updateValues['message']                = request()->input('message');
         $updateValues['calendar_link']          = request()->input('calendar_link');
         $updateValues['member_role_ids'] = implode(",", array_filter(request()->input('member_roles')));
 
@@ -363,6 +366,13 @@ class GuildController extends Controller
 
         if ($updateValues['name'] != $guild->name) {
             $auditMessage .= ' (guild name changed to ' . $updateValues['name'] . ')';
+        }
+
+        if (!request()->input('show_message')) {
+            $auditMessage .= ' (MOTD updated)';
+            $updateValues['message'] = null;
+        } else if ($updateValues['message'] != $guild->message) {
+            $auditMessage .= ' (MOTD updated)';
         }
 
         if (array_key_exists('gm_role_id', $updateValues) && $updateValues['gm_role_id'] != $guild->gm_role_id) {
