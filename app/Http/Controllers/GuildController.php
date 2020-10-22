@@ -34,6 +34,7 @@ class GuildController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        request()->session()->reflash();
         return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
     }
 
@@ -68,7 +69,7 @@ class GuildController extends Controller
 
         if ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to view wishlists.');
-            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+            return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
         }
 
         $showOfficerNote = false;

@@ -57,7 +57,7 @@
                                 <textarea id="importTextarea"
                                     name="import_textarea"
                                     rows="20"
-                                    placeholder="Accepts RCLootCouncil CSV data, or any CSV. First line must contain headers for the data.
+                                    placeholder="Accepts RCLootCouncil CSV data, or any CSV. First line must contain headers for the data (case sensitive).
 eg.
     character,date,itemID,itemName,note
     Gurgthock,2020-10-01,18821,Quick Strike Ring,That's my BIS
@@ -239,11 +239,6 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                         {{ $errors->first($itemId) }}
                                                     </li>
                                                 @endif
-                                                @if ($i == 124)
-                                                    <li class="text-danger font-weight-bold">
-                                                        Max items added
-                                                    </li>
-                                                @endif
                                             </ul>
                                         </div>
                                     </div>
@@ -399,6 +394,11 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                 value="{{ old('item.' . $i . '.import_id') ? old('item.' . $i . '.import_id') : '' }}">
                                         </div>
                                     </div>
+                                    @if ($i == $maxItems - 1)
+                                        <div class="col-12 mt-3 text-danger font-weight-bold">
+                                            Max items added
+                                        </div>
+                                    @endif
                                 </div>
                             @endfor
                         </div>

@@ -205,7 +205,11 @@ function addItemRemoveHandler() {
  * @return            bool   True on success.
  */
 function addTag($this, value, label) {
-    if ($this && value && label) {
+    if ($this && value) {
+        if (!label) {
+            label = "";
+        }
+
         // Find the hidden input
         $nextInput = $($this).next().next("ul").children("li").children("input[value='']").first();
 

@@ -371,9 +371,9 @@ function loadItemToForm(item, i) {
     let votes         = null;
 
     if (item['player']) { // RCLC name for character, formatted like so: "Playername-Servername"
-        characterName = item['player'].split("-")[0]; // Split the character name and server name up, get just the character name.
+        characterName = item['player'].split("-")[0].trim(); // Split the character name and server name up, get just the character name.
     } else if (item['character']) {
-        characterName = item['character'];
+        characterName = item['character'].trim();
     }
 
     if (item['id']) { // RCLC value
@@ -381,9 +381,9 @@ function loadItemToForm(item, i) {
     }
 
     if (item['itemID']) { // RCLC value
-        itemId = item['itemID'];
+        itemId = item['itemID'].trim();
     } else if (item['item_id']) {
-        itemId = item['item_id'];
+        itemId = item['item_id'].trim();
     }
 
     // Convert item ID to the ID that we use, because having two of the same item is stupid.
@@ -397,42 +397,49 @@ function loadItemToForm(item, i) {
     }
 
     if (item['item']) { // RCLC value
-        itemName = item['item'];
+        itemName = item['item'].trim();
     } else if (item['itemName']) {
-        itemName = item['itemName'];
+        itemName = item['itemName'].trim();
     } else if (item['item_name']) {
-        itemName = item['item_name'];
+        itemName = item['item_name'].trim();
     }
 
     if (item['date']) { // RCLC value
-        date = moment(item['date'], 'DD/MM/YY').format('YYYY-MM-DD');
+        rclcDate = moment(item['date'].trim(), 'DD/MM/YY');
+        if (rclcDate.isValid()) {
+            // Accept insane DD/MM/YY format
+            date = rclcDate.format('YYYY-MM-DD');
+        } else {
+            // Accept NORMAL SANE YYYY-MM-DD FORMAT
+            date = moment(item['date'].trim()).format('YYYY-MM-DD');
+        }
     } else if (item['dateTime']) {
-        date = moment(item['dateTime']).format('YYYY-MM-DD');
+        date = moment(item['dateTime'].trim()).format('YYYY-MM-DD');
     } else if (item['date_time']) {
-        date = moment(item['date_time']).format('YYYY-MM-DD');
+        date = moment(item['date_time'].trim()).format('YYYY-MM-DD');
     }
 
     if (item['publicNote']) {
-        publicNote = item['publicNote'];
+        publicNote = item['publicNote'].trim();
     } else if (item['public_note']) {
-        publicNote = item['public_note'];
+        publicNote = item['public_note'].trim();
     }
 
     publicNote = publicNote.substr(0, 140);
 
     if (item['officerNote']) {
-        officerNote = item['officerNote'];
+        officerNote = item['officerNote'].trim();
     } else if (item['officer_note']) {
-        officerNote = item['officer_note'];
+        officerNote = item['officer_note'].trim();
     }
     if (item['note']) { // RCLC value
-        note = item['note'];
+        note = item['note'].trim();
     }
     if (item['response']) { // RCLC value
-        response = item['response'];
+        response = item['response'].trim();
     }
     if (item['votes']) { // RCLC value
-        votes = item['votes'];
+        votes = item['votes'].trim();
     }
 
     officerNote = (votes ? "Votes: " + votes + " " : "") + (officerNote ? officerNote + " " : "") + (response ? '"' + response + '" ' : "") + (note ? '"' + note + '" ' : "");
