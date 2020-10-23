@@ -78,7 +78,7 @@
                     @foreach ($existingGuilds as $existingGuild)
                         <li class="bg-lightest mt-3 mb-3 p-3">
                             <h2>
-                                <span class="text-{{ $guild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
+                                <span class="text-{{ $existingGuild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
                                     &lt;{{ $existingGuild->name }}&gt;
                                 </span>
                             </h2>
