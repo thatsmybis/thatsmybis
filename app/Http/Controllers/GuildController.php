@@ -80,8 +80,8 @@ class GuildController extends Controller
         $header = [
                 "raid_name",
                 "character_name",
-                "class",
-                "inactive_at",
+                "character_class",
+                "character_inactive_at",
                 "sort_order",
                 "item_name",
                 "item_id",
