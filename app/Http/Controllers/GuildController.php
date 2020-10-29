@@ -80,6 +80,8 @@ class GuildController extends Controller
         $header = [
                 "raid_name",
                 "character_name",
+                "class",
+                "inactive_at",
                 "sort_order",
                 "item_name",
                 "item_id",
@@ -98,6 +100,8 @@ class GuildController extends Controller
                 "SELECT
                     r.name AS 'raid_name',
                     c.name AS 'character_name',
+                    c.class AS 'character_class',
+                    c.inactive_at AS 'character_inactive_at',
                     ci.`order` AS 'sort_order',
                     i.name AS 'item_name',
                     ci.item_id AS 'item_id',
