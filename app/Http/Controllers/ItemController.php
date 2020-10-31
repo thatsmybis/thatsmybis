@@ -590,13 +590,18 @@ class ItemController extends Controller
 
         // For each item added, attempt to delete or flag a matching item from the character's wishlist and prios
         foreach ($detachRows as $detachRow) {
-            // Find wishlist for this item
-            $wishlistRow = DB::table('character_items')->where([
+            $whereClause = [
                 'item_id'      => $detachRow['item_id'],
                 'character_id' => $detachRow['character_id'],
                 'type'         => Item::TYPE_WISHLIST,
-                'is_received'  => 0,
-            ])->limit(1)->orderBy('order')->first();
+            ];
+
+            if (!$deleteWishlist) {
+                $whereClause['is_received'] = 0;
+            }
+
+            // Find wishlist for this item
+            $wishlistRow = DB::table('character_items')->where($whereClause)->limit(1)->orderBy('is_received')->orderBy('order')->first();
 
             if ($wishlistRow) {
                 if ($deleteWishlist) {
@@ -630,13 +635,18 @@ class ItemController extends Controller
                 }
             }
 
-            // Find prio for this item
-            $prioRow = DB::table('character_items')->where([
+            $whereClause = [
                 'item_id'      => $detachRow['item_id'],
                 'character_id' => $detachRow['character_id'],
                 'type'         => Item::TYPE_PRIO,
-                'is_received'  => 0,
-            ])->orderBy('order')->first();
+            ];
+
+            if (!$deletePrio) {
+                $whereClause['is_received'] = 0;
+            }
+
+            // Find prio for this item
+            $prioRow = DB::table('character_items')->where($whereClause)->orderBy('is_received')->orderBy('order')->first();
 
             if ($prioRow) {
                 $auditMessage = '';
