@@ -635,6 +635,7 @@ class ItemController extends Controller
                 'item_id'      => $detachRow['item_id'],
                 'character_id' => $detachRow['character_id'],
                 'type'         => Item::TYPE_PRIO,
+                'is_received'  => 0,
             ])->orderBy('order')->first();
 
             if ($prioRow) {
