@@ -595,6 +595,7 @@ class ItemController extends Controller
                 'item_id'      => $detachRow['item_id'],
                 'character_id' => $detachRow['character_id'],
                 'type'         => Item::TYPE_WISHLIST,
+                'is_received'  => 0,
             ])->limit(1)->orderBy('order')->first();
 
             if ($wishlistRow) {
