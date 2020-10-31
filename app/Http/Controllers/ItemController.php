@@ -442,7 +442,11 @@ class ItemController extends Controller
         $validationRules = [
             'raid_id'               => 'nullable|integer|exists:raids,id',
             'item.*.id'             => 'nullable|integer|exists:items,item_id',
-            'item.*.character_id'   => 'nullable|required_with:item.*.id|integer|exists:characters,id',
+            'item.*.character_id'   => [
+                'nullable',
+                'integer',
+                'exists:characters,id',
+            ],
             'item.*.is_offspec'     => 'nullable|boolean',
             'item.*.note'           => 'nullable|string|max:140',
             'item.*.officer_note'   => 'nullable|string|max:140',
@@ -459,9 +463,15 @@ class ItemController extends Controller
             //         ]);
             //     }),
             // ],
-            'delete_wishlist_items' => 'nullable|boolean',
-            'delete_prio_items'     => 'nullable|boolean',
+            'delete_wishlist_items'   => 'nullable|boolean',
+            'delete_prio_items'       => 'nullable|boolean',
+            'skip_missing_characters' => 'nullable|boolean',
         ];
+
+        // We're not skipping characters, so add the rule that character_id must be set.
+        if (!request()->input('skip_missing_characters')) {
+            $validationRules['item.*.character_id'][] = 'required_with:item.*.id';
+        }
 
         $validationMessages = [
             'item.*.character_id.required_with' => ':values is missing a character.'
@@ -505,49 +515,54 @@ class ItemController extends Controller
 
         foreach (request()->input('item') as $item) {
             if ($item['id']) {
-                if ($guild->allCharacters->contains('id', $item['character_id'])) {
-                    $newRows[] = [
-                        'item_id'      => $item['id'],
-                        'character_id' => $item['character_id'],
-                        'added_by'     => $currentMember->id,
-                        'raid_id'      => $raidId,
-                        'type'         => Item::TYPE_RECEIVED,
-                        'order'        => '0', // Put this item at the top of the list
-                        'is_offspec'   => (isset($item['is_offspec']) && $item['is_offspec'] == true ? 1 : 0),
-                        'is_received'  => 1,
-                        'note'         => ($item['note']         ? $item['note'] : null),
-                        'officer_note' => ($item['officer_note'] ? $item['officer_note'] : null),
-                        'received_at'  => ($item['received_at']  ? Carbon::parse($item['received_at'])->toDateTimeString() : null),
-                        'import_id'    => ($item['import_id']    ? $item['import_id'] : null),
-                        'created_at'   => $now,
-                    ];
-                    $detachRows[] = [
-                        'item_id'      => $item['id'],
-                        'character_id' => $item['character_id'],
-                    ];
-                    $addedCount++;
+                if ($item['character_id']) {
+                    if ($guild->allCharacters->contains('id', $item['character_id'])) {
+                        $newRows[] = [
+                            'item_id'      => $item['id'],
+                            'character_id' => $item['character_id'],
+                            'added_by'     => $currentMember->id,
+                            'raid_id'      => $raidId,
+                            'type'         => Item::TYPE_RECEIVED,
+                            'order'        => '0', // Put this item at the top of the list
+                            'is_offspec'   => (isset($item['is_offspec']) && $item['is_offspec'] == true ? 1 : 0),
+                            'is_received'  => 1,
+                            'note'         => ($item['note']         ? $item['note'] : null),
+                            'officer_note' => ($item['officer_note'] ? $item['officer_note'] : null),
+                            'received_at'  => ($item['received_at']  ? Carbon::parse($item['received_at'])->toDateTimeString() : null),
+                            'import_id'    => ($item['import_id']    ? $item['import_id'] : null),
+                            'created_at'   => $now,
+                        ];
+                        $detachRows[] = [
+                            'item_id'      => $item['id'],
+                            'character_id' => $item['character_id'],
+                        ];
+                        $addedCount++;
 
-                    $description = $currentMember->username . ' assigned item to character';
+                        $description = $currentMember->username . ' assigned item to character';
 
-                    if (isset($item['is_offspec']) && $item['is_offspec'] == 1) {
-                        $description .= ' (OS)';
+                        if (isset($item['is_offspec']) && $item['is_offspec'] == 1) {
+                            $description .= ' (OS)';
+                        }
+
+                        if ($item['received_at']) {
+                            $description .= ' (backdated ' . $item['received_at'] . ')';
+                        }
+
+                        $audits[] = [
+                            'description'  => $description,
+                            'member_id'    => $currentMember->id,
+                            'character_id' => $item['character_id'],
+                            'guild_id'     => $currentMember->guild_id,
+                            'raid_id'      => $raidId,
+                            'item_id'      => $item['id'],
+                            'created_at'   => $now,
+                        ];
+                    } else {
+                        $warnings .= (isset($item['label']) ? $item['label'] : $item['id']) . ' to character ID ' . $item['character_id'] . ', ';
+                        $failedCount++;
                     }
-
-                    if ($item['received_at']) {
-                        $description .= ' (backdated ' . $item['received_at'] . ')';
-                    }
-
-                    $audits[] = [
-                        'description'  => $description,
-                        'member_id'    => $currentMember->id,
-                        'character_id' => $item['character_id'],
-                        'guild_id'     => $currentMember->guild_id,
-                        'raid_id'      => $raidId,
-                        'item_id'      => $item['id'],
-                        'created_at'   => $now,
-                    ];
                 } else {
-                    $warnings .= (isset($item['label']) ? $item['label'] : $item['id']) . ' to character ID ' . $item['character_id'] . ', ';
+                    $warnings .= (isset($item['label']) ? $item['label'] : $item['id']) . ' to missing character, ';
                     $failedCount++;
                 }
             }

@@ -8,8 +8,8 @@ var overLimitCount  = 0;
 var offspecCount    = 0;
 var missingCharacters     = [];
 var missingCharacterCount = 0;
-let errorCount = 0;
-let firstError = undefined;
+var errorCount = 0;
+var firstError = undefined;
 
 $(document).ready(function () {
     $(".js-show-next").change(function() {
@@ -482,6 +482,8 @@ function loadItemToForm(item, i) {
             missingCharacterCount++;
             missingCharacters.push(characterName);
 
+            characterSelect.parent().addClass("form-danger");
+        } else {
             characterSelect.parent().addClass("form-danger");
         }
     }

@@ -409,6 +409,13 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                             <div class="form-group mb-0">
                                 <div class="checkbox">
                                     <label class="text-muted">
+                                        <input type="checkbox" name="skip_missing_characters" value="1" class="" autocomplete="off"
+                                            {{ (old('skip_missing_characters') && old('skip_missing_characters') == 1) ? 'checked' : '' }}>
+                                            Skip items that don't have a character <abbr title="useful for ignoring characters that aren't in your guild when importing data">?</abbr>
+                                    </label>
+                                </div>
+                                <div class="checkbox">
+                                    <label class="text-muted">
                                         <input type="checkbox" name="delete_wishlist_items" value="1" class="" autocomplete="off"
                                             {{ (old('delete_wishlist_items') && old('delete_wishlist_items') == 1) || (!old('delete_wishlist_items') && $guild->is_wishlist_autopurged) ? 'checked' : '' }}>
                                             Delete assigned items from each character's wishlist <abbr title="if unchecked, corresponding wishlist items will be flagged as received but still be visible">?</abbr>
