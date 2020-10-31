@@ -152,8 +152,7 @@
                                 <div class="d-flex flex-row">
                                     <div class="list-timestamp text-right text-muted p-2">
                                         @if ($log->member_id)
-                                            <!-- <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->member_slug]) }}" class="text-muted"> -->
-                                            <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $log->member_id]) }}" class="text-muted small">
+                                            <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->member_slug]) }}" class="text-muted">
                                                 <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago
                                             </a>
                                         @else
@@ -169,21 +168,19 @@
 
                                             @if ($log->item_id)
                                                 <li class="list-inline-item">
-                                                    @include('partials/item', ['wowheadLink' => false, 'auditLink' => true, 'itemId' => $log->item_id, 'itemName' => $log->item_name, 'fontWeight' => 'light'])
+                                                    @include('partials/item', ['wowheadLink' => false, 'auditLink' => false, 'itemId' => $log->item_id, 'itemName' => $log->item_name, 'fontWeight' => 'light'])
                                                 </li>
                                             @endif
                                             @if ($log->other_member_id)
                                                 <li class="list-inline-item">
-                                                    <!-- <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->other_member_slug]) }}" class="text-muted"> -->
-                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $log->other_member_id]) }}" class="text-muted">
+                                                    <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->other_member_slug]) }}" class="text-muted">
                                                         {{ $log->other_member_username }}
                                                     </a>
                                                 </li>
                                             @endif
                                             @if ($log->character_id)
                                                 <li class="list-inline-item">
-                                                    <!-- <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'nameSlug' => $log->character_slug]) }}" class="text-muted"> -->
-                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $log->character_id]) }}" class="text-muted">
+                                                    <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'nameSlug' => $log->character_slug]) }}" class="text-muted">
                                                         {{ $log->character_name }}
                                                     </a>
                                                 </li>

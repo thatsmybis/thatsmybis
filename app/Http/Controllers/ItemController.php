@@ -694,8 +694,9 @@ class ItemController extends Controller
         request()->session()->flash('status', 'Successfully added ' . $addedCount . ' items. ' . $failedCount . ' failures' . ($warnings ? ': ' . rtrim($warnings, ', ') : '.'));
 
         return redirect()->route('guild.auditLog', [
-            'guildId'      => $guild->id,
-            'guildSlug'    => $guild->slug,
+            'guildId'   => $guild->id,
+            'guildSlug' => $guild->slug,
+            'batch_id'  => $batch->id,
         ]);
     }
 
