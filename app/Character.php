@@ -111,7 +111,7 @@ class Character extends Model
                 $join->on('raids.id', 'character_items.raid_id');
             })
             ->where('character_items.type', Item::TYPE_RECEIVED)
-            ->orderBy('order')
+            ->orderBy('received_at')
             ->withPivot(['id', 'added_by', 'type', 'order', 'note', 'officer_note', 'is_offspec', 'raid_id', 'received_at', 'created_at'])
             ->withTimeStamps();
 
