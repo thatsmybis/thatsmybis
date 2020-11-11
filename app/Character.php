@@ -112,7 +112,8 @@ class Character extends Model
             })
             ->where('character_items.type', Item::TYPE_RECEIVED)
             // Composite order by which checks for received_at date and uses that first, and then created_at date as a fallback
-            ->orderByRaw('IF(`character_items`.`received_at`, `character_items`.`received_at`, `character_items`.`created_at`) DESC')
+            // ->orderByRaw('IF(`character_items`.`received_at`, `character_items`.`received_at`, `character_items`.`created_at`) DESC')
+            ->orderBy('order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'note', 'officer_note', 'is_offspec', 'raid_id', 'received_at', 'created_at'])
             ->withTimeStamps();
 
