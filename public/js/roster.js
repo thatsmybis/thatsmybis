@@ -327,7 +327,7 @@ function getItemList(data, type, characterId, useOrder = false) {
                     data-wowhead="item=${ item.item_id }?domain=classic">
                     ${ item.name }
                 </a>
-                ${ item.pivot.is_offspec ? '<span title="offspec item" class="font-weight-medium text-muted">OS</span>' : '' }
+                ${ item.pivot.is_offspec ? '<span title="offspec item" class="small text-muted">OS</span>' : '' }
                 <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
                     data-timestamp="${ item.pivot.received_at ? item.pivot.received_at : item.pivot.created_at }"
                     data-title="added by ${ item.added_by_username } at"
