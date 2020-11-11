@@ -105,7 +105,7 @@
                         <ol class="">
                             @foreach ($character->received as $item)
                                 <li class="">
-                                    @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username])
+                                    @include('partials/item', ['wowheadLink' => false, 'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null), 'itemUsername' => $item->added_by_username])
                                     @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                 </li>
                             @endforeach
