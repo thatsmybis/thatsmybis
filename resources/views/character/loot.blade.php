@@ -176,7 +176,7 @@
                                 <input id="received" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
                                 <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
-                                <ul class="js-sortable no-bullet no-indent mb-0">
+                                <ul class="no-bullet no-indent mb-0">
                                     @for ($i = 0; $i < $maxReceivedItems; $i++)
                                         @php
                                             $item      = null;
@@ -200,8 +200,8 @@
                                             <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
                                             <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable d-inline-block">
-                                                @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? $item->pivot->created_at : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
+                                            <span class="js-input-label text-unselectable d-inline-block">
+                                                @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
                                                 @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                             </span>&nbsp;
                                         </li>

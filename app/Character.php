@@ -111,7 +111,8 @@ class Character extends Model
                 $join->on('raids.id', 'character_items.raid_id');
             })
             ->where('character_items.type', Item::TYPE_RECEIVED)
-            ->orderBy('received_at')
+            // Composite order by which checks for received_at date and uses that first, and then created_at date as a fallback
+            ->orderByRaw('IF(`character_items`.`received_at`, `character_items`.`received_at`, `character_items`.`created_at`) DESC')
             ->withPivot(['id', 'added_by', 'type', 'order', 'note', 'officer_note', 'is_offspec', 'raid_id', 'received_at', 'created_at'])
             ->withTimeStamps();
 

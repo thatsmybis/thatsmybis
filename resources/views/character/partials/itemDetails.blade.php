@@ -15,14 +15,9 @@
                 <strong>Officer Note:</strong> {{ $item->pivot->officer_note }}
             </li>
         @endif
-        @if ((!isset($hideCreatedAt) || !$hideCreatedAt) && $item->pivot->created_at)
+        @if ($item->pivot->received_at || ((!isset($hideCreatedAt) || !$hideCreatedAt) && $item->pivot->created_at))
             <li class="cursor-pointer js-timestamp-title" data-timestamp="{{ $item->pivot->created_at }}">
                 added <span class="js-watchable-timestamp" data-timestamp="{{ $item->pivot->created_at }}"></span> ago
-            </li>
-        @endif
-        @if ($item->pivot->received_at)
-            <li class="cursor-pointer js-timestamp-title" data-timestamp="{{ $item->pivot->received_at }}">
-                received <span class="js-watchable-timestamp" data-timestamp="{{ $item->pivot->received_at }}"></span> ago
                 @if (isset($item->pivot->type) && $item->pivot->type == App\Item::TYPE_RECEIVED)
                     (backdated)
                 @endif
