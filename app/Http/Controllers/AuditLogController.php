@@ -32,8 +32,7 @@ class AuditLogController extends Controller
 
         $guild->load(['characters', 'members', 'raids']);
 
-        $resource = null;
-        $resourceName = null;
+        $resources = [];
 
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
@@ -115,34 +114,29 @@ class AuditLogController extends Controller
             });
         }
 
-        if (!empty(request()->input('batch_id'))) {
-            $query = $query->where('batches.id', request()->input('batch_id'));
-            $resource = Batch::where([['guild_id', $guild->id], ['id', request()->input('batch_id')]])->with('member')->first();
-            $resourceName = $resource ? ($resource->name ? $resource->name : 'Batch ' . $resource->id) : null;
-        }
-
         if (!empty(request()->input('character_id'))) {
             $query = $query->where('characters.id', request()->input('character_id'));
-            $resource = Character::where([['guild_id', $guild->id], ['id', request()->input('character_id')]])->with('member')->first();
-            $resourceName = $resource ? $resource->name : null;
-        }
-
-        if (!empty(request()->input('item_id'))) {
-            $query = $query->where('items.item_id', request()->input('item_id'));
-            $resource = Item::find(request()->input('item_id'));
-            $resourceName = $resource ? $resource->name : null;
+            $resources[] = Character::where([['guild_id', $guild->id], ['id', request()->input('character_id')]])->with('member')->first();
         }
 
         if (!empty(request()->input('member_id'))) {
             $query = $query->where('members.id', request()->input('member_id'));
-            $resource = Member::where([['guild_id', $guild->id], ['id', request()->input('member_id')]])->with('user')->first();
-            $resourceName = $resource ? $resource->username : null;
+            $resources[] = Member::where([['guild_id', $guild->id], ['id', request()->input('member_id')]])->with('user')->first();
+        }
+
+        if (!empty(request()->input('batch_id'))) {
+            $query = $query->where('batches.id', request()->input('batch_id'));
+            $resources[] = Batch::where([['guild_id', $guild->id], ['id', request()->input('batch_id')]])->with('member')->first();
         }
 
         if (!empty(request()->input('raid_id'))) {
             $query = $query->where('raids.id', request()->input('raid_id'));
-            $resource = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])->with('role')->first();
-            $resourceName = $resource ? $resource->name : null;
+            $resources[] = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])->with('role')->first();
+        }
+
+        if (!empty(request()->input('item_id'))) {
+            $query = $query->where('items.item_id', request()->input('item_id'));
+            $resources[] = Item::find(request()->input('item_id'));
         }
 
         if (!empty(request()->input('type'))) {
@@ -161,8 +155,7 @@ class AuditLogController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'logs'          => $logs,
-            'resource'      => $resource,
-            'resourceName'  => $resourceName,
+            'resources'     => $resources,
             'showPrios'     => $showPrios,
             'showWishlist'  => $showWishlist,
         ]);

@@ -10,9 +10,6 @@
                     <h1 class="font-wight-medium">
                         <span class="fas fa-fw fa-clipboard-list-check text-gold"></span>
                         Audit Log
-                        @if ($resourceName)
-                            for {{ $resourceName }}
-                        @endif
                     </h1>
                     <ul>
                         <li class="small no-bullet font-italic">
@@ -41,32 +38,36 @@
             </div>
 
             <div class="row">
-                @if ($resource)
-                    <div class="col-12 pb-3">
-                        <div class="bg-light rounded pt-1 pb-1 pl-3 pr-3">
-                            @if($resource instanceof \App\Batch)
-                                @if ($resource->name)
-                                    {{ $resource->name }}
-                                @else
-                                    Batch {{ $resource->id }}
-                                @endif
-                                @if ($resource->note)
-                                    <p>
-                                        {{ $resource->note }}
-                                    </p>
-                                @endif
-                            @elseif($resource instanceof \App\Character)
-                                @include('character/partials/header', ['character' => $resource, 'headerSize' => 1, 'showEdit' => false, 'showIcon' => false])
-                            @elseif($resource instanceof \App\Item)
-                                @include('partials/item', ['item' => $resource, 'wowheadLink' => false])
-                            @elseif($resource instanceof \App\Member)
-                                @include('member/partials/header', ['member' => $resource, 'discordUsername' => $resource->user->discord_username, 'headerSize' => 1, 'showEdit' => false, 'titlePrefix' => null])
-                            @elseif($resource instanceof \App\Raid)
-                                <span class="font-weight-bold">
-                                    @include('partials/raid', ['raid' => $resource, 'raidColor' => $resource->getColor()])
-                                </span>
-                            @endif
-                        </div>
+                @if ($resources)
+                    <div class="col-12 pb-3 d-flex flex-wrap">
+                        @foreach ($resources as $resource)
+                            <div>
+                                <div class="bg-light rounded pt-1 pb-1 pl-3 pr-3 mr-3 mb-3">
+                                    @if($resource instanceof \App\Batch)
+                                        @if ($resource->name)
+                                            {{ $resource->name }}
+                                        @else
+                                            Batch {{ $resource->id }}
+                                        @endif
+                                        @if ($resource->note)
+                                            <p>
+                                                {{ $resource->note }}
+                                            </p>
+                                        @endif
+                                    @elseif($resource instanceof \App\Character)
+                                        @include('character/partials/header', ['character' => $resource, 'headerSize' => 1, 'showEdit' => false, 'showIcon' => false])
+                                    @elseif($resource instanceof \App\Item)
+                                        @include('partials/item', ['item' => $resource, 'wowheadLink' => false])
+                                    @elseif($resource instanceof \App\Member)
+                                        @include('member/partials/header', ['member' => $resource, 'discordUsername' => $resource->user->discord_username, 'headerSize' => 1, 'showEdit' => false, 'titlePrefix' => null])
+                                    @elseif($resource instanceof \App\Raid)
+                                        <div class="mt-1 mb-2 font-weight-bold">
+                                            @include('partials/raid', ['raid' => $resource, 'raidColor' => $resource->getColor()])
+                                        </div>
+                                    @endif
+                                </div>
+                            </div>
+                        @endforeach
                     </div>
                 @endif
             </div>
