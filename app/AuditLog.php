@@ -35,6 +35,9 @@ class AuditLog extends Model
     protected $hidden = [
     ];
 
+    const TYPE_ASSIGN    = 'assign';
+    const TYPE_ITEM_NOTE = 'item_note';
+
     public function character() {
         return $this->belongsTo(Character::class);
     }

@@ -146,7 +146,11 @@ class AuditLogController extends Controller
         }
 
         if (!empty(request()->input('type'))) {
-            $query = $query->where('audit_logs.type', request()->input('type'));
+            if (request()->input('type') == 'received_all') {
+                $query = $query->whereIn('audit_logs.type', [AuditLog::TYPE_ASSIGN, Item::TYPE_RECEIVED]);
+            } else {
+                $query = $query->where('audit_logs.type', request()->input('type'));
+            }
         }
 
         $logs = $query->where(['audit_logs.guild_id' => $guild->id])

@@ -238,6 +238,7 @@ class ItemController extends Controller
 
                 $audits[] = [
                     'description'  => $currentMember->username . ' changed item note/priority',
+                    'type'         => AuditLog::TYPE_ITEM_NOTE,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,
                     'item_id'      => $existingItem->item_id,
@@ -255,6 +256,7 @@ class ItemController extends Controller
 
                 $audits[] = [
                     'description'  => $currentMember->username . ' added item note/priority',
+                    'type'         => AuditLog::TYPE_ITEM_NOTE,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,
                     'item_id'      => $item['id'],
@@ -550,6 +552,7 @@ class ItemController extends Controller
 
                         $audits[] = [
                             'description'  => $description,
+                            'type'         => AuditLog::TYPE_ASSIGN,
                             'member_id'    => $currentMember->id,
                             'character_id' => $item['character_id'],
                             'guild_id'     => $currentMember->guild_id,
@@ -573,7 +576,7 @@ class ItemController extends Controller
         $batch = Batch::create([
             'name'      => request()->input('name') ? request()->input('name') : null,
             'note'      => $currentMember->username . ' assigned ' . count($newRows) . ' items' . ($raid ? ' on raid ' . $raid->name : ''),
-            'type'      => 'assign',
+            'type'      => AuditLog::TYPE_ASSIGN,
             'guild_id'  => $guild->id,
             'member_id' => $currentMember->id,
             'raid_id'   => $raidId,
@@ -609,6 +612,7 @@ class ItemController extends Controller
                     DB::table('character_items')->where(['id' => $wishlistRow->id])->delete();
                     $audits[] = [
                         'description'  => 'System removed 1 wishlist item after character was assigned item',
+                        'type'         => Item::TYPE_WISHLIST,
                         'member_id'    => $currentMember->id,
                         'character_id' => $wishlistRow->character_id,
                         'guild_id'     => $currentMember->guild_id,
@@ -625,6 +629,7 @@ class ItemController extends Controller
 
                     $audits[] = [
                         'description'  => 'System flagged 1 wishlist item as received after character was assigned item',
+                        'type'         => Item::TYPE_WISHLIST,
                         'member_id'    => $currentMember->id,
                         'character_id' => $wishlistRow->character_id,
                         'guild_id'     => $currentMember->guild_id,
@@ -662,7 +667,7 @@ class ItemController extends Controller
                         ])
                         ->where('order', '>', $prioRow->order)
                         ->update(['order' => DB::raw('`order` - 1')]);
-                    $auditMessage = 'removed 1 prio ';
+                    $auditMessage = 'removed 1 prio';
                 } else {
                     DB::table('character_items')->where(['id' => $prioRow->id])
                         ->update([
@@ -674,6 +679,7 @@ class ItemController extends Controller
 
                 $audits[] = [
                     'description'  => 'System ' . $auditMessage . ' after character was assigned item',
+                    'type'         => Item::TYPE_PRIO,
                     'member_id'    => $currentMember->id,
                     'character_id' => $prioRow->character_id,
                     'guild_id'     => $currentMember->guild_id,

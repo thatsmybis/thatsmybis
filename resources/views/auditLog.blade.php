@@ -135,28 +135,36 @@
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
                         <label for="type" class="font-weight-bold">
-                            <span class="fas fa-fw fa- text-muted"></span>
-                            Type
+                            <span class="fas fa-fw fa-scroll-old text-muted"></span>
+                            Category
                         </label>
                         <select onchange="location = this.value;" name="type" class="selectpicker form-control dark" data-live-search="true" autocomplete="off" onchange="location = this.value;">
                             <option value="">
                                 —
                             </option>
-                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\Item::TYPE_WISHLIST]) }}"
-                                data-tokens="{{ \App\Item::TYPE_WISHLIST }}">
-                                Wishlist
-                            </option>
                             <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\Item::TYPE_PRIO]) }}"
                                 data-tokens="{{ \App\Item::TYPE_PRIO }}">
                                 Prio
                             </option>
+                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'received_all']) }}"
+                                data-tokens="received_all">
+                                Received (all)
+                            </option>
+                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\AuditLog::TYPE_ASSIGN]) }}"
+                                data-tokens="{{ \App\AuditLog::TYPE_ASSIGN }}">
+                                Received (via assign loot page)
+                            </option>
                             <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\Item::TYPE_RECEIVED]) }}"
                                 data-tokens="{{ \App\Item::TYPE_RECEIVED }}">
-                                Received
+                                Received (via character loot page)
                             </option>
                             <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\Item::TYPE_RECIPE]) }}"
                                 data-tokens="{{ \App\Item::TYPE_RECIPE }}">
                                 Recipe
+                            </option>
+                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\Item::TYPE_WISHLIST]) }}"
+                                data-tokens="{{ \App\Item::TYPE_WISHLIST }}">
+                                Wishlist
                             </option>
                         </select>
                     </div>
