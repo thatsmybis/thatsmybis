@@ -78,13 +78,14 @@
                             <span class="fas fa-fw fa-users text-muted"></span>
                             Character
                         </label>
-                        <select onchange="location = this.value;" name="character_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
+                        <select name="character_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
                                 —
                             </option>
                             @foreach ($guild->characters as $character)
-                                <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}"
-                                        data-tokens="{{ $character->id }}" class="text-{{ strtolower($character->class) }}-important">
+                                <option value="{{ $character->id }}"
+                                        data-tokens="{{ $character->id }}" class="text-{{ strtolower($character->class) }}-important"
+                                        {{ Request::get('character_id') && Request::get('character_id') == $character->id ? 'selected' : ''}}>
                                     {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? "Alt" : '' }}
                                 </option>
                             @endforeach
@@ -98,13 +99,14 @@
                             <span class="fas fa-fw fa-user text-muted"></span>
                             Member
                         </label>
-                        <select onchange="location = this.value;" name="member_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off" onchange="location = this.value;">
+                        <select name="member_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
                                 —
                             </option>
                             @foreach ($guild->members as $member)
-                                <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}"
-                                    data-tokens="{{ $member->id }}">
+                                <option value="{{ $member->id }}"
+                                    data-tokens="{{ $member->id }}"
+                                    {{ Request::get('member_id') && Request::get('member_id') == $member->id ? 'selected' : ''}}>
                                     {{ $member->username }}
                                 </option>
                             @endforeach
@@ -118,13 +120,14 @@
                             <span class="fas fa-fw fa-helmet-battle text-muted"></span>
                             Raid
                         </label>
-                        <select onchange="location = this.value;" name="raid_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off" onchange="location = this.value;">
+                        <select name="raid_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
                                 —
                             </option>
                             @foreach ($guild->raids as $raid)
-                                <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}"
-                                    data-tokens="{{ $raid->id }}">
+                                <option value="{{ $raid->id }}"
+                                    data-tokens="{{ $raid->id }}"
+                                    {{ Request::get('raid_id') && Request::get('raid_id') == $raid->id ? 'selected' : ''}}>
                                     {{ $raid->name }}
                                 </option>
                             @endforeach
@@ -138,32 +141,38 @@
                             <span class="fas fa-fw fa-scroll-old text-muted"></span>
                             Category
                         </label>
-                        <select onchange="location = this.value;" name="type" class="selectpicker form-control dark" data-live-search="true" autocomplete="off" onchange="location = this.value;">
-                            <option value="">
+                        <select name="type" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
+                            <option value="" data-tokens="">
                                 —
                             </option>
-                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\Item::TYPE_PRIO]) }}"
-                                data-tokens="{{ \App\Item::TYPE_PRIO }}">
+                            <option value="{{ \App\Item::TYPE_PRIO }}"
+                                data-tokens="{{ \App\Item::TYPE_PRIO }}"
+                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_PRIO ? 'selected' : ''}}>
                                 Prio
                             </option>
-                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'received_all']) }}"
-                                data-tokens="received_all">
+                            <option value="{{ 'received_all' }}"
+                                data-tokens="received_all"
+                                {{ Request::get('type') && Request::get('type') == 'received_all' ? 'selected' : ''}}>
                                 Received (all)
                             </option>
-                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\AuditLog::TYPE_ASSIGN]) }}"
-                                data-tokens="{{ \App\AuditLog::TYPE_ASSIGN }}">
+                            <option value="{{ \App\AuditLog::TYPE_ASSIGN }}"
+                                data-tokens="{{ \App\AuditLog::TYPE_ASSIGN }}"
+                                {{ Request::get('type') && Request::get('type') == \App\AuditLog::TYPE_ASSIGN ? 'selected' : ''}}>
                                 Received (via assign loot page)
                             </option>
-                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\Item::TYPE_RECEIVED]) }}"
-                                data-tokens="{{ \App\Item::TYPE_RECEIVED }}">
+                            <option value="{{ \App\Item::TYPE_RECEIVED }}"
+                                data-tokens="{{ \App\Item::TYPE_RECEIVED }}"
+                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_RECEIVED ? 'selected' : ''}}>
                                 Received (via character loot page)
                             </option>
-                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\Item::TYPE_RECIPE]) }}"
-                                data-tokens="{{ \App\Item::TYPE_RECIPE }}">
+                            <option value="{{ \App\Item::TYPE_RECIPE }}"
+                                data-tokens="{{ \App\Item::TYPE_RECIPE }}"
+                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_RECIPE ? 'selected' : ''}}>
                                 Recipe
                             </option>
-                            <option value="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => \App\Item::TYPE_WISHLIST]) }}"
-                                data-tokens="{{ \App\Item::TYPE_WISHLIST }}">
+                            <option value="{{ \App\Item::TYPE_WISHLIST }}"
+                                data-tokens="{{ \App\Item::TYPE_WISHLIST }}"
+                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_WISHLIST ? 'selected' : ''}}>
                                 Wishlist
                             </option>
                         </select>
@@ -273,6 +282,17 @@
 <script>
     var guild = {!! $guild->toJson() !!};
 
+    $("select").change(function () {
+        updateUrl($(this).prop("name"), $(this).val());
+    });
+
+    // Updates the URL with the given parameter and value, then reloads the page
+    function updateUrl(paramName, paramValue) {
+        let url = new URL(location);
+        url.searchParams.set(paramName, paramValue);
+        location = url;
+    }
+
     $(".js-item-autocomplete-link").each(function () {
         var self = this; // Allows callback functions to access `this`
         $(this).autocomplete({
@@ -308,7 +328,7 @@
 
                     // Only allow numbers (an item ID must be found)
                     if (Number.isInteger(value)) {
-                        location = "/" + guild.id + "/" + guild.name + "/audit-log?item_id=" + value;
+                        updateUrl('item_id', value);
                     }
 
                     // prevent autocomplete from autofilling this.val()
