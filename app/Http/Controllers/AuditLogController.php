@@ -145,6 +145,10 @@ class AuditLogController extends Controller
             $resourceName = $resource ? $resource->name : null;
         }
 
+        if (!empty(request()->input('type'))) {
+            $query = $query->where('audit_logs.type', request()->input('type'));
+        }
+
         $logs = $query->where(['audit_logs.guild_id' => $guild->id])
             ->orderBy('audit_logs.created_at', 'desc')
             ->paginate(self::RESULTS_PER_PAGE);
