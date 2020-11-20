@@ -31,17 +31,16 @@ class MemberController extends Controller
         $currentMember = request()->get('currentMember');
 
         $guild->load([
-            'members' => function ($query) use($memberId) {
+            'allMembers' => function ($query) use($memberId) {
                 return $query->where('members.id', $memberId)
                 ->with([
                     'roles',
                     'user',
                 ]);
-
             },
         ]);
 
-        $member = $guild->members->first();
+        $member = $guild->allMembers->first();
 
         if (!$member) {
             request()->session()->flash('status', 'Member not found.');
@@ -248,7 +247,7 @@ class MemberController extends Controller
         $updateValues['public_note'] = request()->input('public_note');
 
         // Member cannot make themselves inactive.
-        if (($currentMember->hasPermission('inactive.characters') || $currentMember->id == $character->member_id && $currentMember->id != $member->id) &&
+        if ($currentMember->hasPermission('inactive.characters') && $currentMember->id != $member->id &&
             ((request()->input('inactive_at') == 1 && !$member->inactive_at) || (!request()->input('inactive_at') && $member->inactive_at))
         ) {
             $updateValues['inactive_at'] = (request()->input('inactive_at') == 1 ? getDateTime() : null);

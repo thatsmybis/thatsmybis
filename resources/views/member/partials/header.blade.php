@@ -24,6 +24,11 @@
         </ul>
     </li>
     <li>
+        @if ($member->inactive_at)
+            <small>
+                <span class="font-weight-bold text-danger">INACTIVE</span>
+            </small>
+        @endif
         Member
     </li>
     <li>
