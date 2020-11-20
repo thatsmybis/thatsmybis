@@ -225,6 +225,7 @@ class MemberController extends Controller
             'public_note'   => 'nullable|string|max:140',
             'officer_note'  => 'nullable|string|max:140',
             'personal_note' => 'nullable|string|max:2000',
+            'inactive_at'   => 'nullable|boolean',
         ];
 
         $validationMessages = [];
@@ -243,8 +244,16 @@ class MemberController extends Controller
         }
 
         $updateValues['username']    = request()->input('username');
-        $updateValues['slug']    = slug(request()->input('username'));
+        $updateValues['slug']        = slug(request()->input('username'));
         $updateValues['public_note'] = request()->input('public_note');
+
+        // Member cannot make themselves inactive.
+        if (($currentMember->hasPermission('inactive.characters') || $currentMember->id == $guild->user_id) && $currentMember->id != $member->id) {
+            $updateValues['inactive_at'] = (request()->input('inactive_at') == 1 ? getDateTime() : null);
+            if ($updateValues['inactive_at']) {
+
+            }
+        }
 
         // User is editing their own member
         if ($currentMember->id == $member->id) {

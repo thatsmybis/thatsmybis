@@ -86,6 +86,22 @@
                     --}}
                 </div>
 
+                @if (($currentMember->hasPermission('inactive.characters') || $currentMember->id == $guild->user_id) && $currentMember->id != $member->id)
+                    <div class="row mb-3 pt-2 pb-1 bg-light rounded">
+                        <div class="col-12">
+                            <div class="form-group mb-0">
+                                <div class="checkbox">
+                                    <label>
+                                        <input type="checkbox" name="inactive_at" value="1" class="" autocomplete="off"
+                                            {{ old('inactive_at') && old('inactive_at') == 1 ? 'checked' : ($member->inactive_at ? 'checked' : '') }}>
+                                            Inactive <small class="text-muted">no longer visible, their characters will also be made inactive</small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="form-group">
                     <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
                 </div>

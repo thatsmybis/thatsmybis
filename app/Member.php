@@ -29,7 +29,7 @@ class Member extends Model
         'officer_note',
         'personal_note',
         'banned_at',
-        'quit_at',
+        'inactive_at',
     ];
 
     /**

@@ -42,7 +42,7 @@ class CharacterController extends Controller
             'officer_note'  => 'nullable|string|max:140',
             'personal_note' => 'nullable|string|max:2000',
             'order'         => 'nullable|integer|min:0|max:50',
-            'is_inactive'   => 'nullable|boolean',
+            'inactive_at'   => 'nullable|boolean',
         ];
     }
 
@@ -445,8 +445,12 @@ class CharacterController extends Controller
         $updateValues['rank_goal']    = request()->input('rank_goal');
         $updateValues['raid_id']      = request()->input('raid_id');
         $updateValues['public_note']  = request()->input('public_note');
-        $updateValues['inactive_at']  = (request()->input('inactive_at') == 1 ? getDateTime() : null);
         $updateValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
+
+        // Cannot make inactive if already inactive
+        if ((request()->input('inactive_at') == 1 && !$character->inactive_at) || (!request()->input('inactive_at') && $character->inactive_at)) {
+            $updateValues['inactive_at'] = (request()->input('inactive_at') == 1 ? getDateTime() : null);
+        }
 
         // User is editing their own character
         if ($character->member_id == $currentMember->id) {
@@ -472,8 +476,16 @@ class CharacterController extends Controller
             $auditMessage .= ' (public note)';
         }
 
-        if (isset($updateValues['officer_note']) && ($updateValues['officer_note'] != $character->officer_note)) {
+        if (array_key_exists('officer_note', $updateValues) && ($updateValues['officer_note'] != $character->officer_note)) {
             $auditMessage .= ' (officer note)';
+        }
+
+        if (array_key_exists('inactive_at', $updateValues)) {
+            if ($updateValues['inactive_at']) {
+                $auditMessage .= ' (made inactive)';
+            } else {
+                $auditMessage .= ' (made active)';
+            }
         }
 
         $character->update($updateValues);
