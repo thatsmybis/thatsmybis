@@ -271,7 +271,7 @@
                 </div>
 
                 <div class="col-12 mt-3">
-                    {{ $logs->links() }}
+                    {{ $logs->appends(request()->input())->links() }}
                 </div>
             </div>
         </div>
@@ -291,6 +291,7 @@
     function updateUrl(paramName, paramValue) {
         let url = new URL(location);
         url.searchParams.set(paramName, paramValue);
+        url.searchParams.delete('page');
         location = url;
     }
 
