@@ -64,9 +64,9 @@ class Guild extends Model
         return $this->hasMany(Character::class)->orderBy('name');
     }
 
-    // Includes banned members
+    // Includes banned and inactive members
     public function allMembers() {
-        return $this->members()->orderBy('username');
+        return $this->hasMany(Member::class)->orderBy('username');
     }
 
     public function allRaids() {
@@ -89,9 +89,9 @@ class Guild extends Model
             ->orderBy('items.name');
     }
 
-    // Excludes banned members
+    // Excludes banned members and inactive
     public function members() {
-        return $this->hasMany(Member::class)->whereNull('banned_at')->orderBy('username');
+        return $this->hasMany(Member::class)->whereNull('banned_at')->whereNull('inactive_at')->orderBy('username');
     }
 
     public function roles()

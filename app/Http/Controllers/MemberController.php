@@ -148,7 +148,7 @@ class MemberController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['members', 'members.characters', 'members.roles', 'raids', 'raids.role']);
+        $guild->load(['allMembers', 'allMembers.characters', 'allMembers.roles', 'raids', 'raids.role']);
 
         $unassignedCharacters = Character::where([
                 ['guild_id', $guild->id],
@@ -248,11 +248,10 @@ class MemberController extends Controller
         $updateValues['public_note'] = request()->input('public_note');
 
         // Member cannot make themselves inactive.
-        if (($currentMember->hasPermission('inactive.characters') || $currentMember->id == $guild->user_id) && $currentMember->id != $member->id) {
+        if (($currentMember->hasPermission('inactive.characters') || $currentMember->id == $character->member_id && $currentMember->id != $member->id) &&
+            ((request()->input('inactive_at') == 1 && !$member->inactive_at) || (!request()->input('inactive_at') && $member->inactive_at))
+        ) {
             $updateValues['inactive_at'] = (request()->input('inactive_at') == 1 ? getDateTime() : null);
-            if ($updateValues['inactive_at']) {
-
-            }
         }
 
         // User is editing their own member
@@ -270,8 +269,33 @@ class MemberController extends Controller
             $auditMessage .= ' (public note)';
         }
 
-        if (isset($updateValues['officer_note']) && ($updateValues['officer_note'] != $member->officer_note)) {
+        if (array_key_exists('officer_note', $updateValues) && ($updateValues['officer_note'] != $member->officer_note)) {
             $auditMessage .= ' (officer note)';
+        }
+
+        if (array_key_exists('inactive_at', $updateValues)) {
+            $member->load('characters');
+            if ($updateValues['inactive_at']) {
+                // Make characters inactive
+                foreach ($member->characters as $character) {
+                    if (!$character->inactive_at) {
+                        $character->inactive_at = getDateTime();
+                        $character->save();
+                    }
+                }
+
+                $auditMessage .= ' (made inactive, including their characters)';
+            } else {
+                // Make characters active
+                foreach ($member->characters as $character) {
+                    if ($character->inactive_at) {
+                        $character->inactive_at = null;
+                        $character->save();
+                    }
+                }
+
+                $auditMessage .= ' (made active, including their characters)';
+            }
         }
 
         $member->update($updateValues);

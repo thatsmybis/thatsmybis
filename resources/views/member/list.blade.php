@@ -42,35 +42,15 @@
                                     </ul>
                                 </td>
                                 <td>
-                                    —
                                 </td>
                                 <td>
-                                    —
                                 </td>
                             </tr>
                         @endif
-                        @foreach($guild->members as $member)
+                        @foreach($guild->allMembers->whereNull('inactive_at')->whereNull('banned_at') as $member)
                             <tr>
                                 <td>
-                                    <div class="dropdown">
-                                        <a class="dropdown-toggle font-weight-bold text-white" id="member{{ $member->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            {{ $member->username }}
-                                        </a>
-                                        <div class="dropdown-menu" aria-labelledby="member{{ $member->id }}Dropdown">
-                                            <a class="dropdown-item" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}" target="_blank">
-                                                Profile
-                                            </a>
-                                            <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}" target="_blank">
-                                                Logs
-                                            </a>
-                                            <a class="dropdown-item" href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}" target="_blank">
-                                                Edit
-                                            </a>
-                                        </div>
-                                    </div>
-                                    <span class="text-discord">
-                                        {{ $member->user->discord_username }}
-                                    </span>
+                                    @include('member/partials/listMember')
                                 </td>
                                 <td>
                                     <ul class="list-inline">
@@ -110,6 +90,32 @@
                                 </td>
                             </tr>
                         @endforeach
+                        @if ($guild->allMembers->whereNotNull('inactive_at')->count() > 0)
+                            <tr>
+                                <td>
+                                    <span class="font-weight-bold text-muted">
+                                        Inactive Members
+                                    </span>
+                                    <br>
+                                    <span id="showInactiveMembers" class="font-italic cursor-pointer">
+                                        click to show
+                                    </span>
+                                </td>
+                                <td>
+                                    <ul id="inactiveMembers" class="list-inline" style="display:none;">
+                                        @foreach($guild->allMembers->whereNotNull('inactive_at') as $member)
+                                            @include('member/partials/listMember')
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>
+                                    —
+                                </td>
+                                <td>
+                                    —
+                                </td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -130,6 +136,10 @@ $(document).ready(function () {
             { "orderable" : false },
             { "orderable" : false },
         ]
+    });
+
+    $("#showInactiveMembers").click(function () {
+        $("#inactiveMembers").toggle();
     });
 });
 </script>

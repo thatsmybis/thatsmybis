@@ -448,7 +448,9 @@ class CharacterController extends Controller
         $updateValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
 
         // Cannot make inactive if already inactive
-        if ((request()->input('inactive_at') == 1 && !$character->inactive_at) || (!request()->input('inactive_at') && $character->inactive_at)) {
+        if (($currentMember->hasPermission('inactive.characters') || $currentMember->id == $character->member_id) &&
+            ((request()->input('inactive_at') == 1 && !$character->inactive_at) || (!request()->input('inactive_at') && $character->inactive_at))
+        ) {
             $updateValues['inactive_at'] = (request()->input('inactive_at') == 1 ? getDateTime() : null);
         }
 
