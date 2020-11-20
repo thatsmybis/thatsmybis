@@ -25,18 +25,22 @@
                     Your Guilds
                 </h3>
                 <ul class="no-bullet no-indent">
+                    @php
+                        $disabled = [];
+                    @endphp
                     @foreach ($user->members as $member)
-                        <li class="bg-lightest mt-3 mb-3 p-3">
-                            <h2>
-                                @if ($member->guild->disabled_at)
-                                    <span class="small text-muted">disabled</span>
-                                @endif
-                                <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}"
-                                    class="text-{{ $member->guild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
-                                    &lt;{{ $member->guild->name }}&gt;
-                                </a>
-                            </h2>
-                            @if (!$member->guild->disabled_at)
+                        @if ($member->guild->disabled_at || $member->inactive_at)
+                            @php
+                                $disabled[] = $member;
+                            @endphp
+                        @else
+                            <li class="bg-lightest mt-3 mb-3 p-3">
+                                <h2>
+                                    <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}"
+                                        class="text-{{ $member->guild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
+                                        &lt;{{ $member->guild->name }}&gt;
+                                    </a>
+                                </h2>
                                 <ul class="list-inline">
                                     @foreach ($member->characters as $character)
                                         <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
@@ -53,10 +57,43 @@
                                         </a>
                                     </li>
                                 </ul>
-                            @endif
-                        </li>
+                            </li>
+                        @endif
                     @endforeach
                 </ul>
+                @if ($disabled)
+                    <ul class="no-bullet no-indent">
+                        <li>
+                            <span class="text-muted">old guilds</span>
+                            <br>
+                            <span id="showInactiveGuilds" class="small text-muted font-italic cursor-pointer">
+                                click to show
+                            </span>
+                        </li>
+                        @foreach ($disabled as $member)
+                            <li class="js-inactive-guild bg-lightest mt-3 mb-3 p-3" style="display:none;">
+                                <h3>
+                                    <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}"
+                                        class="text-danger font-weight-medium">
+                                        &lt;{{ $member->guild->name }}&gt;
+                                    </a>
+                                </h3>
+                                <ul class="list-inline">
+                                    @if ($member->guild->disabled_at)
+                                        <li>
+                                            <span class="small text-muted">guild disabled</span>
+                                        </li>
+                                    @endif
+                                    @if ($member->inactive_at || $member->banned_at)
+                                        <li>
+                                            <span class="small text-muted">your membership has been disabled</span>
+                                        </li>
+                                    @endif
+                                </ul>
+                            </li>
+                        @endforeach
+                    </ul>
+                @endif
             @else
                 <div class="mt-4 mb-4">
                     <p class="font-weight-normal pt-3 text-4">
@@ -109,4 +146,14 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+$(document).ready(function () {
+    $("#showInactiveGuilds").click(function () {
+        $(".js-inactive-guild").toggle();
+    });
+});
+</script>
 @endsection

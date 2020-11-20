@@ -97,7 +97,7 @@
                                         Inactive Members
                                     </span>
                                     <br>
-                                    <span id="showInactiveMembers" class="font-italic cursor-pointer">
+                                    <span id="showInactiveMembers" class="small font-italic cursor-pointer">
                                         click to show
                                     </span>
                                 </td>

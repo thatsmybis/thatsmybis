@@ -82,6 +82,11 @@ class CheckGuildPermissions
             // Fetch their existing member object
             $currentMember = Member::where(['guild_id' => $guild->id, 'user_id' => Auth::id()])->first();
 
+            if ($currentMember && ($currentMember->banned_at || $currentMember->inactive_at)) {
+                request()->session()->flash('status-danger',  'Your membership has been disabled. To reverse this, an officer would need to access your member page and re-enable it.');
+                return redirect()->route('home');
+            }
+
             if (!$currentMember) {
                 // Don't have a member object? Let's create one...
                 $currentMember = Member::create($user, $discordMember, $guild);
