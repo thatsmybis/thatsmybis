@@ -219,12 +219,14 @@ class MemberController extends Controller
         }
 
         $validationRules = [
-            'id'            => 'required|integer|exists:members,id',
-            'username'      => 'nullable|string|min:2|max:32',
-            'public_note'   => 'nullable|string|max:140',
-            'officer_note'  => 'nullable|string|max:140',
-            'personal_note' => 'nullable|string|max:2000',
-            'inactive_at'   => 'nullable|boolean',
+            'id'                   => 'required|integer|exists:members,id',
+            'username'             => 'nullable|string|min:2|max:32',
+            'public_note'          => 'nullable|string|max:140',
+            'officer_note'         => 'nullable|string|max:140',
+            'personal_note'        => 'nullable|string|max:2000',
+            'is_wishlist_unlocked' => 'nullable|boolean',
+            'is_received_unlocked' => 'nullable|boolean',
+            'inactive_at'          => 'nullable|boolean',
         ];
 
         $validationMessages = [];
@@ -233,8 +235,13 @@ class MemberController extends Controller
 
         $updateValues = [];
 
-        if ($currentMember->hasPermission('edit.officer-notes')) {
+        if ($currentMember->hasPermission('edit.officer-notes') || $currentMember->id == $guild->user_id) {
             $updateValues['officer_note'] = request()->input('officer_note');
+        }
+
+        if ($currentMember->hasPermission('edit.characters') || $currentMember->id == $guild->user_id) {
+            $updateValues['is_wishlist_unlocked'] = request()->input('is_wishlist_unlocked') == 1 ? 1 : 0;
+            $updateValues['is_received_unlocked'] = request()->input('is_received_unlocked') == 1 ? 1 : 0;
         }
 
         if ($currentMember->id != $member->id && !$currentMember->hasPermission('edit.characters')) {
@@ -270,6 +277,14 @@ class MemberController extends Controller
 
         if (array_key_exists('officer_note', $updateValues) && ($updateValues['officer_note'] != $member->officer_note)) {
             $auditMessage .= ' (officer note)';
+        }
+
+        if (array_key_exists('is_wishlist_unlocked', $updateValues) && $updateValues['is_wishlist_unlocked'] != $member->is_wishlist_unlocked) {
+            $auditMessage .= ' (wishlist ' . ($updateValues['is_wishlist_unlocked'] ? 'unlocked' : 'lock changed to use guild setting') . ')';
+        }
+
+        if (array_key_exists('is_received_unlocked', $updateValues) && $updateValues['is_received_unlocked'] != $member->is_received_unlocked) {
+            $auditMessage .= ' (received loot list ' . ($updateValues['is_received_unlocked'] ? 'unlocked' : 'lock changed to use guild setting') . ')';
         }
 
         if (array_key_exists('inactive_at', $updateValues)) {

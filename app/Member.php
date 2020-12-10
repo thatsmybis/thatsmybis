@@ -28,6 +28,8 @@ class Member extends Model
         'public_note',
         'officer_note',
         'personal_note',
+        'is_wishlist_unlocked',
+        'is_received_unlocked',
         'banned_at',
         'inactive_at',
     ];

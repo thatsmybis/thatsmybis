@@ -86,6 +86,46 @@
                     --}}
                 </div>
 
+                @if (($currentMember->hasPermission('edit.characters') || $currentMember->id == $guild->user_id))
+                    <div class="row mb-3 pt-2 pb-1 bg-light rounded">
+                        <div class="col-12">
+                            <div class="form-group mb-0">
+                                <div class="checkbox">
+                                    <label class="{{ $guild->is_received_locked ? '' : 'text-muted' }}">
+                                        <input type="checkbox" name="is_received_unlocked" value="1" class="" autocomplete="off"
+                                            {{ old('is_received_unlocked') && old('is_received_unlocked') == 1 ? 'checked' : ($member->is_received_unlocked ? 'checked' : '') }}>
+                                            Unlock received loot list
+                                            <small class="text-muted">
+                                                allow member to edit their received loot,
+                                                <span class="font-weight-bold">overrides guild settings {{ $guild->is_received_locked ? '(locked)' : '(already unlocked)' }}</span>
+                                            </small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        @if ($guild->is_wishlist_locked)
+                            <div class="col-12">
+
+                            </div>
+                        @endif
+                        <div class="col-12">
+                            <div class="form-group mb-0">
+                                <div class="checkbox">
+                                    <label class="{{ $guild->is_wishlist_locked ? '' : 'text-muted' }}">
+                                        <input type="checkbox" name="is_wishlist_unlocked" value="1" class="" autocomplete="off"
+                                            {{ old('is_wishlist_unlocked') && old('is_wishlist_unlocked') == 1 ? 'checked' : ($member->is_wishlist_unlocked ? 'checked' : '') }}>
+                                            Unlock wishlists
+                                            <small class="text-muted">
+                                                allow member to edit their wishlist,
+                                                <span class="font-weight-bold">overrides guild settings {{ $guild->is_wishlist_locked ? '(locked)' : '(already unlocked)' }}</span>
+                                            </small>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
                 @if (($currentMember->hasPermission('inactive.characters') || $currentMember->id == $guild->user_id) && $currentMember->id != $member->id)
                     <div class="row mb-3 pt-2 pb-1 bg-light rounded">
                         <div class="col-12">
