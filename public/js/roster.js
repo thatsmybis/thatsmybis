@@ -79,7 +79,7 @@ function createTable() {
                                     data-toggle="dropdown"
                                     aria-haspopup="true"
                                     aria-expanded="false"
-                                    title="${ row.member ? row.member.username : '' }">
+                                    title="${ row.username ? row.username : '' }">
                                     ${ row.name }
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="character${ row.id }Dropdown">
@@ -131,6 +131,11 @@ function createTable() {
                                     ${ row.profession_2 ? row.profession_2 : '' }
                                 </small>
                             </li>` : `` }
+                        ${ showEdit ?
+                            `
+                            ${ row.is_received_unlocked ? `<li class="list-inline-item small text-warning">loot unlocked</li>` : `` }
+                            ${ row.is_wishlist_unlocked ? `<li class="list-inline-item small text-warning">wishlist unlocked</li>` : `` }
+                            ` : `` }
                     </ul>`;
                 },
                 "visible" : true,

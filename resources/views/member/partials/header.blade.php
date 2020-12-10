@@ -24,12 +24,30 @@
         </ul>
     </li>
     <li>
-        @if ($member->inactive_at)
-            <small>
-                <span class="font-weight-bold text-danger">INACTIVE</span>
-            </small>
-        @endif
-        Member
+        <ul class="list-inline">
+            @if ($member->inactive_at)
+                <li class="list-inline-item">
+                    <small>
+                        <span class="font-weight-bold text-danger">INACTIVE</span>
+                    </small>
+                </li>
+            @endif
+            <li class="list-inline-item">
+                Member
+            </li>
+            @if (isset($showEdit) && $showEdit)
+                @if ($member->is_received_unlocked && isset($guild) && $guild->is_received_locked)
+                    <li class="list-inline-item">
+                        <span class="text-warning small">loot unlocked</span>
+                    </li>
+                @endif
+                @if ($member->is_wishlist_unlocked && isset($guild) && $guild->is_wishlist_locked)
+                    <li class="list-inline-item">
+                        <span class="text-warning small">wishlist unlocked</span>
+                    </li>
+                @endif
+            @endif
+        </ul>
     </li>
     <li>
         {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}

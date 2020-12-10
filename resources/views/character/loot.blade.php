@@ -70,7 +70,7 @@
                             </span>
                             @if ($lockWishlist)
                                 <small class="text-warning font-weight-normal">locked by your guild master(s)</small>
-                            @elseif ($guild->is_wishlist_locked)
+                            @elseif (!$unlockWishlist && $guild->is_wishlist_locked)
                                 <small class="text-warning font-weight-normal">locked for raiders</small> <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
                             @else
                                 <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
@@ -149,7 +149,7 @@
 
                             @if ($lockReceived)
                                 <small class="text-warning font-weight-normal">locked by your guild master(s)</small>
-                            @elseif ($guild->is_received_locked)
+                            @elseif (!$unlockReceived && $guild->is_received_locked)
                                 <small class="text-warning font-weight-normal">locked for raiders</small> <small class="text-muted font-weight-normal">max {{ $maxReceivedItems }}</small>
                             @else
                                 <small class="text-muted font-weight-normal">max {{ $maxReceivedItems }}</small>

@@ -135,6 +135,8 @@ class DashboardController extends Controller
             'characters.public_note',
             'characters.inactive_at',
             'members.username',
+            'members.is_wishlist_unlocked',
+            'members.is_received_unlocked',
             'raids.name AS raid_name',
             'raid_roles.color AS raid_color',
         ];

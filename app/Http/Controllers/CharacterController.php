@@ -228,14 +228,24 @@ class CharacterController extends Controller
             $character = $character->load('prios');
         }
 
-        $lockReceived = false;
+        $lockReceived   = false;
+        $unlockReceived = false;
         if ($guild->is_received_locked && !$currentMember->hasPermission('loot.characters')) {
-            $lockReceived = true;
+            if ($currentMember->id == $character->member_id && $currentMember->is_received_unlocked) {
+                $unlockReceived = true;
+            } else {
+                $lockReceived = true;
+            }
         }
 
-        $lockWishlist = false;
+        $lockWishlist   = false;
+        $unlockWishlist = false;
         if ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
-            $lockWishlist = true;
+            if ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked) {
+                $unlockWishlist = true;
+            } else {
+                $lockWishlist = true;
+            }
         }
 
         $showOfficerNote = false;
@@ -250,6 +260,8 @@ class CharacterController extends Controller
 
             'lockReceived'    => $lockReceived,
             'lockWishlist'    => $lockWishlist,
+            'unlockReceived'  => $unlockReceived,
+            'unlockWishlist'  => $unlockWishlist,
             'showOfficerNote' => $showOfficerNote,
             'showPrios'       => $showPrios,
 
@@ -579,13 +591,13 @@ class CharacterController extends Controller
             ]);
         }
 
-        if (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters')) {
+        if (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked)) {
             if (request()->input('wishlist')) {
                 $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember);
             }
         }
 
-        if (!$guild->is_received_locked || $currentMember->hasPermission('loot.characters')) {
+        if (!$guild->is_received_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_received_unlocked)) {
             if (request()->input('received')) {
                 $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember);
             }
