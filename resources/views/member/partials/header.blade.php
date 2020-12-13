@@ -36,12 +36,12 @@
                 Member
             </li>
             @if (isset($showEdit) && $showEdit)
-                @if ($member->is_received_unlocked && isset($guild) && $guild->is_received_locked)
+                @if ($member->is_received_unlocked)
                     <li class="list-inline-item">
                         <span class="text-warning small">loot unlocked</span>
                     </li>
                 @endif
-                @if ($member->is_wishlist_unlocked && isset($guild) && $guild->is_wishlist_locked)
+                @if ($member->is_wishlist_unlocked)
                     <li class="list-inline-item">
                         <span class="text-warning small">wishlist unlocked</span>
                     </li>

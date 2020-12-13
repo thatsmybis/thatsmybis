@@ -22,12 +22,12 @@
             {{ $member->user->discord_username }}
         </span>
     </li>
-    @if ($member->is_received_unlocked && isset($guild) && $guild->is_received_locked)
+    @if ($member->is_received_unlocked)
         <li>
             <span class="font-weight-bold text-warning small">loot unlocked</span>
         </li>
     @endif
-    @if ($member->is_wishlist_unlocked && isset($guild) && $guild->is_wishlist_locked)
+    @if ($member->is_wishlist_unlocked)
         <li>
             <span class="font-weight-bold text-warning small">wishlist unlocked</span>
         </li>
