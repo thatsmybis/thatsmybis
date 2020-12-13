@@ -41,6 +41,9 @@
                     Calaris (Patreon)
                </li>
                <li>
+                    Finvy (Patreon)
+               </li>
+               <li>
                     mattyp237 (Patreon)
                </li>
                <li>
