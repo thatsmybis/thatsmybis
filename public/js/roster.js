@@ -133,8 +133,8 @@ function createTable() {
                             </li>` : `` }
                         ${ showEdit ?
                             `
-                            ${ row.is_received_unlocked ? `<li class="list-inline-item small text-warning">loot unlocked</li>` : `` }
-                            ${ row.is_wishlist_unlocked ? `<li class="list-inline-item small text-warning">wishlist unlocked</li>` : `` }
+                            ${ row.is_received_unlocked ? `<li class="list-inline-item small text-warning" title="To lock, edit the member that owns this character">loot unlocked</li>` : `` }
+                            ${ row.is_wishlist_unlocked ? `<li class="list-inline-item small text-warning" title="To lock, edit the member that owns this character">wishlist unlocked</li>` : `` }
                             ` : `` }
                     </ul>`;
                 },
