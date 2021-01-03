@@ -294,6 +294,81 @@ class GuildController extends Controller
     }
 
     /**
+     * Show the guild change owner page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function owner($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+        $user          = request()->get('currentUser');
+
+        if (!request()->get('isSuperAdmin')) {
+            request()->session()->flash('status', 'You don\'t have permissions to change the guild owner. Only the current owner can do that');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $guild->load(['members']);
+
+        $members = $guild->members()->with('user')->get();
+
+        return view('guild.owner', [
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'members'       => $members,
+        ]);
+    }
+
+    /**
+     * Submit the guild change owner page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function submitOwner($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!request()->get('isSuperAdmin')) {
+            request()->session()->flash('status', 'You don\'t have permissions to change the guild owner. Only the current owner can do that.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $validationRules =  [
+            'member_id' => 'nullable|integer|exists:members,id',
+        ];
+
+        $this->validate(request(), $validationRules);
+
+        $message = '';
+
+        if (request()->input('member_id')) {
+
+            $member = $guild->members()->where('id', request()->input('member_id'))->with('user')->firstOrFail();
+
+            if ($member->user->id == $guild->user_id) {
+                $message = 'unchanged';
+            } else {
+                $guild->update(['user_id' => $member->user->id]);
+
+                AuditLog::create([
+                    'description'     => $currentMember->username . ' changed the guild owner to ' . $member->username . ' (' . $member->user->discord_username . ').',
+                    'member_id'       => $currentMember->id,
+                    'guild_id'        => $guild->id,
+                ]);
+
+                $message = 'changed to ' . $member->username . ' (' . $member->user->discord_username . ').';
+            }
+        } else {
+            $message = 'unchanged';
+        }
+
+        request()->session()->flash('status', 'Guild owner ' . $message . '.');
+        return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+    }
+
+    /**
      * Show the guild settings page.
      *
      * @return \Illuminate\Http\Response
@@ -310,9 +385,14 @@ class GuildController extends Controller
 
         $guild->load(['roles']);
 
+        $owner = $guild->members()->where([
+            ['user_id', $guild->user_id],
+        ])->with('user')->first();
+
         return view('guild.settings', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'owner'         => $owner,
             'permissions'   => Permission::all(),
         ]);
     }

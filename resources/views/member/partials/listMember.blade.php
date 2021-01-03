@@ -1,6 +1,9 @@
 <ul class="no-indent no-bullet">
     <li>
         <div class="dropdown">
+            @if ($member->user_id == $guild->user_id)
+                <span class="fas fa-fw fa-crown text-gold" title="guild owner on this website"></span>
+            @endif
             <a class="dropdown-toggle font-weight-bold text-white" id="member{{ $member->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ $member->username }}
             </a>

@@ -129,8 +129,10 @@ Route::group([
     Route::get( '/syncRoles', 'RoleController@syncRoles')->name('guild.syncRoles');
 
     Route::get( '/settings',  'GuildController@settings')->name('guild.settings');
-
     Route::post('/settings',  'GuildController@submitSettings')->name('guild.submitSettings');
+
+    Route::get( '/change-owner',  'GuildController@owner')      ->name('guild.owner');
+    Route::post('/change-owner',  'GuildController@submitOwner')->name('guild.submitOwner');
 
     // Can't get the permissions working right now (2019-12-02), so I'm disabling this.
     Route::get( '/permissions', 'PermissionsController@permissions')->name('guild.permissions');

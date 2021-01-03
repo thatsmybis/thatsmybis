@@ -7,7 +7,7 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
-                    <h1 class="font-wight-medium">
+                    <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-users-crown text-gold"></span>
                         Guild Settings
                     </h1>
@@ -36,6 +36,27 @@
                                         Guild Name
                                     </label>
                                     <input name="name" maxlength="36" type="text" class="form-control dark" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Guild Owner -->
+                        <div class="row">
+                            <div class="col-md-8 col-12">
+                                <div class="form-group">
+                                    <label for="discord_id" class="font-weight-normal">
+                                        <span class="fas fa-fw fa-user-crown text-muted"></span>
+                                        <span class="text-muted">Guild Owner</span>
+                                        <a href="{{ route('guild.owner', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">change</a>
+                                    </label>
+                                    <div class="font-italic">
+                                        <span class="text-discord">
+                                            {{ $guild->user->discord_username }}
+                                        </span>
+                                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $owner->id, 'usernameSlug' => $owner->slug]) }}" class="text-muted">
+                                            ({{ $guild->user->username }})
+                                        </a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
