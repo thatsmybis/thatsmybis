@@ -7,7 +7,7 @@
         <div class="col-12">
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
-                    <h1 class="font-wight-medium">
+                    <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-clipboard-list-check text-gold"></span>
                         Audit Log
                     </h1>

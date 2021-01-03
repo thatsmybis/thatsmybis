@@ -12,7 +12,7 @@
                     </div>
                 @else
                     <div class="col-12 pt-2 mb-2">
-                        <h1 class="font-wight-medium ">Create a Character</h1>
+                        <h1 class="font-weight-medium ">Create a Character</h1>
                     </div>
                 @endif
             </div>

@@ -14,7 +14,7 @@
 
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
-                    <h1 class="font-wight-medium font-blizz">
+                    <h1 class="font-weight-medium font-blizz">
                         <span class="fas fa-fw fa-dungeon text-muted"></span>
                         {{ $raid->name }} Prios for {{ $instance->name }}
                     </h1>

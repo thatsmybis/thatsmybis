@@ -7,7 +7,7 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
-                    <h1 class="font-wight-medium">
+                    <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
                         {{ $raid ? 'Edit' : 'Create' }} Raid Group
                     </h1>
