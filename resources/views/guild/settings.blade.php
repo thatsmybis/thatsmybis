@@ -47,7 +47,9 @@
                                     <label for="discord_id" class="font-weight-normal">
                                         <span class="fas fa-fw fa-user-crown text-muted"></span>
                                         <span class="text-muted">Guild Owner</span>
-                                        <a href="{{ route('guild.owner', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">change</a>
+                                        @if (request()->get('isSuperAdmin'))
+                                            <a href="{{ route('guild.owner', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">change</a>
+                                        @endif
                                     </label>
                                     <div class="font-italic">
                                         <span class="text-discord">
