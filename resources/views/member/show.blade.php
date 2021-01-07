@@ -24,15 +24,31 @@
                             <li class="pt-3 pl-3 pb-3 pr-3 rounded">
                                 <a href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}" class="font-weight-medium">
                                     <span class="fas fa-plus"></span>
-                                    create character
+                                    Create character
                                 </a>
                             </li>
                         @endif
-                        @foreach ($characters as $character)
+                        @foreach ($characters->where('inactive_at', null) as $character)
                             <li class="pt-2 pl-3 pb-3 pr-3 rounded">
                                 @include('character/partials/header', ['character' => $character, 'showEdit' => $showEdit, 'showEditLoot' => $showEditLoot, 'showIcon' => false, 'showOwner' => false, 'showLogs' => true, 'useDropdown' => true])
                             </li>
                         @endforeach
+                        @if ($characters->whereNotNull('inactive_at')->count() > 0)
+                            <li class="pt-2 pl-3 pb-3 pr-3 rounded">
+                                <span class="text-muted">Inactive characters</span>
+                                <br>
+                                <span id="showInactiveCharacters" class="small text-muted font-italic cursor-pointer">
+                                    click to show
+                                </span>
+                                <ol class="js-inactive-characters striped no-bullet no-indent" style="display:none;">
+                                    @foreach ($characters->whereNotNull('inactive_at') as $character)
+                                        <li class="pt-2 pl-3 pb-3 pr-3 rounded">
+                                            @include('character/partials/header', ['character' => $character, 'showEdit' => $showEdit, 'showEditLoot' => $showEditLoot, 'showIcon' => false, 'showOwner' => false, 'showLogs' => true, 'useDropdown' => true])
+                                        </li>
+                                    @endforeach
+                                </ol>
+                            </li>
+                        @endif
                     </ol>
                 </div>
             </div>
@@ -174,3 +190,14 @@
     </div>
 </div>
 @endsection
+
+@section('scripts')
+<script>
+$(document).ready(function () {
+    $("#showInactiveCharacters").click(function () {
+        $(".js-inactive-characters").toggle();
+    });
+});
+</script>
+@endsection
+
