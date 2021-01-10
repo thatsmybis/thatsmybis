@@ -393,7 +393,7 @@ function loadItemToForm(item, i) {
 
     // Convert item ID to the ID that we use
     if (itemId && itemId == 19003) { // 19003 = Head of Nefarian, Alliance version
-        itemId = 18422; // Head of Nefarian, Horde version
+        itemId = 19002; // Head of Nefarian, Horde version
     }
 
     if (item['item']) { // RCLC value
