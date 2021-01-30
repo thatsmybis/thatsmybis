@@ -139,12 +139,31 @@ class Character extends Model
     public function wishlist() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
-            ->select(['items.*', 'added_by_members.username AS added_by_username'])
+            ->select([
+                'items.*',
+                'item_sources.id           AS item_source_id',
+                'item_sources.instance_id  AS instance_id',
+                'instances.name            AS instance_name',
+                'instances.order           AS instance_order',
+                'item_sources.npc_id       AS npc_id',
+                'item_sources.object_id    AS object_id',
+                'added_by_members.username AS added_by_username'
+            ])
             ->leftJoin('members AS added_by_members', function ($join) {
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
+            ->leftJoin('item_item_sources', function ($join) {
+                $join->on('items.item_id', 'item_item_sources.item_id');
+            })
+            ->leftJoin('item_sources', function ($join) {
+                $join->on('item_item_sources.item_source_id', 'item_sources.id');
+            })
+            ->leftJoin('instances', function ($join) {
+                $join->on('item_sources.instance_id', 'instances.id');
+            })
             ->where('character_items.type', Item::TYPE_WISHLIST)
-            ->orderBy('order')
+            ->orderBy('character_items.order')
+            ->groupBy('character_items.id')
             ->withPivot(['id', 'added_by', 'type', 'order', 'is_offspec', 'is_received', 'received_at', 'raid_id', 'created_at'])
             ->withTimeStamps();
 

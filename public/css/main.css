@@ -282,6 +282,14 @@ ul.striped > li:nth-of-type(odd), ol.striped > li:nth-of-type(odd) {
     background: #28264f;
 }
 
+.fa-li-single { /* For doing fa-li when not wrapped in a fa-ul list */
+    left: 1.5em;
+    position: absolute;
+    text-align: center;
+    width: 2em;
+    line-height: inherit;
+}
+
 div.striped:nth-of-type(odd) {
     background: #ffffff0c;
 }

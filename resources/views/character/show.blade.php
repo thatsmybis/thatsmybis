@@ -69,12 +69,35 @@
                     <div class="col-12 pb-3">
                         @if ($character->relationLoaded('wishlist') && $character->wishlist->count() > 0)
                             <ol class="">
-                                @foreach ($character->wishlist as $item)
-                                    <li>
-                                        @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
-                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true])
-                                    </li>
-                                @endforeach
+                                @if (true)
+                                    @php
+                                        $lastInstanceId = null;
+                                    @endphp
+                                    @foreach ($character->wishlist->sortBy('instance_order')->sortByDesc('instance_id') as $item)
+                                        @if ($item->instance_id != $lastInstanceId)
+                                            <li class="font-weight-bold no-bullet no-indent {{ !$loop->first ? 'mt-3' : '' }}">
+                                                <span class="text-muted fas fa-li-single fa-fw fa-chess-rook"></span>
+                                                {{ $item->instance_name }}
+                                            </li>
+                                        @endif
+
+                                        <li value="{{ $item->pivot->order }}">
+                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                        </li>
+
+                                        @php
+                                            $lastInstanceId = $item->instance_id;
+                                        @endphp
+                                    @endforeach
+                                @else
+                                    @foreach ($character->wishlist as $item)
+                                        <li>
+                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                        </li>
+                                    @endforeach
+                                @endif
                             </ol>
                         @else
                             <div class="pl-4">
