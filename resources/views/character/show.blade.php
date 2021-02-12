@@ -73,10 +73,10 @@
                                     @php
                                         $lastInstanceId = null;
                                     @endphp
-                                    @foreach ($character->wishlist->sortBy('instance_order')->sortByDesc('instance_id') as $item)
+                                    @foreach ($character->wishlist as $item)
                                         @if ($item->instance_id != $lastInstanceId)
-                                            <li class="font-weight-bold no-bullet no-indent {{ !$loop->first ? 'mt-3' : '' }}">
-                                                <span class="text-muted fas fa-li-single fa-fw fa-chess-rook"></span>
+                                            <li class="no-bullet no-indent {{ !$loop->first ? 'mt-3' : '' }}">
+                                                <span class="text-muted fas fa-li-single fa-fw fa-dungeon"></span>
                                                 {{ $item->instance_name }}
                                             </li>
                                         @endif

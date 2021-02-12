@@ -162,12 +162,12 @@ class Character extends Model
                 $join->on('item_sources.instance_id', 'instances.id');
             })
             ->where('character_items.type', Item::TYPE_WISHLIST)
-            ->orderBy('character_items.order')
             ->groupBy('character_items.id')
+            ->orderBy('character_items.order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'is_offspec', 'is_received', 'received_at', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
-        return ($query);
+        return $query;
     }
 
     static public function classes() {

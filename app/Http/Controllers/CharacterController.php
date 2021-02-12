@@ -301,7 +301,7 @@ class CharacterController extends Controller
         $showWishlist = false;
         if (!$guild->is_wishlist_private || $character->member_id == $currentMember->id || $currentMember->hasPermission('view.wishlists')) {
             $showWishlist = true;
-            $character = $character->load('wishlist');
+            $character = $character->load(['wishlist']);
         }
 
         $showEdit = false;

@@ -1,14 +1,14 @@
 var table = null;
 
-var colName = 0;
-var colLoot = 1;
+var colName     = 0;
+var colLoot     = 1;
 var colWishlist = 2;
-var colPrios = 3;
-var colRecipes = 4;
-var colRoles = 5;
-var colNotes = 6;
-var colClass = 7;
-var colRaid = 8;
+var colPrios    = 3;
+var colRecipes  = 4;
+var colRoles    = 5;
+var colNotes    = 6;
+var colClass    = 7;
+var colRaid     = 8;
 
 var allItemsVisible = false;
 
@@ -302,6 +302,7 @@ function getItemList(data, type, characterId, useOrder = false) {
     let items = `<ol class="no-indent js-item-list mb-2" data-type="${ type }" data-id="${ characterId }">`;
     let initialLimit = 4;
 
+    let lastInstanceId = null;
     let lastRaidId = null;
     $.each(data, function (index, item) {
         let clipItem = false;
@@ -315,8 +316,19 @@ function getItemList(data, type, characterId, useOrder = false) {
         if (type == 'prio' && item.pivot.raid_id && item.pivot.raid_id != lastRaidId) {
             lastRaidId = item.pivot.raid_id;
             items += `
-                <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small">
+                <li data-raid-id="" class="${ clipItem ? 'js-clipped-item' : '' } js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small"
+                    style="${ clipItem ? 'display:none;' : '' }">
                     ${ raids.find(val => val.id === item.pivot.raid_id).name }
+                </li>
+            `;
+        }
+
+        if (type == 'wishlist' && item.instance_id && item.instance_id != lastInstanceId) {
+            lastInstanceId = item.instance_id;
+            items += `
+                <li data-instance-id="" class="${ clipItem ? 'js-clipped-item' : '' } no-bullet font-weight-normal font-italic text-muted small"
+                    style="${ clipItem ? 'display:none;' : '' }">
+                    ${ item.instance_name }
                 </li>
             `;
         }
