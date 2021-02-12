@@ -152,10 +152,27 @@ function createTable() {
                 "width"   : "280px",
             },
             {
-                "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
+                "title"  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist
+                    <span class="js-sort-wishlists text-link">
+                        <span class="fas fa-fw fa-exchange cursor-pointer"></span>
+                    </span>`,
                 "data"   : "wishlist",
                 "render" : function (data, type, row) {
-                    return data && data.length ? getItemList(data, 'wishlist', row.id) : '—';
+                    if (data && data.length) {
+                        // Create a copy of data, them sort it by instance_order DESC, user chosen order ASC
+                        let dataSorted = data.slice().sort((a, b) => b.instance_order - a.instance_order || a.pivot.order - b.pivot.order);
+                        console.log(data, dataSorted);
+                        let list = ``;
+                        list += getItemList(dataSorted, 'wishlist', row.id, true, true, 'js-wishlist-sorted', (guild.do_sort_items_by_instance ? true : false));
+                        list += getItemList(data, 'wishlist', row.id, true, false, 'js-wishlist-unsorted', (guild.do_sort_items_by_instance ? false : true));
+
+data.length > 9 ? foo = data : '';
+data.length > 9 ? foo2 = dataSorted : '';
+
+                        return list;
+                    } else {
+                        return '—';
+                    }
                 },
                 "orderable" : false,
                 "visible" : showWishlist ? true : false,
@@ -275,6 +292,7 @@ function createTable() {
             makeWowheadLinks();
             addItemAutocompleteHandler();
             addTagInputHandlers();
+            addWishlistSortHandlers();
         }
     });
     return memberTable;
@@ -298,8 +316,8 @@ function addClippedItemHandlers() {
 }
 
 // Gets an HTML list of items with pretty wowhead formatting
-function getItemList(data, type, characterId, useOrder = false) {
-    let items = `<ol class="no-indent js-item-list mb-2" data-type="${ type }" data-id="${ characterId }">`;
+function getItemList(data, type, characterId, useOrder = false, showInstances = false, listClass = null, isVisible = true) {
+    let items = `<ol class="no-indent js-item-list mb-2 ${ listClass }" data-type="${ type }" data-id="${ characterId }" style="${ isVisible ? '' : 'display:none;' }">`;
     let initialLimit = 4;
 
     let lastInstanceId = null;
@@ -317,17 +335,21 @@ function getItemList(data, type, characterId, useOrder = false) {
             lastRaidId = item.pivot.raid_id;
             items += `
                 <li data-raid-id="" class="${ clipItem ? 'js-clipped-item' : '' } js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small"
-                    style="${ clipItem ? 'display:none;' : '' }">
+                    style="${ clipItem ? 'display:none;' : '' }"
+                    data-type="${ type }"
+                    data-id="${ characterId }">
                     ${ raids.find(val => val.id === item.pivot.raid_id).name }
                 </li>
             `;
         }
 
-        if (type == 'wishlist' && item.instance_id && item.instance_id != lastInstanceId) {
+        if (showInstances && item.instance_id && item.instance_id != lastInstanceId) {
             lastInstanceId = item.instance_id;
             items += `
                 <li data-instance-id="" class="${ clipItem ? 'js-clipped-item' : '' } no-bullet font-weight-normal font-italic text-muted small"
-                    style="${ clipItem ? 'display:none;' : '' }">
+                    style="${ clipItem ? 'display:none;' : '' }"
+                    data-type="${ type }"
+                    data-id="${ characterId }">
                     ${ item.instance_name }
                 </li>
             `;

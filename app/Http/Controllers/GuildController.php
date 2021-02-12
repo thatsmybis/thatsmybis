@@ -415,36 +415,38 @@ class GuildController extends Controller
         $guild->load('roles');
 
         $validationRules =  [
-            'name'                   => 'string|max:36|unique:guilds,name,' . $guild->id,
-            'disabled_at'            => 'nullable|boolean',
-            'is_prio_private'        => 'nullable|boolean',
-            'is_received_locked'     => 'nullable|boolean',
-            'is_wishlist_private'    => 'nullable|boolean',
-            'is_wishlist_locked'     => 'nullable|boolean',
-            'is_prio_autopurged'     => 'nullable|boolean',
-            'is_wishlist_autopurged' => 'nullable|boolean',
-            'calendar_link'          => 'nullable|string|max:200',
-            'message'                => 'nullable|string|max:500',
-            'show_message'           => 'nullable|boolean',
-            'gm_role_id'             => 'nullable|integer|exists:roles,discord_id',
-            'officer_role_id'        => 'nullable|integer|exists:roles,discord_id',
-            'raid_leader_role_id'    => 'nullable|integer|exists:roles,discord_id',
-            'member_roles.*'         => 'nullable|integer|exists:roles,discord_id',
+            'name'                      => 'string|max:36|unique:guilds,name,' . $guild->id,
+            'disabled_at'               => 'nullable|boolean',
+            'is_prio_private'           => 'nullable|boolean',
+            'is_received_locked'        => 'nullable|boolean',
+            'is_wishlist_private'       => 'nullable|boolean',
+            'is_wishlist_locked'        => 'nullable|boolean',
+            'is_prio_autopurged'        => 'nullable|boolean',
+            'is_wishlist_autopurged'    => 'nullable|boolean',
+            'do_sort_items_by_instance' => 'nullable|boolean',
+            'calendar_link'             => 'nullable|string|max:200',
+            'message'                   => 'nullable|string|max:500',
+            'show_message'              => 'nullable|boolean',
+            'gm_role_id'                => 'nullable|integer|exists:roles,discord_id',
+            'officer_role_id'           => 'nullable|integer|exists:roles,discord_id',
+            'raid_leader_role_id'       => 'nullable|integer|exists:roles,discord_id',
+            'member_roles.*'            => 'nullable|integer|exists:roles,discord_id',
         ];
 
         $this->validate(request(), $validationRules);
 
-        $updateValues['name']                   = request()->input('name');
-        $updateValues['slug']                   = slug(request()->input('name'));
-        $updateValues['is_prio_private']        = request()->input('is_prio_private') == 1 ? 1 : 0;
-        $updateValues['is_received_locked']     = request()->input('is_received_locked') == 1 ? 1 : 0;
-        $updateValues['is_wishlist_private']    = request()->input('is_wishlist_private') == 1 ? 1 : 0;
-        $updateValues['is_wishlist_locked']     = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
-        $updateValues['is_prio_autopurged']     = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
-        $updateValues['is_wishlist_autopurged'] = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
-        $updateValues['message']                = request()->input('message');
-        $updateValues['calendar_link']          = request()->input('calendar_link');
-        $updateValues['member_role_ids'] = implode(",", array_filter(request()->input('member_roles')));
+        $updateValues['name']                      = request()->input('name');
+        $updateValues['slug']                      = slug(request()->input('name'));
+        $updateValues['is_prio_private']           = request()->input('is_prio_private') == 1 ? 1 : 0;
+        $updateValues['is_received_locked']        = request()->input('is_received_locked') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_private']       = request()->input('is_wishlist_private') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_locked']        = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
+        $updateValues['is_prio_autopurged']        = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_autopurged']    = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
+        $updateValues['do_sort_items_by_instance'] = request()->input('do_sort_items_by_instance') == 1 ? 1 : 0;
+        $updateValues['message']                   = request()->input('message');
+        $updateValues['calendar_link']             = request()->input('calendar_link');
+        $updateValues['member_role_ids']           = implode(",", array_filter(request()->input('member_roles')));
 
         $updateValues = $this->flushRoles($guild, $updateValues);
 

@@ -39,6 +39,7 @@ class Guild extends Model
         'is_wishlist_locked',
         'is_prio_autopurged',
         'is_wishlist_autopurged',
+        'do_sort_items_by_instance',
         'disabled_at',
     ];
 

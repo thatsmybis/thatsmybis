@@ -65,39 +65,41 @@
                                 Wishlist
                             </span>
                         @endif
+                        <span class="js-sort-wishlists text-link">
+                            <span class="fas fa-fw fa-exchange cursor-pointer"></span>
+                        </span>
                     </div>
                     <div class="col-12 pb-3">
                         @if ($character->relationLoaded('wishlist') && $character->wishlist->count() > 0)
-                            <ol class="">
-                                @if (true)
+                            <ol class="js-wishlist-sorted" style="{{ $guild->do_sort_items_by_instance ? '' : 'display:none;' }}">
+                                @php
+                                $lastInstanceId = null;
+                                @endphp
+                                @foreach ($character->wishlist->sortByDesc('instance_order')->sortBy('order') as $item)
+                                    @if ($item->instance_id != $lastInstanceId)
+                                        <li class="no-bullet no-indent {{ !$loop->first ? 'mt-3' : '' }}">
+                                            {{ $item->instance_name }}
+                                        </li>
+                                    @endif
+
+                                    <li value="{{ $item->pivot->order }}">
+                                        @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                    </li>
+
                                     @php
-                                        $lastInstanceId = null;
+                                        $lastInstanceId = $item->instance_id;
                                     @endphp
-                                    @foreach ($character->wishlist as $item)
-                                        @if ($item->instance_id != $lastInstanceId)
-                                            <li class="no-bullet no-indent {{ !$loop->first ? 'mt-3' : '' }}">
-                                                <span class="text-muted fas fa-li-single fa-fw fa-dungeon"></span>
-                                                {{ $item->instance_name }}
-                                            </li>
-                                        @endif
+                                @endforeach
+                            </ol>
 
-                                        <li value="{{ $item->pivot->order }}">
-                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
-                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
-                                        </li>
-
-                                        @php
-                                            $lastInstanceId = $item->instance_id;
-                                        @endphp
-                                    @endforeach
-                                @else
-                                    @foreach ($character->wishlist as $item)
-                                        <li>
-                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
-                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
-                                        </li>
-                                    @endforeach
-                                @endif
+                            <ol class="js-wishlist-unsorted" style="{{ $guild->do_sort_items_by_instance ? 'display:none;' : '' }}">
+                                @foreach ($character->wishlist as $item)
+                                    <li value="{{ $item->pivot->order }}">
+                                        @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                    </li>
+                                @endforeach
                             </ol>
                         @else
                             <div class="pl-4">

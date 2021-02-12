@@ -33,6 +33,9 @@ $(document).ready(function () {
     // For toggling hidden note inputs
     addNoteHandlers();
 
+    // For enabling wishlist sorting
+    addWishlistSortHandlers();
+
     $(".js-edit-content").click(function (e) {
         e.preventDefault();
         let id = $(this).data("id");
@@ -88,6 +91,14 @@ function addNoteHandlers() {
     });
 }
 
+// Add basic handlers to change the sorting of wishlists
+function addWishlistSortHandlers() {
+    $(".js-sort-wishlists").click(function () {
+        $(".js-wishlist-unsorted").toggle();
+        $(".js-wishlist-sorted").toggle();
+    });
+}
+
 function decToHex(number) {
     return parseInt(number).toString(16);
 }
@@ -111,7 +122,7 @@ function getColorFromDec(color) {
 
 // Turn a url into a slug url!
 function slug(string) {
-    let theChosenCharacter = "-";
+    let theChosenCharacter = "-"; // You are the Chosen One
 
     const a = "àáäâãåăæçèéëêǵḧìíïîḿńǹñòóöôœṕŕßśșțùúüûǘẃẍÿź·/_,:;";
     const b = "aaaaaaaaceeeeghiiiimnnnoooooprssstuuuuuwxyz------";

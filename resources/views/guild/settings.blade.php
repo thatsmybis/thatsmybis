@@ -92,7 +92,7 @@
                                         <label>
                                             <input type="checkbox" name="disabled_at" value="1" class="" autocomplete="off"
                                                 {{ old('disabled_at') && old('disabled_at') == 1 ? 'checked' : ($guild->disabled_at ? 'checked' : '') }}>
-                                                Disable guild <span class="text-muted small">members will only be shown the guild name and MOTD</span>
+                                                Disable guild <span class="text-muted small">members will only be shown the guild name and MOTD - <strong>can</strong> be undone</span>
                                         </label>
                                     </div>
                                 </div>
@@ -172,7 +172,6 @@
                                 </div>
                             </div>
                         </div>
-
                     </div>
                 </div>
 
@@ -236,6 +235,34 @@
                                 </label>
                             </div>
                         </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="form-group mb-0">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="do_sort_items_by_instance" value="1" class="" autocomplete="off"
+                                        {{ old('do_sort_items_by_instance') && old('do_sort_items_by_instance') == 1 ? 'checked' : ($guild->do_sort_items_by_instance ? 'checked' : '') }}>
+                                        Sort wishlists by dungeon <span class="text-muted small">default is to sort by user's priority</span>
+                                        <!--
+                                            Q: Why is this a guild setting and not a user setting?
+                                            A: So that everyone in the guild sees the same thing, avoiding inconsistencies and mistakes.
+                                        -->
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 mt-3 mb-2">
+                        <h2 class="font-weight-medium">
+                            <span class="fas fa-fw fa-key text-success"></span>
+                            Permissions
+                        </h2>
+                        <span class="text-muted">Based on user roles in your Discord server</span>
                     </div>
                 </div>
 
