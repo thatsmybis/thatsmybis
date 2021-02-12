@@ -397,7 +397,7 @@ function parseMarkdown(element = null) {
 
         $(".js-markdown-inline").each(function () {
             if (!$(this).hasClass("js-markdown-parsed")) {
-                $(this).html(marked.inlineLexer($.trim($(this).text()), {renderer: render}));
+                $(this).html(marked.parseInline($.trim($(this).text()), {renderer: render}));
                 $(this).addClass("js-markdown-parsed");
             }
         });

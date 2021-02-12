@@ -110,7 +110,7 @@
                         </span>
                     </div>
                     <div class="col-12 mb-3 pl-4">
-                        {{ $member->public_note ? $member->public_note : '—' }}
+                        <span class="js-markdown-inline">{{ $member->public_note ? $member->public_note : '—' }}</span>
                         @if ($currentMember->id == $member->id || $currentMember->hasPermission('edit.officer-notes'))
                             <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                         @endif
@@ -136,7 +136,7 @@
                         </div>
                         <div class="col-12 mb-3 pl-4">
                             @if (!isStreamerMode())
-                                {{ $member->officer_note ? $member->officer_note : '—' }}
+                                <span class="js-markdown-inline">{{ $member->officer_note ? $member->officer_note : '—' }}</span>
                                 @if ($currentMember->hasPermission('edit.officer-notes'))
                                     <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                                 @endif
@@ -166,7 +166,7 @@
                                 </span>
                             </div>
                             <div class="col-12 mb-3 pl-4">
-                                {{ $member->personal_note ? $member->personal_note : '—' }}
+                                <span class="js-markdown-inline">{{ $member->personal_note ? $member->personal_note : '—' }}</span>
                                 <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                             </div>
                             <div class="js-note-input col-12 pl-4" style="display:none;">

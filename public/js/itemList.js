@@ -35,6 +35,7 @@ $(document).ready( function () {
         // wowhead's script previously ignored these links if they weren't visible
         makeWowheadLinks();
         trackTimestamps();
+        parseMarkdown();
     });
 
     // Filter out characters based on the raid they are in
@@ -131,7 +132,7 @@ function createTable(lastSource) {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
                 "data"   : "guild_note",
                 "render" : function (data, type, row) {
-                    return (data ? nl2br(data) : '—');
+                    return (data ? `<span class="js-markdown-inline">${ nl2br(data) }</span>` : '—');
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -141,7 +142,7 @@ function createTable(lastSource) {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Prio Notes',
                 "data"   : "guild_priority",
                 "render" : function (data, type, row) {
-                    return (data ? nl2br(data) : '—');
+                    return (data ? `<span class="js-markdown-inline">${ nl2br(data) }</span>` : '—');
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -152,6 +153,7 @@ function createTable(lastSource) {
         "paging" : false,
         "initComplete": function () {
             makeWowheadLinks();
+            parseMarkdown();
         },
         "createdRow" : function (row, data, dataIndex) {
             // Add a top border style between different loot sources

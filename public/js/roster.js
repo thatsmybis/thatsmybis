@@ -39,6 +39,7 @@ $(document).ready( function () {
         makeWowheadLinks();
         addClippedItemHandlers();
         trackTimestamps();
+        parseMarkdown();
     });
 
     // Toggle visiblity for all of the clipped/hidden items on the page
@@ -218,8 +219,8 @@ function createTable() {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
                 "data"   : "public_note",
                 "render" : function (data, type, row) {
-                    return (row.public_note ? nl2br(row.public_note) : '—')
-                        + (row.officer_note ? '<br><small class="font-weight-bold">Officer\'s Note</small><br><em>' + nl2br(row.officer_note) + '</em>' : '');
+                    return (row.public_note ? `<span class="js-markdown-inline">${ nl2br(row.public_note) }</span>` : '—')
+                        + (row.officer_note ? `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ nl2br(row.officer_note) }</span>` : '');
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -288,6 +289,7 @@ function createTable() {
             addItemAutocompleteHandler();
             addTagInputHandlers();
             addWishlistSortHandlers();
+            parseMarkdown();
         }
     });
     return memberTable;

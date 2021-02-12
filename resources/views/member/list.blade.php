@@ -61,13 +61,13 @@
                                 </td>
                                 <td>
                                     <div>
-                                        {{ $member->public_note ? $member->public_note : '—' }}
+                                        <span class="js-markdown-inline">{{ $member->public_note ? $member->public_note : '—' }}</span>
                                     </div>
                                     @if ($showOfficerNote)
                                         <div>
-                                            <span class="font-weight-bold small font-underline">Officer's note</span>
+                                            <span class="font-weight-bold small font-italic text-gold">Officer's note</span>
                                             <br>
-                                            <em>{{ $member->officer_note ? $member->officer_note : '—' }}</em>
+                                            <span class="js-markdown-inline">{{ $member->officer_note ? $member->officer_note : '—' }}</span>
                                         </div>
                                     @endif
                                 </td>

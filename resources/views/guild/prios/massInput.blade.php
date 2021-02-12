@@ -99,14 +99,14 @@
                                         @if ($item->guild_note)
                                             <li title="Note">
                                                 <span class="fa-li"><span class="fal fa-fw fa-sticky-note text-muted"></span></span>
-                                                {{ $item->guild_note }}
+                                                <span class="js-markdown-inline">{{ $item->guild_note }}</span>
                                             </li>
                                         @endif
 
                                         @if ($item->guild_priority)
                                             <li title="Priority note">
                                                 <span class="fa-li"><span class="fal fa-fw fa-sort-amount-down text-muted"></span></span>
-                                                {{ $item->guild_priority }}
+                                                <span class="js-markdown-inline">{{ $item->guild_priority }}</span>
                                             </li>
                                         @endif
 
