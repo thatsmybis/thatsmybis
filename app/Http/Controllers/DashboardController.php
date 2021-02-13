@@ -116,89 +116,22 @@ class DashboardController extends Controller
 
         $guild->load(['raids', 'raids.role']);
 
-        $characterFields = [
-            'characters.id',
-            'characters.member_id',
-            'characters.guild_id',
-            'characters.name',
-            'characters.slug',
-            'characters.level',
-            'characters.race',
-            'characters.class',
-            'characters.spec',
-            'characters.profession_1',
-            'characters.profession_2',
-            'characters.rank',
-            'characters.rank_goal',
-            'characters.raid_id',
-            'characters.is_alt',
-            'characters.public_note',
-            'characters.inactive_at',
-            'members.username',
-            'members.is_wishlist_unlocked',
-            'members.is_received_unlocked',
-            'raids.name AS raid_name',
-            'raid_roles.color AS raid_color',
-        ];
-
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
-            $characterFields[] = 'characters.officer_note';
-            $showOfficerNote = true;
-        }
-
-        $characters = Character::select($characterFields)
-            ->leftJoin('members', function ($join) {
-                $join->on('members.id', 'characters.member_id');
-            })
-            ->leftJoin('raids', function ($join) {
-                $join->on('raids.id', 'characters.raid_id');
-            })
-            ->leftJoin('roles AS raid_roles', function ($join) {
-                $join->on('raid_roles.id', 'raids.role_id');
-            })
-            ->where('characters.guild_id', $guild->id)
-            ->whereNull('characters.inactive_at')
-            ->orderBy('characters.name')
-            ->with(['received']);
-
-        $showPrios = false;
-        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
-            $characters = $characters->with('prios');
-            $showPrios = true;
-        }
-
-        $showWishlist = false;
-        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
-            $characters = $characters->with('wishlist');
-            $showWishlist = true;
-        }
+        $characters = $guild->getCharactersWithItemsAndPermissions($currentMember, false);
 
         $showEdit = false;
         if ($currentMember->hasPermission('edit.characters')) {
             $showEdit = true;
         }
 
-        $characters = $characters->get();
-
-        if (!$showOfficerNote) {
-            // Hide officer notes on item assignments
-            $characters->each(function ($character) {
-                $character->received->each(function ($item) {
-                    $item->pivot->makeHidden(['officer_note']);
-                });
-            });
-        }
-
         return view('roster', [
-            'characters'      => $characters,
+            'characters'      => $characters['characters'],
             'currentMember'   => $currentMember,
             'guild'           => $guild,
             'raids'           => $guild->raids,
             'showEdit'        => $showEdit,
-            'showOfficerNote' => $showOfficerNote,
-            'showPrios'       => $showPrios,
-            'showWishlist'    => $showWishlist,
+            'showOfficerNote' => $characters['showOfficerNote'],
+            'showPrios'       => $characters['showPrios'],
+            'showWishlist'    => $characters['showWishlist'],
         ]);
     }
 }

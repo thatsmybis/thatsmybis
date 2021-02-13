@@ -139,8 +139,12 @@ Route::group([
     Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');
 
     Route::group(['prefix' => 'export'], function () {
-        Route::get( '/',         'GuildController@showExports')   ->name('guild.exports');
-        Route::get( '/wishlist', 'ExportController@exportWishlist')->name('guild.export.wishlist');
+        Route::get('/',                      'GuildController@showExports')               ->name('guild.exports');
+        Route::get('/characters-with-items', 'ExportController@exportCharactersWithItems')->name('guild.export.charactersWithItems');
+        Route::get('/item-notes',            'ExportController@exportItemNotes')          ->name('guild.export.itemNotes');
+        Route::get('/loot',                  'ExportController@exportLoot')               ->name('guild.export.loot');
+        Route::get('/prios',                 'ExportController@exportPrios')              ->name('guild.export.prio');
+        Route::get('/wishlist',              'ExportController@exportWishlists')          ->name('guild.export.wishlist');
     });
 });
 

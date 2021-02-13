@@ -34,18 +34,31 @@ class Item extends Model
         'set_id',
     ];
 
-    const TYPE_PRIO     = 'prio';
-    const TYPE_RECEIVED = 'received';
-    const TYPE_RECIPE   = 'recipe';
-    const TYPE_WISHLIST = 'wishlist';
-
     /**
      * The attributes that should be hidden for arrays.
      *
      * @var array
      */
     protected $hidden = [
+        'description',
+        'note',
+        'slot',
+        'class',
+        'tier',
+        'type',
+        'profession',
+        'inventory_type',
+        'allowable_class',
+        'item_level',
+        'required_level',
+        'required_honor_rank',
+        'set_id',
     ];
+
+    const TYPE_PRIO     = 'prio';
+    const TYPE_RECEIVED = 'received';
+    const TYPE_RECIPE   = 'recipe';
+    const TYPE_WISHLIST = 'wishlist';
 
     public function characters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')

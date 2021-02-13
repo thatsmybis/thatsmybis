@@ -248,6 +248,11 @@ body {
     white-space: pre-wrap;
 }
 
+.code-box {
+    max-height: 250px;
+    overflow: scroll;
+}
+
 .item-tooltip {
     max-width: 680px;
 }
