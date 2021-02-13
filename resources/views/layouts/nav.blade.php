@@ -115,6 +115,10 @@
                                 </a>
                             @endif
 
+                            <!-- <a class="dropdown-item" href="{{ route('guild.exports', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                Exports
+                            </a> -->
+
                             <a class="dropdown-item" href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 Members
                             </a>

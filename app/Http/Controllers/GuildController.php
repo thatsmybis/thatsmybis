@@ -58,86 +58,16 @@ class GuildController extends Controller
     }
 
     /**
-     * Export a guild's wishlist data
+     * Show the export page.
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportWishlist($guildId, $guildSlug)
+    public function showExports($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view wishlists.');
-            return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
-        }
-
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
-            $showOfficerNote = true;
-        }
-
-        $header = [
-                "raid_name",
-                "character_name",
-                "character_class",
-                "character_inactive_at",
-                "sort_order",
-                "item_name",
-                "item_id",
-                "note",
-                // "officer_note",
-                "received_at",
-                "import_id",
-                "created_at",
-                "updated_at",
-                "item_note",
-                "item_prio_note",
-            ];
-
-        $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
-        $rows = DB::select(DB::raw(
-                "SELECT
-                    r.name AS 'raid_name',
-                    c.name AS 'character_name',
-                    c.class AS 'character_class',
-                    c.inactive_at AS 'character_inactive_at',
-                    ci.`order` AS 'sort_order',
-                    i.name AS 'item_name',
-                    ci.item_id AS 'item_id',
-                    ci.note AS 'note',
-                    -- {$officerNote} AS 'officer_note',
-                    ci.received_at AS 'received_at',
-                    ci.import_id AS 'import_id',
-                    ci.created_at AS 'created_at',
-                    ci.updated_at AS 'updated_at',
-                    gi.note AS 'item_note',
-                    gi.priority AS 'item_prio_note'
-                FROM character_items ci
-                    JOIN characters c ON c.id = ci.character_id
-                    LEFT JOIN raids r ON r.id = c.raid_id
-                    JOIN items i ON i.item_id = ci.item_id
-                    LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
-                WHERE ci.type = 'wishlist' AND c.guild_id = {$guild->id}
-                ORDER BY r.name, c.name, ci.`order`;"));
-
-        // output up to 5MB is kept in memory, if it becomes bigger it will automatically be written to a temporary file
-        $csv = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
-
-        fputcsv($csv, $header);
-        foreach ($rows as $row) {
-            // Convert from stdClass to array
-            $row = get_object_vars($row);
-            fputcsv($csv, $row);
-        }
-        rewind($csv);
-        $csv = stream_get_contents($csv);
-
-        return view('guild.export.generic', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'csv'           => $csv,
-        ]);
+        return view('guild.export.list', ['currentMember' => $currentMember, 'guild' => $guild]);
     }
 
     /**
