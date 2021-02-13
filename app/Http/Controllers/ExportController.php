@@ -61,7 +61,7 @@ class ExportController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'data'          => $characters['characters'],
-            'name'          => 'Loot CSV',
+            'name'          => 'Characters CSV',
         ]);
     }
 
@@ -98,7 +98,7 @@ class ExportController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'data'          => $csv,
-            'name'          => 'Loot CSV',
+            'name'          => 'Item Notes CSV',
         ]);
     }
 
@@ -200,7 +200,7 @@ class ExportController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'data'          => $csv,
-            'name'          => 'Loot CSV',
+            'name'          => 'Prios CSV',
         ]);
     }
 
