@@ -44,13 +44,13 @@
                                                     </span>
                                                 @elseif ($matchingGuild)
                                                     <a href="{{ route('guild.settings', ['guildId' => $matchingGuild->id, 'guildSlug' => $matchingGuild->slug]) }}">
-                                                        <span class="fab fa-fw fa-battle-net text-muted"></span>
+                                                        <span class="fab fa-fw fa- text-muted"></span>
                                                         {{ $expansion->name_long }}
                                                     </a>
                                                     <span class="text-muted font-italic small">owned by <span class="text-discord">{{ $matchingGuild->user->discord_username }}</span></span>
                                                 @else
                                                     <span class="text-muted">
-                                                        <span class="fab fa-fw fa-battle-net text-muted"></span>
+                                                        <span class="fab fa-fw fa- text-muted"></span>
                                                         {{ $expansion->name_long }}
                                                     </span>
                                                 @endif

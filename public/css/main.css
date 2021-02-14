@@ -326,6 +326,11 @@ button.link:hover, input[type="submit"].link:hover, input[type="reset"].link:hov
     text-decoration: underline;
 }
 
+kbd {
+    border: 1px solid #6c7988;
+    background-color: #2f353c;
+}
+
 /* Nice well contrasted backgrounds with the dark theme */
 .dropdown-menu {
     background-color: #32305c;

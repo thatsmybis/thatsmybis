@@ -21,6 +21,9 @@
                         <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
                         We will not give you access to data you wouldn't normally have access to in your guild (such as officer notes) but we will try to help you as best we can.
                     </p>
+                    <p>
+                        Exports are shown in browser for easy copy+pasting. To save the data, press <kbd>CTRL + S</kbd> or <kbd>CMD + S</kbd>
+                    </p>
                     <ol class="no-bullet no-indent striped">
                         <!-- Loot Received -->
                         <li class="p-3 mb-3 rounded">
