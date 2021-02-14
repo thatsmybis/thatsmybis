@@ -170,70 +170,7 @@ class GuildController extends Controller
             $discordId = $input['discord_id_select'];
         }
 
-        // Verify that the bot is on the server
-        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
-
-        try {
-            $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$discordId, 'user.id' => (int)$user->discord_id]);
-        } catch (Exception $e) {
-            $error = \Illuminate\Validation\ValidationException::withMessages([
-               'permissions' => ["Unable to find you on that server, or the bot is missing. Make sure you have the correct Discord Server ID and the bot has been added."],
-            ]);
-            throw $error;
-        }
-
-        $discordGuild = $discord->guild->getGuild(['guild.id' => (int)$discordId]);
-
-        $hasPermissions = false;
-
-        $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$discordId]);
-
-        if ($discordMember->user->id == $discordGuild->owner_id) {
-            // You own the server... come right in.
-            $hasPermissions = true;
-        } else {
-            // Go through each of the user's roles, and check to see if any of them have admin or management permissions
-            // We're only going to let the user register this server if they have one of those permissions
-            foreach ($discordMember->roles as $role) {
-                $discordPermissions = $roles[array_search($role, array_column($roles, 'id'))]->permissions;
-                if (($discordPermissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) { // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
-                    $hasPermissions = true;
-                    break;
-                }
-            }
-        }
-
-        if (!$hasPermissions) {
-            $error = \Illuminate\Validation\ValidationException::withMessages([
-               'permissions' => ["We couldn't find admin permissions on your account for that server. Have someone with admin permissions register your guild."],
-            ]);
-            throw $error;
-        }
-
-        // Create the guild
-        $guild = Guild::firstOrCreate(['name' => $input['name']],
-            [
-                'slug'         => slug($input['name']),
-                'user_id'      => $user->id,
-                'discord_id'   => $discordId,
-                'expansion_id' => $input['expansion_id'],
-            ]);
-
-        // Insert the roles associated with this Discord
-        foreach ($roles as $role) {
-            $role = Role::firstOrCreate(['discord_id' => $role->id],
-                [
-                    'name'                => $role->name,
-                    'guild_id'            => $guild->id,
-                    'slug'                => slug($role->name),
-                    'description'         => null,
-                    'color'               => $role->color ? $role->color : null,
-                    'position'            => $role->position,
-                    'discord_permissions' => $role->permissions,
-                ]);
-        }
-
-        $member = Member::create($user, $discordMember, $guild);
+        [$guild, $member] = $this->createNewGuild($input['name'], $discordId, $input['expansion_id'], $user);
 
         AuditLog::create([
             'description'     => $member->username . ' registered the guild',
@@ -244,6 +181,38 @@ class GuildController extends Controller
         // Redirect to guild settings page; prompting the user to finish setup
         request()->session()->flash('status', 'Successfully registered guild.');
         return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+    }
+
+    /**
+     * Register a guild
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function registerExpansion($guildId, $guildSlug, $expansionSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+        $currentUser   = request()->get('currentUser');
+
+        $expansion = Expansion::where('slug', $expansionSlug)->firstOrFail();
+
+        [$newGuild, $newMember] = $this->createNewGuild($guild->name, $guild->discord_id, $expansion->id, $currentUser);
+
+        AuditLog::create([
+            'description'     => $currentMember->username . ' registered the guild for ' . $expansion->name_long . ' (new guild ID: ' . $newGuild->id . ')',
+            'member_id'       => $currentMember->id,
+            'guild_id'        => $guild->id,
+        ]);
+
+        AuditLog::create([
+            'description'     => $newMember->username . ' registered the guild',
+            'member_id'       => $newMember->id,
+            'guild_id'        => $newGuild->id,
+        ]);
+
+        // Redirect to guild settings page; prompting the user to finish setup
+        request()->session()->flash('status', 'Successfully registered guild.');
+        return redirect()->route('guild.settings', ['guildId' => $newGuild->id, 'guildSlug' => $guild->slug]);
     }
 
     /**
@@ -536,5 +505,82 @@ class GuildController extends Controller
         }
 
         return $updateValues;
+    }
+
+    /**
+     * Creates a new guild.
+     *
+     * @var string   $guildName
+     * @var int      $discordId
+     * @var int      $expansionId
+     * @var App\User $user        The user creating the guild.
+     *
+     * @return array
+     */
+    private function createNewGuild($guildName, $discordId, $expansionId, $user) {
+        // Verify that the bot is on the server
+        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+
+        try {
+            $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$discordId, 'user.id' => (int)$user->discord_id]);
+        } catch (Exception $e) {
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+               'permissions' => ["Unable to find you on that server, or the bot is missing. Make sure you have the correct Discord Server ID and the bot has been added."],
+            ]);
+            throw $error;
+        }
+
+        $discordGuild = $discord->guild->getGuild(['guild.id' => (int)$discordId]);
+
+        $hasPermissions = false;
+
+        $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$discordId]);
+
+        if ($discordMember->user->id == $discordGuild->owner_id) {
+            // You own the server... come right in.
+            $hasPermissions = true;
+        } else {
+            // Go through each of the user's roles, and check to see if any of them have admin or management permissions
+            // We're only going to let the user register this server if they have one of those permissions
+            foreach ($discordMember->roles as $role) {
+                $discordPermissions = $roles[array_search($role, array_column($roles, 'id'))]->permissions;
+                if (($discordPermissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) { // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
+                    $hasPermissions = true;
+                    break;
+                }
+            }
+        }
+
+        if (!$hasPermissions) {
+            $error = \Illuminate\Validation\ValidationException::withMessages([
+               'permissions' => ["We couldn't find admin permissions on your account for that server. Have someone with admin permissions register your guild."],
+            ]);
+            throw $error;
+        }
+
+        // Create the guild
+        $guild = Guild::firstOrCreate(['discord_id' => $discordId, 'expansion_id' => $expansionId],
+            [
+                'name'    => $guildName,
+                'slug'    => slug($guildName),
+                'user_id' => $user->id,
+            ]);
+
+        // Insert the roles associated with this Discord
+        foreach ($roles as $role) {
+            Role::firstOrCreate(['discord_id' => $role->id, 'guild_id' => $guild->id],
+                [
+                    'name'                => $role->name,
+                    'slug'                => slug($role->name),
+                    'description'         => null,
+                    'color'               => $role->color ? $role->color : null,
+                    'position'            => $role->position,
+                    'discord_permissions' => $role->permissions,
+                ]);
+        }
+
+        $member = Member::create($user, $discordMember, $guild);
+
+        return [$guild, $member];
     }
 }

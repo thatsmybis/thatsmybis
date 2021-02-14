@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Guild, User};
+use App\{Expansion, Guild, User};
 use Auth;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
@@ -71,7 +71,12 @@ class HomeController extends Controller
         // Authenticated users default to a different page
             $user = request()->get('currentUser');
             $user->load([
-                'members',
+                'members' => function ($query) {
+                    return $query
+                        ->select('members.*') // Otherwise fetches guild fields as well, resulting in some bugs...
+                        ->leftJoin('guilds', 'guilds.id', 'members.guild_id')
+                        ->orderBy('guilds.name');
+                },
                 'members.characters',
                 'members.characters.raid',
                 'members.guild',
@@ -87,25 +92,26 @@ class HomeController extends Controller
                     'tokenType' => 'OAuth',
                 ]);
 
-                $guilds = $discord->user->getCurrentUserGuilds();
+                $discordGuilds = $discord->user->getCurrentUserGuilds();
 
-                if ($guilds) {
+                if ($discordGuilds) {
                     $guildIds = [];
-                    foreach ($guilds as $guild) {
-                        $guildIds[$guild->id] = $guild->id;
+                    foreach ($discordGuilds as $discordGuild) {
+                        $discordGuildIds[$discordGuild->id] = $discordGuild->id;
                     }
 
-                    // Remove guilds they're already a member of
-                    foreach ($user->members as $member) {
-                        unset($guildIds[$member->guild->discord_id]);
-                    }
+                    $currentGuildIds = $user->members->pluck('guild_id')->toArray();
 
-                    $existingGuilds = Guild::whereIn('discord_id', $guildIds)->get();
+                    $existingGuilds = Guild::whereIn('discord_id', $discordGuildIds)
+                        ->whereNotIn('id', $currentGuildIds)
+                        ->orderBy('guilds.name')
+                        ->get();
                 }
             }
 
             return view('dashboard', [
                 'existingGuilds' => $existingGuilds,
+                'expansions'     => Expansion::all(),
                 'user'           => $user,
             ]);
         } else {

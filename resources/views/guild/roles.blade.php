@@ -12,12 +12,19 @@
                         Discord Roles
                     </h1>
                     <p>
-                        When we see a new role attached to a member, we'll sync this list
+                        Whenever we see a new role attached to a member, we'll automatically sync this list.
                     </p>
                     <p>
-                        If you want to manually trigger an update, hit the button down at the bottom
+                        Roles listed on offline members are <strong>cached</strong>.
                         <br>
-                        This will update colors, names, order, add new roles, and remove old ones
+                        They will be properly updated the next time that member logs in.
+                    </p>
+                    <p>
+                        If you want to manually trigger an update, hit the button down at the bottom.
+                        <br>
+                        This will update colors, names, order, add new roles, and remove old ones.
+                        <br>
+                        It <strong>will not</strong> sync the <strong>display only</strong> roles listed alongside offline members.
                     </p>
                 </div>
 

@@ -18,7 +18,7 @@
             We run on <a href="{{ route('donate') }}">donations</a>; thank you to our donors!
         </div>
 
-        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mt-4">
+        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center">
             @if ($user->members->count() > 0)
                 <h3 class="font-weight-normal mb-3">
                     <span class="fas fa-fw fa-users text-muted"></span>
@@ -35,9 +35,10 @@
                             @endphp
                         @else
                             <li class="bg-lightest mt-3 mb-3 p-3">
-                                <span class="text-gold font-weight-normal">
-                                    {{ $member->guild->expansion->name_short }}
-                                </span>
+                                <h4 class="font-weight-medium mb-0">
+                                    <span class="fab fa-fw fa-battle-net text-mage"></span>
+                                    {{ $expansions->where('id', $member->guild->expansion_id)->first()->name_short }}
+                                </h4>
                                 <h2>
                                     <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
                                         <span class="text-{{ $member->guild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
@@ -45,16 +46,16 @@
                                         </span>
                                     </a>
                                 </h2>
-                                <ul class="list-inline">
+                                <ul class="list-inline mt-3">
                                     @foreach ($member->characters as $character)
-                                        <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
+                                        <li class="list-inline-item bg-tag rounded pt-0 pl-1 pb-1 pr-1">
                                             <a href="{{route('character.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                                 class="text-{{ $character->class ? strtolower($character->class) : '' }}">
                                                 {{ $character->name }}
                                             </a>
                                         </li>
                                     @endforeach
-                                    <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
+                                    <li class="list-inline-item bg-tag rounded pt-0 pl-1 pb-1 pr-1">
                                         <a href="{{ route('character.showCreate', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}">
                                             <span class="fas fa-plus"></span>
                                             create character
@@ -114,10 +115,14 @@
         </div>
 
         @if ($existingGuilds)
-            <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mb-5">
+            <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mt-3 mb-3">
                 <ul class="no-bullet no-indent">
                     @foreach ($existingGuilds as $existingGuild)
                         <li class="bg-lightest mt-3 mb-3 p-3">
+                            <h4 class="font-weight-medium mb-0">
+                                <span class="fab fa-fw fa-battle-net text-mage"></span>
+                                {{ $expansions->where('id', $existingGuild->expansion_id)->first()->name_short }}
+                            </h4>
                             <h2>
                                 <span class="text-{{ $existingGuild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
                                     &lt;{{ $existingGuild->name }}&gt;
@@ -138,7 +143,7 @@
             </div>
         @endif
 
-        <div class="col-12 text-center mt-2 mb-5">
+        <div class="col-12 text-center mb-5">
             <div class="mb-5">
                 <p class="font-weight-normal pt-3 text-4">
                     Are you a Guild Master?

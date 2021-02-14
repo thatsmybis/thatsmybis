@@ -37,22 +37,29 @@
                                                 $matchingGuild = $guild->guilds->where('expansion_id', $expansion->id)->first();
                                             @endphp
                                             <li>
-                                                <span class="{{ $expansion->id == $guild->expansion_id ? 'text-gold font-weight-bold' : 'text-muted' }}">
-                                                    {{ $expansion->name_long }}
-                                                </span>
                                                 @if ($expansion->id == $guild->expansion_id)
-                                                    <span class="text-success font-italic small">active</span>
+                                                    <span class="text-gold font-weight-bold">
+                                                        <span class="fab fa-fw fa-battle-net text-muted"></span>
+                                                        {{ $expansion->name_long }}
+                                                    </span>
                                                 @elseif ($matchingGuild)
-                                                    <a href="{{ route('guild.home', ['guildId' => $matchingGuild->id, 'guildSlug' => $matchingGuild->slug]) }}">
-                                                        switch to
-                                                    </a> (&lt;{{ $matchingGuild->name }}&gt;, owned by {{ $matchingGuild->user->discord_username }})
+                                                    <a href="{{ route('guild.settings', ['guildId' => $matchingGuild->id, 'guildSlug' => $matchingGuild->slug]) }}">
+                                                        <span class="fab fa-fw fa-battle-net text-muted"></span>
+                                                        {{ $expansion->name_long }}
+                                                    </a>
+                                                    <span class="text-muted font-italic small">owned by <span class="text-discord">{{ $matchingGuild->user->discord_username }}</span></span>
+                                                @else
+                                                    <span class="text-muted">
+                                                        <span class="fab fa-fw fa-battle-net text-muted"></span>
+                                                        {{ $expansion->name_long }}
+                                                    </span>
                                                 @endif
 
                                                 @if (!$expansion->is_enabled)
                                                     <span class="text-muted font-italic small">not yet supported</span>
                                                 @elseif (!$matchingGuild)
-                                                    <a href="{{ route('guild.registerExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}" class="font-italic small">
-                                                        register for expansion
+                                                    <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}" class="font-italic small">
+                                                        add expansion
                                                     </a>
                                                 @endif
                                             </li>
