@@ -81,7 +81,7 @@ function createTable(lastSource) {
                 "className" : "text-right",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-treasure-chest text-gold"></span> Loot',
+                "title"  : '<span class="fas fa-fw fa-sack text-success"></span> Loot',
                 "data"   : "",
                 "render" : function (data, type, row) {
                     return `

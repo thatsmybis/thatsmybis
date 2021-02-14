@@ -61,7 +61,7 @@ class ExportController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'data'          => $characters['characters'],
-            'name'          => 'Characters CSV',
+            'name'          => 'Characters JSON',
         ]);
     }
 

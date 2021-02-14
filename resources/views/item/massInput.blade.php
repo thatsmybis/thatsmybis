@@ -181,7 +181,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                         <!-- Character select filter -->
                         <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
                             <label for="raid_filter font-weight-light">
-                                <span class="text-muted">Character filter</span>
+                                <span class="text-muted">Character dropdown filter</span>
                             </label>
                             <select id="raid_filter" class="form-control dark">
                                 <option value="">—</option>
