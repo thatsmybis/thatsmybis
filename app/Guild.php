@@ -5,6 +5,7 @@ namespace App;
 use App\{
     Character,
     Content,
+    Expansion,
     Item,
     Member,
     Raid,
@@ -25,6 +26,7 @@ class Guild extends Model
         'slug',
         'user_id',
         'discord_id',
+        'expansion_id',
         'admin_role_id',
         'gm_role_id',
         'officer_role_id',
@@ -81,6 +83,10 @@ class Guild extends Model
 
     public function content() {
         return $this->hasMany(Content::class)->whereNull('removed_at')->orderByDesc('created_at');
+    }
+
+    public function expansion() {
+        return $this->belongsTo(Expansion::class);
     }
 
     public function items() {

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Guild, Member, Permission, Role, User};
+use App\{AuditLog, Expansion, Guild, Member, Permission, Role, User};
 use Auth;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -114,7 +114,10 @@ class GuildController extends Controller
             }
         }
 
-        return view('guild.register', ['guilds' => $guildArray]);
+        return view('guild.register', [
+            'expansions' => Expansion::all(),
+            'guilds'     => $guildArray,
+        ]);
     }
 
     /**
@@ -128,6 +131,7 @@ class GuildController extends Controller
             'name'              => 'string|max:36|unique:guilds,name',
             'discord_id_select' => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id',
             'discord_id'        => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id_select',
+            'expansion_id'      => 'integer|exists:expansions,id',
             'bot_added'         => 'numeric|gte:1',
         ];
 
@@ -165,7 +169,6 @@ class GuildController extends Controller
 
         $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$discordId]);
 
-
         if ($discordMember->user->id == $discordGuild->owner_id) {
             // You own the server... come right in.
             $hasPermissions = true;
@@ -191,9 +194,10 @@ class GuildController extends Controller
         // Create the guild
         $guild = Guild::firstOrCreate(['name' => $input['name']],
             [
-                'slug'       => slug($input['name']),
-                'user_id'    => $user->id,
-                'discord_id' => $discordId,
+                'slug'         => slug($input['name']),
+                'user_id'      => $user->id,
+                'discord_id'   => $discordId,
+                'expansion_id' => $input['expansion_id'],
             ]);
 
         // Insert the roles associated with this Discord
@@ -321,6 +325,7 @@ class GuildController extends Controller
 
         return view('guild.settings', [
             'currentMember' => $currentMember,
+            'expansions'    => Expansion::all(),
             'guild'         => $guild,
             'owner'         => $owner,
             'permissions'   => Permission::all(),

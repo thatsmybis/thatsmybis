@@ -35,10 +35,14 @@
                             @endphp
                         @else
                             <li class="bg-lightest mt-3 mb-3 p-3">
+                                <span class="text-gold font-weight-normal">
+                                    {{ $member->guild->expansion->name_short }}
+                                </span>
                                 <h2>
-                                    <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}"
-                                        class="text-{{ $member->guild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
-                                        &lt;{{ $member->guild->name }}&gt;
+                                    <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
+                                        <span class="text-{{ $member->guild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
+                                            &lt;{{ $member->guild->name }}&gt;
+                                        </span>
                                     </a>
                                 </h2>
                                 <ul class="list-inline">

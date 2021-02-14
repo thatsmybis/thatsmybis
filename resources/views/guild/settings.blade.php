@@ -27,6 +27,30 @@
 
                 <div class="row">
                     <div class="col-12 pt-2 pb-0 mb-3 bg-light rounded">
+                        <!-- Expansion -->
+                        <div class="row">
+                            <div class="col-md-8 col-12">
+                                <div class="form-group">
+                                    <ul class="no-bullet no-indent">
+                                        @foreach ($expansions as $expansion)
+                                            <li>
+                                                <span class="{{ $expansion->id == $guild->expansion_id ? 'text-gold font-weight-bold' : 'text-muted' }}">
+                                                    {{ $expansion->name }}
+                                                </span>
+                                                @if ($expansion->id == $guild->expansion_id)
+                                                    <span class="text-success font-italic">this guild</span>
+                                                @endif
+                                                @if (!$expansion->is_enabled)
+                                                    <span class="text-muted font-italic">unsupported</span>
+                                                @endif
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 pt-2 pb-0 mb-3 bg-light rounded">
 
                         <div class="row">
                             <div class="col-md-8 col-12">
@@ -95,31 +119,6 @@
                                                 Disable guild <span class="text-muted small">members will only be shown the guild name and MOTD - <strong>can</strong> be undone</span>
                                         </label>
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Expansion -->
-                        <div class="row">
-                            <div class="col-md-8 col-12">
-                                <div class="form-group">
-                                    <label for="expansion">
-                                        <span class="text-muted">Expansion</span>
-                                        <small class="text-muted">
-                                            locked
-                                        </small>
-                                    </label>
-                                    <select disabled name="expansion" class="form-control dark">
-                                        <option value="1" selected>
-                                            Classic
-                                        </option>
-                                        <option value="2" {{ old('expansion') && old('expansion') == 2 ? 'selected' : '' }}>
-                                            Burning Crusade
-                                        </option>
-                                        <option value="3" {{ old('expansion') && old('expansion') == 3 ? 'selected' : '' }}>
-                                            Wrath of the Lich King
-                                        </option>
-                                    </select>
                                 </div>
                             </div>
                         </div>
