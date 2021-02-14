@@ -121,6 +121,25 @@ class GuildController extends Controller
     }
 
     /**
+     * Show the page to register an existing Discord server for an expansion.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showRegisterExpansion($guildId, $guildSlug, $expansionSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $expansion = Expansion::where('slug', $expansionSlug)->firstOrFail();
+
+        return view('guild.registerExpansion', [
+            'currentMember' => $currentMember,
+            'expansion'     => $expansion,
+            'guild'         => $guild
+        ]);
+    }
+
+    /**
      * Register a guild
      *
      * @return \Illuminate\Http\Response
@@ -317,7 +336,12 @@ class GuildController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load(['roles']);
+        $guild->load([
+            'guilds' => function ($query) {
+                return $query->with('user');
+            },
+            'roles'
+        ]);
 
         $owner = $guild->members()->where([
             ['user_id', $guild->user_id],

@@ -125,6 +125,8 @@ Route::group([
         });
     });
 
+    Route::get( '/register-expansion/{expansionSlug}', 'GuildController@showRegisterExpansion')->name('guild.registerExpansion');
+
     Route::get( '/roles',     'RoleController@roles')    ->name('guild.roles');
     Route::get( '/syncRoles', 'RoleController@syncRoles')->name('guild.syncRoles');
 

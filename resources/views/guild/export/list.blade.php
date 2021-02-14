@@ -14,12 +14,12 @@
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     <p>
-                        <p>
-                            <strong>These are subject to change.</strong>
-                            If you absolutely need access to some data, please reach out on
-                            <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
-                            We will not give you access to data you wouldn't normally have access to in your guild, such as officer notes.
-                        </p>
+                        <strong>The format of the data being exported is subject to change.</strong> We might change a field or two as development on this project continues.
+                    </p>
+                    <p>
+                        If you absolutely need access to some data or for a specific export format to not change, please reach out on
+                        <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
+                        We will not give you access to data you wouldn't normally have access to in your guild (such as officer notes) but we will try to help you as best we can.
                     </p>
                     <ol class="no-bullet no-indent striped">
                         <!-- Loot Received -->
@@ -110,7 +110,7 @@
                                 <strong>Guild notes</strong> and <strong>prio notes</strong> are included.
                             </p>
                             <p>
-                                Handy if all you want is a the loot tables in a simple format...
+                                Handy if all you want is the loot tables in a simple format...
                             </p>
                             <p>
                                 Fields exported:

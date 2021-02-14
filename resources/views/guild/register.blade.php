@@ -114,15 +114,17 @@
                 </div>
 
                 <div class="form-group pt-3 pl-4">
-                    <input class="form-check-input" type="checkbox" value="1" id="bot_added" onclick="toggleSubmit()">
-                    <label class="form-check-label" for="bot_added">
-                        I've added
-                        <a href="https://discord.com/api/oauth2/authorize?client_id={{ env('DISCORD_KEY') }}&permissions=0&redirect_uri={{ env('DISCORD_REDIRECT_URI') }}&scope=bot"
-                            target="_blank">
-                            the bot
-                        </a>
-                        to my server
-                    </label>
+                    <div class="checkbox">
+                        <label>
+                            <input class="" type="checkbox" value="1" id="bot_added" onclick="toggleSubmit()">
+                            I've added
+                            <a href="https://discord.com/api/oauth2/authorize?client_id={{ env('DISCORD_KEY') }}&permissions=0&redirect_uri={{ env('DISCORD_REDIRECT_URI') }}&scope=bot"
+                                target="_blank">
+                                the bot
+                            </a>
+                            to my server
+                        </label>
+                    </div>
                 </div>
 
                 <div class="form-group pt-3">
