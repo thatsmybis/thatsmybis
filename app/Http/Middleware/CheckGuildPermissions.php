@@ -46,7 +46,7 @@ class CheckGuildPermissions
                 $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$guild->discord_id, 'user.id' => (int)$user->discord_id]);
             } catch (Exception $e) {
                 if ($user->id != $guild->user_id) { // Guild owner is excempt
-                    request()->session()->flash('status', 'That Discord server is either missing the ' . env('APP_NAME') . ' bot, or you don\'t appear to be a member of that guild\'s  Discord.');
+                    request()->session()->flash('status', 'That Discord server is either missing the ' . env('APP_NAME') . ' bot or we\'re simply unable to find you on it.');
                     return redirect()->route('home');
                 }
             }

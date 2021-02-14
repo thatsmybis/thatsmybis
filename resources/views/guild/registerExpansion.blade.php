@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Register for ' . $expansion->name_short . ' - ' . config('app.name'))
+@section('title', 'Add ' . $expansion->name_short . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -7,12 +7,23 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
-                    <h1 class="font-weight-medium font-blizz">
-                        <span class="fab fa-fw fa-battle-net text-uncommon"></span>
-                        {{ $expansion->name_long }}
+                    <h1 class="font-weight-medium">
+                        <span class="fab fa-fw fa-battle-net text-mage"></span>
+                        Add {{ $expansion->name_long }}
                     </h1>
                 </div>
+
                 <div class="col-12 pt-2 pb-0 mb-3 bg-light rounded">
+                    @if (count($errors) > 0)
+                        <ul class="alert alert-danger">
+                            @foreach ($errors->all() as $error)
+                                <li>
+                                    {{ $error }}
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
+
                     <h2 class="font-weight-bold">
                         Here's how this works:
                     </h2>
@@ -67,10 +78,17 @@
                     </div>
 
                     <div class="form-group pt-3">
-                        <a href="" class="btn btn-success disabled" id="submit_button">
-                            <span class="fas fa-fw fa-check"></span>
-                            Create new space for {{ $expansion->name_short }}
-                        </a>
+                        <form class="form-horizontal"
+                            role="form"
+                            method="POST"
+                            action="{{ route('guild.registerExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}"
+                        >
+                            {{ csrf_field() }}
+                            <button disabled class="btn btn-success" id="submit_button">
+                                <span class="fas fa-fw fa-check"></span>
+                                Create new space for {{ $expansion->name_short }}
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -86,9 +104,9 @@
         var button = document.getElementById("submit_button");
 
         if (checkBox.checked == true) {
-            button.classList.remove('disabled');
+            button.disabled = false;
         } else {
-            button.classList.add('disabled');
+            button.disabled = true;
         }
     }
 </script>
