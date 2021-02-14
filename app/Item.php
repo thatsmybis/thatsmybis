@@ -16,12 +16,6 @@ class Item extends Model
      */
     protected $fillable = [
         'name',
-        'description',
-        'note',
-        'slot',
-        'class',
-        'tier',
-        'type',
         'source',
         'profession',
         'quality',
@@ -30,7 +24,6 @@ class Item extends Model
         'allowable_class',
         'item_level',
         'required_level',
-        'required_honor_rank',
         'set_id',
     ];
 
@@ -40,18 +33,10 @@ class Item extends Model
      * @var array
      */
     protected $hidden = [
-        'description',
-        'note',
-        'slot',
-        'class',
-        'tier',
-        'type',
-        'profession',
         'inventory_type',
         'allowable_class',
         'item_level',
         'required_level',
-        'required_honor_rank',
         'set_id',
     ];
 
