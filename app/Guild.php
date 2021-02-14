@@ -89,6 +89,11 @@ class Guild extends Model
         return $this->belongsTo(Expansion::class);
     }
 
+    // Other guilds registered under the same Discord server ID
+    public function guilds() {
+        return $this->hasMany(Guild::class, 'discord_id', 'discord_id')->where('guilds.id', '!=', $this->id);
+    }
+
     public function items() {
         return $this->belongsToMany(Item::class, 'guild_items', 'guild_id', 'item_id')
             ->withTimeStamps()

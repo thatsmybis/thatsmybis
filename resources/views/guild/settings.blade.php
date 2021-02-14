@@ -33,15 +33,27 @@
                                 <div class="form-group">
                                     <ul class="no-bullet no-indent">
                                         @foreach ($expansions as $expansion)
+                                            @php
+                                                $matchingGuild = $guild->guilds->where('expansion_id', $expansion->id)->first();
+                                            @endphp
                                             <li>
                                                 <span class="{{ $expansion->id == $guild->expansion_id ? 'text-gold font-weight-bold' : 'text-muted' }}">
-                                                    {{ $expansion->name }}
+                                                    {{ $expansion->name_long }}
                                                 </span>
                                                 @if ($expansion->id == $guild->expansion_id)
-                                                    <span class="text-success font-italic">this guild</span>
+                                                    <span class="text-success font-italic small">active</span>
+                                                @elseif ($matchingGuild)
+                                                    <a href="{{ route('guild.home', ['guildId' => $matchingGuild->id, 'guildSlug' => $matchingGuild->slug]) }}">
+                                                        switch to
+                                                    </a> (&lt;{{ $matchingGuild->name }}&gt;, owned by {{ $matchingGuild->user->discord_username }})
                                                 @endif
+
                                                 @if (!$expansion->is_enabled)
-                                                    <span class="text-muted font-italic">unsupported</span>
+                                                    <span class="text-muted font-italic small">not yet supported</span>
+                                                @elseif (!$matchingGuild)
+                                                    <a href="{{ route('guild.registerExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}" class="font-italic small">
+                                                        register for expansion
+                                                    </a>
                                                 @endif
                                             </li>
                                         @endforeach
