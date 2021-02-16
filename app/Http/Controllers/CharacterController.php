@@ -25,16 +25,16 @@ class CharacterController extends Controller
         $this->middleware(['auth', 'seeUser']);
     }
 
-    private function getValidationRules() {
+    private function getValidationRules($guild) {
         return [
             'member_id'     => 'nullable|integer|exists:members,id',
             'name'          => 'required|string|min:2|max:32',
             'level'         => 'nullable|integer|min:1|max:60',
-            'race'          => ['nullable', 'string', Rule::in(Character::races())],
-            'class'         => ['nullable', 'string', Rule::in(Character::classes())],
+            'race'          => ['nullable', 'string', Rule::in(Character::races($guild->expansion_id))],
+            'class'         => ['nullable', 'string', Rule::in(Character::classes($guild->expansion_id))],
             'spec'          => 'nullable|string|max:50',
-            'profession_1'  => ['nullable', 'string', 'different:profession_2', Rule::in(Character::professions())],
-            'profession_2'  => ['nullable', 'string', 'different:profession_1', Rule::in(Character::professions())],
+            'profession_1'  => ['nullable', 'string', 'different:profession_2', Rule::in(Character::professions($guild->expansion_id))],
+            'profession_2'  => ['nullable', 'string', 'different:profession_1', Rule::in(Character::professions($guild->expansion_id))],
             'rank'          => 'nullable|integer|min:1|max:14',
             'rank_goal'     => 'nullable|integer|min:1|max:14',
             'raid_id'       => 'nullable|integer|exists:raids,id',
@@ -70,7 +70,7 @@ class CharacterController extends Controller
             abort(403, 'Name taken.');
         }
 
-        $validationRules = $this->getValidationRules();
+        $validationRules = $this->getValidationRules($guild);
 
         $validationMessages = [];
 
@@ -408,7 +408,7 @@ class CharacterController extends Controller
             return redirect()->back();
         }
 
-        $validationRules = $this->getValidationRules();
+        $validationRules = $this->getValidationRules($guild);
         $validationRules['id'] = 'required|integer|exists:characters,id';
 
         $validationMessages = [];
