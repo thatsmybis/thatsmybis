@@ -1,7 +1,17 @@
 <nav class="navbar navbar-expand-md navbar-dark">
     <span class="navbar-brand" href="{{ route('home') }}">
         <span class="font-weight-bold">
-            <a href="{{ route('home') }}" class="text-{{ isset($guild) && $guild->disabled_at ? 'danger' : 'white' }}"
+            @php
+                $logoColor = 'white';
+                if (isset($guild)) {
+                    if ($guild->disabled_at) {
+                        $logoColor = 'danger';
+                    } else{
+                        $logoColor = getExpansionColor($guild->expansion_id);
+                    }
+                }
+            @endphp
+            <a href="{{ route('home') }}" class="text-{{ $logoColor }}"
                 title="{{ isset($guild) && $guild->disabled_at ? 'guild is disabled' : '' }}">
                 {!! isset($guild) && $guild->name ? $guild->name : env('APP_NAME') !!}
             </a>

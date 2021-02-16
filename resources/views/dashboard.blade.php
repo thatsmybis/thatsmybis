@@ -35,13 +35,13 @@
                             @endphp
                         @else
                             <li class="bg-lightest mt-3 mb-3 p-3">
-                                <h4 class="font-weight-medium mb-0">
-                                    <span class="fab fa-fw fa-battle-net text-mage"></span>
+                                <span class="font-weight-light text-5 text-muted">
+                                    <span class="fab fa-fw fa-battle-net"></span>
                                     {{ $expansions->where('id', $member->guild->expansion_id)->first()->name_short }}
-                                </h4>
+                                </span>
                                 <h2>
                                     <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
-                                        <span class="text-{{ $member->guild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
+                                        <span class="text-{{ $member->guild->disabled_at ? 'danger' : getExpansionColor($member->guild->expansion_id) }} font-weight-medium">
                                             &lt;{{ $member->guild->name }}&gt;
                                         </span>
                                     </a>
@@ -79,7 +79,7 @@
                             <li class="js-inactive-guild bg-lightest mt-3 mb-3 p-3" style="display:none;">
                                 <h3>
                                     <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}"
-                                        class="text-danger font-weight-medium">
+                                        class="text-{{ $member->guild->disabled_at ? 'danger' : getExpansionColor($member->guild->expansion_id) }} font-weight-medium">
                                         &lt;{{ $member->guild->name }}&gt;
                                     </a>
                                 </h3>
@@ -119,19 +119,19 @@
                 <ul class="no-bullet no-indent">
                     @foreach ($existingGuilds as $existingGuild)
                         <li class="bg-lightest mt-3 mb-3 p-3">
-                            <h4 class="font-weight-medium mb-0">
-                                <span class="fab fa-fw fa-battle-net text-mage"></span>
+                            <span class="font-weight-light text-5 text-muted">
+                                <span class="fab fa-fw fa-battle-net"></span>
                                 {{ $expansions->where('id', $existingGuild->expansion_id)->first()->name_short }}
-                            </h4>
+                            </span>
                             <h2>
-                                <span class="text-{{ $existingGuild->disabled_at ? 'danger' : 'uncommon' }} font-weight-medium">
+                                <span class="text-{{ $existingGuild->disabled_at ? 'danger' : getExpansionColor($existingGuild->expansion_id) }} font-weight-medium">
                                     &lt;{{ $existingGuild->name }}&gt;
                                 </span>
                             </h2>
                             <ul class="list-inline">
                                 <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
                                     <a href="{{ route('guild.home', ['guildId' => $existingGuild->id, 'guildSlug' => $existingGuild->slug]) }}"
-                                        class="btn btn-success">
+                                        class="btn btn-secondary">
                                         <span class="fas fa-plus"></span>
                                         Join Guild
                                     </a>
