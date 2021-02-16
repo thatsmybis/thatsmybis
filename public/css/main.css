@@ -213,6 +213,35 @@ body {
     color: #1eff00;
 }
 
+/* wowhead link colors */
+.q1 {
+    color: #fff!important;
+}
+.q2 {
+    color: #1eff00!important;
+}
+.q3 {
+    color: #057ffa !important;
+}
+.q4 {
+    color: #ab4aed !important;
+}
+.q5 {
+    color: #ff8000!important;
+}
+.q6 {
+    color: #e5cc80!important;
+}
+.q7 {
+    color: #0cf!important;
+}
+.q8 {
+    color: #0cf!important;
+}
+.q9 {
+    color: #71d5ff!important;
+}
+
 .text-muted {
     color: #8e959b !important;
 }

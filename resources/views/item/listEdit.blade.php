@@ -69,7 +69,7 @@
                                                 Item Name
                                             </span>
                                         </label>
-                                        @include('partials/item', ['wowheadLink' => true])
+                                        @include('partials/item', ['wowheadLink' => false, 'targetBlank' => true])
                                     </div>
                                 </div>
 
