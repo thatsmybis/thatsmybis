@@ -359,6 +359,7 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
                 value="${ useOrder ? item.pivot.order : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"
+                    class="${ item.quality ? 'q' + item.quality : '' }"
                     data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"
                     data-wowhead="item=${ item.item_id }?domain=classic">
                     ${ item.name }

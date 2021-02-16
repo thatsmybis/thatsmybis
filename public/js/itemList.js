@@ -88,7 +88,7 @@ function createTable(lastSource) {
                     <ul class="no-bullet no-indent mb-0">
                         <li>
                             <a href="/${ guild.id }/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }"
-                                class=""
+                                class="${ row.quality ? 'q' + row.quality : '' }"
                                 data-wowhead-link="https://classic.wowhead.com/item=${ row.item_id }"
                                 data-wowhead="item=${ row.item_id }?domain=classic">
                                 ${ row.name }
