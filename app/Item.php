@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Character, Guild, ItemSource};
+use App\{Character, Expansion, Guild, ItemSource};
 use Illuminate\Database\Eloquent\Model;
 
 class Item extends Model
@@ -15,6 +15,7 @@ class Item extends Model
      * @var array
      */
     protected $fillable = [
+        'expansion_id',
         'name',
         'source',
         'profession',
@@ -59,6 +60,10 @@ class Item extends Model
             ->withTimeStamps()
             ->withPivot('type')
             ->orderBy('characters.name');
+    }
+
+    public function expansion() {
+        return $this->belongsTo(Expansion::class);
     }
 
     public function guilds() {
