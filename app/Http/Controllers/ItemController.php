@@ -7,6 +7,8 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class ItemController extends Controller
 {
@@ -62,6 +64,7 @@ class ItemController extends Controller
         $items = Item::select([
                 'items.item_id',
                 'items.name',
+                'items.quality',
                 'item_sources.name AS source_name',
                 'guild_items.note AS guild_note',
                 'guild_items.priority AS guild_priority',
@@ -76,7 +79,10 @@ class ItemController extends Controller
                 $join->on('guild_items.item_id', 'items.item_id')
                     ->where('guild_items.guild_id', $guild->id);
             })
-            ->where('item_sources.instance_id', $instance->id)
+            ->where([
+                ['item_sources.instance_id', $instance->id],
+                ['items.expansion_id', $guild->expansion_id],
+            ])
             ->orderBy('item_sources.order')
             ->orderBy('items.name');
 
@@ -147,6 +153,7 @@ class ItemController extends Controller
         $items = Item::select([
                 'items.item_id',
                 'items.name',
+                'items.quality',
                 'item_sources.name AS source_name',
                 'guild_items.note AS guild_note',
                 'guild_items.priority AS guild_priority',
@@ -161,7 +168,10 @@ class ItemController extends Controller
                 $join->on('guild_items.item_id', 'items.item_id')
                     ->where('guild_items.guild_id', $guild->id);
             })
-            ->where('item_sources.instance_id', $instance->id)
+            ->where([
+                ['item_sources.instance_id', $instance->id],
+                ['items.expansion_id', $guild->expansion_id],
+            ])
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
             // This is problematic because the notes entered may differ, but we can only take one.
             ->groupBy('items.item_id')
@@ -193,7 +203,11 @@ class ItemController extends Controller
         }
 
         $validationRules =  [
-            'items.*.id'       => 'required|integer|exists:items,item_id',
+            'items.*.id' => [
+                'required',
+                'integer',
+                Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
+            ],
             'items.*.note'     => 'nullable|string|max:140',
             'items.*.priority' => 'nullable|string|max:140',
         ];
@@ -332,21 +346,25 @@ class ItemController extends Controller
             $showOfficerNote = true;
         }
 
-        $item = Item::where('item_id', $id)->with([
-            'guilds' => function ($query) use($guild) {
-                return $query->select([
-                    'guild_items.created_by',
-                    'guild_items.updated_by',
-                    'guild_items.note',
-                    'guild_items.priority'
-                ])
-                ->where('guilds.id', $guild->id);
-            },
-            'receivedAndRecipeCharacters' => function ($query) use($guild) {
-                return $query
-                    ->where(['characters.guild_id' => $guild->id]);
-            },
-        ]);
+        $item = Item::where([
+                ['item_id', $id],
+                ['expansion_id', $guild->expansion_id],
+            ])
+            ->with([
+                'guilds' => function ($query) use($guild) {
+                    return $query->select([
+                        'guild_items.created_by',
+                        'guild_items.updated_by',
+                        'guild_items.note',
+                        'guild_items.priority'
+                    ])
+                    ->where('guilds.id', $guild->id);
+                },
+                'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                    return $query
+                        ->where(['characters.guild_id' => $guild->id]);
+                },
+            ]);
 
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
@@ -443,7 +461,11 @@ class ItemController extends Controller
 
         $validationRules = [
             'raid_id'               => 'nullable|integer|exists:raids,id',
-            'item.*.id'             => 'nullable|integer|exists:items,item_id',
+            'items.*.id' => [
+                'nullable',
+                'integer',
+                Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
+            ],
             'item.*.character_id'   => [
                 'nullable',
                 'integer',
@@ -717,7 +739,11 @@ class ItemController extends Controller
         $guild->load(['raids', 'roles']);
 
         $validationRules = [
-            'id'       => 'required|integer|exists:items,item_id',
+            'id' => [
+                'required',
+                'integer',
+                Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
+            ],
             'note'     => 'nullable|string|max:140',
             'priority' => 'nullable|string|max:140',
         ];
