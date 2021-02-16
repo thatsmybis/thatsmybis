@@ -21,7 +21,7 @@
             </label>
             <select id="class_filter" class="form-control dark">
                 <option value="">—</option>
-                @foreach (App\Character::classes() as $class)
+                @foreach (App\Character::classes($guild->expansion_id) as $class)
                     <option value="{{ $class }}" class="text-{{ strtolower($class) }}-important">
                         {{ $class }}
                     </option>
