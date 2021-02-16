@@ -7,25 +7,31 @@ if (isset($item)) {
         $itemQuality = 'q' . $item->quality;
     }
 }
+
+// TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
+$wowheadSubdomain = null;
+$wowheadAttribs = null;
+if (isset($guild) && $guild->expansion_id === 1 || (isset($item) && isset($item->expansion_id) && $item->expansion_id === 1)) {
+    $wowheadSubdomain = 'classic';
+    $wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadSubdomain . '" data-wowhead-link="https://' . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadSubdomain . '"';
+}
 @endphp
 
 <span class="font-weight-{{ isset($fontWeight) && $fontWeight ? $fontWeight : 'medium' }} {{ isset($strikeThrough) && $strikeThrough ? 'font-strikethrough' : '' }}">
-    @if (isset($wowheadLink) && $wowheadLink)
-        <a href="https://classic.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ $itemQuality }}">{{ $itemName }}</a>
+    @if ($wowheadSubdomain && isset($wowheadLink) && $wowheadLink)
+        <a href="https://{{ $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ $itemQuality }}">{{ $itemName }}</a>
     @elseif (isset($guild) && $guild)
         @if (isset($auditLink) && $auditLink)
             <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId]) }}"
                 target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
-                data-wowhead="item={{ $itemId }}?domain=classic"
-                data-wowhead-link="https://classic.wowhead.com/item={{ $itemId }}"
+                {!! $wowheadAttribs !!}
                 class="{{ $itemQuality }}">
                 {{ $itemName }}
             </a>
         @else
             <a href="{{ route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId, 'slug' => slug($itemName)]) }}"
                 target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
-                data-wowhead="item={{ $itemId }}?domain=classic"
-                data-wowhead-link="https://classic.wowhead.com/item={{ $itemId }}"
+                {!! $wowheadAttribs !!}
                 class="{{ $itemQuality }}">
                 {{ $itemName }}
             </a>
@@ -33,8 +39,7 @@ if (isset($item)) {
     @else
         <a href="{{ route('item.show', ['item_id' => $itemId, 'slug' => slug($itemName)]) }}"
             target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
-            data-wowhead="item={{ $itemId }}?domain=classic"
-            data-wowhead-link="https://classic.wowhead.com/item={{ $itemId }}?domain=classic"
+            {!! $wowheadAttribs !!}
             class="{{ $itemQuality }}">
             {{ $itemName }}
         </a>

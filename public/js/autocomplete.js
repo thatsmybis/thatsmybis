@@ -222,15 +222,20 @@ function addTag($this, value, label) {
 
             let link = "";
             if (guild) {
+                // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
+                let wowheadData = null;
+                if (expansionId === 1) {
+                    wowheadData = `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ value }"
+                        data-wowhead="item=${ value }?domain=${ wowheadSubdomain }"`;
+                }
                 link = ` <a href="/${ guild.id }/${ guild.slug }/i/${ value }/${ slug(label) }"
                     target="_blank"
                     class="font-weight-medium"
-                    data-wowhead-link="https://classic.wowhead.com/item=${ value }"
-                    data-wowhead="item=${ value }?domain=classic">
+                    ${ wowheadData }>
                     ${ label }
                 </a>`;
             } else {
-                link = `<a href="https://classic.wowhead.com/item=${ value }" target="_blank" class="font-weight-medium">${ label }</a>`;
+                link = `<a href="https://${ wowheadSubdomain }.wowhead.com/item=${ value }" target="_blank" class="font-weight-medium">${ label }</a>`;
             }
             $nextInput.siblings(".js-input-label").html(link);
             $($this).val("");

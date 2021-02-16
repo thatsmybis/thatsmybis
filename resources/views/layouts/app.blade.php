@@ -176,10 +176,17 @@
     <style>.q3 {color: #057ffa !important;} .q4 {color: #ab4aed !important;}/* override some wowhead item quality colors to be higher contrast */</style>
 
     <script>
+        // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
         @if (isset($guild) && $guild->expansion_id)
             var expansionId = {{ $guild->expansion_id }};
+            @if ($guild->expansion_id === 1)
+                var wowheadSubdomain = "classic";
+            @else
+                var wowheadSubdomain = null;
+            @endif
         @else
             var expansionId = 1;
+            var wowheadSubdomain = "classic";
         @endif
     </script>
 
