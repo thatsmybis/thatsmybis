@@ -19,6 +19,20 @@ function getDateTime($format = 'Y-m-d H:i:s') {
     return (new \DateTime())->format($format);
 }
 
+// Gets a CSS color for an expansion
+function getExpansionColor($expansionId) {
+    switch ($expansionId) {
+        case 1:
+            return 'gold';
+        case 2:
+            return 'uncommon';
+        case 3:
+            return 'mage';
+        default:
+            return 'white';
+    }
+}
+
 // Check the request for whether or not we stored the bool isSuperAdmin as true or false
 function isStreamerMode() {
     return request()->get('isStreamerMode');
