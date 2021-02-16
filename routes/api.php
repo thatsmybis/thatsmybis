@@ -17,4 +17,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get( '/items/query/{query}',    'Api\ItemsController@query')  ->name('apiSearchItems');
+Route::get('/items/query/{expansion_id}/{query}', 'Api\ItemsController@query')->name('apiSearchItems');

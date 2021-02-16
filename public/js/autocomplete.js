@@ -19,7 +19,7 @@ function addItemAutocompleteHandler() {
                 $.ajax({
                     method: "get",
                     dataType: "json",
-                    url: "/api/items/query/" + request.term,
+                    url: "/api/items/query/" + expansionId + "/" + request.term,
                     success: function (data) {
                         response(data);
                         if (data.length <= 0) {
