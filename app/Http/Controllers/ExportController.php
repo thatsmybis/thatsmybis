@@ -90,6 +90,7 @@ class ExportController extends Controller
                 JOIN item_sources ON item_sources.id = iis.item_source_id
                 JOIN instances ON instances.id = item_sources.instance_id
                 LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
+            WHERE i.expansion_id = {$guild->expansion_id}
             ORDER BY instances.`order` DESC, i.name ASC;"));
 
         $csv = $this->createCsv($rows, self::ITEM_NOTE_HEADERS);

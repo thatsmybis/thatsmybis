@@ -81,6 +81,7 @@ class PrioController extends Controller
         $items = Item::select([
                 'items.item_id',
                 'items.name',
+                'items.quality',
                 'item_sources.name AS source_name',
                 'guild_items.note AS guild_note',
                 'guild_items.priority AS guild_priority',
@@ -95,7 +96,10 @@ class PrioController extends Controller
                 $join->on('guild_items.item_id', 'items.item_id')
                     ->where('guild_items.guild_id', $guild->id);
             })
-            ->where('item_sources.instance_id', $instance->id)
+            ->where([
+                ['item_sources.instance_id', $instance->id],
+                ['items.expansion_id', $guild->expansion_id],
+            ])
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
             // This is problematic because the notes entered may differ, but we can only take one.
             ->groupBy('items.item_id')
@@ -152,6 +156,7 @@ class PrioController extends Controller
         $item = Item::select([
                 'items.item_id',
                 'items.name',
+                'items.quality',
                 'item_sources.name AS source_name',
                 'guild_items.note AS guild_note',
                 'guild_items.priority AS guild_priority',
@@ -166,7 +171,10 @@ class PrioController extends Controller
                 $join->on('guild_items.item_id', 'items.item_id')
                     ->where('guild_items.guild_id', $guild->id);
             })
-            ->where('items.item_id', $itemId)
+            ->where([
+                ['items.item_id', $itemId],
+                ['items.expansion_id', $guild->expansion_id],
+            ])
             ->groupBy('items.item_id')
             ->with([
                 'priodCharacters' => function ($query) use ($raid) {
@@ -208,7 +216,11 @@ class PrioController extends Controller
 
         $validationRules =  [
             'instance_id'           => 'required|exists:instances,id',
-            'items.*.id'            => 'nullable|integer|exists:items,item_id',
+            'items.*.id' => [
+                'nullable',
+                'integer',
+                Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
+            ],
             'items.*.characters.id' => 'nullable|integer|exists:characters,id',
             'raid_id'               => 'required|exists:raids,id',
         ];
@@ -261,7 +273,11 @@ class PrioController extends Controller
         }
 
         $validationRules =  [
-            'item_id' => 'nullable|integer|exists:items,item_id',
+            'item_id' => [
+                'required',
+                'integer',
+                Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
+            ],
             'raid_id' => 'required|exists:raids,id',
             'items.*.characters.id' => 'nullable|integer|exists:characters,id',
         ];
