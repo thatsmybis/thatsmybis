@@ -22,7 +22,8 @@ class ItemsController extends \App\Http\Controllers\Controller
 
     private function getValidationRules() {
         return [
-            'query' => 'string|min:1|max:40'
+            'expansion_id' => 'integer|min:1|max:99',
+            'query'        => 'string|min:1|max:40',
         ];
     }
 
@@ -32,16 +33,22 @@ class ItemsController extends \App\Http\Controllers\Controller
      * @param $query The name to search for.
      * @return \Illuminate\Http\Response
      */
-    public function query($query)
+    public function query($expansionId, $query)
     {
-        $validator = Validator::make(['query' => $query], $this->getValidationRules());
+        $validator = Validator::make([
+            'expansion_id' => $expansionId,
+            'query'        => $query
+        ], $this->getValidationRules());
 
         if ($validator->fails()) {
-            return response()->json(['error' => 'Query did not pass validation. Query must be between 1 and 40 characters.'], 403);
+            return response()->json(['error' => 'Query did not pass validation. Query must be between 1 and 40 characters. Expansion ID must be between 1 and 99.'], 403);
         } else {
             if ($query && $query != " ") {
                 $results = Item::select(['name', 'item_id'])
-                    ->where('name', 'like', '%' . $query . '%')
+                    ->where([
+                        ['name', 'like', '%' . $query . '%'],
+                        ['expansion_id', $expansionId],
+                    ])
                     // For a more performant/powerful query...
                     // ->whereRaw(
                     //     "MATCH(`items`.`name`) AGAINST(? IN BOOLEAN MODE)",

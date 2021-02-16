@@ -173,7 +173,15 @@
 
     <script>var whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true, dropChance: true, iconSize: '@yield('wowheadIconSize', 'small')', hide: { maxstack: true, ilvl: false, sellprice: true }};</script>
     <script src="https://wow.zamimg.com/widgets/power.js"></script>
-    <style>.q3 {color: #057ffa !important;} .q4 {color: #ab4aed !important;}/* override wowhead epic color to be higher contrast */</style>
+    <style>.q3 {color: #057ffa !important;} .q4 {color: #ab4aed !important;}/* override some wowhead item quality colors to be higher contrast */</style>
+
+    <script>
+        @if (isset($guild) && $guild->expansion_id)
+            var expansionId = {{ $guild->expansion_id }};
+        @else
+            var expansionId = 1;
+        @endif
+    </script>
 
     <script src="{{ env('APP_ENV') == 'local' ? asset('/js/helpers.js') : mix('js/processed/helpers.js') }}"></script>
     <script src="{{ env('APP_ENV') == 'local' ? asset('/js/autocomplete.js') : mix('js/processed/autocomplete.js') }}"></script>
