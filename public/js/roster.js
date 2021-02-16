@@ -352,6 +352,13 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
             `;
         }
 
+        // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
+        let wowheadData = null;
+        if (expansionId === 1) {
+            wowheadData = `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ item.item_id }"
+            data-wowhead="item=${ item.item_id }?domain=${ wowheadSubdomain }">`;
+        }
+
         items += `
             <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' } ${ item.pivot.is_received && (item.pivot.type == 'wishlist' || item.pivot.type == 'prio') ? 'font-strikethrough' : '' }"
                 data-type="${ type }"
@@ -360,8 +367,7 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
                 style="${ clipItem ? 'display:none;' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"
                     class="${ item.quality ? 'q' + item.quality : '' }"
-                    data-wowhead-link="https://classic.wowhead.com/item=${ item.item_id }"
-                    data-wowhead="item=${ item.item_id }?domain=classic">
+                    ${ wowheadData }>
                     ${ item.name }
                 </a>
                 ${ item.pivot.is_offspec ? '<span title="offspec item" class="small text-muted">OS</span>' : '' }

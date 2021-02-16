@@ -451,7 +451,7 @@ class ItemController extends Controller
             'showPrios'                   => $showPrios,
             'showWishlist'                => $showWishlist,
             'wishlistCharacters'          => $item->relationLoaded('wishlistCharacters') ? $item->wishlistCharacters : null,
-            'itemJson'                    => self::getItemWowheadJson($item->item_id),
+            'itemJson'                    => self::getItemWowheadJson($guild->expansion_id, $item->item_id),
         ]);
     }
 
@@ -805,13 +805,17 @@ class ItemController extends Controller
      *
      * @param int $id The ID of the item to fetch.
      */
-    public static function getItemWowheadJson($id) {
+    public static function getItemWowheadJson($expansionId, $itemId) {
         $json = null;
-        try {
-            // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)
-            $json = json_decode(file_get_contents('https://classic.wowhead.com/tooltip/item/' . (int)$id));
-        } catch (Exception $e) {
-            // Fail silently, that's okay, we just won't display the content
+
+        // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
+        if ($expansionId === 1) {
+            try {
+                // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)
+                $json = json_decode(file_get_contents('https://classic.wowhead.com/tooltip/item/' . (int)$itemId));
+            } catch (Exception $e) {
+                // Fail silently, that's okay, we just won't display the content
+            }
         }
         return $json;
     }

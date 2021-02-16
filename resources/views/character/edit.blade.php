@@ -184,7 +184,7 @@
 
                 <div class="row mb-3 pb-1 pt-2 bg-light rounded">
                     <div class="col-12">
-                        <div class="row mb-4">
+                        <div class="row">
                             <div class="col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="class" class="font-weight-bold">
@@ -230,39 +230,41 @@
                             </div>
                         </div>
 
-                        <div class="row">
-                            <div class="col-sm-3 col-6">
-                                <div class="form-group">
-                                    <label for="rank" class="font-weight-bold">
-                                        <span class="text-muted fas fa-fw fa-swords"></span>
-                                        PvP Rank
-                                    </label>
-                                    <input name="rank"
-                                        type="number"
-                                        min="1"
-                                        max="14"
-                                        class="form-control dark"
-                                        placeholder="—"
-                                        value="{{ old('rank') ? old('rank') : ($character ? $character->rank : '') }}" />
+                        @if ($guild->expansion_id === 1)
+                            <div class="row mt-4">
+                                <div class="col-sm-3 col-6">
+                                    <div class="form-group">
+                                        <label for="rank" class="font-weight-bold">
+                                            <span class="text-muted fas fa-fw fa-swords"></span>
+                                            PvP Rank
+                                        </label>
+                                        <input name="rank"
+                                            type="number"
+                                            min="1"
+                                            max="14"
+                                            class="form-control dark"
+                                            placeholder="—"
+                                            value="{{ old('rank') ? old('rank') : ($character ? $character->rank : '') }}" />
+                                    </div>
                                 </div>
-                            </div>
 
 
-                            <div class="col-sm-3 col-6">
-                                <div class="form-group">
-                                    <label for="rank_goal" class="font-weight-bold">
-                                        PvP Rank Goal
-                                    </label>
-                                    <input name="rank_goal"
-                                        type="number"
-                                        min="1"
-                                        max="14"
-                                        class="form-control dark"
-                                        placeholder="—"
-                                        value="{{ old('rank_goal') ? old('rank_goal') : ($character ? $character->rank_goal : '') }}" />
+                                <div class="col-sm-3 col-6">
+                                    <div class="form-group">
+                                        <label for="rank_goal" class="font-weight-bold">
+                                            PvP Rank Goal
+                                        </label>
+                                        <input name="rank_goal"
+                                            type="number"
+                                            min="1"
+                                            max="14"
+                                            class="form-control dark"
+                                            placeholder="—"
+                                            value="{{ old('rank_goal') ? old('rank_goal') : ($character ? $character->rank_goal : '') }}" />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        @endif
                     </div>
                 </div>
 
