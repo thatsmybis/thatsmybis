@@ -222,12 +222,9 @@ function addTag($this, value, label) {
 
             let link = "";
             if (guild) {
-                // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
-                let wowheadData = null;
-                if (expansionId === 1) {
-                    wowheadData = `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ value }"
+                let wowheadData = `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ value }"
                         data-wowhead="item=${ value }?domain=${ wowheadSubdomain }"`;
-                }
+
                 link = ` <a href="/${ guild.id }/${ guild.slug }/i/${ value }/${ slug(label) }"
                     target="_blank"
                     class="font-weight-medium"
