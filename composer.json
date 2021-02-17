@@ -17,6 +17,7 @@
         "laravel/socialite": "^4.2",
         "laravel/tinker": "^2.0",
         "laravel/ui": "^2.0",
+        "predis/predis": "^1.1",
         "restcord/restcord": "^0.4",
         "socialiteproviders/discord": "^2.0"
     },
