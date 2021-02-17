@@ -6,7 +6,6 @@ use App\{AuditLog, Character, Content, Guild, Member, Raid, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
-use RestCord\DiscordClient;
 
 class MemberController extends Controller
 {

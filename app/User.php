@@ -6,7 +6,6 @@ use App\{Guild, Member};
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use RestCord\DiscordClient;
 
 class User extends Authenticatable
 {

@@ -6,6 +6,7 @@ use Auth, Closure;
 use App\{AuditLog, Guild, Member};
 use Exception;
 use RestCord\DiscordClient;
+use Illuminate\Support\Facades\Cache;
 
 class CheckGuildPermissions
 {

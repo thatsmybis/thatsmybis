@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\{AuditLog, Guild, Raid, User};
 use Auth;
 use Illuminate\Http\Request;
-use RestCord\DiscordClient;
 use Kodeine\Acl\Models\Eloquent\Permission;
 
 class RaidController extends Controller

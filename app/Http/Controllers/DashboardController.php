@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\{Character, Content, Guild, Member, Raid, Role, User};
 use Auth;
 use Illuminate\Http\Request;
-use RestCord\DiscordClient;
 
 class DashboardController extends Controller
 {

@@ -7,7 +7,7 @@ use App\Role;
 use App\Notification;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use RestCord\DiscordClient;
+use Illuminate\Support\Facades\Cache;
 
 class SeeUser
 {
