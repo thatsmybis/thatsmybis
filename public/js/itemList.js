@@ -84,13 +84,14 @@ function createTable(lastSource) {
                 "title"  : '<span class="fas fa-fw fa-sack text-success"></span> Loot',
                 "data"   : "",
                 "render" : function (data, type, row) {
+                    let wowheadData = `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ row.item_id }"
+                        data-wowhead="item=${ row.item_id }?domain=${ wowheadSubdomain }"`;
                     return `
                     <ul class="no-bullet no-indent mb-0">
                         <li>
                             <a href="/${ guild.id }/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }"
                                 class="${ row.quality ? 'q' + row.quality : '' }"
-                                data-wowhead-link="https://classic.wowhead.com/item=${ row.item_id }"
-                                data-wowhead="item=${ row.item_id }?domain=classic">
+                                ${ wowheadData }>
                                 ${ row.name }
                             </a>
                         </li>
@@ -184,6 +185,7 @@ function getCharacterList(data, type, itemId) {
                 </li>
             `;
         }
+
         characters += `
             <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }"
                 value="${ type == 'prio' ? character.pivot.order : '' }"

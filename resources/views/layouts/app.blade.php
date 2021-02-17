@@ -182,7 +182,7 @@
             @if ($guild->expansion_id === 1)
                 var wowheadSubdomain = "classic";
             @else
-                var wowheadSubdomain = null;
+                var wowheadSubdomain = "www";
             @endif
         @else
             var expansionId = 1;

@@ -807,16 +807,20 @@ class ItemController extends Controller
      */
     public static function getItemWowheadJson($expansionId, $itemId) {
         $json = null;
+        $domain = 'www';
 
         // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
         if ($expansionId === 1) {
-            try {
-                // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)
-                $json = json_decode(file_get_contents('https://classic.wowhead.com/tooltip/item/' . (int)$itemId));
-            } catch (Exception $e) {
-                // Fail silently, that's okay, we just won't display the content
-            }
+            $domain = 'classic';
         }
+
+        try {
+            // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)
+            $json = json_decode(file_get_contents('https://' . $domain . '.wowhead.com/tooltip/item/' . (int)$itemId));
+        } catch (Exception $e) {
+            // Fail silently, that's okay, we just won't display the content
+        }
+
         return $json;
     }
 }
