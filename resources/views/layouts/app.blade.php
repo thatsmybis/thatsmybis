@@ -186,7 +186,7 @@
             @endif
         @else
             var expansionId = 1;
-            var wowheadSubdomain = "classic";
+            var wowheadSubdomain = "www";
         @endif
     </script>
 
