@@ -396,6 +396,11 @@ function loadItemToForm(item, i) {
         itemId = 19002; // Head of Nefarian, Horde version
     }
 
+    // Convert item ID to the ID that we use
+    if (itemId && itemId == 32385) { // 32385 = Magtheridon's Head, Alliance version
+        itemId = 32385; // Head of Nefarian, Horde version
+    }
+
     if (item['item']) { // RCLC value
         itemName = item['item'].trim();
     } else if (item['itemName']) {
