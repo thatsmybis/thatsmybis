@@ -397,7 +397,7 @@ function loadItemToForm(item, i) {
     }
 
     // Convert item ID to the ID that we use
-    if (itemId && itemId == 32385) { // 32385 = Magtheridon's Head, Alliance version
+    if (itemId && itemId == 32386) { // 32385 = Magtheridon's Head, Alliance version
         itemId = 32385; // Head of Nefarian, Horde version
     }
 
