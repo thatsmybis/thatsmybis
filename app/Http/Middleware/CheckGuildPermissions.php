@@ -6,6 +6,7 @@ use Auth, Closure;
 use App\{AuditLog, Guild, Member};
 use Exception;
 use RestCord\DiscordClient;
+use Illuminate\Support\Facades\Cache;
 
 class CheckGuildPermissions
 {
@@ -42,13 +43,25 @@ class CheckGuildPermissions
             $discordMember = null;
 
             // Check if current user is on that guild's Discord
-            try {
-                $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$guild->discord_id, 'user.id' => (int)$user->discord_id]);
-            } catch (Exception $e) {
-                if ($user->id != $guild->user_id) { // Guild owner is excempt
-                    request()->session()->flash('status', 'That Discord server is either missing the ' . env('APP_NAME') . ' bot or we\'re simply unable to find you on it.');
-                    return redirect()->route('home');
+            // Cache to results
+            $discordMember = Cache::remember('user:' . $user->id . ':guild:' . $guild->id . ':discordMember', env('DISCORD_ROLE_CACHE_SECONDS'),
+                function () use ($user, $guild) {
+                    try {
+                        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+                        return $discord->guild->getGuildMember([
+                            'guild.id' => (int)$guild->discord_id,
+                            'user.id' => (int)$user->discord_id
+                        ]);
+                    } catch (Exception $e) {
+                        // Yeah, I know...
+                        return null;
+                    }
                 }
+            );
+
+            if (!$discordMember && $user->id != $guild->user_id) { // Guild owner gets a pass
+                request()->session()->flash('status', 'That Discord server is either missing the ' . env('APP_NAME') . ' bot or we\'re unable to find you on it.');
+                return redirect()->route('home');
             }
 
             // Guild owner doesn't have to go through this process

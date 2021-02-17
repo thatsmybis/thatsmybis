@@ -7,7 +7,6 @@ use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\DB;
-use RestCord\DiscordClient;
 
 class CharacterController extends Controller
 {
