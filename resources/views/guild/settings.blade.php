@@ -38,16 +38,17 @@
                                             @endphp
                                             <li>
                                                 @if ($expansion->id == $guild->expansion_id)
-                                                    <span class="text-gold font-weight-bold">
+                                                    <span class="text-{{ getExpansionColor($guild->expansion_id) }} font-weight-bold">
                                                         <span class="fab fa-fw fa-battle-net text-muted"></span>
                                                         {{ $expansion->name_long }}
                                                     </span>
                                                 @elseif ($matchingGuild)
-                                                    <a href="{{ route('guild.settings', ['guildId' => $matchingGuild->id, 'guildSlug' => $matchingGuild->slug]) }}">
+                                                    <a href="{{ route('guild.settings', ['guildId' => $matchingGuild->id, 'guildSlug' => $matchingGuild->slug]) }}"
+                                                        class="text-{{ getExpansionColor($matchingGuild->expansion_id) }}">
                                                         <span class="fab fa-fw fa- text-muted"></span>
                                                         {{ $expansion->name_long }}
+                                                        <span class="text-muted font-italic small">owned by <span class="text-discord">{{ $matchingGuild->user->discord_username }}</span></span>
                                                     </a>
-                                                    <span class="text-muted font-italic small">owned by <span class="text-discord">{{ $matchingGuild->user->discord_username }}</span></span>
                                                 @else
                                                     <span class="text-muted">
                                                         <span class="fab fa-fw fa- text-muted"></span>
