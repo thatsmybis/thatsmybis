@@ -60,6 +60,7 @@ class CheckGuildPermissions
             if (!$discordMember && $user->id != $guild->user_id) { // Guild owner gets a pass
                 request()->session()->flash('status', 'That Discord server is either missing the ' . env('APP_NAME') . ' bot or we\'re unable to find you on it.');
                 return redirect()->route('home');
+
             }
 
             // Guild owner doesn't have to go through this process
