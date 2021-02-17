@@ -12,7 +12,7 @@
                         Discord Roles
                     </h1>
                     <p>
-                        Whenever we see a new role attached to a member, we'll automatically sync this list.
+                        When we see a new role attached to a member, we'll automatically sync this list.
                     </p>
                     <p>
                         Roles listed on offline members are <strong>cached</strong>.
