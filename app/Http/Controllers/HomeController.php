@@ -6,6 +6,7 @@ use App\{Expansion, Guild, User};
 use Auth;
 use Illuminate\Http\Request;
 use RestCord\DiscordClient;
+use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -87,12 +88,16 @@ class HomeController extends Controller
             // Fetch guilds the user can join that already exist on this website
             if ($user->discord_token) {
 
-                $discord = new DiscordClient([
-                    'token' => $user->discord_token,
-                    'tokenType' => 'OAuth',
-                ]);
-
-                $discordGuilds = $discord->user->getCurrentUserGuilds();
+                // Cache to results
+                $discordGuilds = Cache::remember('user:' . $user->id . ':discordGuilds', env('DISCORD_ROLE_CACHE_SECONDS'),
+                    function () use ($user) {
+                        $discord = new DiscordClient([
+                            'token'     => $user->discord_token,
+                            'tokenType' => 'OAuth',
+                        ]);
+                        return $discord->user->getCurrentUserGuilds();
+                    }
+                );
 
                 if ($discordGuilds) {
                     $guildIds = [];

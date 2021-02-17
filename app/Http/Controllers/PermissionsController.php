@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\{Role, User};
 use Auth;
 use Illuminate\Http\Request;
-use RestCord\DiscordClient;
 use Kodeine\Acl\Models\Eloquent\Permission;
 
 class PermissionsController extends Controller
