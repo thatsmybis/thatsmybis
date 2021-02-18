@@ -8,8 +8,8 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
-                        <span class="fas fa-fw fa-database text-muted"></span>
-                        WoW Loot Tables
+                        <span class="fab fa-fw fa-battle-net text-mage"></span>
+                        World of Warcraft Loot Tables
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">

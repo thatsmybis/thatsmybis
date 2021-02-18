@@ -3,7 +3,7 @@
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-gold">Classic</span> Loot Tables
+        <span class="font-weight-normal text-gold">Classic</span> Loot Tables CSV
     </h2>
     <p>
         For ALL of Classic WoW.
@@ -21,7 +21,7 @@
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-uncommon">Burning Crusade</span> Loot Tables
+        <span class="font-weight-normal text-uncommon">Burning Crusade</span> Loot Tables CSV
     </h2>
     <p>
        For ALL of Burning Crusade. (includes Classic too)
