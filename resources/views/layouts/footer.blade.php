@@ -59,7 +59,7 @@
                                                 alt="PayPal"
                                                 class="">
                                         </button>
-                                        <img alt="" border="0" src="https://www.paypal.com/en_CA/i/scr/pixel.gif" width="1" height="1" />
+                                        <!-- Just fails to load <img alt="" border="0" src="https://www.paypal.com/en_CA/i/scr/pixel.gif" width="1" height="1" />-->
                                     </form>
                                 </span>
                                 <div class="dropdown-item">
