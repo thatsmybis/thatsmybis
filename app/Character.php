@@ -98,9 +98,8 @@ class Character extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->where('character_items.type', Item::TYPE_RECIPE)
-            // TODO: Temporary fix to get maintenance window out
             ->groupBy('character_items.id')
-            ->orderBy('order')
+            ->orderBy('character_items.order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
             ->withTimeStamps();
 
@@ -118,7 +117,6 @@ class Character extends Model
                 $join->on('raids.id', 'character_items.raid_id');
             })
             ->where('character_items.type', Item::TYPE_RECEIVED)
-            // TODO: Temporary fix to get maintenance window out
             ->groupBy('character_items.id')
             // Composite order by which checks for received_at date and uses that first, and then created_at date as a fallback
             // Sorts by `order` first though
@@ -139,7 +137,6 @@ class Character extends Model
             ->where('character_items.type', Item::TYPE_PRIO)
             ->orderBy('character_items.raid_id')
             ->orderBy('character_items.order')
-            // TODO: Temporary fix to get maintenance window out
             ->groupBy('character_items.id')
             ->withPivot(['id', 'added_by', 'type', 'order', 'is_received', 'received_at', 'raid_id', 'created_at'])
             ->withTimeStamps();

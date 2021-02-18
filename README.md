@@ -54,10 +54,31 @@ You should install and use the [phpredis](https://github.com/phpredis/phpredis#i
 
 ### phpredis Installation
 
+#### Option 1
+
+1. `apt install php-redis`
+2. `apt install redis-server`
+
+I required `phpize`, so I ran `sudo apt install php7.4-dev` (adjust for you version of php).
+
+You may need to run `sudo apt install igbinary`.
+
+You may need to add the following to your php or php-fpm config:
+```
+extension=redis.so
+extension=igbinary.so
+```
+
+#### Option 2
+
+This worked on my local environment, but not on the production server:
+
 1. `pecl install redis`
 2. `enable igbinary serializer support?` > yes (it uses far less memory)
 3. `enable lzf serializer support?` > no (I have no idea what this does)
 4. `enable zstd serializer support?` > no (I have no idea what this does)
+
+I required `igbinary`, so I ran `sudo pecl install igbinary`.
 
 After installation, run `redis-server` to test that you can run an instance of the server.
 
