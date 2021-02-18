@@ -184,6 +184,13 @@
             @else
                 var wowheadSubdomain = "www";
             @endif
+        @elseif (isset($expansionId))
+            var expansionId = {{ $expansionId }};
+            @if ($expansionId == 1)
+                var wowheadSubdomain = "classic";
+            @else
+                var wowheadSubdomain = "www";
+            @endif
         @else
             var expansionId = 1;
             var wowheadSubdomain = "www";

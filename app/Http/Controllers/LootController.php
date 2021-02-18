@@ -62,6 +62,7 @@ class LootController extends Controller
 
         return view('item.list', [
             'currentMember'   => null,
+            'expansionId'     => $expansionId,
             'guild'           => null,
             'instance'        => $instance,
             'items'           => $items,
