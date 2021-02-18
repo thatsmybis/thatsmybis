@@ -36,6 +36,11 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/discord/callback', 'Auth\LoginController@handleDiscordCallback');
 });
 
+Route::group(['prefix' => 'loot'], function () {
+    Route::get('/',                         'LootController@show')                 ->name('loot');
+    Route::get('/table/{expansionId}', 'ExportController@exportExpansionLoot')->name('loot.table');
+});
+
 // Route::get( '/about',   'HomeController@about')  ->name('about');
 // Route::get( '/contact', 'HomeController@contact')->name('contact');
 Route::get( '/faq',     'HomeController@faq')    ->name('faq');

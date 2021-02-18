@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Cache;
 
-class ExportController extends Controller
-{
+class ExportController extends Controller {
     const LOOT_HEADERS = [
         "raid_name",
         "character_name",
@@ -35,6 +35,15 @@ class ExportController extends Controller
         "updated_at",
     ];
 
+    const EXPANSION_LOOT_HEADERS = [
+        "instance_name",
+        "source_name",
+        "item_name",
+        "item_quality",
+        "item_id",
+        "url",
+    ];
+
     /**
      * Create a new controller instance.
      *
@@ -42,7 +51,7 @@ class ExportController extends Controller
      */
     public function __construct()
     {
-        $this->middleware(['auth', 'seeUser']);
+        $this->middleware(['auth', 'seeUser'])->except(['exportExpansionLoot']);
     }
 
     /**
@@ -62,6 +71,58 @@ class ExportController extends Controller
             'guild'         => $guild,
             'data'          => $characters['characters'],
             'name'          => 'Characters JSON',
+        ]);
+    }
+
+    /**
+     * Export an expansion's loot tables
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportExpansionLoot($expansion)
+    {
+        if ($expansion == 'classic') {
+            $expansionId = 1;
+        } else if ($expansion == 'burning-crusade') {
+            $expansionId = 2;
+        }
+        // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
+        $subdomain = 'www';
+        if ($expansion == 1) {
+            $subdomain = 'classic';
+        }
+
+        $csv = Cache::remember('lootTable:' . $expansion, 600, function () use ($subdomain, $expansionId) {
+                $rows = DB::select(DB::raw(
+                    "SELECT
+                        instances.name AS 'instance_name',
+                        item_sources.name AS 'source_name',
+                        items.name AS 'item_name',
+                        CASE
+                            WHEN items.quality = 1 THEN 'poor'
+                            WHEN items.quality = 2 THEN 'common'
+                            WHEN items.quality = 3 THEN 'rare'
+                            WHEN items.quality = 4 THEN 'epic'
+                            WHEN items.quality = 5 THEN 'legendary'
+                            WHEN items.quality = 6 THEN 'artifact'
+                            WHEN items.quality = 7 THEN 'hierloom'
+                        END AS 'item_quality',
+                        -- items.quality AS 'item_quality'
+                        items.item_id AS 'item_id',
+                        CONCAT('https://{$subdomain}.wowhead.com/item=', items.item_id) AS 'url'
+                    FROM instances
+                        JOIN item_sources      ON item_sources.instance_id = instances.id
+                        JOIN item_item_sources ON item_item_sources.item_source_id = item_sources.id
+                        JOIN items             ON items.item_id = item_item_sources.item_id
+                    WHERE items.expansion_id = {$expansionId}
+                    ORDER BY instances.`order` ASC, item_sources.`order` ASC, items.name ASC;"));
+
+                return $this->createCsv($rows, self::EXPANSION_LOOT_HEADERS);
+            });
+
+        return view('guild.export.generic', [
+            'data' => $csv,
+            'name' => $expansion . ' Loot Table CSV',
         ]);
     }
 

@@ -113,9 +113,6 @@
                                 <strong>Guild notes</strong> and <strong>prio notes</strong> are included.
                             </p>
                             <p>
-                                Handy if all you want is the loot tables in a simple format...
-                            </p>
-                            <p>
                                 Fields exported:
                             </p>
                             <div class="bg-dark rounded p-2">
@@ -226,19 +223,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- Item Database -->
-                        <li class="p-3 mb-3 rounded">
-                            <h2>
-                                <span class="fas fa-fw fa-database text-muted"></span>
-                                Classic Item Database
-                            </h2>
-                            <p>
-                                The Classic WoW item database used by {{ env('APP_NAME') }}!
-                            </p>
-                            <p>
-                                <a href="https://github.com/thatsmybis/classic-wow-item-db/tree/master/thatsmybis" target="_blank">https://github.com/thatsmybis/classic-wow-item-db/tree/master/thatsmybis</a>
-                            </p>
-                        </li>
+                        @include('partials/expansionDatabases')
                     </ol>
                 </div>
             </div>
