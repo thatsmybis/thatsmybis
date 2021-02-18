@@ -89,7 +89,7 @@ class ExportController extends Controller {
 
         // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
         $subdomain = 'www';
-        if ($expansionSlug == 1) {
+        if ($expansionId == 1) {
             $subdomain = 'classic';
         }
 
