@@ -98,6 +98,8 @@ class Character extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->where('character_items.type', Item::TYPE_RECIPE)
+            // TODO: Temporary fix to get maintenance window out
+            ->groupBy('character_items.id')
             ->orderBy('order')
             ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
             ->withTimeStamps();
