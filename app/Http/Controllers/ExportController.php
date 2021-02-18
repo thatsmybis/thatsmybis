@@ -204,6 +204,7 @@ class ExportController extends Controller {
                 JOIN items i ON i.item_id = ci.item_id
                 LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
             WHERE ci.type = 'received' AND c.guild_id = {$guild->id}
+                AND i.expansion_id = {$guild->expansion_id}
             ORDER BY r.name, c.name, ci.`order`;"));
 
         $csv = $this->createCsv($rows, self::LOOT_HEADERS);
@@ -255,6 +256,7 @@ class ExportController extends Controller {
                 JOIN items i ON i.item_id = ci.item_id
                 LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
             WHERE ci.type = 'prio' AND c.guild_id = {$guild->id}
+                AND i.expansion_id = {$guild->expansion_id}
             ORDER BY r.name, c.name, ci.`order`;"));
 
         $csv = $this->createCsv($rows, self::LOOT_HEADERS);
@@ -311,6 +313,7 @@ class ExportController extends Controller {
                 JOIN items i ON i.item_id = ci.item_id
                 LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
             WHERE ci.type = 'wishlist' AND c.guild_id = {$guild->id}
+                AND i.expansion_id = {$guild->expansion_id}
             ORDER BY r.name, c.name, ci.`order`;"));
 
         $csv = $this->createCsv($rows, self::LOOT_HEADERS);
