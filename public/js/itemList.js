@@ -86,10 +86,16 @@ function createTable(lastSource) {
                 "render" : function (data, type, row) {
                     let wowheadData = `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ row.item_id }"
                         data-wowhead="item=${ row.item_id }?domain=${ wowheadSubdomain }"`;
+                    let url = "";
+                    if (guild) {
+                        url = `/${ guild.id }/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }`;
+                    } else {
+                        url = "";
+                    }
                     return `
                     <ul class="no-bullet no-indent mb-0">
                         <li>
-                            <a href="/${ guild.id }/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }"
+                            <a href="${ url }"
                                 class="${ row.quality ? 'q' + row.quality : '' }"
                                 ${ wowheadData }>
                                 ${ row.name }
@@ -136,7 +142,7 @@ function createTable(lastSource) {
                     return (data ? `<span class="js-markdown-inline">${ nl2br(data) }</span>` : '—');
                 },
                 "orderable" : false,
-                "visible" : true,
+                "visible" : showNotes ? true : false,
                 "width"   : "200px",
             },
             {
@@ -146,7 +152,7 @@ function createTable(lastSource) {
                     return (data ? `<span class="js-markdown-inline">${ nl2br(data) }</span>` : '—');
                 },
                 "orderable" : false,
-                "visible" : true,
+                "visible" : showNotes ? true : false,
                 "width"   : "200px",
             },
         ],

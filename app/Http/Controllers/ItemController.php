@@ -125,6 +125,7 @@ class ItemController extends Controller
             'instance'        => $instance,
             'items'           => $items,
             'raids'           => $guild->raids,
+            'showNotes'       => true,
             'showOfficerNote' => $showOfficerNote,
             'showPrios'       => $showPrios,
             'showWishlist'    => $showWishlist,

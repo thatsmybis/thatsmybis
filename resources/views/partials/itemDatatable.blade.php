@@ -7,11 +7,13 @@
             </label>
             <select id="raid_filter" class="form-control dark">
                 <option value="">—</option>
-                @foreach ($raids as $raid)
-                    <option value="{{ $raid->id }}" style="color:{{ $raid->getColor() }};">
-                        {{ $raid->name }}
-                    </option>
-                @endforeach
+                @if ($raids)
+                    @foreach ($raids as $raid)
+                        <option value="{{ $raid->id }}" style="color:{{ $raid->getColor() }};">
+                            {{ $raid->name }}
+                        </option>
+                    @endforeach
+                @endif
             </select>
         </li>
 

@@ -10,6 +10,11 @@
                 <span class="fas fa-fw fa-sack text-success"></span>
                 {{ $instance->name }}
             </h1>
+            @if (!$guild)
+                <p class="font-weight-bold text-gold">
+                    To assign Prios, Wishlists, and Notes, sign in and register your guild.
+                </p>
+            @endif
         </div>
         <div class="col-12 pr-0 pl-0">
             @include('partials/itemDatatable')
@@ -21,9 +26,10 @@
 
 @section('scripts')
 <script>
-    var items = {!! $items->toJson() !!};
-    var guild = {!! $guild->toJson() !!};
-    var raids = {!! $raids->toJson() !!};
+    var items = {!! $items ? $items->toJson() : '{}' !!};
+    var guild = {!! $guild ? $guild->toJson() : '{}' !!};
+    var raids = {!! $raids ? $raids->toJson() : '{}' !!};
+    var showNotes       = {{ $showNotes ? 'true' : 'false' }};
     var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
     var showPrios       = {{ $showPrios ? 'true' : 'false' }};
     var showWishlist    = {{ $showWishlist ? 'true' : 'false' }};

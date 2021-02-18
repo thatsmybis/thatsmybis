@@ -79,20 +79,21 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportExpansionLoot($expansion)
+    public function exportExpansionLoot($expansionSlug)
     {
-        if ($expansion == 'classic') {
+        if ($expansionSlug == 'classic') {
             $expansionId = 1;
-        } else if ($expansion == 'burning-crusade') {
+        } else if ($expansionSlug == 'burning-crusade') {
             $expansionId = 2;
         }
+
         // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
         $subdomain = 'www';
-        if ($expansion == 1) {
+        if ($expansionSlug == 1) {
             $subdomain = 'classic';
         }
 
-        $csv = Cache::remember('lootTable:' . $expansion, 600, function () use ($subdomain, $expansionId) {
+        $csv = Cache::remember('lootTable:' . $expansionSlug, 600, function () use ($subdomain, $expansionId) {
                 $rows = DB::select(DB::raw(
                     "SELECT
                         instances.name AS 'instance_name',
@@ -115,14 +116,14 @@ class ExportController extends Controller {
                         JOIN item_item_sources ON item_item_sources.item_source_id = item_sources.id
                         JOIN items             ON items.item_id = item_item_sources.item_id
                     WHERE items.expansion_id = {$expansionId}
-                    ORDER BY instances.`order` ASC, item_sources.`order` ASC, items.name ASC;"));
+                    ORDER BY instances.`order` DESC, item_sources.`order` ASC, items.name ASC;"));
 
                 return $this->createCsv($rows, self::EXPANSION_LOOT_HEADERS);
             });
 
         return view('guild.export.generic', [
             'data' => $csv,
-            'name' => $expansion . ' Loot Table CSV',
+            'name' => $expansionSlug . ' Loot Table CSV',
         ]);
     }
 

@@ -37,8 +37,9 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'loot'], function () {
-    Route::get('/',                         'LootController@show')                 ->name('loot');
-    Route::get('/table/{expansionId}', 'ExportController@exportExpansionLoot')->name('loot.table');
+    Route::get('/',                                   'LootController@show')                 ->name('loot');
+    Route::get('/list/{expansionId}/{instanceSlug}', 'LootController@list')                 ->name('loot.list');
+    Route::get('/table/{expansionSlug}',              'ExportController@exportExpansionLoot')->name('loot.table');
 });
 
 // Route::get( '/about',   'HomeController@about')  ->name('about');

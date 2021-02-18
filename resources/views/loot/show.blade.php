@@ -9,20 +9,16 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-database text-muted"></span>
-                        Download WoW Loot Tables
+                        WoW Loot Tables
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     <p>
-                        <strong>The format of the data being exported is subject to change.</strong> We might change a field or two as development on this project continues.
+                        Use these when planning your guild's loot, or try <a href="{{ route('home') }}">our open source tool</a> if you're doing loot council.
                     </p>
                     <p>
-                        If you absolutely need access to some data or for a specific export format to not change, please reach out on
+                        If you need help or have questions, please reach out on
                         <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
-                        We will try to help you as best we can.
-                    </p>
-                    <p>
-                        Exports are shown in browser for easy copy+pasting. To save the data, press <kbd>CTRL + S</kbd> or <kbd>CMD + S</kbd>
                     </p>
                     <ol class="no-bullet no-indent striped">
                         @include('partials/expansionDatabases')
