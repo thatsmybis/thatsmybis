@@ -12,7 +12,7 @@
             </h1>
             @if (!$guild)
                 <p class="font-weight-bold text-gold">
-                    To assign Prios, Wishlists, and Notes, sign in and register your guild.
+                    To assign Prios and Wishlists sign in and register your guild.
                 </p>
             @endif
         </div>

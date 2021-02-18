@@ -66,8 +66,8 @@ class LootController extends Controller
             'instance'        => $instance,
             'items'           => $items,
             'raids'           => null,
-            'showNotes'       => true,
-            'showOfficerNote' => true,
+            'showNotes'       => false,
+            'showOfficerNote' => false,
             'showPrios'       => true,
             'showWishlist'    => true,
         ]);
