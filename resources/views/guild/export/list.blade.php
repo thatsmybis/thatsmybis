@@ -41,9 +41,15 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'csv']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         Download CSV
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        View CSV
                                     </a>
                                 </li>
                             </ul>
@@ -67,9 +73,15 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'csv']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         Download CSV
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        View CSV
                                     </a>
                                 </li>
                             </ul>
@@ -93,9 +105,15 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.prio', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.prio', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'csv']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         Download CSV
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.prio', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        View CSV
                                     </a>
                                 </li>
                             </ul>
@@ -119,9 +137,15 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.itemNotes', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.itemNotes', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'csv']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         Download CSV
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.itemNotes', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        View CSV
                                     </a>
                                 </li>
                             </ul>
@@ -213,9 +237,15 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'json']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-code text-muted"></span>
                                         Download JSON
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-code text-muted"></span>
+                                        View JSON
                                     </a>
                                 </li>
                             </ul>

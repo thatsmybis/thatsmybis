@@ -6,6 +6,10 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
 class ExportController extends Controller {
+    const CSV  = 'csv';
+    const HTML = 'html';
+    const JSON = 'json';
+
     const LOOT_HEADERS = [
         "raid_name",
         "character_name",
@@ -59,19 +63,14 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportCharactersWithItems($guildId, $guildSlug)
+    public function exportCharactersWithItems($guildId, $guildSlug, $type)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         $characters = $guild->getCharactersWithItemsAndPermissions($currentMember, false);
 
-        return view('guild.export.generic', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'data'          => $characters['characters'],
-            'name'          => 'Characters JSON',
-        ]);
+        return $this->getExport($characters['characters'], 'Character JSON', $type);
     }
 
     /**
@@ -79,7 +78,7 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportExpansionLoot($expansionSlug)
+    public function exportExpansionLoot($expansionSlug, $type)
     {
         if ($expansionSlug == 'classic') {
             $expansionId = 1;
@@ -121,10 +120,7 @@ class ExportController extends Controller {
                 return $this->createCsv($rows, self::EXPANSION_LOOT_HEADERS);
             });
 
-        return view('guild.export.generic', [
-            'data' => $csv,
-            'name' => $expansionSlug . ' Loot Table CSV',
-        ]);
+        return $this->getExport($csv, $expansionSlug . ' Loot Table', $type);
     }
 
     /**
@@ -132,7 +128,7 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportItemNotes($guildId, $guildSlug)
+    public function exportItemNotes($guildId, $guildSlug, $type)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -157,12 +153,7 @@ class ExportController extends Controller {
 
         $csv = $this->createCsv($rows, self::ITEM_NOTE_HEADERS);
 
-        return view('guild.export.generic', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'data'          => $csv,
-            'name'          => 'Item Notes CSV',
-        ]);
+        return $this->getExport($csv, 'Item Notes', $type);
     }
 
     /**
@@ -170,7 +161,7 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportLoot($guildId, $guildSlug)
+    public function exportLoot($guildId, $guildSlug, $type)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -209,12 +200,7 @@ class ExportController extends Controller {
 
         $csv = $this->createCsv($rows, self::LOOT_HEADERS);
 
-        return view('guild.export.generic', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'data'          => $csv,
-            'name'          => 'Loot CSV',
-        ]);
+        return $this->getExport($csv, 'Loot', $type);
     }
 
     /**
@@ -222,7 +208,7 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportPrios($guildId, $guildSlug)
+    public function exportPrios($guildId, $guildSlug, $type)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -261,12 +247,7 @@ class ExportController extends Controller {
 
         $csv = $this->createCsv($rows, self::LOOT_HEADERS);
 
-        return view('guild.export.generic', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'data'          => $csv,
-            'name'          => 'Prios CSV',
-        ]);
+        return $this->getExport($csv, 'Prio', $type);
     }
 
     /**
@@ -274,7 +255,7 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportWishlists($guildId, $guildSlug)
+    public function exportWishlists($guildId, $guildSlug, $type)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -318,12 +299,7 @@ class ExportController extends Controller {
 
         $csv = $this->createCsv($rows, self::LOOT_HEADERS);
 
-        return view('guild.export.generic', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'data'          => $csv,
-            'name'          => 'Wishlist CSV',
-        ]);
+        return $this->getExport($csv, 'Wishlist', $type);
     }
 
     /**
@@ -348,5 +324,37 @@ class ExportController extends Controller {
         $csv = stream_get_contents($csv);
 
         return $csv;
+    }
+
+    /**
+     * Get a CSV or HTML of the export
+     *
+     * @var array  $csv   The data.
+     * @var string $title
+     * @var string $type  'csv' or 'html'
+     *
+     * @return The thing to present to the user.
+     */
+    private function getExport($csv, $title, $type) {
+        if ($type == self::CSV) {
+            return response($csv)
+                ->withHeaders([
+                    'Content-Type'        => 'text/csv',
+                    'Cache-Control'       => 'no-store, no-cache',
+                    'Content-Disposition' => 'attachment; filename="' . slug($title) . '.csv"',
+                ]);
+        } else if ($type == self::JSON) {
+            return response($csv)
+                ->withHeaders([
+                    'Content-Type'        => 'text/json',
+                    'Cache-Control'       => 'no-store, no-cache',
+                    'Content-Disposition' => 'attachment; filename="' . slug($title) . '.json"',
+                ]);
+        } else {
+            return view('guild.export.generic', [
+                'data' => $csv,
+                'name' => $title,
+            ]);
+        }
     }
 }

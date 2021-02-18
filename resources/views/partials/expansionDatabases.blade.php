@@ -10,9 +10,15 @@
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">
-            <a href="{{ route('loot.table', 'classic') }}" target="_blank" class="text-4 tag">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
                 Download CSV
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
+                <span class="fas fa-fw fa-file-csv text-muted"></span>
+                View CSV
             </a>
         </li>
     </ul>
@@ -28,9 +34,15 @@
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">
-            <a href="{{ route('loot.table', 'burning-crusade') }}" target="_blank" class="text-4 tag">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'burning-crusade', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
                 Download CSV
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'burning-crusade', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
+                <span class="fas fa-fw fa-file-csv text-muted"></span>
+                View CSV
             </a>
         </li>
     </ul>
@@ -46,42 +58,42 @@
             <h2 class="font-weight-bold text-gold">Classic Raids</h2>
             <ul class="no-bullet no-indent">
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'zulgurub']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'zulgurub', 'type' => 'csv']) }}" target="_blank">
                         Zul'Gurub
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'ruins-of-ahnqiraj', 'type' => 'csv']) }}" target="_blank">
                         Ruins of Ahn'Qiraj
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'world-bosses']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'world-bosses', 'type' => 'csv']) }}" target="_blank">
                         World Bosses
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'molten-core']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'molten-core', 'type' => 'csv']) }}" target="_blank">
                         Molten Core
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'onyxias-lair']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'onyxias-lair', 'type' => 'csv']) }}" target="_blank">
                         Onyxia's Lair
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'blackwing-lair']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'blackwing-lair', 'type' => 'csv']) }}" target="_blank">
                         Blackwing Lair
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'temple-of-ahnqiraj']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'temple-of-ahnqiraj', 'type' => 'csv']) }}" target="_blank">
                         Temple of Ahn'Qiraj
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'naxxramas']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'naxxramas', 'type' => 'csv']) }}" target="_blank">
                         Naxxramas
                     </a>
                 </li>
@@ -92,47 +104,47 @@
             <h2 class="font-weight-bold text-uncommon">Burning Crusade Raids</h2>
             <ul class="no-bullet no-indent">
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'karazhan']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'karazhan', 'type' => 'csv']) }}" target="_blank">
                         Karazhan
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'gruuls-lair']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'gruuls-lair', 'type' => 'csv']) }}" target="_blank">
                         Gruul's Lair
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'magtheridons-lair']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'magtheridons-lair', 'type' => 'csv']) }}" target="_blank">
                         Magtheridon's Lair
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'serpentshrine-cavern']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'serpentshrine-cavern', 'type' => 'csv']) }}" target="_blank">
                         Serpentshrine Cavern
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'hyjal-summit']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'hyjal-summit', 'type' => 'csv']) }}" target="_blank">
                         Hyjal Summit
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'tempest-keep']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'tempest-keep', 'type' => 'csv']) }}" target="_blank">
                         Tempest Keep
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'black-temple']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'black-temple', 'type' => 'csv']) }}" target="_blank">
                         Black Temple
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'zulaman']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'zulaman', 'type' => 'csv']) }}" target="_blank">
                         Zul'Aman
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'sunwell-plateau']) }}" target="_blank">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'sunwell-plateau', 'type' => 'csv']) }}" target="_blank">
                         Sunwell Plateau
                     </a>
                 </li>

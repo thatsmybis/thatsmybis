@@ -37,9 +37,9 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'loot'], function () {
-    Route::get('/',                                   'LootController@show')                 ->name('loot');
+    Route::get('/',                                  'LootController@show')                 ->name('loot');
     Route::get('/list/{expansionId}/{instanceSlug}', 'LootController@list')                 ->name('loot.list');
-    Route::get('/table/{expansionSlug}',              'ExportController@exportExpansionLoot')->name('loot.table');
+    Route::get('/table/{expansionSlug}/{type}',      'ExportController@exportExpansionLoot')->name('loot.table');
 });
 
 // Route::get( '/about',   'HomeController@about')  ->name('about');
@@ -148,12 +148,12 @@ Route::group([
     Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');
 
     Route::group(['prefix' => 'export'], function () {
-        Route::get('/',                      'GuildController@showExports')               ->name('guild.exports');
-        Route::get('/characters-with-items', 'ExportController@exportCharactersWithItems')->name('guild.export.charactersWithItems');
-        Route::get('/item-notes',            'ExportController@exportItemNotes')          ->name('guild.export.itemNotes');
-        Route::get('/loot',                  'ExportController@exportLoot')               ->name('guild.export.loot');
-        Route::get('/prios',                 'ExportController@exportPrios')              ->name('guild.export.prio');
-        Route::get('/wishlist',              'ExportController@exportWishlists')          ->name('guild.export.wishlist');
+        Route::get('/',                             'GuildController@showExports')               ->name('guild.exports');
+        Route::get('/characters-with-items/{type}', 'ExportController@exportCharactersWithItems')->name('guild.export.charactersWithItems');
+        Route::get('/item-notes/{type}',            'ExportController@exportItemNotes')          ->name('guild.export.itemNotes');
+        Route::get('/loot/{type}',                  'ExportController@exportLoot')               ->name('guild.export.loot');
+        Route::get('/prios/{type}',                 'ExportController@exportPrios')              ->name('guild.export.prio');
+        Route::get('/wishlist/{type}',              'ExportController@exportWishlists')          ->name('guild.export.wishlist');
     });
 });
 
