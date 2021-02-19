@@ -119,12 +119,14 @@
                                         @endphp
                                         <li class="input-item {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
                                             style="{{ $itemId ? '' : 'display:none;' }}">
+                                            <input hidden name="wishlist[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" />
                                             <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
                                             <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
                                             <span class="js-sort-handle js-input-label move-cursor text-unselectable d-inline-block">
                                                 @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? $item->pivot->created_at : null), 'itemUsername' => ($item ? $item->added_by_username : null), 'strikeThrough' => ($item ? $item->pivot->is_received : null)])
                                                 @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                                @include('character/partials/itemEdit', ['name' => 'wishlist', 'index' => $i])
                                             </span>&nbsp;
                                         </li>
                                         @if ($errors->has('wishlist.' . $i . '.item_id'))
@@ -197,6 +199,7 @@
                                             }
                                         @endphp
                                         <li class="input-item {{ $errors->has('received.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ $itemId ? '' : 'display:none;' }}">
+                                            <input hidden name="received[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" />
                                             <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
                                             <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
@@ -252,6 +255,7 @@
                                         }
                                     @endphp
                                     <li class="input-item {{ $errors->has('recipes.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ $itemId ? '' : 'display:none;' }}">
+                                        <input hidden name="recipes[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" />
                                         <input type="checkbox" checked name="recipes[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
                                         <input type="checkbox" checked name="recipes[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
                                         <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
