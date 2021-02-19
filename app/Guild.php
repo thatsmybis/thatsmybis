@@ -220,4 +220,17 @@ class Guild extends Model
             'showWishlist'    => $showWishlist,
          ];
     }
+
+    // Returns the maximum level for characters in this guild
+    public function getMaxLevel() {
+        if ($this->expansion_id === 1) {
+            return 60;
+        } else if ($this->expansion_id === 2) {
+            return 70;
+        } else if ($this->expansion_id === 3) {
+            return 80;
+        } else {
+            return 60;
+        }
+    }
 }

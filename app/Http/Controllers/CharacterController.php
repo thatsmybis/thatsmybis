@@ -28,7 +28,7 @@ class CharacterController extends Controller
         return [
             'member_id'     => 'nullable|integer|exists:members,id',
             'name'          => 'required|string|min:2|max:32',
-            'level'         => 'nullable|integer|min:1|max:60',
+            'level'         => 'nullable|integer|min:1|max:' . $guild->getMaxLevel(),
             'race'          => ['nullable', 'string', Rule::in(Character::races($guild->expansion_id))],
             'class'         => ['nullable', 'string', Rule::in(Character::classes($guild->expansion_id))],
             'spec'          => 'nullable|string|max:50',

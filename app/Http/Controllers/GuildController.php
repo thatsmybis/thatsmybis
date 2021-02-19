@@ -343,7 +343,7 @@ class GuildController extends Controller
         $guild->load('roles');
 
         $validationRules =  [
-            'name'                      => 'string|max:36|unique:guilds,name,' . $guild->id,
+            'name'                      => 'string|max:36',
             'disabled_at'               => 'nullable|boolean',
             'is_prio_private'           => 'nullable|boolean',
             'is_received_locked'        => 'nullable|boolean',

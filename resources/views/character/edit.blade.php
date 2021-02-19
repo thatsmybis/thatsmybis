@@ -146,10 +146,10 @@
                                     <input name="level"
                                         type="number"
                                         min="1"
-                                        max="60"
+                                        max="{{ $guild->getMaxLevel() }}"
                                         class="form-control dark"
                                         placeholder="0"
-                                        value="{{ old('level') ? old('level') : ($character ? $character->level : '60') }}" />
+                                        value="{{ old('level') ? old('level') : ($character ? $character->level : $guild->getMaxLevel()) }}" />
                                 </div>
                             </div>
                         </div>
