@@ -539,8 +539,10 @@ class CharacterController extends Controller
         }
 
         $validationRules =  [
-            'id'                 => 'required|integer|exists:characters,id',
-            'wishlist.*.item_id' => 'nullable|integer|exists:items,item_id',
+            'id'                     => 'required|integer|exists:characters,id',
+            'wishlist.*.item_id'     => 'nullable|integer|exists:items,item_id',
+            'wishlist.*.is_received' => 'nullable|boolean',
+            'wishlist.*.is_offspec'  => 'nullable|boolean',
             'received.*.item_id' => 'nullable|integer|exists:items,item_id',
             'recipes.*.item_id'  => 'nullable|integer|exists:items,item_id',
             'public_note'        => 'nullable|string|max:140',
@@ -557,10 +559,10 @@ class CharacterController extends Controller
 
         $updateValues = [];
 
-        $updateValues['public_note']   = request()->input('public_note');
+        $updateValues['public_note'] = request()->input('public_note');
 
         if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
-            $updateValues['officer_note']   = request()->input('officer_note');
+            $updateValues['officer_note'] = request()->input('officer_note');
         }
 
         // User is editing their own character
@@ -702,6 +704,7 @@ class CharacterController extends Controller
         $now = getDateTime();
 
         $audits = [];
+        $isReordered = false;
 
         /**
          * Go over all the items we already have in the database.
@@ -716,14 +719,42 @@ class CharacterController extends Controller
                     $i++;
                 }
                 // We found a match
-                if (!isset($inputItems[$inputItemKey]['resolved']) && $existingItem->item_id == $inputItem['item_id']) {
+                if (!isset($inputItems[$inputItemKey]['resolved']) && $existingItem->pivot->id == $inputItem['pivot_id']) {
                     $found = true;
+                    $newValues = [];
+
+                    $inputItem['is_received'] = isset($inputItem['is_received']) ? 1 : 0;
+                    $inputItem['is_offspec']  = isset($inputItem['is_offspec']) ? 1 : 0;
+
+                    // Order changed
                     if ($existingItem->pivot->order != $i) {
-                        // Update the metadata
-                        $toUpdate[] = [
-                            'id'    => $existingItem->pivot->id,
-                            'order' => $i,
-                        ];
+                        $newValues['order'] = $i;
+                        $isReordered = true;
+                    }
+                    // Is Received flag changed
+                    if ($existingItem->pivot->is_received != $inputItem['is_received']) {
+                        if ($inputItem['is_received']) {
+                            $newValues['is_received'] = 1;
+                            $newValues['received_at'] = null; // Can't set a date until we have a date input
+                        } else {
+                            $newValues['is_received'] = 0;
+                            $newValues['received_at'] = null;
+                        }
+                    }
+                    // Is Offspec flag changed
+                    if ($existingItem->pivot->is_offspec != $inputItem['is_offspec']) {
+                        if ($inputItem['is_offspec']) {
+                            $newValues['is_offspec'] = 1;
+                        } else {
+                            $newValues['is_offspec'] = 0;
+                        }
+                    }
+
+                    // At least one value changed
+                    if (count($newValues)) {
+                        $newValues['pivot_id'] = $existingItem->pivot->id;
+                        $newValues['item_id']  = $existingItem->item_id;
+                        $toUpdate[] = $newValues;
                     }
                     // Mark the input item as resolved so that we don't go over it again (we've already resolved what to do with this item)
                     $inputItems[$inputItemKey]['resolved'] = true;
@@ -794,24 +825,59 @@ class CharacterController extends Controller
         // I'm sure there's some clever way to perform an UPDATE statement with CASE statements... https://stackoverflow.com/questions/3432/multiple-updates-in-mysql
         // Don't have time for that just to remove a few queries.
         foreach ($toUpdate as $item) {
+            $newValues = [];
+            $auditMessage = '';
+
+            if (isset($item['is_received'])) {
+                $newValues['is_received'] = $item['is_received'];
+                $auditMessage .= ($item['is_received'] ? 'unreceived to received, ' : 'received to unreceived, ');
+            }
+            if (isset($item['received_at'])) {
+                $newValues['received_at'] = $item['received_at'];
+                $auditMessage .= ($item['received_at'] ? 'added received date, ' : 'cleared received date, ');
+            }
+            if (isset($item['is_offspec'])) {
+                $newValues['is_offspec'] = $item['is_offspec'];
+                $auditMessage .= ($item['is_offspec'] ? 'MS to OS, ' : 'OS to MS, ');
+            }
+            if (isset($item['order'])) {
+                $newValues['order'] = $item['order'];
+                if ($auditMessage) {
+                    $auditMessage .= 'order changed to ' . $item['order'] . ', ';
+                }
+            }
+            $auditMessage = rtrim($auditMessage, ', ');
+
+            $newValues['updated_at'] = $now;
+
             DB::table('character_items')
-                ->where('id', $item['id'])
-                ->update([
-                    'order'      => $item['order'],
-                    'updated_at' => $now,
-                ]);
+                ->where('id', $item['pivot_id'])
+                ->update($newValues);
 
             // If we want to log EVERY prio change (this has a cascading effect and can result in hundreds of audits)
             // $audits[] = [
             //     'description'  => $currentMember->username . ' updated item on ' . $character->name . ' (' . $itemType . ')' . ' (prio set to ' . $item['order'] . ')',
+            //     'type'         => $itemType,
             //     'member_id'    => $currentMember->id,
             //     'guild_id'     => $currentMember->guild_id,
             //     'character_id' => $character->id,
-            //     'item_id'      => $item['id'],
+            //     'item_id'      => $item['pivot_id'],
             // ];
+
+            if ($auditMessage) {
+                $audits[] = [
+                    'description'  => $currentMember->username . ' ' . $auditMessage . ' on ' . $character->name . ' (' . $itemType . ')',
+                    'type'         => $itemType,
+                    'member_id'    => $currentMember->id,
+                    'guild_id'     => $currentMember->guild_id,
+                    'character_id' => $character->id,
+                    'item_id'      => $item['item_id'],
+                    'created_at'   => $now,
+                ];
+            }
         }
 
-        if (count($toUpdate) > 0) {
+        if ($isReordered) {
             $audits[] = [
                 'description'  => $currentMember->username . ' re-ordered items for a character (' . $itemType . ' items)',
                 'type'         => $itemType,
