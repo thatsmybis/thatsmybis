@@ -245,6 +245,7 @@ function createTable() {
         ],
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
         "paging" : false,
+        "fixedHeader" : true, // Header row sticks to top of window when scrolling down
         initComplete: function () {
             let sortColumns = [colClass, colRaid];
             this.api().columns().every(function (index) {

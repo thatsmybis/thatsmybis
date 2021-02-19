@@ -546,6 +546,23 @@ button.close:hover {
 .table {
     color: #c6c6c6;
 }
+/* Datatables FixedHeader CSS */
+table.fixedHeader-floating {
+  position: fixed !important;
+  background-color: #19182f;
+}
+table.fixedHeader-floating.no-footer {
+  border-bottom-width: 0;
+}
+table.fixedHeader-locked {
+  position: absolute !important;
+  background-color: #19182f;
+}
+@media print {
+  table.fixedHeader-floating {
+    display: none;
+  }
+}
 
 /* get rid of the default solid border that clutters things */
 .table td {
