@@ -92,7 +92,8 @@ class AuditLogController extends Controller
                 })
             ->leftJoin('roles', function ($join) {
                     $join->on('roles.id', '=', 'audit_logs.role_id');
-                });
+                })
+            ->groupBy('audit_logs.id');
 
         if (!$showPrios && !$showWishlist) {
             $query = $query->where(function ($query) {
