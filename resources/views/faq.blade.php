@@ -8,6 +8,7 @@
             <h1>Frequently Asked Questions</h1>
 
             <ol>
+                <li><a href="#loot-tables">Where are the public loot tables?</a></li>
                 <li><a href="#not-seeing-guild">Why can't I see my guild?</a></li>
                 <li><a href="#how-to-loot-council">How do I loot council?</a></li>
                 <li><a href="#what-does-this-do">What does this website do?</a></li>
@@ -19,6 +20,13 @@
                 <li><a href="#feature-request">Can you add feature XYZ?</a></li>
                 <li><a href="#how-to-help">I'd like to help out</a></li>
             </ol>
+
+            <hr class="light">
+
+            <h2 id="loot-tables">Where are the public loot tables?</h2>
+            <p>
+                <a href="{{ route('loot') }}" target="_blank">Here</a>
+            </p>
 
             <hr class="light">
 
