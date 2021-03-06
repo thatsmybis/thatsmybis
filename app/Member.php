@@ -129,7 +129,7 @@ class Member extends Model
             if ($rolesToDetach) {
                 // Looks like you don't actually have those roles anymore. RIP!
                 $this->roles()->detach($this->roles->whereIn('discord_id', $rolesToDetach));
-           }
+            }
 
             if ($rolesToAttach) {
                 // Looks like you have some new roles! Let's fetch them from the database...
