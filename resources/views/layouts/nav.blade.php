@@ -141,7 +141,7 @@
                     $editPrios      = $currentMember->hasPermission('edit.prios');
                 @endphp
 
-                @if ($viewRoles || $viewRaids || $editGuild || $editPrios)
+                @if ($viewRoles || $viewRaids || $editCharacters || $editGuild || $editItems || $editPrios)
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin

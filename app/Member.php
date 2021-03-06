@@ -129,11 +129,11 @@ class Member extends Model
             if ($rolesToDetach) {
                 // Looks like you don't actually have those roles anymore. RIP!
                 $this->roles()->detach($this->roles->whereIn('discord_id', $rolesToDetach));
-            }
+           }
 
             if ($rolesToAttach) {
                 // Looks like you have some new roles! Let's fetch them from the database...
-                $roles = Role::whereIn('discord_id', $rolesToAttach)->get();
+                $roles = Role::where('guild_id', $guild->id)->whereIn('discord_id', $rolesToAttach)->get();
 
                 $attachRolesArray = [];
 
@@ -165,6 +165,9 @@ class Member extends Model
             // Detach all roles
             $this->roles()->detach();
         }
+
+        // Refresh to whatever is now in the database
+        $this->load('roles');
 
         return true;
     }
