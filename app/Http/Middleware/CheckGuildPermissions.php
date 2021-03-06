@@ -116,8 +116,12 @@ class CheckGuildPermissions
                 // Compare Discord's roles vs. our DB's roles
                 $diffRoles = array_merge(array_diff($storedRoles, $discordMember->roles), array_diff($discordMember->roles, $storedRoles));
 
+                // TODO: Remove $triggerHotfix after 2021. This was added to resolve a bug that was live for a few weeks when
+                // TBC was released on thatsmybis. The bug affected records in the database.
+                $doTriggerHotfix = ($currentMember->roles->count() > 0 && $currentMember->roles->last()->updated_at < '2021-03-02 06:00:00');
+
                 // The roles we have vs. what Discord has differ.
-                if ($diffRoles) {
+                if ($diffRoles || $doTriggerHotfix) {
                     // Sync their roles with the db
                     $currentMember->syncRoles($guild, $discordMember);
                 }
