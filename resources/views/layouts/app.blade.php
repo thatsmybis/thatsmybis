@@ -182,6 +182,8 @@
             var expansionId = {{ $guild->expansion_id }};
             @if ($guild->expansion_id === 1)
                 var wowheadSubdomain = "classic";
+            @elseif ($guild->expansion_id === 2)
+                var wowheadSubdomain = "tbc";
             @else
                 var wowheadSubdomain = "www";
             @endif
@@ -189,6 +191,8 @@
             var expansionId = {{ $expansionId }};
             @if ($expansionId == 1)
                 var wowheadSubdomain = "classic";
+            @elseif ($expansionId == 2)
+                var wowheadSubdomain = "tbc";
             @else
                 var wowheadSubdomain = "www";
             @endif
