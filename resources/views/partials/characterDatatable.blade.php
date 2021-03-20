@@ -88,11 +88,9 @@
                     <option value="17">
                         Sunwell Plateau
                     </option>
-                    <!--
                     <option value="18">
                         World Bosses
                     </option>
-                    -->
                 @endif
             </select>
         </li>
