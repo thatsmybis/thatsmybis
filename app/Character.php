@@ -93,10 +93,11 @@ class Character extends Model
     public function recipes() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
-            ->select(['items.*', 'added_by_members.username AS added_by_username'])
-            ->leftJoin('members AS added_by_members', function ($join) {
-                $join->on('added_by_members.id', 'character_items.added_by');
-            })
+            ->select(['items.*', 'added_by_members.username AS added_by_username', 'instances.id AS instance_id'])
+            ->leftJoin('members AS added_by_members', 'added_by_members.id', '=', 'character_items.added_by')
+            ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
+            ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
+            ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->where('character_items.type', Item::TYPE_RECIPE)
             ->groupBy('character_items.id')
             ->orderBy('character_items.order')
@@ -109,13 +110,12 @@ class Character extends Model
     public function received() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
-            ->select(['items.*', 'added_by_members.username AS added_by_username', 'raids.name AS raid_name'])
-            ->leftJoin('members AS added_by_members', function ($join) {
-                $join->on('added_by_members.id', 'character_items.added_by');
-            })
-            ->leftJoin('raids', function ($join) {
-                $join->on('raids.id', 'character_items.raid_id');
-            })
+            ->select(['items.*', 'added_by_members.username AS added_by_username', 'raids.name AS raid_name', 'instances.id AS instance_id'])
+            ->leftJoin('members AS added_by_members', 'added_by_members.id', '=', 'character_items.added_by')
+            ->leftJoin('raids', 'raids.id', '=', 'character_items.raid_id')
+            ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
+            ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
+            ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->where('character_items.type', Item::TYPE_RECEIVED)
             ->groupBy('character_items.id')
             // Composite order by which checks for received_at date and uses that first, and then created_at date as a fallback
@@ -130,10 +130,11 @@ class Character extends Model
     public function prios() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
-            ->select(['items.*', 'added_by_members.username AS added_by_username'])
-            ->leftJoin('members AS added_by_members', function ($join) {
-                $join->on('added_by_members.id', 'character_items.added_by');
-            })
+            ->select(['items.*', 'added_by_members.username AS added_by_username', 'instances.id AS instance_id'])
+            ->leftJoin('members AS added_by_members', 'added_by_members.id', '=', 'character_items.added_by')
+            ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
+            ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
+            ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->where('character_items.type', Item::TYPE_PRIO)
             ->orderBy('character_items.raid_id')
             ->orderBy('character_items.order')
@@ -157,18 +158,10 @@ class Character extends Model
                 'item_sources.object_id    AS object_id',
                 'added_by_members.username AS added_by_username'
             ])
-            ->leftJoin('members AS added_by_members', function ($join) {
-                $join->on('added_by_members.id', 'character_items.added_by');
-            })
-            ->leftJoin('item_item_sources', function ($join) {
-                $join->on('items.item_id', 'item_item_sources.item_id');
-            })
-            ->leftJoin('item_sources', function ($join) {
-                $join->on('item_item_sources.item_source_id', 'item_sources.id');
-            })
-            ->leftJoin('instances', function ($join) {
-                $join->on('item_sources.instance_id', 'instances.id');
-            })
+            ->leftJoin('members AS added_by_members', 'added_by_members.id',              '=', 'character_items.added_by')
+            ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
+            ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
+            ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->where('character_items.type', Item::TYPE_WISHLIST)
             ->groupBy('character_items.id')
             ->orderBy('character_items.order')

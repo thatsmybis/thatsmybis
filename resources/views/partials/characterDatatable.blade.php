@@ -28,6 +28,74 @@
                 @endforeach
             </select>
         </li>
+        <li class="list-inline-item">
+            <label for="raid_filter font-weight-light">
+                <span class="text-muted fas fa-fw fa-sack"></span>
+                Dungeon
+            </label>
+            <select id="instance_filter" class="form-control dark">
+                <option value="">—</option>
+                @if ($guild->expansion_id == 1)
+                    <option value="4">
+                        Zul'Gurub
+                    </option>
+                    <option value="5">
+                        Ruins of Ahn'Qiraj
+                    </option>
+                    <option value="8">
+                        World Bosses
+                    </option>
+                    <option value="1">
+                        Molten Core
+                    </option>
+                    <option value="2">
+                        Onyxia's Lair
+                    </option>
+                    <option value="3">
+                        Blackwing Lair
+                    </option>
+                    <option value="6">
+                        Temple of Ahn'Qiraj
+                    </option>
+                    <option value="7">
+                        Naxxramas
+                    </option>
+                @elseif ($guild->expansion_id == 2)
+                    <option value="9">
+                        Karazhan
+                    </option>
+                    <option value="10">
+                        Gruul's Lair
+                    </option>
+                    <option value="11">
+                        Magtheridon's Lair
+                    </option>
+                    <option value="12">
+                        Serpentshrine Cavern
+                    </option>
+                    <option value="13">
+                        Hyjal Summit
+                    </option>
+                    <option value="14">
+                        Tempest Keep
+                    </option>
+                    <option value="15">
+                        Black Temple
+                    </option>
+                    <option value="16">
+                        Zul'Aman
+                    </option>
+                    <option value="17">
+                        Sunwell Plateau
+                    </option>
+                    <!--
+                    <option value="18">
+                        World Bosses
+                    </option>
+                    -->
+                @endif
+            </select>
+        </li>
 
         <li class="list-inline-item font-weight-light">
             <span class="text-muted fas fa-fw fa-eye-slash"></span>
