@@ -83,6 +83,8 @@ Route::group([
         Route::get( '/{nameSlug}',                    'CharacterController@find')      ->name('character.find');
     });
 
+    Route::get( '/loot/recipes',             'ItemController@listRecipesWithGuild')->name('guild.recipe.list');
+
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')      ->name('guild.item.list');
     Route::get( '/loot/{instanceSlug}/edit', 'ItemController@listWithGuildEdit')  ->name('guild.item.list.edit');
     Route::post('/loot/{instanceSlug}/edit', 'ItemController@listWithGuildSubmit')->name('guild.item.list.submit');

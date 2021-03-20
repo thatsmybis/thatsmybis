@@ -300,6 +300,10 @@ body {
     font-weight: 700 !important;
 }
 
+.dropdown-divider { /* bootstrap override */
+    border-top-color: #8e8d9c;
+}
+
 ul.no-bullet, ol.no-bullet, li.no-bullet  {
     list-style-type: none;
 }

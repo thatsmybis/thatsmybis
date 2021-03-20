@@ -96,6 +96,10 @@
                                 Sunwell Plateau
                             </a>
                         @endif
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('guild.recipe.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            Guild Recipes
+                        </a>
                     </div>
                 </li>
 
