@@ -16,7 +16,7 @@
                     <thead>
                         <tr>
                             <th>
-                                <span class="fas fa-fw fa-user text-muted"></span>
+                                <span class="fas fa-fw fa-book text-muted"></span>
                                 Recipe
                             </th>
                             <th>
