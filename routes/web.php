@@ -83,6 +83,10 @@ Route::group([
         Route::get( '/{nameSlug}',                    'CharacterController@find')      ->name('character.find');
     });
 
+
+    Route::get( '/gquit',                          'MemberController@showGquit')  ->name('member.showGquit');
+    Route::post('/gquit',                          'MemberController@submitGquit')->name('member.submitGquit');
+
     Route::get( '/loot/recipes',             'ItemController@listRecipesWithGuild')->name('guild.recipe.list');
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')      ->name('guild.item.list');

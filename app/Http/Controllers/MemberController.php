@@ -137,6 +137,22 @@ class MemberController extends Controller
     }
 
     /**
+     * Show the page for a member to gquit
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showGquit($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        return view('member.gquit', [
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+        ]);
+    }
+
+    /**
      * Show a list of members for a guild
      *
      * @return \Illuminate\Http\Response
@@ -171,6 +187,45 @@ class MemberController extends Controller
             'showOfficerNote'      => $showOfficerNote,
             'unassignedCharacters' => $unassignedCharacters,
         ]);
+    }
+
+    /**
+     * A member gquits.
+     *
+     * @return
+     */
+    public function submitGquit($guildId, $guildSlug) {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if ($currentMember->user_id == $guild->user_id) {
+            request()->session()->flash('status', 'You are the guild master. The guild master may not gquit.');
+            return redirect()->back();
+        }
+
+        $updateValues = [];
+        $updateValues['inactive_at'] = getDateTime();
+
+        $currentMember->load('characters');
+        // Make characters inactive
+        foreach ($currentMember->characters as $character) {
+            if (!$character->inactive_at) {
+                $character->inactive_at = getDateTime();
+                $character->save();
+            }
+        }
+
+        $currentMember->update($updateValues);
+
+        AuditLog::create([
+            'description'     => $currentMember->username . ' gquit. Their profile and characters were automatically flagged as inactive and were hidden.',
+            'member_id'       => $currentMember->id,
+            'guild_id'        => $guild->id,
+            'other_member_id' => null,
+        ]);
+
+        request()->session()->flash('status', 'Successfully gquit.');
+        return redirect()->route('home');
     }
 
     /**

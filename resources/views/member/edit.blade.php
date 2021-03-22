@@ -134,7 +134,7 @@
                                     <label>
                                         <input type="checkbox" name="inactive_at" value="1" class="" autocomplete="off"
                                             {{ old('inactive_at') && old('inactive_at') == 1 ? 'checked' : ($member->inactive_at ? 'checked' : '') }}>
-                                            Inactive <small class="text-muted">no longer visible, characters also toggled inactive (or active)</small>
+                                            Inactive or Kicked <small class="text-muted">no longer visible, characters also toggled inactive</small>
                                     </label>
                                 </div>
                             </div>
