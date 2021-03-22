@@ -128,6 +128,18 @@
             </div>
         </div>
     @endif
+    @if (isset($guild) && $guild->expansion_id == 2)
+        {{-- TODO: Remove when stats are corrected --}}
+        <div class="container-fluid container-width-capped">
+            <div class="row">
+                <div class="col-12 text-center">
+                    <span class="small font-weight-normal">
+                        TBC stats will be fixed during TBC Beta
+                    </span>
+                </div>
+            </div>
+        </div>
+    @endif
     @if (isset($guild) && $guild->message)
         <div class="container-fluid container-width-capped">
             <div class="row">

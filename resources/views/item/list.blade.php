@@ -14,6 +14,10 @@
                 <p class="font-weight-bold text-gold">
                     To assign Prios and Wishlists sign in and register your guild.
                 </p>
+                <p class="font-weight-normal">
+                    {{-- TODO: Remove when stats are corrected --}}
+                    TBC stats will be fixed during TBC Beta
+                </p>
             @endif
         </div>
         <div class="col-12 pr-0 pl-0">
