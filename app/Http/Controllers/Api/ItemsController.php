@@ -57,6 +57,17 @@ class ItemsController extends \App\Http\Controllers\Controller
                     ->orderByDesc('weight')
                     ->limit(15)
                     ->get();
+                
+                if (count($results) == 0) {
+                    $results = Item::select(['name', 'item_id'])
+                        ->where([
+                            ['name', 'like', '%'.trim($query).'%'],
+                            ['expansion_id', $expansionId],
+                        ])
+                        ->orderByDesc('weight')
+                        ->limit(15)
+                        ->get();
+                }
 
                 // For testing the query time:
                 // $start = microtime(true);
