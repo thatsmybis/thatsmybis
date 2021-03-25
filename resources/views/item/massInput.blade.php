@@ -62,7 +62,7 @@ eg.
     character,date,itemID,itemName,note
     Gurgthock,2020-10-01,18821,Quick Strike Ring,That's my BIS
 
-Supported header fields:
+Supported header fields: (CASE SENSITIVE)
 ================
 player OR character (required)
 itemID OR item_id (required)
