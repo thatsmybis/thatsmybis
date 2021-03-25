@@ -147,7 +147,7 @@ class GuildController extends Controller
     public function register()
     {
         $validationRules =  [
-            'name'              => 'string|max:36|unique:guilds,name',
+            'name'              => 'string|max:36',
             'discord_id_select' => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id',
             'discord_id'        => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id_select',
             'expansion_id'      => 'integer|exists:expansions,id',
