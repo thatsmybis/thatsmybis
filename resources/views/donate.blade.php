@@ -41,10 +41,10 @@
                     Calaris (Patreon: Main Tank)
                </li>
                <li>
-                    Finvy (Patreon)
+                    Finvy (Patreon: Raider)
                </li>
                <li>
-                    mattyp237 (Patreon)
+                    mattyp237 (Patreon: Parser)
                </li>
                <li>
                     niph (Paypal)
