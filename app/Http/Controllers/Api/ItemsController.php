@@ -46,7 +46,7 @@ class ItemsController extends \App\Http\Controllers\Controller
             if ($query && $query != " ") {
                 $results = Item::select(['name', 'item_id'])
                     ->where([
-                        ['name', 'like', '%' . $query . '%'],
+                        ['name', 'like', '%' . trim($query) . '%'],
                         ['expansion_id', $expansionId],
                     ])
                     // For a more performant/powerful query...
