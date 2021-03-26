@@ -83,11 +83,10 @@ Route::group([
         Route::get( '/{nameSlug}',                    'CharacterController@find')      ->name('character.find');
     });
 
+    Route::get( '/gquit', 'MemberController@showGquit')  ->name('member.showGquit');
+    Route::post('/gquit', 'MemberController@submitGquit')->name('member.submitGquit');
 
-    Route::get( '/gquit',                          'MemberController@showGquit')  ->name('member.showGquit');
-    Route::post('/gquit',                          'MemberController@submitGquit')->name('member.submitGquit');
-
-    Route::get( '/loot/recipes',             'ItemController@listRecipesWithGuild')->name('guild.recipe.list');
+    Route::get( '/loot/recipes', 'ItemController@listRecipesWithGuild')->name('guild.recipe.list');
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')      ->name('guild.item.list');
     Route::get( '/loot/{instanceSlug}/edit', 'ItemController@listWithGuildEdit')  ->name('guild.item.list.edit');
@@ -121,7 +120,6 @@ Route::group([
 
     Route::get( '/assign-loot', 'ItemController@massInput')      ->name('item.massInput');
     Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
-
 
     Route::group(['prefix' => 'raid'], function () {
         Route::get( '/',               'RaidController@raids')        ->name('guild.raids');

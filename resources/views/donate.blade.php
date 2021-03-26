@@ -38,7 +38,7 @@
             <h2>Donors</h2>
             <ul>
                <li>
-                    Calaris (Patreon)
+                    Calaris (Patreon: Main Tank)
                </li>
                <li>
                     Finvy (Patreon)
@@ -50,13 +50,16 @@
                     niph (Paypal)
                </li>
                <li>
-                    Sangwa (Patreon)
+                    Sangwa (Patreon: Raider)
                </li>
                <li>
-                    Strix (Patreon)
+                    Strix (Patreon: Black Lotus)
                </li>
                <li>
-                    TideAd (Patreon)
+                    TideAd (Patreon: Parser)
+               </li>
+               <li>
+                    Z. Anon (Patreon: Raider)
                </li>
             </ul>
         </div>
