@@ -12,8 +12,18 @@
                         <li class="list-inline-item">
                             <h1 class="font-weight-bold">
                                 @if ($itemJson)
+
+                                    @php
+                                        $wowheadSubdomain = 'www';
+                                        if ($guild->expansion_id === 1) {
+                                            $wowheadSubdomain = 'classic';
+                                        } elseif ($guild->expansion_id === 2) {
+                                            $wowheadSubdomain = 'tbc';
+                                        }
+                                    @endphp
+
                                     {{-- %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want --}}
-                                    <a class="q{!! $itemJson->quality !!}" href="https://classic.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
+                                    <a class="q{!! $itemJson->quality !!}" href="https://{{ $wowheadSubdomain }}.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
                                         <span class="iconlarge">
                                             <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
                                     </a>
