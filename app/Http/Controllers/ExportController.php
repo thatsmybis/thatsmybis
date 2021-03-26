@@ -86,10 +86,11 @@ class ExportController extends Controller {
             $expansionId = 2;
         }
 
-        // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
         $subdomain = 'www';
         if ($expansionId == 1) {
             $subdomain = 'classic';
+        } else if ($expansionId == 2) {
+            $subdomain = 'tbc';
         }
 
         $csv = Cache::remember('lootTable:' . $expansionSlug, 600, function () use ($subdomain, $expansionId) {

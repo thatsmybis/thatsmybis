@@ -897,7 +897,6 @@ class ItemController extends Controller
         $json = null;
         $domain = 'www';
 
-        // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
         if ($expansionId === 1) {
             $domain = 'classic';
         } else if ($expansionId === 2) {

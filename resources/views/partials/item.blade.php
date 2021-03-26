@@ -7,7 +7,6 @@ if (isset($item)) {
     }
 }
 
-// TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
 $wowheadSubdomain = 'www';
 
 if (isset($guild) && $guild->expansion_id) {

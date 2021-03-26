@@ -128,18 +128,6 @@
             </div>
         </div>
     @endif
-    @if (isset($guild) && $guild->expansion_id == 2)
-        {{-- TODO: Remove when stats are corrected --}}
-        <div class="container-fluid container-width-capped">
-            <div class="row">
-                <div class="col-12 text-center">
-                    <span class="small font-weight-normal">
-                        TBC stats will be fixed during TBC Beta
-                    </span>
-                </div>
-            </div>
-        </div>
-    @endif
     @if (isset($guild) && $guild->message)
         <div class="container-fluid container-width-capped">
             <div class="row">
@@ -189,7 +177,6 @@
     <style>.q3 {color: #057ffa !important;} .q4 {color: #ab4aed !important;}/* override some wowhead item quality colors to be higher contrast */</style>
 
     <script>
-        // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
         @if (isset($guild) && $guild->expansion_id)
             var expansionId = {{ $guild->expansion_id }};
             @if ($guild->expansion_id === 1)

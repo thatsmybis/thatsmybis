@@ -104,10 +104,6 @@
             <h2 class="font-weight-bold text-uncommon">Burning Crusade Raids</h2>
             <ul class="no-bullet no-indent">
                 <li class="">
-                    {{-- TODO: Remove when stats are corrected --}}
-                    TBC stats will be fixed during TBC Beta
-                </li>
-                <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'karazhan']) }}" target="_blank">
                         Karazhan
                     </a>
