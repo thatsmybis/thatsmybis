@@ -49,6 +49,15 @@
                <li>
                     niph (Paypal)
                </li>
+               <li>
+                    Sangwa (Patreon)
+               </li>
+               <li>
+                    Strix (Patreon)
+               </li>
+               <li>
+                    TideAd (Patreon)
+               </li>
             </ul>
         </div>
     </div>

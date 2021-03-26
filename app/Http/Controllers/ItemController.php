@@ -861,10 +861,10 @@ class ItemController extends Controller
             ]);
 
             AuditLog::create([
-                'description'  => $currentMember->username . ' changed item note/priority',
-                'member_id'    => $currentMember->id,
-                'guild_id'     => $currentMember->guild_id,
-                'item_id'      => $item->item_id,
+                'description' => $currentMember->username . ' changed item note/priority',
+                'member_id'   => $currentMember->id,
+                'guild_id'    => $currentMember->guild_id,
+                'item_id'     => $item->item_id,
             ]);
         } else {
             $noticeVerb = 'created';
@@ -876,10 +876,10 @@ class ItemController extends Controller
             ]);
 
             AuditLog::create([
-                'description'  => $currentMember->username . ' added item note/priority',
-                'member_id'    => $currentMember->id,
-                'guild_id'     => $currentMember->guild_id,
-                'item_id'      => $item->item_id,
+                'description' => $currentMember->username . ' added item note/priority',
+                'member_id'   => $currentMember->id,
+                'guild_id'    => $currentMember->guild_id,
+                'item_id'     => $item->item_id,
             ]);
         }
 
