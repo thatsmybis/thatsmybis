@@ -86,10 +86,11 @@ class ExportController extends Controller {
             $expansionId = 2;
         }
 
-        // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
         $subdomain = 'www';
         if ($expansionId == 1) {
             $subdomain = 'classic';
+        } else if ($expansionId == 2) {
+            $subdomain = 'tbc';
         }
 
         $csv = Cache::remember('lootTable:' . $expansionSlug, 600, function () use ($subdomain, $expansionId) {
@@ -185,10 +186,10 @@ class ExportController extends Controller {
                 -- {$officerNote} AS 'officer_note',
                 ci.received_at AS 'received_at',
                 ci.import_id AS 'import_id',
-                ci.created_at AS 'created_at',
-                ci.updated_at AS 'updated_at',
                 gi.note AS 'item_note',
-                gi.priority AS 'item_prio_note'
+                gi.priority AS 'item_prio_note',
+                ci.created_at AS 'created_at',
+                ci.updated_at AS 'updated_at'
             FROM character_items ci
                 JOIN characters c ON c.id = ci.character_id
                 LEFT JOIN raids r ON r.id = c.raid_id
@@ -232,10 +233,10 @@ class ExportController extends Controller {
                 -- {$officerNote} AS 'officer_note',
                 ci.received_at AS 'received_at',
                 ci.import_id AS 'import_id',
-                ci.created_at AS 'created_at',
-                ci.updated_at AS 'updated_at',
                 gi.note AS 'item_note',
-                gi.priority AS 'item_prio_note'
+                gi.priority AS 'item_prio_note',
+                ci.created_at AS 'created_at',
+                ci.updated_at AS 'updated_at'
             FROM character_items ci
                 JOIN characters c ON c.id = ci.character_id
                 LEFT JOIN raids r ON r.id = c.raid_id
@@ -273,21 +274,21 @@ class ExportController extends Controller {
         $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
         $rows = DB::select(DB::raw(
             "SELECT
-                r.name AS 'raid_name',
-                c.name AS 'character_name',
-                c.class AS 'character_class',
+                r.name        AS 'raid_name',
+                c.name        AS 'character_name',
+                c.class       AS 'character_class',
                 c.inactive_at AS 'character_inactive_at',
-                ci.`order` AS 'sort_order',
-                i.name AS 'item_name',
-                ci.item_id AS 'item_id',
-                ci.note AS 'note',
+                ci.`order`    AS 'sort_order',
+                i.name        AS 'item_name',
+                ci.item_id    AS 'item_id',
+                ci.note       AS 'note',
                 -- {$officerNote} AS 'officer_note',
                 ci.received_at AS 'received_at',
-                ci.import_id AS 'import_id',
-                ci.created_at AS 'created_at',
-                ci.updated_at AS 'updated_at',
-                gi.note AS 'item_note',
-                gi.priority AS 'item_prio_note'
+                ci.import_id   AS 'import_id',
+                gi.note        AS 'item_note',
+                gi.priority    AS 'item_prio_note',
+                ci.created_at  AS 'created_at',
+                ci.updated_at  AS 'updated_at'
             FROM character_items ci
                 JOIN characters c ON c.id = ci.character_id
                 LEFT JOIN raids r ON r.id = c.raid_id

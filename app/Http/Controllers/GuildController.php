@@ -147,7 +147,7 @@ class GuildController extends Controller
     public function register()
     {
         $validationRules =  [
-            'name'              => 'string|max:36|unique:guilds,name',
+            'name'              => 'string|max:36',
             'discord_id_select' => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id',
             'discord_id'        => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id_select',
             'expansion_id'      => 'integer|exists:expansions,id',
@@ -173,9 +173,9 @@ class GuildController extends Controller
         [$guild, $member] = $this->createNewGuild($input['name'], $discordId, $input['expansion_id'], $user);
 
         AuditLog::create([
-            'description'     => $member->username . ' registered the guild',
-            'member_id'       => $member->id,
-            'guild_id'        => $guild->id,
+            'description' => $member->username . ' registered the guild',
+            'member_id'   => $member->id,
+            'guild_id'    => $guild->id,
         ]);
 
         // Redirect to guild settings page; prompting the user to finish setup
@@ -199,15 +199,15 @@ class GuildController extends Controller
         [$newGuild, $newMember] = $this->createNewGuild($guild->name, $guild->discord_id, $expansion->id, $currentUser);
 
         AuditLog::create([
-            'description'     => $currentMember->username . ' registered the guild for ' . $expansion->name_long . ' (new guild ID: ' . $newGuild->id . ')',
-            'member_id'       => $currentMember->id,
-            'guild_id'        => $guild->id,
+            'description' => $currentMember->username . ' registered the guild for ' . $expansion->name_long . ' (new guild ID: ' . $newGuild->id . ')',
+            'member_id'   => $currentMember->id,
+            'guild_id'    => $guild->id,
         ]);
 
         AuditLog::create([
-            'description'     => $newMember->username . ' registered the guild',
-            'member_id'       => $newMember->id,
-            'guild_id'        => $newGuild->id,
+            'description' => $newMember->username . ' registered the guild',
+            'member_id'   => $newMember->id,
+            'guild_id'    => $newGuild->id,
         ]);
 
         // Redirect to guild settings page; prompting the user to finish setup
@@ -275,9 +275,9 @@ class GuildController extends Controller
                 $guild->update(['user_id' => $member->user->id]);
 
                 AuditLog::create([
-                    'description'     => $currentMember->username . ' changed the guild owner to ' . $member->username . ' (' . $member->user->discord_username . ').',
-                    'member_id'       => $currentMember->id,
-                    'guild_id'        => $guild->id,
+                    'description' => $currentMember->username . ' changed the guild owner to ' . $member->username . ' (' . $member->user->discord_username . ').',
+                    'member_id'   => $currentMember->id,
+                    'guild_id'    => $guild->id,
                 ]);
 
                 $message = 'changed to ' . $member->username . ' (' . $member->user->discord_username . ').';
@@ -430,9 +430,9 @@ class GuildController extends Controller
         $guild->update($updateValues);
 
         AuditLog::create([
-            'description'     => $currentMember->username . ' modified guild settings' . $auditMessage,
-            'member_id'       => $currentMember->id,
-            'guild_id'        => $guild->id,
+            'description' => $currentMember->username . ' modified guild settings' . $auditMessage,
+            'member_id'   => $currentMember->id,
+            'guild_id'    => $guild->id,
         ]);
 
         request()->session()->flash('status', 'Guild settings updated.');

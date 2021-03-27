@@ -13,8 +13,11 @@
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
-                    <p>
-                        Use these when planning your guild's loot, or try <a href="{{ route('home') }}">our open source tool</a> if you're doing loot council.
+                    <p class="text-4">
+                        Try our <a href="{{ route('home') }}">open source tool</a> if you're considering loot council. It helps with
+                        <span class="font-weight-bold">transparency</span>,
+                        <span class="font-weight-bold">recordkeeping</span>, and
+                        <span class="font-weight-bold">communication</span> challenges.
                     </p>
                     <p>
                         If you need help or have questions, please reach out on

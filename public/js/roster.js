@@ -52,12 +52,13 @@ $(document).ready( function () {
         } else {
             $(".js-clipped-item").show();
             $(".js-show-clipped-items").hide();
-            $(".js-hide-clipped-items").show();
+            $(".js-hide-clipped-items").hide();
             allItemsVisible = true;
         }
     });
 
     addClippedItemHandlers();
+    addInstanceFilterHandlers();
     trackTimestamps();
 });
 
@@ -313,6 +314,35 @@ function addClippedItemHandlers() {
     });
 }
 
+function addInstanceFilterHandlers() {
+    $("#instance_filter").change(function () {
+        let instanceId = $("#instance_filter").val();
+        if (instanceId) {
+            // Show all items, then remove the visible/hidden filters; they interfere with this filter.
+            allItemsVisible = false;
+            $(".js-show-all-clipped-items").click();
+            $(".js-show-all-clipped-items").hide();
+            $(".js-show-clipped-items").hide();
+            $(".js-hide-clipped-items").hide();
+
+            // hide all other instance's items
+            $("li.js-has-instance[data-instance-id='" + instanceId + "']").show();
+            $("li.js-has-instance[data-instance-id!='" + instanceId + "']").hide();
+        } else {
+            // show all instance's items
+            $("li.js-has-instance[data-instance-id]").show();
+
+            // Reset the visible/hidden filters to their default state.
+            allItemsVisible = true;
+            $(".js-show-all-clipped-items").click();
+            $(".js-show-all-clipped-items").show();
+            $(".js-show-clipped-items").show();
+            $(".js-hide-clipped-items").hide();
+        }
+    });
+
+}
+
 // Gets an HTML list of items with pretty wowhead formatting
 function getItemList(data, type, characterId, useOrder = false, showInstances = false, listClass = null, isVisible = true) {
     let items = `<ol class="no-indent js-item-list mb-2 ${ listClass }" data-type="${ type }" data-id="${ characterId }" style="${ isVisible ? '' : 'display:none;' }">`;
@@ -344,10 +374,11 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
         if (showInstances && item.instance_id && item.instance_id != lastInstanceId) {
             lastInstanceId = item.instance_id;
             items += `
-                <li data-instance-id="" class="${ clipItem ? 'js-clipped-item' : '' } no-bullet font-weight-normal font-italic text-muted small"
+                <li class="js-has-instance ${ clipItem ? 'js-clipped-item' : '' } no-bullet font-weight-normal font-italic text-muted small"
                     style="${ clipItem ? 'display:none;' : '' }"
                     data-type="${ type }"
-                    data-id="${ characterId }">
+                    data-id="${ characterId }"
+                    data-instance-id="${ item.instance_id }">
                     ${ item.instance_name }
                 </li>
             `;
@@ -357,9 +388,10 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
             data-wowhead="item=${ item.item_id }?domain=${ wowheadSubdomain }"`;
 
         items += `
-            <li class="font-weight-normal ${ clipItem ? 'js-clipped-item' : '' } ${ item.pivot.is_received && (item.pivot.type == 'wishlist' || item.pivot.type == 'prio') ? 'font-strikethrough' : '' }"
+            <li class="js-has-instance font-weight-normal ${ clipItem ? 'js-clipped-item' : '' } ${ item.pivot.is_received && (item.pivot.type == 'wishlist' || item.pivot.type == 'prio') ? 'font-strikethrough' : '' }"
                 data-type="${ type }"
                 data-id="${ characterId }"
+                data-instance-id="${ item.instance_id }"
                 value="${ useOrder ? item.pivot.order : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"

@@ -93,7 +93,7 @@ class CheckGuildPermissions
             }
 
             // Fetch their existing member object
-            $currentMember = Member::where(['guild_id' => $guild->id, 'user_id' => Auth::id()])->first();
+            $currentMember = Member::where(['guild_id' => $guild->id, 'user_id' => Auth::id()])->with('roles')->first();
 
             if ($currentMember && ($currentMember->banned_at || $currentMember->inactive_at)) {
                 request()->session()->flash('status-danger',  'Your membership has been disabled. To reverse this, an officer would need to access your member page and re-enable it.');
@@ -110,6 +110,15 @@ class CheckGuildPermissions
                     'guild_id'        => $guild->id,
                 ]);
             } else if ($discordMember) {
+                // TODO: Remove $doHotfix after 2021. This was added to resolve a bug that was live for a few weeks when
+                // TBC was released on thatsmybis. The bug affected records in the database.
+                $doHotfix = ($currentMember->roles->count() > 0 && $currentMember->roles->last()->updated_at < '2021-03-02 05:45:00');
+
+                if ($doHotfix) {
+                    $currentMember->roles()->detach();
+                    $currentMember->load('roles');
+                }
+
                 // Does the member have any new/missing roles since we last checked?
                 $storedRoles = $currentMember->roles->keyBy('discord_id')->keys()->toArray();
 
@@ -117,7 +126,7 @@ class CheckGuildPermissions
                 $diffRoles = array_merge(array_diff($storedRoles, $discordMember->roles), array_diff($discordMember->roles, $storedRoles));
 
                 // The roles we have vs. what Discord has differ.
-                if ($diffRoles) {
+                if ($diffRoles || $doHotfix) {
                     // Sync their roles with the db
                     $currentMember->syncRoles($guild, $discordMember);
                 }

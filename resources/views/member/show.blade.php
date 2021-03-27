@@ -186,6 +186,17 @@
                     </div>
                 </div>
             </form>
+
+            @if ($member->id == $currentMember->id)
+                <div class="row mb-3 pb-3 pt-3">
+                    <div class="col-12 mb-2">
+                        <a href="{{ route('member.showGquit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}"
+                            class="btn btn-outline-danger font-weight-light">
+                            /gquit
+                        </a>
+                    </div>
+                </div>
+            @endif
         </div>
     </div>
 </div>

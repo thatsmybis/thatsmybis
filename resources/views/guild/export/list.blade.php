@@ -14,6 +14,9 @@
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     <p>
+                        Publicly sharable copy of the generic loot tables <a href="{{ route('loot') }}" target="_blank">here</a>
+                    </p>
+                    <p>
                         <strong>The format of the data being exported is subject to change.</strong> We might change a field or two as development on this project continues.
                     </p>
                     <p>

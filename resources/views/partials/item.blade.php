@@ -7,10 +7,20 @@ if (isset($item)) {
     }
 }
 
-// TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
 $wowheadSubdomain = 'www';
-if (isset($guild) && $guild->expansion_id === 1 || (isset($item) && isset($item->expansion_id) && $item->expansion_id === 1)) {
+
+if (isset($guild) && $guild->expansion_id) {
+    if ($guild->expansion_id === 1) {
+        $wowheadSubdomain = 'classic';
+    } else if ($guild->expansion_id === 2) {
+        $wowheadSubdomain = 'tbc';
+    }
+} else if (isset($item) && isset($item->expansion_id)) {
+    if ($item->expansion_id === 1) {
     $wowheadSubdomain = 'classic';
+    } else if ($item->expansion_id === 2) {
+        $wowheadSubdomain = 'tbc';
+    }
 }
 
 $wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadSubdomain . '" data-wowhead-link="https://' . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadSubdomain . '"';

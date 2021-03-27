@@ -292,6 +292,93 @@ class ItemController extends Controller
     }
 
     /**
+     * List the items
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listRecipesWithGuild($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load(['raids']);
+
+        $characterFields = [
+            'characters.id',
+            'characters.raid_id',
+            'characters.name',
+            'characters.slug',
+            'characters.level',
+            'characters.race',
+            'characters.spec',
+            'characters.class',
+            'characters.is_alt',
+            'members.username',
+            'raids.name AS raid_name',
+            'raid_roles.color AS raid_color',
+            'added_by_members.username AS added_by_username',
+        ];
+
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
+        $items = Item::select(['items.*', 'guild_items.note AS guild_note', 'guild_items.priority AS guild_priority',])
+            ->join('character_items',         'character_items.item_id', '=', 'items.item_id')
+            ->join('characters',              'characters.id',           '=', 'character_items.character_id')
+            ->leftJoin('item_item_sources', 'item_item_sources.item_id', '=', 'items.item_id')
+            ->leftJoin('item_sources',      'item_sources.id',           '=', 'item_item_sources.item_source_id')
+            ->leftJoin('guild_items', function ($join) use ($guild) {
+                $join->on('guild_items.item_id', 'items.item_id')
+                    ->where('guild_items.guild_id', $guild->id);
+            })
+            ->where([
+                // Only get items that this guild already has
+                ['character_items.type', Item::TYPE_RECIPE],
+                ['characters.guild_id', $guild->id],
+                ['items.expansion_id',  $guild->expansion_id],
+            ])
+            ->with([
+                'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                    return $query->select([
+                            'characters.id',
+                            'characters.raid_id',
+                            'characters.name',
+                            'characters.slug',
+                            'characters.level',
+                            'characters.race',
+                            'characters.spec',
+                            'characters.class',
+                            'characters.is_alt',
+                            'members.username',
+                            'raids.name AS raid_name',
+                            'raid_roles.color AS raid_color',
+                            'added_by_members.username AS added_by_username',
+                        ])
+                        ->leftJoin('members', function ($join) {
+                            $join->on('members.id', 'characters.member_id');
+                        })
+                        ->where([
+                                ['characters.guild_id', $guild->id],
+                                ['character_items.is_received', 0],
+                            ])
+                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                }
+            ])
+            ->orderBy('items.name')
+            ->get();
+
+        return view('item.listRecipes', [
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'items'           => $items,
+            'showNotes'       => true,
+            'showOfficerNote' => $showOfficerNote,
+        ]);
+    }
+
+    /**
      * Show the mass input page
      *
      * @return \Illuminate\Http\Response
@@ -774,10 +861,10 @@ class ItemController extends Controller
             ]);
 
             AuditLog::create([
-                'description'  => $currentMember->username . ' changed item note/priority',
-                'member_id'    => $currentMember->id,
-                'guild_id'     => $currentMember->guild_id,
-                'item_id'      => $item->item_id,
+                'description' => $currentMember->username . ' changed item note/priority',
+                'member_id'   => $currentMember->id,
+                'guild_id'    => $currentMember->guild_id,
+                'item_id'     => $item->item_id,
             ]);
         } else {
             $noticeVerb = 'created';
@@ -789,10 +876,10 @@ class ItemController extends Controller
             ]);
 
             AuditLog::create([
-                'description'  => $currentMember->username . ' added item note/priority',
-                'member_id'    => $currentMember->id,
-                'guild_id'     => $currentMember->guild_id,
-                'item_id'      => $item->item_id,
+                'description' => $currentMember->username . ' added item note/priority',
+                'member_id'   => $currentMember->id,
+                'guild_id'    => $currentMember->guild_id,
+                'item_id'     => $item->item_id,
             ]);
         }
 
@@ -810,9 +897,10 @@ class ItemController extends Controller
         $json = null;
         $domain = 'www';
 
-        // TODO: Only Classic has valid links as of 2021-02-16. Update this when other expansions are supported.
         if ($expansionId === 1) {
             $domain = 'classic';
+        } else if ($expansionId === 2) {
+            $domain = 'tbc';
         }
 
         try {

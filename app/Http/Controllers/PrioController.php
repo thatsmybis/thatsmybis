@@ -163,10 +163,10 @@ class PrioController extends Controller
                 'guild_items.note AS guild_note',
                 'guild_items.priority AS guild_priority',
             ])
-            ->join('item_item_sources', function ($join) {
+            ->leftJoin('item_item_sources', function ($join) {
                 $join->on('item_item_sources.item_id', 'items.item_id');
             })
-            ->join('item_sources', function ($join) {
+            ->leftJoin('item_sources', function ($join) {
                 $join->on('item_sources.id', 'item_item_sources.item_source_id');
             })
             ->leftJoin('guild_items', function ($join) use ($guild) {
@@ -217,8 +217,8 @@ class PrioController extends Controller
         }
 
         $validationRules =  [
-            'instance_id'           => 'required|exists:instances,id',
-            'items.*.id' => [
+            'instance_id' => 'required|exists:instances,id',
+            'items.*.id'  => [
                 'nullable',
                 'integer',
                 Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
@@ -244,7 +244,8 @@ class PrioController extends Controller
                 $join->on('item_sources.id', 'item_item_sources.item_source_id');
             })
             ->where([
-                'item_sources.instance_id' => $instance->id,
+                ['items.expansion_id',       $guild->expansion_id],
+                ['item_sources.instance_id', $instance->id],
             ])
             ->with([
                 'priodCharacters' => function ($query) use ($raid) {
@@ -292,7 +293,8 @@ class PrioController extends Controller
 
         $itemsWithExistingPrios = Item::
             where([
-                'items.item_id' => request()->input('item_id'),
+                ['items.expansion_id', $guild->expansion_id],
+                ['items.item_id',      request()->input('item_id')],
             ])
             ->with([
                 'priodCharacters' => function ($query) use ($raid) {

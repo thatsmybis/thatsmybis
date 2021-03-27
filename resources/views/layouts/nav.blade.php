@@ -95,7 +95,14 @@
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'sunwell-plateau']) }}">
                                 Sunwell Plateau
                             </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'bc-world-bosses']) }}">
+                                World Bosses
+                            </a>
                         @endif
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="{{ route('guild.recipe.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            Guild Recipes
+                        </a>
                     </div>
                 </li>
 
@@ -141,7 +148,7 @@
                     $editPrios      = $currentMember->hasPermission('edit.prios');
                 @endphp
 
-                @if ($viewRoles || $viewRaids || $editGuild || $editPrios)
+                @if ($viewRoles || $viewRaids || $editCharacters || $editGuild || $editItems || $editPrios)
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin
@@ -240,6 +247,9 @@
                                             <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'sunwell-plateau']) }}">
                                                 Sunwell Plateau
                                             </a>
+                                            <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'bc-world-bosses']) }}">
+                                                World Bosses
+                                            </a>
                                         @endif
                                     </div>
                                 </div>
@@ -303,6 +313,9 @@
                                             </a>
                                             <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'sunwell-plateau']) }}">
                                                 Sunwell Plateau
+                                            </a>
+                                            <a class="dropdown-item" href="{{ route('guild.prios.chooseRaid', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'bc-world-bosses']) }}">
+                                                World Bosses
                                             </a>
                                         @endif
                                     </div>
