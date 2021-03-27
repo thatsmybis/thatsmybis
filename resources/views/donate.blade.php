@@ -59,7 +59,7 @@
                     TideAd (Patreon: Parser)
                </li>
                <li>
-                    Z. Anon (Patreon: Raider)
+                    Sentence (Patreon: Raider)
                </li>
             </ul>
         </div>
