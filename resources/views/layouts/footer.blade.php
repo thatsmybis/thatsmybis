@@ -1,7 +1,7 @@
 <footer class="footer">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-6 h-100 text-center text-lg-left mt-5">
+            <div class="col-lg-6 h-100 text-xs-left mt-5">
                 <ul class="list-inline mb-2">
                     {{--
                     <li class="list-inline-item">
@@ -24,22 +24,10 @@
                     <li class="list-inline-item">&sdot;</li>
                     --}}
                     <li class="list-inline-item">
-                        <a href="{{ route('faq') }}" class="text-white">FAQ</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="{{ route('privacy') }}" class="text-white">privacy</a>
-                    </li>
-                    <li class="list-inline-item">
-                        <a href="{{ env('LINK_GITHUB') }}" target="_blank" class="text-white">
-                            <span class="fab fa-github"></span>
-                            Github
-                        </a>
-                    </li>
-                    <li class="list-inline-item">
                         <div class="dropdown">
-                            <a class="dropdown-toggle font-weight-bold text-white" id="donateDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="fas fa-fw fa-heart"></span>
-                                Donate
+                            <a class="dropdown-toggle font-weight-bold {{ isset($guild) ? 'text-patreon-md' : 'text-patreon' }}" id="donateDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="fas fa-fw fa-sack"></span>
+                                Support TMB
                             </a>
                             <div class="dropdown-menu text-center" aria-labelledby="donateDropdown">
                                 <a class="dropdown-item text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
@@ -67,6 +55,18 @@
                                 </div>
                             </div>
                         </div>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="{{ route('faq') }}" class="text-white">FAQ</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="{{ route('privacy') }}" class="text-white">privacy</a>
+                    </li>
+                    <li class="list-inline-item">
+                        <a href="{{ env('LINK_GITHUB') }}" target="_blank" class="text-white">
+                            <span class="fab fa-github"></span>
+                            Github
+                        </a>
                     </li>
                 </ul>
                 <!-- <p class="text-muted small mb-4 mb-lg-0">&copy; {{ env('APP_NAME') }} 2019. All Rights Reserved.</p> -->

@@ -33,7 +33,7 @@
                 loot distribution
             </p>
 
-            <p class="text-4">
+            <p class="text-5">
                 view our public <a href="{{ route('loot') }}">loot tables</a>
             </p>
 
@@ -42,11 +42,19 @@
                     <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> Sign In
                 </a>
             </div>
-            <div class="mt-5 mb-5">
-                <p class="font-weight-bold">
+
+            <div class="pt-5 mt-5 mb-5">
+                <p class="font-weight-bold text-4">
                     Preview video
                 </p>
                 <iframe style="width:100%;max-width:960px;height:540px;" src="https://www.youtube.com/embed/vOJuNdYs_2w" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+
+            <div class="pt-5 mt-5 mb-5">
+                <p class="font-weight-bold text-4">
+                    Longer preview video with most of the new features and stuff
+                </p>
+                <iframe style="width:100%;max-width:960px;height:540px;" src="https://www.youtube.com/embed/hj_tqjxy6sY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
         </div>
     </div>

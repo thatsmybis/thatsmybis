@@ -254,6 +254,15 @@ body {
     color: #ff5c50 !important;
 }
 
+.text-patreon-md {
+    color: #fff !important;
+}
+@media (max-width: 992px) {
+    .text-patreon-md {
+        color: #ff5c50 !important;
+    }
+}
+
 .font-weight-medium {
     font-weight: 600 !important;
 }
@@ -614,42 +623,4 @@ div.dataTables_filter input {
     /*overflow-x: hidden;*/
     /* add padding to account for vertical scrollbar */
     /*padding-right: 20px;*/
-}
-
-.marquee-classic-bg {
-    background:url(https://s3.amazonaws.com/aftershock.gg/classic.gif);
-    -webkit-animation:270s scroll infinite linear;
-    -moz-animation:270s scroll infinite linear;
-    -o-animation:270s scroll infinite linear;
-    -ms-animation:270s scroll infinite linear;
-    animation:270s scroll infinite linear;
-    top:0;
-    left:0;
-    width:100%;
-    height:100%;
-}
-@-webkit-keyframes scroll{
-    100%{
-        background-position:5000px -3000px;
-    }
-}
-@-moz-keyframes scroll{
-    100%{
-        background-position:5000px -3000px;
-    }
-}
-@-o-keyframes scroll{
-    100%{
-        background-position:5000px -3000px;
-    }
-}
-@-ms-keyframes scroll{
-    100%{
-        background-position:5000px -3000px;
-    }
-}
-@keyframes scroll{
-    100%{
-        background-position:5000px -3000px;
-    }
 }

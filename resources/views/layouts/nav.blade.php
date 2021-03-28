@@ -327,6 +327,16 @@
             @endif
         </ul>
         <ul class="navbar-nav">
+            @if (isset($guild))
+                <li class="nav-item mr-3 d-none d-lg-block">
+                    <a class="dropdown-item text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
+                    <a href="https://www.patreon.com/lemmings19" target="_blank" class="nav-link active font-weight-bold text-patreon"
+                        title="Toss a coin to your web dev">
+                        <span class="fas fa-fw fa-sack"></span>
+                        Support TMB
+                    </a>
+                </li>
+            @endif
         </ul>
         <div class="my-2 my-lg-0">
             @if (Auth::guest())
