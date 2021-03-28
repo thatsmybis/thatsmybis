@@ -455,7 +455,6 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
 <script>
     var guild    = {!! $guild->toJson() !!};
     var maxItems = {{ $maxItems }};
-    var preventDuplicates = true;
 
     function showSubmitWarning() {
         let message = "Submit?";

@@ -10,6 +10,7 @@ var missingCharacters     = [];
 var missingCharacterCount = 0;
 var errorCount = 0;
 var firstError = undefined;
+var preventDuplicates = true;
 
 $(document).ready(function () {
     $(".js-show-next").change(function() {
@@ -331,6 +332,8 @@ function completeCsvImport(results)
     if (statusMessages) {
         $("#status-message").html(`<ul>${statusMessages}</ul>`).show();
     }
+
+
 
     // icky hack
     setTimeout(function(){enableForm();}, 100);

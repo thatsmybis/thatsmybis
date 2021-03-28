@@ -575,18 +575,10 @@ class ItemController extends Controller
             'item.*.note'           => 'nullable|string|max:140',
             'item.*.officer_note'   => 'nullable|string|max:140',
             'item.*.received_at'    => 'nullable|date|before:tomorrow|after:2004-09-22',
-            // 'item.*.import_id'      => 'nullable|string|max:20|unique:character_items,import_id,NULL,id,guild_id,item.*.character_id', // Composite unique
-            // 'item.*.import_id'      => [
-            //     'nullable',
-            //     'string',
-            //     'max:20',
-            //     Rule::unique('character_items', 'import_id')->where(function ($query) use ($guild) {
-            //         $query->where([
-            //             'guild_id' => $guild->id,
-            //             'import_id'
-            //         ]);
-            //     }),
-            // ],
+            // Would be nice to find a way to get it to check against `character_items`.`character_id` != item.*.character_id
+            // Check the history of this file for some possible ideas on how to do it.
+            // For now we'll just check the ID and call it good enough.
+            'item.*.import_id'        => 'nullable|string|max:20|unique:character_items,import_id',
             'delete_wishlist_items'   => 'nullable|boolean',
             'delete_prio_items'       => 'nullable|boolean',
             'skip_missing_characters' => 'nullable|boolean',
@@ -598,7 +590,8 @@ class ItemController extends Controller
         }
 
         $validationMessages = [
-            'item.*.character_id.required_with' => ':values is missing a character.'
+            'item.*.character_id.required_with' => ':values is missing a character.',
+            'item.*.import_id.unique'           => '":input" has been imported before. If you want to import anyway, change the ID and submit again.',
         ];
 
         $this->validate(request(), $validationRules, $validationMessages);
