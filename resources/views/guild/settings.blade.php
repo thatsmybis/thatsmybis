@@ -470,7 +470,7 @@
 @endsection
 
 @section('scripts')
-<script src="{{ env('APP_ENV') == 'local' ? asset('/js/guildSettings.js') : mix('js/processed/guildSettings.js') }}"></script>
+<script src="{{ loadScript('guildSettings.js') }}"></script>
 <script>
     $(document).ready(() => warnBeforeLeaving("#editForm"));
 </script>

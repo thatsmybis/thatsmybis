@@ -172,7 +172,7 @@
 @endsection
 
 @section('scripts')
-<script src="{{ env('APP_ENV') == 'local' ? asset('/js/autocomplete.js') : mix('js/processed/autocomplete.js') }}"></script>
+<script src="{{ loadScript('autocomplete.js') }}"></script>
 @endsection
 
 @section('wowheadIconSize', 'medium')

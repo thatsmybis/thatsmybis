@@ -228,7 +228,7 @@
 @endsection
 
 @section('scripts')
-<script src="{{ env('APP_ENV') == 'local' ? asset('/js/autocomplete.js') : mix('js/processed/autocomplete.js') }}"></script>
+<script src="{{ loadScript('autocomplete.js') }}"></script>
 <script>
     $(document).ready(() => warnBeforeLeaving("#editForm"));
 </script>

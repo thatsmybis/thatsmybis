@@ -455,7 +455,6 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
 <script>
     var guild    = {!! $guild->toJson() !!};
     var maxItems = {{ $maxItems }};
-    var preventDuplicates = false;
 
     function showSubmitWarning() {
         let message = "Submit?";
@@ -473,5 +472,5 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
 
     $(document).ready(() => warnBeforeLeaving("#itemForm"));
 </script>
-<script src="{{ env('APP_ENV') == 'local' ? asset('/js/itemMassInput.js') : mix('js/processed/itemMassInput.js') }}"></script>
+<script src="{{ loadScript('itemMassInput.js') }}"></script>
 @endsection

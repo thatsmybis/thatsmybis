@@ -289,6 +289,6 @@
     var showPrios       = {{ $showPrios ? 'true' : 'false' }};
     var showWishlist    = {{ $showWishlist ? 'true' : 'false' }};
 </script>
-<script src="{{ env('APP_ENV') == 'local' ? asset('/js/roster.js') : mix('js/processed/roster.js') }}"></script>
+<script src="{{ loadScript('roster.js') }}"></script>
 @endsection
 

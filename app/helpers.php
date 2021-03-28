@@ -43,6 +43,11 @@ function isSuper() {
     return request()->get('isSuperAdmin');
 }
 
+// Loads the desired Javascript. Switches source based on dev/prod.
+function loadScript($file, $type = 'js') {
+    return env('APP_ENV') == 'local' ? asset('/' . $type . '/' . $file) : mix($type . '/processed/' . $file);
+}
+
 /**
  * Split a string into an array delimited by newlines.
  *

@@ -34,5 +34,5 @@
     var showPrios       = {{ $showPrios ? 'true' : 'false' }};
     var showWishlist    = {{ $showWishlist ? 'true' : 'false' }};
 </script>
-<script src="{{ env('APP_ENV') == 'local' ? asset('/js/itemList.js') : mix('js/processed/itemList.js') }}"></script>
+<script src="{{ loadScript('itemList.js') }}"></script>
 @endsection
