@@ -115,7 +115,7 @@ class DashboardController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids', 'raids.role']);
+        $guild->load(['allRaids', 'raids.role']);
 
         $characters = $guild->getCharactersWithItemsAndPermissions($currentMember, false);
 
@@ -128,7 +128,7 @@ class DashboardController extends Controller
             'characters'      => $characters['characters'],
             'currentMember'   => $currentMember,
             'guild'           => $guild,
-            'raids'           => $guild->raids,
+            'raids'           => $guild->allRaids,
             'showEdit'        => $showEdit,
             'showOfficerNote' => $characters['showOfficerNote'],
             'showPrios'       => $characters['showPrios'],

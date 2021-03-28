@@ -280,7 +280,7 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load('raids');
+        $guild->load('allRaids');
 
         $character = Character::where(['id' => $characterId, 'guild_id' => $guild->id])
             ->with([

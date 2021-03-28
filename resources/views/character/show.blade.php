@@ -32,7 +32,7 @@
                                             $lastRaidId = $item->pivot->raid_id;
                                         @endphp
                                         <li class="text-muted no-bullet font-italic small font-weight-bold">
-                                            {{ $guild->raids->find($item->pivot->raid_id)->name }}
+                                            {{ $guild->alLRaids->find($item->pivot->raid_id)->name }}
                                         </li>
                                     @endif
                                     <li value="{{ $item->pivot->order }}">
