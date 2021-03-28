@@ -125,7 +125,15 @@
                                             <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
                                             <span class="js-sort-handle js-input-label move-cursor text-unselectable d-inline-block">
                                                 <span class="js-item-display">
-                                                    @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? $item->pivot->created_at : null), 'itemUsername' => ($item ? $item->added_by_username : null), 'strikeThrough' => ($item ? $item->pivot->is_received : null)])
+                                                    @includeWhen($itemId, 'partials/item', [
+                                                        'wowheadLink' => false,
+                                                        'targetBlank' => true,
+                                                        'itemId' => $itemId,
+                                                        'itemName' => $itemLabel,
+                                                        'itemDate' => ($item ? $item->pivot->created_at : null),
+                                                        'itemUsername' => ($item ? $item->added_by_username : null),
+                                                        'strikeThrough' => ($item ? $item->pivot->is_received : null)
+                                                    ])
                                                     @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                                 </span>
                                                 @include('character/partials/itemEdit', ['name' => 'wishlist', 'index' => $i])
