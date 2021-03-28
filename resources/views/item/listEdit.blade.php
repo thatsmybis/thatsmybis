@@ -44,7 +44,7 @@
                 </ul>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.item.list.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
+            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route('guild.item.list.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
                 {{ csrf_field() }}
 
                 <div class="row">
@@ -138,6 +138,12 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(() => warnBeforeLeaving("#editForm"));
+</script>
 @endsection
 
 @section('wowheadIconSize', 'medium')

@@ -53,7 +53,7 @@
                 </ul>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.prios.massInput.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
+            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route('guild.prios.massInput.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="raid_id" value="{{ $raid->id }}">
@@ -229,6 +229,9 @@
 
 @section('scripts')
 <script src="{{ env('APP_ENV') == 'local' ? asset('/js/autocomplete.js') : mix('js/processed/autocomplete.js') }}"></script>
+<script>
+    $(document).ready(() => warnBeforeLeaving("#editForm"));
+</script>
 @endsection
 
 @section('wowheadIconSize', 'medium')

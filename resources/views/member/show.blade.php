@@ -85,7 +85,7 @@
                 </div>
             </div>
 
-            <form role="form" method="POST" action="{{ route('member.updateNote', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+            <form id="noteForm" role="form" method="POST" action="{{ route('member.updateNote', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $member->id }}" />
@@ -205,10 +205,11 @@
 @section('scripts')
 <script>
 $(document).ready(function () {
+    warnBeforeLeaving("#noteForm");
+
     $("#showInactiveCharacters").click(function () {
         $(".js-inactive-characters").toggle();
     });
 });
 </script>
 @endsection
-

@@ -43,6 +43,17 @@ $(document).ready(function () {
     });
 });
 
+/**
+ * Prevents inputs from submitting their form when enter is pressed.
+ */
+function addInputAntiSubmitHandler(selector = ":text") {
+    $(selector).on("keypress keyup", function (e) {
+        if (e.which == 13) {
+            return false;
+        }
+    });
+}
+
 // Copied from https://stackoverflow.com/a/61222302/1196517
 function addNestedDropdownSupport() {
     $.fn.dropdown = (function() {
@@ -73,17 +84,6 @@ function addNestedDropdownSupport() {
     });
 }
 
-/**
- * Prevents inputs from submitting their form when enter is pressed.
- */
-function addInputAntiSubmitHandler(selector = ":text") {
-    $(selector).on("keypress keyup", function (e) {
-        if (e.which == 13) {
-            return false;
-        }
-    });
-}
-
 // Add basic handlers to show edit forms for notes
 function addNoteHandlers() {
     $(".js-show-note-edit").click(function () {
@@ -97,6 +97,30 @@ function addWishlistSortHandlers() {
         $(".js-wishlist-unsorted").toggle();
         $(".js-wishlist-sorted").toggle();
     });
+}
+
+function cleanUrl(sanitize, base, href) {
+    if (sanitize) {
+        try {
+            var prot = decodeURIComponent(unescape(href))
+            .replace(/[^\w:]/g, '')
+            .toLowerCase();
+        } catch (e) {
+            return null;
+        }
+        if (prot.indexOf('javascript:') === 0 || prot.indexOf('vbscript:') === 0 || prot.indexOf('data:') === 0) {
+            return null;
+        }
+    }
+    if (base && !originIndependentUrl.test(href)) {
+        href = resolveUrl(base, href);
+    }
+    try {
+        href = encodeURI(href).replace(/%25/g, '%');
+    } catch (e) {
+        return null;
+    }
+    return href;
 }
 
 function decToHex(number) {
@@ -119,6 +143,147 @@ function getColorFromDec(color) {
     }
     return '#' + color;
 }
+
+// Updates any wowhead links to have a tooltip, plus other modifications.
+// The configuration for this is defined in the HTML header (app.blade.php)
+function makeWowheadLinks() {
+    // Sometimes the error "WH.getDataEnv is not a function" appears
+    // This *seems* to be due to trying to refresh the links before they've finished their inital
+    // setup, but I'm not sure.
+    // If the error goes through (and I don't see anything we can do to fix/handle it), it breaks the
+    // javascript on the rest of our page. try/catch is a cheap fix.
+    try {
+        $WowheadPower.refreshLinks();
+    } catch (error) {
+        console.log("Failed to refresh wowhead links.");
+    }
+}
+
+/**
+ * Convert newlines to <br> tags. Given the odd name because that's the name PHP uses.
+ *
+ * @param string string The string to convert.
+ *
+ * @return string
+ */
+function nl2br(string) {
+    return string ? string.replace(/\n/g,"<br>") : '';
+}
+
+/**
+ * Parse markdown in the given element from markdown into HTML.
+ * If no element is provided, do it for all markdown elements.
+ */
+function parseMarkdown(element = null) {
+    var render = new marked.Renderer();
+
+    // Disable pretty links so that users always know what link they're clicking on.
+    // This is to prevent abuse.
+    // Autolinks still work: 'https://nubbl.com' -> 'https://nubbl.com'
+    // Pretty links format like so: '[title1](https://www.example.com)' -> 'title1 (https://www.example.com)'
+    /*
+        render.link = function(href, title, text) {
+            var textIsDifferent = text ? ((text == href) ? false : true) : false;
+            var out = '';
+
+            if (textIsDifferent) {
+                out = text + ' (';
+            }
+
+            href = cleanUrl(this.options.sanitize, this.options.baseUrl, href);
+
+            if (href === null) {
+                return text;
+            }
+
+            out += '<a target="_blank" href="' + href + '"';
+            if (title) {
+                out += ' title="' + title + '"';
+            }
+            out += '>' + href + '</a>';
+
+            if (textIsDifferent) {
+                out += ')';
+            }
+            return out;
+        };
+    */
+
+    // Add target=_blank to links
+    render.link = function(href, title, text) {
+        var out = '';
+        href = cleanUrl(this.options.sanitize, this.options.baseUrl, href);
+
+        if (href === null) {
+            return text;
+        }
+
+        out += '<a target="_blank" href="' + href + '"';
+        if (title) {
+            out += ' title="' + title + '"';
+        }
+        out += '>' + text + '</a>';
+        return out;
+    };
+
+    // Disable embedded images. Instead, display as a link.
+    // '![alt text](https://example.com/image.jpg)' -> 'alt text (https://example.com/image.jpg)'
+    // '![](https://example.com/image.jpg)' -> 'https://example.com/image.jpg'
+    // render.image = function(href, title, text) {
+    //     var textIsDifferent = text ? ((text == href) ? false : true) : false;
+    //     var out = '';
+
+    //     if (textIsDifferent) {
+    //         out = text + ' (';
+    //     }
+
+    //     href = cleanUrl(this.options.sanitize, this.options.baseUrl, href);
+    //     if (href === null) {
+    //         return text;
+    //     }
+
+    //     out += '<a target="_blank" href="' + href + '"';
+    //     if (title) {
+    //         out += ' title="' + title + '"';
+    //     }
+    //     out += '>' + href + '</a>';
+
+    //     if (textIsDifferent) {
+    //         out += ')';
+    //     }
+    //     return out;
+    // };
+
+    if (element && !element.hasClass("js-markdown-parsed")) {
+        element.html(marked(element.html(), {renderer: render}));
+        element.addClass("js-markdown-parsed"); // To avoid going over the same element twice
+    } else {
+        $(".js-markdown").each(function () {
+            if (!$(this).hasClass("js-markdown-parsed")) {
+                $(this).html(marked($.trim($(this).text()), {renderer: render}));
+                $(this).addClass("js-markdown-parsed");
+            }
+        });
+
+        $(".js-markdown-inline").each(function () {
+            if (!$(this).hasClass("js-markdown-parsed")) {
+                $(this).html(marked.parseInline($.trim($(this).text()), {renderer: render}));
+                $(this).addClass("js-markdown-parsed");
+            }
+        });
+    }
+}
+
+// Takes a numeric RGB value and turns it into a hex colour code
+function rgbToHex (rgb) {
+    let hex = Number(rgb).toString(16);
+
+    // If it's too short, keep adding prefixed zero's till it's long enough
+    while (hex.length < 6) {
+        hex = "0" + hex;
+    }
+    return hex;
+};
 
 // Turn a url into a slug url!
 function slug(string) {
@@ -266,166 +431,10 @@ function trackTimestamps(rate = 15000) {
 }
 
 /**
- * Convert newlines to <br> tags. Given the odd name because that's the name PHP uses.
- *
- * @param string string The string to convert.
- *
- * @return string
+ * Warn a user before leaving the page if the given element has changed.
  */
-function nl2br(string) {
-    return string ? string.replace(/\n/g,"<br>") : '';
-}
-
-function cleanUrl(sanitize, base, href) {
-    if (sanitize) {
-        try {
-            var prot = decodeURIComponent(unescape(href))
-            .replace(/[^\w:]/g, '')
-            .toLowerCase();
-        } catch (e) {
-            return null;
-        }
-        if (prot.indexOf('javascript:') === 0 || prot.indexOf('vbscript:') === 0 || prot.indexOf('data:') === 0) {
-            return null;
-        }
-    }
-    if (base && !originIndependentUrl.test(href)) {
-        href = resolveUrl(base, href);
-    }
-    try {
-        href = encodeURI(href).replace(/%25/g, '%');
-    } catch (e) {
-        return null;
-    }
-    return href;
-}
-
-/**
- * Parse markdown in the given element from markdown into HTML.
- * If no element is provided, do it for all markdown elements.
- */
-function parseMarkdown(element = null) {
-    var render = new marked.Renderer();
-
-    // Disable pretty links so that users always know what link they're clicking on.
-    // This is to prevent abuse.
-    // Autolinks still work: 'https://nubbl.com' -> 'https://nubbl.com'
-    // Pretty links format like so: '[title1](https://www.example.com)' -> 'title1 (https://www.example.com)'
-    /*
-        render.link = function(href, title, text) {
-            var textIsDifferent = text ? ((text == href) ? false : true) : false;
-            var out = '';
-
-            if (textIsDifferent) {
-                out = text + ' (';
-            }
-
-            href = cleanUrl(this.options.sanitize, this.options.baseUrl, href);
-
-            if (href === null) {
-                return text;
-            }
-
-            out += '<a target="_blank" href="' + href + '"';
-            if (title) {
-                out += ' title="' + title + '"';
-            }
-            out += '>' + href + '</a>';
-
-            if (textIsDifferent) {
-                out += ')';
-            }
-            return out;
-        };
-    */
-
-    // Add target=_blank to links
-    render.link = function(href, title, text) {
-        var out = '';
-        href = cleanUrl(this.options.sanitize, this.options.baseUrl, href);
-
-        if (href === null) {
-            return text;
-        }
-
-        out += '<a target="_blank" href="' + href + '"';
-        if (title) {
-            out += ' title="' + title + '"';
-        }
-        out += '>' + text + '</a>';
-        return out;
-    };
-
-    // Disable embedded images. Instead, display as a link.
-    // '![alt text](https://example.com/image.jpg)' -> 'alt text (https://example.com/image.jpg)'
-    // '![](https://example.com/image.jpg)' -> 'https://example.com/image.jpg'
-    // render.image = function(href, title, text) {
-    //     var textIsDifferent = text ? ((text == href) ? false : true) : false;
-    //     var out = '';
-
-    //     if (textIsDifferent) {
-    //         out = text + ' (';
-    //     }
-
-    //     href = cleanUrl(this.options.sanitize, this.options.baseUrl, href);
-    //     if (href === null) {
-    //         return text;
-    //     }
-
-    //     out += '<a target="_blank" href="' + href + '"';
-    //     if (title) {
-    //         out += ' title="' + title + '"';
-    //     }
-    //     out += '>' + href + '</a>';
-
-    //     if (textIsDifferent) {
-    //         out += ')';
-    //     }
-    //     return out;
-    // };
-
-    if (element && !element.hasClass("js-markdown-parsed")) {
-        element.html(marked(element.html(), {renderer: render}));
-        element.addClass("js-markdown-parsed"); // To avoid going over the same element twice
-    } else {
-        $(".js-markdown").each(function () {
-            if (!$(this).hasClass("js-markdown-parsed")) {
-                $(this).html(marked($.trim($(this).text()), {renderer: render}));
-                $(this).addClass("js-markdown-parsed");
-            }
-        });
-
-        $(".js-markdown-inline").each(function () {
-            if (!$(this).hasClass("js-markdown-parsed")) {
-                $(this).html(marked.parseInline($.trim($(this).text()), {renderer: render}));
-                $(this).addClass("js-markdown-parsed");
-            }
-        });
-    }
-}
-
-// Takes a numeric RGB value and turns it into a hex colour code
-function rgbToHex (rgb) {
-    let hex = Number(rgb).toString(16);
-
-    // If it's too short, keep adding prefixed zero's till it's long enough
-    while (hex.length < 6) {
-        hex = "0" + hex;
-    }
-    return hex;
-};
-
-// Updates any wowhead links to have a tooltip, plus other modifications.
-// The configuration for this is defined in the HTML header (app.blade.php)
-function makeWowheadLinks() {
-    // Sometimes the error "WH.getDataEnv is not a function" appears
-    // This *seems* to be due to trying to refresh the links before they've finished their inital
-    // setup, but I'm not sure.
-    // If the error goes through (and I don't see anything we can do to fix/handle it), it breaks the
-    // javascript on the rest of our page. try/catch is a cheap fix.
-    try {
-        $WowheadPower.refreshLinks();
-    } catch (error) {
-        console.log("Failed to refresh wowhead links.");
-    }
+function warnBeforeLeaving(selector) {
+    $(selector).one("change", () => {
+        window.onbeforeunload = () => true;
+    });
 }

@@ -20,7 +20,7 @@
                     @endforeach
                 </ul>
             @endif
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('member.update', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route('member.update', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $member->id }}" />
@@ -149,4 +149,10 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(() => warnBeforeLeaving("#editForm"));
+</script>
 @endsection

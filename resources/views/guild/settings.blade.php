@@ -22,7 +22,7 @@
                     @endforeach
                 </ul>
             @endif
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.submitSettings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route('guild.submitSettings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <div class="row">
@@ -471,4 +471,7 @@
 
 @section('scripts')
 <script src="{{ env('APP_ENV') == 'local' ? asset('/js/guildSettings.js') : mix('js/processed/guildSettings.js') }}"></script>
+<script>
+    $(document).ready(() => warnBeforeLeaving("#editForm"));
+</script>
 @endsection

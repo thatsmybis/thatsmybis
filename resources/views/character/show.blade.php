@@ -176,7 +176,7 @@
                 </div>
             </div>
 
-            <form role="form" method="POST" action="{{ route('character.updateNote', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+            <form id="noteForm" role="form" method="POST" action="{{ route('character.updateNote', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $character->id }}" />
@@ -282,4 +282,10 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(() => warnBeforeLeaving("#noteForm"));
+</script>
 @endsection

@@ -21,7 +21,7 @@
                 </ul>
             @endif
 
-            <form class="form-horizontal" role="form" method="POST" action="{{ route('character.updateLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+            <form id="itemForm" class="form-horizontal" role="form" method="POST" action="{{ route('character.updateLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $character->id }}" />
@@ -336,5 +336,7 @@
 @section('scripts')
 <script>
     var guild = {!! $guild->toJson() !!};
+
+    $(document).ready(() => warnBeforeLeaving("#itemForm"));
 </script>
 @endsection

@@ -250,6 +250,10 @@ function addTag($this, value, label) {
             if ($($this).data("isSingleInput")) {
                 $($this).hide();
             }
+
+            // Trigger any onChange listeners
+            $($this).change();
+
             return true;
         } else {
             $($this).val("maximum items added");
