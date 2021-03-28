@@ -132,10 +132,14 @@ class Character extends Model
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->select(['items.*', 'added_by_members.username AS added_by_username', 'instances.id AS instance_id'])
             ->leftJoin('members AS added_by_members', 'added_by_members.id', '=', 'character_items.added_by')
+            ->leftJoin('raids',                       'character_items.raid_id',          '=', 'raids.id')
             ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
             ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
-            ->where('character_items.type', Item::TYPE_PRIO)
+            ->where([
+                ['character_items.type', Item::TYPE_PRIO],
+            ])
+            ->whereNull('raids.disabled_at')
             ->orderBy('character_items.raid_id')
             ->orderBy('character_items.order')
             ->groupBy('character_items.id')

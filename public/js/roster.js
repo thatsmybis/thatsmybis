@@ -351,6 +351,13 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
     let lastInstanceId = null;
     let lastRaidId = null;
     $.each(data, function (index, item) {
+
+        // Skip prio item if raid is disabled or not found in the guild
+        // if (type == 'prio' && item.pivot.raid_id && guild.raids.filter(raid => (raid.id == item.pivot.raid_id)).length < 1) {
+        //     console.log(item.pivot.raid_id + ' not found');
+        //     return false;
+        // }
+
         let clipItem = false;
         if (index >= initialLimit) {
             clipItem = true;
