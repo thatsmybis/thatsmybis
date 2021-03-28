@@ -176,7 +176,7 @@ function addItemRemoveHandler() {
      * Remove the chosen tag from the list that appears below the select.
      */
     $(".js-input-button").click(function () {
-        $(this).prev("input").val(""); // Clear the pivot input (doesn't always exist)
+        $(this).prev("input").val(""); // Clear the pivot input (note: doesn't always exist)
         $(this).prev("input").prev("input").val(""); // Clear the label input
         $(this).prev("input").prev("input").prev("input").val(""); // Clear the value input
         $(this).parent("li").hide();
