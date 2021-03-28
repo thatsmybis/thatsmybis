@@ -437,4 +437,8 @@ function warnBeforeLeaving(selector) {
     $(selector).one("change", () => {
         window.onbeforeunload = () => true;
     });
+    // Remove the warning if submitting
+    $(selector).one("submit", () => {
+        window.onbeforeunload = function () {};
+    });
 }
