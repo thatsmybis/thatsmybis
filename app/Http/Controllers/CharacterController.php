@@ -594,18 +594,18 @@ class CharacterController extends Controller
 
         if (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked)) {
             if (request()->input('wishlist')) {
-                $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember);
+                $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember, true);
             }
         }
 
         if (!$guild->is_received_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_received_unlocked)) {
             if (request()->input('received')) {
-                $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember);
+                $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember, false);
             }
         }
 
         if (request()->input('recipes')) {
-            $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember);
+            $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember, false);
         }
         return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
     }
@@ -695,8 +695,9 @@ class CharacterController extends Controller
      * @param string        $itemType      The type of item. (ie. received, recipe, wishlist)
      * @param App\Character $character     The character to sync the items to.
      * @param App\Member    $currentMember The member syncing these items.
+     * @param boolean       $updateFlags   Should we check for and update the OS and received flag?
      */
-    private function syncItems($existingItems, $inputItems, $itemType, $character, $currentMember) {
+    private function syncItems($existingItems, $inputItems, $itemType, $character, $currentMember, $updateFlags) {
         $toAdd    = [];
         $toUpdate = [];
         $toDrop   = [];
@@ -723,16 +724,19 @@ class CharacterController extends Controller
                     $found = true;
                     $newValues = [];
 
-                    $inputItem['is_received'] = isset($inputItem['is_received']) ? 1 : 0;
-                    $inputItem['is_offspec']  = isset($inputItem['is_offspec']) ? 1 : 0;
+                    if ($updateFlags) {
+                        $inputItem['is_received'] = isset($inputItem['is_received']) ? 1 : 0;
+                        $inputItem['is_offspec']  = isset($inputItem['is_offspec']) ? 1 : 0;
+                    }
 
                     // Order changed
                     if ($existingItem->pivot->order != $i) {
-                        $newValues['order'] = $i;
+                        $newValues['order']     = $i;
+                        $newValues['old_order'] = $existingItem->pivot->order;
                         $isReordered = true;
                     }
                     // Is Received flag changed
-                    if ($existingItem->pivot->is_received != $inputItem['is_received']) {
+                    if ($updateFlags && $existingItem->pivot->is_received != $inputItem['is_received']) {
                         if ($inputItem['is_received']) {
                             $newValues['is_received'] = 1;
                             $newValues['received_at'] = $now;
@@ -742,7 +746,7 @@ class CharacterController extends Controller
                         }
                     }
                     // Is Offspec flag changed
-                    if ($existingItem->pivot->is_offspec != $inputItem['is_offspec']) {
+                    if ($updateFlags && $existingItem->pivot->is_offspec != $inputItem['is_offspec']) {
                         if ($inputItem['is_offspec']) {
                             $newValues['is_offspec'] = 1;
                         } else {
@@ -834,22 +838,24 @@ class CharacterController extends Controller
             $newValues = [];
             $auditMessage = '';
 
+            // These keys only exist if we're changing them.
             if (isset($item['is_received'])) {
                 $newValues['is_received'] = $item['is_received'];
-                $auditMessage .= ($item['is_received'] ? 'unreceived to received, ' : 'received to unreceived, ');
+                $auditMessage .= ($item['is_received'] ? 'set as received, ' : 'set as unreceived, ');
             }
-            if (isset($item['received_at'])) {
-                $newValues['received_at'] = $item['received_at'];
-                $auditMessage .= ($item['received_at'] ? 'added received date, ' : 'cleared received date, ');
-            }
+            // Don't bother showing this until we have a manual received date input
+            // if (isset($item['received_at'])) {
+            //     $newValues['received_at'] = $item['received_at'];
+            //     $auditMessage .= ($item['received_at'] ? 'added a received date, ' : 'removed received date, ');
+            // }
             if (isset($item['is_offspec'])) {
                 $newValues['is_offspec'] = $item['is_offspec'];
-                $auditMessage .= ($item['is_offspec'] ? 'MS to OS, ' : 'OS to MS, ');
+                $auditMessage .= ($item['is_offspec'] ? 'set as OS, ' : 'set as MS, ');
             }
             if (isset($item['order'])) {
                 $newValues['order'] = $item['order'];
                 if ($auditMessage) {
-                    $auditMessage .= 'order changed to ' . $item['order'] . ', ';
+                    $auditMessage .= 'order ' . $item['old_order'] . ' -> ' . $item['order'] . ', ';
                 }
             }
             $auditMessage = rtrim($auditMessage, ', ');
@@ -872,7 +878,7 @@ class CharacterController extends Controller
 
             if ($auditMessage) {
                 $audits[] = [
-                    'description'  => $currentMember->username . ' ' . $auditMessage . ' on ' . $character->name . ' (' . $itemType . ')',
+                    'description'  => $currentMember->username . ' changed an item on ' . $character->name . ' (' . $itemType . '): ' . $auditMessage,
                     'type'         => $itemType,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,
