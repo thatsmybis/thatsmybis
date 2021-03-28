@@ -189,7 +189,7 @@ function getCharacterList(data, type, itemId) {
             lastRaidId = character.pivot.raid_id;
             characters += `
                 <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic  text-muted small">
-                    ${ character.raid_name ? character.raid_name : null }
+                    ${ character.raid_name ? character.raid_name : '' }
                 </li>
             `;
         }

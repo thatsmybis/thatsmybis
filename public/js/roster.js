@@ -366,7 +366,7 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
                     style="${ clipItem ? 'display:none;' : '' }"
                     data-type="${ type }"
                     data-id="${ characterId }">
-                    ${ raids.find(val => val.id === item.pivot.raid_id).name }
+                    ${ raids.length > 0 ? raids.find(val => val.id === item.pivot.raid_id).name : '' }
                 </li>
             `;
         }
