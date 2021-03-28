@@ -27,8 +27,7 @@ function addItemAutocompleteHandler() {
                             $(self).nextAll(".js-status-indicator").html("<span class=\"bg-danger\">&nbsp;" + request.term + " not found&nbsp;</span>");
                         }
                     },
-                    error: function () {
-                    }
+                    error: function () {}
                 });
             },
             search: function () {
@@ -177,8 +176,9 @@ function addItemRemoveHandler() {
      * Remove the chosen tag from the list that appears below the select.
      */
     $(".js-input-button").click(function () {
-        $(this).prev("input").val(""); // Clear the label input
-        $(this).prev("input").prev("input").val(""); // Clear the value input
+        $(this).prev("input").val(""); // Clear the pivot input (doesn't always exist)
+        $(this).prev("input").prev("input").val(""); // Clear the label input
+        $(this).prev("input").prev("input").prev("input").val(""); // Clear the value input
         $(this).parent("li").hide();
 
         // Remove the select's warning message.
@@ -211,7 +211,7 @@ function addTag($this, value, label) {
         }
 
         // Find the hidden input
-        $nextInput = $($this).next().next("ul").children("li").children("input[value='']").first();
+        $nextInput = $($this).next().next("ul").children("li").children("input:first-child[value='']").first();
 
         if ($nextInput.val() == "") {
             $nextInput.parent("li").show();
@@ -234,7 +234,18 @@ function addTag($this, value, label) {
             } else {
                 link = `<a href="https://${ wowheadSubdomain }.wowhead.com/item=${ value }" target="_blank" class="font-weight-medium">${ label }</a>`;
             }
-            $nextInput.siblings(".js-input-label").html(link);
+
+            let inputLabel  = $nextInput.siblings(".js-input-label");
+            let itemDisplay = inputLabel.children(".js-item-display");
+
+            if (itemDisplay.length > 0) {
+                // Only replace the display
+                itemDisplay.html(link);
+            } else {
+                // Replace the whole thing
+                inputLabel.html(link);
+            }
+
             $($this).val("");
             if ($($this).data("isSingleInput")) {
                 $($this).hide();

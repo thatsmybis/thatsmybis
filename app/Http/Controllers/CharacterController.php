@@ -735,7 +735,7 @@ class CharacterController extends Controller
                     if ($existingItem->pivot->is_received != $inputItem['is_received']) {
                         if ($inputItem['is_received']) {
                             $newValues['is_received'] = 1;
-                            $newValues['received_at'] = null; // Can't set a date until we have a date input
+                            $newValues['received_at'] = $now;
                         } else {
                             $newValues['is_received'] = 0;
                             $newValues['received_at'] = null;
@@ -795,9 +795,15 @@ class CharacterController extends Controller
             if ($inputItem['item_id']) {
                 $i++;
             }
+
             if (!isset($inputItem['resolved']) && $inputItem['item_id']) {
+                $isReceived = isset($inputItem['is_received']) ? 1 : 0;
+                $isOffspec  = isset($inputItem['is_offspec']) ? 1 : 0;
+
                 $toAdd[] = [
                     'item_id'      => $inputItem['item_id'],
+                    'is_received'  => $isReceived,
+                    'is_offspec'   => $isOffspec,
                     'character_id' => $character->id,
                     'added_by'     => $currentMember->id,
                     'type'         => $itemType,
@@ -807,7 +813,7 @@ class CharacterController extends Controller
                 ];
 
                 $audits[] = [
-                    'description'  => $currentMember->username . ' added item to a character (' . $itemType . ')',
+                    'description'  => $currentMember->username . ' added item to a character (' . $itemType . ')' . ($isReceived ? ' (received)' : null) . ($isOffspec ? ' (OS)' : null),
                     'type'         => $itemType,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,
