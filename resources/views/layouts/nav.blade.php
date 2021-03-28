@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-md navbar-dark">
-    <span class="navbar-brand" href="{{ route('home') }}">
+    <span class="{{ isset($guild) ? 'navbar-brand-guild' : 'navbar-brand' }}" href="{{ route('home') }}">
         <span class="font-weight-bold">
             @php
                 $logoColor = 'white';
@@ -328,7 +328,7 @@
         </ul>
         <ul class="navbar-nav">
             @if (isset($guild))
-                <li class="nav-item mr-3 d-none d-lg-block">
+                <li class="nav-item mr-3 d-patreon-block">
                     <a class="dropdown-item text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
                     <a href="https://www.patreon.com/lemmings19" target="_blank" class="nav-link active font-weight-bold text-patreon"
                         title="Toss a coin to your web dev">

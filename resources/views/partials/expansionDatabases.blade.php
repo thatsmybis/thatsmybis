@@ -3,11 +3,8 @@
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-gold">Classic</span> Loot Tables CSV
+        <span class="font-weight-normal text-gold">Classic</span> Loot Tables
     </h2>
-    <p>
-        For ALL of Classic WoW.
-    </p>
     <ul class="list-inline">
         <li class="list-inline-item">
             <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
@@ -27,10 +24,10 @@
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-uncommon">Burning Crusade</span> Loot Tables CSV
+        <span class="font-weight-normal text-uncommon">Burning Crusade</span> Loot Tables
     </h2>
     <p>
-       For ALL of Burning Crusade. (includes Classic too)
+       (includes Classic too)
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">

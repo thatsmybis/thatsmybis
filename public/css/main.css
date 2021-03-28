@@ -257,9 +257,17 @@ body {
 .text-patreon-md {
     color: #fff !important;
 }
-@media (max-width: 992px) {
+@media (max-width: 950px) {
     .text-patreon-md {
         color: #ff5c50 !important;
+    }
+}
+.d-patreon-block {
+    display: block;
+}
+@media (min-width: 768px) and (max-width: 950px) {
+    .d-patreon-block {
+        display: none !important;
     }
 }
 
@@ -307,6 +315,16 @@ body {
 
 .nav-item.active {
     font-weight: 700 !important;
+}
+
+.navbar-brand-guild {
+    font-size: 1.25rem;
+}
+/* Shrink the guild brand when the page is too small to display both that and the full menu */
+@media (min-width: 768px) and (max-width: 1200px) {
+    .navbar-brand-guild {
+        font-size: 1.25vmax;
+    }
 }
 
 .dropdown-divider { /* bootstrap override */
