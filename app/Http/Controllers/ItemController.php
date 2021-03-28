@@ -339,6 +339,20 @@ class ItemController extends Controller
                 ['characters.guild_id', $guild->id],
                 ['items.expansion_id',  $guild->expansion_id],
             ])
+            ->orWhere([
+                ['characters.guild_id', $guild->id],
+                ['items.expansion_id',  $guild->expansion_id],
+            ])
+            ->whereRaw("(`items`.`name` LIKE '%Design%'
+                OR `items`.`name` LIKE '%Enchant%'
+                OR `items`.`name` LIKE '%Formula%'
+                OR `items`.`name` LIKE '%Pattern%'
+                OR `items`.`name` LIKE '%Plans%'
+                OR `items`.`name` LIKE '%Recipe%'
+                OR `items`.`name` LIKE '%Schematic%')"
+            )
+            ->orderBy('items.name')
+            ->groupBy('items.id')
             ->with([
                 'receivedAndRecipeCharacters' => function ($query) use($guild) {
                     return $query->select([
@@ -361,14 +375,12 @@ class ItemController extends Controller
                         })
                         ->where([
                                 ['characters.guild_id', $guild->id],
-                                ['character_items.is_received', 0],
                             ])
-                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        ->groupBy(['character_items.character_id', 'character_items.item_id'])
+                        ->orderBy('characters.name');
                 }
             ])
-            ->orderBy('items.name')
             ->get();
-
         return view('item.listRecipes', [
             'currentMember'   => $currentMember,
             'guild'           => $guild,

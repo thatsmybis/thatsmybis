@@ -101,13 +101,13 @@
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="toggle-column-default text-link cursor-pointer" href="">
+            <span class="toggle-column-default text-link cursor-pointer">
                 Defaults
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="1" href="">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="1">
                 <span class="text-muted fal fa-fw fa-sack"></span>
                 Loot Received
             </span>
@@ -115,7 +115,7 @@
         @if ($showWishlist)
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
-                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2" href="">
+                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2">
                     <span class="text-muted fal fa-fw fa-scroll-old"></span>
                     Wishlist
                 </span>
@@ -124,7 +124,7 @@
         @if ($showPrios)
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
-                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
+                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
                     <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
                     Prio's
                 </span>
@@ -133,7 +133,7 @@
         <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
                 <span class="text-muted fas fa-fw fa-book"></span>
                 Recipes
             </span>
@@ -142,7 +142,7 @@
         <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4" href="">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4">
                 <span class="text-muted fab fa-fw fa-discord"></span>
                 Roles
             </span>
@@ -150,14 +150,14 @@
         -->
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="6" href="">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="6">
                 <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
                 Notes
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="js-show-all-clipped-items text-link cursor-pointer font-weight-light" data-column="6" href="">
+            <span class="js-show-all-clipped-items text-link cursor-pointer font-weight-light" data-column="6">
                 <span class="text-muted fal fa-fw fa-eye"></span>
                 Show all loot
             </span>

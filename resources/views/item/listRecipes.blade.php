@@ -11,6 +11,63 @@
             </h1>
         </div>
         <div class="col-12 pr-0 pl-0">
+            <div class="pr-2 pl-2">
+                <ul class="list-inline mb-0">
+                    <li class="list-inline-item text-muted">
+                        Quick Filters:
+                    </li>
+                    <li class="list-inline-item font-weight-light">
+                        <span data-value="" class="js-quick-filter text-link cursor-pointer">
+                            <span class="fas fa-fw fa-undo"></span>
+                            All
+                        </span>
+                    </li>
+                    @if ($guild->expansion_id > 1)
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <span data-value="design" class="js-quick-filter text-link cursor-pointer">
+                                Design
+                            </span>
+                        </li>
+                    @endif
+                    <li class="list-inline-item">&sdot;</li>
+                    <li class="list-inline-item">
+                        <span data-value="enchant" class="js-quick-filter text-link cursor-pointer">
+                            Enchant
+                        </span>
+                    </li>
+                    <li class="list-inline-item">&sdot;</li>
+                    <li class="list-inline-item">
+                        <span data-value="formula" class="js-quick-filter text-link cursor-pointer">
+                            Formula
+                        </span>
+                    </li>
+                    <li class="list-inline-item">&sdot;</li>
+                    <li class="list-inline-item">
+                        <span data-value="pattern" class="js-quick-filter text-link cursor-pointer">
+                            Pattern
+                        </span>
+                    </li>
+                    <li class="list-inline-item">&sdot;</li>
+                    <li class="list-inline-item">
+                        <span data-value="plans" class="js-quick-filter text-link cursor-pointer">
+                            Plans
+                        </span>
+                    </li>
+                    <li class="list-inline-item">&sdot;</li>
+                    <li class="list-inline-item">
+                        <span data-value="recipe" class="js-quick-filter text-link cursor-pointer">
+                            Recipe
+                        </span>
+                    </li>
+                    <li class="list-inline-item">&sdot;</li>
+                    <li class="list-inline-item">
+                        <span data-value="schematic" class="js-quick-filter text-link cursor-pointer">
+                            Schematic
+                        </span>
+                    </li>
+                </ul>
+            </div>
             <div class="col-12 pb-3 pr-2 pl-2 rounded">
                 <table id="recipes" class="table table-border table-hover stripe">
                     <thead>
@@ -71,7 +128,7 @@
 @section('scripts')
 <script>
 $(document).ready(function () {
-    $("#recipes").DataTable({
+    datatable = $("#recipes").DataTable({
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
         "paging" : false,
         "fixedHeader" : true, // Header row sticks to top of window when scrolling down
@@ -80,6 +137,11 @@ $(document).ready(function () {
             { "orderable" : false },
             { "orderable" : false },
         ]
+    });
+
+    $(".js-quick-filter").click(function () {
+        let value = $(this).data('value');
+        $("#recipes").DataTable().column(0).search(value).draw();
     });
 });
 </script>
