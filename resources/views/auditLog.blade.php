@@ -302,7 +302,7 @@
                 $.ajax({
                     method: "get",
                     dataType: "json",
-                    url: "/api/items/query/" + request.term,
+                    url: "/api/items/query/" + guild.expansion_id + "/" + request.term,
                     success: function (data) {
                         response(data);
                         if (data.length <= 0) {
