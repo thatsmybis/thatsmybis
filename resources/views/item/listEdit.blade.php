@@ -1,6 +1,12 @@
 @extends('layouts.app')
 @section('title', $instance-> name . " Notes - " . config('app.name'))
 
+@php
+    // Iterating over 6+ tiers 100+ items results in a lot of needless iterations.
+    // So we're just doing it once, saving the results, and printing them.
+    $tierSelectOptions = (string)View::make('partials.tierOptions', ['tiers' => $guild->tiers(), 'tierMode' => $guild->tier_mode]);
+@endphp
+
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
@@ -60,9 +66,12 @@
                                     </h2>
                                 </div>
                             @endif
+
+                            <input hidden name="items[{{ $loop->iteration }}][id]" value="{{ $item->item_id }}" />
+
                             <div class="row striped-light pb-2 pt-3 rounded">
 
-                                <div class="col-lg-4 col-12">
+                                <div class="col-lg-3 col-12">
                                     <div class="d-inline-grid align-middle text-5 mb-2">
                                         <label for="items[{{ $loop->iteration }}][name]" class="font-weight-bold d-none d-sm-block">
                                             <span class="sr-only">
@@ -73,10 +82,48 @@
                                     </div>
                                 </div>
 
+                                <div class="col-lg-1 col-12 {{ $errors->has('items.' . $loop->iteration . '.tier') ? 'bg-danger rounded font-weight-bold' : '' }}">
+                                    <div class="form-group">
+
+                                        <label for="items[{{ $loop->iteration }}][tier]" class="font-weight-bold">
+                                            @if ($loop->first)
+                                                <span class="fas fa-fw fa-trophy text-muted"></span>
+                                                Tier
+                                            @else
+                                                <span class="sr-only">Tier</span>
+                                            @endif
+                                        </label>
+
+                                        <select name="items[{{ $loop->iteration }}][tier]" class="form-control dark">
+                                            <option value="" selected>
+                                            —
+                                            </option>
+                                            {{-- See the notes at the top for why the options look like this --}}
+                                            @if (old('items.' . $loop->iteration . '.tier') || $item->guild_tier)
+                                                @php
+                                                    $tier = old('items.' . $loop->iteration . '.tier') ? old('items.' . $loop->iteration . '.tier') : $item->guild_tier;
+                                                    // Select the correct option
+                                                    $options = str_replace('hack="' . $tier . '"', 'selected', $tierSelectOptions);
+                                                 @endphp
+                                                 {!! $options !!} {{$tier }}
+                                            @else
+                                                {!! $tierSelectOptions !!}
+                                            @endif
+
+                                        </select>
+
+                                        @if ($errors->has('items.' . $loop->iteration . '.tier'))
+                                            <div class="'text-danger font-weight-bold'">
+                                                {{ $errors->first('items.' . $loop->iteration . '.tier') }}
+                                            </div>
+                                        @endif
+                                    </div>
+                                </div>
+
                                 <div class="col-lg-4 col-12 {{ $errors->has('items.' . $loop->iteration . '.note') || $errors->has('items.' . $loop->iteration . '.id') ? 'bg-danger rounded font-weight-bold' : '' }}">
                                     <div class="form-group">
 
-                                        <label for="items[{{ $loop->iteration }}][note]" class="font-weight-bold d-none d-sm-block">
+                                        <label for="items[{{ $loop->iteration }}][note]" class="font-weight-bold">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-sticky-note text-muted"></span>
                                                 Note
@@ -84,9 +131,6 @@
                                                 <span class="sr-only">Note</span>
                                             @endif
                                         </label>
-
-                                        <input hidden name="items[{{ $loop->iteration }}][id]" value="{{ $item->item_id }}" />
-
 
                                         <input name="items[{{ $loop->iteration }}][note]" maxlength="140" data-max-length="140" type="text" placeholder="add a note" class="form-control dark"
                                             value="{{ old('items.' . $loop->iteration . '.note') ? old('items.' . $loop->iteration . '.note') : ($item->guild_note ? $item->guild_note : '') }}">
@@ -102,7 +146,7 @@
                                 <div class="col-lg-4 col-12 {{ $errors->has('items.' . $loop->iteration . '.priority') ? 'bg-danger rounded font-weight-bold' : '' }}">
                                     <div class="form-group">
 
-                                        <label for="priority" class="font-weight-bold d-none d-sm-block">
+                                        <label for="priority" class="font-weight-bold">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
                                                 Priority

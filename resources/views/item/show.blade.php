@@ -65,6 +65,40 @@
 
                                 <div class="col-12">
                                     <span class="text-muted font-weight-bold">
+                                        <span class="fas fa-fw fa-trophy"></span>
+                                        Guild Tier
+                                    </span>
+                                </div>
+                                <div class="col-12 mb-3 pl-4 font-weight-bold text-tier-{{ $notes['tier'] ? $notes['tier'] : '' }}">
+                                    {{ $notes['tier'] ? $guild->tier_mode == App\Guild::TIER_MODE_NUM ? $notes['tier'] : $notes['tier_label'] : '—' }}
+                                    @if ($showNoteEdit)
+                                        <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
+                                    @endif
+                                </div>
+                                @if ($showNoteEdit)
+                                    <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
+                                        <div class="form-group">
+                                            <label for="tier" class="sr-only">
+                                                Item Tier
+                                            </label>
+                                            <select name="tier" class="form-control dark">
+                                                <option value="" selected>
+                                                —
+                                                </option>
+                                                @foreach ($guild->tiers() as $key => $tier)
+                                                    <option value="{{ $key }}"
+                                                        class="text-tier-{{ $key }}"
+                                                        {{ old('tier') && old('tier') == $key ? 'selected' : ($notes['tier'] && $notes['tier'] == $key ? 'selected' : '') }}>
+                                                        {{ $guild->tier_mode == App\Guild::TIER_MODE_NUM ? $key : $tier }}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                    </div>
+                                @endif
+
+                                <div class="col-12">
+                                    <span class="text-muted font-weight-bold">
                                         <span class="fas fa-fw fa-comment-alt-lines"></span>
                                         Guild Note
                                     </span>
@@ -79,7 +113,7 @@
                                     <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                                         <div class="form-group">
                                             <label for="note" class="sr-only">
-                                                Item Priority
+                                                Item Note
                                             </label>
                                             <textarea maxlength="140" data-max-length="140" name="note" rows="2" placeholder="add a note" class="form-control dark">{{ old('note') ? old('note') : ($item ? $notes['note'] : '') }}</textarea>
                                         </div>
@@ -94,11 +128,11 @@
                                 </div>
                                 <div class="col-12 mb-3 pl-4">
                                     {{ $notes['priority'] ? $notes['priority'] : '—' }}
-                                    @if ($showNoteEdit)
+                                    @if ($showPrioEdit)
                                         <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                                     @endif
                                 </div>
-                                @if ($showNoteEdit)
+                                @if ($showPrioEdit)
                                     <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                                         <div class="form-group">
                                             <label for="priority" class="sr-only">

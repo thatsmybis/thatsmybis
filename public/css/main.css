@@ -242,6 +242,25 @@ body {
     color: #71d5ff!important;
 }
 
+.text-tier-1 {
+    color: #93c5ff !important;
+}
+.text-tier-2 {
+    color: #5bb54e !important;
+}
+.text-tier-3 {
+    color: #98cc3d !important;
+}
+.text-tier-4 {
+    color: #f1d53d !important;
+}
+.text-tier-5 {
+    color: #ea8d23 !important;
+}
+.text-tier-6 {
+    color: #ff7171 !important;
+}
+
 .text-muted {
     color: #8e959b !important;
 }

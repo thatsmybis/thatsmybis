@@ -79,7 +79,12 @@ class Item extends Model
     public function priodCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['character_items.type' => self::TYPE_PRIO])
-            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
+            ->select([
+                'characters.*',
+                'raids.name AS raid_name',
+                'raid_roles.color AS raid_color',
+                'added_by_members.username AS added_by_username',
+            ])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raids', function ($join) {
                 $join->on('raids.id', 'characters.raid_id');
@@ -99,7 +104,12 @@ class Item extends Model
     public function receivedCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['character_items.type' => self::TYPE_RECEIVED])
-            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
+            ->select([
+                'characters.*',
+                'raids.name AS raid_name',
+                'raid_roles.color AS raid_color',
+                'added_by_members.username AS added_by_username',
+            ])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raids', function ($join) {
                 $join->on('raids.id', 'characters.raid_id');
@@ -111,14 +121,27 @@ class Item extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'raid_id', 'type', 'note', 'officer_note', 'is_offspec', 'received_at'])
+            ->withPivot([
+                'added_by',
+                'raid_id',
+                'type',
+                'note',
+                'officer_note',
+                'is_offspec',
+                'received_at'
+            ])
             ->orderBy('characters.name');
     }
 
     public function receivedAndRecipeCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->whereIn('character_items.type', [self::TYPE_RECEIVED, self::TYPE_RECIPE])
-            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
+            ->select([
+                'characters.*',
+                'raids.name AS raid_name',
+                'raid_roles.color AS raid_color',
+                'added_by_members.username AS added_by_username',
+            ])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raids', function ($join) {
                 $join->on('raids.id', 'characters.raid_id');
@@ -130,7 +153,15 @@ class Item extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'raid_id', 'type', 'order', 'note', 'officer_note', 'is_offspec', 'received_at'])
+            ->withPivot([
+                'added_by',
+                'raid_id',
+                'type',
+                'order',
+                'note',
+                'officer_note',
+                'is_offspec', 'received_at'
+            ])
             ->orderBy('characters.name');
     }
 
