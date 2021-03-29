@@ -591,7 +591,7 @@ class ItemController extends Controller
 
         $validationMessages = [
             'item.*.character_id.required_with' => ':values is missing a character.',
-            'item.*.import_id.unique'           => '":input" has been imported before. If you want to import anyway, change the ID and submit again.',
+            'item.*.import_id.unique'           => '":input" has been imported before. If you want to import anyway, change/remove the ID and submit again.',
         ];
 
         $this->validate(request(), $validationRules, $validationMessages);

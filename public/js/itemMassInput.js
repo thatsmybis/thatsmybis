@@ -290,7 +290,7 @@ function completeCsvImport(results)
                 overLimitCount++;
                 continue;
             } else if (item['response'] != undefined && disenchantFlags.includes(item['response'].toLowerCase())) {
-                console.log("Skipping row " + (i + 1) + ": Disenchant");
+                console.log(`Skipping row ${ (i + 1) }: Disenchant ${ item.item ? item.item : (item.item_id ? item.item_id : '') }`);
                 skippedCount++;
                 disenchantCount++;
                 continue;
@@ -328,6 +328,8 @@ function completeCsvImport(results)
         missingCharacters = missingCharacters.join(", ");
         statusMessages += `<li class="text-danger">${ missingCharacterCount } character${ missingCharacterCount > 1 ? 's' : '' } not found: ${ missingCharacters }</li>`;
     }
+
+    statusMessages += `<li class="text-muted">More details in console (usually F12)</li>`;
 
     if (statusMessages) {
         $("#status-message").html(`<ul>${statusMessages}</ul>`).show();
@@ -380,7 +382,21 @@ function loadItemToForm(item, i) {
     }
 
     if (item['id']) { // RCLC value
-        importId = item['id'];
+        // RCLC id is only a unix timestamp to the second.
+        // To make it really unique, append the character's name.
+        importId = (item['id'] + "-" + characterName).substring(0, 20);
+
+        // Check if the ID is a RCLC ID that contains the unix time of the transaction.
+        // If it is, use that for the date instead.
+        let possibleUnixTimestamp = item['id'].split('-').map(item => item.trim());
+
+        if (possibleUnixTimestamp.length > 0) {
+            possibleUnixTimestamp = moment(Number(possibleUnixTimestamp[0] + '000')); // Add milliseconds so that moment() will accept it.
+
+            if (possibleUnixTimestamp.isValid()) {
+                date = possibleUnixTimestamp.format('YYYY-MM-DD');
+            }
+        }
     }
 
     if (item['itemID']) { // RCLC value
@@ -412,7 +428,7 @@ function loadItemToForm(item, i) {
         itemName = item['item_name'].trim();
     }
 
-    if (item['date']) { // RCLC value
+    if (item['date'] && !date) { // If RCLC value; can instead default to the date in the ID
         rclcDate = moment(item['date'].trim(), 'DD/MM/YY');
         if (rclcDate.isValid()) {
             // Accept insane DD/MM/YY format
@@ -500,7 +516,7 @@ function loadItemToForm(item, i) {
         // Check the checkbox
         $("[name=item\\[" + i + "\\]\\[is_offspec\\]]").prop("checked", true).change();
 
-        console.log("Flagged as offspec for row " + (i + 1));
+        console.log(`Flagged row ${ (i + 1) } as offspec ${ itemName ? itemName : (itemId ? itemId : '') }${ characterName ? ' on ' + characterName : '' }`);
         offspecCount++;
     }
 
@@ -533,7 +549,7 @@ function prepareForm() {
     $("[name=raid_filter]").val("").change();
 
     if (preventDuplicates) {
-        $(".js-import-id").show();
+        // $(".js-import-id").show();
     }
 
     // Reset all native form elements

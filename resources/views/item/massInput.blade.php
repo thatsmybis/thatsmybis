@@ -358,7 +358,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <label for="item[{{ $i }}][received_at]" class="font-weight-bold">
                                                 @if ($i == 0)
                                                     <span class="fas fa-fw fa-calendar-alt text-muted"></span>
-                                                    Date
+                                                    <abbr title="RCLC date imports may be off by +/-24h due to timezone issues.">Date</abbr>
                                                     <span class="text-muted small">optional</span>
                                                 @else
                                                     &nbsp;
@@ -389,7 +389,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                     </span>
                                                 @endif
                                             </label>
-                                            <input name="item[{{ $i }}][import_id]" maxlength="140" data-max-length="140" type="text" placeholder="unique ID from loot addon"
+                                            <input name="item[{{ $i }}][import_id]" maxlength="20" data-max-length="20" type="text" placeholder="unique ID from loot addon"
                                                 class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.import_id') ? 'form-danger' : '' }}" autocomplete="off"
                                                 value="{{ old('item.' . $i . '.import_id') ? old('item.' . $i . '.import_id') : '' }}">
                                         </div>
