@@ -42,6 +42,7 @@ class Guild extends Model
         'is_prio_autopurged',
         'is_wishlist_autopurged',
         'do_sort_items_by_instance',
+        'tier_mode',
         'disabled_at',
     ];
 
@@ -60,6 +61,18 @@ class Guild extends Model
         'class_leader_role_id',
         'member_role_ids',
         'calendar_link',
+    ];
+
+    const TIER_MODE_NUM = 'num';
+    const TIER_MODE_S   = 's';
+
+    const TIERS = [
+        1 => 'S',
+        2 => 'A',
+        3 => 'B',
+        4 => 'C',
+        5 => 'D',
+        6 => 'F',
     ];
 
     // Excludes hidden and removed characters
@@ -97,7 +110,7 @@ class Guild extends Model
     public function items() {
         return $this->belongsToMany(Item::class, 'guild_items', 'guild_id', 'item_id')
             ->withTimeStamps()
-            ->withPivot(['created_by', 'updated_by', 'note', 'priority'])
+            ->withPivot(['created_by', 'updated_by', 'note', 'priority', 'tier', 'tier_label'])
             ->orderBy('items.name');
     }
 
@@ -232,5 +245,9 @@ class Guild extends Model
         } else {
             return 60;
         }
+    }
+
+    public static function tiers() {
+        return self::TIERS;
     }
 }

@@ -65,16 +65,14 @@ class ItemController extends Controller
                 'items.item_id',
                 'items.name',
                 'items.quality',
-                'item_sources.name AS source_name',
-                'guild_items.note AS guild_note',
-                'guild_items.priority AS guild_priority',
+                'item_sources.name      AS source_name',
+                'guild_items.note       AS guild_note',
+                'guild_items.priority   AS guild_priority',
+                'guild_items.tier       AS guild_tier',
+                'guild_items.tier_label AS guild_tier_label',
             ])
-            ->join('item_item_sources', function ($join) {
-                $join->on('item_item_sources.item_id', 'items.item_id');
-            })
-            ->join('item_sources', function ($join) {
-                $join->on('item_sources.id', 'item_item_sources.item_source_id');
-            })
+            ->leftJoin('item_item_sources', 'item_item_sources.item_id', '=', 'items.item_id')
+            ->leftJoin('item_sources', 'item_sources.id', '=', 'item_item_sources.item_source_id')
             ->leftJoin('guild_items', function ($join) use ($guild) {
                 $join->on('guild_items.item_id', 'items.item_id')
                     ->where('guild_items.guild_id', $guild->id);
@@ -155,9 +153,11 @@ class ItemController extends Controller
                 'items.item_id',
                 'items.name',
                 'items.quality',
-                'item_sources.name AS source_name',
-                'guild_items.note AS guild_note',
-                'guild_items.priority AS guild_priority',
+                'item_sources.name      AS source_name',
+                'guild_items.note       AS guild_note',
+                'guild_items.priority   AS guild_priority',
+                'guild_items.tier       AS guild_tier',
+                'guild_items.tier_label AS guild_tier_label',
             ])
             ->join('item_item_sources', function ($join) {
                 $join->on('item_item_sources.item_id', 'items.item_id');
@@ -211,6 +211,7 @@ class ItemController extends Controller
             ],
             'items.*.note'     => 'nullable|string|max:140',
             'items.*.priority' => 'nullable|string|max:140',
+            'items.*.tier'     => ['nullable', 'integer', Rule::in(array_keys(Guild::tiers()))],
         ];
 
         $this->validate(request(), $validationRules);
@@ -243,16 +244,23 @@ class ItemController extends Controller
             $existingItem = $guild->items->where('item_id', $item['id'])->first();
 
             // Note or priority has changed; update it
-            if ($existingItem && ($item['note'] != $existingItem->pivot->note || $item['priority'] != $existingItem->pivot->priority)) {
+            if ($existingItem && (
+                    $item['note'] != $existingItem->pivot->note
+                    || $item['priority'] != $existingItem->pivot->priority
+                    || $item['tier'] != $existingItem->pivot->tier
+                )
+            ) {
                 $guild->items()->updateExistingPivot($existingItem->item_id, [
                     'note'       => $item['note'],
                     'priority'   => $item['priority'],
                     'updated_by' => $currentMember->id,
+                    'tier'       => $item['tier'],
+                    'tier_label' => $item['tier'] ? Guild::tiers()[$item['tier']] : null,
                 ]);
                 $updatedCount++;
 
                 $audits[] = [
-                    'description'  => $currentMember->username . ' changed item note/priority',
+                    'description'  => $currentMember->username . ' changed item note/priority/tier',
                     'type'         => AuditLog::TYPE_ITEM_NOTE,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,
@@ -266,11 +274,13 @@ class ItemController extends Controller
                     'note'       => $item['note'],
                     'priority'   => $item['priority'],
                     'created_by' => $currentMember->id,
+                    'tier'       => $item['tier'],
+                    'tier_label' => $item['tier'] ? Guild::tiers()[$item['tier']] : null,
                 ]);
                 $addedCount++;
 
                 $audits[] = [
-                    'description'  => $currentMember->username . ' added item note/priority',
+                    'description'  => $currentMember->username . ' added item note/priority/tier',
                     'type'         => AuditLog::TYPE_ITEM_NOTE,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,
@@ -456,7 +466,9 @@ class ItemController extends Controller
                         'guild_items.created_by',
                         'guild_items.updated_by',
                         'guild_items.note',
-                        'guild_items.priority'
+                        'guild_items.priority',
+                        'guild_items.tier',
+                        'guild_items.tier_label'
                     ])
                     ->where('guilds.id', $guild->id);
                 },
@@ -512,13 +524,17 @@ class ItemController extends Controller
         }
 
         $notes = [];
-        $notes['note']     = null;
-        $notes['priority'] = null;
+        $notes['note']       = null;
+        $notes['priority']   = null;
+        $notes['tier']       = null;
+        $notes['tier_label'] = null;
 
         // If this guild has notes for this item, prep them for ease of access in the view
         if ($item->guilds->count() > 0) {
-            $notes['note']     = $item->guilds->first()->pivot->note;
-            $notes['priority'] = $item->guilds->first()->pivot->priority;
+            $notes['note']       = $item->guilds->first()->note;
+            $notes['priority']   = $item->guilds->first()->priority;
+            $notes['tier']       = $item->guilds->first()->tier;
+            $notes['tier_label'] = $item->guilds->first()->tier_label;
         }
 
         $showEdit = false;
@@ -839,6 +855,7 @@ class ItemController extends Controller
             ],
             'note'     => 'nullable|string|max:140',
             'priority' => 'nullable|string|max:140',
+            'tier'     => ['nullable', 'integer', Rule::in(array_keys(Guild::tiers()))],
         ];
 
         $validationMessages = [];
@@ -862,11 +879,13 @@ class ItemController extends Controller
             $guild->items()->updateExistingPivot($item->item_id, [
                 'note'       => request()->input('note'),
                 'priority'   => request()->input('priority'),
+                'tier'       => request()->input('tier'),
+                'tier_label' => request()->input('tier') ? Guild::tiers()[request()->input('tier')] : null,
                 'updated_by' => $currentMember->id,
             ]);
 
             AuditLog::create([
-                'description' => $currentMember->username . ' changed item note/priority',
+                'description' => $currentMember->username . ' changed item note/priority/tier',
                 'member_id'   => $currentMember->id,
                 'guild_id'    => $currentMember->guild_id,
                 'item_id'     => $item->item_id,
@@ -877,11 +896,13 @@ class ItemController extends Controller
             $guild->items()->attach($item->item_id, [
                 'note'       => request()->input('note'),
                 'priority'   => request()->input('priority'),
+                'tier'       => request()->input('tier'),
+                'tier_label' => request()->input('tier') ? Guild::tiers()[request()->input('tier')] : null,
                 'created_by' => $currentMember->id,
             ]);
 
             AuditLog::create([
-                'description' => $currentMember->username . ' added item note/priority',
+                'description' => $currentMember->username . ' added item note/priority/tier',
                 'member_id'   => $currentMember->id,
                 'guild_id'    => $currentMember->guild_id,
                 'item_id'     => $item->item_id,
