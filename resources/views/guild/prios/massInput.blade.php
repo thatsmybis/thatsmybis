@@ -120,6 +120,7 @@
                                                                 class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
                                                                 <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
                                                                 <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_color) }}"></span>-->
+                                                                <span class="text-muted small font-weight-bold">{{ $character->pivot->is_offspec ? 'OS' : '' }}</span>
                                                                 <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
                                                                 <span class="js-watchable-timestamp smaller text-muted"
                                                                     data-timestamp="{{ $character->pivot->created_at }}"
