@@ -118,14 +118,15 @@ class Character extends Model
                 'guild_items.tier          AS guild_tier',
                 'guild_items.tier_label    AS guild_tier_label',
             ])
-            ->leftJoin('members AS added_by_members', 'added_by_members.id', '=', 'character_items.added_by')
-            ->leftJoin('raids', 'raids.id', '=', 'character_items.raid_id')
+            ->join(    'characters',                  'characters.id',                    '=', 'character_items.character_id')
+            ->leftJoin('members AS added_by_members', 'added_by_members.id',              '=', 'character_items.added_by')
+            ->leftJoin('raids',                       'raids.id',                         '=', 'character_items.raid_id')
             ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
             ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->leftJoin('guild_items', function ($join) {
-                $join->on('guild_items.item_id', 'character_items.item_id')
-                    ->where('guild_items.guild_id', 'characters.guild_id');
+                $join->on('guild_items.item_id', 'items.item_id')
+                    ->on('guild_items.guild_id', 'characters.guild_id'); // I spent too long before googling why `where()` wasn't working: https://stackoverflow.com/a/29544890/1196517
             })
             ->where('character_items.type', Item::TYPE_RECEIVED)
             ->groupBy('character_items.id')
@@ -148,14 +149,15 @@ class Character extends Model
                 'guild_items.tier          AS guild_tier',
                 'guild_items.tier_label    AS guild_tier_label',
             ])
+            ->join(    'characters',                  'characters.id',                    '=', 'character_items.character_id')
             ->leftJoin('members AS added_by_members', 'added_by_members.id', '=', 'character_items.added_by')
             ->leftJoin('raids',                       'character_items.raid_id',          '=', 'raids.id')
             ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
             ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->leftJoin('guild_items', function ($join) {
-                $join->on('guild_items.item_id', 'character_items.item_id')
-                    ->where('guild_items.guild_id', 'characters.guild_id');
+                $join->on('guild_items.item_id', 'items.item_id')
+                    ->on('guild_items.guild_id', 'characters.guild_id');
             })
             ->where([
                 ['character_items.type', Item::TYPE_PRIO],
@@ -179,19 +181,18 @@ class Character extends Model
                 'item_sources.instance_id  AS instance_id',
                 'instances.name            AS instance_name',
                 'instances.order           AS instance_order',
-                'item_sources.npc_id       AS npc_id',
-                'item_sources.object_id    AS object_id',
                 'added_by_members.username AS added_by_username',
                 'guild_items.tier          AS guild_tier',
                 'guild_items.tier_label    AS guild_tier_label',
             ])
+            ->join(    'characters',                  'characters.id',                    '=', 'character_items.character_id')
             ->leftJoin('members AS added_by_members', 'added_by_members.id',              '=', 'character_items.added_by')
             ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
             ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->leftJoin('guild_items', function ($join) {
-                $join->on('guild_items.item_id', 'character_items.item_id')
-                    ->where('guild_items.guild_id', 'characters.guild_id');
+                $join->on('guild_items.item_id', 'items.item_id')
+                    ->on('guild_items.guild_id', 'characters.guild_id');
             })
             ->where('character_items.type', Item::TYPE_WISHLIST)
             ->groupBy('character_items.id')

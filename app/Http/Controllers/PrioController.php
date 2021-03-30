@@ -84,9 +84,11 @@ class PrioController extends Controller
                 'items.item_id',
                 'items.name',
                 'items.quality',
-                'item_sources.name AS source_name',
-                'guild_items.note AS guild_note',
-                'guild_items.priority AS guild_priority',
+                'item_sources.name      AS source_name',
+                'guild_items.note       AS guild_note',
+                'guild_items.priority   AS guild_priority',
+                'guild_items.tier       AS guild_tier',
+                'guild_items.tier_label AS guild_tier_label',
             ])
             ->join('item_item_sources', function ($join) {
                 $join->on('item_item_sources.item_id', 'items.item_id');
@@ -159,9 +161,11 @@ class PrioController extends Controller
                 'items.item_id',
                 'items.name',
                 'items.quality',
-                'item_sources.name AS source_name',
-                'guild_items.note AS guild_note',
-                'guild_items.priority AS guild_priority',
+                'item_sources.name      AS source_name',
+                'guild_items.note       AS guild_note',
+                'guild_items.priority   AS guild_priority',
+                'guild_items.tier       AS guild_tier',
+                'guild_items.tier_label AS guild_tier_label',
             ])
             ->leftJoin('item_item_sources', function ($join) {
                 $join->on('item_item_sources.item_id', 'items.item_id');
