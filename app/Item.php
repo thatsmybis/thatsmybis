@@ -180,7 +180,7 @@ class Item extends Model
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'raid_id', 'type','is_received', 'received_at', 'order'])
+            ->withPivot(['added_by', 'raid_id', 'type', 'is_received', 'is_offspec', 'received_at', 'order'])
             ->orderBy('character_items.order');
     }
 }

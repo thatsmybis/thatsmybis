@@ -202,6 +202,7 @@ function getCharacterList(data, type, itemId) {
                     title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     <span class="text-muted">${ character.pivot.order ? character.pivot.order : '' }</span>
+                    <span class="text-muted small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_color) }"></span>${ character.name }
                     ${ character.is_alt ? `
                         <span class="text-legendary">alt</span>
