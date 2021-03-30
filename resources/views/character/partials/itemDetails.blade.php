@@ -1,5 +1,5 @@
 @if ($item)
-    <ul class="no-bullet no-indent small text-muted">
+    <ul class="no-bullet no-indent small text-muted ml-3">
         <li>
             <ul class="list-inline">
                 @if ($item->pivot->is_offspec)

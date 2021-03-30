@@ -83,7 +83,12 @@
                                                 Item Name
                                             </span>
                                         </label>
-                                        @include('partials/item', ['wowheadLink' => false, 'targetBlank' => true])
+                                        @include('partials/item', [
+                                            'wowheadLink' => false,
+                                            'targetBlank' => true,
+                                            'showTier'    => true,
+                                            'tierMode'    => $guild->tier_mode,
+                                            ])
                                     </div>
                                 </div>
 

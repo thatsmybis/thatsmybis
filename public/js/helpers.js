@@ -1,3 +1,7 @@
+// For knowing what kind of tier style to display
+const TIER_MODE_NUM = 'num';
+const TIER_MODE_S   = 's';
+
 // For keeping track of the intervals updating times
 var timestampUpdateInterval = null;
 
@@ -142,6 +146,19 @@ function getColorFromDec(color) {
         color = 'FFF';
     }
     return '#' + color;
+}
+
+//
+function getItemTierLabel(item, tierMode) {
+    if (item.guild_tier) {
+        if (tierMode == TIER_MODE_S) {
+            return item.guild_tier_label;
+        } else {
+            return item.guild_tier;
+        }
+    } else {
+        return '';
+    }
 }
 
 // Updates any wowhead links to have a tooltip, plus other modifications.

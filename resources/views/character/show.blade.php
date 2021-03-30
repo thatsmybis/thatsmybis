@@ -36,7 +36,14 @@
                                         </li>
                                     @endif
                                     <li value="{{ $item->pivot->order }}">
-                                        @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                        @include('partials/item', [
+                                            'wowheadLink'   => false,
+                                            'itemDate'      => $item->pivot->created_at,
+                                            'itemUsername'  => $item->added_by_username,
+                                            'strikeThrough' => $item->pivot->is_received,
+                                            'showTier'      => true,
+                                            'tierMode'      => $guild->tier_mode,
+                                        ])
                                         @include('character/partials/itemDetails', ['hideCreatedAt' => true, 'hideRaid' => true])
                                     </li>
                                 @endforeach
@@ -83,7 +90,14 @@
                                     @endif
 
                                     <li value="{{ $item->pivot->order }}">
-                                        @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                        @include('partials/item', [
+                                            'wowheadLink'   => false,
+                                            'itemDate'      => $item->pivot->created_at,
+                                            'itemUsername'  => $item->added_by_username,
+                                            'strikeThrough' => $item->pivot->is_received,
+                                            'showTier'      => true,
+                                            'tierMode'      => $guild->tier_mode,
+                                        ])
                                         @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                     </li>
 
@@ -96,7 +110,14 @@
                             <ol class="js-wishlist-unsorted" style="{{ $guild->do_sort_items_by_instance ? 'display:none;' : '' }}">
                                 @foreach ($character->wishlist as $item)
                                     <li value="{{ $item->pivot->order }}">
-                                        @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                        @include('partials/item', [
+                                            'wowheadLink'   => false,
+                                            'itemDate'      => $item->pivot->created_at,
+                                            'itemUsername'  => $item->added_by_username,
+                                            'strikeThrough' => $item->pivot->is_received,
+                                            'showTier'      => true,
+                                            'tierMode'      => $guild->tier_mode,
+                                        ])
                                         @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                     </li>
                                 @endforeach

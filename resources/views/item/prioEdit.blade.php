@@ -38,12 +38,15 @@
                 <div class="row mt-3 mb-3 bg-light rounded">
                     <div class="col-lg-4 col-12">
                         <div class="d-inline-grid align-middle text-5 mb-2">
-                            <label for="items[{{ $item->item_id }}][name]" class="font-weight-bold d-none d-sm-block">
-                                <span class="sr-only">
-                                    Item Name
-                                </span>
+                            <label for="items[{{ $item->item_id }}][name]" class="font-weight-bold d-none d-sm-block sr-only">
+                                Item Name
                             </label>
-                            @include('partials/item', ['wowheadLink' => false, 'targetBlank' => true])
+                            @include('partials/item', [
+                                'wowheadLink' => false,
+                                'targetBlank' => true,
+                                'showTier'    => true,
+                                'tierMode'    => $guild->tier_mode,
+                            ])
                         </div>
                     </div>
 
