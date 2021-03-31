@@ -26,16 +26,19 @@ if (isset($guild) && $guild->expansion_id) {
     }
 }
 
-$itemTierText = '';
-
-if (isset($itemTier) && $itemTier) {
-    if (isset($tierMode) && $tierMode == \App\Guild::TIER_MODE_NUM) {
-        $itemTierText = $itemTier;
+if (isset($showTier) && $showTier) {
+    if (isset($tierMode) && $tierMode) {
+        $itemTierText = '&nbsp;';
+        if (isset($itemTier) && $itemTier) {
+            if ($tierMode == \App\Guild::TIER_MODE_S) {
+                $itemTierText = \App\Guild::tiers()[$itemTier];
+            } else {
+                $itemTierText = $itemTier;
+            }
+        }
     } else {
-        $itemTierText = \App\Guild::tiers()[$itemTier];
+        $showTier = false;
     }
-} else {
-    $itemTierText = '&nbsp;';
 }
 
 $wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadSubdomain . '" data-wowhead-link="https://' . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadSubdomain . '"';
@@ -43,7 +46,7 @@ $wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadSubdoma
 
 <span class="font-weight-{{ isset($fontWeight) && $fontWeight ? $fontWeight : 'medium' }}">
     @if (isset($showTier) && $showTier)
-        <span class="text-monospace font-weight-light text-tier-{{ isset($itemTier) && $itemTier ? $itemTier : '' }}">{!! $itemTierText !!}</span>
+        <span class="text-monospace font-weight-medium text-tier-{{ isset($itemTier) && $itemTier ? $itemTier : '' }}">{!! $itemTierText !!}</span>
     @endif
     <span class="{{ isset($strikeThrough) && $strikeThrough ? 'font-strikethrough' : '' }}">
         @if (isset($wowheadLink) && $wowheadLink)

@@ -14,7 +14,6 @@ class AddTiersToGuildItems extends Migration
     public function up()
     {
         Schema::table('guild_items', function (Blueprint $table) {
-            $table->string('tier_label', 3)->nullable()->after('updated_by');
             $table->unsignedTinyInteger('tier')->nullable()->after('updated_by');
         });
     }

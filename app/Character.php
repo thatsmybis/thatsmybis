@@ -116,7 +116,6 @@ class Character extends Model
                 'raids.name                AS raid_name',
                 'instances.id              AS instance_id',
                 'guild_items.tier          AS guild_tier',
-                'guild_items.tier_label    AS guild_tier_label',
             ])
             ->join(    'characters',                  'characters.id',                    '=', 'character_items.character_id')
             ->leftJoin('members AS added_by_members', 'added_by_members.id',              '=', 'character_items.added_by')
@@ -147,7 +146,6 @@ class Character extends Model
                 'added_by_members.username AS added_by_username',
                 'instances.id              AS instance_id',
                 'guild_items.tier          AS guild_tier',
-                'guild_items.tier_label    AS guild_tier_label',
             ])
             ->join(    'characters',                  'characters.id',                    '=', 'character_items.character_id')
             ->leftJoin('members AS added_by_members', 'added_by_members.id', '=', 'character_items.added_by')
@@ -183,7 +181,6 @@ class Character extends Model
                 'instances.order           AS instance_order',
                 'added_by_members.username AS added_by_username',
                 'guild_items.tier          AS guild_tier',
-                'guild_items.tier_label    AS guild_tier_label',
             ])
             ->join(    'characters',                  'characters.id',                    '=', 'character_items.character_id')
             ->leftJoin('members AS added_by_members', 'added_by_members.id',              '=', 'character_items.added_by')

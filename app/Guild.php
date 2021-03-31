@@ -110,7 +110,7 @@ class Guild extends Model
     public function items() {
         return $this->belongsToMany(Item::class, 'guild_items', 'guild_id', 'item_id')
             ->withTimeStamps()
-            ->withPivot(['created_by', 'updated_by', 'note', 'priority', 'tier', 'tier_label'])
+            ->withPivot(['created_by', 'updated_by', 'note', 'priority', 'tier'])
             ->orderBy('items.name');
     }
 

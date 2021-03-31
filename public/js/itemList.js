@@ -95,7 +95,9 @@ function createTable(lastSource) {
                     return `
                     <ul class="no-bullet no-indent mb-0">
                         <li>
-                            <span class="text-monospace font-weight-light text-tier-${ row.guild_tier ? row.guild_tier : '' }">${ row.guild_tier ? getItemTierLabel(row, guild.tier_mode) : '&nbsp;' }</span>
+                            ${ guild.tier_mode ?
+                                `<span class="text-monospace font-weight-medium text-tier-${ row.guild_tier ? row.guild_tier : '' }">${ row.guild_tier ? getItemTierLabel(row, guild.tier_mode) : '&nbsp;' }</span>`
+                            : `` }
                             <a href="${ url }"
                                 class="${ row.quality ? 'q' + row.quality : '' }"
                                 ${ wowheadData }>

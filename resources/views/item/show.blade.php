@@ -63,14 +63,14 @@
                                     </div>
                                 @endif
 
-                                <div class="col-12">
+                                <div class="col-12" style="{{ $guild->tier_mode ? '' : 'display:none;' }}">
                                     <span class="text-muted font-weight-bold">
                                         <span class="fas fa-fw fa-trophy"></span>
                                         Guild Tier
                                     </span>
                                 </div>
-                                <div class="col-12 mb-3 pl-4 font-weight-bold text-tier-{{ $notes['tier'] ? $notes['tier'] : '' }}">
-                                    {{ $notes['tier'] ? $guild->tier_mode == App\Guild::TIER_MODE_NUM ? $notes['tier'] : $notes['tier_label'] : '—' }}
+                                <div class="col-12 mb-3 pl-4 font-weight-bold text-tier-{{ $notes['tier'] ? $notes['tier'] : '' }}" style="{{ $guild->tier_mode ? '' : 'display:none;' }}">
+                                    {{ $notes['tier'] ? $guild->tier_mode == App\Guild::TIER_MODE_NUM ? $notes['tier'] : App\Guild::tiers()[$notes['tier']] : '—' }}
                                     @if ($showNoteEdit)
                                         <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                                     @endif
