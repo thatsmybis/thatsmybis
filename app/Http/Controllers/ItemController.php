@@ -266,7 +266,7 @@ class ItemController extends Controller
                 ];
 
             // Note is totally new; insert it
-            } else if (!$existingItem && ($item['note'] || $item['priority'])) {
+            } else if (!$existingItem && ($item['note'] || $item['priority'] || $item['tier'])) {
                 $guild->items()->attach($item['id'], [
                     'note'       => $item['note'],
                     'priority'   => $item['priority'],
