@@ -69,7 +69,6 @@ class ItemController extends Controller
                 'guild_items.note       AS guild_note',
                 'guild_items.priority   AS guild_priority',
                 'guild_items.tier       AS guild_tier',
-                'guild_items.tier_label AS guild_tier_label',
             ])
             ->leftJoin('item_item_sources', 'item_item_sources.item_id', '=', 'items.item_id')
             ->leftJoin('item_sources', 'item_sources.id', '=', 'item_item_sources.item_source_id')
@@ -157,7 +156,6 @@ class ItemController extends Controller
                 'guild_items.note       AS guild_note',
                 'guild_items.priority   AS guild_priority',
                 'guild_items.tier       AS guild_tier',
-                'guild_items.tier_label AS guild_tier_label',
             ])
             ->join('item_item_sources', function ($join) {
                 $join->on('item_item_sources.item_id', 'items.item_id');
@@ -255,7 +253,6 @@ class ItemController extends Controller
                     'priority'   => $item['priority'],
                     'updated_by' => $currentMember->id,
                     'tier'       => $item['tier'],
-                    'tier_label' => $item['tier'] ? Guild::tiers()[$item['tier']] : null,
                 ]);
                 $updatedCount++;
 
@@ -275,7 +272,6 @@ class ItemController extends Controller
                     'priority'   => $item['priority'],
                     'created_by' => $currentMember->id,
                     'tier'       => $item['tier'],
-                    'tier_label' => $item['tier'] ? Guild::tiers()[$item['tier']] : null,
                 ]);
                 $addedCount++;
 
@@ -468,7 +464,6 @@ class ItemController extends Controller
                         'guild_items.note',
                         'guild_items.priority',
                         'guild_items.tier',
-                        'guild_items.tier_label'
                     ])
                     ->where('guilds.id', $guild->id);
                 },
@@ -527,14 +522,12 @@ class ItemController extends Controller
         $notes['note']       = null;
         $notes['priority']   = null;
         $notes['tier']       = null;
-        $notes['tier_label'] = null;
 
         // If this guild has notes for this item, prep them for ease of access in the view
         if ($item->guilds->count() > 0) {
             $notes['note']       = $item->guilds->first()->note;
             $notes['priority']   = $item->guilds->first()->priority;
             $notes['tier']       = $item->guilds->first()->tier;
-            $notes['tier_label'] = $item->guilds->first()->tier_label;
         }
 
         $showEdit = false;
@@ -880,7 +873,6 @@ class ItemController extends Controller
                 'note'       => request()->input('note'),
                 'priority'   => request()->input('priority'),
                 'tier'       => request()->input('tier'),
-                'tier_label' => request()->input('tier') ? Guild::tiers()[request()->input('tier')] : null,
                 'updated_by' => $currentMember->id,
             ]);
 
@@ -897,7 +889,6 @@ class ItemController extends Controller
                 'note'       => request()->input('note'),
                 'priority'   => request()->input('priority'),
                 'tier'       => request()->input('tier'),
-                'tier_label' => request()->input('tier') ? Guild::tiers()[request()->input('tier')] : null,
                 'created_by' => $currentMember->id,
             ]);
 

@@ -14,7 +14,7 @@ class AddTierModeToGuilds extends Migration
     public function up()
     {
         Schema::table('guilds', function (Blueprint $table) {
-            $table->string('tier_mode', 3)->default('s')->after('do_sort_items_by_instance');
+            $table->string('tier_mode', 5)->default('s')->after('do_sort_items_by_instance');
         });
     }
 

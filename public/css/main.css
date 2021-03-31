@@ -243,22 +243,22 @@ body {
 }
 
 .text-tier-1 {
-    color: #93c5ff !important;
+    color:  #02f3ff !important; /* S */
 }
 .text-tier-2 {
-    color: #5bb54e !important;
+    color:  #20ff00 !important; /* A */
 }
 .text-tier-3 {
-    color: #98cc3d !important;
+    color:  #f7ff00 !important; /* B */
 }
 .text-tier-4 {
-    color: #f1d53d !important;
+    color:  #f80 !important; /* C */
 }
 .text-tier-5 {
-    color: #ea8d23 !important;
+    color:  #f00 !important; /* D */
 }
 .text-tier-6 {
-    color: #ff7171 !important;
+    color:  #ff0078 !important; /* F */
 }
 
 .text-muted {

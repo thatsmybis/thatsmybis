@@ -164,8 +164,8 @@ function createTable() {
                         // Create a copy of data, then sort it by instance_order DESC, user chosen order ASC
                         let dataSorted = data.slice().sort((a, b) => b.instance_order - a.instance_order || a.pivot.order - b.pivot.order);
                         let list = ``;
-                        list += getItemList(dataSorted, 'wishlist', row.id, true, true, 'js-wishlist-sorted', (guild.do_sort_items_by_instance ? true : false), true);
-                        list += getItemList(data, 'wishlist', row.id, true, false, 'js-wishlist-unsorted', (guild.do_sort_items_by_instance ? false : true), true);
+                        list += getItemList(dataSorted, 'wishlist', row.id, true, true, 'js-wishlist-sorted', (guild.do_sort_items_by_instance ? true : false));
+                        list += getItemList(data, 'wishlist', row.id, true, false, 'js-wishlist-unsorted', (guild.do_sort_items_by_instance ? false : true));
                         return list;
                     } else {
                         return '—';
@@ -344,7 +344,7 @@ function addInstanceFilterHandlers() {
 }
 
 // Gets an HTML list of items with pretty wowhead formatting
-function getItemList(data, type, characterId, useOrder = false, showInstances = false, listClass = null, isVisible = true, showTier = false) {
+function getItemList(data, type, characterId, useOrder = false, showInstances = false, listClass = null, isVisible = true) {
     let items = `<ol class="no-indent js-item-list mb-2 ${ listClass }" data-type="${ type }" data-id="${ characterId }" style="${ isVisible ? '' : 'display:none;' }">`;
     let initialLimit = 4;
 
@@ -401,7 +401,9 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
                 data-instance-id="${ item.instance_id }"
                 value="${ useOrder ? item.pivot.order : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
-                <span class="text-monospace font-weight-light text-tier-${ item.guild_tier ? item.guild_tier : '' }">${ item.guild_tier ? getItemTierLabel(item, guild.tier_mode) : '&nbsp;' }</span>
+                ${ guild.tier_mode ?
+                    `<span class="text-monospace font-weight-medium text-tier-${ item.guild_tier ? item.guild_tier : '' }">${ item.guild_tier ? getItemTierLabel(item, guild.tier_mode) : '&nbsp;' }</span>`
+                : `` }
                 <a href="/${ guild.id }/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"
                     class="${ item.quality ? 'q' + item.quality : '' } ${ item.pivot.is_received && (item.pivot.type == 'wishlist' || item.pivot.type == 'prio') ? 'font-strikethrough' : '' }"
                     ${ wowheadData }>

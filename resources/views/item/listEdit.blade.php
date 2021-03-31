@@ -71,7 +71,7 @@
 
                             <div class="row striped-light pb-2 pt-3 rounded">
 
-                                <div class="col-lg-3 col-12">
+                                <div class="col-lg-{{ $guild->tier_mode ? '3' : '4' }} col-12">
                                     <div class="d-inline-grid align-middle text-5 mb-2">
                                         <label for="items[{{ $loop->iteration }}][name]" class="font-weight-bold d-none d-sm-block">
                                             <span class="sr-only">
@@ -85,7 +85,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-1 col-12 {{ $errors->has('items.' . $loop->iteration . '.tier') ? 'bg-danger rounded font-weight-bold' : '' }}">
+                                <div class="col-lg-1 col-12 {{ $errors->has('items.' . $loop->iteration . '.tier') ? 'bg-danger rounded font-weight-bold' : '' }}" style="{{ $guild->tier_mode ? '' : 'display:none;' }}">
                                     <div class="form-group">
 
                                         <label for="items[{{ $loop->iteration }}][tier]" class="font-weight-bold">

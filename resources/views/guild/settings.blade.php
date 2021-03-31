@@ -276,6 +276,34 @@
                 </div>
 
                 <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="form-group mb-0">
+                            <div class="form-group">
+                                <div class="form-group">
+                                    <label for="tier_mode">
+                                        <span class="fas fa-fw fa-trophy text-muted"></span>
+                                        Tier mode <span class="small text-muted">your guild can rank the quality of each item</span>
+                                    </label>
+                                    <select name="tier_mode" class="form-control dark">
+                                        <option value="s"
+                                            {{ old('tier_mode') && old('tier_mode') == 's' || $guild->tier_mode == 's' ? 'selected' : '' }}>
+                                            S-tier
+                                        </option>
+                                        <option value="num"
+                                            {{ old('tier_mode') && old('tier_mode') == 'num' || $guild->tier_mode == 'num' ? 'selected' : '' }}>
+                                            Numbered
+                                        </option>
+                                        <option value="" {{ old('tier_mode') && old('tier_mode') == '' || $guild->tier_mode == '' ? 'selected' : '' }}>
+                                            Off
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
                     <div class="col-12 pt-2 mt-3 mb-2">
                         <h2 class="font-weight-medium">
                             <span class="fas fa-fw fa-key text-success"></span>

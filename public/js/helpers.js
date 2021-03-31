@@ -2,6 +2,15 @@
 const TIER_MODE_NUM = 'num';
 const TIER_MODE_S   = 's';
 
+const TIERS = {
+    1: 'S',
+    2: 'A',
+    3: 'B',
+    4: 'C',
+    5: 'D',
+    6: 'F',
+};
+
 // For keeping track of the intervals updating times
 var timestampUpdateInterval = null;
 
@@ -152,7 +161,7 @@ function getColorFromDec(color) {
 function getItemTierLabel(item, tierMode) {
     if (item.guild_tier) {
         if (tierMode == TIER_MODE_S) {
-            return item.guild_tier_label;
+            return TIERS[item.guild_tier];
         } else {
             return item.guild_tier;
         }
