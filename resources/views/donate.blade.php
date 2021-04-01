@@ -47,10 +47,16 @@
                     mattyp237 (Patreon: Parser)
                </li>
                <li>
+                    Mister Awesomesauce (Patreon: Raider)
+               </li>
+               <li>
                     niph (Paypal)
                </li>
                <li>
                     Sangwa (Patreon: Raider)
+               </li>
+               <li>
+                    Sentence (Patreon: Raider)
                </li>
                <li>
                     Strix (Patreon: Black Lotus)
@@ -59,7 +65,7 @@
                     TideAd (Patreon: Parser)
                </li>
                <li>
-                    Sentence (Patreon: Raider)
+                    Tron (Patreon: Main Tank)
                </li>
             </ul>
         </div>
