@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Item};
+use App\{Guild, Item};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -29,6 +29,7 @@ class ExportController extends Controller {
         "item_note",
         "item_prio_note",
         "item_tier",
+        "tier_label",
         "created_at",
         "updated_at"
     ];
@@ -41,6 +42,7 @@ class ExportController extends Controller {
         "guild_note",
         "prio_note",
         "tier",
+        "tier_label",
         "created_at",
         "updated_at",
     ];
@@ -186,6 +188,7 @@ class ExportController extends Controller {
         $currentMember = request()->get('currentMember');
 
         $csv = Cache::remember("export:notes:guild:{$guild->id}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild) {
+            $tierLabelField = $this->getTierLabelField($guild);
             $rows = DB::select(DB::raw(
                 "SELECT
                     i.name            AS 'item_name',
@@ -195,6 +198,7 @@ class ExportController extends Controller {
                     gi.note           AS 'item_note',
                     gi.priority       AS 'item_prio_note',
                     gi.tier           AS 'tier',
+                    {$tierLabelField}
                     gi.created_at     AS 'created_at',
                     gi.updated_at     AS 'updated_at'
                 FROM items i
@@ -276,6 +280,7 @@ class ExportController extends Controller {
      * @return The thing to present to the user.
      */
     private function getLootBaseSql($lootType, $guild) {
+        $tierLabelField = $this->getTierLabelField($guild);
         return
             "SELECT
                 ci.type        AS 'type',
@@ -295,6 +300,7 @@ class ExportController extends Controller {
                 gi.note        AS 'item_note',
                 gi.priority    AS 'item_prio_note',
                 gi.tier        AS 'item_tier',
+                {$tierLabelField}
                 ci.created_at  AS 'created_at',
                 ci.updated_at  AS 'updated_at'
             FROM character_items ci
@@ -316,6 +322,7 @@ class ExportController extends Controller {
      * @return The thing to present to the user.
      */
     private function getNotesBaseSql($guild) {
+        $tierLabelField = $this->getTierLabelField($guild);
         return
             "SELECT
                 'item_note'    AS 'type',
@@ -335,6 +342,7 @@ class ExportController extends Controller {
                 gi.note        AS 'item_note',
                 gi.priority    AS 'item_prio_note',
                 gi.tier        AS 'item_tier',
+                {$tierLabelField}
                 gi.created_at  AS 'created_at',
                 gi.updated_at  AS 'updated_at'
             FROM items i
@@ -344,5 +352,31 @@ class ExportController extends Controller {
                 JOIN guild_items gi   ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
             WHERE i.expansion_id = {$guild->expansion_id}
             ORDER BY instances.`order` DESC, i.name ASC;";
+    }
+
+    /**
+     * Based on the guild's settings, get the correct label for item tiers.
+     *
+     * @var App/Guild $guild    The guild it belongs to.
+     *
+     * @return The SQL select field clause to use.
+     */
+    private function getTierLabelField($guild) {
+        if ($guild->tier_mode == Guild::TIER_MODE_S) {
+            $tiers = Guild::tiers();
+            return
+                "CASE
+                    WHEN gi.tier = 1 THEN '{$tiers[1]}'
+                    WHEN gi.tier = 2 THEN '{$tiers[2]}'
+                    WHEN gi.tier = 3 THEN '{$tiers[3]}'
+                    WHEN gi.tier = 4 THEN '{$tiers[4]}'
+                    WHEN gi.tier = 5 THEN '{$tiers[5]}'
+                    WHEN gi.tier = 6 THEN '{$tiers[6]}'
+                END AS 'tier_label',";
+        } else if ($guild->tier_mode == Guild::TIER_MODE_NUM) {
+            return "gi.tier AS 'tier_label',";
+        } else {
+            return "null AS 'tier_label',";
+        }
     }
 }
