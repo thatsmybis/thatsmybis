@@ -13,6 +13,10 @@
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
+                    <p class="text-4">
+                        Exports are <span class="font-weight-bold">CACHED FOR {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} MINUTE{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 'S' : '' }}</span>.
+                        <abbr title="This applies across your entire guild. If you're the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait two minutes for the data to update.">more info</abbr>
+                    </p>
                     <p>
                         Publicly sharable copy of the generic loot tables <a href="{{ route('loot') }}" target="_blank">here</a>
                     </p>
@@ -22,17 +26,17 @@
                     <p>
                         If you absolutely need access to some data or for a specific export format to not change, please reach out on
                         <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
-                        We will not give you access to data you wouldn't normally have access to in your guild (such as officer notes) but we will try to help you as best we can.
+                        I will not give you access to data you wouldn't normally have access to in your guild (such as officer notes) but I will try to help you as best I can.
                     </p>
                     <ol class="no-bullet no-indent striped">
                         <!-- Loot Received -->
                         <li class="p-3 mb-3 rounded">
                             <h2>
-                                <span class="fas fa-fw fa-sack text-success"></span>
-                                Loot Received
+                                <span class="fas fa-fw fa-treasure-chest text-gold"></span>
+                                Loot Received, Wishlists, Prios, and Notes
                             </h2>
                             <p>
-                                All of the loot received in your guild.
+                                All of the loot in your guild, plus all of your guild's notes and tiers for items.
                             </p>
                             <p>
                                 Fields exported:
@@ -44,13 +48,13 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'csv']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => 'all']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         Download CSV
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => 'all']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         View CSV
                                     </a>
@@ -61,28 +65,20 @@
                         <li class="p-3 mb-3 rounded">
                             <h2>
                                 <span class="fas fa-fw fa-scroll-old text-legendary"></span>
-                                Wishlists
+                                Just Wishlists
                             </h2>
                             <p>
-                                All of the wishlisted items in your guild.
+                                The wishlisted items in your guild.
                             </p>
-                            <p>
-                                Fields exported:
-                            </p>
-                            <div class="bg-dark rounded p-2">
-                                <code>
-                                    {{ collect(App\Http\Controllers\ExportController::LOOT_HEADERS)->implode(', ') }}
-                                </code>
-                            </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'csv']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_WISHLIST]) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         Download CSV
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_WISHLIST]) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         View CSV
                                     </a>
@@ -93,28 +89,44 @@
                         <li class="p-3 mb-3 rounded">
                             <h2>
                                 <span class="fas fa-fw fa-sort-amount-down text-gold"></span>
-                                Prios
+                                Just Prios
                             </h2>
                             <p>
-                                All of the item/character priorities in your guild.
+                                The item prios in your guild.
                             </p>
-                            <p>
-                                Fields exported:
-                            </p>
-                            <div class="bg-dark rounded p-2">
-                                <code>
-                                    {{ collect(App\Http\Controllers\ExportController::LOOT_HEADERS)->implode(', ') }}
-                                </code>
-                            </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.prio', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'csv']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_PRIO]) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         Download CSV
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.prio', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_PRIO]) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        View CSV
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Loot Received -->
+                        <li class="p-3 mb-3 rounded">
+                            <h2>
+                                <span class="fas fa-fw fa-sack text-success"></span>
+                                Just Loot Received
+                            </h2>
+                            <p>
+                                The loot received in your guild.
+                            </p>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_RECEIVED]) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        Download CSV
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_RECEIVED]) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         View CSV
                                     </a>
@@ -125,7 +137,7 @@
                         <li class="p-3 mb-3 rounded">
                             <h2>
                                 <span class="fas fa-fw fa-sword text-muted"></span>
-                                All Items With Guild Notes
+                                Item Guild Notes
                             </h2>
                             <p>
                                 <strong>Guild notes</strong> and <strong>prio notes</strong> are included.
@@ -140,13 +152,13 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.itemNotes', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'csv']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.itemNotes', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         Download CSV
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.itemNotes', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.itemNotes', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         View CSV
                                     </a>
@@ -157,7 +169,7 @@
                         <li class="p-3 mb-3 rounded">
                             <h2>
                                 <span class="fas fa-fw fa-users-class text-success"></span>
-                                Characters With Everything
+                                Giant JSON blob
                             </h2>
                             <p>
                                 All of your guild's characters with their <strong>loot received</strong>, <strong>wishlist</strong>, <strong>prios</strong>, notes, etc. It's all of the data used to populate the Roster page.
@@ -201,6 +213,8 @@
         "updated_at": null,
         "added_by_username": "Lemmings",
         "raid_name": null,
+        "instance_id": 9,
+        "guild_tier": 2,
         "pivot": {
           "character_id": 20,
           "item_id": 23060,
@@ -240,13 +254,13 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'json']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'json']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-code text-muted"></span>
                                         Download JSON
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'type' => 'html']) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-code text-muted"></span>
                                         View JSON
                                     </a>

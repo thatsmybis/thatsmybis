@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\{Item};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -11,9 +12,12 @@ class ExportController extends Controller {
     const JSON = 'json';
 
     const LOOT_HEADERS = [
+        "type",
         "raid_name",
+        "member_name",
         "character_name",
         "character_class",
+        "character_is_alt",
         "character_inactive_at",
         "sort_order",
         "item_name",
@@ -24,8 +28,9 @@ class ExportController extends Controller {
         "import_id",
         "item_note",
         "item_prio_note",
+        "item_tier",
         "created_at",
-        "updated_at",
+        "updated_at"
     ];
 
     const ITEM_NOTE_HEADERS = [
@@ -35,6 +40,7 @@ class ExportController extends Controller {
         "source_name",
         "guild_note",
         "prio_note",
+        "tier",
         "created_at",
         "updated_at",
     ];
@@ -63,14 +69,16 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportCharactersWithItems($guildId, $guildSlug, $type)
+    public function exportCharactersWithItems($guildId, $guildSlug, $fileType)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $characters = $guild->getCharactersWithItemsAndPermissions($currentMember, false);
+        $characters = Cache::remember("export:jsonBlob:guild:{$guild->id}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild, $currentMember) {
+            return $guild->getCharactersWithItemsAndPermissions($currentMember, false);
+        });
 
-        return $this->getExport($characters['characters'], 'Character JSON', $type);
+        return $this->getExport($characters['characters'], 'Character JSON', $fileType);
     }
 
     /**
@@ -78,7 +86,7 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportExpansionLoot($expansionSlug, $type)
+    public function exportExpansionLoot($expansionSlug, $fileType)
     {
         if ($expansionSlug == 'classic') {
             $expansionId = 1;
@@ -93,7 +101,7 @@ class ExportController extends Controller {
             $subdomain = 'tbc';
         }
 
-        $csv = Cache::remember('lootTable:' . $expansionSlug, 600, function () use ($subdomain, $expansionId) {
+        $csv = Cache::remember('lootTableExport:' . $expansionSlug, 600, function () use ($subdomain, $expansionId) {
                 $rows = DB::select(DB::raw(
                     "SELECT
                         instances.name AS 'instance_name',
@@ -121,40 +129,7 @@ class ExportController extends Controller {
                 return $this->createCsv($rows, self::EXPANSION_LOOT_HEADERS);
             });
 
-        return $this->getExport($csv, $expansionSlug . ' Loot Table', $type);
-    }
-
-    /**
-     * Export a guild's item notes and prio notes
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function exportItemNotes($guildId, $guildSlug, $type)
-    {
-        $guild         = request()->get('guild');
-        $currentMember = request()->get('currentMember');
-
-        $rows = DB::select(DB::raw(
-            "SELECT
-                i.name AS 'item_name',
-                i.item_id AS 'item_id',
-                instances.name AS 'instance_name',
-                item_sources.name AS 'source_name',
-                gi.note AS 'item_note',
-                gi.priority AS 'item_prio_note',
-                gi.created_at AS 'created_at',
-                gi.updated_at AS 'updated_at'
-            FROM items i
-                JOIN item_item_sources iis ON iis.item_id = i.item_id
-                JOIN item_sources ON item_sources.id = iis.item_source_id
-                JOIN instances ON instances.id = item_sources.instance_id
-                LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
-            WHERE i.expansion_id = {$guild->expansion_id}
-            ORDER BY instances.`order` DESC, i.name ASC;"));
-
-        $csv = $this->createCsv($rows, self::ITEM_NOTE_HEADERS);
-
-        return $this->getExport($csv, 'Item Notes', $type);
+        return $this->getExport($csv, $expansionSlug . ' Loot Table', $fileType);
     }
 
     /**
@@ -162,145 +137,78 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportLoot($guildId, $guildSlug, $type)
+    public function exportGuildLoot($guildId, $guildSlug, $fileType, $lootType)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
-            $showOfficerNote = true;
-        }
-
-        $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
-        $rows = DB::select(DB::raw(
-            "SELECT
-                r.name AS 'raid_name',
-                c.name AS 'character_name',
-                c.class AS 'character_class',
-                c.inactive_at AS 'character_inactive_at',
-                ci.`order` AS 'sort_order',
-                i.name AS 'item_name',
-                ci.item_id AS 'item_id',
-                ci.note AS 'note',
-                -- {$officerNote} AS 'officer_note',
-                ci.received_at AS 'received_at',
-                ci.import_id AS 'import_id',
-                gi.note AS 'item_note',
-                gi.priority AS 'item_prio_note',
-                ci.created_at AS 'created_at',
-                ci.updated_at AS 'updated_at'
-            FROM character_items ci
-                JOIN characters c ON c.id = ci.character_id
-                LEFT JOIN raids r ON r.id = c.raid_id
-                JOIN items i ON i.item_id = ci.item_id
-                LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
-            WHERE ci.type = 'received' AND c.guild_id = {$guild->id}
-                AND i.expansion_id = {$guild->expansion_id}
-            ORDER BY r.name, c.name, ci.`order`;"));
-
-        $csv = $this->createCsv($rows, self::LOOT_HEADERS);
-
-        return $this->getExport($csv, 'Loot', $type);
-    }
-
-    /**
-     * Export a guild's prio data
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function exportPrios($guildId, $guildSlug, $type)
-    {
-        $guild         = request()->get('guild');
-        $currentMember = request()->get('currentMember');
-
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
-            $showOfficerNote = true;
-        }
-
-        $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
-        $rows = DB::select(DB::raw(
-            "SELECT
-                r.name AS 'raid_name',
-                c.name AS 'character_name',
-                c.class AS 'character_class',
-                c.inactive_at AS 'character_inactive_at',
-                ci.`order` AS 'sort_order',
-                i.name AS 'item_name',
-                ci.item_id AS 'item_id',
-                ci.note AS 'note',
-                -- {$officerNote} AS 'officer_note',
-                ci.received_at AS 'received_at',
-                ci.import_id AS 'import_id',
-                gi.note AS 'item_note',
-                gi.priority AS 'item_prio_note',
-                ci.created_at AS 'created_at',
-                ci.updated_at AS 'updated_at'
-            FROM character_items ci
-                JOIN characters c ON c.id = ci.character_id
-                LEFT JOIN raids r ON r.id = c.raid_id
-                JOIN items i ON i.item_id = ci.item_id
-                LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
-            WHERE ci.type = 'prio' AND c.guild_id = {$guild->id}
-                AND i.expansion_id = {$guild->expansion_id}
-            ORDER BY r.name, c.name, ci.`order`;"));
-
-        $csv = $this->createCsv($rows, self::LOOT_HEADERS);
-
-        return $this->getExport($csv, 'Prio', $type);
-    }
-
-    /**
-     * Export a guild's wishlist data
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function exportWishlists($guildId, $guildSlug, $type)
-    {
-        $guild         = request()->get('guild');
-        $currentMember = request()->get('currentMember');
-
-        if ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
+        if ($lootType == Item::TYPE_WISHLIST && $guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to view wishlists.');
             return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
         }
 
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
-            $showOfficerNote = true;
+        if ($lootType == Item::TYPE_PRIO && $guild->is_prio_private && !$currentMember->hasPermission('edit.prios')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view prios.');
+            return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
         }
 
-        $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
-        $rows = DB::select(DB::raw(
-            "SELECT
-                r.name        AS 'raid_name',
-                c.name        AS 'character_name',
-                c.class       AS 'character_class',
-                c.inactive_at AS 'character_inactive_at',
-                ci.`order`    AS 'sort_order',
-                i.name        AS 'item_name',
-                ci.item_id    AS 'item_id',
-                ci.note       AS 'note',
-                -- {$officerNote} AS 'officer_note',
-                ci.received_at AS 'received_at',
-                ci.import_id   AS 'import_id',
-                gi.note        AS 'item_note',
-                gi.priority    AS 'item_prio_note',
-                ci.created_at  AS 'created_at',
-                ci.updated_at  AS 'updated_at'
-            FROM character_items ci
-                JOIN characters c ON c.id = ci.character_id
-                LEFT JOIN raids r ON r.id = c.raid_id
-                JOIN items i ON i.item_id = ci.item_id
-                LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
-            WHERE ci.type = 'wishlist' AND c.guild_id = {$guild->id}
-                AND i.expansion_id = {$guild->expansion_id}
-            ORDER BY r.name, c.name, ci.`order`;"));
+        // $showOfficerNote = false;
+        // if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+        //     $showOfficerNote = true;
+        // }
 
-        $csv = $this->createCsv($rows, self::LOOT_HEADERS);
+        // $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
 
-        return $this->getExport($csv, 'Wishlist', $type);
+        $csv = Cache::remember("export:{$lootType}:guild:{$guild->id}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($lootType, $guild) {
+            $rows = DB::select(DB::raw($this->getLootBaseSql($lootType, $guild)));
+
+            if ($lootType == 'all') {
+                $rows = array_merge(
+                    $rows,
+                    DB::select(DB::raw($this->getNotesBaseSql($guild)))
+                );
+            }
+
+            return $this->createCsv($rows, self::LOOT_HEADERS);
+        });
+
+        return $this->getExport($csv, ($lootType == 'all' ? 'All Loot' : ucfirst($lootType) ) . ' Export', $fileType);
+    }
+
+    /**
+     * Export a guild's item notes and prio notes
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportItemNotes($guildId, $guildSlug, $fileType)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $csv = Cache::remember("export:notes:guild:{$guild->id}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild) {
+            $rows = DB::select(DB::raw(
+                "SELECT
+                    i.name            AS 'item_name',
+                    i.item_id         AS 'item_id',
+                    instances.name    AS 'instance_name',
+                    item_sources.name AS 'source_name',
+                    gi.note           AS 'item_note',
+                    gi.priority       AS 'item_prio_note',
+                    gi.tier           AS 'tier',
+                    gi.created_at     AS 'created_at',
+                    gi.updated_at     AS 'updated_at'
+                FROM items i
+                    JOIN item_item_sources iis ON iis.item_id = i.item_id
+                    JOIN item_sources          ON item_sources.id = iis.item_source_id
+                    JOIN instances             ON instances.id = item_sources.instance_id
+                    LEFT JOIN guild_items gi   ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
+                WHERE i.expansion_id = {$guild->expansion_id}
+                ORDER BY instances.`order` DESC, i.name ASC;"));
+
+            return $this->createCsv($rows, self::ITEM_NOTE_HEADERS);
+        });
+
+        return $this->getExport($csv, 'Item Notes', $fileType);
     }
 
     /**
@@ -330,21 +238,21 @@ class ExportController extends Controller {
     /**
      * Get a CSV or HTML of the export
      *
-     * @var array  $csv   The data.
+     * @var array  $csv      The data.
      * @var string $title
-     * @var string $type  'csv' or 'html'
+     * @var string $fileType 'csv' or 'html'
      *
      * @return The thing to present to the user.
      */
-    private function getExport($csv, $title, $type) {
-        if ($type == self::CSV) {
+    private function getExport($csv, $title, $fileType) {
+        if ($fileType == self::CSV) {
             return response($csv)
                 ->withHeaders([
                     'Content-Type'        => 'text/csv',
                     'Cache-Control'       => 'no-store, no-cache',
                     'Content-Disposition' => 'attachment; filename="' . slug($title) . '.csv"',
                 ]);
-        } else if ($type == self::JSON) {
+        } else if ($fileType == self::JSON) {
             return response($csv)
                 ->withHeaders([
                     'Content-Type'        => 'text/json',
@@ -357,5 +265,84 @@ class ExportController extends Controller {
                 'name' => $title,
             ]);
         }
+    }
+
+    /**
+     * Get the SQL used for the character loot exports
+     *
+     * @var string    $lootType The type of loot to fetch.
+     * @var App/Guild $guild    The guild it belongs to.
+     *
+     * @return The thing to present to the user.
+     */
+    private function getLootBaseSql($lootType, $guild) {
+        return
+            "SELECT
+                ci.type        AS 'type',
+                r.name         AS 'raid_name',
+                m.username     AS 'member_name',
+                c.name         AS 'character_name',
+                c.class        AS 'character_class',
+                c.is_alt       AS 'character_is_alt',
+                c.inactive_at  AS 'character_inactive_at',
+                ci.`order`     AS 'sort_order',
+                i.name         AS 'item_name',
+                ci.item_id     AS 'item_id',
+                ci.note        AS 'note',
+                -- {officerNote} AS 'officer_note',
+                ci.received_at AS 'received_at',
+                ci.import_id   AS 'import_id',
+                gi.note        AS 'item_note',
+                gi.priority    AS 'item_prio_note',
+                gi.tier        AS 'item_tier',
+                ci.created_at  AS 'created_at',
+                ci.updated_at  AS 'updated_at'
+            FROM character_items ci
+                JOIN characters c ON c.id = ci.character_id
+                JOIN members m    ON m.id = c.member_id
+                LEFT JOIN raids r ON r.id = c.raid_id
+                JOIN items i ON i.item_id = ci.item_id
+                LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
+            WHERE " . ($lootType == "all" ? "" : "ci.type = '{$lootType}' AND") . " c.guild_id = {$guild->id}
+                AND i.expansion_id = {$guild->expansion_id}
+            ORDER BY ci.type, r.name, c.name, ci.`order`;";
+    }
+
+    /**
+     * Get the SQL used for the guild note exports that can be combined with the character exports
+     *
+     * @var App/Guild $guild    The guild it belongs to.
+     *
+     * @return The thing to present to the user.
+     */
+    private function getNotesBaseSql($guild) {
+        return
+            "SELECT
+                'item_note'    AS 'type',
+                null           AS 'raid_name',
+                null           AS 'member_name',
+                null           AS 'character_name',
+                null           AS 'character_class',
+                null           AS 'character_is_alt',
+                null           AS 'character_inactive_at',
+                null           AS 'sort_order',
+                i.name         AS 'item_name',
+                i.item_id      AS 'item_id',
+                null           AS 'note',
+                -- {officerNote} AS 'officer_note',
+                null           AS 'received_at',
+                null           AS 'import_id',
+                gi.note        AS 'item_note',
+                gi.priority    AS 'item_prio_note',
+                gi.tier        AS 'item_tier',
+                gi.created_at  AS 'created_at',
+                gi.updated_at  AS 'updated_at'
+            FROM items i
+                JOIN item_item_sources iis ON iis.item_id = i.item_id
+                JOIN item_sources          ON item_sources.id = iis.item_source_id
+                JOIN instances             ON instances.id = item_sources.instance_id
+                JOIN guild_items gi   ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
+            WHERE i.expansion_id = {$guild->expansion_id}
+            ORDER BY instances.`order` DESC, i.name ASC;";
     }
 }

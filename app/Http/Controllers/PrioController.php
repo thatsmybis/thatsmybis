@@ -23,7 +23,7 @@ class PrioController extends Controller
         $this->middleware(['auth', 'seeUser']);
     }
 
-        /**
+    /**
      * Show the mass input page
      *
      * @return \Illuminate\Http\Response
