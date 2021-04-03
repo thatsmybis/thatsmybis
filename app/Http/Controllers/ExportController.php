@@ -29,7 +29,7 @@ class ExportController extends Controller {
         "item_note",
         "item_prio_note",
         "item_tier",
-        "tier_label",
+        "item_tier_label",
         "created_at",
         "updated_at"
     ];
@@ -372,11 +372,11 @@ class ExportController extends Controller {
                     WHEN gi.tier = 4 THEN '{$tiers[4]}'
                     WHEN gi.tier = 5 THEN '{$tiers[5]}'
                     WHEN gi.tier = 6 THEN '{$tiers[6]}'
-                END AS 'tier_label',";
+                END AS 'item_tier_label',";
         } else if ($guild->tier_mode == Guild::TIER_MODE_NUM) {
-            return "gi.tier AS 'tier_label',";
+            return "gi.tier AS 'item_tier_label',";
         } else {
-            return "null AS 'tier_label',";
+            return "null AS 'item_tier_label',";
         }
     }
 }
