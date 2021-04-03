@@ -154,9 +154,12 @@ Route::group([
 
     Route::group(['prefix' => 'export'], function () {
         Route::get('/',                                 'GuildController@showExports')               ->name('guild.exports');
-        Route::get('/characters-with-items/{fileType}', 'ExportController@exportCharactersWithItems')->name('guild.export.charactersWithItems');
-        Route::get('/item-notes/{fileType}',            'ExportController@exportItemNotes')          ->name('guild.export.itemNotes');
-        Route::get('/loot/{fileType}/{lootType}',       'ExportController@exportGuildLoot')          ->name('guild.export.loot');
+        Route::get('/characters-with-items/{fileType}', 'ExportController@exportCharactersWithItems')->name('guild.export.charactersWithItems')
+            ->where(['fileType' => '(html|json)']);
+        Route::get('/item-notes/{fileType}',            'ExportController@exportItemNotes')          ->name('guild.export.itemNotes')
+            ->where(['fileType' => '(csv|html)']);
+        Route::get('/loot/{fileType}/{lootType}',       'ExportController@exportGuildLoot')          ->name('guild.export.loot')
+            ->where(['fileType' => '(csv|html)', 'lootType' => '(all|prio|received|wishlist)']);
     });
 });
 
