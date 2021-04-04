@@ -14,6 +14,7 @@
                 </div>
             </div>
 
+            <!--
             <div class="row">
                 <div class="col-md-3 col-6">
                     <div class="form-group">
@@ -25,6 +26,7 @@
                     </div>
                 </div>
             </div>
+            -->
         </div>
     </div>
 
@@ -95,19 +97,22 @@
                                         </li>
                                     </ul>
                                 </td>
-                                <td class="small">
+                                <td class="">
                                     <ul class="no-bullet no-indent">
-                                        <li class="">
-                                            received item count (via char page)
+                                        <li>
+                                            {{ $guild->wishlist_item_count }} <span class="text-muted small">wishlist items</span>
                                         </li>
-                                        <li class="">
-                                            received item count (via batch)
+                                        <li>
+                                            {{ $guild->prio_item_count }} <span class="text-muted small">prio items</span>
                                         </li>
-                                        <li class="">
-                                            wishlisted item count
+                                        <li>
+                                            {{ $guild->received_item_count }} <span class="text-muted small">received items</span>
                                         </li>
-                                        <li class="">
-                                            prio'd item count
+                                        <li>
+                                            {{ $guild->batch_item_count }} <span class="text-muted small">batch items</span>
+                                        </li>
+                                        <li>
+                                            {{ $guild->batch_item_count }} <span class="text-muted small">batches</span>
                                         </li>
                                     </ul>
                                 </td>
