@@ -103,7 +103,6 @@ class CheckGuildPermissions
             if (!$currentMember) {
 
                 if ($discordMember) {
-                    dd('a');
                     // Don't have a member object? Let's create one...
                     $currentMember = Member::create($user, $discordMember, $guild);
 
