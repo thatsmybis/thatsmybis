@@ -38,9 +38,10 @@ Route::group(['prefix' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'loot'], function () {
-    Route::get('/',                                  'LootController@show')                 ->name('loot');
-    Route::get('/list/{expansionId}/{instanceSlug}', 'LootController@list')                 ->name('loot.list');
-    Route::get('/table/{expansionSlug}/{type}',      'ExportController@exportExpansionLoot')->name('loot.table');
+    Route::get('/',                                      'LootController@show')                 ->name('loot');
+    Route::get('/list/{expansionId}/{instanceSlug}',     'LootController@list')                 ->name('loot.list');
+    Route::get('/table/{expansionSlug}/{type}',          'ExportController@exportExpansionLoot')->name('loot.table');
+    Route::get('/wishlists/{expansionId}',               'LootController@showWishlistStats')    ->name('loot.wishlist');
 });
 
 // Route::get( '/about',   'HomeController@about')  ->name('about');
@@ -95,9 +96,11 @@ Route::group([
 
     Route::get( '/loot/recipes', 'ItemController@listRecipesWithGuild')->name('guild.recipe.list');
 
-    Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')      ->name('guild.item.list');
-    Route::get( '/loot/{instanceSlug}/edit', 'ItemController@listWithGuildEdit')  ->name('guild.item.list.edit');
-    Route::post('/loot/{instanceSlug}/edit', 'ItemController@listWithGuildSubmit')->name('guild.item.list.submit');
+    Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')       ->name('guild.item.list');
+    Route::get( '/loot/{instanceSlug}/edit', 'ItemController@listWithGuildEdit')   ->name('guild.item.list.edit');
+    Route::post('/loot/{instanceSlug}/edit', 'ItemController@listWithGuildSubmit') ->name('guild.item.list.submit');
+
+    Route::get('/loot/wishlists/{expansionId}', 'LootController@showWishlistStats')->name('guild.loot.wishlist');
 
     Route::group(['prefix' => 'i'], function () {
         Route::get( '/{item_id}/{slug?}',        'ItemController@showWithGuild')    ->name('guild.item.show');

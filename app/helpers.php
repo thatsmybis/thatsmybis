@@ -56,6 +56,24 @@ function loadScript($file, $type = 'js') {
 }
 
 /**
+ * - 999 stays 999
+ * - 1000 becomes 1k
+ * - 1500 becomes 1.5k
+ * - 1000000 becomes 1000k
+ *
+ * @param int $number The number to shorten.
+ *
+ * @return string
+ */
+function numToKs($number) {
+    if ($number >= 1000) {
+        return number_format(($number / 1000), 1) . 'k';
+    } else {
+        return $number;
+    }
+}
+
+/**
  * Split a string into an array delimited by newlines.
  *
  * @param $string string

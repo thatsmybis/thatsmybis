@@ -261,6 +261,25 @@ body {
     color:  #ff0078 !important; /* F */
 }
 
+li.li-tier-1 {
+    color:  #02f3ff !important; /* S */
+}
+li.li-tier-2 {
+    color:  #20ff00 !important; /* A */
+}
+li.li-tier-3 {
+    color:  #f7ff00 !important; /* B */
+}
+li.li-tier-4 {
+    color:  #f80 !important; /* C */
+}
+li.li-tier-5 {
+    color:  #f00 !important; /* D */
+}
+li.li-tier-6 {
+    color:  #ff0078 !important; /* F */
+}
+
 .text-muted {
     color: #8e959b !important;
 }

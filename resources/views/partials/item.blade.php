@@ -50,7 +50,7 @@ $wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadSubdoma
     @endif
     <span class="{{ isset($strikeThrough) && $strikeThrough ? 'font-strikethrough' : '' }}">
         @if (isset($wowheadLink) && $wowheadLink)
-            <a href="https://{{ $wowheadSubdomain }}wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
+            <a href="https://{{ $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @elseif (isset($guild) && $guild)
             @if (isset($auditLink) && $auditLink)
                 <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId]) }}"
@@ -68,12 +68,7 @@ $wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadSubdoma
                 </a>
             @endif
         @else
-            <a href="{{ route('item.show', ['item_id' => $itemId, 'slug' => slug($itemName)]) }}"
-                target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
-                {!! $wowheadAttribs !!}
-                class="{{ isset($itemQuality) ? $itemQuality : '' }}">
-                {{ $itemName }}
-            </a>
+            <a href="https://{{ $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @endif
     </span>
 </span>

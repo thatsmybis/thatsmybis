@@ -103,7 +103,7 @@ class ExportController extends Controller {
             $subdomain = 'tbc';
         }
 
-        $csv = Cache::remember('lootTableExport:' . $expansionSlug, 600, function () use ($subdomain, $expansionId) {
+        $csv = Cache::remember('lootTableExport:' . $expansionSlug, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($subdomain, $expansionId) {
                 $rows = DB::select(DB::raw(
                     "SELECT
                         instances.name AS 'instance_name',
