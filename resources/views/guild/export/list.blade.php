@@ -15,7 +15,7 @@
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     <p class="text-4">
                         Exports are <span class="font-weight-bold">CACHED FOR {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} MINUTE{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 'S' : '' }}</span>.
-                        <abbr title="This applies across your entire guild. If you're the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait two minutes for the data to update.">more info</abbr>
+                        <abbr title="This applies across your entire guild. If you're the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 's' : '' }} for the data to update.">more info</abbr>
                     </p>
                     <p>
                         Publicly sharable copy of the generic loot tables <a href="{{ route('loot') }}" target="_blank">here</a>
