@@ -34,6 +34,11 @@
             </p>
 
             <p class="text-5">
+                see what items people are wishlisting in
+                <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">TBC</a>
+                and
+                <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">Classic</a>
+                <br>
                 view our public <a href="{{ route('loot') }}">loot tables</a>
             </p>
 
