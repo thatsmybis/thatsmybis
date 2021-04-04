@@ -923,6 +923,14 @@ class ItemController extends Controller
         try {
             // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)
             $json = json_decode(file_get_contents('https://' . $domain . '.wowhead.com/tooltip/item/' . (int)$itemId));
+
+            // Fix link - Not using this because I wasn't easily able to get wowhead's script to not parse the link and do stupid crap to it
+            $json->tooltip = str_replace('href="/', 'href="https://' . $domain . '.wowhead.com/', $json->tooltip);
+
+
+            // Remove links
+            $json->tooltip = str_replace('<a ', '<span ', $json->tooltip);
+            $json->tooltip = str_replace('</a>', '</span>', $json->tooltip);
         } catch (Exception $e) {
             // Fail silently, that's okay, we just won't display the content
         }
