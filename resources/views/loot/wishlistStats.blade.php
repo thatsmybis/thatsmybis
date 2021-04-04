@@ -32,10 +32,13 @@
                         @foreach($wishlist as $item)
                             <li class="margin-bottom-small text-tier-{{ $loop->iteration <= 5 ? '1' : ($loop->iteration <= 10 ? '2' : ($loop->iteration <= 20 ? '3' : ($loop->iteration <= 30 ? '4' : '5'))) }}">
                                 @include('partials/item', ['wowheadLink' => false,])
-                                <small>
-                                    <span class="font-weight-bold text-muted">
+                                <small class="text-muted">
+                                    <span class="font-weight-bold">
                                         {{ $item->count > 0 ? numToKs($item->count) : '' }}
                                     </span>
+                                    <em>
+                                        {{ $item->instance_name }}
+                                    </em>
                                 </small>
                             </li>
                         @endforeach

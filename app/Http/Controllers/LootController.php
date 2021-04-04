@@ -125,7 +125,7 @@ class LootController extends Controller
                         'items.item_id',
                         'items.name',
                         'items.expansion_id',
-                        'instances.name as instance_name',
+                        'instances.short_name as instance_name',
                         DB::raw("'{$class}' AS `class`"),
                         DB::raw("count(distinct character_items.id) AS `count`")
                     ])
