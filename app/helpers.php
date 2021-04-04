@@ -33,6 +33,19 @@ function getExpansionColor($expansionId) {
     }
 }
 
+function getExpansionAbbr($expansionId) {
+    switch ($expansionId) {
+        case 1:
+            return 'Classic';
+        case 2:
+            return 'TBC';
+        case 3:
+            return 'WoTLK';
+        default:
+            return '';
+    }
+}
+
 // Check the request for whether or not we stored the bool isAdmin as true or false
 function isAdmin() {
     return request()->get('isAdmin');

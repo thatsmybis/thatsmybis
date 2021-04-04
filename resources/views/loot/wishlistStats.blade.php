@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Loot - ' . config('app.name'))
+@section('title', getExpansionAbbr($expansionId) . ' Wishlists - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid">
@@ -16,7 +16,7 @@
             </ul>
             <h1>
                 <span class="font-weight-bold">Top {{ $maxItems }}</span> Wishlisted
-                <span class="text-{{ getExpansionColor($expansionId) }} font-weight-bold">{{ $expansionId == 1 ? 'Classic' : 'TBC' }}</span> Items
+                <span class="text-{{ getExpansionColor($expansionId) }} font-weight-bold">{{ getExpansionAbbr($expansionId) }}</span> Items
             </h1>
             <span class="smaller text-muted">Now you can be just like everyone else! :D</span>
         </div>

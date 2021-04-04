@@ -75,6 +75,7 @@
                             @else
                                 <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
                             @endif
+                            <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">see what other people wishlisted</a>
                         </label>
 
                         @if ($lockWishlist)
