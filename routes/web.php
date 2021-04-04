@@ -94,13 +94,12 @@ Route::group([
     Route::get( '/gquit', 'MemberController@showGquit')  ->name('member.showGquit');
     Route::post('/gquit', 'MemberController@submitGquit')->name('member.submitGquit');
 
-    Route::get( '/loot/recipes', 'ItemController@listRecipesWithGuild')->name('guild.recipe.list');
+    Route::get( '/loot/recipes',   'ItemController@listRecipesWithGuild')    ->name('guild.recipe.list');
+    Route::get( '/loot/wishlists', 'LootController@showWishlistStatsInGuild')->name('guild.loot.wishlist');
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')       ->name('guild.item.list');
     Route::get( '/loot/{instanceSlug}/edit', 'ItemController@listWithGuildEdit')   ->name('guild.item.list.edit');
     Route::post('/loot/{instanceSlug}/edit', 'ItemController@listWithGuildSubmit') ->name('guild.item.list.submit');
-
-    Route::get('/loot/wishlists/{expansionId}', 'LootController@showWishlistStats')->name('guild.loot.wishlist');
 
     Route::group(['prefix' => 'i'], function () {
         Route::get( '/{item_id}/{slug?}',        'ItemController@showWithGuild')    ->name('guild.item.show');

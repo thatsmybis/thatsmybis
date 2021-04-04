@@ -8,7 +8,7 @@ use Illuminate\Support\Facades\DB;
 
 class LootController extends Controller
 {
-    const MAX_LIST_ITEMS = 20;
+    const MAX_LIST_ITEMS = 25;
 
     /**
      * Create a new controller instance.
@@ -78,12 +78,11 @@ class LootController extends Controller
     }
 
     /**
-     * List the items
+     * Show the top X wishlisted items for each class.
      *
      * @return \Illuminate\Http\Response
      */
-    public function showWishlistStats($expansionId)
-    {
+    public function showWishlistStats($expansionId = null) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -91,10 +90,11 @@ class LootController extends Controller
             $expansionId = 1;
         } else if ($expansionId == 'tbc') {
             $expansionId = 2;
+        } else if (!$expansionId) {
+            $expansionId = 2;
         }
 
-        $wishlists = Character::classes($expansionId);
-        $wishlists = array_fill_keys($wishlists, null);
+        $wishlists = array_fill_keys(Character::classes($expansionId), null);
 
         foreach ($wishlists as $key => $value) {
             $wishlists[$key] = self::getWishlistStats($key, $expansionId);
@@ -108,6 +108,12 @@ class LootController extends Controller
             'maxItems'        => self::MAX_LIST_ITEMS,
         ]);
     }
+
+    public function showWishlistStatsInGuild($guildId, $guildSlug) {
+        $guild = request()->get('guild');
+        return $this->showWishlistStats($guild->expansion_id);
+    }
+
 
     public static function getWishlistStats($class, $expansionId) {
         $validClasses = Character::classes($expansionId);
