@@ -180,7 +180,7 @@
     <h2>Want more?</h2>
 
     <p>
-        View our <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}">live data</a> for what people are wishlisting in
+        View my <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}">live data</a> for what people are wishlisting in
         <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">TBC</a>
         and
         <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">Classic</a>

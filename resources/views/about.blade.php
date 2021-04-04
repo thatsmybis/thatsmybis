@@ -3,5 +3,5 @@
 
 
 @section('content')
-Yeah we haven't written anything for this yet.
+Yeah I haven't written anything for this yet.
 @endsection
