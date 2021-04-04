@@ -87,7 +87,7 @@
                                 <td>
                                     <ul class="no-bullet no-indent">
                                         <li class="">
-                                            {{ $guild->char_count }} <span class="text-muted small">characters</span>
+                                            {{ $guild->character_count }} <span class="text-muted small">characters</span>
                                         </li>
                                         <li class="">
                                             {{ $guild->member_count }} <span class="text-muted small">members</span>
@@ -112,7 +112,7 @@
                                             {{ $guild->batch_item_count }} <span class="text-muted small">batch items</span>
                                         </li>
                                         <li>
-                                            {{ $guild->batch_item_count }} <span class="text-muted small">batches</span>
+                                            {{ $guild->batch_count }} <span class="text-muted small">batches</span>
                                         </li>
                                     </ul>
                                 </td>
