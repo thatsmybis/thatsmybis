@@ -29,16 +29,26 @@
         <ul class="navbar-nav mr-auto">
             @if (Auth::user() && isset($guild) && $guild)
 
-                @if (isset($currentMember) && $currentMember)
+                @php
+                    $menuColor = ($currentMember->guild_id != $guild->id ? 'text-danger' : '' );
+                @endphp
+
+                @if ($currentMember->guild_id == $guild->id)
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['member.edit', 'member.show']) && $currentMember->id == (isset($member) ? $member->id : null) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]) }}">
+                        <a class="nav-link {{ $menuColor }}" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]) }}">
                             Profile
+                        </a>
+                    </li>
+                @elseif ($currentMember->guild_id != $guild->id)
+                    <li class="nav-item">
+                        <a class="nav-link">
+                            <span class="fa-fw fas fa-exclamation-triangle text-danger"></span>
                         </a>
                     </li>
                 @endif
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ in_array(Route::currentRouteName(), ['guild.item.list']) ? 'active font-weight-bold' : '' }}" href="#" id="lootNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.item.list']) ? 'active font-weight-bold' : '' }}" href="#" id="lootNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Loot
                     </a>
                     <div class="dropdown-menu" aria-labelledby="lootNavDropdown">
@@ -107,12 +117,12 @@
                 </li>
 
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.roster']) ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Roster</a>
+                    <a class="nav-link {{ $menuColor }}" href="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Roster</a>
                 </li>
 
                 {{-- Why hello there... yes. Yes, there is a 'news' page. No, I don't quite think it's ready for the mainstream yet.
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.news']) ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('guild.news', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">News</a>
+                    <a class="nav-link {{ $menuColor }}" href="{{ route('guild.news', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">News</a>
                 </li>
                 --}}
 
@@ -125,18 +135,18 @@
                 --}}
                 {{-- Why yes, there's a section for hosting resources such as guides... but it's just not time yet!
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['contentIndex', 'showContent']) ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('contentIndex', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Resources</a>
+                    <a class="nav-link {{ $menuColor }}" href="{{ route('contentIndex', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Resources</a>
                 </li>
                 --}}
 
                 @if ($currentMember->hasPermission('edit.raid-loot'))
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['item.massInput']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('item.massInput', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Assign Loot</a>
+                        <a class="nav-link {{ $menuColor }}" href="{{ route('item.massInput', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Assign Loot</a>
                     </li>
                 @endif
 
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.auditLog']) ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Audit</a>
+                    <a class="nav-link {{ $menuColor }}" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Audit</a>
                 </li>
 
                 @php
@@ -150,7 +160,7 @@
 
                 @if ($viewRoles || $viewRaids || $editCharacters || $editGuild || $editItems || $editPrios)
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link {{ $menuColor }} dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Admin
                         </a>
                         <div class="dropdown-menu" aria-labelledby="adminNavDropdown">

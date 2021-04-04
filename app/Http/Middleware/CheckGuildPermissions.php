@@ -11,8 +11,6 @@ use Illuminate\Support\Facades\Cache;
 class CheckGuildPermissions
 {
     /**
-     * Handle an incoming request.
-     *
      * Stores guild and currentMember objects in the request for convenient access later on.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -32,7 +30,9 @@ class CheckGuildPermissions
                 $request->route()->setParameter('guildSlug', $guild->slug);
             }
 
-            $user = request()->get('currentUser');
+            $user    = request()->get('currentUser');
+            $isAdmin = request()->get('isAdmin');
+
             if (!$user) {
                 request()->session()->flash('status', 'You need to be signed in to do that.');
                 return redirect()->route('login');
@@ -59,14 +59,14 @@ class CheckGuildPermissions
                 }
             );
 
-            if (!$discordMember && $user->id != $guild->user_id) { // Guild owner gets a pass
+            if (!$discordMember && $user->id != $guild->user_id && !$isAdmin) { // Guild owner gets a pass
                 request()->session()->flash('status', 'That Discord server is either missing the ' . env('APP_NAME') . ' bot or we\'re unable to find you on it.');
                 return redirect()->route('home');
             }
 
             // Guild owner doesn't have to go through this process
             // This ensures they never lock themselves out due to messing with roles
-            if ($user->id != $guild->user_id) {
+            if ($user->id != $guild->user_id && !$isAdmin) {
                 if ($guild->getMemberRoleIds()) {
                     // Check that the Discord user has one of the role(s) required to access this guild
                     $matchingRoles = array_intersect($guild->getMemberRoleIds(), $discordMember->roles);
@@ -81,7 +81,7 @@ class CheckGuildPermissions
             }
 
             // Check if the guild is disabled
-            if ($guild->disabled_at && $user->id != $guild->user_id) {
+            if ($guild->disabled_at && $user->id != $guild->user_id && !$isAdmin) {
                 $message = '';
                 $message .= $guild->name . ' disabled by guild master.';
                 if ($guild->message) {
@@ -95,20 +95,30 @@ class CheckGuildPermissions
             // Fetch their existing member object
             $currentMember = Member::where(['guild_id' => $guild->id, 'user_id' => Auth::id()])->with('roles')->first();
 
-            if ($currentMember && ($currentMember->banned_at || $currentMember->inactive_at)) {
+            if ($currentMember && ($currentMember->banned_at || $currentMember->inactive_at) && !$isAdmin) {
                 request()->session()->flash('status-danger',  'Your membership has been disabled. To reverse this, an officer would need to access your member page and re-enable it.');
                 return redirect()->route('home');
             }
 
             if (!$currentMember) {
-                // Don't have a member object? Let's create one...
-                $currentMember = Member::create($user, $discordMember, $guild);
 
-                AuditLog::create([
-                    'description'     => $currentMember->username . ' joined',
-                    'member_id'       => $currentMember->id,
-                    'guild_id'        => $guild->id,
-                ]);
+                if ($discordMember) {
+                    dd('a');
+                    // Don't have a member object? Let's create one...
+                    $currentMember = Member::create($user, $discordMember, $guild);
+
+                    AuditLog::create([
+                        'description'     => $currentMember->username . ' joined',
+                        'member_id'       => $currentMember->id,
+                        'guild_id'        => $guild->id,
+                    ]);
+                } else {
+                    $currentMember = Member::where('user_id', $user->id)->first();
+                    if (!$currentMember) {
+                        abort(403, "You must have at least one member object tied to your account to access someone else's guild as an admin. The code demands there must always be a member object!");
+                    }
+                    $request->attributes->add(['isNotYourGuild' => true]);
+                }
             } else if ($discordMember) {
                 // TODO: Remove $doHotfix after 2021. This was added to resolve a bug that was live for a few weeks when
                 // TBC was released on thatsmybis. The bug affected records in the database.
@@ -135,8 +145,8 @@ class CheckGuildPermissions
             // Store the guild and current member for later access.
             $request->attributes->add([
                 'currentMember' => $currentMember,
+                'isGuildAdmin'  => ($guild->user_id == $currentMember->user_id || $isAdmin),
                 'guild'         => $guild,
-                'isSuperAdmin'  => ($guild->user_id == $currentMember->user_id),
             ]);
         }
 

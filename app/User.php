@@ -38,6 +38,7 @@ class User extends Authenticatable
      */
     protected $hidden = [
         // 'email',
+        'is_admin',
         'discord_id',
         'password',
         'remember_token',

@@ -226,7 +226,7 @@ class GuildController extends Controller
         $currentMember = request()->get('currentMember');
         $user          = request()->get('currentUser');
 
-        if (!request()->get('isSuperAdmin')) {
+        if (!request()->get('isGuildAdmin')) {
             request()->session()->flash('status', 'You don\'t have permissions to change the guild owner. Only the current owner can do that');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
@@ -252,7 +252,7 @@ class GuildController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!request()->get('isSuperAdmin')) {
+        if (!request()->get('isGuildAdmin')) {
             request()->session()->flash('status', 'You don\'t have permissions to change the guild owner. Only the current owner can do that.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }

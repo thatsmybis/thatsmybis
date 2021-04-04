@@ -60,6 +60,13 @@ Route::get('/streamer-mode', 'MemberController@toggleStreamerMode')->name('toggl
 // });
 
 Route::group([
+        'middleware' => ['seeUser', 'checkAdmin'],
+        'prefix'     => 'admin'
+    ], function () {
+    Route::get( '/guilds', 'AdminController@showGuilds')->name('admin.guilds');
+});
+
+Route::group([
         'middleware' => ['seeUser', 'checkGuildPermissions'],
         'prefix'     => '{guildId}/{guildSlug}'
     ], function () {

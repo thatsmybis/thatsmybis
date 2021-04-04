@@ -33,14 +33,21 @@ function getExpansionColor($expansionId) {
     }
 }
 
-// Check the request for whether or not we stored the bool isSuperAdmin as true or false
-function isStreamerMode() {
-    return request()->get('isStreamerMode');
+// Check the request for whether or not we stored the bool isAdmin as true or false
+function isAdmin() {
+    return request()->get('isAdmin');
 }
 
-// Check the request for whether or not we stored the bool isSuperAdmin as true or false
-function isSuper() {
-    return request()->get('isSuperAdmin');
+function isGuildAdmin() {
+    return request()->get('isGuildAdmin');
+}
+
+function isNotYourGuild() {
+    return request()->get('isNotYourGuild');
+}
+
+function isStreamerMode() {
+    return request()->get('isStreamerMode');
 }
 
 // Loads the desired Javascript. Switches source based on dev/prod.

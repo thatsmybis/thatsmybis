@@ -61,7 +61,7 @@ class Member extends Model
     public function hasPermission($permission, $operator = null) {
         // Call the function from our trait, but override it if the current user is a
         // badass SUPER ADMIN!
-        return ($this->traitHasPermission($permission, $operator = null) || isSuper());
+        return ($this->traitHasPermission($permission, $operator = null) || isGuildAdmin());
     }
 
     /**
