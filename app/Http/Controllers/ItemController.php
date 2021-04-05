@@ -6,6 +6,7 @@ use App\{AuditLog, Batch, Guild, Instance, Item, Raid};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
@@ -178,7 +179,10 @@ class ItemController extends Controller
             ->orderBy('items.name')
             ->get();
 
+        $averageTiers = $this->getItemAverageTiers($instance, $guild->expansion_id);
+
         return view('item.listEdit', [
+            'averageTiers'  => $averageTiers,
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'instance'      => $instance,
@@ -903,6 +907,33 @@ class ItemController extends Controller
         request()->session()->flash('status', "Successfully " . $noticeVerb . " " . $item->name ."'s note.");
 
         return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name)]);
+    }
+
+    public static function getItemAverageTiers($instance, $expansionId) {
+        return Cache::remember('tiers:instance:' . $instance->id . ':expansion:' . $expansionId, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($instance, $expansionId) {
+            return Item::select([
+                'items.item_id',
+                DB::raw('AVG(`guild_items`.`tier`) AS `average_tier`'),
+            ])
+            ->join('item_item_sources', function ($join) {
+                $join->on('item_item_sources.item_id', 'items.item_id');
+            })
+            ->join('item_sources', function ($join) {
+                $join->on('item_sources.id', 'item_item_sources.item_source_id');
+            })
+            ->leftJoin('guild_items', function ($join) {
+                $join->on('guild_items.item_id', 'items.item_id');
+            })
+            ->where([
+                ['item_sources.instance_id', $instance->id],
+                ['items.expansion_id', $expansionId],
+            ])
+            ->groupBy('items.item_id')
+            ->orderBy('item_sources.order')
+            ->orderBy('items.name')
+            ->get()
+            ->keyBy('item_id');
+        });
     }
 
     /**

@@ -115,6 +115,15 @@
 
                                         </select>
 
+                                        @if ($averageTiers[$item->item_id]->average_tier)
+                                            <span class="font-weight-light text-muted small">
+                                                avg.
+                                                <span class="text-tier-">
+                                                    {{  $guild->tier_mode == App\Guild::TIER_MODE_S ? numToSTier(number_format($averageTiers[$item->item_id]->average_tier, 1)) : number_format($averageTiers[$item->item_id]->average_tier, 1) }}
+                                                </span>
+                                            </span>
+                                        @endif
+
                                         @if ($errors->has('items.' . $loop->iteration . '.tier'))
                                             <div class="'text-danger font-weight-bold'">
                                                 {{ $errors->first('items.' . $loop->iteration . '.tier') }}

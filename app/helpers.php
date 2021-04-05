@@ -86,6 +86,15 @@ function numToKs($number) {
     }
 }
 
+function slug($string) {
+    $slug = substr(Illuminate\Support\Str::slug($string, '-'), 0, 50);
+    if ($slug) {
+        return $slug;
+    } else {
+        return '-';
+    }
+}
+
 /**
  * Split a string into an array delimited by newlines.
  *
@@ -97,11 +106,22 @@ function splitByLine($string) {
     return preg_split("/\r\n|\n|\r/", $string);
 }
 
-function slug($string) {
-    $slug = substr(Illuminate\Support\Str::slug($string, '-'), 0, 50);
-    if ($slug) {
-        return $slug;
+/**
+ * Expects a float, returns an s-tier with the decimal of the float intact.
+ *
+ * @param $float
+ *
+ * @return array
+ */
+function numToSTier($float) {
+    if ($float > 0) {
+        $tiers = App\Guild::tiers();
+
+        $whole = floor($float);
+        $decimal = $float - $whole;
+
+        return $tiers[ceil($float)] . ltrim($decimal, '0');
     } else {
-        return '-';
+        return '';
     }
 }
