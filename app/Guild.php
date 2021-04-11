@@ -8,6 +8,7 @@ use App\{
     Expansion,
     Item,
     Member,
+    Raid,
     RaidGroup,
     Role,
     User,
@@ -35,6 +36,7 @@ class Guild extends Model
         'member_role_ids',
         'message',
         'calendar_link',
+        'is_attendance_hidden',
         'is_prio_private',
         'is_received_locked',
         'is_wishlist_private',
@@ -75,7 +77,7 @@ class Guild extends Model
         6 => 'F',
     ];
 
-    // Excludes hidden and removed characters
+    // Includes hidden and removed characters
     public function allCharacters() {
         return $this->hasMany(Character::class)->orderBy('name');
     }
@@ -117,6 +119,11 @@ class Guild extends Model
     // Excludes banned members and inactive
     public function members() {
         return $this->hasMany(Member::class)->whereNull('banned_at')->whereNull('inactive_at')->orderBy('username');
+    }
+
+    public function raids()
+    {
+        return $this->hasMany(Raid::class)->orderByDesc('date');
     }
 
     public function roles()

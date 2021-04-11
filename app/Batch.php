@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Guild, Member, RaidGroup, User};
+use App\{Guild, Member, Raid, RaidGroup, User};
 use Illuminate\Database\Eloquent\Model;
 
 class Batch extends Model
@@ -20,6 +20,7 @@ class Batch extends Model
         'type',
         'guild_id',
         'member_id',
+        'raid_id',
         'raid_group_id',
         'user_id',
     ];
@@ -38,6 +39,11 @@ class Batch extends Model
 
     public function member() {
         return $this->belongsTo(Member::class);
+    }
+
+    public function raid()
+    {
+        return $this->belongsTo(Raid::class);
     }
 
     public function raidGroup() {

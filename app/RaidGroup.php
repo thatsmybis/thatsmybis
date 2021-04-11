@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Role};
+use App\{Raid, Role};
 use Illuminate\Database\Eloquent\Model;
 
 class RaidGroup extends Model
@@ -45,6 +45,11 @@ class RaidGroup extends Model
             ->withTimeStamps()
             ->withPivot(['added_by', 'raid_group_id', 'type'])
             ->orderBy('characters.name');
+    }
+
+    public function raids()
+    {
+        return $this->hasMany(Raid::class)->orderByDesc('date');
     }
 
     public function role() {

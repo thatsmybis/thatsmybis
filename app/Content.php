@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Guild, Member};
+use App\{Guild, Member, Raid};
 use Illuminate\Database\Eloquent\Model;
 
 class Content extends Model
@@ -40,5 +40,10 @@ class Content extends Model
 
     public function member() {
         return $this->belongsTo(Member::class);
+    }
+
+    public function raid()
+    {
+        return $this->belongsTo(Raid::class);
     }
 }
