@@ -78,15 +78,15 @@
                     </li>
                 @endif
                 {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
-                @if ($character->relationLoaded('raid') && $character->raidGroup)
+                @if ($character->relationLoaded('raidGroup') && $character->raidGroup)
                     @php
-                        $raidColor = null;
+                        $raidGroupColor = null;
                         if ($character->raidGroup->relationLoaded('role')) {
-                            $raidColor = $character->raidGroup->getColor();
+                            $raidGroupColor = $character->raidGroup->getColor();
                         }
                     @endphp
                     <li class="list-inline-item font-weight-bold">
-                        <span class="tag d-inline" style="border-color:{{ $raidColor }};"><span class="role-circle" style="background-color:{{ $raidColor }}"></span>
+                        <span class="tag d-inline" style="border-color:{{ $raidGroupColor }};"><span class="role-circle" style="background-color:{{ $raidGroupColor }}"></span>
                             {{ $character->raidGroup->name }}
                         </span>
                     </li>

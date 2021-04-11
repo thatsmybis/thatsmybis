@@ -22,7 +22,7 @@
             </a>
             <span class="dropdown-item disabled">
                 @if ($raidGroup)
-                    @include('partials/raidGroup', ['raidColor' => $raidGroup->getColor()])
+                    @include('partials/raidGroup', ['raidGroupColor' => $raidGroup->getColor()])
                 @else
                     no raid groups
                 @endif

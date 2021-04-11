@@ -191,8 +191,8 @@ function getCharacterList(data, type, itemId) {
         if (type == 'prio' && character.pivot.raid_group_id && character.pivot.raid_group_id != lastRaidGroupId) {
             lastRaidGroupId = character.pivot.raid_group_id;
             characters += `
-                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic  text-muted small">
-                    ${ character.raid_group_name ? character.raid_group_name : '' }
+                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small">
+                    ${ raidGroups.find(raidGroup => raidGroup.id === character.pivot.raid_group_id).name }
                 </li>
             `;
         }
@@ -203,7 +203,7 @@ function getCharacterList(data, type, itemId) {
                 class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0 ${ character.pivot.received_at ? 'font-strikethrough' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
                     title="${ character.raid_group_name ? character.raid_group_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
-                    class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
+                    class="text-${ character.class ? character.class.toLowerCase() : '' }-important tag d-inline">
                     <span class="text-muted">${ character.pivot.order ? character.pivot.order : '' }</span>
                     <span class="text-muted small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_group_color) }"></span>${ character.name }
