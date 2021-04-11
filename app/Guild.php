@@ -8,7 +8,7 @@ use App\{
     Expansion,
     Item,
     Member,
-    Raid,
+    RaidGroup,
     Role,
     User,
 };
@@ -85,8 +85,8 @@ class Guild extends Model
         return $this->hasMany(Member::class)->orderBy('username');
     }
 
-    public function allRaids() {
-        return $this->hasMany(Raid::class)->orderBy('name');
+    public function allRaidGroups() {
+        return $this->hasMany(RaidGroup::class)->orderBy('name');
     }
 
     // Excludes hidden and removed characters
@@ -124,8 +124,8 @@ class Guild extends Model
         return $this->hasMany(Role::class)->orderBy('name');
     }
 
-    public function raids() {
-        return $this->hasMany(Raid::class)->whereNull('disabled_at')->orderBy('name');
+    public function raidGroups() {
+        return $this->hasMany(RaidGroup::class)->whereNull('disabled_at')->orderBy('name');
     }
 
     public function user() {
@@ -167,15 +167,15 @@ class Guild extends Model
             'characters.profession_2',
             'characters.rank',
             'characters.rank_goal',
-            'characters.raid_id',
+            'characters.raid_group_id',
             'characters.is_alt',
             'characters.public_note',
             'characters.inactive_at',
             'members.username',
             'members.is_wishlist_unlocked',
             'members.is_received_unlocked',
-            'raids.name AS raid_name',
-            'raid_roles.color AS raid_color',
+            'raid_groups.name AS raid_group_name',
+            'raid_group_roles.color AS raid_group_color',
         ];
 
         $showOfficerNote = false;
@@ -188,11 +188,11 @@ class Guild extends Model
             ->leftJoin('members', function ($join) {
                 $join->on('members.id', 'characters.member_id');
             })
-            ->leftJoin('raids', function ($join) {
-                $join->on('raids.id', 'characters.raid_id');
+            ->leftJoin('raid_groups', function ($join) {
+                $join->on('raid_groups.id', 'characters.raid_group_id');
             })
-            ->leftJoin('roles AS raid_roles', function ($join) {
-                $join->on('raid_roles.id', 'raids.role_id');
+            ->leftJoin('roles AS raid_group_roles', function ($join) {
+                $join->on('raid_group_roles.id', 'raid_groups.role_id');
             })
             ->where('characters.guild_id', $this->id)
             ->orderBy('characters.name')

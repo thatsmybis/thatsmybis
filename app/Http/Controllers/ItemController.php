@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Batch, Guild, Instance, Item, Raid};
+use App\{AuditLog, Batch, Guild, Instance, Item, RaidGroup};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -36,13 +36,13 @@ class ItemController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids']);
+        $guild->load(['raidGroups']);
 
         $instance = Instance::where('slug', $instanceSlug)->firstOrFail();
 
         $characterFields = [
             'characters.id',
-            'characters.raid_id',
+            'characters.raid_group_id',
             'characters.name',
             'characters.slug',
             'characters.level',
@@ -51,8 +51,8 @@ class ItemController extends Controller
             'characters.class',
             'characters.is_alt',
             'members.username',
-            'raids.name AS raid_name',
-            'raid_roles.color AS raid_color',
+            'raid_groups.name         AS raid_group_name',
+            'raid_group_roles.color    AS raid_group_color',
             'added_by_members.username AS added_by_username',
         ];
 
@@ -122,7 +122,7 @@ class ItemController extends Controller
             'guild'           => $guild,
             'instance'        => $instance,
             'items'           => $items,
-            'raids'           => $guild->raids,
+            'raidGroups'      => $guild->raidGroups,
             'showNotes'       => true,
             'showOfficerNote' => $showOfficerNote,
             'showPrios'       => $showPrios,
@@ -311,11 +311,11 @@ class ItemController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids']);
+        $guild->load(['raidGroups']);
 
         $characterFields = [
             'characters.id',
-            'characters.raid_id',
+            'characters.raid_group_id',
             'characters.name',
             'characters.slug',
             'characters.level',
@@ -324,8 +324,8 @@ class ItemController extends Controller
             'characters.class',
             'characters.is_alt',
             'members.username',
-            'raids.name AS raid_name',
-            'raid_roles.color AS raid_color',
+            'raid_groups.name          AS raid_group_name',
+            'raid_group_roles.color    AS raid_group_color',
             'added_by_members.username AS added_by_username',
         ];
 
@@ -367,7 +367,7 @@ class ItemController extends Controller
                 'receivedAndRecipeCharacters' => function ($query) use($guild) {
                     return $query->select([
                             'characters.id',
-                            'characters.raid_id',
+                            'characters.raid_group_id',
                             'characters.name',
                             'characters.slug',
                             'characters.level',
@@ -376,8 +376,8 @@ class ItemController extends Controller
                             'characters.class',
                             'characters.is_alt',
                             'members.username',
-                            'raids.name AS raid_name',
-                            'raid_roles.color AS raid_color',
+                            'raid_groups.name AS raid_group_name',
+                            'raid_group_roles.color AS raid_group_color',
                             'added_by_members.username AS added_by_username',
                         ])
                         ->leftJoin('members', function ($join) {
@@ -412,7 +412,7 @@ class ItemController extends Controller
 
         $guild->load([
             'characters',
-            'raids',
+            'raidGroups',
         ]);
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
@@ -437,18 +437,18 @@ class ItemController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids']);
+        $guild->load(['raidGroups']);
 
         $characterFields = [
-            'characters.raid_id',
+            'characters.raid_group_id',
             'characters.name',
             'characters.level',
             'characters.race',
             'characters.spec',
             'characters.class',
             'members.username',
-            'raids.name AS raid_name',
-            'raid_roles.color AS raid_color',
+            'raid_groups.name AS raid_group_name',
+            'raid_group_roles.color AS raid_group_color',
         ];
 
         $showOfficerNote = false;
@@ -555,7 +555,7 @@ class ItemController extends Controller
             'item'                        => $item,
             'notes'                       => $notes,
             'priodCharacters'             => $item->relationLoaded('priodCharacters') ? $item->priodCharacters : null,
-            'raids'                       => $guild->raids,
+            'raidGroups'                  => $guild->raidGroups,
             'receivedAndRecipeCharacters' => $item->receivedAndRecipeCharacters,
             'showEdit'                    => $showEdit,
             'showNoteEdit'                => $showNoteEdit,
@@ -573,7 +573,7 @@ class ItemController extends Controller
         $currentMember = request()->get('currentMember');
 
         $validationRules = [
-            'raid_id'               => 'nullable|integer|exists:raids,id',
+            'raid_group_id' => 'nullable|integer|exists:raid_groups,id',
             'items.*.id' => [
                 'nullable',
                 'integer',
@@ -614,23 +614,23 @@ class ItemController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $raidInputId = request()->input('raid_id');
+        $raidGroupInputId = request()->input('raid_group_id');
 
         $guild->load([
             // Allow adding items to inactive characters as well
             // Perhaps someone deactivated a character while the raid leader was still editing the form
             // We don't want the submission to fail because of that
             'allCharacters',
-            'raids' => function ($query) use ($raidInputId) {
-                return $query->where('id', $raidInputId);
+            'raidGroups' => function ($query) use ($raidGroupInputId) {
+                return $query->where('id', $raidGroupInputId);
             }
         ]);
 
-        $raid = $guild->raids->first();
+        $raidGroup = $guild->raidGroups->first();
 
         $deleteWishlist = request()->input('delete_wishlist_items') ? true : false;
         $deletePrio     = request()->input('delete_prio_items') ? true : false;
-        $raidId         = $raid ? $raid->id : null;
+        $raidGroupId    = $raidGroup ? $raidGroup->id : null;
 
         $warnings   = '';
         $newRows    = [];
@@ -648,19 +648,19 @@ class ItemController extends Controller
                 if ($item['character_id']) {
                     if ($guild->allCharacters->contains('id', $item['character_id'])) {
                         $newRows[] = [
-                            'item_id'      => $item['id'],
-                            'character_id' => $item['character_id'],
-                            'added_by'     => $currentMember->id,
-                            'raid_id'      => $raidId,
-                            'type'         => Item::TYPE_RECEIVED,
-                            'order'        => '0', // Put this item at the top of the list
-                            'is_offspec'   => (isset($item['is_offspec']) && $item['is_offspec'] == true ? 1 : 0),
-                            'is_received'  => 1,
-                            'note'         => ($item['note']         ? $item['note'] : null),
-                            'officer_note' => ($item['officer_note'] ? $item['officer_note'] : null),
-                            'received_at'  => ($item['received_at']  ? Carbon::parse($item['received_at'])->toDateTimeString() : null),
-                            'import_id'    => ($item['import_id']    ? $item['import_id'] : null),
-                            'created_at'   => $now,
+                            'item_id'       => $item['id'],
+                            'character_id'  => $item['character_id'],
+                            'added_by'      => $currentMember->id,
+                            'raid_group_id' => $raidGroupId,
+                            'type'          => Item::TYPE_RECEIVED,
+                            'order'         => '0', // Put this item at the top of the list
+                            'is_offspec'    => (isset($item['is_offspec']) && $item['is_offspec'] == true ? 1 : 0),
+                            'is_received'   => 1,
+                            'note'          => ($item['note']         ? $item['note'] : null),
+                            'officer_note'  => ($item['officer_note'] ? $item['officer_note'] : null),
+                            'received_at'   => ($item['received_at']  ? Carbon::parse($item['received_at'])->toDateTimeString() : null),
+                            'import_id'     => ($item['import_id']    ? $item['import_id'] : null),
+                            'created_at'    => $now,
                         ];
                         $detachRows[] = [
                             'item_id'      => $item['id'],
@@ -679,14 +679,14 @@ class ItemController extends Controller
                         }
 
                         $audits[] = [
-                            'description'  => $description,
-                            'type'         => AuditLog::TYPE_ASSIGN,
-                            'member_id'    => $currentMember->id,
-                            'character_id' => $item['character_id'],
-                            'guild_id'     => $currentMember->guild_id,
-                            'raid_id'      => $raidId,
-                            'item_id'      => $item['id'],
-                            'created_at'   => $now,
+                            'description'   => $description,
+                            'type'          => AuditLog::TYPE_ASSIGN,
+                            'member_id'     => $currentMember->id,
+                            'character_id'  => $item['character_id'],
+                            'guild_id'      => $currentMember->guild_id,
+                            'raid_group_id' => $raidGroupId,
+                            'item_id'       => $item['id'],
+                            'created_at'    => $now,
                         ];
                     } else {
                         $warnings .= (isset($item['label']) ? $item['label'] : $item['id']) . ' to character ID ' . $item['character_id'] . ', ';
@@ -702,13 +702,13 @@ class ItemController extends Controller
         // Create a batch record for this job
         // Doing this right before we do the inserts just in case something went wrong beforehand
         $batch = Batch::create([
-            'name'      => request()->input('name') ? request()->input('name') : null,
-            'note'      => $currentMember->username . ' assigned ' . count($newRows) . ' items' . ($raid ? ' on raid ' . $raid->name : ''),
-            'type'      => AuditLog::TYPE_ASSIGN,
-            'guild_id'  => $guild->id,
-            'member_id' => $currentMember->id,
-            'raid_id'   => $raidId,
-            'user_id'   => $currentMember->user_id,
+            'name'          => request()->input('name') ? request()->input('name') : null,
+            'note'          => $currentMember->username . ' assigned ' . count($newRows) . ' items' . ($raidGroup ? ' on raid group ' . $raidGroup->name : ''),
+            'type'          => AuditLog::TYPE_ASSIGN,
+            'guild_id'      => $guild->id,
+            'member_id'     => $currentMember->id,
+            'raid_group_id' => $raidGroupId,
+            'user_id'       => $currentMember->user_id,
         ]);
 
         // Add the batch ID to the items we're going to insert
@@ -739,14 +739,14 @@ class ItemController extends Controller
                     // Delete the one we found
                     DB::table('character_items')->where(['id' => $wishlistRow->id])->delete();
                     $audits[] = [
-                        'description'  => 'System removed 1 wishlist item after character was assigned item',
-                        'type'         => Item::TYPE_WISHLIST,
-                        'member_id'    => $currentMember->id,
-                        'character_id' => $wishlistRow->character_id,
-                        'guild_id'     => $currentMember->guild_id,
-                        'raid_id'      => $wishlistRow->raid_id,
-                        'item_id'      => $wishlistRow->item_id,
-                        'created_at'   => $now,
+                        'description'   => 'System removed 1 wishlist item after character was assigned item',
+                        'type'          => Item::TYPE_WISHLIST,
+                        'member_id'     => $currentMember->id,
+                        'character_id'  => $wishlistRow->character_id,
+                        'guild_id'      => $currentMember->guild_id,
+                        'raid_group_id' => $wishlistRow->raid_group_id,
+                        'item_id'       => $wishlistRow->item_id,
+                        'created_at'    => $now,
                     ];
                 } else {
                     DB::table('character_items')->where(['id' => $wishlistRow->id])
@@ -756,14 +756,14 @@ class ItemController extends Controller
                         ]);
 
                     $audits[] = [
-                        'description'  => 'System flagged 1 wishlist item as received after character was assigned item',
-                        'type'         => Item::TYPE_WISHLIST,
-                        'member_id'    => $currentMember->id,
-                        'character_id' => $wishlistRow->character_id,
-                        'guild_id'     => $currentMember->guild_id,
-                        'raid_id'      => $wishlistRow->raid_id,
-                        'item_id'      => $wishlistRow->item_id,
-                        'created_at'   => $now,
+                        'description'   => 'System flagged 1 wishlist item as received after character was assigned item',
+                        'type'          => Item::TYPE_WISHLIST,
+                        'member_id'     => $currentMember->id,
+                        'character_id'  => $wishlistRow->character_id,
+                        'guild_id'      => $currentMember->guild_id,
+                        'raid_group_id' => $wishlistRow->raid_group_id,
+                        'item_id'       => $wishlistRow->item_id,
+                        'created_at'    => $now,
                     ];
                 }
             }
@@ -787,11 +787,11 @@ class ItemController extends Controller
                     // Delete the one we found
                     DB::table('character_items')->where(['id' => $prioRow->id])->delete();
 
-                    // Now correct the order on the remaning prios for that item in that raid
+                    // Now correct the order on the remaning prios for that item in that raid group
                     DB::table('character_items')->where([
-                            'item_id' => $prioRow->item_id,
-                            'raid_id' => $prioRow->raid_id,
-                            'type'    => Item::TYPE_PRIO,
+                            'item_id'       => $prioRow->item_id,
+                            'raid_group_id' => $prioRow->raid_group_id,
+                            'type'          => Item::TYPE_PRIO,
                         ])
                         ->where('order', '>', $prioRow->order)
                         ->update(['order' => DB::raw('`order` - 1')]);
@@ -806,14 +806,14 @@ class ItemController extends Controller
                 }
 
                 $audits[] = [
-                    'description'  => 'System ' . $auditMessage . ' after character was assigned item',
-                    'type'         => Item::TYPE_PRIO,
-                    'member_id'    => $currentMember->id,
-                    'character_id' => $prioRow->character_id,
-                    'guild_id'     => $currentMember->guild_id,
-                    'raid_id'      => $prioRow->raid_id,
-                    'item_id'      => $prioRow->item_id,
-                    'created_at'   => $now,
+                    'description'   => 'System ' . $auditMessage . ' after character was assigned item',
+                    'type'          => Item::TYPE_PRIO,
+                    'member_id'     => $currentMember->id,
+                    'character_id'  => $prioRow->character_id,
+                    'guild_id'      => $currentMember->guild_id,
+                    'raid_group_id' => $prioRow->raid_group_id,
+                    'item_id'       => $prioRow->item_id,
+                    'created_at'    => $now,
                 ];
             }
         }
@@ -842,7 +842,7 @@ class ItemController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids', 'roles']);
+        $guild->load(['raidGroups', 'roles']);
 
         $validationRules = [
             'id' => [

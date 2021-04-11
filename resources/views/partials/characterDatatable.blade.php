@@ -1,15 +1,15 @@
 <div class="pr-2 pl-2">
     <ul class="list-inline mb-0">
         <li class="list-inline-item">
-            <label for="raid_filter font-weight-light">
+            <label for="raid_group_filter font-weight-light">
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
-                Raid
+                Raid Group
             </label>
             <select id="raid_filter" class="form-control dark">
                 <option value="">—</option>
-                @foreach ($raids as $raid)
-                    <option value="{{ $raid->name }}" style="color:{{ $raid->getColor() }};">
-                        {{ $raid->name }}
+                @foreach ($raidGroups as $raidGroup)
+                    <option value="{{ $raidGroup->name }}" style="color:{{ $raidGroup->getColor() }};">
+                        {{ $raidGroup->name }}
                     </option>
                 @endforeach
             </select>
@@ -29,7 +29,7 @@
             </select>
         </li>
         <li class="list-inline-item">
-            <label for="raid_filter font-weight-light">
+            <label for="raid_group_filter font-weight-light">
                 <span class="text-muted fas fa-fw fa-sack"></span>
                 Dungeon
             </label>

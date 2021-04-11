@@ -34,21 +34,21 @@ $(document).ready(function () {
         }
     }
 
-    $("[name=raid_id]").on('change', function () {
+    $("[name=raid_group_id]").on('change', function () {
         if ($(this).val()) {
-            $("#raidWarning").hide();
+            $("#raidGroupWarning").hide();
         } else {
-            $("#raidWarning").show();
+            $("#raidGroupWarning").show();
         }
     }).change();
 
-    // Filter out characters based on the raid they are in
-    $("#raid_filter").on('change', function () {
-        let raidId = $(this).val();
+    // Filter out characters based on the raid group they are in
+    $("#raid_group_filter").on('change', function () {
+        let raidGroupId = $(this).val();
 
-        if (raidId) {
-            $(".js-character-option[data-raid-id!='" + raidId + "']").hide();
-            $(".js-character-option[data-raid-id='" + raidId + "']").show();
+        if (raidGroupId) {
+            $(".js-character-option[data-raid-group-id!='" + raidGroupId + "']").hide();
+            $(".js-character-option[data-raid-group-id='" + raidGroupId + "']").show();
         } else {
             $(".js-character-option").show();
         }
@@ -546,7 +546,7 @@ function prepareForm() {
     $("[name=toggle_notes]").prop("checked", true).change();
     $("[name=toggle_dates]").prop("checked", true).change();
     $("[name=date_default]").val("").change();
-    $("[name=raid_filter]").val("").change();
+    $("[name=raid_group_filter]").val("").change();
 
     if (preventDuplicates) {
         // $(".js-import-id").show();

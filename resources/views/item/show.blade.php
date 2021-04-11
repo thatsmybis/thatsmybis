@@ -165,13 +165,13 @@
                                                 edit
                                             </span>
                                             <div class="dropdown-menu" aria-labelledby="editPrioLink">
-                                                @foreach ($raids as $raid)
-                                                    <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'raidId' => $raid->id]) }}">
-                                                        {{ $raid->name }}
+                                                @foreach ($raidGroups as $raidGroup)
+                                                    <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'raidGroupId' => $raidGroup->id]) }}">
+                                                        {{ $raidGroup->name }}
                                                     </a>
                                                 @endforeach
-                                                <a class="dropdown-item" href="{{ route('guild.raid.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                                    <span class="fas fa-fw fa-plus"></span> Create New Raid
+                                                <a class="dropdown-item" href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                                    <span class="fas fa-fw fa-plus"></span> Create New Raid Group
                                                 </a>
                                             </div>
                                         </div>
@@ -180,31 +180,31 @@
                             </ul>
                             @if ($priodCharacters && $priodCharacters->count() > 0)
                                 @php
-                                    $lastRaid = '';
+                                    $lastRaidGroup = '';
                                 @endphp
                                 <ul class="list-inline">
                                     @foreach ($priodCharacters as $character)
-                                        @if ($character->pivot->raid_id != $lastRaid)
+                                        @if ($character->pivot->raid_group_id != $lastRaidGroup)
                                             @if (!$loop->first)
                                                     </ol>
                                                 </li>
                                             @endif
                                             @php
-                                                $lastRaid = $character->pivot->raid_id;
+                                                $lastRaidGroup = $character->pivot->raid_group_id;
                                             @endphp
                                             <li class="list-inline-item align-top">
                                                 <ol class="lesser-indent">
-                                                    <li data-raid-id="{{ $character->pivot->raid_id }}" class="no-bullet font-weight-bold mt-2">
-                                                        {{ $raids->where('id', $character->pivot->raid_id)->first()->name }}
+                                                    <li data-raid-group-id="{{ $character->pivot->raid_group_id }}" class="no-bullet font-weight-bold mt-2">
+                                                        {{ $raidGroups->where('id', $character->pivot->raid_group_id)->first()->name }}
                                                     </li>
                                         @endif
-                                            <li data-raid-id="{{ $character->pivot->raid_id }}"
+                                            <li data-raid-group-id="{{ $character->pivot->raid_group_id }}"
                                                 class="js-item-wishlist-character font-weight-normal mb-1 {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}"
                                                 value="{{ $character->pivot->order }}">
                                                 <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                                    title="{{ $character->raid_name ? $character->raid_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}"
+                                                    title="{{ $character->raid_group_name ? $character->raid_group_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}"
                                                     class="text-{{ $character->class ? strtolower($character->class) : ''}}-important tag d-inline">
-                                                    <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_color ? $character->raid_color : '')) }}"></span>{{ $character->name }}
+                                                    <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_group_color ? $character->raid_group_color : '')) }}"></span>{{ $character->name }}
                                                     @if ($character->is_alt)
                                                         <span class="text-legendary">alt</span>
                                                     @endif
@@ -317,7 +317,7 @@
 <script>
     var characters      = {!! $showWishlist ? ($showOfficerNote ? $wishlistCharacters->makeVisible('officer_note')->toJson() : $wishlistCharacters->toJson()) : null !!};
     var guild           = {!! $guild->toJson() !!};
-    var raids           = {!! $raids->toJson() !!};
+    var raidGroups      = {!! $raidGroups->toJson() !!};
     var showEdit        = {{ $showEdit ? 'true' : 'false' }};
     var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
     var showPrios       = {{ $showPrios ? 'true' : 'false' }};

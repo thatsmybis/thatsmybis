@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Content, Raid, User};
+use App\{Content, RaidGroup, User};
 use Auth;
 use Illuminate\Http\Request;
 
@@ -38,8 +38,8 @@ class ContentController extends Controller
     {
         $content = Content::where('slug', $slug)->whereNull('removed_at')->with('user')->firstOrFail();
         return view('content.show', [
-            'content'  => $content,
-            'raids'    => Raid::all(),
+            'content'    => $content,
+            'raidGroups' => RaidGroup::all(),
         ]);
     }
 
@@ -90,16 +90,16 @@ class ContentController extends Controller
                 abort(403, 'You cannot edit news posts.');
             }
 
-            // ints are raid id's
+            // ints are raid group id's
             if (is_numeric($category)) {
                 if (!Auth::user()->hasRole(env('PERMISSION_RAID_LEADER'))) {
                     abort(403, 'You cannot edit raid posts.');
                 }
 
-                $raid = Raid::findOrFail($category);
+                $raidGroup = RaidGroup::findOrFail($category);
 
-                $updateValues['raid_id'] = $raid->id;
-                $category = $raid->slug;
+                $updateValues['raid_group_id'] = $raidGroup->id;
+                $category = $raidGroup->slug;
             }
 
             $updateValues['last_edited_by'] = Auth::id();
@@ -114,16 +114,16 @@ class ContentController extends Controller
                 abort(403, 'You cannot create news posts.');
             }
 
-            // ints are raid id's
+            // ints are raid group id's
             if (is_numeric($category)) {
                 if (!Auth::user()->hasRole(env('PERMISSION_RAID_LEADER'))) {
-                    abort(403, 'You cannot create raid posts.');
+                    abort(403, 'You cannot create Raid Group posts.');
                 }
 
-                $raid = Raid::findOrFail($category);
+                $raidGroup = RaidGroup::findOrFail($category);
 
-                $updateValues['raid_id'] = $raid->id;
-                $category = $raid->slug;
+                $updateValues['raid_group_id'] = $raidGroup->id;
+                $category = $raidGroup->slug;
             }
 
             $updateValues['category'] = $category;

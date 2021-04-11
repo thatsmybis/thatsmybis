@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Batch, Character, Guild, Instance, Item, ItemSource, Member, Raid, Role};
+use App\{AuditLog, Batch, Character, Guild, Instance, Item, ItemSource, Member, RaidGroup, Role};
 use Auth;
 use Illuminate\Http\Request;
 
@@ -30,7 +30,7 @@ class AuditLogController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['characters', 'members', 'raids']);
+        $guild->load(['characters', 'members', 'raid_groups']);
 
         $resources = [];
 
@@ -60,7 +60,7 @@ class AuditLogController extends Controller
                 'members.slug           AS member_slug',
                 'other_members.username AS other_member_username',
                 'other_members.slug     AS other_member_slug',
-                'raids.name             AS raid_name',
+                'raid_groups.name       AS raid_group_name',
                 'roles.name             AS role_name',
             ])
             ->leftJoin('batches', function ($join) {
@@ -87,8 +87,8 @@ class AuditLogController extends Controller
             ->leftJoin('members as other_members', function ($join) {
                     $join->on('other_members.id', '=', 'audit_logs.other_member_id');
                 })
-            ->leftJoin('raids', function ($join) {
-                    $join->on('raids.id', '=', 'audit_logs.raid_id');
+            ->leftJoin('raid_groups', function ($join) {
+                    $join->on('raid_groups.id', '=', 'audit_logs.raid_group_id');
                 })
             ->leftJoin('roles', function ($join) {
                     $join->on('roles.id', '=', 'audit_logs.role_id');
@@ -130,9 +130,9 @@ class AuditLogController extends Controller
             $resources[] = Batch::where([['guild_id', $guild->id], ['id', request()->input('batch_id')]])->with('member')->first();
         }
 
-        if (!empty(request()->input('raid_id'))) {
-            $query = $query->where('raids.id', request()->input('raid_id'));
-            $resources[] = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])->with('role')->first();
+        if (!empty(request()->input('raid_group_id'))) {
+            $query = $query->where('raid_groups.id', request()->input('raid_group_id'));
+            $resources[] = RaidGroup::where([['guild_id', $guild->id], ['id', request()->input('raid_group_id')]])->with('role')->first();
         }
 
         if (!empty(request()->input('item_id'))) {

@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Item, Guild, Member, Raid};
+use App\{Item, Guild, Member, RaidGroup};
 use Illuminate\Database\Eloquent\Model;
 
 class Character extends Model
@@ -25,7 +25,7 @@ class Character extends Model
         'profession_2',
         'rank',
         'rank_goal',
-        'raid_id',
+        'raid_group_id',
         'public_note',
         'officer_note',
         'personal_note',
@@ -86,8 +86,8 @@ class Character extends Model
         return $this->belongsTo(Member::class);
     }
 
-    public function raid() {
-        return $this->belongsTo(Raid::class);
+    public function raidGroup() {
+        return $this->belongsTo(RaidGroup::class);
     }
 
     public function recipes() {
@@ -101,7 +101,14 @@ class Character extends Model
             ->where('character_items.type', Item::TYPE_RECIPE)
             ->groupBy('character_items.id')
             ->orderBy('character_items.order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'raid_id', 'created_at'])
+            ->withPivot([
+                'id',
+                'added_by',
+                'type',
+                'order',
+                'raid_group_id',
+                'created_at',
+            ])
             ->withTimeStamps();
 
         return ($query);
@@ -113,13 +120,13 @@ class Character extends Model
             ->select([
                 'items.*',
                 'added_by_members.username AS added_by_username',
-                'raids.name                AS raid_name',
+                'raid_groups.name          AS raid_group_name',
                 'instances.id              AS instance_id',
                 'guild_items.tier          AS guild_tier',
             ])
             ->join(    'characters',                  'characters.id',                    '=', 'character_items.character_id')
             ->leftJoin('members AS added_by_members', 'added_by_members.id',              '=', 'character_items.added_by')
-            ->leftJoin('raids',                       'raids.id',                         '=', 'character_items.raid_id')
+            ->leftJoin('raid_groups',                 'raid_groups.id',                   '=', 'character_items.raid_group_id')
             ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
             ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
@@ -132,7 +139,18 @@ class Character extends Model
             // Composite order by which checks for received_at date and uses that first, and then created_at date as a fallback
             // Sorts by `order` first though
             ->orderByRaw('`character_items`.`order`, IF(`character_items`.`received_at`, `character_items`.`received_at`, `character_items`.`created_at`) DESC')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'note', 'officer_note', 'is_offspec', 'raid_id', 'received_at', 'created_at'])
+            ->withPivot([
+                'id',
+                'added_by',
+                'type',
+                'order',
+                'note',
+                'officer_note',
+                'is_offspec',
+                'raid_group_id',
+                'received_at',
+                'created_at'
+            ])
             ->withTimeStamps();
 
         return ($query);
@@ -148,8 +166,8 @@ class Character extends Model
                 'guild_items.tier          AS guild_tier',
             ])
             ->join(    'characters',                  'characters.id',                    '=', 'character_items.character_id')
-            ->leftJoin('members AS added_by_members', 'added_by_members.id', '=', 'character_items.added_by')
-            ->leftJoin('raids',                       'character_items.raid_id',          '=', 'raids.id')
+            ->leftJoin('members AS added_by_members', 'added_by_members.id',              '=', 'character_items.added_by')
+            ->leftJoin('raid_groups',                 'character_items.raid_group_id',    '=', 'raid_groups.id')
             ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
             ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
@@ -160,11 +178,20 @@ class Character extends Model
             ->where([
                 ['character_items.type', Item::TYPE_PRIO],
             ])
-            ->whereNull('raids.disabled_at')
-            ->orderBy('character_items.raid_id')
+            ->whereNull('raid_groups.disabled_at')
+            ->orderBy('character_items.raid_group_id')
             ->orderBy('character_items.order')
             ->groupBy('character_items.id')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'is_received', 'received_at', 'raid_id', 'created_at'])
+            ->withPivot([
+                'id',
+                'added_by',
+                'type',
+                'order',
+                'is_received',
+                'received_at',
+                'raid_group_id',
+                'created_at',
+            ])
             ->withTimeStamps();
 
         return ($query);
@@ -194,7 +221,17 @@ class Character extends Model
             ->where('character_items.type', Item::TYPE_WISHLIST)
             ->groupBy('character_items.id')
             ->orderBy('character_items.order')
-            ->withPivot(['id', 'added_by', 'type', 'order', 'is_offspec', 'is_received', 'received_at', 'raid_id', 'created_at'])
+            ->withPivot([
+                'id',
+                'added_by',
+                'type',
+                'order',
+                'is_offspec',
+                'is_received',
+                'received_at',
+                'raid_group_id',
+                'created_at',
+            ])
             ->withTimeStamps();
 
         return $query;

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Character, Content, Guild, Item, Raid, Role, User};
+use App\{AuditLog, Character, Content, Guild, Item, RaidGroup, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -36,7 +36,7 @@ class CharacterController extends Controller
             'profession_2'  => ['nullable', 'string', 'different:profession_1', Rule::in(Character::professions($guild->expansion_id))],
             'rank'          => 'nullable|integer|min:1|max:14',
             'rank_goal'     => 'nullable|integer|min:1|max:14',
-            'raid_id'       => 'nullable|integer|exists:raids,id',
+            'raid_group_id' => 'nullable|integer|exists:raid_groups,id',
             'public_note'   => 'nullable|string|max:140',
             'officer_note'  => 'nullable|string|max:140',
             'personal_note' => 'nullable|string|max:2000',
@@ -62,7 +62,7 @@ class CharacterController extends Controller
                 // Use comparison that takes accents into account... as so many WoW characters have accented names.
                 return $query->whereRaw('LOWER(characters.name) COLLATE utf8mb4_bin = (?)', strtolower(request()->input('name')));
             },
-            'raids',
+            'raidGroups',
         ]);
 
         if ($guild->allCharacters->count() > 0) {
@@ -106,9 +106,9 @@ class CharacterController extends Controller
         $createValues['profession_2']  = request()->input('profession_2');
         $createValues['rank']          = request()->input('rank');
         $createValues['rank_goal']     = request()->input('rank_goal');
-        $createValues['raid_id']       = request()->input('raid_id');
+        $createValues['raid_group_id'] = request()->input('raid_group_id');
         $createValues['public_note']   = request()->input('public_note');
-        $createValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
+        $createValues['is_alt']        = (request()->input('is_alt') == "1" ? true : false);
 
         // User is creating their own character
         if (isset($createValues['member_id']) && $createValues['member_id'] == $currentMember->id) {
@@ -127,7 +127,11 @@ class CharacterController extends Controller
             'character_id' => $character->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully created ' . $createValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
+        request()->session()->flash('status', 'Successfully created ' . $createValues['name']
+            . ', ' . (request()->input('level') ? 'level '
+            Group. requestGroup()->input('level') : '')
+            . ' ' . request()->input('race')
+            . ' ' . request()->input('class'));
 
         if (request()->input('create_more')) {
             return redirect()->route('character.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'create_more' => 1]);
@@ -163,7 +167,7 @@ class CharacterController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load(['raids', 'raids.role']);
+        $guild->load(['raidGroups', 'raidGroups.role']);
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
@@ -219,7 +223,7 @@ class CharacterController extends Controller
             return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
         }
 
-        $character = $character->load(['member', 'raid', 'raid.role', 'received', 'recipes', 'wishlist']);
+        $character = $character->load(['member', 'raidGroup', 'raidGroup.role', 'received', 'recipes', 'wishlist']);
 
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
@@ -280,13 +284,13 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load('allRaids');
+        $guild->load('allRaidGroups');
 
         $character = Character::where(['id' => $characterId, 'guild_id' => $guild->id])
             ->with([
                 'member',
-                'raid',
-                'raid.role',
+                'raidGroup',
+                'raidGroup.role',
                 'received',
                 'recipes',
             ])->firstOrFail();
@@ -379,7 +383,7 @@ class CharacterController extends Controller
                 return $query->whereRaw('LOWER(characters.name) COLLATE utf8mb4_bin = (?)', strtolower(request()->input('name')))
                     ->orWhere('id', request()->input('id'));
             },
-            'raids',
+            'raidGroups',
         ]);
 
         $character = $guild->allCharacters->where('id', request()->input('id'))->first();
@@ -396,14 +400,14 @@ class CharacterController extends Controller
             return redirect()->back();
         }
 
-        $raid = null;
+        $raidGroup = null;
 
-        if (request()->input('raid_id')) {
-            $raid = $guild->raids->where('id', request()->input('raid_id'))->first();
+        if (request()->input('raid_group_id')) {
+            $raidGroup = $guild->raidGroups->where('id', request()->input('raid_group_id'))->first();
         }
 
-        if (request()->input('raid_id') && !$raid) {
-            request()->session()->flash('status', 'Raid not found.');
+        if (request()->input('raid_group_id') && !$raidGroup) {
+            request()->session()->flash('status', 'Raid Group not found.');
             return redirect()->back();
         }
 
@@ -444,19 +448,19 @@ class CharacterController extends Controller
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
-        $updateValues['name']         = request()->input('name');
-        $updateValues['slug']         = slug(request()->input('name'));
-        $updateValues['level']        = request()->input('level');
-        $updateValues['race']         = request()->input('race');
-        $updateValues['class']        = request()->input('class');
-        $updateValues['spec']         = request()->input('spec');
-        $updateValues['profession_1'] = request()->input('profession_1');
-        $updateValues['profession_2'] = request()->input('profession_2');
-        $updateValues['rank']         = request()->input('rank');
-        $updateValues['rank_goal']    = request()->input('rank_goal');
-        $updateValues['raid_id']      = request()->input('raid_id');
-        $updateValues['public_note']  = request()->input('public_note');
-        $updateValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
+        $updateValues['name']          = request()->input('name');
+        $updateValues['slug']          = slug(request()->input('name'));
+        $updateValues['level']         = request()->input('level');
+        $updateValues['race']          = request()->input('race');
+        $updateValues['class']         = request()->input('class');
+        $updateValues['spec']          = request()->input('spec');
+        $updateValues['profession_1']  = request()->input('profession_1');
+        $updateValues['profession_2']  = request()->input('profession_2');
+        $updateValues['rank']          = request()->input('rank');
+        $updateValues['rank_goal']     = request()->input('rank_goal');
+        $updateValues['raid_group_id'] = request()->input('raid_group_id');
+        $updateValues['public_note']   = request()->input('public_note');
+        $updateValues['is_alt']        = (request()->input('is_alt') == "1" ? true : false);
 
         // Cannot make inactive if already inactive
         if (($currentMember->hasPermission('inactive.characters') || $currentMember->id == $character->member_id) &&
@@ -477,8 +481,8 @@ class CharacterController extends Controller
             $auditMessage .= ' (renamed from ' . $character->name . ' to ' . $updateValues['name'] . ')';
         }
 
-        if ($updateValues['raid_id'] != $character->raid_id) {
-            $auditMessage .= ' (changed raid to ' . ($raid ? $raid->name : 'none') . ')';
+        if ($updateValues['raid_group_id'] != $character->raid_group_id) {
+            $auditMessage .= ' (changed Raid Group to ' . ($raidGroup ? $raidGroup->name : 'none') . ')';
         }
 
         if (array_key_exists('member_id', $updateValues) && $updateValues['member_id'] != $character->member_id) {

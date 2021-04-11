@@ -79,7 +79,7 @@ class HomeController extends Controller
                         ->orderBy('guilds.name');
                 },
                 'members.characters',
-                'members.characters.raid',
+                'members.characters.raidGroup',
                 'members.guild',
             ]);
 

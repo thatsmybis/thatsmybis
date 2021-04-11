@@ -37,11 +37,11 @@
                     </label>
                 </div>
                 @if (Auth::user()->hasRole(env('PERMISSION_RAID_LEADER')))
-                    @foreach ($raids as $raid)
+                    @foreach ($raidGroups as $raidGroup)
                         <div class="form-check">
-                            <input class="form-check-input" type="radio" name="category" id="category{{ $raid->id }}" value="{{ $raid->id }}" {{ old('category') && old('category') == $raid->slug ? 'checked' : '' }}>
-                            <label class="form-check-label" for="category{{ $raid->id }}">
-                                {{ $raid->name }}
+                            <input class="form-check-input" type="radio" name="category" id="category{{ $raidGroup->id }}" value="{{ $raidGroup->id }}" {{ old('category') && old('category') == $raidGroup->slug ? 'checked' : '' }}>
+                            <label class="form-check-label" for="category{{ $raidGroup->id }}">
+                                {{ $raidGroup->name }}
                             </label>
                         </div>
                     @endforeach

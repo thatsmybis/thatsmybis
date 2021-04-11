@@ -28,7 +28,7 @@
 <script>
     var items = {!! $items ? $items->toJson() : '{}' !!};
     var guild = {!! $guild ? $guild->toJson() : '{}' !!};
-    var raids = {!! $raids ? $raids->toJson() : '{}' !!};
+    var raidGroups      = {!! $raidGroups ? $raidGroups->toJson() : '{}' !!};
     var showNotes       = {{ $showNotes ? 'true' : 'false' }};
     var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
     var showPrios       = {{ $showPrios ? 'true' : 'false' }};

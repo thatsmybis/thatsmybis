@@ -13,7 +13,7 @@ class ExportController extends Controller {
 
     const LOOT_HEADERS = [
         "type",
-        "raid_name",
+        "raid_group_name",
         "member_name",
         "character_name",
         "character_class",
@@ -284,7 +284,7 @@ class ExportController extends Controller {
         return
             "SELECT
                 ci.type        AS 'type',
-                r.name         AS 'raid_name',
+                rg.name        AS 'raid_group_name',
                 m.username     AS 'member_name',
                 c.name         AS 'character_name',
                 c.class        AS 'character_class',
@@ -304,14 +304,14 @@ class ExportController extends Controller {
                 ci.created_at  AS 'created_at',
                 ci.updated_at  AS 'updated_at'
             FROM character_items ci
-                JOIN characters c ON c.id = ci.character_id
-                JOIN members m    ON m.id = c.member_id
-                LEFT JOIN raids r ON r.id = c.raid_id
-                JOIN items i ON i.item_id = ci.item_id
+                JOIN characters c        ON c.id = ci.character_id
+                JOIN members m           ON m.id = c.member_id
+                LEFT JOIN raid_groups rg ON rg.id = c.raid_group__id
+                JOIN items i             ON i.item_id = ci.item_id
                 LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
             WHERE " . ($lootType == "all" ? "" : "ci.type = '{$lootType}' AND") . " c.guild_id = {$guild->id}
                 AND i.expansion_id = {$guild->expansion_id}
-            ORDER BY ci.type, r.name, c.name, ci.`order`;";
+            ORDER BY ci.type, rg.name, c.name, ci.`order`;";
     }
 
     /**
@@ -326,7 +326,7 @@ class ExportController extends Controller {
         return
             "SELECT
                 'item_note'    AS 'type',
-                null           AS 'raid_name',
+                null           AS 'raid_group_name',
                 null           AS 'member_name',
                 null           AS 'character_name',
                 null           AS 'character_class',
@@ -349,7 +349,7 @@ class ExportController extends Controller {
                 JOIN item_item_sources iis ON iis.item_id = i.item_id
                 JOIN item_sources          ON item_sources.id = iis.item_source_id
                 JOIN instances             ON instances.id = item_sources.instance_id
-                JOIN guild_items gi   ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
+                JOIN guild_items gi        ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
             WHERE i.expansion_id = {$guild->expansion_id}
             ORDER BY instances.`order` DESC, i.name ASC;";
     }

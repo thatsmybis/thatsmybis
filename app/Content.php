@@ -20,7 +20,7 @@ class Content extends Model
         'category',
         'content',
         'member_id',
-        'raid_id',
+        'raid_group_id',
         'guild_id',
         'last_edited_by',
         'removed_at',

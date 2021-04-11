@@ -20,8 +20,8 @@
                     <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $item->pivot->added_by, 'usernameSlug' => slug($item->added_by_username)]) }}" class="text-muted" target="_blank">
                         {{ $item->added_by_username }}
                     </a>
-                    @if ((!isset($hideRaid) || !$hideRaid) && $item->raid_name)
-                        / {{ $item->raid_name }}
+                    @if ((!isset($hideRaidGroup) || !$hideRaidGroup) && $item->raid_group_name)
+                        / {{ $item->raid_group_name }}
                     @endif
                 </li>
             </ul>
