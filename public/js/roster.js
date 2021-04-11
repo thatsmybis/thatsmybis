@@ -349,7 +349,7 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
     let initialLimit = 4;
 
     let lastInstanceId = null;
-    let lastRaidId = null;
+    let lastRaidGroupId = null;
     $.each(data, function (index, item) {
 
         // Skip prio item if raid group is disabled or not found in the guild

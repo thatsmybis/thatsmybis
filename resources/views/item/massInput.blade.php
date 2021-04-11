@@ -171,7 +171,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                             <select name="raid_group_id" class="form-control dark">
                                 <option value="">—</option>
                                 @foreach ($guild->raidGroups as $raidGroup)
-                                    <option value="{{ $raid->id }}" style="color:{{ $raidGroup->getColor() }};">
+                                    <option value="{{ $raidGroup->id }}" style="color:{{ $raidGroup->getColor() }};">
                                         {{ $raidGroup->name }}
                                     </option>
                                 @endforeach

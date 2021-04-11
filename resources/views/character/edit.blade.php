@@ -170,9 +170,9 @@
                                     </option>
 
                                     @foreach ($guild->raidGroups as $raidGroup)
-                                        <option value="{{ $raid->id }}"
+                                        <option value="{{ $raidGroup->id }}"
                                             style="color:{{ $raidGroup->getColor() }};"
-                                            {{ old('raid_group_id') ? (old('raid_group_id') == $raidGroup->id ? 'selected' : '') : ($character && $character->raidGroup == $raidGroup->id ? 'selected' : '') }}>
+                                            {{ old('raid_group_id') ? (old('raid_group_id') == $raidGroup->id ? 'selected' : '') : ($character && $character->raidGroup && $character->raidGroup->id == $raidGroup->id ? 'selected' : '') }}>
                                             {{ $raidGroup->name }}
                                         </option>
                                     @endforeach

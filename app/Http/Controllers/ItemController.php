@@ -51,7 +51,7 @@ class ItemController extends Controller
             'characters.class',
             'characters.is_alt',
             'members.username',
-            'raid_groups.name         AS raid_group_name',
+            'raid_groups.name          AS raid_group_name',
             'raid_group_roles.color    AS raid_group_color',
             'added_by_members.username AS added_by_username',
         ];

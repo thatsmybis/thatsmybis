@@ -30,7 +30,7 @@ class AuditLogController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['characters', 'members', 'raid_groups']);
+        $guild->load(['characters', 'members', 'raidGroups']);
 
         $resources = [];
 

@@ -70,7 +70,7 @@ class RaidGroupController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load(['raidGroups', 'roles']);
+        $guild->load(['allRaidGroups', 'roles']);
 
         $validationRules = [
             'name'    => 'string|max:255',
@@ -140,7 +140,7 @@ class RaidGroupController extends Controller
         }
 
         $validationRules = [
-            'id' => 'required|integer|exists:raidGroups,id'
+            'id' => 'required|integer|exists:raid_groups,id'
         ];
         $validationMessages = [];
         $this->validate(request(), $validationRules, $validationMessages);

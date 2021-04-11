@@ -16,7 +16,7 @@
                     <div class="text-3 font-weight-medium ml-4 mb-3">
                         Choose a raid group
                     </div>
-                    @if ($guild->raid_groups->count() > 0)
+                    @if ($guild->raidGroups->count() > 0)
                         <ol class="no-bullet no-indent striped">
                             @foreach ($guild->raidGroups as $raidGroup)
                                 <li class="p-3 mb-3 rounded">
