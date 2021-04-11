@@ -2,13 +2,10 @@
 
 namespace App;
 
-use App\{
-    Raid,
-    Role,
-};
+use App\{Role};
 use Illuminate\Database\Eloquent\Model;
 
-class Raid extends Model
+class RaidGroup extends Model
 {
     /**
      * The attributes that are mass assignable.
@@ -32,21 +29,21 @@ class Raid extends Model
     ];
 
     public function priodCharacters() {
-        return $this->belongsToMany(Character::class, 'character_items', 'raid_id', 'character_id')
+        return $this->belongsToMany(Character::class, 'character_items', 'raid_group_id', 'character_id')
             ->where(['character_items.type' => self::TYPE_PRIO])
-            ->select(['characters.*', 'raids.name AS raid_name', 'raid_roles.color AS raid_color', 'added_by_members.username AS added_by_username'])
+            ->select(['characters.*', 'raid_groups.name AS raid_group_name', 'raid_group_roles.color AS raid_group_color', 'added_by_members.username AS added_by_username'])
             ->whereNull('characters.inactive_at')
-            ->leftJoin('raids', function ($join) {
-                $join->on('raids.id', 'character_items.raid_id');
+            ->leftJoin('raid_groups', function ($join) {
+                $join->on('raid_groups.id', 'character_items.raid_group_id');
             })
-            ->leftJoin('roles AS raid_roles', function ($join) {
-                $join->on('raid_roles.id', 'raids.role_id');
+            ->leftJoin('roles AS raid_group_roles', function ($join) {
+                $join->on('raid_group_roles.id', 'raid_groups.role_id');
             })
             ->leftJoin('members AS added_by_members', function ($join) {
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
             ->withTimeStamps()
-            ->withPivot(['added_by', 'raid_id', 'type'])
+            ->withPivot(['added_by', 'raid_group_id', 'type'])
             ->orderBy('characters.name');
     }
 

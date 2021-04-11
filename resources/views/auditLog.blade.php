@@ -60,9 +60,9 @@
                                         @include('partials/item', ['item' => $resource, 'wowheadLink' => false])
                                     @elseif($resource instanceof \App\Member)
                                         @include('member/partials/header', ['member' => $resource, 'discordUsername' => $resource->user->discord_username, 'headerSize' => 1, 'showEdit' => false, 'titlePrefix' => null])
-                                    @elseif($resource instanceof \App\Raid)
+                                    @elseif($resource instanceof \App\RaidGroup)
                                         <div class="mt-1 mb-2 font-weight-bold">
-                                            @include('partials/raid', ['raid' => $resource, 'raidColor' => $resource->getColor()])
+                                            @include('partials/raidGroup', ['raidGroup' => $resource, 'raidGroupColor' => $resource->getColor()])
                                         </div>
                                     @endif
                                 </div>
@@ -117,19 +117,19 @@
                 </div>
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
-                        <label for="raid_id" class="font-weight-bold">
+                        <label for="raid_group_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-helmet-battle text-muted"></span>
-                            Raid
+                            Raid Group
                         </label>
-                        <select name="raid_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
+                        <select name="raid_group_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
                                 —
                             </option>
-                            @foreach ($guild->raids as $raid)
-                                <option value="{{ $raid->id }}"
-                                    data-tokens="{{ $raid->id }}"
-                                    {{ Request::get('raid_id') && Request::get('raid_id') == $raid->id ? 'selected' : ''}}>
-                                    {{ $raid->name }}
+                            @foreach ($guild->raidGroups as $raidGroup)
+                                <option value="{{ $raidGroup->id }}"
+                                    data-tokens="{{ $raidGroup->id }}"
+                                    {{ Request::get('raid_group_id') && Request::get('raid_group_id') == $raidGroup->id ? 'selected' : ''}}>
+                                    {{ $raidGroup->name }}
                                 </option>
                             @endforeach
 
@@ -242,10 +242,10 @@
                                                     {{ $log->item_source_name }}
                                                 </li>
                                             @endif
-                                            @if ($log->raid_id)
+                                            @if ($log->raid_group_id)
                                                 <li class="list-inline-item text-muted">
-                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $log->raid_id]) }}" class="text-muted">
-                                                        {{ $log->raid_name }}
+                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_group_id' => $log->raid_group_id]) }}" class="text-muted">
+                                                        {{ $log->raid_group_name }}
                                                     </a>
                                                 </li>
                                             @endif

@@ -14,16 +14,16 @@
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     <div class="text-3 font-weight-medium ml-4 mb-3">
-                        Choose a raid
+                        Choose a raid group
                     </div>
-                    @if ($guild->raids->count() > 0)
+                    @if ($guild->raid_groups->count() > 0)
                         <ol class="no-bullet no-indent striped">
-                            @foreach ($guild->raids as $raid)
+                            @foreach ($guild->raidGroups as $raidGroup)
                                 <li class="p-3 mb-3 rounded">
-                                    <a href="{{ route('guild.prios.massInput', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'raidId' => $raid->id]) }}" class="tag text-4">
-                                        <span class="role-circle-large" style="{{ $raid->role ? 'background-color:' . $raid->role->getColor() : '' }}" title="{{ $raid->role ? $raid->role->getColor() : ''}}"></span>
-                                        <span class="font-weight-bold text-danger">{{ $raid->disabled_at ? 'DISABLED' : '' }}</span>
-                                        <span title="{{ $raid->slug }}">{{ $raid->name }}</span>
+                                    <a href="{{ route('guild.prios.massInput', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'raidGroupId' => $raidGroup->id]) }}" class="tag text-4">
+                                        <span class="role-circle-large" style="{{ $raidGroup->role ? 'background-color:' . $raidGroup->role->getColor() : '' }}" title="{{ $raidGroup->role ? $raidGroup->role->getColor() : ''}}"></span>
+                                        <span class="font-weight-bold text-danger">{{ $raidGroup->disabled_at ? 'DISABLED' : '' }}</span>
+                                        <span title="{{ $raidGroup->slug }}">{{ $raidGroup->name }}</span>
                                         <span class="fas fa-fw fa-arrow-alt-right text-success"></span>
                                     </a>
                                 </li>
@@ -32,8 +32,8 @@
                     @else
                     <p class="text-4">
                         No raid groups yet
-                        <a href="{{ route('guild.raid.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
-                            <span class="fas fa-fw fa-plus"></span> Create New Raid
+                        <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
+                            <span class="fas fa-fw fa-plus"></span> Create New Raid Group
                         </a>
                     </p>
                     @endif

@@ -1,14 +1,14 @@
 var table = null;
 
-var colName     = 0;
-var colLoot     = 1;
-var colWishlist = 2;
-var colPrios    = 3;
-var colRecipes  = 4;
-var colRoles    = 5;
-var colNotes    = 6;
-var colClass    = 7;
-var colRaid     = 8;
+var colName      = 0;
+var colLoot      = 1;
+var colWishlist  = 2;
+var colPrios     = 3;
+var colRecipes   = 4;
+var colRoles     = 5;
+var colNotes     = 6;
+var colClass     = 7;
+var colRaidGroup = 8;
 
 var allItemsVisible = false;
 
@@ -102,15 +102,15 @@ function createTable() {
                                 </div>
                             </div>
                         </li>
-                        ${ row.is_alt || row.raid_name || row.class ? `
+                        ${ row.is_alt || row.raid_group_name || row.class ? `
                             <li>
                                 ${ row.is_alt ? `
                                     <span class="text-legendary font-weight-bold">Alt</span>&nbsp;
                                 ` : '' }
-                                ${ row.raid_name ? `
+                                ${ row.raid_group_name ? `
                                     <span class="font-weight-bold">
-                                        <span class="role-circle" style="background-color:${ row.raid_color ? getColorFromDec(parseInt(row.raid_color)) : '' }"></span>
-                                        ${ row.raid_name ? row.raid_name : '' }
+                                        <span class="role-circle" style="background-color:${ row.raid_group_color ? getColorFromDec(parseInt(row.raid_group_color)) : '' }"></span>
+                                        ${ row.raid_group_name ? row.raid_group_name : '' }
                                     </span>
                                 ` : ``}
                                 ${ row.class ? row.class : '' }
@@ -236,10 +236,10 @@ function createTable() {
                 "visible" : false,
             },
             {
-                "title"  : "Raid",
-                "data"   : "raid",
+                "title"  : "Raid Group",
+                "data"   : "raid_group",
                 "render" : function (data, type, row) {
-                    return (row.raid_name ? row.raid_name : null);
+                    return (row.raid_group_name ? row.raid_group_name : null);
                 },
                 "visible" : false,
             },
@@ -248,7 +248,7 @@ function createTable() {
         "paging" : false,
         "fixedHeader" : true, // Header row sticks to top of window when scrolling down
         initComplete: function () {
-            let sortColumns = [colClass, colRaid];
+            let sortColumns = [colClass, colRaidGroup];
             this.api().columns().every(function (index) {
                 var column = this;
 
@@ -260,8 +260,8 @@ function createTable() {
                     select2 = null;
                 }
 
-                if (index == colRaid) {
-                    select1 = $("#raid_filter");
+                if (index == colRaidGroup) {
+                    select1 = $("#raid_group_filter");
                     select2 = null;
                 }
 
@@ -352,9 +352,9 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
     let lastRaidId = null;
     $.each(data, function (index, item) {
 
-        // Skip prio item if raid is disabled or not found in the guild
-        // if (type == 'prio' && item.pivot.raid_id && guild.raids.filter(raid => (raid.id == item.pivot.raid_id)).length < 1) {
-        //     console.log(item.pivot.raid_id + ' not found');
+        // Skip prio item if raid group is disabled or not found in the guild
+        // if (type == 'prio' && item.pivot.raid_group_id && guild.raidGroups.filter(raidGroup => (raidGroup.id == item.pivot.raid_group_id)).length < 1) {
+        //     console.log(item.pivot.raid_group_id + ' not found');
         //     return false;
         // }
 
@@ -366,14 +366,14 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
             }
         }
 
-        if (type == 'prio' && item.pivot.raid_id && item.pivot.raid_id != lastRaidId) {
-            lastRaidId = item.pivot.raid_id;
+        if (type == 'prio' && item.pivot.raid_group_id && item.pivot.raid_group_id != lastRaidGroupId) {
+            lastRaidGroupId = item.pivot.raid_group_id;
             items += `
-                <li data-raid-id="" class="${ clipItem ? 'js-clipped-item' : '' } js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small"
+                <li data-raid-group-id="" class="${ clipItem ? 'js-clipped-item' : '' } js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small"
                     style="${ clipItem ? 'display:none;' : '' }"
                     data-type="${ type }"
                     data-id="${ characterId }">
-                    ${ raids.length > 0 ? raids.find(val => val.id === item.pivot.raid_id).name : '' }
+                    ${ raidGroups.length > 0 ? raidGroups.find(val => val.id === item.pivot.raid_group_id).name : '' }
                 </li>
             `;
         }

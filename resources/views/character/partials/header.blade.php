@@ -67,7 +67,7 @@
             </ul>
         @endif
     </li>
-    @if ($character->raid_id || $character->class || $character->is_alt)
+    @if ($character->raid_group_id || $character->class || $character->is_alt)
         <li>
             <ul class="list-inline">
                 @if ($character->is_alt)
@@ -78,22 +78,22 @@
                     </li>
                 @endif
                 {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
-                @if ($character->relationLoaded('raid') && $character->raid)
+                @if ($character->relationLoaded('raid') && $character->raidGroup)
                     @php
                         $raidColor = null;
-                        if ($character->raid->relationLoaded('role')) {
-                            $raidColor = $character->raid->getColor();
+                        if ($character->raidGroup->relationLoaded('role')) {
+                            $raidColor = $character->raidGroup->getColor();
                         }
                     @endphp
                     <li class="list-inline-item font-weight-bold">
                         <span class="tag d-inline" style="border-color:{{ $raidColor }};"><span class="role-circle" style="background-color:{{ $raidColor }}"></span>
-                            {{ $character->raid->name }}
+                            {{ $character->raidGroup->name }}
                         </span>
                     </li>
-                @elseif ($character->raid_name)
+                @elseif ($character->raid_group_name)
                     <li class="list-inline-item font-weight-bold">
-                        <span class="tag d-inline" style="border-color:{{ $character->raid_color ? getHexColorFromDec($character->raid_color) : '' }};"><span class="role-circle" style="background-color:{{ $character->raid_color ? getHexColorFromDec($character->raid_color) : '' }}"></span>
-                            {{ $character->raid_name }}
+                        <span class="tag d-inline" style="border-color:{{ $character->raid_group_color ? getHexColorFromDec($character->raid_group_color) : '' }};"><span class="role-circle" style="background-color:{{ $character->raid_group_color ? getHexColorFromDec($character->raid_group_color) : '' }}"></span>
+                            {{ $character->raid_group_name }}
                         </span>
                     </li>
                 @endif

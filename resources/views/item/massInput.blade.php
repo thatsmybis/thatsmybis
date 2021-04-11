@@ -23,7 +23,7 @@
                     <small>
                         <strong>Hint:</strong> Keep the roster and/or item pages open in another window to review who deserves what
                         <br>
-                        <strong>Note:</strong> If a character has the same item prio'd in multiple raids, we'll only remove/flag the first one we find.
+                        <strong>Note:</strong> If a character has the same item prio'd in multiple raid groups, we'll only remove/flag the first one we find.
                     </small>
                 </div>
             </div>
@@ -162,17 +162,17 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                             </div>
                         @endif
 
-                        <!-- Raid -->
+                        <!-- Raid Group -->
                         <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
-                            <label for="raid_id font-weight-light">
+                            <label for="raid_group_id font-weight-light">
                                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
-                                Raid
+                                Raid Group
                             </label>
-                            <select name="raid_id" class="form-control dark">
+                            <select name="raid_group_id" class="form-control dark">
                                 <option value="">—</option>
-                                @foreach ($guild->raids as $raid)
-                                    <option value="{{ $raid->id }}" style="color:{{ $raid->getColor() }};">
-                                        {{ $raid->name }}
+                                @foreach ($guild->raidGroups as $raidGroup)
+                                    <option value="{{ $raid->id }}" style="color:{{ $raidGroup->getColor() }};">
+                                        {{ $raidGroup->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -180,14 +180,14 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
 
                         <!-- Character select filter -->
                         <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
-                            <label for="raid_filter font-weight-light">
+                            <label for="raid_group_filter font-weight-light">
                                 <span class="text-muted">Character dropdown filter</span>
                             </label>
-                            <select id="raid_filter" class="form-control dark">
+                            <select id="raid_group_filter" class="form-control dark">
                                 <option value="">—</option>
-                                @foreach ($guild->raids as $raid)
-                                    <option value="{{ $raid->id }}" style="color:{{ $raid->getColor() }};">
-                                        {{ $raid->name }}
+                                @foreach ($guild->raidGroups as $raidGroup)
+                                    <option value="{{ $raidGroup->id }}" style="color:{{ $raidGroup->getColor() }};">
+                                        {{ $raidGroup->name }}
                                     </option>
                                 @endforeach
                             </select>
@@ -436,8 +436,8 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                             <li class="mb-2">
                                 <button class="btn btn-success" onclick="return showSubmitWarning();"><span class="fas fa-fw fa-save"></span> Submit</button>
                             </li>
-                            <li id="raidWarning" style="display:none;">
-                                <span class="text-danger">No raid selected</span>
+                            <li id="raidGroupWarning" style="display:none;">
+                                <span class="text-danger">No raid group selected</span>
                             </li>
                             <li>
                                 <small>WARNING: This form expires if you don't submit it within {{ env('SESSION_LIFETIME') / 60 }} hours (security reasons)</small>
@@ -459,7 +459,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
     function showSubmitWarning() {
         let message = "Submit?";
 
-        if (!$("[name=raid_id]").val()) {
+        if (!$("[name=raid_group_id]").val()) {
             message += " Don't forget to set a raid group!";
         }
 

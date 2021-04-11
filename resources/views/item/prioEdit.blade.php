@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Prios for " . $raid-> name . " " . $item-> name . " - " . config('app.name'))
+@section('title', "Prios for " . $raidGroup-> name . " " . $item-> name . " - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -10,10 +10,10 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium font-blizz">
                         <span class="fas fa-fw fa-sack text-muted"></span>
-                        {{ $raid->name }} Prios
+                        {{ $raidGroup->name }} Prios
                     </h1>
                     <small>
-                        <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their prios. If they have the same item prio'd in multiple raids, we'll remove only the first one we find.
+                        <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their prios. If they have the same item prio'd in multiple raid groups, we'll remove only the first one we find.
                     </small>
                 </div>
             </div>
@@ -31,7 +31,7 @@
             <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.item.prios.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
-                <input hidden name="raid_id" value="{{ $raid->id }}">
+                <input hidden name="raid_group_id" value="{{ $raidGroup->id }}">
                 <input hidden name="item_id" value="{{ $item->item_id }}">
                 <input hidden name="items[{{ $item->item_id }}][item_id]" value="{{ $item->item_id }}">
 
@@ -79,7 +79,7 @@
                                                 <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                                     class="tag {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
                                                     <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
-                                                    <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_color) }}"></span>-->
+                                                    <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_group_color) }}"></span>-->
                                                     <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
                                                     <span class="js-watchable-timestamp smaller text-muted"
                                                         data-timestamp="{{ $character->pivot->created_at }}"
@@ -126,7 +126,7 @@
                                 @foreach ($guild->characters as $character)
                                     <option value="{{ $character->id }}"
                                         data-tokens="{{ $character->id }}"
-                                        data-raid-id="{{ $character->raid_id }}"
+                                        data-raid-group-id="{{ $character->raid_group_id }}"
                                         class="js-character-option text-{{ strtolower($character->class) }}-important">
                                         {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }}
                                     </option>

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Character, Content, Guild, Member, Raid, Role, User};
+use App\{AuditLog, Character, Content, Guild, Member, RaidGroup, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -92,8 +92,8 @@ class MemberController extends Controller
         $member = Member::where(['guild_id' => $guild->id, 'id' => $memberId])
             ->with([
                 'characters',
-                'characters.raid',
-                'characters.raid.role',
+                'characters.raidGroup',
+                'characters.raidGroup.role',
                 'characters.recipes',
                 'roles',
             ])
@@ -162,7 +162,13 @@ class MemberController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['allMembers', 'allMembers.characters', 'allMembers.roles', 'raids', 'raids.role']);
+        $guild->load([
+            'allMembers',
+            'allMembers.characters',
+            'allMembers.roles',
+            'raidGroups',
+            'raidGroups.role',
+        ]);
 
         $unassignedCharacters = Character::where([
                 ['guild_id', $guild->id],

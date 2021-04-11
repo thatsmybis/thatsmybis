@@ -1,10 +1,10 @@
 @php
-    $raid = ($character->raid_id ? $guild->raids->where('id', $character->raid_id)->first() : null);
+    $raidGroup = ($character->raid_group_id ? $guild->raidGroups->where('id', $character->raid_group_id)->first() : null);
 @endphp
 <li class="list-inline-item text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}">
     <div class="dropdown">
         <a class="dropdown-toggle text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}" id="character{{ $character->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="role-circle" style="background-color:{{ $raid ? $raid->getColor() : null }}"></span>
+            <span class="role-circle" style="background-color:{{ $raidGroup ? $raidGroup->getColor() : null }}"></span>
             {{ $character->name }}
         </a>
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
@@ -21,10 +21,10 @@
                 Loot
             </a>
             <span class="dropdown-item disabled">
-                @if ($raid)
-                    @include('partials/raid', ['raidColor' => $raid->getColor()])
+                @if ($raidGroup)
+                    @include('partials/raidGroup', ['raidColor' => $raidGroup->getColor()])
                 @else
-                    no raid
+                    no raid groups
                 @endif
             </span>
             @if ($character->inactive_at)

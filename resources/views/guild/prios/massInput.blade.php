@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Prios for " . $raid->name . " " . $instance->name . " - " . config('app.name'))
+@section('title', "Prios for " . $raidGroup->name . " " . $instance->name . " - " . config('app.name'))
 
 @php
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
@@ -16,7 +16,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium font-blizz">
                         <span class="fas fa-fw fa-dungeon text-muted"></span>
-                        {{ $raid->name }} Prios for {{ $instance->name }}
+                        {{ $raidGroup->name }} Prios for {{ $instance->name }}
                     </h1>
                     <small>
                         <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their prios. If they have the same item prio'd in multiple raid groups, we'll only remove the first one we find.
@@ -56,7 +56,7 @@
             <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route('guild.prios.massInput.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
                 {{ csrf_field() }}
 
-                <input hidden name="raid_id" value="{{ $raid->id }}">
+                <input hidden name="raid_group_id" value="{{ $raidGroup->id }}">
                 <input hidden name="instance_id" value="{{ $instance->id }}">
 
                 <div class="row">
@@ -124,7 +124,7 @@
                                                             <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                                                 class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
                                                                 <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
-                                                                <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_color) }}"></span>-->
+                                                                <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_group_color) }}"></span>-->
                                                                 <span class="text-muted small font-weight-bold">{{ $character->pivot->is_offspec ? 'OS' : '' }}</span>
                                                                 <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
                                                                 <span class="js-watchable-timestamp smaller text-muted"

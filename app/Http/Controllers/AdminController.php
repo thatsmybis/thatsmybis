@@ -40,13 +40,13 @@ class AdminController extends Controller
                 // DB::raw("(SELECT count(`id`) FROM `batches` WHERE `batches`.`guild_id` = `guilds`.`id`)       AS `batch_count`"),
                 // DB::raw("(SELECT count(`id`) FROM `characters` WHERE `characters`.`guild_id` = `guilds`.`id`) AS `character_count`"),
                 // DB::raw("(SELECT count(`id`) FROM `members` WHERE `members`.`guild_id` = `guilds`.`id`)       AS `member_count`"),
-                // DB::raw("(SELECT count(`id`) FROM `raids` WHERE `raids`.`guild_id` = `guilds`.`id`)           AS `raid_count`"),
+                // DB::raw("(SELECT count(`id`) FROM `raid_groups` WHERE `raid_groups`.`guild_id` = `guilds`.`id`) AS `raid_group_count`"),
                 // DB::raw('COUNT(DISTINCT `batches`.`id`)    AS `batch_count`'),
                 // DB::raw('COUNT(DISTINCT `characters`.`id`) AS `char_count`'),
                 DB::raw('COUNT(DISTINCT `members`.`id`)    AS `member_count`'),
-                // DB::raw('COUNT(DISTINCT `raids`.`id`)      AS `raid_count`'),
+                // DB::raw('COUNT(DISTINCT `raid_groups`.`id`)      AS `raid_group_count`'),
                 // Joins running too slow; need to optimize before using
-                // DB::raw("(SELECT count(`id`) FROM `character_items` AS `wishlist_items` WHERE `raids`.`guild_id` = `guilds`.`id`)           AS `raid_count`"),
+                // DB::raw("(SELECT count(`id`) FROM `character_items` AS `wishlist_items` WHERE `raid_groups`.`guild_id` = `guilds`.`id`) AS `raid_group_count`"),
                 // DB::raw('COUNT(DISTINCT `wishlist_items`.`id`) AS `wishlist_item_count`'),
                 // DB::raw('COUNT(DISTINCT `prio_items`.`id`)     AS `prio_item_count`'),
                 // DB::raw('COUNT(DISTINCT `received_items`.`id`) AS `received_item_count`'),
@@ -73,7 +73,7 @@ class AdminController extends Controller
             ->leftJoin('users AS owner',          'owner.id',                     '=', 'guilds.user_id')
             ->leftJoin('members',                 'members.guild_id',             '=', 'guilds.id')
             ->leftJoin('members AS owner_member', 'owner_member.user_id',         '=', 'owner.id')
-            ->leftJoin('raids',                   'raids.guild_id',               '=', 'guilds.id')
+            ->leftJoin('raid_groups',             'raid_groups.guild_id',         '=', 'guilds.id')
             ->orderBy('guilds.name', 'asc')
             ->groupBy('guilds.id')
             ->paginate(self::GUILDS_PER_PAGE);

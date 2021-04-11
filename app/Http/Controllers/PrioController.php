@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Character, Guild, Instance, Item, Raid};
+use App\{AuditLog, Character, Guild, Instance, Item, RaidGroup};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -28,7 +28,7 @@ class PrioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function chooseRaid($guildId, $guildSlug, $instanceSlug)
+    public function chooseRaidGroup($guildId, $guildSlug, $instanceSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -39,13 +39,13 @@ class PrioController extends Controller
         }
 
         $guild->load([
-            'raids',
-            'raids.role',
+            'raidGroups',
+            'raidGroups.role',
         ]);
 
         $instance = Instance::where('slug', $instanceSlug)->firstOrFail();
 
-        return view('guild.prios.chooseRaid', [
+        return view('guild.prios.chooseRaidGroup', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'instance'      => $instance,
@@ -57,7 +57,7 @@ class PrioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function massInput($guildId, $guildSlug, $instanceSlug, $raidId)
+    public function massInput($guildId, $guildSlug, $instanceSlug, $raidGroupId)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -71,9 +71,9 @@ class PrioController extends Controller
             'characters',
         ]);
 
-        $raid = Raid::where([
+        $raidGroup = RaidGroup::where([
             'guild_id' => $guild->id,
-            'id'       => $raidId,
+            'id'       => $raidGroupId,
         ])->firstOrFail();
 
         $instance = Instance::where('slug', $instanceSlug)
@@ -109,8 +109,8 @@ class PrioController extends Controller
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
             ->with([
-                'priodCharacters' => function ($query) use ($raid) {
-                    return $query->where('character_items.raid_id', $raid->id);
+                'priodCharacters' => function ($query) use ($raidGroup) {
+                    return $query->where('character_items.raid_group_id', $raidGroup->id);
                 },
                 'receivedAndRecipeCharacters' => function ($query) use($guild) {
                     return $query
@@ -131,7 +131,7 @@ class PrioController extends Controller
         return view('guild.prios.massInput', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
-            'raid'          => $raid,
+            'raidGroup'     => $raidGroup,
             'instance'      => $instance,
             'items'         => $items,
             'maxPrios'      => self::MAX_PRIOS,
@@ -139,11 +139,11 @@ class PrioController extends Controller
     }
 
     /**
-     * Show an item's character priorities for a specific raid for editing
+     * Show an item's character priorities for a specific raid group for editing
      *
      * @return \Illuminate\Http\Response
      */
-    public function singleInput($guildId, $guildSlug, $itemId, $raidId) {
+    public function singleInput($guildId, $guildSlug, $itemId, $raidGroupId) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -154,7 +154,7 @@ class PrioController extends Controller
 
         $guild->load('characters');
 
-        $raid = Raid::where(['guild_id' => $guild->id, 'id' => $raidId])->firstOrFail();
+        $raidGroup = RaidGroup::where(['guild_id' => $guild->id, 'id' => $raidGroupId])->firstOrFail();
 
         $item = Item::select([
                 'items.item_id',
@@ -181,8 +181,8 @@ class PrioController extends Controller
             ])
             ->groupBy('items.item_id')
             ->with([
-                'priodCharacters' => function ($query) use ($raid) {
-                    return $query->where('character_items.raid_id', $raid->id);
+                'priodCharacters' => function ($query) use ($raidGroup) {
+                    return $query->where('character_items.raid_group_Groupid', $raidGroup->id);
                 },
                 'receivedAndRecipeCharacters' => function ($query) use($guild) {
                     return $query
@@ -205,7 +205,7 @@ class PrioController extends Controller
             'guild'         => $guild,
             'item'          => $item,
             'maxPrios'      => \App\Http\Controllers\PrioController::MAX_PRIOS,
-            'raid'          => $raid,
+            'raidGroup'     => $raidGroup,
         ]);
     }
 
@@ -226,14 +226,14 @@ class PrioController extends Controller
                 Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
             ],
             'items.*.characters.id' => 'nullable|integer|exists:characters,id',
-            'raid_id'               => 'required|exists:raids,id',
+            'raid_group_id'         => 'required|exists:raid_groups,id',
         ];
 
         $this->validate(request(), $validationRules);
 
         $guild->load('characters');
 
-        $raid = Raid::where(['guild_id' => $guild->id, 'id' => request()->input('raid_id')])->firstOrFail();
+        $raidGroup = RaidGroup::where(['guild_id' => $guild->id, 'id' => request()->input('raid_group_id')])->firstOrFail();
 
         $instance = Instance::findOrFail(request()->input('instance_id'));
 
@@ -250,16 +250,16 @@ class PrioController extends Controller
                 ['item_sources.instance_id', $instance->id],
             ])
             ->with([
-                'priodCharacters' => function ($query) use ($raid) {
-                    return $query->where('character_items.raid_id', $raid->id);
+                'priodCharacters' => function ($query) use ($raidGroup) {
+                    return $query->where('character_items.raid_group_id', $raidGroup->id);
                 },
             ])
             ->groupBy('items.item_id')
             ->get();
 
-        $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
+        $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raidGroup);
 
-        request()->session()->flash('status', 'Successfully updated prios for ' . $modifiedCount . ' items in ' . $raid->name . '.');
+        request()->session()->flash('status', 'Successfully updated prios for ' . $modifiedCount . ' items in ' . $raidGroup->name . '.');
         return redirect()->route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]);
     }
 
@@ -283,7 +283,7 @@ class PrioController extends Controller
                 'integer',
                 Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
             ],
-            'raid_id' => 'required|exists:raids,id',
+            'raid_group_id' => 'required|exists:raid_groups,id',
             'items.*.characters.id' => 'nullable|integer|exists:characters,id',
         ];
 
@@ -291,7 +291,7 @@ class PrioController extends Controller
 
         $guild->load('characters');
 
-        $raid = Raid::where(['guild_id' => $guild->id, 'id' => request()->input('raid_id')])->firstOrFail();
+        $raidGroup = RaidGroup::where(['guild_id' => $guild->id, 'id' => request()->input('raid_group_id')])->firstOrFail();
 
         $itemsWithExistingPrios = Item::
             where([
@@ -299,15 +299,15 @@ class PrioController extends Controller
                 ['items.item_id',      request()->input('item_id')],
             ])
             ->with([
-                'priodCharacters' => function ($query) use ($raid) {
-                    return $query->where('character_items.raid_id', $raid->id);
+                'priodCharacters' => function ($query) use ($raidGroup) {
+                    return $query->where('character_items.raid_group_id', $raidGroup->id);
                 },
             ])
             ->get();
 
-        $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raid);
+        $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raidGroup);
 
-        request()->session()->flash('status', ($modifiedCount ? 'Successfully updated prios for ' : 'No changes made to prios for ') . $itemsWithExistingPrios->first()->name . ' in ' . $raid->name . '.');
+        request()->session()->flash('status', ($modifiedCount ? 'Successfully updated prios for ' : 'No changes made to prios for ') . $itemsWithExistingPrios->first()->name . ' in ' . $raidGroup->name . '.');
         return redirect()->route('guild.item.show', [
             'guildId'   => $guild->id,
             'guildSlug' => $guild->slug,
@@ -326,11 +326,11 @@ class PrioController extends Controller
      * @param Array          $inputItems    The items provided from the HTML form input.
      * @param App\Member     $currentMember The member syncing these items.
      * @param App\Characters $characters    The characters we're allowed to attach to.
-     * @param App\Raid       $raid          The raid to associate these prios with.
+     * @param App\RaidGroup  $raidGroup     The raid group to associate these prios with.
      *
      * @return int The number of items that had their prios modified.
      */
-    private static function syncPrios($itemsWithExistingPrios, $inputItems, $currentMember, $characters, $raid) {
+    private static function syncPrios($itemsWithExistingPrios, $inputItems, $currentMember, $characters, $raidGroup) {
         $characters = $characters->keyBy('id');
 
         $toAdd    = [];
@@ -399,14 +399,14 @@ class PrioController extends Controller
 
                         $isModified = true;
                         $audits[] = [
-                            'description'  => $currentMember->username . ' removed a prio from a character (rank ' . $existingPrio->pivot->order . ')',
-                            'type'         => Item::TYPE_PRIO,
-                            'member_id'    => $currentMember->id,
-                            'guild_id'     => $currentMember->guild_id,
-                            'character_id' => $existingPrio->id,
-                            'item_id'      => $existingItem->item_id,
-                            'raid_id'      => $raid->id,
-                            'created_at'   => $now,
+                            'description'   => $currentMember->username . ' removed a prio from a character (rank ' . $existingPrio->pivot->order . ')',
+                            'type'          => Item::TYPE_PRIO,
+                            'member_id'     => $currentMember->id,
+                            'guild_id'      => $currentMember->guild_id,
+                            'character_id'  => $existingPrio->id,
+                            'item_id'       => $existingItem->item_id,
+                            'raid_group_id' => $raidGroup->id,
+                            'created_at'    => $now,
                         ];
                     }
                 }
@@ -421,26 +421,26 @@ class PrioController extends Controller
 
                     if (!isset($inputPrio['resolved'])) {
                         $toAdd[] = [
-                            'item_id'      => $inputItem['item_id'],
-                            'character_id' => $inputPrio['character_id'],
-                            'added_by'     => $currentMember->id,
-                            'raid_id'      => $raid->id,
-                            'type'         => Item::TYPE_PRIO,
-                            'order'        => $i,
-                            'created_at'   => $now,
-                            'updated_at'   => $now,
+                            'item_id'       => $inputItem['item_id'],
+                            'character_id'  => $inputPrio['character_id'],
+                            'added_by'      => $currentMember->id,
+                            'raid_group_id' => $raidGroup->id,
+                            'type'          => Item::TYPE_PRIO,
+                            'order'         => $i,
+                            'created_at'    => $now,
+                            'updated_at'    => $now,
                         ];
 
                         $isModified = true;
                         $audits[] = [
-                            'description'  => $currentMember->username . ' prio\'d an item to a character (' . $i . ')',
-                            'type'         => Item::TYPE_PRIO,
-                            'member_id'    => $currentMember->id,
-                            'guild_id'     => $currentMember->guild_id,
-                            'character_id' => $inputPrio['character_id'],
-                            'item_id'      => $inputItem['item_id'],
-                            'raid_id'      => $raid->id,
-                            'created_at'   => $now,
+                            'description'   => $currentMember->username . ' prio\'d an item to a character (' . $i . ')',
+                            'type'          => Item::TYPE_PRIO,
+                            'member_id'     => $currentMember->id,
+                            'guild_id'      => $currentMember->guild_id,
+                            'character_id'  => $inputPrio['character_id'],
+                            'item_id'       => $inputItem['item_id'],
+                            'raid_group_id' => $raidGroup->id,
+                            'created_at'    => $now,
                         ];
                     }
                 }
@@ -448,14 +448,14 @@ class PrioController extends Controller
                 if ($toUpdateCount > 0) {
                     $isModified = true;
                     $audits[] = [
-                        'description'  => $currentMember->username . ' altered ' . $toUpdateCount . ' prios for an item',
-                        'type'         => Item::TYPE_PRIO,
-                        'member_id'    => $currentMember->id,
-                        'guild_id'     => $currentMember->guild_id,
-                        'character_id' => null,
-                        'item_id'      => $inputItem['item_id'],
-                        'raid_id'      => $raid->id,
-                        'created_at'   => $now,
+                        'description'   => $currentMember->username . ' altered ' . $toUpdateCount . ' prios for an item',
+                        'type'          => Item::TYPE_PRIO,
+                        'member_id'     => $currentMember->id,
+                        'guild_id'      => $currentMember->guild_id,
+                        'character_id'  => null,
+                        'item_id'       => $inputItem['item_id'],
+                        'raid_group_id' => $raidGroup->id,
+                        'created_at'    => $now,
                     ];
                 }
 

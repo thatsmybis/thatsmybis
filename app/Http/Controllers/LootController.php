@@ -69,7 +69,7 @@ class LootController extends Controller
             'guild'           => null,
             'instance'        => $instance,
             'items'           => $items,
-            'raids'           => null,
+            'raidGroups'      => null,
             'showNotes'       => false,
             'showOfficerNote' => false,
             'showPrios'       => true,

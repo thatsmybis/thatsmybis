@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', (!$raid ? "Create" : "Edit") . " Raid Group - " . config('app.name'))
+@section('title', (!$raidGroup ? "Create" : "Edit") . " Raid Group - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,7 +9,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                        {{ $raid ? 'Edit' : 'Create' }} Raid Group
+                        {{ $raidGroup ? 'Edit' : 'Create' }} Raid Group
                     </h1>
                 </div>
             </div>
@@ -24,10 +24,10 @@
                 </ul>
             @endif
 
-            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route(($raid ? 'guild.raid.update' : 'guild.raid.create'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route(($raidGroup ? 'guild.raidGroup.update' : 'guild.raidGroup.create'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
-                <input hidden name="id" value="{{ $raid ? $raid->id : '' }}" />
+                <input hidden name="id" value="{{ $raidGroup ? $raidGroup->id : '' }}" />
 
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
@@ -36,14 +36,14 @@
                                 <div class="form-group">
                                     <label for="name" class="font-weight-bold">
                                         <span class="fas fa-fw fa-users text-muted"></span>
-                                        Raid Name
+                                        Raid Group Name
                                     </label>
                                     <input name="name"
                                         maxlength="255"
                                         type="text"
                                         class="form-control dark"
                                         placeholder="eg. Raid One"
-                                        value="{{ old('name') ? old('name') : ($raid ? $raid->name : '') }}" />
+                                        value="{{ old('name') ? old('name') : ($raidGroup ? $raidGroup->name : '') }}" />
                                 </div>
                             </div>
                         </div>
@@ -67,7 +67,7 @@
                                             @foreach ($guild->roles as $role)
                                                 <option value="{{ $role->id }}"
                                                     style="color:{{ $role->getColor() }};"
-                                                    {{ old('role_id') ? (old('role_id') == $role->id ? 'selected' : '') : ($raid && $raid->role_id && $raid->role_id == $role->id ? 'selected' : '') }}>
+                                                    {{ old('role_id') ? (old('role_id') == $role->id ? 'selected' : '') : ($raidGroup && $raidGroup->role_id && $raidGroup->role_id == $role->id ? 'selected' : '') }}>
                                                     {{ $role->name }}
                                                 </option>
                                             @endforeach

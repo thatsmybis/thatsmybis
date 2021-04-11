@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Guild, Raid, User};
+use App\{AuditLog, Guild, RaidGroup, User};
 use Auth;
 use Illuminate\Http\Request;
 use Kodeine\Acl\Models\Eloquent\Permission;
 
-class RaidController extends Controller
+class RaidGroupController extends Controller
 {
     /**
      * Create a new controller instance.
@@ -20,7 +20,7 @@ class RaidController extends Controller
     }
 
     /**
-     * Show a raid for editing
+     * Show a raid group for editing
      *
      * @return \Illuminate\Http\Response
      */
@@ -35,30 +35,30 @@ class RaidController extends Controller
         }
 
         $guild->load([
-            'allRaids' => function ($query) use ($id) {
+            'allRaidGroups' => function ($query) use ($id) {
                 return $query->where('id', $id);
             },
-            'allRaids.role']);
+            'allRaidGroups.role']);
 
-        $raid = null;
+        $raidGroup = null;
 
         if ($id) {
-            $raid = $guild->allRaids->where('id', $id)->first();
+            $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
 
-            if (!$raid) {
-                abort(404, 'Raid not found.');
+            if (!$raidGroup) {
+                abort(404, 'Raid Group not found.');
             }
         }
 
-        return view('guild.raids.edit', [
+        return view('guild.raidGroups.edit', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
-            'raid'          => $raid,
+            'raidGroup'     => $raidGroup,
         ]);
     }
 
     /**
-     * Create a raid
+     * Create a raid group
      * @return
      */
     public function create($guildId, $guildSlug) {
@@ -66,11 +66,11 @@ class RaidController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('create.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to create raids.');
+            request()->session()->flash('status', 'You don\'t have permissions to create Raid Groups.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load(['raids', 'roles']);
+        $guild->load(['raidGroups', 'roles']);
 
         $validationRules = [
             'name'    => 'string|max:255',
@@ -81,7 +81,7 @@ class RaidController extends Controller
 
         $this->validate(request(), $validationRules, $validationMessages);
 
-        if ($guild->raids->contains('name', request()->input('name'))) {
+        if ($guild->raidGroups->contains('name', request()->input('name'))) {
             abort(403, 'Name already exists.');
         }
 
@@ -101,21 +101,21 @@ class RaidController extends Controller
         $createValues['role_id']  = request()->input('role_id');
         $createValues['guild_id'] = $guild->id;
 
-        $raid = Raid::create($createValues);
+        $raidGroup = RaidGroup::create($createValues);
 
         AuditLog::create([
-            'description' => $currentMember->username . ' created a raid',
-            'member_id'   => $currentMember->id,
-            'guild_id'    => $guild->id,
-            'raid_id'     => $raid->id,
+            'description'   => $currentMember->username . ' created a Raid Group',
+            'member_id'     => $currentMember->id,
+            'guild_id'      => $guild->id,
+            'raid_group_id' => $raidGroup->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully created raid.');
-        return redirect()->route('guild.raids', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        request()->session()->flash('status', 'Successfully created Raid Group.');
+        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
     /**
-     * Disable a raid
+     * Disable a raid group
      * @return
      */
     public function toggleDisable($guildId, $guildSlug) {
@@ -123,24 +123,24 @@ class RaidController extends Controller
         $currentMember = request()->get('currentMember');
 
         $guild->load([
-            'allRaids' => function ($query) {
+            'allRaidGroups' => function ($query) {
                 return $query->where('id', request()->input('id'));
             }
         ]);
 
-        $raid = $guild->allRaids->first();
+        $raidGroup = $guild->allRaidGroups->first();
 
-        if (!$raid) {
-            abort(404, 'Raid not found.');
+        if (!$raidGroup) {
+            abort(404, 'Raid Group not found.');
         }
 
         if (!$currentMember->hasPermission('disable.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to disable/enable raids.');
+            request()->session()->flash('status', 'You don\'t have permissions to disable/enable Raid Groups.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $validationRules = [
-            'id' => 'required|integer|exists:raids,id'
+            'id' => 'required|integer|exists:raidGroups,id'
         ];
         $validationMessages = [];
         $this->validate(request(), $validationRules, $validationMessages);
@@ -149,25 +149,25 @@ class RaidController extends Controller
 
         $updateValues['disabled_at']  = $disabledAt;
 
-        $raid->update($updateValues);
+        $raidGroup->update($updateValues);
 
         AuditLog::create([
-            'description' => $currentMember->username . ($disabledAt ? ' disabled' : ' enabled') . ' a raid',
-            'member_id'   => $currentMember->id,
-            'guild_id'    => $guild->id,
-            'raid_id'     => $raid->id,
+            'description'   => $currentMember->username . ($disabledAt ? ' disabled' : ' enabled') . ' a Raid Group group',
+            'member_id'     => $currentMember->id,
+            'guild_id'      => $guild->id,
+            'raid_group_id' => $raidGroup->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully ' . ($disabledAt ? 'disabled' : 'enabled') . ' ' . $raid->name . '.');
-        return redirect()->route('guild.raids', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        request()->session()->flash('status', 'Successfully ' . ($disabledAt ? 'disabled' : 'enabled') . ' ' . $raidGroup->name . '.');
+        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
     /**
-     * Show the raids page.
+     * Show the raid groups page.
      *
      * @return \Illuminate\Http\Response
      */
-    public function raids($guildId, $guildSlug)
+    public function raidGroups($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -177,16 +177,16 @@ class RaidController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load(['allRaids', 'allRaids.role']);
+        $guild->load(['allRaidGroups', 'allRaidGroups.role']);
 
-        return view('guild.raids.list', [
+        return view('guild.raidGroups.list', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
         ]);
     }
 
     /**
-     * Update a raid
+     * Update a raid group
      * @return
      */
     public function update($guildId, $guildSlug) {
@@ -194,12 +194,12 @@ class RaidController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit raids.');
+            request()->session()->flash('status', 'You don\'t have permissions to edit Raid Groups.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [
-            'id'      => 'required|integer|exists:raids,id',
+            'id'      => 'required|integer|exists:raid_groups,id',
             'name'    => 'string|max:255',
             'role_id' => 'nullable|integer|exists:roles,id',
         ];
@@ -209,14 +209,14 @@ class RaidController extends Controller
         $id = request()->input('id');
 
         $guild->load([
-            'allRaids' => function ($query) use ($id) {
+            'allRaidGroups' => function ($query) use ($id) {
                 return $query->where('id', $id);
             },
         ]);
 
-        $raid = $guild->allRaids->where('id', $id)->first();
-        if (!$raid) {
-            abort(404, 'Raid not found.');
+        $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
+        if (!$raidGroup) {
+            abort(404, 'Raid Group not found.');
         }
 
         $role = null;
@@ -235,20 +235,20 @@ class RaidController extends Controller
 
         $auditMessage = '';
 
-        if ($updateValues['name'] != $raid->name) {
+        if ($updateValues['name'] != $raidGroup->name) {
             $auditMessage .= ' (renamed to ' . $updateValues['name'] . ')';
         }
 
-        $raid->update($updateValues);
+        $raidGroup->update($updateValues);
 
         AuditLog::create([
-            'description' => $currentMember->username . ' updated a raid' . $auditMessage,
-            'member_id'   => $currentMember->id,
-            'guild_id'    => $guild->id,
-            'raid_id'     => $raid->id,
+            'description'   => $currentMember->username . ' updated a Raid Group' . $auditMessage,
+            'member_id'     => $currentMember->id,
+            'guild_id'      => $guild->id,
+            'raid_group_id' => $raidGroup->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully updated ' . $raid->name . '.');
-        return redirect()->route('guild.raids', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        request()->session()->flash('status', 'Successfully updated ' . $raidGroup->name . '.');
+        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 }

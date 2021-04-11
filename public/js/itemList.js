@@ -38,13 +38,13 @@ $(document).ready( function () {
         parseMarkdown();
     });
 
-    // Filter out characters based on the raid they are in
-    $("#raid_filter").on('change', function () {
-        let raidId = $(this).val();
+    // Filter out characters based on the raid group they are in
+    $("#raid_group_filter").on('change', function () {
+        let raidGroupId = $(this).val();
 
-        if (raidId) {
-            $(".js-item-wishlist-character[data-raid-id!='" + raidId + "']").hide();
-            $(".js-item-wishlist-character[data-raid-id='" + raidId + "']").show();
+        if (raidGroupId) {
+            $(".js-item-wishlist-character[data-raid-group-id!='" + raidGroupId + "']").hide();
+            $(".js-item-wishlist-character[data-raid-group-id='" + raidGroupId + "']").show();
         } else {
             $(".js-item-wishlist-character").show();
         }
@@ -186,27 +186,27 @@ function getCharacterList(data, type, itemId) {
     let characters = `<ul class="list-inline js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
     let initialLimit = 4;
 
-    let lastRaidId = null;
+    let lastRaidGroupId = null;
     $.each(data, function (index, character) {
-        if (type == 'prio' && character.pivot.raid_id && character.pivot.raid_id != lastRaidId) {
-            lastRaidId = character.pivot.raid_id;
+        if (type == 'prio' && character.pivot.raid_group_id && character.pivot.raid_group_id != lastRaidGroupId) {
+            lastRaidGroupId = character.pivot.raid_group_id;
             characters += `
-                <li data-raid-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic  text-muted small">
-                    ${ character.raid_name ? character.raid_name : '' }
+                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic  text-muted small">
+                    ${ character.raid_group_name ? character.raid_group_name : '' }
                 </li>
             `;
         }
 
         characters += `
-            <li data-raid-id="${ type == 'prio' ? character.pivot.raid_id : character.raid_id }"
+            <li data-raid-group-id="${ type == 'prio' ? character.pivot.raid_group_id : character.raid_group_id }"
                 value="${ type == 'prio' ? character.pivot.order : '' }"
                 class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0 ${ character.pivot.received_at ? 'font-strikethrough' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
-                    title="${ character.raid_name ? character.raid_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
+                    title="${ character.raid_group_name ? character.raid_group_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : ''}-important tag d-inline">
                     <span class="text-muted">${ character.pivot.order ? character.pivot.order : '' }</span>
                     <span class="text-muted small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
-                    <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_color) }"></span>${ character.name }
+                    <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_group_color) }"></span>${ character.name }
                     ${ character.is_alt ? `
                         <span class="text-legendary">alt</span>
                     ` : '' }

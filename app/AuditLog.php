@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Character, Guild, Instance, Item, ItemSource, Member, Raid, Role};
+use App\{Character, Guild, Instance, Item, ItemSource, Member, RaidGroup, Role};
 use Illuminate\Database\Eloquent\Model;
 
 class AuditLog extends Model
@@ -23,7 +23,7 @@ class AuditLog extends Model
         'item_source_id',
         'member_id',
         'other_member_id',
-        'raid_id',
+        'raid_group_id',
         'role_id',
     ];
 
@@ -62,8 +62,8 @@ class AuditLog extends Model
         return $this->belongsTo(Member::class);
     }
 
-    public function raid() {
-        return $this->belongsTo(Raid::class);
+    public function raidGroup() {
+        return $this->belongsTo(RaidGroup::class);
     }
 
     public function role() {

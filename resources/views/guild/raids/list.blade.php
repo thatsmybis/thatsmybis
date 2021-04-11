@@ -13,39 +13,39 @@
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
-                    @if ($guild->allRaids->count() > 0)
+                    @if ($guild->allRaidGroups->count() > 0)
                         <ol class="no-bullet no-indent striped">
-                            @foreach ($guild->allRaids as $raid)
+                            @foreach ($guild->allRaidGroups as $raidGroup)
                                 <li class="p-3 mb-3 rounded">
-                                    <span class="role-circle" style="{{ $raid->role ? 'background-color:' . $raid->role->getColor() : '' }}" title="{{ $raid->role ? $raid->role->getColor() : ''}}"></span>
-                                    <span class="font-weight-bold text-danger">{{ $raid->disabled_at ? 'DISABLED' : '' }}</span>
-                                    <span title="{{ $raid->slug }}">{{ $raid->name }}</span>
+                                    <span class="role-circle" style="{{ $raidGroup->role ? 'background-color:' . $raidGroup->role->getColor() : '' }}" title="{{ $raidGroup->role ? $raidGroup->role->getColor() : ''}}"></span>
+                                    <span class="font-weight-bold text-danger">{{ $raidGroup->disabled_at ? 'DISABLED' : '' }}</span>
+                                    <span title="{{ $raidGroup->slug }}">{{ $raidGroup->name }}</span>
                                     <small class="text-muted">
-                                        @if ($raid->role)
-                                            - <span title="Discord Role: {{ $raid->role->discord_id }}">{{ $raid->role->name }}</span>
+                                        @if ($raidGroup->role)
+                                            - <span title="Discord Role: {{ $raidGroup->role->discord_id }}">{{ $raidGroup->role->name }}</span>
                                         @endif
                                     </small>
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
-                                            <a href="{{ route('guild.raid.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raid->id]) }}">
+                                            <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
                                                 <span class="fas fa-fw fa-pencil"></span>edit
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
+                                            <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_group_id' => $raidGroup->id]) }}">
                                                 <span class="fas fa-fw fa-clipboard-list-check"></span>logs
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
-                                            <form class="form-inline" role="form" method="POST" action="{{ route('guild.raid.toggleDisable', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                            <form class="form-inline" role="form" method="POST" action="{{ route('guild.raidGroup.toggleDisable', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                                 {{ csrf_field() }}
-                                                <input hidden name="id" value="{{ $raid->id }}">
+                                                <input hidden name="id" value="{{ $raidGroup->id }}">
                                                 <input hidden type="checkbox" name="disabled_at" value="1" class="" autocomplete="off"
-                                                    {{ $raid->disabled_at ? '' : 'checked' }}>
+                                                    {{ $raidGroup->disabled_at ? '' : 'checked' }}>
                                                 <button type="submit"
-                                                    class="btn btn-link text-{{ $raid->disabled_at ? 'success' : 'danger' }} p-0 m-0 ml-3"
-                                                    title="{{ $raid->disabled_at ? 'Raid is shown in dropdowns again' : 'Raid is no longer shown in dropdowns. Characters already assigned to this raid will remain assigned to it.' }}">
-                                                    <span class="fas fa-fw fa-{{ $raid->disabled_at ? 'trash-undo' : 'trash' }}"></span>{{ $raid->disabled_at ? 'enable' : 'disable' }}
+                                                    class="btn btn-link text-{{ $raidGroup->disabled_at ? 'success' : 'danger' }} p-0 m-0 ml-3"
+                                                    title="{{ $raidGroup->disabled_at ? 'Raid Group is shown in dropdowns again' : 'Raid Group is no longer shown in dropdowns. Characters already assigned to this raid group will remain assigned to it.' }}">
+                                                    <span class="fas fa-fw fa-{{ $raidGroup->disabled_at ? 'trash-undo' : 'trash' }}"></span>{{ $raidGroup->disabled_at ? 'enable' : 'disable' }}
                                                 </button>
                                             </form>
                                         </li>
@@ -60,8 +60,8 @@
                     @endif
                 </div>
                 <div class="col-12 mt-3">
-                    <a href="{{ route('guild.raid.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
-                        <span class="fas fa-fw fa-plus"></span> Create New Raid
+                    <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
+                        <span class="fas fa-fw fa-plus"></span> Create New Raid Group
                     </a>
                 </div>
             </div>

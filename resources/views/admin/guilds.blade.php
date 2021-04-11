@@ -93,7 +93,7 @@
                                             {{ $guild->member_count }} <span class="text-muted small">members</span>
                                         </li>
                                         <li class="">
-                                            {{ $guild->raid_count }} <span class="text-muted small">raids</span>
+                                            {{ $guild->raid_group_count }} <span class="text-muted small">raid groups</span>
                                         </li>
                                     </ul>
                                 </td>

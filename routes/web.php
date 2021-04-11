@@ -105,8 +105,8 @@ Route::group([
         Route::get( '/{item_id}/{slug?}',        'ItemController@showWithGuild')    ->name('guild.item.show');
         Route::post('/note/update',              'ItemController@updateNote')       ->name('guild.item.updateNote');
 
-        Route::get( '/{item_id}/{raidId}/prios', 'PrioController@singleInput')      ->name('guild.item.prios');
-        Route::post('/prios',                    'PrioController@submitSingleInput')->name('guild.item.prios.submit');
+        Route::get( '/{item_id}/{raidGroupId}/prios', 'PrioController@singleInput')      ->name('guild.item.prios');
+        Route::post('/prios',                         'PrioController@submitSingleInput')->name('guild.item.prios.submit');
     });
 
     Route::group(['prefix' => 'members'], function () {
@@ -130,18 +130,18 @@ Route::group([
     Route::get( '/assign-loot', 'ItemController@massInput')      ->name('item.massInput');
     Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
 
-    Route::group(['prefix' => 'raid'], function () {
-        Route::get( '/',               'RaidController@raids')        ->name('guild.raids');
-        Route::get( '/create',         'RaidController@edit')         ->name('guild.raid.create');
-        Route::get( '/edit/{id?}',     'RaidController@edit')         ->name('guild.raid.edit');
-        Route::post('/toggle-disable', 'RaidController@toggleDisable')->name('guild.raid.toggleDisable');
-        Route::post('/update',         'RaidController@update')       ->name('guild.raid.update');
-        Route::post('/',               'RaidController@create')       ->name('guild.raid.create');
+    Route::group(['prefix' => 'raidGroup'], function () {
+        Route::get( '/',               'RaidGroupController@raidGroups')   ->name('guild.raidGroups');
+        Route::get( '/create',         'RaidGroupController@edit')         ->name('guild.raidGroup.create');
+        Route::get( '/edit/{id?}',     'RaidGroupController@edit')         ->name('guild.raidGroup.edit');
+        Route::post('/toggle-disable', 'RaidGroupController@toggleDisable')->name('guild.raidGroup.toggleDisable');
+        Route::post('/update',         'RaidGroupController@update')       ->name('guild.raidGroup.update');
+        Route::post('/',               'RaidGroupController@create')       ->name('guild.raidGroup.create');
 
         Route::group(['prefix' => 'prio'], function () {
-            Route::get( '/{instanceSlug}',          'PrioController@chooseRaid')     ->name('guild.prios.chooseRaid');
-            Route::get( '/{instanceSlug}/{raidId}', 'PrioController@massInput')      ->name('guild.prios.massInput');
-            Route::post('/',                        'PrioController@submitMassInput')->name('guild.prios.massInput.submit');
+            Route::get( '/{instanceSlug}',               'PrioController@chooseRaidGroup')->name('guild.prios.chooseRaidGroup');
+            Route::get( '/{instanceSlug}/{raidGroupId}', 'PrioController@massInput')      ->name('guild.prios.massInput');
+            Route::post('/',                             'PrioController@submitMassInput')->name('guild.prios.massInput.submit');
         });
     });
 

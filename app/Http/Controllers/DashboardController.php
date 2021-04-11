@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Character, Content, Guild, Member, Raid, Role, User};
+use App\{Character, Content, Guild, Member, RaidGroup, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 
@@ -28,7 +28,7 @@ class DashboardController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['raids', 'roles']);
+        $guild->load(['raidGroups', 'roles']);
 
         // if we reimplement: We want member not user
         // if we reimplement this: Change this if we re-implement the news section
@@ -41,9 +41,9 @@ class DashboardController extends Controller
 
             $userDiscordRoles = $user->roles->where(['guild_id' => $guild->id])->keyBy('discord_id')->keys();
 
-            $userRaids = Raid::whereIn('discord_role_id', $userDiscordRoles)->get()->keyBy('id')->keys()->toArray();
+            $userRaidGroups = RaidGroup::whereIn('discord_role_id', $userDiscordRoles)->get()->keyBy('id')->keys()->toArray();
 
-            $content = Content::where(['category' => 'news', 'guild_id' => $guild->id])->orWhereIn('raid_id', $userRaids)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
+            $content = Content::where(['category' => 'news', 'guild_id' => $guild->id])->orWhereIn('raid_group_id', $userRaidGroups)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
         } else {
             $content = Content::where('category', $category)->whereNull('removed_at')->with('user')->orderByDesc('created_at')->get();
         }
@@ -53,7 +53,7 @@ class DashboardController extends Controller
             'contents'      => $content,
             'currentMember' => $currentMember,
             'guild'         => $guild,
-            'raids'         => $guild->raids,
+            'raidGroups'    => $guild->raidGroups,
         ]);
     }
 
@@ -115,7 +115,7 @@ class DashboardController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['allRaids', 'raids.role']);
+        $guild->load(['allRaidGroups', 'raidGroups.role']);
 
         $characters = $guild->getCharactersWithItemsAndPermissions($currentMember, false);
 
@@ -128,7 +128,7 @@ class DashboardController extends Controller
             'characters'      => $characters['characters'],
             'currentMember'   => $currentMember,
             'guild'           => $guild,
-            'raids'           => $guild->allRaids,
+            'raidGroups'      => $guild->allRaidGroups,
             'showEdit'        => $showEdit,
             'showOfficerNote' => $characters['showOfficerNote'],
             'showPrios'       => $characters['showPrios'],

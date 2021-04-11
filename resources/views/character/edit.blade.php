@@ -159,21 +159,21 @@
                 <div class="row mb-3 pb-1 pt-2 bg-light rounded">
                     <div class="col-sm-6 col-12">
                         <div class="form-group">
-                            <label for="raid_id" class="font-weight-bold">
+                            <label for="raid_group_id" class="font-weight-bold">
                                 <span class="fas fa-fw fa-helmet-battle text-dk"></span>
                                 Raid Group
                             </label>
                             <div class="form-group">
-                                <select name="raid_id" class="form-control dark">
+                                <select name="raid_group_id" class="form-control dark">
                                     <option value="" selected>
                                         —
                                     </option>
 
-                                    @foreach ($guild->raids as $raid)
+                                    @foreach ($guild->raidGroups as $raidGroup)
                                         <option value="{{ $raid->id }}"
-                                            style="color:{{ $raid->getColor() }};"
-                                            {{ old('raid_id') ? (old('raid_id') == $raid->id ? 'selected' : '') : ($character && $character->raid_id == $raid->id ? 'selected' : '') }}>
-                                            {{ $raid->name }}
+                                            style="color:{{ $raidGroup->getColor() }};"
+                                            {{ old('raid_group_id') ? (old('raid_group_id') == $raidGroup->id ? 'selected' : '') : ($character && $character->raidGroup == $raidGroup->id ? 'selected' : '') }}>
+                                            {{ $raidGroup->name }}
                                         </option>
                                     @endforeach
                                 </select>

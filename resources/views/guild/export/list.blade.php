@@ -193,15 +193,15 @@
     "profession_2": null,
     "rank": null,
     "rank_goal": null,
-    "raid_id": 7,
+    "raid_group_id": 7,
     "is_alt": 0,
     "public_note": "test1",
     "inactive_at": null,
     "username": "Lemmings",
     "is_wishlist_unlocked": 0,
     "is_received_unlocked": 0,
-    "raid_name": "Myth Raid",
-    "raid_color": "10181046",
+    "raid_group_name": "Myth Raid",
+    "raid_group_color": "10181046",
     "received": [
       {
         "item_id": 23060,
@@ -212,7 +212,7 @@
         "created_at": null,
         "updated_at": null,
         "added_by_username": "Lemmings",
-        "raid_name": null,
+        "raid_group_name": null,
         "instance_id": 9,
         "guild_tier": 2,
         "pivot": {
@@ -225,7 +225,7 @@
           "note": null,
           "officer_note": null,
           "is_offspec": 0,
-          "raid_id": null,
+          "raid_group_id": null,
           "received_at": null,
           "created_at": "2020-11-18T22:12:36.000000Z",
           "updated_at": null

@@ -24,15 +24,15 @@
                         @if ($character->relationLoaded('prios') && $character->prios->count() > 0)
                             <ol class="">
                                 @php
-                                    $lastRaidId = null;
+                                    $lastRaidGroupId = null;
                                 @endphp
                                 @foreach ($character->prios as $item)
-                                    @if ($item->pivot->raid_id != $lastRaidId)
+                                    @if ($item->pivot->raid_group_id != $lastRaidGroupId)
                                         @php
-                                            $lastRaidId = $item->pivot->raid_id;
+                                            $lastRaidGroupId = $item->pivot->raid_group_id;
                                         @endphp
                                         <li class="text-muted no-bullet font-italic small font-weight-bold">
-                                            {{ $guild->alLRaids->find($item->pivot->raid_id)->name }}
+                                            {{ $guild->allRaidGroups->find($item->pivot->raid_group_id)->name }}
                                         </li>
                                     @endif
                                     <li value="{{ $item->pivot->order }}">
@@ -44,7 +44,7 @@
                                             'showTier'      => true,
                                             'tierMode'      => $guild->tier_mode,
                                         ])
-                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true, 'hideRaid' => true])
+                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true, 'hideRaidGroup' => true])
                                     </li>
                                 @endforeach
                             </ol>
