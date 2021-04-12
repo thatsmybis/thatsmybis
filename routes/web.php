@@ -69,7 +69,8 @@ Route::group([
 
 Route::group([
         'middleware' => ['seeUser', 'checkGuildPermissions'],
-        'prefix'     => '{guildId}/{guildSlug}'
+        'prefix'     => '{guildId}/{guildSlug}',
+        'where'      => ['guildId' => '[0-9]+'],
     ], function () {
 
     Route::get( '/',                'GuildController@home')              ->name('guild.home');
@@ -130,17 +131,25 @@ Route::group([
     Route::get( '/assign-loot', 'ItemController@massInput')      ->name('item.massInput');
     Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
 
+    Route::group(['prefix' => 'raid'], function () {
+        Route::get( '/',                'RaidController@list')  ->name('guild.raids');
+        Route::get( '/edit/{id?}',      'RaidController@edit')  ->where('id', '[0-9]+')->name('guild.raids.edit');
+        Route::post('/update',          'RaidController@update')->name('guild.raids.update');
+        Route::post('/new',             'RaidController@create')->name('guild.raids.create');
+        Route::get( '/{id}/{raidSlug}', 'RaidController@show')  ->where('id', '[0-9]+')->name('guild.raids.show');
+    });
+
     Route::group(['prefix' => 'raidGroup'], function () {
         Route::get( '/',               'RaidGroupController@raidGroups')   ->name('guild.raidGroups');
         Route::get( '/create',         'RaidGroupController@edit')         ->name('guild.raidGroup.create');
-        Route::get( '/edit/{id?}',     'RaidGroupController@edit')         ->name('guild.raidGroup.edit');
+        Route::get( '/edit/{id?}',     'RaidGroupController@edit')         ->where('id', '[0-9]+')->name('guild.raidGroup.edit');
         Route::post('/toggle-disable', 'RaidGroupController@toggleDisable')->name('guild.raidGroup.toggleDisable');
         Route::post('/update',         'RaidGroupController@update')       ->name('guild.raidGroup.update');
-        Route::post('/',               'RaidGroupController@create')       ->name('guild.raidGroup.create');
+        Route::post('/',               'RaidGroupController@create')       ->name('guild.raidGroup.create'); // TODO: This or the copy a few lines up needs to go, wuth some testing
 
         Route::group(['prefix' => 'prio'], function () {
             Route::get( '/{instanceSlug}',               'PrioController@chooseRaidGroup')->name('guild.prios.chooseRaidGroup');
-            Route::get( '/{instanceSlug}/{raidGroupId}', 'PrioController@massInput')      ->name('guild.prios.massInput');
+            Route::get( '/{instanceSlug}/{raidGroupId}', 'PrioController@massInput')      ->where('raidGroupId', '[0-9]+')->name('guild.prios.massInput');
             Route::post('/',                             'PrioController@submitMassInput')->name('guild.prios.massInput.submit');
         });
     });
