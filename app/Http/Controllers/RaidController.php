@@ -2,12 +2,17 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Guild, Raid, RaidGroup};
+use App\{AuditLog, Guild, Instance, Raid, RaidGroup};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Kodeine\Acl\Models\Eloquent\Permission;
 
 class RaidController extends Controller
 {
+    const RESULTS_PER_PAGE = 20;
+    const MAX_INSTANCES = 4;
+    const MAX_RAIDS     = 4;
+
     /**
      * Create a new controller instance.
      *
@@ -52,6 +57,8 @@ class RaidController extends Controller
         return view('guild.raidGroups.edit', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'maxInstances'  => self::MAX_INSTANCES,
+            'maxRaids'      => self::MAX_RAIDS,
             'raidGroup'     => $raidGroup,
         ]);
     }
@@ -61,10 +68,9 @@ class RaidController extends Controller
      * @return
      */
     public function create($guildId, $guildSlug) {
-        // TODO: Copied from raidgroups
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
-
+dd(Instance::all());
         if (!$currentMember->hasPermission('create.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to create Raid Groups.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
@@ -120,20 +126,26 @@ class RaidController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function list($guildId, $guildSlug) {
-        // TODO: Copied from raidgroups
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!$currentMember->hasPermission('view.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
-        }
+        $guild->load(['characters', 'members', 'raidGroups', 'raidGroups.role']);
 
-        $guild->load(['allRaidGroups', 'allRaidGroups.role']);
+        $raids = Raid::select([
+                'raids.*',
+                DB::raw('COUNT(DISTINCT `raid_characters`.`character_id`) AS `raider_count`'),
+                DB::raw('COUNT(DISTINCT `raid_items`.`item_id`) AS `item_count`'),
+            ])
+            ->leftJoin('raid_characters', 'raid_characters.raid_id', '=', 'raids.id')
+            ->where('raids.guild_id', $guild->id)
+            ->orderBy('raids.date', 'desc')
+            ->with(['instances', 'member', 'raidGroups', 'raidGroups.role'])
+            ->paginate(self::RESULTS_PER_PAGE);
 
-        return view('guild.raidGroups.list', [
+        return view('guild.raids.list', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'raids'         => $raids,
         ]);
     }
 

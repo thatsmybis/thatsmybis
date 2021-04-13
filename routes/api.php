@@ -17,8 +17,8 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/items/query/{expansion_id}/{query}', 'Api\ItemsController@query')->where('expansion_id', '[0-9]+')->name('apiSearchItems');
+Route::get('/items/query/{expansion_id}/{query}', 'Api\ItemController@query')->where('expansion_id', '[0-9]+')->name('apiSearchItems');
 
-Route::get('/raids/query/{guild_id}/{query}', 'Api\RaidsController@query')->where('guild_id', '[0-9]+')->name('apiSearchRaids');
+Route::get('/raids/query/{guild_id}/{query}', 'Api\RaidController@query')->where('guild_id', '[0-9]+')->name('apiSearchRaids');
 
-Route::get('/batches/query/{guild_id}/{query}', 'Api\BatchesController@query')->where('guild_id', '[0-9]+')->name('apiSearchBatches');
+Route::get('/batches/query/{guild_id}/{query}', 'Api\BatchController@query')->where('guild_id', '[0-9]+')->name('apiSearchBatches');

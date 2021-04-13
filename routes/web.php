@@ -131,11 +131,11 @@ Route::group([
     Route::get( '/assign-loot', 'ItemController@massInput')      ->name('item.massInput');
     Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
 
-    Route::group(['prefix' => 'raid'], function () {
-        Route::get( '/',                'RaidController@list')  ->name('guild.raids');
+    Route::group(['prefix' => 'raids'], function () {
+        Route::get( '/',                'RaidController@list')  ->name('guild.raids.list');
         Route::get( '/edit/{id?}',      'RaidController@edit')  ->where('id', '[0-9]+')->name('guild.raids.edit');
         Route::post('/update',          'RaidController@update')->name('guild.raids.update');
-        Route::post('/new',             'RaidController@create')->name('guild.raids.create');
+        Route::get ('/new',             'RaidController@create')->name('guild.raids.create');
         Route::get( '/{id}/{raidSlug}', 'RaidController@show')  ->where('id', '[0-9]+')->name('guild.raids.show');
     });
 

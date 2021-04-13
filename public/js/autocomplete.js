@@ -18,6 +18,9 @@ function addItemAutocompleteHandler() {
             source: function (request, response) {
                 $.ajax({
                     method: "get",
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
                     dataType: "json",
                     url: "/api/items/query/" + expansionId + "/" + request.term,
                     success: function (data) {

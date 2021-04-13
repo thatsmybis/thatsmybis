@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Item;
+use App\Batch;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Log;
 
-class ItemsController extends \App\Http\Controllers\Controller
+class BatchController extends \App\Http\Controllers\Controller
 {
     /**
      * Create a new controller instance.
@@ -21,39 +21,40 @@ class ItemsController extends \App\Http\Controllers\Controller
 
     private function getValidationRules() {
         return [
-            'expansion_id' => 'integer|min:1|max:99',
-            'query'        => 'string|min:1|max:40',
+            'guild_id' => 'integer|exists:guilds',
+            'query'    => 'string|min:1|max:40',
         ];
     }
 
     /**
-     * Lookup items similar to a given query.
+     * Lookup guild batches similar to a given query.
      *
      * @param $query The name to search for.
      * @return \Illuminate\Http\Response
      */
-    public function query($expansionId, $query)
+    public function query($guildID, $query)
     {
+        // TODO: Copied from itemscontroller
         $validator = Validator::make([
-            'expansion_id' => $expansionId,
-            'query'        => $query
+            'guild_id' => $guildID,
+            'query'    => $query
         ], $this->getValidationRules());
 
         if ($validator->fails()) {
-            return response()->json(['error' => 'Query did not pass validation. Query must be between 1 and 40 characters. Expansion ID must be between 1 and 99.'], 403);
+            return response()->json(['error' => 'Query did not pass validation. Query must be between 1 and 40 characters. Guild ID must match your guild.'], 403);
         } else {
             if ($query && $query != " ") {
-                $results = Item::select(['name', 'item_id'])
+                $results = Batch::select(['name', 'date', 'id'])
                     ->where([
+                        ['guild_id', $guildID],
                         ['name', 'like', '%' . trim($query) . '%'],
-                        ['expansion_id', $expansionId],
                     ])
                     // For a more performant/powerful query...
                     // ->whereRaw(
-                    //     "MATCH(`items`.`name`) AGAINST(? IN BOOLEAN MODE)",
+                    //     "MATCH(`batches`.`name`) AGAINST(? IN BOOLEAN MODE)",
                     //     ['+' . $query . ''] // note the prefixed or suffixed character(s) https://dev.mysql.com/doc/refman/5.5/en/fulltext-boolean.html
                     // )
-                    ->orderByDesc('weight')
+                    ->orderByDesc('created_at')
                     ->limit(15)
                     ->get();
 
@@ -64,8 +65,8 @@ class ItemsController extends \App\Http\Controllers\Controller
                 // Log::debug($query . " (FULLTEXT): " . round(($end - $start) * 1000, 3) . "ms");
 
                 // We just want the names in a plain old array; not key:value.
-                $results = $results->transform(function ($item) {
-                    return ['value' => $item['item_id'], 'label' => $item['name']];
+                $results = $results->transform(function ($batch) {
+                    return ['value' => $batch['id'], 'label' => $batch['name']];
                 });
             } else {
                 return response()->json([], 200);

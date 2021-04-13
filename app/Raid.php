@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Batch, Character, Guild, Item, Member, RaidGroup};
+use App\{Batch, Character, Guild, Instance, Item, Member, RaidGroup};
 use Illuminate\Database\Eloquent\Model;
 
 class Raid extends Model
@@ -14,6 +14,7 @@ class Raid extends Model
      */
     protected $fillable = [
         'name',
+        'slug',
         'guild_id',
         'member_id',
         'date',
@@ -40,6 +41,10 @@ class Raid extends Model
 
     public function guild() {
         return $this->belongsTo(Guild::class);
+    }
+
+    public function instances() {
+        return $this->hasMany(Instance::class)->orderBy('order');
     }
 
     public function items() {

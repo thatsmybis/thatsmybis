@@ -15,13 +15,14 @@ class CreateNewRaidsTable extends Migration
     {
         Schema::create('raids', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 80)         ->nullable()->index();
+            $table->string('name', 80)         ->index();
+            $table->string('slug', 80)         ->index();
             $table->bigInteger('guild_id')     ->unsigned();
             $table->bigInteger('member_id')    ->unsigned();
             $table->timestamp('date')          ->nullable()->index();
             $table->string('note', 255)        ->nullable();
             $table->string('officer_note', 255)->nullable();
-            $table->string('logs', 120)        ->nullable();
+            $table->string('logs', 255)        ->nullable();
             $table->timestamps();
 
             $table->foreign('guild_id')->references('id')->on('guilds');

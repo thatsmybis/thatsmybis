@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Raid;
+use Auth;
+use App\Item;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Log;
 
-class RaidsController extends \App\Http\Controllers\Controller
+class ItemController extends \App\Http\Controllers\Controller
 {
     /**
      * Create a new controller instance.
@@ -21,8 +22,8 @@ class RaidsController extends \App\Http\Controllers\Controller
 
     private function getValidationRules() {
         return [
-            'guildId' => 'integer|exists:guilds',
-            'query'   => 'string|min:1|max:40',
+            'expansion_id' => 'integer|min:1|max:99',
+            'query'        => 'string|min:1|max:40',
         ];
     }
 
@@ -34,7 +35,7 @@ class RaidsController extends \App\Http\Controllers\Controller
      */
     public function query($expansionId, $query)
     {
-        // TODO: Copied from itemscontroller
+        return Auth::user();
         $validator = Validator::make([
             'expansion_id' => $expansionId,
             'query'        => $query
