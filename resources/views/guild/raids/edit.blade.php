@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', (!$character ? "Create" : "Edit") . " Raid - " . config('app.name')
+@section('title', ($raid ? "Edit" : "Create") . " Raid - " . config('app.name')
 
 )@php
     $maxDate = (new \DateTime())->modify('+1 day')->format('Y-m-d');
@@ -53,7 +53,7 @@
                                         type="text"
                                         class="form-control dark"
                                         placeholder="eg. Gurgthock"
-                                        value="{{ old('name') ? old('name') : ($character ? $character->name : '') }}" />
+                                        value="{{ old('name') ? old('name') : ($raid ? $raid->name : '') }}" />
                                 </div>
                             </div>
 
@@ -85,148 +85,20 @@
                                         value="{{ old('logs') ? old('logs') : ($raid ? $raid->logs : '') }}" />
                                 </div>
                             </div>
-                        </div>
-
-                    </div>
-                </div>
-TODO beyond this point
-                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
-                    @for ($i = 0; $i++; $i < $maxRaids)
-                    <div class="col-sm-6 col-12">
-                        <div class="form-group">
-                            <label for="raid_group_id[{{ $i }}]" class="font-weight-bold">
-                                <span class="fas fa-fw fa-users text-dk"></span>
-                                Raid Group {{ $i }}
-                            </label>
-                            <div class="form-group">
-                                <select name="raid_group_id{{ $i }}" class="form-control dark">
-                                    <option value="" selected>
-                                        —
-                                    </option>
-
-                                    @foreach ($raidGroups as $raidGroup)
-                                        <option value="{{ $raidGroup->id }}"
-                                            style="color:{{ $raidGroup->getColor() }};"
-                                            {{ old('raid_group_id') TODO ? (old('raid_group_id') TODO == $raidGroup->id ? 'selected' : '') : (TODO ? 'selected' : '') }}>
-                                            {{ $raidGroup->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
-                    @for ($i = 0; $i++; $i < $maxInstances)
-                    <div class="col-sm-6 col-12">
-                        <div class="form-group">
-                            <label for="instance_id[{{ $i }}]" class="font-weight-bold">
-                                <span class="fas fa-fw fa-users text-dk"></span>
-                                Dungeon {{ $i }}
-                            </label>
-                            <div class="form-group">
-                                <select name="instance_id{{ $i }}" class="form-control dark">
-                                    <option value="" selected>
-                                        —
-                                    </option>
-
-                                    @foreach ($instances as $instance)
-                                        <option value="{{ $instance->id }}"
-                                            style="color:{{ $instance->getColor() }};"
-                                            {{ old('instance_id') TODO ? (old('instance_id') TODO == $instance->id ? 'selected' : '') : (TODO ? 'selected' : '') }}>
-                                            {{ $instance->name }}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-Not touched beyond this point
-                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
-                    <div class="col-12">
-                        <div class="row">
-                            <div class="col-sm-6 col-12">
-                                <div class="form-group">
-                                    <label for="class" class="font-weight-bold">
-                                        <span class="text-muted fas fa-fw fa-flower-daffodil"></span>
-                                        Profession 1
-                                    </label>
-                                    <div class="form-group">
-                                        <select name="profession_1" class="form-control dark">
-                                            <option value="" selected>
-                                                —
-                                            </option>
-
-                                            @foreach (App\Character::professions($guild->expansion_id) as $profession)
-                                                <option value="{{ $profession }}"
-                                                    {{ old('profession_1') ? (old('profession_1') == $profession ? 'selected' : '') : ($character && $character->profession_1 == $profession ? 'selected' : '') }}>
-                                                    {{ $profession }}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                            @if ($raid)
+                                <div class="col-sm-6 col-12">
+                                    <div class="form-group mb-0">
+                                        <div class="checkbox">
+                                            <label>
+                                                <input type="checkbox" name="is_cancelled" value="1" class="" autocomplete="off"
+                                                    {{ old('is_cancelled') && old('is_cancelled') == 1 ? 'checked' : ($raid && $raid->is_cancelled ? 'checked' : '') }}>
+                                                    Cancelled <small class="text-muted">closest you can get to deleting this</small>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col-sm-6 col-12">
-                                <div class="form-group">
-                                    <label for="class" class="font-weight-bold">
-                                        Profession 2
-                                    </label>
-                                    <div class="form-group">
-                                        <select name="profession_2" class="form-control dark">
-                                            <option value="" selected>
-                                                —
-                                            </option>
-
-                                            @foreach (App\Character::professions($guild->expansion_id) as $profession)
-                                                <option value="{{ $profession }}"
-                                                    {{ old('profession_2') ? (old('profession_2') == $profession ? 'selected' : '') : ($character && $character->profession_2 == $profession ? 'selected' : '') }}>
-                                                    {{ $profession }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                            @endif
                         </div>
-
-                        @if ($guild->expansion_id === 1)
-                            <div class="row mt-4">
-                                <div class="col-sm-3 col-6">
-                                    <div class="form-group">
-                                        <label for="rank" class="font-weight-bold">
-                                            <span class="text-muted fas fa-fw fa-swords"></span>
-                                            PvP Rank
-                                        </label>
-                                        <input name="rank"
-                                            type="number"
-                                            min="1"
-                                            max="14"
-                                            class="form-control dark"
-                                            placeholder="—"
-                                            value="{{ old('rank') ? old('rank') : ($character ? $character->rank : '') }}" />
-                                    </div>
-                                </div>
-
-
-                                <div class="col-sm-3 col-6">
-                                    <div class="form-group">
-                                        <label for="rank_goal" class="font-weight-bold">
-                                            PvP Rank Goal
-                                        </label>
-                                        <input name="rank_goal"
-                                            type="number"
-                                            min="1"
-                                            max="14"
-                                            class="form-control dark"
-                                            placeholder="—"
-                                            value="{{ old('rank_goal') ? old('rank_goal') : ($character ? $character->rank_goal : '') }}" />
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
                     </div>
                 </div>
 
@@ -238,7 +110,7 @@ Not touched beyond this point
                                 Public Note
                                 <small class="text-muted">anyone in the guild can see this</small>
                             </label>
-                            <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
+                            <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($raid ? $raid->public_note : '') }}</textarea>
                         </div>
                     </div>
 
@@ -253,64 +125,62 @@ Not touched beyond this point
                                 @if (isStreamerMode())
                                     Hidden in streamer mode
                                 @else
-                                    <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                                    <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($raid ? $raid->officer_note : '') }}</textarea>
                                 @endif
                             </div>
                         </div>
                     @endif
+                </div>
 
-                    {{--
-                        @if ($currentMember->id == $character->member_id)
-                            <div class="col-12">
-                                <div class="form-group">
-                                    <label for="personal_note" class="font-weight-bold">
-                                        <span class="text-muted fas fa-fw fa-eye-slash"></span>
-                                        Personal Note
-                                        <small class="text-muted">only you can see this</small>
-                                    </label>
-                                    <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
-                                </div>
+                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
+                    <div class="col-sm-6 col-12">
+                        <label for="instance_id[0]" class="font-weight-bold">
+                            <span class="fas fa-fw fa-helmet-battle text-muted"></span>
+                            Dungeons
+                        </label>
+                        @for ($i = 0; $i < $maxInstances; $i++)
+                            <div class="form-group {{ $i > 1 ? 'js-hide-empty' : '' }}" style="{{ $i > 1 ? 'display:none;' : '' }}">
+                                <select name="instance_id[]" class="form-control dark {{ $i > 0 ? 'js-show-next' : '' }}">
+                                    <option value="" selected>
+                                        —
+                                    </option>
+
+                                    @foreach ($instances as $instance)
+                                        <option value="{{ $instance->id }}"
+                                            {{ old('instance_id.' . $i) && old('instance_id.' . $i) == $instance->id ? 'selected' : ($raid && $raid->instances->slice($i, 1) && $raid->instances->slice($i, 1) == $instance->id ? 'selected' : '') }}>
+                                            {{ $instance->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
-                        @endif
-                    --}}
+                        @endfor
+                    </div>
+
+                    <div class="col-sm-6 col-12">
+                        <label for="raid_group_id[0]" class="font-weight-bold">
+                            <span class="fas fa-fw fa-helmet-battle text-muted"></span>
+                            Raids
+                        </label>
+                        @for ($i = 0; $i < $maxRaids; $i++)
+                            <div class="form-group {{ $i > 1 ? 'js-hide-empty' : '' }}" style="{{ $i > 1 ? 'display:none;' : '' }}">
+                                <select name="raid_group_id[]" class="form-control dark {{ $i > 0 ? 'js-show-next' : '' }}">
+                                    <option value="" selected>
+                                        —
+                                    </option>
+
+                                    @foreach ($guild->raidGroups as $raidGroup)
+                                        <option value="{{ $raidGroup->id }}"
+                                            style="color:{{ $raidGroup->getColor() }};"
+                                            {{ old('raid_group_id.' . $i) && old('raid_group_id.' . $i) == $raidGroup->id ? 'selected' : ($raid && $raid->raidGroups->slice($i, 1) && $raid->raidGroups->slice($i, 1) == $raidGroup->id ? 'selected' : '') }}>
+                                            {{ $raidGroup->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endfor
+                    </div>
                 </div>
-                <div class="row mb-3 pt-2 pb-1 bg-light rounded">
-                    @if ($character && ($currentMember->hasPermission('inactive.characters') || $currentMember->id == $character->member_id))
-                        <div class="col-6">
-                            <div class="form-group mb-0">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="inactive_at" value="1" class="" autocomplete="off"
-                                            {{ old('inactive_at') && old('inactive_at') == 1 ? 'checked' : ($character->inactive_at ? 'checked' : '') }}>
-                                            Inactive <small class="text-muted">no longer visible</small>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-6">
-                            <div class="form-group mb-0">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="is_alt" value="1" class="" autocomplete="off"
-                                            {{ old('is_alt') && old('is_alt') == 1 ? 'checked' : ($character->is_alt ? 'checked' : '') }}>
-                                            Alt Character <small class="text-muted">will be tagged as an alt</small>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    @else
-                        <div class="col-12">
-                            <div class="form-group mb-0">
-                                <div class="checkbox">
-                                    <label>
-                                        <input type="checkbox" name="is_alt" value="1" class="" autocomplete="off">
-                                            Alt Character <small class="text-muted">will be tagged as an alt</small>
-                                    </label>
-                                </div>
-                            </div>
-                        </div>
-                    @endif
-                </div>
+
                 <div class="form-group">
                     <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
                 </div>
@@ -322,6 +192,24 @@ Not touched beyond this point
 
 @section('scripts')
 <script>
-    $(document).ready(() => warnBeforeLeaving("#editForm"));
+    $(document).ready(function () {
+        warnBeforeLeaving("#editForm")
+
+        $(".js-show-next").change(function() {
+            showNext(this);
+        }).change();
+
+        $(".js-show-next").keyup(function() {
+            showNext(this);
+        });
+    });
+
+    // If the current element has a value, show it and the next element that is hidden because it is empty
+    function showNext(currentElement) {
+        if ($(currentElement).val() != "") {
+            $(currentElement).show();
+            $(currentElement).parent().next(".js-hide-empty").show();
+        }
+    }
 </script>
 @endsection

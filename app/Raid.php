@@ -7,6 +7,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Raid extends Model
 {
+    const REMARK_LATE = 'Late';
+    const REMARK_UNPREPARED = 'Unprepared';
+    const REMARK_LATE_UNPREPARED = 'Late & unprepared';
+    const REMARK_NO_SHOW = 'No show';
+    const REMARK_BENCHED = 'Benched';
+    const REMARK_VALID_ABSENCE = 'Valid absence';
+
     /**
      * The attributes that are mass assignable.
      *
@@ -18,7 +25,8 @@ class Raid extends Model
         'guild_id',
         'member_id',
         'date',
-        'note',
+        'is_cancelled',
+        'public_note',
         'officer_note',
         'logs',
     ];
@@ -94,5 +102,16 @@ class Raid extends Model
 
     public function raidGroups() {
         return $this->hasMany(RaidGroup::class)->orderBy('name');
+    }
+
+    static public function remarks() {
+        return [
+            self::REMARK_LATE,
+            self::REMARK_UNPREPARED,
+            self::REMARK_LATE_UNPREPARED,
+            self::REMARK_NO_SHOW,
+            self::REMARK_BENCHED,
+            self::REMARK_VALID_ABSENCE,
+        ];
     }
 }

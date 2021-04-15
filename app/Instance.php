@@ -17,6 +17,7 @@ class Instance extends Model
         'short_name',
         'slug',
         'order',
+        'expansion_id',
     ];
 
     /**

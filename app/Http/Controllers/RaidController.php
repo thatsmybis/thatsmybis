@@ -24,7 +24,7 @@ class RaidController extends Controller
     }
 
     /**
-     * Show a raid for editing
+     * Show a raid for editing, or creating if no ID is provided
      *
      * @return \Illuminate\Http\Response
      */
@@ -33,33 +33,35 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        // TODO: Is this permission check ok? Dufferenet permission?
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load([
-            'allRaidGroups' => function ($query) use ($id) {
-                return $query->where('id', $id);
-            },
-            'allRaidGroups.role']);
-
-        $raidGroup = null;
+        $raid = null;
 
         if ($id) {
-            $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
-
-            if (!$raidGroup) {
-                abort(404, 'Raid Group not found.');
-            }
+            $raid = Raid::where([
+                ['guild_id', $guild->id],
+                ['id', $id],
+            ])->first();
         }
 
-        return view('guild.raidGroups.edit', [
+        $guild->load([
+            'characters',
+            'raidGroups',
+            'raidGroups.role']);
+
+        $instances = Instance::where('expansion_id', $guild->expansion_id)->get();
+
+        return view('guild.raids.edit', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'instances'     => $instances,
             'maxInstances'  => self::MAX_INSTANCES,
             'maxRaids'      => self::MAX_RAIDS,
-            'raidGroup'     => $raidGroup,
+            'raid'          => $raid,
         ]);
     }
 
@@ -70,7 +72,7 @@ class RaidController extends Controller
     public function create($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
-dd(Instance::all());
+
         if (!$currentMember->hasPermission('create.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to create Raid Groups.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
