@@ -40,6 +40,11 @@ class RaidController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
         $raid = null;
 
         if ($id) {
@@ -57,13 +62,14 @@ class RaidController extends Controller
         $instances = Instance::where('expansion_id', $guild->expansion_id)->get();
 
         return view('guild.raids.edit', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'instances'     => $instances,
-            'maxCharacters' => self::MAX_CHARACTERS,
-            'maxInstances'  => self::MAX_INSTANCES,
-            'maxRaids'      => self::MAX_RAIDS,
-            'raid'          => $raid,
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'instances'       => $instances,
+            'maxCharacters'   => self::MAX_CHARACTERS,
+            'maxInstances'    => self::MAX_INSTANCES,
+            'maxRaids'        => self::MAX_RAIDS,
+            'raid'            => $raid,
+            'showOfficerNote' => $showOfficerNote,
         ]);
     }
 

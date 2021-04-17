@@ -132,6 +132,9 @@ body {
     font-size:18px;
 }
 
+.text-death-knight {
+    color: #c41e3b;
+}
 .text-druid {
     color: #ff8000;
 }
@@ -654,8 +657,146 @@ div.dataTables_filter input {
 /* END DATATABLES OVERRIDE */
 
 /* Bootstrap-Slider override */
+/* the bar bits that are NOT within the selection */
+.slider-track {
+    border-top: 1px solid #4a76ff;
+    border-bottom: 1px solid #4a76ff;
+    background-color: #32305c;
+    background-image: -moz-linear-gradient(top, #32305c, #32305c);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#32305c), to(#32305c));
+    background-image: -webkit-linear-gradient(top, #32305c, #32305c);
+    background-image: -o-linear-gradient(top, #32305c, #32305c);
+    background-image: linear-gradient(to bottom, #32305c, #32305c);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#32305c', endColorstr='#32305c',GradientType=0);
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    position: absolute;
+    cursor: pointer;
+}
+/* the bar bits that are within the selection */
+.slider-selection.tick-slider-selection {
+    background-color: #f7f7f7;
+    background-image: -moz-linear-gradient(top, #F9F9F9, #F5F5F5);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F9F9F9), to(#F5F5F5));
+    background-image: -webkit-linear-gradient(top, #F9F9F9, #F5F5F5);
+    background-image: -o-linear-gradient(top, #F9F9F9, #F5F5F5);
+    background-image: linear-gradient(to bottom, #F9F9F9, #F5F5F5);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F9F9F9', endColorstr='#F5F5F5',GradientType=0);
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    position: absolute;
+}
+/* the main circle bit that is selected */
 .slider-handle {
-    /*background-image: linear-gradient(to bottom, #216D93, #036fa5) !important;*/
+  background-color: #02f3ff;
+  background-image: -moz-linear-gradient(top, #02f3ff, #02f3ff);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#02f3ff), to(#02f3ff));
+  background-image: -webkit-linear-gradient(top, #02f3ff, #02f3ff);
+  background-image: -o-linear-gradient(top, #02f3ff, #02f3ff);
+  background-image: linear-gradient(to bottom, #02f3ff, #02f3ff);
+  background-repeat: repeat-x;
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#02f3ff', endColorstr='#02f3ff',GradientType=0);
+  -webkit-box-shadow: none;
+  -moz-box-shadow: none;
+  box-shadow: none;
+  position: absolute;
+  top: 0;
+  width: 20px;
+  height: 20px;
+  background-color: #02f3ff;
+  border: 0px solid #4a76ff;
+}
+/* the secondary circle bits that are within the selection */
+.slider-tick.in-selection {
+    background-color: #f7f7f7;
+    background-image: -moz-linear-gradient(top, #F5F5F5, #F9F9F9);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#F5F5F5), to(#F9F9F9));
+    background-image: -webkit-linear-gradient(top, #F5F5F5, #F9F9F9);
+    background-image: -o-linear-gradient(top, #F5F5F5, #F9F9F9);
+    background-image: linear-gradient(to bottom, #F5F5F5, #F9F9F9);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#F5F5F5', endColorstr='#F9F9F9',GradientType=0);
+    -webkit-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.15);
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    position: absolute;
+    cursor: pointer;
+    width: 20px;
+    height: 20px;
+    filter: none;
+    opacity: 0.8;
+    border: 0px solid transparent;
+}
+.slider-tick {
+    border: 1px solid #4a76ff;
+    border-bottom: 1px solid #4a76ff;
+    background-color: #32305c;
+    background-image: -moz-linear-gradient(top, #32305c, #32305c);
+    background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#32305c), to(#32305c));
+    background-image: -webkit-linear-gradient(top, #32305c, #32305c);
+    background-image: -o-linear-gradient(top, #32305c, #32305c);
+    background-image: linear-gradient(to bottom, #32305c, #32305c);
+    background-repeat: repeat-x;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#32305c', endColorstr='#32305c',GradientType=0);
+    opacity: 1;
+}
+
+
+/* jQuery datetimepicker override */
+.xdsoft_datetimepicker.xdsoft_dark {
+    color: #fff !important;
+    box-shadow: none !important;
+    background: #32305c !important;
+    border: 1px solid #6865b9 !important;
+    border-radius: 3px;
+}
+.xdsoft_datetimepicker.xdsoft_dark .xdsoft_label {
+    color: #fff !important;
+    background: #32305c !important;
+}
+.xdsoft_datetimepicker.xdsoft_dark .xdsoft_timepicker .xdsoft_time_box > div > div {
+    color: #fff !important;
+    color: #fff !important;
+    background: #32305c !important;
+    border: 1px solid #6865b9 !important;
+}
+.xdsoft_datetimepicker.xdsoft_dark .xdsoft_calendar td, th {
+    color: #fff !important;
+    background: #32305c !important;
+    border: 1px solid #6865b9 !important;
+}
+.xdsoft_datetimepicker.xdsoft_dark .xdsoft_timepicker .xdsoft_time_box {
+    border-bottom: 1px solid #6865b9 !important;
+    border-top: 1px solid #6865b9 !important;
+}
+/* selected text*/
+.xdsoft_datetimepicker .xdsoft_calendar td.xdsoft_current {
+    box-shadow: none !important;
+    color: #ff8000 !important;
+    border: 1px solid #ff8000 !important;
+    font-weight: 900 !important;
+}
+.xdsoft_datetimepicker.xdsoft_dark .xdsoft_timepicker .xdsoft_time_box > div > div.xdsoft_current {
+    box-shadow: none !important;
+    color: #ff8000 !important;
+    border: 1px solid #ff8000 !important;
+    font-weight: 900 !important;
 }
 
 .ui-autocomplete {

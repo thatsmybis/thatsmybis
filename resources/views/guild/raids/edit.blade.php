@@ -44,10 +44,35 @@
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="row">
-                            <div class="col-sm-6 col-12">
+                            <div class="col-12">
+                                <div class="form-group">
+                                    <label for="date" class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-calendar"></span>
+                                        Date
+                                    </label>
+                                    <div>
+                                        <input name="date"
+                                            type="text"
+                                            min="2004-09-22"
+                                            max="{{ $maxDate }}"
+                                            value="{{ old('date') ? old('date') : ($raid ? $raid->date : '') }}">
+                                        <!-- <input name="date"
+                                            required
+                                            type="date"
+                                            min="2004-09-22"
+                                            max="{{ $maxDate }}"
+                                            class="form-control dark"
+                                            value="{{ old('date') ? old('date') : ($raid ? $raid->date : '') }}" /> -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-6 col-12">
                                 <div class="form-group">
                                     <label for="name" class="font-weight-bold">
-                                        <span class="text-muted fas fa-fw fa-helmet-battle"></span>
+                                        <span class="text-dk fas fa-fw fa-helmet-battle"></span>
                                         Raid Name
                                     </label>
                                     <input name="name"
@@ -59,25 +84,10 @@
                                         value="{{ old('name') ? old('name') : ($raid ? $raid->name : '') }}" />
                                 </div>
                             </div>
-
-                            <div class="col-sm-6 col-12">
-                                <div class="form-group">
-                                    <label for="date" class="font-weight-bold">
-                                        <span class="text-muted fas fa-fw fa-calendar"></span>
-                                        Date
-                                    </label>
-                                    <input name="date"
-                                        required
-                                        type="date"
-                                        min="2004-09-22"
-                                        max="{{ $maxDate }}"
-                                        class="form-control dark"
-                                        value="{{ old('date') ? old('date') : ($raid ? $raid->date : '') }}" />
-                                </div>
-                            </div>
                         </div>
+
                         <div class="row">
-                            <div class="col-md-6 col-12">
+                            <div class="col-lg-6 col-12">
                                 <div class="form-group">
                                     <label for="public_note" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
@@ -89,7 +99,7 @@
                             </div>
 
                             @if ($currentMember->hasPermission('edit.officer-notes'))
-                                <div class="col-md-6 col-12">
+                                <div class="col-lg-6 col-12">
                                     <div class="form-group">
                                         <label for="officer_note" class="font-weight-bold">
                                             <span class="text-muted fas fa-fw fa-shield"></span>
@@ -97,7 +107,9 @@
                                             <small class="text-muted">only officers can see this</small>
                                         </label>
                                         @if (isStreamerMode())
-                                            Hidden in streamer mode
+                                        <div class="mt-1">
+                                            Officer note is hidden in streamer mode
+                                        </div>
                                         @else
                                             <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($raid ? $raid->officer_note : '') }}</textarea>
                                         @endif
@@ -106,7 +118,7 @@
                             @endif
                         </div>
                         <div class="row">
-                            <div class="col-sm-6 col-12">
+                            <div class="col-lg-6 col-12">
                                 <div class="form-group">
                                     <label for="logs" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-link"></span>
@@ -316,7 +328,7 @@
 
                                         <!-- Credit slider -->
                                         <div class="col-lg-3 col-sm-6 col-12">
-                                            <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.credit') ? 'text-danger font-weight-bold' : '' }}">
+                                            <div class="form-group text-center  mb-0 {{ $errors->has('characters.' . $i . '.credit') ? 'text-danger font-weight-bold' : '' }}">
 
                                                 <label for="credit" class="font-weight-bold">
                                                     @if ($i == 0)
@@ -369,7 +381,6 @@
                                                             @if ($i == 0)
                                                                 <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
                                                                 Custom Note
-                                                                <span class="text-muted small">optional</span>
                                                             @else
                                                                 &nbsp;
                                                                 <span class="sr-only">
@@ -391,7 +402,6 @@
                                                             @if ($i == 0)
                                                                 <span class="fas fa-fw fa-shield text-muted"></span>
                                                                 Officer Note
-                                                                <span class="text-muted small">optional</span>
                                                             @else
                                                                 &nbsp;
                                                                 <span class="sr-only">
@@ -399,8 +409,14 @@
                                                                 </span>
                                                             @endif
                                                         </label>
+                                                        @if (isStreamerMode())
+                                                            <div class="mt-2">
+                                                                Officer note is hidden in streamer mode
+                                                            </div>
+                                                        @endif
                                                         <input name="character[{{ $i }}][officer_note]" maxlength="140" data-max-length="140" type="text" placeholder="officer note"
                                                             class="form-control dark {{ $errors->has('characters.' . $i . '.officer_note') ? 'form-danger' : '' }}" autocomplete="off"
+                                                            style="{{ isStreamerMode() ? 'display:none;' : '' }}"
                                                             value="{{ old('characters.' . $i . '.officer_note') ? old('characters.' . $i . '.officer_note') : '' }}">
                                                     </div>
                                                 </div>
@@ -430,8 +446,21 @@
 
 @section('scripts')
 <script>
+    var characters = {!! $showOfficerNote ? $guild->characters->makeVisible('officer_note')->toJson() : $guild->characters->toJson() !!};
+
     $(document).ready(function () {
         warnBeforeLeaving("#editForm")
+
+        $("[name=date]").datetimepicker({
+            format: 'Y.m.d H:i',
+            inline: true,
+            step: 30,
+            theme: 'dark',
+        });
+
+        $("[name=raid_group_id\\[\\]]").change(function () {
+            fillCharactersFromRaid($(this).val());
+        });
 
         $(".js-show-next").change(function() {
             showNext(this);
@@ -466,6 +495,17 @@
         }).change();
     });
 
+    function fillCharactersFromRaid(raidGroupId) {
+        const raidGroupCharacters = characters.find(character => character.raid_group_id == raidGroupId);
+
+        // Find first empty character input, select appropriate character
+    }
+
+    // Hack to get the slider's labels to refresh: https://github.com/seiyria/bootstrap-slider/issues/396#issuecomment-310415503
+    function fixSliderLabels() {
+        window.dispatchEvent(new Event('resize'));
+    }
+
     // If the current element has a value, show it and the next element that is hidden because it is empty
     function showNext(currentElement) {
         if ($(currentElement).val() != "") {
@@ -483,11 +523,6 @@
             nextElement.find("select[name^=character][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
             fixSliderLabels();
         }
-    }
-
-    // Hack to get the slider's labels to refresh: https://github.com/seiyria/bootstrap-slider/issues/396#issuecomment-310415503
-    function fixSliderLabels() {
-        window.dispatchEvent(new Event('resize'));
     }
 </script>
 @endsection
