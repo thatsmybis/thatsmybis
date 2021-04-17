@@ -9,9 +9,10 @@ use Kodeine\Acl\Models\Eloquent\Permission;
 
 class RaidController extends Controller
 {
+    const MAX_CHARACTERS = 160;
+    const MAX_INSTANCES  = 4;
+    const MAX_RAIDS      = 4;
     const RESULTS_PER_PAGE = 20;
-    const MAX_INSTANCES = 4;
-    const MAX_RAIDS     = 4;
 
     /**
      * Create a new controller instance.
@@ -33,7 +34,7 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // TODO: Is this permission check ok? Dufferenet permission?
+        // TODO: Is this permission check ok? Different permission?
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
@@ -59,6 +60,7 @@ class RaidController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'instances'     => $instances,
+            'maxCharacters' => self::MAX_CHARACTERS,
             'maxInstances'  => self::MAX_INSTANCES,
             'maxRaids'      => self::MAX_RAIDS,
             'raid'          => $raid,

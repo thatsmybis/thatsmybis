@@ -12,7 +12,6 @@ class Raid extends Model
     const REMARK_LATE_UNPREPARED = 'Late & unprepared';
     const REMARK_NO_SHOW = 'No show';
     const REMARK_BENCHED = 'Benched';
-    const REMARK_VALID_ABSENCE = 'Valid absence';
 
     /**
      * The attributes that are mass assignable.
@@ -111,7 +110,6 @@ class Raid extends Model
             self::REMARK_LATE_UNPREPARED,
             self::REMARK_NO_SHOW,
             self::REMARK_BENCHED,
-            self::REMARK_VALID_ABSENCE,
         ];
     }
 }
