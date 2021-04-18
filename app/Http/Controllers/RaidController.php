@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\{AuditLog, Guild, Instance, Raid, RaidGroup};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 use Kodeine\Acl\Models\Eloquent\Permission;
 
 class RaidController extends Controller
@@ -30,7 +31,6 @@ class RaidController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function edit($guildId, $guildSlug, $id = null) {
-        // TODO: Copied from raidgroups
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -82,52 +82,116 @@ class RaidController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('create.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to create Raid Groups.');
+            request()->session()->flash('status', 'You don\'t have permissions to create Raids.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load(['allRaidGroups', 'roles']);
-
         $validationRules = [
-            'name'    => 'string|max:255',
-            'role_id' => 'nullable|integer|exists:roles,id',
+            'date'            => 'required|date_format:Y-m-d H:i:s',
+            'name'            => 'required|string|max:75',
+            'public_note'     => 'nullable|string|max:250',
+            'officer_note'    => 'nullable|string|max:250',
+            'logs'            => 'nullable|string|max:250',
+            'instance_id.*'   => [
+                'nullable',
+                'integer',
+                Rule::exists('instances', 'id')->where('instances.expansion_id', $guild->expansion_id),
+            ],
+            'raid_group_id.*' => [
+                'nullable',
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
+            ],
+            'characters.*.character_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('characters', 'id')->where('characters.guild_id', $guild->id),
+            ],
+            'characters.*.is_exempt'    => 'nullable|boolean',
+            'characters.*.remark'       => ['nullable', 'string', Rule::in(Raid::remarks())],
+            'characters.*.credit'       => 'required|numeric|between:0,1',
+            'characters.*.note'         => 'nullable|string|max:250',
+            'characters.*.officer_note' => 'nullable|string|max:250',
         ];
 
         $validationMessages = [];
 
         $this->validate(request(), $validationRules, $validationMessages);
 
-        if ($guild->raidGroups->contains('name', request()->input('name'))) {
-            abort(403, 'Name already exists.');
-        }
-
-        $role = null;
-
-        if (request()->input('role_id')) {
-            $role = $guild->roles->where('id', request()->input('role_id'));
-            if (!$role) {
-                abort(404, 'Role not found.');
-            }
-        }
-
         $createValues = [];
 
-        $createValues['name']     = request()->input('name');
-        $createValues['slug']     = slug(request()->input('name'));
-        $createValues['role_id']  = request()->input('role_id');
-        $createValues['guild_id'] = $guild->id;
+        $createValues['date']         = request()->input('date');
+        $createValues['name']         = request()->input('name');
+        $createValues['public_note']  = request()->input('public_note');
+        $createValues['officer_note'] = request()->input('officer_note');
+        $createValues['logs']         = request()->input('logs');
 
-        $raidGroup = RaidGroup::create($createValues);
+        $createValues['slug']         = slug(request()->input('name'));
+        $createValues['guild_id']     = $guild->id;
+        $createValues['member_id']    = $currentMember->id;
+        $createValues['is_cancelled'] = 0;
+
+        $raid = Raid::create($createValues);
+
+        $characterCount = 0;
+        $instanceCount = 0;
+        $raidGroupCount = 0;
+        $newRows = [];
+
+        // Add characters
+        foreach (request()->input('characters') as $character) {
+            if ($character['character_id']) {
+                $newRows[] = [
+                    'raid_id'      => $raid,
+                    'character_id' => $character['character_id'],
+                    'is_exempt'    => isset($character['is_exempt']) && $character['is_exempt'] == 1 ? 1 : 0,
+                    'remark'       => ($character['remark'] ? $character['remark'] : null),
+                    'credit'       => ($character['credit'] ? floatval($character['credit']) : 0.0),
+                    'note'         => ($character['note'] ? $character['note'] : null),
+                    'officer_note' => ($character['officer_note'] ? $character['officer_note'] : null),
+                ];
+                $characterCount++;
+            }
+        }
+        DB::table('raid_characters')->insert($newRows);
+        $newRows = [];
+
+        // Add instances
+        foreach (request()->input('instance_id') as $instanceId) {
+            if ($instanceId) {
+                $newRows[] = [
+                    'raid_id'     => $raid,
+                    'instance_id' => $instanceId,
+                ];
+                $instanceCount++;
+            }
+        }
+        DB::table('raid_instances')->insert($newRows);
+        $newRows = [];
+
+        // Add raid groups
+        foreach (request()->input('raid_group_id') as $raidGroupId) {
+            if ($raidGroupId) {
+                $newRows[] = [
+                    'raid_id'       => $raid,
+                    'raid_group_id' => $raidGroupId,
+                ];
+                $raidGroupCount++;
+            }
+        }
+        DB::table('raid_raid_groups')->insert($newRows);
+        $newRows = [];
 
         AuditLog::create([
-            'description'   => $currentMember->username . ' created a Raid Group',
+            'description'   => $currentMember->username . " created raid \"{$raid->name}\" with {$characterCount} character(s), {$instanceCount} dungeon(s), and {$raidGroupCount} raid group(s)",
             'member_id'     => $currentMember->id,
             'guild_id'      => $guild->id,
-            'raid_group_id' => $raidGroup->id,
+            'raid_group_id' => ($raidGroupCount ? request()->input('raid_group_id')[0] : null),
+            'raid_id'       => $raid->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully created Raid Group.');
-        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        request()->session()->flash('status', "Successfully created Raid {$raid->name}.");
+        return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raid->id, 'slug' => $raid->slug]);
     }
 
     /**

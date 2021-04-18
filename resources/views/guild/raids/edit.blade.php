@@ -48,21 +48,16 @@
                                 <div class="form-group">
                                     <label for="date" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-calendar"></span>
-                                        Date
+                                        Date <span class="small text-muted">your local time</span>
                                     </label>
                                     <div>
-                                        <input name="date"
+                                        <input
+                                            required
+                                            name="date"
                                             type="text"
                                             min="2004-09-22"
                                             max="{{ $maxDate }}"
                                             value="{{ old('date') ? old('date') : ($raid ? $raid->date : '') }}">
-                                        <!-- <input name="date"
-                                            required
-                                            type="date"
-                                            min="2004-09-22"
-                                            max="{{ $maxDate }}"
-                                            class="form-control dark"
-                                            value="{{ old('date') ? old('date') : ($raid ? $raid->date : '') }}" /> -->
                                     </div>
                                 </div>
                             </div>
@@ -78,7 +73,7 @@
                                     <input name="name"
                                         required
                                         autocomplete="off"
-                                        maxlength="40"
+                                        maxlength="75"
                                         type="text"
                                         class="form-control dark"
                                         placeholder="eg. MC 42 Binding Run"
@@ -95,7 +90,7 @@
                                         Public Note
                                         <small class="text-muted">anyone in the guild can see this</small>
                                     </label>
-                                    <textarea autocomplete="off"  maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($raid ? $raid->public_note : '') }}</textarea>
+                                    <textarea autocomplete="off"  maxlength="250" data-max-length="250" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($raid ? $raid->public_note : '') }}</textarea>
                                 </div>
                             </div>
 
@@ -112,7 +107,7 @@
                                             Officer note is hidden in streamer mode
                                         </div>
                                         @else
-                                            <textarea autocomplete="off" maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($raid ? $raid->officer_note : '') }}</textarea>
+                                            <textarea autocomplete="off" maxlength="250" data-max-length="250" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($raid ? $raid->officer_note : '') }}</textarea>
                                         @endif
                                     </div>
                                 </div>
@@ -127,7 +122,7 @@
                                     </label>
                                     <input name="logs"
                                         autocomplete="off"
-                                        maxlength="255"
+                                        maxlength="250"
                                         type="text"
                                         class="form-control dark"
                                         placeholder="a warcraftlogs.com link perhaps?"
@@ -226,7 +221,7 @@
                                 <!-- Exempt -->
                                 <div class="col-lg-1 col-2">
                                     <div class="form-group text-center">
-                                        <label for="character[{{ $i }}][exempt]" class="font-weight-bold">
+                                        <label for="characters[{{ $i }}][is_exempt]" class="font-weight-bold">
                                             @if ($i == 0)
                                                 <span class="fas fa-fw fa-undo text-muted"></span>
                                                 Skip
@@ -239,8 +234,8 @@
                                         </label>
                                         <div class="checkbox">
                                             <label title="skip this character's attendance check">
-                                                <input data-index="{{ $i }}" class="js-attendance-skip" type="checkbox" name="character[{{ $i }}][exempt]" value="1" autocomplete="off"
-                                                    {{ old('characters.' . $i . '.exempt') && old('characters.' . $i . '.exempt') == 1  ? 'checked' : '' }}>
+                                                <input data-index="{{ $i }}" class="js-attendance-skip" type="checkbox" name="characters[{{ $i }}][is_exempt]" value="1" autocomplete="off"
+                                                    {{ old('characters.' . $i . '.is_exempt') && old('characters.' . $i . '.is_exempt') == 1  ? 'checked' : '' }}>
                                             </label>
                                         </div>
                                     </div>
@@ -252,7 +247,7 @@
                                         <div class="col-xl-5 col-lg-5 col-12">
                                             <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                <label for="character_id" class="font-weight-bold">
+                                                <label for="characters[{{ $i }}][character_id]" class="font-weight-bold">
                                                     @if ($i == 0)
                                                         <span class="fas fa-fw fa-user text-muted"></span>
                                                         Character
@@ -264,7 +259,7 @@
                                                     @endif
                                                 </label>
 
-                                                <select name="character[{{ $i }}][character_id]" class="js-show-next-character form-control dark {{ $errors->has('characters.' . $i . '.character_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
+                                                <select name="characters[{{ $i }}][character_id]" class="js-show-next-character form-control dark {{ $errors->has('characters.' . $i . '.character_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
                                                     <option value="">
                                                         —
                                                     </option>
@@ -293,7 +288,7 @@
                                         <div class="col-lg-4 col-sm-6 col-12">
                                             <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.remark') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                <label for="remark" class="font-weight-bold">
+                                                <label for="characters[{{ $i }}][remark]" class="font-weight-bold">
                                                     @if ($i == 0)
                                                         <span class="fas fa-fw fa-quote-left text-muted"></span>
                                                         Note
@@ -305,7 +300,7 @@
                                                     @endif
                                                 </label>
 
-                                                <select name="character[{{ $i }}][remark]" class="form-control dark {{ $errors->has('characters.' . $i . '.remark') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
+                                                <select name="characters[{{ $i }}][remark]" class="form-control dark {{ $errors->has('characters.' . $i . '.remark') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
                                                     <option value="">
                                                         —
                                                     </option>
@@ -337,7 +332,7 @@
                                         <div class="col-lg-3 col-sm-6 col-12">
                                             <div class="form-group text-center  mb-0 {{ $errors->has('characters.' . $i . '.credit') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                <label for="credit" class="font-weight-bold">
+                                                <label for="characters[{{ $i }}][remark]" class="font-weight-bold">
                                                     @if ($i == 0)
                                                         <span class="fas fa-fw fa-user-chart text-muted"></span>
                                                         Attendance Credit
@@ -351,7 +346,7 @@
 
                                                 <div data-attendance-input="{{ $i }}" class="small text-muted {{ $errors->has('characters.' . $i . '.credit') ? 'form-danger' : '' }}">
                                                     <input type="text"
-                                                        name="character[{{ $i }}][credit]"
+                                                        name="characters[{{ $i }}][credit]"
                                                         autocomplete="off"
                                                         data-provide="slider"
                                                         data-slider-ticks="[0.0, 0.25, 0.5, 0.75, 1.0]"
@@ -363,7 +358,7 @@
                                                         data-slider-tooltip="hide" />
                                                 </div>
                                                 <div data-attendance-skip-note="{{ $i }}" class="text-warning" style="display:none;">
-                                                    Attendance will be skipped - this won't count against their overall attendance
+                                                    Attendance skipped - this won't count against their overall attendance
                                                 </div>
 
                                                 @if ($errors->has('characters.' . $i))
@@ -380,7 +375,7 @@
                                                 <div class="js-note col-lg-6 col-12">
                                                     <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.note') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                        <label for="character[{{ $i }}][note]" class="font-weight-bold">
+                                                        <label for="characters[{{ $i }}][note]" class="font-weight-bold">
                                                             @if ($i == 0)
                                                                 <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
                                                                 Custom Note
@@ -391,7 +386,7 @@
                                                                 </span>
                                                             @endif
                                                         </label>
-                                                        <input name="character[{{ $i }}][note]" maxlength="140" data-max-length="140" type="text" placeholder="brief public note"
+                                                        <input name="characters[{{ $i }}][note]" maxlength="250" data-max-length="250" type="text" placeholder="brief public note"
                                                             class="form-control dark {{ $errors->has('characters.' . $i . '.note') ? 'form-danger' : '' }}" autocomplete="off"
                                                             value="{{ old('characters.' . $i . '.note') ? old('characters.' . $i . '.note') : '' }}">
                                                     </div>
@@ -401,7 +396,7 @@
                                                 <div class="js-note col-lg-6 col-12">
                                                     <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.officer_note') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                        <label for="character[{{ $i }}][officer_note]" class="font-weight-bold">
+                                                        <label for="characters[{{ $i }}][officer_note]" class="font-weight-bold">
                                                             @if ($i == 0)
                                                                 <span class="fas fa-fw fa-shield text-muted"></span>
                                                                 Officer Note
@@ -417,7 +412,7 @@
                                                                 Officer note is hidden in streamer mode
                                                             </div>
                                                         @endif
-                                                        <input name="character[{{ $i }}][officer_note]" maxlength="140" data-max-length="140" type="text" placeholder="officer note"
+                                                        <input name="characters[{{ $i }}][officer_note]" maxlength="250" data-max-length="250" type="text" placeholder="officer note"
                                                             class="form-control dark {{ $errors->has('characters.' . $i . '.officer_note') ? 'form-danger' : '' }}" autocomplete="off"
                                                             style="{{ isStreamerMode() ? 'display:none;' : '' }}"
                                                             value="{{ old('characters.' . $i . '.officer_note') ? old('characters.' . $i . '.officer_note') : '' }}">
@@ -455,10 +450,11 @@
         warnBeforeLeaving("#editForm")
 
         $("[name=date]").datetimepicker({
-            format: 'Y.m.d H:i',
+            format: 'Y-m-d H:i:s',
             inline: true,
             step: 30,
             theme: 'dark',
+            value: '{{ $raid ? $raid->date : getDateTime('Y-m-d') . ' 17:00:00' }}'
         });
 
         $("[name=raid_group_id\\[\\]]").change(function () {
@@ -509,17 +505,17 @@
         let alreadyAddedCount = 0;
 
         for (const character of raidGroupCharacters) {
-            const existing = $(`select[name^=character][name$=\\[character_id\\]] option:selected[value="${character.id}"]`).first();
+            const existing = $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${character.id}"]`).first();
             if (!existing.length) {
-                let emptyCharacterSelect = $('select[name^=character][name$=\\[character_id\\]] option:selected[value=""]').first().parent();
+                let emptyCharacterSelect = $('select[name^=characters][name$=\\[character_id\\]] option:selected[value=""]').first().parent();
                 emptyCharacterSelect.val(character.id);
                 addedCount++;
 
                 // Reset associated inputs
                 const row = emptyCharacterSelect.parent().closest(".js-row");
-                $(row).find("[name^=character][name$=\\[exempt\\]]").prop("checked", false).change();
-                $(row).find("[name^=character][name$=\\[remark\\]]").val("").change();
-                $(row).find("[name^=character][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
+                $(row).find("[name^=characters][name$=\\[is_exempt\\]]").prop("checked", false).change();
+                $(row).find("[name^=characters][name$=\\[remark\\]]").val("").change();
+                $(row).find("[name^=characters][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
             } else {
                 alreadyAddedCount++;
             }
@@ -548,7 +544,7 @@
             $(currentElement).show();
             let nextElement = $(currentElement).closest(".js-row").next(".js-hide-empty");
             nextElement.show();
-            nextElement.find("select[name^=character_id][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
+            nextElement.find("select[name^=characters][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
             fixSliderLabels();
         }
     }
