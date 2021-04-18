@@ -6,6 +6,7 @@
 
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
     // So we're iterating over the characters only one time, saving the results, and printing them.
+
     $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->characters, 'raidGroups' => $guild->raidGroups]);
 
     $remarkSelectOptions = (string)View::make('partials.remarkOptions', ['characters' => $guild->characters]);
@@ -18,7 +19,7 @@
             <div class="row mb-3">
                 @if ($raid)
                     <div class="col-12 pt-2 bg-lightest rounded">
-                        Edit {{ $raid->name }}
+                        <h1 class="font-weight-medium ">Editing {{ $raid->name }}</h1>
                     </div>
                 @else
                     <div class="col-12 pt-2 mb-2">
@@ -42,7 +43,7 @@
                 <input hidden name="id" value="{{ $raid ? $raid->id : '' }}" />
 
                 <div class="row">
-                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded {{ $errors->has('raid.date') ? 'text-danger font-weight-bold' : '' }}">
                         <div class="row">
                             <div class="col-12">
                                 <div class="form-group">
@@ -64,7 +65,7 @@
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-6 col-12">
+                            <div class="col-lg-6 col-12 {{ $errors->has('raid.name') ? 'text-danger font-weight-bold' : '' }}">
                                 <div class="form-group">
                                     <label for="name" class="font-weight-bold">
                                         <span class="text-dk fas fa-fw fa-helmet-battle"></span>
@@ -80,10 +81,27 @@
                                         value="{{ old('name') ? old('name') : ($raid ? $raid->name : '') }}" />
                                 </div>
                             </div>
+
+                            @if ($raid)
+                                <div class="col-lg-6 col-12 {{ $errors->has('raid.is_cancelled') ? 'text-danger font-weight-bold' : '' }}">
+                                    <div class="form-group mb-0">
+                                        <label>
+                                            &nbsp;
+                                        </label>
+                                        <div class="checkbox text-warning">
+                                            <label>
+                                                <input type="checkbox" name="is_cancelled" value="1" class="" autocomplete="off"
+                                                    {{ old('is_cancelled') && old('is_cancelled') == 1 ? 'checked' : ($raid && $raid->is_cancelled ? 'checked' : '') }}>
+                                                    Cancelled <small class="text-muted">closest you can get to deleting this</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            @endif
                         </div>
 
                         <div class="row">
-                            <div class="col-lg-6 col-12">
+                            <div class="col-lg-6 col-12 {{ $errors->has('raid.public_note') ? 'text-danger font-weight-bold' : '' }}">
                                 <div class="form-group">
                                     <label for="public_note" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
@@ -95,7 +113,7 @@
                             </div>
 
                             @if ($currentMember->hasPermission('edit.officer-notes'))
-                                <div class="col-lg-6 col-12">
+                                <div class="col-lg-6 col-12 {{ $errors->has('raid.officer_note') ? 'text-danger font-weight-bold' : '' }}">
                                     <div class="form-group">
                                         <label for="officer_note" class="font-weight-bold">
                                             <span class="text-muted fas fa-fw fa-shield"></span>
@@ -114,7 +132,7 @@
                             @endif
                         </div>
                         <div class="row">
-                            <div class="col-lg-6 col-12">
+                            <div class="col-lg-6 col-12 {{ $errors->has('raid.logs') ? 'text-danger font-weight-bold' : '' }}">
                                 <div class="form-group">
                                     <label for="logs" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-link"></span>
@@ -129,26 +147,12 @@
                                         value="{{ old('logs') ? old('logs') : ($raid ? $raid->logs : '') }}" />
                                 </div>
                             </div>
-
-                            @if ($raid)
-                                <div class="col-sm-6 col-12">
-                                    <div class="form-group mb-0">
-                                        <div class="checkbox">
-                                            <label>
-                                                <input type="checkbox" name="is_cancelled" value="1" class="" autocomplete="off"
-                                                    {{ old('is_cancelled') && old('is_cancelled') == 1 ? 'checked' : ($raid && $raid->is_cancelled ? 'checked' : '') }}>
-                                                    Cancelled <small class="text-muted">closest you can get to deleting this</small>
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            @endif
                         </div>
                     </div>
                 </div>
 
                 <div class="row mb-3 pb-1 pt-2 bg-light rounded">
-                    <div class="col-sm-6 col-12">
+                    <div class="col-sm-6 col-12 {{ $errors->has('raid.instance_id.*') ? 'text-danger font-weight-bold' : '' }}">
                         <label for="instance_id[0]" class="font-weight-bold">
                             <span class="fas fa-fw fa-dungeon text-muted"></span>
                             Dungeon(s)
@@ -162,7 +166,7 @@
 
                                     @foreach ($instances as $instance)
                                         <option value="{{ $instance->id }}"
-                                            {{ old('instance_id.' . $i) && old('instance_id.' . $i) == $instance->id ? 'selected' : ($raid && $raid->instances->slice($i, 1) && $raid->instances->slice($i, 1) == $instance->id ? 'selected' : '') }}>
+                                            {{ old('instance_id.' . $i) && old('instance_id.' . $i) == $instance->id ? 'selected' : ($raid && $raid->instances->slice($i, 1)->count() && $raid->instances->slice($i, 1)->first()->id == $instance->id ? 'selected' : '') }}>
                                             {{ $instance->name }}
                                         </option>
                                     @endforeach
@@ -171,7 +175,7 @@
                         @endfor
                     </div>
 
-                    <div class="col-sm-6 col-12">
+                    <div class="col-sm-6 col-12 {{ $errors->has('raid.raid_group_id.*') ? 'text-danger font-weight-bold' : '' }}">
                         <label for="raid_group_id[0]" class="font-weight-bold">
                             <span class="fas fa-fw fa-users text-muted"></span>
                             Raid Group(s)
@@ -186,7 +190,7 @@
                                     @foreach ($guild->raidGroups as $raidGroup)
                                         <option value="{{ $raidGroup->id }}"
                                             style="color:{{ $raidGroup->getColor() }};"
-                                            {{ old('raid_group_id.' . $i) && old('raid_group_id.' . $i) == $raidGroup->id ? 'selected' : ($raid && $raid->raidGroups->slice($i, 1) && $raid->raidGroups->slice($i, 1) == $raidGroup->id ? 'selected' : '') }}>
+                                            {{ old('raid_group_id.' . $i) && old('raid_group_id.' . $i) == $raidGroup->id ? 'selected' : ($raid && $raid->raidGroups->slice($i, 1)->count() && $raid->raidGroups->slice($i, 1)->first()->id == $raidGroup->id ? 'selected' : '') }}>
                                             {{ $raidGroup->name }}
                                         </option>
                                     @endforeach
@@ -203,7 +207,7 @@
                         @for ($i = 0; $i < $maxCharacters; $i++)
                             @php
                                 $characterId = 'characters.' . $i . '.id';
-                                $character = $raid && $raid->characters->slice($i, 1) ? $raid->characters->slice($i, 1) : null;
+                                $character = $raid && $raid->characters->slice($i, 1)->count() ? $raid->characters->slice($i, 1)->first() : null;
 
                                 $hide = false;
 
@@ -219,23 +223,25 @@
                             <div class="js-row row striped-light pb-4 pt-4 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $hide ? 'display:none;' : '' }}">
 
                                 <!-- Exempt -->
-                                <div class="col-lg-1 col-2">
+                                <div class="col-lg-1 col-2 {{ $errors->has('characters.' . $i . '.is_exempt') ? 'text-danger font-weight-bold' : '' }}">
                                     <div class="form-group text-center">
-                                        <label for="characters[{{ $i }}][is_exempt]" class="font-weight-bold">
+                                        <label for="characters[{{ $i }}][is_exempt]">
                                             @if ($i == 0)
-                                                <span class="fas fa-fw fa-undo text-muted"></span>
-                                                Skip
+                                                <span class="fas fa-fw fa-redo text-muted"></span>
+                                                <span class="font-weight-bold">
+                                                    Skip
+                                                </span>
                                             @else
-                                                <span class="fas fa-fw fa-undo text-muted"></span>
-                                                <span class="sr-only">
-                                                    Skip Character
+                                                <span class="fas fa-fw fa-redo text-muted"></span>
+                                                <span class="small text-muted">
+                                                    skip
                                                 </span>
                                             @endif
                                         </label>
                                         <div class="checkbox">
                                             <label title="skip this character's attendance check">
                                                 <input data-index="{{ $i }}" class="js-attendance-skip" type="checkbox" name="characters[{{ $i }}][is_exempt]" value="1" autocomplete="off"
-                                                    {{ old('characters.' . $i . '.is_exempt') && old('characters.' . $i . '.is_exempt') == 1  ? 'checked' : '' }}>
+                                                    {{ old('characters.' . $i . '.is_exempt') && old('characters.' . $i . '.is_exempt') == 1  ? 'checked' : (!old('characters.' . $i . '.is_exempt') && $character && $character->pivot->is_exempt ? 'checked' : '') }}>
                                             </label>
                                         </div>
                                     </div>
@@ -265,10 +271,15 @@
                                                     </option>
 
                                                     {{-- See the notes at the top for why the options look like this --}}
-                                                    @if (old('characters.' . $i . '.character_id'))
+                                                    @if (old('characters.' . $i . '.character_id') || $character)
                                                         @php
-                                                            // Select the correct option
-                                                            $options = str_replace('hack="' . old('characters.' . $i . '.character_id') . '"', 'selected', $characterSelectOptions);
+                                                            $oldCharacterId = old('characters.' . $i . '.character_id') ? old('characters.' . $i . '.character_id') : (!old('characters.' . $i . '.character_id') && $character ? $character->pivot->character_id : '');
+                                                            if ($oldCharacterId) {
+                                                                // Select the correct option
+                                                                $options = str_replace('hack="' . $oldCharacterId . '"', 'selected', $characterSelectOptions);
+                                                            } else {
+                                                                $options = $characterSelectOptions;
+                                                            }
                                                          @endphp
                                                          {!! $options !!}
                                                     @else
@@ -286,9 +297,9 @@
 
                                         <!-- Remarks dropdown -->
                                         <div class="col-lg-4 col-sm-6 col-12">
-                                            <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.remark') ? 'text-danger font-weight-bold' : '' }}">
+                                            <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.remark_id') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                <label for="characters[{{ $i }}][remark]" class="font-weight-bold">
+                                                <label for="characters[{{ $i }}][remark_id]" class="font-weight-bold">
                                                     @if ($i == 0)
                                                         <span class="fas fa-fw fa-quote-left text-muted"></span>
                                                         Note
@@ -300,16 +311,21 @@
                                                     @endif
                                                 </label>
 
-                                                <select name="characters[{{ $i }}][remark]" class="form-control dark {{ $errors->has('characters.' . $i . '.remark') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
+                                                <select name="characters[{{ $i }}][remark_id]" class="form-control dark {{ $errors->has('characters.' . $i . '.remark_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
                                                     <option value="">
                                                         —
                                                     </option>
 
                                                     {{-- See the notes at the top for why the options look like this --}}
-                                                    @if (old('characters.' . $i . '.remark'))
+                                                    @if (old('characters.' . $i . '.remark_id') || $character)
                                                         @php
-                                                            // Select the correct option
-                                                            $options = str_replace('hack="' . old('characters.' . $i . '.remark') . '"', 'selected', $remarkSelectOptions);
+                                                            $oldRemark = old('characters.' . $i . '.remark_id') ? old('characters.' . $i . '.remark_id') : (!old('characters.' . $i . '.remark_id') && $character ? $character->pivot->remark_id : '');
+                                                            if ($oldRemark) {
+                                                                // Select the correct option
+                                                                $options = str_replace('hack="' . $oldRemark . '"', 'selected', $remarkSelectOptions);
+                                                            } else {
+                                                                $options = $remarkSelectOptions;
+                                                            }
                                                          @endphp
                                                          {!! $options !!}
                                                     @else
@@ -332,7 +348,7 @@
                                         <div class="col-lg-3 col-sm-6 col-12">
                                             <div class="form-group text-center  mb-0 {{ $errors->has('characters.' . $i . '.credit') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                <label for="characters[{{ $i }}][remark]" class="font-weight-bold">
+                                                <label for="characters[{{ $i }}][credit]" class="font-weight-bold">
                                                     @if ($i == 0)
                                                         <span class="fas fa-fw fa-user-chart text-muted"></span>
                                                         Attendance Credit
@@ -354,7 +370,7 @@
                                                         data-slider-min="0"
                                                         data-slider-max="1"
                                                         data-slider-step="0.25"
-                                                        data-slider-value="{{ old('characters.' . $i . '.credit') ? old('characters.' . $i . '.credit') : ($character ? $character->credit : 1) }}"
+                                                        data-slider-value="{{ old('characters.' . $i . '.credit') ? old('characters.' . $i . '.credit') : (! old('characters.' . $i . '.credit') && $character ? $character->pivot->credit : 1) }}"
                                                         data-slider-tooltip="hide" />
                                                 </div>
                                                 <div data-attendance-skip-note="{{ $i }}" class="text-warning" style="display:none;">
@@ -373,9 +389,9 @@
                                             <div class="row">
                                                 <!-- Note -->
                                                 <div class="js-note col-lg-6 col-12">
-                                                    <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.note') ? 'text-danger font-weight-bold' : '' }}">
+                                                    <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.public_note') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                        <label for="characters[{{ $i }}][note]" class="font-weight-bold">
+                                                        <label for="characters[{{ $i }}][public_note]" class="font-weight-bold">
                                                             @if ($i == 0)
                                                                 <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
                                                                 Custom Note
@@ -386,9 +402,9 @@
                                                                 </span>
                                                             @endif
                                                         </label>
-                                                        <input name="characters[{{ $i }}][note]" maxlength="250" data-max-length="250" type="text" placeholder="brief public note"
-                                                            class="form-control dark {{ $errors->has('characters.' . $i . '.note') ? 'form-danger' : '' }}" autocomplete="off"
-                                                            value="{{ old('characters.' . $i . '.note') ? old('characters.' . $i . '.note') : '' }}">
+                                                        <input name="characters[{{ $i }}][public_note]" maxlength="250" data-max-length="250" type="text" placeholder="brief public note"
+                                                            class="form-control dark {{ $errors->has('characters.' . $i . '.public_note') ? 'form-danger' : '' }}" autocomplete="off"
+                                                            value="{{ old('characters.' . $i . '.public_note') ? old('characters.' . $i . '.public_note') : (!old('characters.' . $i . '.public_note') && $character ? $character->public_note : '') }}">
                                                     </div>
                                                 </div>
 
@@ -415,7 +431,7 @@
                                                         <input name="characters[{{ $i }}][officer_note]" maxlength="250" data-max-length="250" type="text" placeholder="officer note"
                                                             class="form-control dark {{ $errors->has('characters.' . $i . '.officer_note') ? 'form-danger' : '' }}" autocomplete="off"
                                                             style="{{ isStreamerMode() ? 'display:none;' : '' }}"
-                                                            value="{{ old('characters.' . $i . '.officer_note') ? old('characters.' . $i . '.officer_note') : '' }}">
+                                                            value="{{ old('characters.' . $i . '.officer_note') ? old('characters.' . $i . '.officer_note') : (!old('characters.' . $i . '.officer_note') && $character ? $character->officer_note : '') }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -447,6 +463,8 @@
     var characters = {!! $showOfficerNote ? $guild->characters->makeVisible('officer_note')->toJson() : $guild->characters->toJson() !!};
 
     $(document).ready(function () {
+        let initializing = true;
+
         warnBeforeLeaving("#editForm")
 
         $("[name=date]").datetimepicker({
@@ -458,8 +476,10 @@
         });
 
         $("[name=raid_group_id\\[\\]]").change(function () {
-            if ($(this).val()) {
-                fillCharactersFromRaid($(this).val());
+            if (!initializing) {
+                if ($(this).val()) {
+                    fillCharactersFromRaid($(this).val());
+                }
             }
         });
 
@@ -495,6 +515,8 @@
                 $(`[data-attendance-skip-note="${index}"]`).hide();
             }
         }).change();
+
+        initializing = false;
     });
 
     // Add characters belonging to the given raid group to the character list if they're not already in it
@@ -514,7 +536,7 @@
                 // Reset associated inputs
                 const row = emptyCharacterSelect.parent().closest(".js-row");
                 $(row).find("[name^=characters][name$=\\[is_exempt\\]]").prop("checked", false).change();
-                $(row).find("[name^=characters][name$=\\[remark\\]]").val("").change();
+                $(row).find("[name^=characters][name$=\\[remark_id\\]]").val("").change();
                 $(row).find("[name^=characters][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
             } else {
                 alreadyAddedCount++;

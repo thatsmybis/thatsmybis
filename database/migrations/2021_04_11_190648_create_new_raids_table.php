@@ -56,8 +56,8 @@ class CreateNewRaidsTable extends Migration
             $table->bigInteger('character_id') ->unsigned();
             $table->boolean('is_exempt')       ->default(0);
             $table->float('credit', 3, 2)      ->nullable();
-            $table->string('remark', 20)       ->nullable()->index();
-            $table->string('note', 255)        ->nullable();
+            $table->tinyInteger('remark_id')   ->nullable()->index();
+            $table->string('public_note', 255) ->nullable();
             $table->string('officer_note', 255)->nullable();
             $table->timestamps();
 

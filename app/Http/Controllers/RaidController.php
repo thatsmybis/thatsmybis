@@ -52,6 +52,7 @@ class RaidController extends Controller
                 ['guild_id', $guild->id],
                 ['id', $id],
             ])->first();
+            $raid->load('characters', 'instances', 'raidGroups');
         }
 
         $guild->load([
@@ -86,33 +87,7 @@ class RaidController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $validationRules = [
-            'date'            => 'required|date_format:Y-m-d H:i:s',
-            'name'            => 'required|string|max:75',
-            'public_note'     => 'nullable|string|max:250',
-            'officer_note'    => 'nullable|string|max:250',
-            'logs'            => 'nullable|string|max:250',
-            'instance_id.*'   => [
-                'nullable',
-                'integer',
-                Rule::exists('instances', 'id')->where('instances.expansion_id', $guild->expansion_id),
-            ],
-            'raid_group_id.*' => [
-                'nullable',
-                'integer',
-                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
-            ],
-            'characters.*.character_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('characters', 'id')->where('characters.guild_id', $guild->id),
-            ],
-            'characters.*.is_exempt'    => 'nullable|boolean',
-            'characters.*.remark'       => ['nullable', 'string', Rule::in(Raid::remarks())],
-            'characters.*.credit'       => 'required|numeric|between:0,1',
-            'characters.*.note'         => 'nullable|string|max:250',
-            'characters.*.officer_note' => 'nullable|string|max:250',
-        ];
+        $validationRules = $this->getValidationRules($guild);
 
         $validationMessages = [];
 
@@ -142,12 +117,12 @@ class RaidController extends Controller
         foreach (request()->input('characters') as $character) {
             if ($character['character_id']) {
                 $newRows[] = [
-                    'raid_id'      => $raid,
+                    'raid_id'      => $raid->id,
                     'character_id' => $character['character_id'],
                     'is_exempt'    => isset($character['is_exempt']) && $character['is_exempt'] == 1 ? 1 : 0,
-                    'remark'       => ($character['remark'] ? $character['remark'] : null),
+                    'remark_id'    => ($character['remark_id'] ? $character['remark_id'] : null),
                     'credit'       => ($character['credit'] ? floatval($character['credit']) : 0.0),
-                    'note'         => ($character['note'] ? $character['note'] : null),
+                    'public_note'  => ($character['public_note'] ? $character['public_note'] : null),
                     'officer_note' => ($character['officer_note'] ? $character['officer_note'] : null),
                 ];
                 $characterCount++;
@@ -160,7 +135,7 @@ class RaidController extends Controller
         foreach (request()->input('instance_id') as $instanceId) {
             if ($instanceId) {
                 $newRows[] = [
-                    'raid_id'     => $raid,
+                    'raid_id'     => $raid->id,
                     'instance_id' => $instanceId,
                 ];
                 $instanceCount++;
@@ -173,7 +148,7 @@ class RaidController extends Controller
         foreach (request()->input('raid_group_id') as $raidGroupId) {
             if ($raidGroupId) {
                 $newRows[] = [
-                    'raid_id'       => $raid,
+                    'raid_id'       => $raid->id,
                     'raid_group_id' => $raidGroupId,
                 ];
                 $raidGroupCount++;
@@ -191,7 +166,7 @@ class RaidController extends Controller
         ]);
 
         request()->session()->flash('status', "Successfully created Raid {$raid->name}.");
-        return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raid->id, 'slug' => $raid->slug]);
+        return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]);
     }
 
     /**
@@ -228,36 +203,50 @@ class RaidController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function show($guildId, $guildSlug, $id = null) {
-        // TODO: Copied from raidgroups EDIT function
+    public function show($guildId, $guildSlug, $id, $raidSlug = null) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!$currentMember->hasPermission('edit.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        $raid = $guild->raids->find($id);
+
+        if (!$raid) {
+            abort(404, 'Raid not found.');
         }
 
-        $guild->load([
-            'allRaidGroups' => function ($query) use ($id) {
-                return $query->where('id', $id);
-            },
-            'allRaidGroups.role']);
-
-        $raidGroup = null;
-
-        if ($id) {
-            $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
-
-            if (!$raidGroup) {
-                abort(404, 'Raid Group not found.');
-            }
+        if ($raid->slug != $raidSlug) {
+            return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]);
         }
 
-        return view('guild.raidGroups.edit', [
+        $showEditCharacter = false;
+        if ($currentMember->hasPermission('edit.characters')) {
+            $showEditCharacter = true;
+        }
+
+        $showEditCharacterLoot = false;
+        if ($currentMember->hasPermission('loot.characters')) {
+            $showEditCharacterLoot = true;
+        }
+
+        $showEditRaid = false;
+        if ($currentMember->hasPermission('edit.raids')) {
+            $showEditRaid = true;
+        }
+
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
+        $raid->load('batches', 'characters', 'instances', /*'items',*/ 'raidGroups', 'raidGroups.role');
+
+        return view('guild.raids.show', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
-            'raidGroup'     => $raidGroup,
+            'raid'          => $raid,
+            'showEditCharacter'     => $showEditCharacter,
+            'showEditCharacterLoot' => $showEditCharacterLoot,
+            'showEditRaid'          => $showEditRaid,
+            'showOfficerNote'       => $showOfficerNote,
         ]);
     }
 
@@ -275,57 +264,87 @@ class RaidController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $validationRules =  [
-            'id'      => 'required|integer|exists:raid_groups,id',
-            'name'    => 'string|max:255',
-            'role_id' => 'nullable|integer|exists:roles,id',
-        ];
-
-        $this->validate(request(), $validationRules);
-
-        $id = request()->input('id');
-
-        $guild->load([
-            'allRaidGroups' => function ($query) use ($id) {
-                return $query->where('id', $id);
-            },
+        $validationRules = array_merge($this->getValidationRules($guild), [
+            'id' => [
+                'required',
+                'integer',
+                Rule::exists('raids', 'id')->where('raids.guild_id', $guild->id),
+            ],
+            'is_cancelled' => 'nullable|boolean',
         ]);
 
-        $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
-        if (!$raidGroup) {
-            abort(404, 'Raid Group not found.');
-        }
+        $validationMessages = ['id' => 'Raid ID must match one of the raids in your guild.'];
 
-        $role = null;
-        if (request()->input('role_id')) {
-            $role = $guild->roles->where('id', request()->input('role_id'));
-            if (!$role) {
-                abort(404, 'Role not found.');
-            }
+        $this->validate(request(), $validationRules, $validationMessages);
+
+        $raid = Raid::where([['id', request()->input('id')], ['guild_id', $guild->id]])->first();
+        if (!$raid) {
+            abort(404, 'Raid not found.');
         }
 
         $updateValues = [];
 
-        $updateValues['name']    = request()->input('name');
-        $updateValues['slug']    = slug(request()->input('name'));
-        $updateValues['role_id'] = request()->input('role_id');
+        $updateValues['date']         = request()->input('date');
+        $updateValues['name']         = request()->input('name');
+        $updateValues['public_note']  = request()->input('public_note');
+        $updateValues['officer_note'] = request()->input('officer_note');
+        $updateValues['logs']         = request()->input('logs');
+
+        $updateValues['slug']         = slug(request()->input('name'));
+        $updateValues['is_cancelled'] = request()->input('is_cancelled') && request()->input('is_cancelled') === 1 ? 1 : 0;
+
+        $raid->update($updateValues);
 
         $auditMessage = '';
 
-        if ($updateValues['name'] != $raidGroup->name) {
+        if ($updateValues['name'] != $raid->name) {
             $auditMessage .= ' (renamed to ' . $updateValues['name'] . ')';
         }
 
-        $raidGroup->update($updateValues);
+        if ($updateValues['is_cancelled'] != $raid->is_cancelled) {
+            $auditMessage .= $updateValues['is_cancelled'] ? '(cancelled)' : '(un-cancelled)';
+        }
+
+        // TODO: Update characters
 
         AuditLog::create([
-            'description'   => $currentMember->username . ' updated a Raid Group' . $auditMessage,
+            'description'   => $currentMember->username . " updated a Raid " . $auditMessage,
             'member_id'     => $currentMember->id,
             'guild_id'      => $guild->id,
-            'raid_group_id' => $raidGroup->id,
+            'raid_id'       => $raid->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully updated ' . $raidGroup->name . '.');
-        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        request()->session()->flash('status', 'Successfully updated ' . $raid->name . '.');
+        return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]);
+    }
+
+    private function getValidationRules($guild) {
+        return [
+            'date'            => 'required|date_format:Y-m-d H:i:s',
+            'name'            => 'required|string|max:75',
+            'public_note'     => 'nullable|string|max:250',
+            'officer_note'    => 'nullable|string|max:250',
+            'logs'            => 'nullable|string|max:250',
+            'instance_id.*'   => [
+                'nullable',
+                'integer',
+                Rule::exists('instances', 'id')->where('instances.expansion_id', $guild->expansion_id),
+            ],
+            'raid_group_id.*' => [
+                'nullable',
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
+            ],
+            'characters.*.character_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('characters', 'id')->where('characters.guild_id', $guild->id),
+            ],
+            'characters.*.is_exempt'    => 'nullable|boolean',
+            'characters.*.remark_id'    => ['nullable', 'integer', Rule::in(array_keys(Raid::remarks()))],
+            'characters.*.credit'       => 'required|numeric|between:0,1',
+            'characters.*.note'         => 'nullable|string|max:250',
+            'characters.*.officer_note' => 'nullable|string|max:250',
+        ];
     }
 }

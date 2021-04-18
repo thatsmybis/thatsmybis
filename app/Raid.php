@@ -7,11 +7,21 @@ use Illuminate\Database\Eloquent\Model;
 
 class Raid extends Model
 {
-    const REMARK_LATE = 'Late';
-    const REMARK_UNPREPARED = 'Unprepared';
+    const REMARK_LATE            = 'Late';
+    const REMARK_UNPREPARED      = 'Unprepared';
     const REMARK_LATE_UNPREPARED = 'Late & unprepared';
-    const REMARK_NO_SHOW = 'No show';
-    const REMARK_BENCHED = 'Benched';
+    const REMARK_NO_SHOW         = 'No call, no show';
+    const REMARK_AWAY            = 'Away, but called in';
+    const REMARK_BENCHED         = 'Benched';
+
+    const REMARKS = [
+        1 => self::REMARK_LATE,
+        2 => self::REMARK_UNPREPARED,
+        3 => self::REMARK_LATE_UNPREPARED,
+        4 => self::REMARK_NO_SHOW,
+        5 => self::REMARK_AWAY,
+        6 => self::REMARK_BENCHED,
+    ];
 
     /**
      * The attributes that are mass assignable.
@@ -43,7 +53,10 @@ class Raid extends Model
     }
 
     public function characters() {
-        return $this->hasMany(Character::class)->orderBy('name');
+        return $this->belongsToMany(Character::class, 'raid_characters', 'raid_id', 'character_id')
+            ->orderBy('name')
+            ->withTimeStamps()
+            ->withPivot(['is_exempt', 'credit', 'remark_id', 'public_note', 'officer_note']);
     }
 
     public function guild() {
@@ -51,10 +64,11 @@ class Raid extends Model
     }
 
     public function instances() {
-        return $this->hasMany(Instance::class)->orderBy('order');
+        return $this->belongsToMany(Instance::class, 'raid_instances', 'raid_id', 'instance_id')->orderBy('order');
     }
 
     public function items() {
+        // TODO: join directly on character_items.raid_id and batches.raid_id + character_items.batch_id
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'raid_id')
             ->select([
@@ -100,16 +114,10 @@ class Raid extends Model
     }
 
     public function raidGroups() {
-        return $this->hasMany(RaidGroup::class)->orderBy('name');
+        return $this->belongsToMany(RaidGroup::class, 'raid_raid_groups', 'raid_id', 'raid_group_id')->orderBy('name');
     }
 
     static public function remarks() {
-        return [
-            self::REMARK_LATE,
-            self::REMARK_UNPREPARED,
-            self::REMARK_LATE_UNPREPARED,
-            self::REMARK_NO_SHOW,
-            self::REMARK_BENCHED,
-        ];
+        return self::REMARKS;
     }
 }
