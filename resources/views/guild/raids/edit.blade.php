@@ -6,7 +6,7 @@
 
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
     // So we're iterating over the characters only one time, saving the results, and printing them.
-    $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->characters]);
+    $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->characters, 'raidGroups' => $guild->raidGroups]);
 
     $remarkSelectOptions = (string)View::make('partials.remarkOptions', ['characters' => $guild->characters]);
 @endphp
@@ -18,7 +18,7 @@
             <div class="row mb-3">
                 @if ($raid)
                     <div class="col-12 pt-2 bg-lightest rounded">
-                        {{ $raid->name }}
+                        Edit {{ $raid->name }}
                     </div>
                 @else
                     <div class="col-12 pt-2 mb-2">
@@ -77,6 +77,7 @@
                                     </label>
                                     <input name="name"
                                         required
+                                        autocomplete="off"
                                         maxlength="40"
                                         type="text"
                                         class="form-control dark"
@@ -94,7 +95,7 @@
                                         Public Note
                                         <small class="text-muted">anyone in the guild can see this</small>
                                     </label>
-                                    <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($raid ? $raid->public_note : '') }}</textarea>
+                                    <textarea autocomplete="off"  maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($raid ? $raid->public_note : '') }}</textarea>
                                 </div>
                             </div>
 
@@ -111,7 +112,7 @@
                                             Officer note is hidden in streamer mode
                                         </div>
                                         @else
-                                            <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($raid ? $raid->officer_note : '') }}</textarea>
+                                            <textarea autocomplete="off" maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($raid ? $raid->officer_note : '') }}</textarea>
                                         @endif
                                     </div>
                                 </div>
@@ -125,6 +126,7 @@
                                         Link to Raid Logs
                                     </label>
                                     <input name="logs"
+                                        autocomplete="off"
                                         maxlength="255"
                                         type="text"
                                         class="form-control dark"
@@ -158,7 +160,7 @@
                         </label>
                         @for ($i = 0; $i < $maxInstances; $i++)
                             <div class="form-group {{ $i > 0 ? 'js-hide-empty' : '' }}" style="{{ $i > 0 ? 'display:none;' : '' }}">
-                                <select name="instance_id[]" class="form-control dark {{ $i >= 0 ? 'js-show-next' : '' }}">
+                                <select name="instance_id[]" class="form-control dark {{ $i >= 0 ? 'js-show-next' : '' }}" autocomplete="off">
                                     <option value="" selected>
                                         —
                                     </option>
@@ -181,7 +183,7 @@
                         </label>
                         @for ($i = 0; $i < $maxRaids; $i++)
                             <div class="form-group {{ $i > 0 ? 'js-hide-empty' : '' }}" style="{{ $i > 0 ? 'display:none;' : '' }}">
-                                <select name="raid_group_id[]" class="form-control dark {{ $i >= 0 ? 'js-show-next' : '' }}">
+                                <select name="raid_group_id[]" class="form-control dark {{ $i >= 0 ? 'js-show-next' : '' }}" autocomplete="off">
                                     <option value="" selected>
                                         —
                                     </option>
@@ -196,6 +198,8 @@
                                 </select>
                             </div>
                         @endfor
+                        <div class="js-raid-group-message text-warning" style="display:none;">
+                        </div>
                     </div>
                 </div>
 
@@ -234,7 +238,7 @@
                                             @endif
                                         </label>
                                         <div class="checkbox">
-                                            <label title="item is offspec">
+                                            <label title="skip this character's attendance check">
                                                 <input data-index="{{ $i }}" class="js-attendance-skip" type="checkbox" name="character[{{ $i }}][exempt]" value="1" autocomplete="off"
                                                     {{ old('characters.' . $i . '.exempt') && old('characters.' . $i . '.exempt') == 1  ? 'checked' : '' }}>
                                             </label>
@@ -324,6 +328,9 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                            <div class="text-right">
+                                                <span data-index="{{ $i }}" class="js-show-notes text-link cursor-pointer">+ custom note</span>
+                                            </div>
                                         </div>
 
                                         <!-- Credit slider -->
@@ -367,11 +374,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-12 text-right">
-                                            <span class="js-show-notes text-link cursor-pointer">add note</span>
-                                        </div>
-
-                                        <div class="js-notes col-12" style="display:none;">
+                                        <div data-index="{{ $i }}" class="js-notes col-12" style="display:none;">
                                             <div class="row">
                                                 <!-- Note -->
                                                 <div class="js-note col-lg-6 col-12">
@@ -459,7 +462,9 @@
         });
 
         $("[name=raid_group_id\\[\\]]").change(function () {
-            fillCharactersFromRaid($(this).val());
+            if ($(this).val()) {
+                fillCharactersFromRaid($(this).val());
+            }
         });
 
         $(".js-show-next").change(function() {
@@ -479,8 +484,9 @@
         });
 
         $(".js-show-notes").click(function () {
+            const index = $(this).data('index');
             $(this).hide();
-            $(this).parent().next(".js-notes").show();
+            $(`.js-notes[data-index="${index}"]`).show();
         });
 
         $(".js-attendance-skip").on('change', function () {
@@ -495,10 +501,32 @@
         }).change();
     });
 
+    // Add characters belonging to the given raid group to the character list if they're not already in it
     function fillCharactersFromRaid(raidGroupId) {
-        const raidGroupCharacters = characters.find(character => character.raid_group_id == raidGroupId);
+        const raidGroupCharacters = characters.filter(character => character.raid_group_id == raidGroupId);
 
-        // Find first empty character input, select appropriate character
+        let addedCount = 0;
+        let alreadyAddedCount = 0;
+
+        for (const character of raidGroupCharacters) {
+            const existing = $(`select[name^=character][name$=\\[character_id\\]] option:selected[value="${character.id}"]`).first();
+            if (!existing.length) {
+                let emptyCharacterSelect = $('select[name^=character][name$=\\[character_id\\]] option:selected[value=""]').first().parent();
+                emptyCharacterSelect.val(character.id);
+                addedCount++;
+
+                // Reset associated inputs
+                const row = emptyCharacterSelect.parent().closest(".js-row");
+                $(row).find("[name^=character][name$=\\[exempt\\]]").prop("checked", false).change();
+                $(row).find("[name^=character][name$=\\[remark\\]]").val("").change();
+                $(row).find("[name^=character][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
+            } else {
+                alreadyAddedCount++;
+            }
+        }
+
+        $(".js-raid-group-message").html(`${addedCount} characters added${ alreadyAddedCount ? ` (${alreadyAddedCount} already in list)` : '' }`).show();
+        setTimeout(() => $(".js-raid-group-message").hide(), 7500);
     }
 
     // Hack to get the slider's labels to refresh: https://github.com/seiyria/bootstrap-slider/issues/396#issuecomment-310415503
@@ -520,7 +548,7 @@
             $(currentElement).show();
             let nextElement = $(currentElement).closest(".js-row").next(".js-hide-empty");
             nextElement.show();
-            nextElement.find("select[name^=character][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
+            nextElement.find("select[name^=character_id][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
             fixSliderLabels();
         }
     }

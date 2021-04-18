@@ -776,7 +776,7 @@ div.dataTables_filter input {
     background: #32305c !important;
     border: 1px solid #6865b9 !important;
 }
-.xdsoft_datetimepicker.xdsoft_dark .xdsoft_calendar td, th {
+.xdsoft_datetimepicker.xdsoft_dark .xdsoft_calendar td, .xdsoft_datetimepicker.xdsoft_dark .xdsoft_calendar th {
     color: #fff !important;
     background: #32305c !important;
     border: 1px solid #6865b9 !important;
