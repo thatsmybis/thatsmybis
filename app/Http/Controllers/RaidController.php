@@ -243,6 +243,7 @@ class RaidController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'raid'          => $raid,
+            'remarks'       => Raid::remarks(),
             'showEditCharacter'     => $showEditCharacter,
             'showEditCharacterLoot' => $showEditCharacterLoot,
             'showEditRaid'          => $showEditRaid,
@@ -255,7 +256,6 @@ class RaidController extends Controller
      * @return
      */
     public function update($guildId, $guildSlug) {
-        // TODO: Copied from raidgroups
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -305,13 +305,22 @@ class RaidController extends Controller
             $auditMessage .= $updateValues['is_cancelled'] ? '(cancelled)' : '(un-cancelled)';
         }
 
-        // TODO: Update characters
+        // Sync characters
+        $characterInputs = array_filter(request()->input('characters'), function ($character) { return $character['character_id']; });
+        $characters = [];
+
+        foreach ($characterInputs as $key => $character) {
+            $characters[$character['character_id']] = $character;
+            unset($characters[$character['character_id']]['character_id']);
+        }
+
+        $raid->characters()->sync($characters);
 
         AuditLog::create([
-            'description'   => $currentMember->username . " updated a Raid " . $auditMessage,
-            'member_id'     => $currentMember->id,
-            'guild_id'      => $guild->id,
-            'raid_id'       => $raid->id,
+            'description' => $currentMember->username . " updated a Raid " . $auditMessage,
+            'member_id'   => $currentMember->id,
+            'guild_id'    => $guild->id,
+            'raid_id'     => $raid->id,
         ]);
 
         request()->session()->flash('status', 'Successfully updated ' . $raid->name . '.');

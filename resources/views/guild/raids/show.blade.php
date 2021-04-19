@@ -89,9 +89,9 @@
                                                 <li class="text-warning">
                                                     <span class="fas fa-fw fa-user-chart text-muted"></span>
                                                     skipped
-                                                    @if ($character->pivot->remark)
+                                                    @if ($character->pivot->remark_id)
                                                         <span class="text-muted">
-                                                            {{ $character->pivot->remark }}
+                                                            {{ $remarks[$character->pivot->remark_id] }}
                                                         </span>
                                                     @endif
                                                 </li>
@@ -99,9 +99,9 @@
                                                 <li class="text-tier-1">
                                                     <span class="fas fa-fw fa-user-chart text-muted"></span>
                                                     {{ $character->pivot->credit * 100 }}%
-                                                    @if ($character->pivot->remark)
+                                                    @if ($character->pivot->remark_id)
                                                         <span class="text-muted">
-                                                            {{ $character->pivot->remark }}
+                                                            {{ $remarks[$character->pivot->remark_id] }}
                                                         </span>
                                                     @endif
                                                 </li>
@@ -112,7 +112,7 @@
                                         <ul class="list-inline">
                                             @if ($character->pivot->public_note)
                                                 <div>
-                                                    <span class="js-markdown-inline">{{ $character->public_note }}</span>
+                                                    <span class="js-markdown-inline">{{ $character->pivot->public_note }}</span>
                                                 </div>
                                             @endif
                                             @if ($showOfficerNote && $character->pivot->officer_note)
