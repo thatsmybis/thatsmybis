@@ -19,7 +19,12 @@
             <div class="row mb-3">
                 @if ($raid)
                     <div class="col-12 pt-2 bg-lightest rounded">
-                        <h1 class="font-weight-medium ">Editing {{ $raid->name }}</h1>
+                        <h1 class="font-weight-medium ">
+                            Editing
+                            <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
+                                {{ $raid->name }}
+                            </a>
+                        </h1>
                     </div>
                 @else
                     <div class="col-12 pt-2 mb-2">
@@ -91,8 +96,8 @@
                                         <div class="checkbox text-warning">
                                             <label>
                                                 <input type="checkbox" name="is_cancelled" value="1" class="" autocomplete="off"
-                                                    {{ old('is_cancelled') && old('is_cancelled') == 1 ? 'checked' : ($raid && $raid->is_cancelled ? 'checked' : '') }}>
-                                                    Cancelled <small class="text-muted">closest you can get to deleting this</small>
+                                                    {{ old('is_cancelled') && old('is_cancelled') == 1 ? 'checked' : ($raid && $raid->cancelled_at ? 'checked' : '') }}>
+                                                    Cancelled <small class="text-muted">there is no delete option</small>
                                             </label>
                                         </div>
                                     </div>
@@ -229,12 +234,12 @@
                                             @if ($i == 0)
                                                 <span class="fas fa-fw fa-redo text-muted"></span>
                                                 <span class="font-weight-bold">
-                                                    Skip
+                                                    Excused
                                                 </span>
                                             @else
                                                 <span class="fas fa-fw fa-redo text-muted"></span>
                                                 <span class="small text-muted">
-                                                    skip
+                                                    excused
                                                 </span>
                                             @endif
                                         </label>
@@ -265,22 +270,27 @@
                                                     @endif
                                                 </label>
 
-                                                <select name="characters[{{ $i }}][character_id]" class="js-show-next-character form-control dark {{ $errors->has('characters.' . $i . '.character_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
+                                                @php
+                                                    $oldCharacterId = old('characters.' . $i . '.character_id') ? old('characters.' . $i . '.character_id') : (!old('characters.' . $i . '.character_id') && $character ? $character->pivot->character_id : '');
+                                                    if ($oldCharacterId) {
+                                                        // Select the correct option
+                                                        $options = str_replace('hack="' . $oldCharacterId . '"', 'selected', $characterSelectOptions);
+                                                    } else {
+                                                        $options = $characterSelectOptions;
+                                                    }
+                                                 @endphp
+
+                                                <select name="characters[{{ $i }}][character_id]" class="js-show-next-character form-control dark
+                                                    {{ $errors->has('characters.' . $i . '.character_id') ? 'form-danger' : '' }}
+                                                    {{ $hide ? '' : 'selectpicker' }}"
+                                                    data-live-search="true"
+                                                    autocomplete="off">
                                                     <option value="">
                                                         —
                                                     </option>
 
                                                     {{-- See the notes at the top for why the options look like this --}}
-                                                    @if (old('characters.' . $i . '.character_id') || $character)
-                                                        @php
-                                                            $oldCharacterId = old('characters.' . $i . '.character_id') ? old('characters.' . $i . '.character_id') : (!old('characters.' . $i . '.character_id') && $character ? $character->pivot->character_id : '');
-                                                            if ($oldCharacterId) {
-                                                                // Select the correct option
-                                                                $options = str_replace('hack="' . $oldCharacterId . '"', 'selected', $characterSelectOptions);
-                                                            } else {
-                                                                $options = $characterSelectOptions;
-                                                            }
-                                                         @endphp
+                                                    @if ($oldCharacterId)
                                                          {!! $options !!}
                                                     @else
                                                         {!! $characterSelectOptions !!}
@@ -385,7 +395,8 @@
                                             </div>
                                         </div>
 
-                                        <div data-index="{{ $i }}" class="js-notes col-12" style="display:none;">
+                                        <div data-index="{{ $i }}" class="js-notes col-12"
+                                            style="{{ old('characters.' . $i . '.public_note') || old('characters.' . $i . '.officer_note') || ($character && ($character->pivot->public_note || $character->pivot->officer_note)) ? '' : 'display:none' }};">
                                             <div class="row">
                                                 <!-- Note -->
                                                 <div class="js-note col-lg-6 col-12">
@@ -404,7 +415,7 @@
                                                         </label>
                                                         <input name="characters[{{ $i }}][public_note]" maxlength="250" data-max-length="250" type="text" placeholder="brief public note"
                                                             class="form-control dark {{ $errors->has('characters.' . $i . '.public_note') ? 'form-danger' : '' }}" autocomplete="off"
-                                                            value="{{ old('characters.' . $i . '.public_note') ? old('characters.' . $i . '.public_note') : (!old('characters.' . $i . '.public_note') && $character ? $character->public_note : '') }}">
+                                                            value="{{ old('characters.' . $i . '.public_note') ? old('characters.' . $i . '.public_note') : (!old('characters.' . $i . '.public_note') && $character ? $character->pivot->public_note : '') }}">
                                                     </div>
                                                 </div>
 
@@ -431,7 +442,7 @@
                                                         <input name="characters[{{ $i }}][officer_note]" maxlength="250" data-max-length="250" type="text" placeholder="officer note"
                                                             class="form-control dark {{ $errors->has('characters.' . $i . '.officer_note') ? 'form-danger' : '' }}" autocomplete="off"
                                                             style="{{ isStreamerMode() ? 'display:none;' : '' }}"
-                                                            value="{{ old('characters.' . $i . '.officer_note') ? old('characters.' . $i . '.officer_note') : (!old('characters.' . $i . '.officer_note') && $character ? $character->officer_note : '') }}">
+                                                            value="{{ old('characters.' . $i . '.officer_note') ? old('characters.' . $i . '.officer_note') : (!old('characters.' . $i . '.officer_note') && $character ? $character->pivot->officer_note : '') }}">
                                                     </div>
                                                 </div>
                                             </div>
@@ -483,18 +494,26 @@
             }
         });
 
+        // Don't allow for picking the same character in multiple inputs.
+        $("[name^=characters][name$=\\[character_id\\]").change(function () {
+            if (!initializing) {
+                const existing = findExistingCharacter($(this).val(), $(this).find(":selected"));
+                if (existing.length) {
+                    $(this).selectpicker("val", "").selectpicker("refresh");
+                }
+            }
+        });
+
+        // Show the next input
         $(".js-show-next").change(function() {
             showNext(this);
         }).change();
-
         $(".js-show-next").keyup(function() {
             showNext(this);
         });
-
         $(".js-show-next-character").change(function() {
             showNextCharacter(this);
         }).change();
-
         $(".js-show-next-character").keyup(function() {
             showNextCharacter(this);
         });
@@ -519,6 +538,14 @@
         initializing = false;
     });
 
+    function findExistingCharacter(characterId, except = null) {
+        if (except) {
+            return $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${characterId}"]`).not(except).first();
+        } else {
+            return $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${characterId}"]`).first();
+        }
+    }
+
     // Add characters belonging to the given raid group to the character list if they're not already in it
     function fillCharactersFromRaid(raidGroupId) {
         const raidGroupCharacters = characters.filter(character => character.raid_group_id == raidGroupId);
@@ -527,11 +554,14 @@
         let alreadyAddedCount = 0;
 
         for (const character of raidGroupCharacters) {
-            const existing = $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${character.id}"]`).first();
+            const existing = findExistingCharacter(character.id);
             if (!existing.length) {
                 let emptyCharacterSelect = $('select[name^=characters][name$=\\[character_id\\]] option:selected[value=""]').first().parent();
-                emptyCharacterSelect.val(character.id);
-                addedCount++;
+                let characterOption = emptyCharacterSelect.find('option[value="' + character.id + '"i]');
+                if (characterOption.val()) {
+                    characterOption.prop("selected", true).change();
+                    addedCount++;
+                }
 
                 // Reset associated inputs
                 const row = emptyCharacterSelect.parent().closest(".js-row");

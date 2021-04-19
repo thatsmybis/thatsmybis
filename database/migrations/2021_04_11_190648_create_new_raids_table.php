@@ -20,7 +20,7 @@ class CreateNewRaidsTable extends Migration
             $table->bigInteger('guild_id')     ->unsigned();
             $table->bigInteger('member_id')    ->unsigned();
             $table->timestamp('date')          ->nullable()->index();
-            $table->boolean('is_cancelled')    ->default(0);
+            $table->timestamp('cancelled_at')  ->nullable()->index();
             $table->string('public_note', 255) ->nullable();
             $table->string('officer_note', 255)->nullable();
             $table->string('logs', 255)        ->nullable();

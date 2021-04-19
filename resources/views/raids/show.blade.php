@@ -9,6 +9,9 @@
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
                     <h1 class="font-weight-bold">
+                        @if ($raid->cancelled_at)
+                            <span class="text-warning">cancelled</span>
+                        @endif
                         {{ $raid->name }}
                     </h1>
                     <ul class="list-inline">
@@ -32,7 +35,7 @@
                                                 &sdot;
                                             </li>
                                         @endif
-                                        <li class="list-inline-item">
+                                        <li class="list-inline-item text-legendary font-weight-bold">
                                             {{ $instance->name }}
                                         </li>
                                     @endforeach
@@ -88,7 +91,7 @@
                                             @if ($character->pivot->is_exempt)
                                                 <li class="text-warning">
                                                     <span class="fas fa-fw fa-user-chart text-muted"></span>
-                                                    skipped
+                                                    Excused
                                                     @if ($character->pivot->remark_id)
                                                         <span class="text-muted">
                                                             {{ $remarks[$character->pivot->remark_id] }}

@@ -34,7 +34,7 @@ class Raid extends Model
         'guild_id',
         'member_id',
         'date',
-        'is_cancelled',
+        'cancelled_at',
         'public_note',
         'officer_note',
         'logs',
@@ -68,7 +68,6 @@ class Raid extends Model
     }
 
     public function items() {
-        // TODO: join directly on character_items.raid_id and batches.raid_id + character_items.batch_id
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'raid_id')
             ->select([

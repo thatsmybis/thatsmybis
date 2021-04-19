@@ -1,6 +1,10 @@
 @extends('layouts.app')
 @section('title', 'Raids - ' . config('app.name'))
 
+@php
+    $now = getDateTime();
+@endphp
+
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
@@ -86,61 +90,52 @@
                     @if ($raids->count())
                         <ol class="no-bullet no-indent striped">
                             @foreach ($raids as $raid)
+                                @php
+                                    $isFuture = $raid->date > $now;
+                                @endphp
                                 <li class="p-1 pl-3 rounded">
-                                    <div class="d-flex flex-row">
-                                        <div class="list-timestamp text-right text-muted p-2">
+
+                                    <ul class="list-inline">
+                                        @include('raids/partials/listRaid', ['bold' => true, 'text' => (!$isFuture || $raid->cancelled_at ? 'muted' : 'white')])
+
+                                        @if (!$raid->cancelled_at)
+                                            <li class="list-inline-item text-muted">
+                                                {{ $raid->character_count }} raiders
+                                            </li>
+
+                                            <li class="list-inline-item text-muted">
+                                                {{ $raid->item_count }} items
+                                            </li>
+                                        @endif
+                                    </ul>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item text-muted">
+                                            {{ $isFuture ? 'in' : '' }}
                                             <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
-                                        </div>
+                                            {{ !$isFuture ? 'ago' : '' }}
+                                            <span class="js-timestamp" data-timestamp="{{ $raid->date }}" data-format="@ h:mm a, ddd MMM D {{ $isFuture ? '' : 'YYYY' }}"></span>
+                                        </li>
 
-                                        <div class="p-2">
-                                            <ul class="list-inline">
-                                                <li class="list-inline-item">
-                                                    {{ $raid->name }}
-                                                </li>
+                                        @if ($raid->instances->count() > 0)
+                                            <li class="list-inline-item">
+                                                <ul class="list-inline font-weight-bold">
+                                                    @foreach ($raid->instances as $instance)
+                                                        <span class="text-{{ $raid->cancelled_at ? 'muted' : 'legendary' }}">{{ $instance->short_name }}</span>{{ !$loop->last ? ',' : '' }}
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endif
 
-                                                <li class="list-inline-item">
-                                                    {{ $raid->raider_count }}
-                                                </li>
-
-                                                <li class="list-inline-item">
-                                                    {{ $raid->item_count }}
-                                                </li>
-
-                                                @if ($raid->note)
-                                                    <li class="list-inline-item">
-                                                        {{ $raid->note }}
-                                                    </li>
-                                                @endif
-                                                @if ($raid->member_id)
-                                                    <li class="list-inline-item">
-                                                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $raid->member_id, 'usernameSlug' => $raid->member->slug]) }}" class="text-muted">
-                                                            {{ $raid->other_member_username }}
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                @if ($raid->instances->count() > 0)
-                                                    <li class="list-inline-item text-muted">
-                                                        <ul class="list-inline">
-                                                            @foreach ($raid->instances as $instance)
-                                                                {{ $instance->short_name }}
-                                                            @endforeach
-                                                        </ul>
-                                                    </li>
-                                                @endif
-                                                @if ($raid->raidGroups->count() > 0)
-                                                    <li class="list-inline-item text-muted">
-                                                        <ul class="list-inline">
-                                                            @foreach ($raid->raidGroups as $raidGroup)
-                                                                <span style="color:{{ $raidGroup->getColor() }};">
-                                                                    {{ $raidGroup->name }}
-                                                                </span>
-                                                            @endforeach
-                                                        </ul>
-                                                    </li>
-                                                @endif
-                                            </ul>
-                                        </div>
-                                    </a>
+                                        @if ($raid->raidGroups->count() > 0)
+                                            <li class="list-inline-item">
+                                                <ul class="list-inline">
+                                                    @foreach ($raid->raidGroups as $raidGroup)
+                                                        @include('partials/raidGroup', ['raidGroupColor' => $raidGroup->getColor(), 'text' => ($raid->cancelled_at ? 'muted' : '')])
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endif
+                                    </ul>
                                 </li>
                             @endforeach
                         </ol>

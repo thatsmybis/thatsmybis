@@ -62,7 +62,7 @@ class RaidController extends Controller
 
         $instances = Instance::where('expansion_id', $guild->expansion_id)->get();
 
-        return view('guild.raids.edit', [
+        return view('raids.edit', [
             'currentMember'   => $currentMember,
             'guild'           => $guild,
             'instances'       => $instances,
@@ -104,7 +104,7 @@ class RaidController extends Controller
         $createValues['slug']         = slug(request()->input('name'));
         $createValues['guild_id']     = $guild->id;
         $createValues['member_id']    = $currentMember->id;
-        $createValues['is_cancelled'] = 0;
+        $createValues['cancelled_at'] = null;
 
         $raid = Raid::create($createValues);
 
@@ -114,8 +114,10 @@ class RaidController extends Controller
         $newRows = [];
 
         // Add characters
+        $alreadyAdded = [];
         foreach (request()->input('characters') as $character) {
-            if ($character['character_id']) {
+            if ($character['character_id'] && !isset($alreadyAdded[$character['character_id']])) {
+                $alreadyAdded[$character['character_id']] = true;
                 $newRows[] = [
                     'raid_id'      => $raid->id,
                     'character_id' => $character['character_id'],
@@ -132,8 +134,10 @@ class RaidController extends Controller
         $newRows = [];
 
         // Add instances
+        $alreadyAdded = [];
         foreach (request()->input('instance_id') as $instanceId) {
-            if ($instanceId) {
+            if ($instanceId && !isset($alreadyAdded[$instanceId])) {
+                $alreadyAdded[$instanceId] = true;
                 $newRows[] = [
                     'raid_id'     => $raid->id,
                     'instance_id' => $instanceId,
@@ -145,8 +149,10 @@ class RaidController extends Controller
         $newRows = [];
 
         // Add raid groups
+        $alreadyAdded = [];
         foreach (request()->input('raid_group_id') as $raidGroupId) {
-            if ($raidGroupId) {
+            if ($raidGroupId && !isset($alreadyAdded[$raidGroupId])) {
+                $alreadyAdded[$raidGroupId] = true;
                 $newRows[] = [
                     'raid_id'       => $raid->id,
                     'raid_group_id' => $raidGroupId,
@@ -182,19 +188,27 @@ class RaidController extends Controller
 
         $raids = Raid::select([
                 'raids.*',
-                DB::raw('COUNT(DISTINCT `raid_characters`.`character_id`) AS `raider_count`'),
-                DB::raw('COUNT(DISTINCT `raid_items`.`item_id`) AS `item_count`'),
+                DB::raw('COUNT(DISTINCT `raid_characters`.`character_id`) AS `character_count`'),
+                DB::raw('COUNT(DISTINCT `character_items`.`item_id`) AS `item_count`'),
             ])
             ->leftJoin('raid_characters', 'raid_characters.raid_id', '=', 'raids.id')
+            ->leftJoin('character_items', 'character_items.raid_id', '=', 'raids.id')
             ->where('raids.guild_id', $guild->id)
             ->orderBy('raids.date', 'desc')
             ->with(['instances', 'member', 'raidGroups', 'raidGroups.role'])
+            ->groupBy('raids.id')
             ->paginate(self::RESULTS_PER_PAGE);
 
-        return view('guild.raids.list', [
+        $showEdit = false;
+        if ($currentMember->hasPermission('edit.raids')) {
+            $showEdit = true;
+        }
+
+        return view('raids.list', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'raids'         => $raids,
+            'showEdit'      => $showEdit,
         ]);
     }
 
@@ -239,7 +253,7 @@ class RaidController extends Controller
 
         $raid->load('batches', 'characters', 'instances', /*'items',*/ 'raidGroups', 'raidGroups.role');
 
-        return view('guild.raids.show', [
+        return view('raids.show', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'raid'          => $raid,
@@ -270,7 +284,7 @@ class RaidController extends Controller
                 'integer',
                 Rule::exists('raids', 'id')->where('raids.guild_id', $guild->id),
             ],
-            'is_cancelled' => 'nullable|boolean',
+            'cancelled_at' => 'nullable|date_format:Y-m-d H:i:s',
         ]);
 
         $validationMessages = ['id' => 'Raid ID must match one of the raids in your guild.'];
@@ -291,7 +305,7 @@ class RaidController extends Controller
         $updateValues['logs']         = request()->input('logs');
 
         $updateValues['slug']         = slug(request()->input('name'));
-        $updateValues['is_cancelled'] = request()->input('is_cancelled') && request()->input('is_cancelled') === 1 ? 1 : 0;
+        $updateValues['cancelled_at'] = request()->input('is_cancelled') && request()->input('is_cancelled') == 1 ? ($raid->cancelled_at ? $raid->cancelled_at : getDateTime()) : null;
 
         $raid->update($updateValues);
 
@@ -301,20 +315,21 @@ class RaidController extends Controller
             $auditMessage .= ' (renamed to ' . $updateValues['name'] . ')';
         }
 
-        if ($updateValues['is_cancelled'] != $raid->is_cancelled) {
-            $auditMessage .= $updateValues['is_cancelled'] ? '(cancelled)' : '(un-cancelled)';
+        if ($updateValues['cancelled_at'] != $raid->cancelled_at) {
+            $auditMessage .= $updateValues['cancelled_at'] ? '(cancelled)' : '(un-cancelled)';
         }
 
         // Sync characters
-        $characterInputs = array_filter(request()->input('characters'), function ($character) { return $character['character_id']; });
-        $characters = [];
-
-        foreach ($characterInputs as $key => $character) {
-            $characters[$character['character_id']] = $character;
-            unset($characters[$character['character_id']]['character_id']);
-        }
-
+        $characters = $this->filterCharacterInputs(request()->input('characters'));
         $raid->characters()->sync($characters);
+
+        // Sync instances
+        $instances = $this->filterInstanceInputs(request()->input('instance_id'));
+        $raid->instances()->sync($instances);
+
+        // Sync raid groups
+        $raidGroups = $this->filterRaidGroupInputs(request()->input('raid_group_id'));
+        $raid->raidGroups()->sync($raidGroups);
 
         AuditLog::create([
             'description' => $currentMember->username . " updated a Raid " . $auditMessage,
@@ -325,6 +340,43 @@ class RaidController extends Controller
 
         request()->session()->flash('status', 'Successfully updated ' . $raid->name . '.');
         return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]);
+    }
+
+    // Removes duplicates, indexes array by ID.
+    private function filterCharacterInputs($characterInputs) {
+        $characterInputs = array_filter($characterInputs, function ($character) { return $character['character_id']; });
+        $characters = [];
+
+        foreach ($characterInputs as $character) {
+            // This has the added effect of filtering out duplicates
+            $characters[$character['character_id']] = $character;
+        }
+        return $characters;
+    }
+
+    // Removes duplicates, indexes array by ID.
+    private function filterInstanceInputs($instanceInputs) {
+        $instanceInputs = array_filter($instanceInputs, function ($instance) { return $instance; });
+        $instances = [];
+
+        foreach ($instanceInputs as $instance) {
+            // This has the added effect of filtering out duplicates
+            $instances[$instance] = $instance;
+        }
+        return $instances;
+    }
+
+
+    // Removes duplicates, indexes array by ID.
+    private function filterRaidGroupInputs($raidGroupInputs) {
+        $raidGroupInputs = array_filter($raidGroupInputs, function ($raidGroup) { return $raidGroup; });
+        $raidGroups = [];
+
+        foreach ($raidGroupInputs as $raidGroup) {
+            // This has the added effect of filtering out duplicates
+            $raidGroups[$raidGroup] = $raidGroup;
+        }
+        return $raidGroups;
     }
 
     private function getValidationRules($guild) {
