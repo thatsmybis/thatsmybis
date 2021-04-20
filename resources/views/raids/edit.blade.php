@@ -17,20 +17,22 @@
     <div class="row">
         <div class="col-xl-10 offset-xl-1 col-12">
             <div class="row mb-3">
-                @if ($raid)
-                    <div class="col-12 pt-2 bg-lightest rounded">
-                        <h1 class="font-weight-medium ">
-                            Editing
-                            <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
+                <div class="col-12 pt-2 bg-lightest rounded">
+                    <h1 class="font-weight-medium ">
+                        @if ($raid)
+                            @if ($copy)
+                                Copying
+                            @else
+                                Editing
+                            @endif
+                            <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => ($copy ? $raid->original_id : $raid->id), 'raidSlug' => $raid->slug]) }}">
                                 {{ $raid->name }}
                             </a>
-                        </h1>
-                    </div>
-                @else
-                    <div class="col-12 pt-2 mb-2">
-                        <h1 class="font-weight-medium ">Create a Raid</h1>
-                    </div>
-                @endif
+                        @else
+                            Create a Raid
+                        @endif
+                    </h1>
+                </div>
             </div>
 
             @if (count($errors) > 0)
@@ -42,7 +44,7 @@
                     @endforeach
                 </ul>
             @endif
-            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route(($raid ? 'guild.raids.update' : 'guild.raids.create'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route(($raid && !$copy ? 'guild.raids.update' : 'guild.raids.create'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $raid ? $raid->id : '' }}" />
@@ -87,7 +89,7 @@
                                 </div>
                             </div>
 
-                            @if ($raid)
+                            @if ($raid && !$copy)
                                 <div class="col-lg-6 col-12 {{ $errors->has('raid.is_cancelled') ? 'text-danger font-weight-bold' : '' }}">
                                     <div class="form-group mb-0">
                                         <label>
@@ -156,8 +158,8 @@
                     </div>
                 </div>
 
-                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
-                    <div class="col-sm-6 col-12 {{ $errors->has('raid.instance_id.*') ? 'text-danger font-weight-bold' : '' }}">
+                <div class="row mt-3 mb-3 pb-1 pt-2 bg-light rounded">
+                    <div class="col-xl-4 col-sm-6 col-12 {{ $errors->has('raid.instance_id.*') ? 'text-danger font-weight-bold' : '' }}">
                         <label for="instance_id[0]" class="font-weight-bold">
                             <span class="fas fa-fw fa-dungeon text-muted"></span>
                             Dungeon(s)
@@ -180,7 +182,7 @@
                         @endfor
                     </div>
 
-                    <div class="col-sm-6 col-12 {{ $errors->has('raid.raid_group_id.*') ? 'text-danger font-weight-bold' : '' }}">
+                    <div class="offset-xl-2 col-xl-4 col-sm-6 col-12 {{ $errors->has('raid.raid_group_id.*') ? 'text-danger font-weight-bold' : '' }}">
                         <label for="raid_group_id[0]" class="font-weight-bold">
                             <span class="fas fa-fw fa-users text-muted"></span>
                             Raid Group(s)
@@ -204,6 +206,14 @@
                         @endfor
                         <div class="js-raid-group-message text-warning" style="display:none;">
                         </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2">
+                        <h2 class="font-weight-medium ">
+                            Attendees
+                        </h2>
                     </div>
                 </div>
 
@@ -461,7 +471,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ $raid ? 'Update' : 'Save' }}</button>
                 </div>
             </form>
         </div>
@@ -472,133 +482,7 @@
 @section('scripts')
 <script>
     var characters = {!! $showOfficerNote ? $guild->characters->makeVisible('officer_note')->toJson() : $guild->characters->toJson() !!};
-
-    $(document).ready(function () {
-        let initializing = true;
-
-        warnBeforeLeaving("#editForm")
-
-        $("[name=date]").datetimepicker({
-            format: 'Y-m-d H:i:s',
-            inline: true,
-            step: 30,
-            theme: 'dark',
-            value: '{{ $raid ? $raid->date : getDateTime('Y-m-d') . ' 17:00:00' }}'
-        });
-
-        $("[name=raid_group_id\\[\\]]").change(function () {
-            if (!initializing) {
-                if ($(this).val()) {
-                    fillCharactersFromRaid($(this).val());
-                }
-            }
-        });
-
-        // Don't allow for picking the same character in multiple inputs.
-        $("[name^=characters][name$=\\[character_id\\]").change(function () {
-            if (!initializing) {
-                const existing = findExistingCharacter($(this).val(), $(this).find(":selected"));
-                if (existing.length) {
-                    $(this).selectpicker("val", "").selectpicker("refresh");
-                }
-            }
-        });
-
-        // Show the next input
-        $(".js-show-next").change(function() {
-            showNext(this);
-        }).change();
-        $(".js-show-next").keyup(function() {
-            showNext(this);
-        });
-        $(".js-show-next-character").change(function() {
-            showNextCharacter(this);
-        }).change();
-        $(".js-show-next-character").keyup(function() {
-            showNextCharacter(this);
-        });
-
-        $(".js-show-notes").click(function () {
-            const index = $(this).data('index');
-            $(this).hide();
-            $(`.js-notes[data-index="${index}"]`).show();
-        });
-
-        $(".js-attendance-skip").on('change', function () {
-            const index = $(this).data('index');
-            if (this.checked) {
-                $(`[data-attendance-input="${index}"]`).addClass("disabled").hide();
-                $(`[data-attendance-skip-note="${index}"]`).show();
-            } else {
-                $(`[data-attendance-input="${index}"]`).removeClass("disabled").show();
-                $(`[data-attendance-skip-note="${index}"]`).hide();
-            }
-        }).change();
-
-        initializing = false;
-    });
-
-    function findExistingCharacter(characterId, except = null) {
-        if (except) {
-            return $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${characterId}"]`).not(except).first();
-        } else {
-            return $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${characterId}"]`).first();
-        }
-    }
-
-    // Add characters belonging to the given raid group to the character list if they're not already in it
-    function fillCharactersFromRaid(raidGroupId) {
-        const raidGroupCharacters = characters.filter(character => character.raid_group_id == raidGroupId);
-
-        let addedCount = 0;
-        let alreadyAddedCount = 0;
-
-        for (const character of raidGroupCharacters) {
-            const existing = findExistingCharacter(character.id);
-            if (!existing.length) {
-                let emptyCharacterSelect = $('select[name^=characters][name$=\\[character_id\\]] option:selected[value=""]').first().parent();
-                let characterOption = emptyCharacterSelect.find('option[value="' + character.id + '"i]');
-                if (characterOption.val()) {
-                    characterOption.prop("selected", true).change();
-                    addedCount++;
-                }
-
-                // Reset associated inputs
-                const row = emptyCharacterSelect.parent().closest(".js-row");
-                $(row).find("[name^=characters][name$=\\[is_exempt\\]]").prop("checked", false).change();
-                $(row).find("[name^=characters][name$=\\[remark_id\\]]").val("").change();
-                $(row).find("[name^=characters][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
-            } else {
-                alreadyAddedCount++;
-            }
-        }
-
-        $(".js-raid-group-message").html(`${addedCount} characters added${ alreadyAddedCount ? ` (${alreadyAddedCount} already in list)` : '' }`).show();
-        setTimeout(() => $(".js-raid-group-message").hide(), 7500);
-    }
-
-    // Hack to get the slider's labels to refresh: https://github.com/seiyria/bootstrap-slider/issues/396#issuecomment-310415503
-    function fixSliderLabels() {
-        window.dispatchEvent(new Event('resize'));
-    }
-
-    // If the current element has a value, show it and the next element that is hidden because it is empty
-    function showNext(currentElement) {
-        if ($(currentElement).val() != "") {
-            $(currentElement).show();
-            $(currentElement).parent().next(".js-hide-empty").show();
-        }
-    }
-
-    // If the current element has a value, show it and the next element that is hidden because it is empty
-    function showNextCharacter(currentElement) {
-        if ($(currentElement).val() != "") {
-            $(currentElement).show();
-            let nextElement = $(currentElement).closest(".js-row").next(".js-hide-empty");
-            nextElement.show();
-            nextElement.find("select[name^=characters][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
-            fixSliderLabels();
-        }
-    }
+    var raidDate = '{{ $raid ? $raid->date : getDateTime('Y-m-d') . " 17:00:00" }}';
 </script>
+<script src="{{ loadScript('raidEdit.js') }}"></script>
 @endsection

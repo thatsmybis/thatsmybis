@@ -1,9 +1,10 @@
 {
-    "/js/processed/autocomplete.js": "/js/processed/autocomplete.js?id=072f718ad4e246d5c9cf",
+    "/js/processed/autocomplete.js": "/js/processed/autocomplete.js?id=32931600ad507d717b5e",
     "/js/processed/guildSettings.js": "/js/processed/guildSettings.js?id=48d7cbb15911544c46af",
     "/js/processed/helpers.js": "/js/processed/helpers.js?id=2de6cdfcbbb554ced0c1",
-    "/js/processed/itemList.js": "/js/processed/itemList.js?id=e697c69710df88aafd8f",
-    "/js/processed/itemMassInput.js": "/js/processed/itemMassInput.js?id=48ba6f43d22caaa6de80",
-    "/js/processed/roster.js": "/js/processed/roster.js?id=f73a9e50c1e591dbe53d",
-    "/css/processed/main.css": "/css/processed/main.css?id=fe6a0799fbcb34d45161"
+    "/js/processed/itemList.js": "/js/processed/itemList.js?id=c93bbba7d223cce17798",
+    "/js/processed/itemMassInput.js": "/js/processed/itemMassInput.js?id=2db6bfca46427b7e0119",
+    "/js/processed/roster.js": "/js/processed/roster.js?id=84b509237a85ca584d63",
+    "/js/processed/raidEdit.js": "/js/processed/raidEdit.js?id=aaaaa153efcbda0bd040",
+    "/css/processed/main.css": "/css/processed/main.css?id=b299d5a1df9956711143"
 }

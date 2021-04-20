@@ -132,12 +132,13 @@ Route::group([
     Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
 
     Route::group(['prefix' => 'raids'], function () {
-        Route::get( '/',                'RaidController@list')  ->name('guild.raids.list');
-        Route::get( '/new',             'RaidController@edit') ->name('guild.raids.new');
-        Route::get( '/edit/{raidId?}',  'RaidController@edit')  ->where('id', '[0-9]+')->name('guild.raids.edit');
-        Route::post('/update',          'RaidController@update')->name('guild.raids.update');
-        Route::post('/new',             'RaidController@create')->name('guild.raids.create');
-        Route::get( '/{raidId}/{raidSlug?}', 'RaidController@show') ->where('id', '[0-9]+')->name('guild.raids.show');
+        Route::get( '/',                'RaidController@list')    ->name('guild.raids.list');
+        Route::get( '/new',             'RaidController@showEdit')->name('guild.raids.new');
+        Route::get( '/copy/{raidId}',   'RaidController@copy',   )->name('guild.raids.copy');
+        Route::get( '/edit/{raidId}',   'RaidController@showEdit')->where('id', '[0-9]+')->name('guild.raids.edit');
+        Route::post('/update',          'RaidController@update')  ->name('guild.raids.update');
+        Route::post('/new',             'RaidController@create')  ->name('guild.raids.create');
+        Route::get( '/{raidId}/{raidSlug?}', 'RaidController@show')->where('id', '[0-9]+')->name('guild.raids.show');
     });
 
     Route::group(['prefix' => 'raidGroup'], function () {

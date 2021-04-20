@@ -26,52 +26,12 @@ class RaidController extends Controller
     }
 
     /**
-     * Show a raid for editing, or creating if no ID is provided
+     * Copy a raid
      *
      * @return \Illuminate\Http\Response
      */
-    public function edit($guildId, $guildSlug, $id = null) {
-        $guild         = request()->get('guild');
-        $currentMember = request()->get('currentMember');
-
-        // TODO: Is this permission check ok? Different permission?
-        if (!$currentMember->hasPermission('edit.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
-        }
-
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
-            $showOfficerNote = true;
-        }
-
-        $raid = null;
-
-        if ($id) {
-            $raid = Raid::where([
-                ['guild_id', $guild->id],
-                ['id', $id],
-            ])->first();
-            $raid->load('characters', 'instances', 'raidGroups');
-        }
-
-        $guild->load([
-            'characters',
-            'raidGroups',
-            'raidGroups.role']);
-
-        $instances = Instance::where('expansion_id', $guild->expansion_id)->get();
-
-        return view('raids.edit', [
-            'currentMember'   => $currentMember,
-            'guild'           => $guild,
-            'instances'       => $instances,
-            'maxCharacters'   => self::MAX_CHARACTERS,
-            'maxInstances'    => self::MAX_INSTANCES,
-            'maxRaids'        => self::MAX_RAIDS,
-            'raid'            => $raid,
-            'showOfficerNote' => $showOfficerNote,
-        ]);
+    public function copy($guildId, $guildSlug, $id) {
+        return $this->showEdit($guildId, $guildSlug, $id, true);
     }
 
     /**
@@ -173,6 +133,79 @@ class RaidController extends Controller
 
         request()->session()->flash('status', "Successfully created Raid {$raid->name}.");
         return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]);
+    }
+
+    /**
+     * Show a raid for editing, or creating if no ID is provided
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showEdit($guildId, $guildSlug, $id, $copy = false) {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        // TODO: Is this permission check ok? Different permission?
+        if (!$currentMember->hasPermission('edit.raid-loot')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
+        $raid = null;
+
+        if ($id) {
+            $raid = Raid::where([
+                ['guild_id', $guild->id],
+                ['id', $id],
+            ])->first();
+            $raid->load('characters', 'instances', 'raidGroups');
+        }
+
+        $guild->load([
+            'characters',
+            'raidGroups',
+            'raidGroups.role']);
+
+        $instances = Instance::where('expansion_id', $guild->expansion_id)->get();
+
+        // When copying a raid, drop the raid's properties that we don't want copied over
+        if ($copy && $raid) {
+            $raid->original_id = $raid->id;
+            $raid->id   = null;
+            $raid->name = $raid->name . ' Copy';
+            $raid->cancelled_at = null;
+            $raid->logs         = null;
+            $raid->member_id    = null;
+            $raid->created_at   = null;
+            $raid->updated_at   = null;
+            $raid->characters->transform(function ($character) {
+                $character->pivot->raid_id      = null;
+                $character->pivot->is_exempt    = null;
+                $character->pivot->credit       = 1;
+                $character->pivot->remark_id    = null;
+                $character->pivot->public_note  = null;
+                $character->pivot->officer_note = null;
+                $character->pivot->created_at   = null;
+                $character->pivot->updated_at   = null;
+                return $character;
+            });
+        }
+
+        return view('raids.edit', [
+            'copy'            => $copy,
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'instances'       => $instances,
+            'maxCharacters'   => self::MAX_CHARACTERS,
+            'maxInstances'    => self::MAX_INSTANCES,
+            'maxRaids'        => self::MAX_RAIDS,
+            'raid'            => $raid,
+            'showOfficerNote' => $showOfficerNote,
+        ]);
     }
 
     /**
