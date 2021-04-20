@@ -22,6 +22,12 @@
                                     edit
                                 </a>
                             </li>
+                            <li class="list-inline-item">
+                                <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
+                                    <span class="fas fa-copy"></span>
+                                    copy
+                                </a>
+                            </li>
                         @endif
                     </ul>
 

@@ -15,21 +15,25 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
             <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
+                <span class="text-muted fa-fw fas fa-"></span>
                 Profile
             </a>
             @if (!isset($showLogs) || $showLogs)
                 <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}" target="_blank">
+                    <span class="text-muted fa-fw fas fa-"></span>
                     Logs
-                </a>
-            @endif
-            @if (!isset($showEdit) || $showEdit)
-                <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
-                    Edit
                 </a>
             @endif
             @if (!isset($showEditLoot) || $showEditLoot)
                 <a class="dropdown-item" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
+                    <span class="text-muted fa-fw fas fa-sack"></span>
                     Loot
+                </a>
+            @endif
+            @if (!isset($showEdit) || $showEdit)
+                <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
+                    <span class="text-muted fa-fw fas fa-pencil"></span>
+                    Edit
                 </a>
             @endif
             <span class="dropdown-item disabled">

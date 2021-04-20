@@ -93,16 +93,15 @@
                                 @php
                                     $isFuture = $raid->date > $now;
                                 @endphp
-                                <li class="p-1 pl-3 rounded">
+                                <li class="pt-3 pb-3 pl-3 p-1 rounded">
 
                                     <ul class="list-inline">
                                         @include('raids/partials/listRaid', ['bold' => true, 'text' => (!$isFuture || $raid->cancelled_at ? 'muted' : 'white')])
 
-                                        @if (!$raid->cancelled_at)
-                                            <li class="list-inline-item text-muted">
-                                                {{ $raid->character_count }} raiders
-                                            </li>
-
+                                        <li class="list-inline-item text-muted">
+                                            {{ $raid->character_count }} raiders
+                                        </li>
+                                        @if (!$isFuture)
                                             <li class="list-inline-item text-muted">
                                                 {{ $raid->item_count }} items
                                             </li>
@@ -118,7 +117,7 @@
 
                                         @if ($raid->instances->count() > 0)
                                             <li class="list-inline-item">
-                                                <ul class="list-inline font-weight-bold">
+                                                <ul class="list-inline font-weight-bold text-muted">
                                                     @foreach ($raid->instances as $instance)
                                                         <span class="text-{{ $raid->cancelled_at ? 'muted' : 'legendary' }}">{{ $instance->short_name }}</span>{{ !$loop->last ? ',' : '' }}
                                                     @endforeach
@@ -130,7 +129,9 @@
                                             <li class="list-inline-item">
                                                 <ul class="list-inline">
                                                     @foreach ($raid->raidGroups as $raidGroup)
-                                                        @include('partials/raidGroup', ['raidGroupColor' => $raidGroup->getColor(), 'text' => ($raid->cancelled_at ? 'muted' : '')])
+                                                        <li class="list-inline-item">
+                                                            @include('partials/raidGroup', ['raidGroupColor' => $raidGroup->getColor(), 'text' => ($raid->cancelled_at ? 'muted' : '')])
+                                                        </li>
                                                     @endforeach
                                                 </ul>
                                             </li>
@@ -140,7 +141,9 @@
                             @endforeach
                         </ol>
                     @else
-                        This guild hasn't recorded any raids yet
+                        <p class="mt-4 ml-2  text-3">
+                            No raids found
+                        </p>
                     @endif
                 </div>
 

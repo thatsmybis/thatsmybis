@@ -25,13 +25,18 @@
                             @else
                                 Editing
                             @endif
-                            <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => ($copy ? $raid->original_id : $raid->id), 'raidSlug' => $raid->slug]) }}">
-                                {{ $raid->name }}
+                            <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => ($copy ? $originalRaid->id : $raid->id), 'raidSlug' => ($copy ? $originalRaid->slug : $raid->slug)]) }}">
+                                {{ $copy ? $originalRaid->name : $raid->name }}
                             </a>
                         @else
                             Create a Raid
                         @endif
                     </h1>
+                    @if ($raid && !$copy)
+                        <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
+                            <span class="fas fa-copy"></span> copy
+                        </a>
+                    @endif
                 </div>
             </div>
 

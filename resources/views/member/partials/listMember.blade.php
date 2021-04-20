@@ -9,12 +9,15 @@
             </a>
             <div class="dropdown-menu" aria-labelledby="member{{ $member->id }}Dropdown">
                 <a class="dropdown-item" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}" target="_blank">
+                    <span class="text-muted fa-fw fas fa-"></span>
                     Profile
                 </a>
                 <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}" target="_blank">
+                    <span class="text-muted fa-fw fas fa-"></span>
                     Logs
                 </a>
                 <a class="dropdown-item" href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}" target="_blank">
+                    <span class="text-muted fa-fw fas fa-pencil"></span>
                     Edit
                 </a>
             </div>

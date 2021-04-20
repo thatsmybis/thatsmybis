@@ -173,10 +173,11 @@ class RaidController extends Controller
         $instances = Instance::where('expansion_id', $guild->expansion_id)->get();
 
         // When copying a raid, drop the raid's properties that we don't want copied over
+        $originalRaid = null;
         if ($copy && $raid) {
-            $raid->original_id = $raid->id;
-            $raid->id   = null;
-            $raid->name = $raid->name . ' Copy';
+            $originalRaid = clone $raid;
+            $raid->id     = null;
+            $raid->name   = $raid->name . ' Copy';
             $raid->cancelled_at = null;
             $raid->logs         = null;
             $raid->member_id    = null;
@@ -203,6 +204,7 @@ class RaidController extends Controller
             'maxCharacters'   => self::MAX_CHARACTERS,
             'maxInstances'    => self::MAX_INSTANCES,
             'maxRaids'        => self::MAX_RAIDS,
+            'originalRaid'    => $originalRaid,
             'raid'            => $raid,
             'showOfficerNote' => $showOfficerNote,
         ]);
@@ -219,7 +221,7 @@ class RaidController extends Controller
 
         $guild->load(['characters', 'members', 'raidGroups', 'raidGroups.role']);
 
-        $raids = Raid::select([
+        $query = Raid::select([
                 'raids.*',
                 DB::raw('COUNT(DISTINCT `raid_characters`.`character_id`) AS `character_count`'),
                 DB::raw('COUNT(DISTINCT `character_items`.`item_id`) AS `item_count`'),
@@ -229,8 +231,30 @@ class RaidController extends Controller
             ->where('raids.guild_id', $guild->id)
             ->orderBy('raids.date', 'desc')
             ->with(['instances', 'member', 'raidGroups', 'raidGroups.role'])
-            ->groupBy('raids.id')
-            ->paginate(self::RESULTS_PER_PAGE);
+            ->groupBy('raids.id');
+
+        if (!empty(request()->input('character_id'))) {
+            $query = $query->leftJoin('raid_characters AS raid_characters2', 'raid_characters2.raid_id', '=', 'raids.id')
+                ->where('raid_characters2.character_id', request()->input('character_id'));
+        }
+
+        if (!empty(request()->input('member_id'))) {
+            $query = $query->join('characters', 'characters.id', 'raid_characters.character_id')
+                ->join('members', 'members.id', 'characters.member_id')
+                ->where('members.id', request()->input('member_id'));
+        }
+
+        if (!empty(request()->input('raid_group_id'))) {
+            $query = $query->join('raid_raid_groups', 'raid_raid_groups.raid_id', 'raids.id')
+                ->where('raid_raid_groups.raid_group_id', request()->input('raid_group_id'));
+        }
+
+        // if (!empty(request()->input('item_id'))) {
+        //     $query = $query->where('items.item_id', request()->input('item_id'));
+        //     $resources[] = Item::find(request()->input('item_id'));
+        // }
+
+        $raids = $query->paginate(self::RESULTS_PER_PAGE);
 
         $showEdit = false;
         if ($currentMember->hasPermission('edit.raids')) {
