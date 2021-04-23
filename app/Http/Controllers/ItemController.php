@@ -115,6 +115,13 @@ class ItemController extends Controller
             ]);
         }
 
+        $items = $items->with([
+                'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                    return $query
+                        ->where(['characters.guild_id' => $guild->id]);
+                },
+            ]);
+
         $items = $items->get();
 
         return view('item.list', [

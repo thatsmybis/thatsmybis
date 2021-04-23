@@ -4,8 +4,9 @@ var colSource = 0;
 var colName = 1;
 var colPrios = 2;
 var colWishlist = 3;
-var colNotes = 4;
-var colPriority = 5;
+var colReceived = 4;
+var colNotes = 5;
+var colPriority = 6;
 
 // For keeping track of the loot's source
 var lastSource = null;
@@ -23,8 +24,9 @@ $(document).ready( function () {
         e.preventDefault();
 
         table.column(colName)    .visible(true);
-        table.column(colWishlist).visible(true);
         table.column(colPrios)   .visible(true);
+        table.column(colWishlist).visible(true);
+        table.column(colReceived).visible(true);
         table.column(colNotes)   .visible(true);
         table.column(colPriority).visible(true);
    });
@@ -139,6 +141,16 @@ function createTable(lastSource) {
                 "width"   : "400px",
             },
             {
+                "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Received',
+                "data"   : "received_and_recipe_characters",
+                "render" : function (data, type, row) {
+                    return data && data.length ? getCharacterList(data, 'received', row.item_id) : '—';
+                },
+                "orderable" : false,
+                "visible" : true,
+                "width"   : "300px",
+            },
+            {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
                 "data"   : "guild_note",
                 "render" : function (data, type, row) {
@@ -204,7 +216,7 @@ function getCharacterList(data, type, itemId) {
                 <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
                     title="${ character.raid_group_name ? character.raid_group_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="text-${ character.class ? character.class.toLowerCase() : '' }-important tag d-inline">
-                    <span class="text-muted">${ character.pivot.order ? character.pivot.order : '' }</span>
+                    <span class="text-muted">${ type !== 'received' && character.pivot.order ? character.pivot.order : '' }</span>
                     <span class="text-muted small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_group_color) }"></span>${ character.name }
                     ${ character.is_alt ? `
