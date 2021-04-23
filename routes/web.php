@@ -141,7 +141,7 @@ Route::group([
         Route::get( '/{raidId}/{raidSlug?}', 'RaidController@show')->where('id', '[0-9]+')->name('guild.raids.show');
     });
 
-    Route::group(['prefix' => 'raidGroup'], function () {
+    Route::group(['prefix' => 'raid-groups'], function () {
         Route::get( '/',               'RaidGroupController@raidGroups')   ->name('guild.raidGroups');
         Route::get( '/create',         'RaidGroupController@edit')         ->name('guild.raidGroup.create');
         Route::get( '/edit/{id?}',     'RaidGroupController@edit')         ->where('id', '[0-9]+')->name('guild.raidGroup.edit');

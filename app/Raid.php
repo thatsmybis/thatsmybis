@@ -11,7 +11,7 @@ class Raid extends Model
     const REMARK_UNPREPARED      = 'Unprepared';
     const REMARK_LATE_UNPREPARED = 'Late & unprepared';
     const REMARK_NO_SHOW         = 'No call, no show';
-    const REMARK_AWAY            = 'Away, but called in';
+    const REMARK_AWAY            = 'Gave notice';
     const REMARK_BENCHED         = 'Benched';
 
     const REMARKS = [

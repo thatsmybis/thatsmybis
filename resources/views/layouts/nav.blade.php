@@ -149,7 +149,7 @@
                                 Assign Loot
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Show Raids
+                                List Raids
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 Create Raid

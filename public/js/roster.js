@@ -116,22 +116,34 @@ function createTable() {
                                 ${ row.class ? row.class : '' }
                             </li>` : `` }
 
+                        ${ row.attendance_percentage || row.raid_count ? `
+                            <li>
+                                ${ row.attendance_percentage ? `
+                                    <span class="${ getAttendanceColor(row.attendance_percentage) }">${ row.attendance_percentage * 100 }%</span>
+                                ` : '' }
+                                ${ row.raid_count ? `
+                                    <span class="small text-muted">${ row.raid_count } raid${ row.raid_count > 1 ? 's' : '' }</span>
+                                ` : ``}
+                            </li>` : `` }
+
                         ${ row.level || row.race || row.spec ? `
                             <li>
-                                <small>
+                                <span class="small text-muted">
                                     ${ row.level ? row.level : '' }
-                                    ${ row.race  ? row.race : '' }
-                                    ${ row.spec  ? row.spec : '' }
-                                </small>
+                                    <span class="font-weight-bold">
+                                        ${ row.race  ? row.race : '' }
+                                        ${ row.spec  ? row.spec : '' }
+                                    </span>
+                                </span>
                             </li>` : `` }
 
                         ${ row.rank || row.profession_1 || row.profession_2 ? `
                             <li>
-                                <small>
+                                <span class="small text-muted">
                                     ${ row.rank         ? 'Rank ' + row.rank + (row.profession_1 || row.profession_2 ? ',' : '') : '' }
                                     ${ row.profession_1 ? row.profession_1 + (row.profession_2 ? ',' : '') : '' }
                                     ${ row.profession_2 ? row.profession_2 : '' }
-                                </small>
+                                </span>
                             </li>` : `` }
                         ${ showEdit ?
                             `

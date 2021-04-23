@@ -14,6 +14,7 @@ use App\{
     User,
 };
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Guild extends Model
 {
@@ -37,6 +38,7 @@ class Guild extends Model
         'message',
         'calendar_link',
         'is_attendance_hidden',
+        'attendance_decay_days',
         'is_prio_private',
         'is_received_locked',
         'is_wishlist_private',
@@ -93,7 +95,24 @@ class Guild extends Model
 
     // Excludes hidden and removed characters
     public function characters() {
-        return $this->hasMany(Character::class)->whereNull('inactive_at')->orderBy('name');
+        return $this->hasMany(Character::class)
+            ->select([
+                'characters.*'
+            ])
+            ->whereNull('characters.inactive_at')
+            ->orderBy('characters.name');
+    }
+
+    // Gets characters and their attendance stats
+    // Excludes hidden and removed characters
+    public function charactersWithAttendance() {
+        $query = $this->hasMany(Character::class)
+            ->select([
+                'characters.*'
+            ])
+            ->whereNull('characters.inactive_at')
+            ->orderBy('characters.name');
+        return $this->applyAttendanceQuery($query);
     }
 
     public function content() {
@@ -205,6 +224,8 @@ class Guild extends Model
             ->orderBy('characters.name')
             ->with(['received']);
 
+        $characters = $this->applyAttendanceQuery($characters);
+
         if (!$showInactive) {
             $characters = $characters->whereNull('characters.inactive_at');
         }
@@ -239,6 +260,30 @@ class Guild extends Model
             'showPrios'       => $showPrios,
             'showWishlist'    => $showWishlist,
          ];
+    }
+
+    // Takes a query for characters and applies the logic necessary to fetch attendance for those characters.
+    // Applies the fields `raid_count` and `attendance_percentage` to the selected fields.
+    // Might not work on all queries.
+    static public function applyAttendanceQuery($query) {
+        return $query
+            ->addSelect([
+                DB::raw('COALESCE(MAX(`raid_characters`.`raid_count`), 0) AS `raid_count`'),
+                DB::raw('COALESCE(ROUND(MAX(`raid_characters`.`credit`) / MAX(`raid_characters`.`raid_count`), 3), 0) AS `attendance_percentage`'),
+            ])
+            ->join('guilds', 'guilds.id', 'characters.guild_id')
+            ->leftJoin('raids', function ($join) {
+                $join->on('raids.guild_id', 'characters.guild_id')
+                    ->whereRaw('`raids`.`date` BETWEEN CURDATE() - INTERVAL `guilds`.`attendance_decay_days` DAY AND CURDATE()')
+                    ->whereNull('raids.cancelled_at');
+            })
+            ->leftJoin(DB::raw(
+                "(SELECT COUNT(*) AS `raid_count`, SUM(`raid_characters`.`credit`) AS `credit`, MAX(`raid_characters`.`raid_id`) AS `raid_id`, MAX(`raid_characters`.`character_id`) AS `character_id` FROM `raid_characters` WHERE `raid_characters`.`is_exempt` = 0 AND `raid_characters`.`credit` > 0 GROUP BY `raid_characters`.`character_id`) `raid_characters`"
+            ), function ($join) {
+                $join->on('raid_characters.raid_id', 'raids.id')
+                    ->on('raid_characters.character_id', 'characters.id');
+            })
+            ->groupBy('characters.id');
     }
 
     // Returns the maximum level for characters in this guild

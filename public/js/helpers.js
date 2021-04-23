@@ -140,6 +140,27 @@ function decToHex(number) {
     return parseInt(number).toString(16);
 }
 
+// Based on attendance percentage, return a CSS color class
+function getAttendanceColor(percentage = 0) {
+    let color = '';
+
+    if (percentage >= 0.95) {
+        color = 'text-tier-1';
+    } else if (percentage >= 0.90) {
+        color = 'text-tier-2';
+    } else if (percentage >= 0.85) {
+        color = 'text-tier-3';
+    } else if (percentage >= 0.80) {
+        color = 'text-tier-4';
+    } else if (percentage >= 0.75) {
+        color = 'text-tier-5';
+    } else if (percentage < 0.75) {
+        color = 'text-tier-6';
+    }
+
+    return color;
+}
+
 /**
  * Pass a number, get back a hex color complete with leading hash to make it HTML friendly
  */
@@ -157,7 +178,7 @@ function getColorFromDec(color) {
     return '#' + color;
 }
 
-//
+// Based on the guild's tier mode setting, return a tier label
 function getItemTierLabel(item, tierMode) {
     if (item.guild_tier) {
         if (tierMode == TIER_MODE_S) {

@@ -18,25 +18,32 @@
         <div class="col-xl-10 offset-xl-1 col-12">
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
-                    <h1 class="font-weight-medium ">
-                        @if ($raid)
-                            @if ($copy)
-                                Copying
-                            @else
-                                Editing
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <h1 class="font-weight-medium ">
+                                @if ($raid)
+                                    @if ($copy)
+                                        Copying
+                                    @else
+                                        Editing
+                                    @endif
+                                    <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => ($copy ? $originalRaid->id : $raid->id), 'raidSlug' => ($copy ? $originalRaid->slug : $raid->slug)]) }}"
+                                        class="text-white">
+                                        {{ $copy ? $originalRaid->name : $raid->name }}
+                                    </a>
+                                @else
+                                    Create a Raid
+                                @endif
+                            </h1>
+                        </li>
+                        <li class="list-inline-item">
+                            @if ($raid && !$copy)
+                                <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
+                                    <span class="fas fa-copy"></span> copy
+                                </a>
                             @endif
-                            <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => ($copy ? $originalRaid->id : $raid->id), 'raidSlug' => ($copy ? $originalRaid->slug : $raid->slug)]) }}">
-                                {{ $copy ? $originalRaid->name : $raid->name }}
-                            </a>
-                        @else
-                            Create a Raid
-                        @endif
-                    </h1>
-                    @if ($raid && !$copy)
-                        <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
-                            <span class="fas fa-copy"></span> copy
-                        </a>
-                    @endif
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -410,7 +417,7 @@
                                             </div>
                                         </div>
 
-                                        <div data-index="{{ $i }}" class="js-notes col-12"
+                                        <div data-index="{{ $i }}" class="js-notes col-12 mb-3"
                                             style="{{ old('characters.' . $i . '.public_note') || old('characters.' . $i . '.officer_note') || ($character && ($character->pivot->public_note || $character->pivot->officer_note)) ? '' : 'display:none' }};">
                                             <div class="row">
                                                 <!-- Note -->

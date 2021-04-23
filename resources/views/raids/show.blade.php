@@ -8,63 +8,128 @@
         <div class="col-12">
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
-                    <h1 class="font-weight-bold">
-                        @if ($raid->cancelled_at)
-                            <span class="text-warning">cancelled</span>
-                        @endif
-                        {{ $raid->name }}
-                    </h1>
-                    <ul class="list-inline">
-                       @if ($showEditRaid)
-                            <li class="list-inline-item">
-                                <a href="{{ route('guild.raids.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
-                                    <span class="fas fa-pencil"></span>
-                                    edit
-                                </a>
-                            </li>
-                            <li class="list-inline-item">
-                                <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
-                                    <span class="fas fa-copy"></span>
-                                    copy
-                                </a>
-                            </li>
-                        @endif
-                    </ul>
+                    <div class="row">
+                        <div class="col-12">
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <h1 class="font-weight-bold">
+                                        @if ($raid->cancelled_at)
+                                            <span class="text-warning">cancelled</span>
+                                        @endif
+                                        {{ $raid->name }}
+                                    </h1>
+                                </li>
+                               @if ($showEditRaid)
+                                    <li class="list-inline-item">
+                                        <a href="{{ route('guild.raids.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
+                                            <span class="fas fa-pencil"></span>
+                                            edit
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
+                                            <span class="fas fa-copy"></span>
+                                            copy
+                                        </a>
+                                    </li>
+                                @endif
+                            </ul>
 
-                    <ul class="no-indent no-bullet">
-                        @if ($raid->instances->count())
-                            <li class="mt-2">
-                                <ul class="list-inline">
-                                    @foreach ($raid->instances as $instance)
-                                        @if (!$loop->first)
-                                            <li class="list-inline-item">
-                                                &sdot;
-                                            </li>
-                                        @endif
-                                        <li class="list-inline-item text-legendary font-weight-bold">
-                                            {{ $instance->name }}
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </li>
+                            <ul class="no-indent no-bullet">
+                                <li class="mt-2 text-5 font-weight-bold">
+                                    @php
+                                        $isFuture = $raid->date > getDateTime();
+                                    @endphp
+                                    {{ $isFuture ? 'in' : '' }}
+                                    <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
+                                    {{ !$isFuture ? 'ago' : '' }}
+                                    <span class="js-timestamp" data-timestamp="{{ $raid->date }}" data-format="@ h:mm a, ddd MMM D {{ $isFuture ? '' : 'YYYY' }}"></span>
+                                </li>
+                                @if ($raid->instances->count())
+                                    <li class="mt-2">
+                                        <ul class="list-inline">
+                                            @foreach ($raid->instances as $instance)
+                                                @if (!$loop->first)
+                                                    <li class="list-inline-item">
+                                                        &sdot;
+                                                    </li>
+                                                @endif
+                                                <li class="list-inline-item text-legendary font-weight-bold">
+                                                    {{ $instance->name }}
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endif
+                                @if ($raid->raidGroups->count())
+                                    <li class="mt-2">
+                                        <ul class="list-inline">
+                                            @foreach ($raid->raidGroups as $raidGroup)
+                                                @if (!$loop->first)
+                                                    <li class="list-inline-item">
+                                                        &sdot;
+                                                    </li>
+                                                @endif
+                                                <li class="list-inline-item">
+                                                    @include('partials/raidGroup', ['raidGroupColor' => $raidGroup->getColor()])
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </li>
+                                @endif
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        @if ($raid->logs)
+                            <div class="col-lg-6 col-12">
+                                <div class="mb-3">
+                                    <span class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-link"></span>
+                                        Raid Logs
+                                    </span>
+                                    <div class="js-markdown-inline">
+                                        {{ $raid->logs }}
+                                    </div>
+                                </div>
+                            </div>
                         @endif
-                        @if ($raid->raidGroups->count())
-                            <li class="mt-2">
-                                <ul class="list-inline">
-                                    @foreach ($raid->raidGroups as $raidGroup)
-                                        @if (!$loop->first)
-                                            <li class="list-inline-item">
-                                                &sdot;
-                                            </li>
-                                        @endif
-                                        <li class="list-inline-item">
-                                            @include('partials/raidGroup', ['raidGroupColor' => $raidGroup->getColor()])
-                                        </li>
-                                    @endforeach
-                                </ul>
-                            </li>
+                    </div>
+
+                    <div class="row">
+                        @if ($raid->public_note)
+                            <div class="col-lg-6 col-12">
+                                <div class="list-group-item rounded mb-3">
+                                    <span class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
+                                        Notes
+                                    </span>
+                                    <div>
+                                        <p class="js-markdown-inline">
+                                            {{ $raid->public_note }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         @endif
-                    </ul>
+
+                        @if ($showOfficerNote && $raid->officer_note)
+                            <div class="col-lg-6 col-12">
+                                <div class="list-group-item rounded mb-3">
+                                    <span class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
+                                        Officer Notes
+                                    </span>
+                                    <div>
+                                        <p class="js-markdown-inline">
+                                            {{ $raid->officer_note }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
                 </div>
             </div>
             <div class="row mb-3 pt-3">

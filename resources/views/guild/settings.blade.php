@@ -199,16 +199,16 @@
                         <div class="form-group mb-0">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
-                                        {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
-                                        Limit <strong>wishlist visibility</strong> to Raid Leaders <span class="text-muted small">members can still see <em>their own</em> characters' wishlists</span>
+                                    <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
+                                        {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
+                                        Limit <strong>prio visibility</strong> to Raid Leaders <span class="text-muted small">character prios are hidden, but prio notes on items are still visible</span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
-                                        {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
-                                        Limit <strong>prio visibility</strong> to Raid Leaders <span class="text-muted small">character prios are hidden, but prio notes on items are still visible</span>
+                                    <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
+                                        Limit <strong>wishlist visibility</strong> to Raid Leaders <span class="text-muted small">members can still see <em>their own</em> characters' wishlists</span>
                                 </label>
                             </div>
                         </div>
@@ -220,16 +220,16 @@
                         <div class="form-group mb-0">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="is_received_locked" value="1" class="" autocomplete="off"
-                                        {{ old('is_received_locked') && old('is_received_locked') == 1 ? 'checked' : ($guild->is_received_locked ? 'checked' : '') }}>
-                                        Lock loot received <span class="text-muted small">Raid Leader and above can still edit</span>
+                                    <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
+                                        Lock wishlists <span class="text-muted small">Raid Leader and above can still edit</span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
-                                        {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
-                                        Lock wishlists <span class="text-muted small">Raid Leader and above can still edit</span>
+                                    <input type="checkbox" name="is_received_locked" value="1" class="" autocomplete="off"
+                                        {{ old('is_received_locked') && old('is_received_locked') == 1 ? 'checked' : ($guild->is_received_locked ? 'checked' : '') }}>
+                                        Lock loot received <span class="text-muted small">Raid Leader and above can still edit</span>
                                 </label>
                             </div>
                         </div>
@@ -279,25 +279,78 @@
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="form-group mb-0">
                             <div class="form-group">
-                                <div class="form-group">
-                                    <label for="tier_mode">
-                                        <span class="fas fa-fw fa-trophy text-muted"></span>
-                                        Tier mode <span class="small text-muted">your guild can rank the quality of each item</span>
-                                    </label>
-                                    <select name="tier_mode" class="form-control dark">
-                                        <option value="s"
-                                            {{ old('tier_mode') && old('tier_mode') == 's' || $guild->tier_mode == 's' ? 'selected' : '' }}>
-                                            S-tier
+                                <label for="attendance_decay_days">
+                                    Attendance decay rate <span class="small text-muted">how far back to count attendance</span>
+                                </label>
+                                @php
+                                    $rates = [
+                                        31  => '1 month',
+                                        61  => '2 months',
+                                        91  => '3 months',
+                                        122 => '4 months',
+                                        152 => '5 months',
+                                        183 => '6 months',
+                                        213 => '7 months',
+                                        243 => '8 months',
+                                        274 => '9 months',
+                                        304 => '10 months',
+                                        335 => '11 months',
+                                        365 => '1 year',
+                                        456 => '1 ¼ years',
+                                        548 => '1 ½ years',
+                                        639 => '1 ¾ years',
+                                        730 => '2 years',
+                                    ];
+                                @endphp
+                                <select name="attendance_decay_days" class="form-control dark">
+                                    <option value="" {{ old('attendance_decay_days') && old('attendance_decay_days') == 36500 || $guild->attendance_decay_days == 36500 ? 'selected' : '' }}>
+                                        No limit
+                                    </option>
+                                    @foreach ($rates as $key => $label)
+                                        <option value="{{ $key }}"
+                                            {{ old('attendance_decay_days') && old('attendance_decay_days') == $key || $guild->attendance_decay_days == $key ? 'selected' : '' }}>
+                                            {{ $label }}
                                         </option>
-                                        <option value="num"
-                                            {{ old('tier_mode') && old('tier_mode') == 'num' || $guild->tier_mode == 'num' ? 'selected' : '' }}>
-                                            Numbered
-                                        </option>
-                                        <option value="" {{ old('tier_mode') && old('tier_mode') == '' || $guild->tier_mode == '' ? 'selected' : '' }}>
-                                            Off
-                                        </option>
-                                    </select>
-                                </div>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group mb-0">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_attendance_hidden" value="1" class="" autocomplete="off"
+                                        {{ old('is_attendance_hidden') && old('is_attendance_hidden') == 1 ? 'checked' : ($guild->is_attendance_hidden ? 'checked' : '') }}>
+                                        Don't show attendance
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="form-group mb-0">
+                            <div class="form-group">
+                                <label for="tier_mode">
+                                    <span class="fas fa-fw fa-trophy text-muted"></span>
+                                    Tier mode
+                                    <span class="small text-muted">
+                                        rank each item in the Item Notes admin dropdown menu
+                                    </span>
+                                </label>
+                                <select name="tier_mode" class="form-control dark">
+                                    <option value="s"
+                                        {{ old('tier_mode') && old('tier_mode') == 's' || $guild->tier_mode == 's' ? 'selected' : '' }}>
+                                        S-tier
+                                    </option>
+                                    <option value="num"
+                                        {{ old('tier_mode') && old('tier_mode') == 'num' || $guild->tier_mode == 'num' ? 'selected' : '' }}>
+                                        Numbered
+                                    </option>
+                                    <option value="" {{ old('tier_mode') && old('tier_mode') == '' || $guild->tier_mode == '' ? 'selected' : '' }}>
+                                        Off
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -310,6 +363,10 @@
                             Permissions
                         </h2>
                         <span class="text-muted">Based on user roles in your Discord server</span>
+                        <div class="small text-muted mb-3">
+                            Not seeing all of your roles?
+                            <a href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}#role-whitelisting">sync roles</a>
+                        </div>
                     </div>
                 </div>
 
@@ -486,10 +543,6 @@
                         <span class="fas fa-fw fa-save"></span>
                         Save
                     </button>
-                    <div class="small text-muted mb-3">
-                        Not seeing all of your roles?
-                        <a href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}#role-whitelisting">sync roles</a>
-                    </div>
                 </div>
             </form>
         </div>

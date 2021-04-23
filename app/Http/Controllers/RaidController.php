@@ -166,7 +166,7 @@ class RaidController extends Controller
         }
 
         $guild->load([
-            'characters',
+            'allCharacters',
             'raidGroups',
             'raidGroups.role']);
 
@@ -219,7 +219,7 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['characters', 'members', 'raidGroups', 'raidGroups.role']);
+        $guild->load(['allCharacters', 'members', 'raidGroups', 'raidGroups.role']);
 
         $query = Raid::select([
                 'raids.*',

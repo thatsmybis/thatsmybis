@@ -352,6 +352,8 @@ class GuildController extends Controller
             'is_prio_autopurged'        => 'nullable|boolean',
             'is_wishlist_autopurged'    => 'nullable|boolean',
             'do_sort_items_by_instance' => 'nullable|boolean',
+            'is_attendance_hidden'      => 'nullable|boolean',
+            'attendance_decay_days'     => 'nullable|integer|min:1|max:730',
             'tier_mode'                 => 'nullable|string|in:s,num',
             'calendar_link'             => 'nullable|string|max:200',
             'message'                   => 'nullable|string|max:500',
@@ -373,6 +375,8 @@ class GuildController extends Controller
         $updateValues['is_prio_autopurged']        = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
         $updateValues['is_wishlist_autopurged']    = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
         $updateValues['do_sort_items_by_instance'] = request()->input('do_sort_items_by_instance') == 1 ? 1 : 0;
+        $updateValues['is_attendance_hidden']      = request()->input('is_attendance_hidden') == 1 ? 1 : 0;
+        $updateValues['attendance_decay_days']     = request()->input('attendance_decay_days') ? request()->input('attendance_decay_days') : 36500;
         $updateValues['tier_mode']                 = request()->input('tier_mode');
         $updateValues['message']                   = request()->input('message');
         $updateValues['calendar_link']             = request()->input('calendar_link');

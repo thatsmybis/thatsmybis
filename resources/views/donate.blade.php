@@ -37,36 +37,48 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <h2>Donors</h2>
             <ul>
-               <li>
-                    Calaris (Patreon: Main Tank)
-               </li>
-               <li>
-                    Finvy (Patreon: Raider)
-               </li>
-               <li>
-                    mattyp237 (Patreon: Parser)
-               </li>
-               <li>
-                    Mister Awesomesauce (Patreon: Raider)
-               </li>
-               <li>
-                    niph (Paypal)
-               </li>
-               <li>
-                    Sangwa (Patreon: Raider)
-               </li>
-               <li>
-                    Sentence (Patreon: Raider)
-               </li>
-               <li>
-                    Strix (Patreon: Black Lotus)
-               </li>
-               <li>
-                    TideAd (Patreon: Parser)
-               </li>
-               <li>
-                    Tron (Patreon: Main Tank)
-               </li>
+                <li>
+                    Anon (Patreon)
+                </li>
+                <li>
+                    Busmonstret (Raider)
+                </li>
+                <li>
+                     Calaris (Patreon: Main Tank)
+                </li>
+                <li>
+                     Finvy (Patreon: Raider)
+                </li>
+                <li>
+                     Kral (Patreon: Parser)
+                </li>
+                <li>
+                     mattyp237 (Patreon: Parser)
+                </li>
+                <li>
+                     Mister Awesomesauce (Patreon: Raider)
+                </li>
+                <li>
+                     niph (Paypal)
+                </li>
+                <li>
+                     Panya (Patreon: Parser)
+                </li>
+                <li>
+                     Sangwa (Patreon: Raider)
+                </li>
+                <li>
+                     Sentence (Patreon: Raider)
+                </li>
+                <li>
+                     Strix (Patreon: Black Lotus)
+                </li>
+                <li>
+                     TideAd (Patreon: Parser)
+                </li>
+                <li>
+                     Tron (Patreon: Main Tank)
+                </li>
             </ul>
         </div>
     </div>
