@@ -141,7 +141,7 @@
                                     </li>
                                 </ul>
                             </li>
-                        @else
+                        @endif
                     @endforeach
                 </ul>
             </div>

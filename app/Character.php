@@ -254,7 +254,7 @@ class Character extends Model
                     ->whereNull('raids.cancelled_at');
             })
             ->leftJoin(DB::raw(
-                "(SELECT COUNT(*) AS `raid_count`, SUM(`raid_characters`.`credit`) AS `credit`, MAX(`raid_characters`.`raid_id`) AS `raid_id`, MAX(`raid_characters`.`character_id`) AS `character_id` FROM `raid_characters` WHERE `raid_characters`.`is_exempt` = 0 AND `raid_characters`.`credit` > 0 GROUP BY `raid_characters`.`character_id`) `raid_characters`"
+                "(SELECT COUNT(*) AS `raid_count`, SUM(`raid_characters`.`credit`) AS `credit`, MAX(`raid_characters`.`raid_id`) AS `raid_id`, MAX(`raid_characters`.`character_id`) AS `character_id` FROM `raid_characters` WHERE `raid_characters`.`is_exempt` = 0 GROUP BY `raid_characters`.`character_id`) `raid_characters`"
             ), function ($join) {
                 $join->on('raid_characters.raid_id', 'raids.id')
                     ->on('raid_characters.character_id', 'characters.id');
