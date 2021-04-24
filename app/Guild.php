@@ -165,13 +165,14 @@ class Guild extends Model
      * Returns all of the characters and all the stuff associated with them.
      * Since it goes through the work of looking them up, also returns some of passed in member's permissions.
      *
-     * @param Member $member       The member who this data is going to be displayed to. The data changes
-     *                             based on the member's permissions.
-     * @param bool   $showInactive Should we fetch inactive characters?
+     * @param bool   $showOfficerNote
+     * @param bool   $showPrios
+     * @param bool   $showWishlist
+     * @param bool   $showInactive
      *
      * @return array
      */
-    public function getCharactersWithItemsAndPermissions($member, $showInactive) {
+    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $showInactive) {
         $characterFields = [
             'characters.id',
             'characters.member_id',
@@ -197,10 +198,8 @@ class Guild extends Model
             'raid_group_roles.color AS raid_group_color',
         ];
 
-        $showOfficerNote = false;
-        if ($member->hasPermission('view.officer-notes') && !isStreamerMode()) {
+        if ($showOfficerNote) {
             $characterFields[] = 'characters.officer_note';
-            $showOfficerNote = true;
         }
 
         $query = Character::select($characterFields)
@@ -223,16 +222,12 @@ class Guild extends Model
             $query = $query->whereNull('characters.inactive_at');
         }
 
-        $showPrios = false;
-        if (!$this->is_prio_private || $member->hasPermission('view.prios')) {
+        if ($showPrios) {
             $query = $query->with('prios');
-            $showPrios = true;
         }
 
-        $showWishlist = false;
-        if (!$this->is_wishlist_private || $member->hasPermission('view.wishlists')) {
+        if ($showWishlist) {
             $query = $query->with('wishlist');
-            $showWishlist = true;
         }
 
         $characters = $query->get();

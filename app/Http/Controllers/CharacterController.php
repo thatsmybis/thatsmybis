@@ -6,6 +6,7 @@ use App\{AuditLog, Character, Content, Guild, Item, RaidGroup, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class CharacterController extends Controller
@@ -284,17 +285,25 @@ class CharacterController extends Controller
 
         $guild->load('allRaidGroups');
 
-        $query = Character::select('characters.*')
-            ->where(['characters.id' => $characterId, 'characters.guild_id' => $guild->id])
-            ->with([
-                'member',
-                'raidGroup',
-                'raidGroup.role',
-                'received',
-                'recipes',
-            ]);
-        $query = Character::addAttendanceQuery($query);
-        $character = $query->firstOrFail();
+        $character = Cache::remember('character:' . $characterId . ':guild:' . $guild->id . ':attendance:' . $guild->is_attendance_hidden,
+            env('CACHE_CHARACTER_SECONDS', 5),
+            function () use ($guild, $characterId) {
+                $query = Character::select('characters.*')
+                    ->where(['characters.id' => $characterId, 'characters.guild_id' => $guild->id])
+                    ->with([
+                        'member',
+                        'raidGroup',
+                        'raidGroup.role',
+                        'received',
+                        'recipes',
+                    ]);
+
+                if (!$guild->is_attendance_hidden) {
+                    $query = Character::addAttendanceQuery($query);
+                }
+
+                return $query->firstOrFail();
+        });
 
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {

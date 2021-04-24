@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\{Character, Content, Guild, Member, RaidGroup, Role, User};
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class DashboardController extends Controller
 {
@@ -117,7 +118,26 @@ class DashboardController extends Controller
 
         $guild->load(['allRaidGroups', 'raidGroups.role']);
 
-        $characters = $guild->getCharactersWithItemsAndPermissions($currentMember, false);
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
+        $showPrios = false;
+        if (!$this->is_prio_private || $currentMember->hasPermission('view.prios')) {
+            $showPrios = true;
+        }
+
+        $showWishlist = false;
+        if (!$this->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
+            $showWishlist = true;
+        }
+
+        $characters = Cache::remember('roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden,
+            env('CACHE_ROSTER_SECONDS', 5),
+            function () use ($guild, $showOfficerNote, $showPrios, $showWishlist) {
+            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, false);
+        });
 
         $showEdit = false;
         if ($currentMember->hasPermission('edit.characters')) {

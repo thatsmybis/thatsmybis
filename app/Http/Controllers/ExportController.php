@@ -76,8 +76,25 @@ class ExportController extends Controller {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $characters = Cache::remember("export:jsonBlob:guild:{$guild->id}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild, $currentMember) {
-            return $guild->getCharactersWithItemsAndPermissions($currentMember, false);
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
+        $showPrios = false;
+        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+            $showPrios = true;
+        }
+
+        $showWishlist = false;
+        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
+            $showWishlist = true;
+        }
+
+        $characters = Cache::remember('export:roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden,
+            env('EXPORT_CACHE_SECONDS', 120),
+            function () use ($guild, $showOfficerNote, $showPrios, $showWishlist) {
+            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, false);
         });
 
         return $this->getExport($characters['characters'], 'Character JSON', $fileType);

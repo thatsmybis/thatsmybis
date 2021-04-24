@@ -62,73 +62,84 @@ class ItemController extends Controller
             $showOfficerNote = true;
         }
 
-        $query = Item::select([
-                'items.item_id',
-                'items.name',
-                'items.quality',
-                'item_sources.name      AS source_name',
-                'guild_items.note       AS guild_note',
-                'guild_items.priority   AS guild_priority',
-                'guild_items.tier       AS guild_tier',
-            ])
-            ->leftJoin('item_item_sources', 'item_item_sources.item_id', '=', 'items.item_id')
-            ->leftJoin('item_sources', 'item_sources.id', '=', 'item_item_sources.item_source_id')
-            ->leftJoin('guild_items', function ($join) use ($guild) {
-                $join->on('guild_items.item_id', 'items.item_id')
-                    ->where('guild_items.guild_id', $guild->id);
-            })
-            ->where([
-                ['item_sources.instance_id', $instance->id],
-                ['items.expansion_id', $guild->expansion_id],
-            ])
-            ->orderBy('item_sources.order')
-            ->orderBy('items.name');
-
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
             $showPrios = true;
-            $query = $query->with([
-                ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild, $characterFields) {
-                    return $query
-                        ->addSelect($characterFields)
-                        ->leftJoin('members', function ($join) {
-                            $join->on('members.id', 'characters.member_id');
-                        })
-                        ->where([
-                            ['characters.guild_id', $guild->id],
-                            ['character_items.is_received', 0],
-                        ])
-                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
-                }
-            ]);
+
         }
 
         $showWishlist = false;
         if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
             $showWishlist = true;
-            $query = $query->with([
-                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $characterFields) {
-                    return $query
-                        ->addSelect($characterFields)
-                        ->leftJoin('members', function ($join) {
-                            $join->on('members.id', 'characters.member_id');
-                        })
-                        ->where([
+        }
+
+        $items = Cache::remember('items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0) . ':attendance:' . $guild->is_attendance_hidden,
+            env('CACHE_INSTANCE_ITEMS_SECONDS', 5),
+            function () use ($guild, $instance, $currentMember, $characterFields, $showPrios, $showWishlist) {
+            $query = Item::select([
+                    'items.item_id',
+                    'items.name',
+                    'items.quality',
+                    'item_sources.name      AS source_name',
+                    'guild_items.note       AS guild_note',
+                    'guild_items.priority   AS guild_priority',
+                    'guild_items.tier       AS guild_tier',
+                ])
+                ->leftJoin('item_item_sources', 'item_item_sources.item_id', '=', 'items.item_id')
+                ->leftJoin('item_sources', 'item_sources.id', '=', 'item_item_sources.item_source_id')
+                ->leftJoin('guild_items', function ($join) use ($guild) {
+                    $join->on('guild_items.item_id', 'items.item_id')
+                        ->where('guild_items.guild_id', $guild->id);
+                })
+                ->where([
+                    ['item_sources.instance_id', $instance->id],
+                    ['items.expansion_id', $guild->expansion_id],
+                ])
+                ->orderBy('item_sources.order')
+                ->orderBy('items.name');
+
+            if ($showPrios) {
+                $query = $query->with([
+                    ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild, $characterFields) {
+                        return $query
+                            ->addSelect($characterFields)
+                            ->leftJoin('members', function ($join) {
+                                $join->on('members.id', 'characters.member_id');
+                            })
+                            ->where([
                                 ['characters.guild_id', $guild->id],
                                 ['character_items.is_received', 0],
                             ])
-                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
-                }
-            ]);
-        }
+                            ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                    }
+                ]);
+            }
 
-        $query = $query->with([
-                'receivedAndRecipeCharacters' => function ($query) use($guild) {
-                    return $query->where(['characters.guild_id' => $guild->id]);
-                },
-            ]);
+            if ($showWishlist) {
+                $query = $query->with([
+                    ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $characterFields) {
+                        return $query
+                            ->addSelect($characterFields)
+                            ->leftJoin('members', function ($join) {
+                                $join->on('members.id', 'characters.member_id');
+                            })
+                            ->where([
+                                    ['characters.guild_id', $guild->id],
+                                    ['character_items.is_received', 0],
+                                ])
+                            ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                    }
+                ]);
+            }
 
-        $items = $query->get();
+            $query = $query->with([
+                    'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                        return $query->where(['characters.guild_id' => $guild->id]);
+                    },
+                ]);
+
+            return $query->get();
+        });
 
         return view('item.list', [
             'currentMember'   => $currentMember,
@@ -469,60 +480,73 @@ class ItemController extends Controller
             $showOfficerNote = true;
         }
 
-        $item = Item::where([
-                ['item_id', $id],
-                ['expansion_id', $guild->expansion_id],
-            ])
-            ->with([
-                'guilds' => function ($query) use($guild) {
-                    return $query->select([
-                        'guild_items.created_by',
-                        'guild_items.updated_by',
-                        'guild_items.note',
-                        'guild_items.priority',
-                        'guild_items.tier',
-                    ])
-                    ->where('guilds.id', $guild->id);
-                },
-                'receivedAndRecipeCharacters' => function ($query) use($guild) {
-                    return $query
-                        ->where(['characters.guild_id' => $guild->id]);
-                },
-            ]);
-
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
-            $item = $item->with([
-                'priodCharacters' => function ($query) use ($guild) {
-                    return $query
-                        ->where(['characters.guild_id' => $guild->id]);
-                },
-            ]);
             $showPrios = true;
         }
 
         $showWishlist = false;
         if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
-            $item = $item->with([
-                'wishlistCharacters' => function ($query) use($guild) {
-                    return $query
-                        ->where([
-                            ['characters.guild_id', $guild->id],
-                            ['character_items.is_received', 0],
-                        ])
-                        ->groupBy(['character_items.character_id'])
-                        ->with([
-                            'prios',
-                            'received',
-                            'recipes',
-                            'wishlist',
-                        ]);
-                },
-            ]);
             $showWishlist = true;
         }
 
-        $item = $item->firstOrFail();
+        $item = Cache::remember('item:guild:' . $guild->id . 'item:' . $id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':attendance:' . $guild->is_attendance_hidden,
+            env('CACHE_ITEM_SECONDS', 5),
+            function () use ($id, $guild, $showPrios, $showWishlist) {
+            $item = Item::where([
+                    ['item_id', $id],
+                    ['expansion_id', $guild->expansion_id],
+                ])
+                ->with([
+                    'guilds' => function ($query) use($guild) {
+                        return $query->select([
+                            'guild_items.created_by',
+                            'guild_items.updated_by',
+                            'guild_items.note',
+                            'guild_items.priority',
+                            'guild_items.tier',
+                        ])
+                        ->where('guilds.id', $guild->id);
+                    },
+                    'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                        return $query
+                            ->where(['characters.guild_id' => $guild->id]);
+                    },
+                ]);
+
+            if ($showPrios) {
+                $item = $item->with([
+
+                    ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild) {
+                        return $query
+                            ->where(['characters.guild_id' => $guild->id])
+                            ->groupBy(['character_items.character_id']);
+                    },
+                ]);
+            }
+
+            if ($showWishlist) {
+                $item = $item->with([
+
+                    ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
+                        return $query
+                            ->where([
+                                ['characters.guild_id', $guild->id],
+                                ['character_items.is_received', 0],
+                            ])
+                            ->groupBy(['character_items.character_id'])
+                            ->with([
+                                'prios',
+                                'received',
+                                'recipes',
+                                'wishlist',
+                            ]);
+                    },
+                ]);
+            }
+
+            return $item->firstOrFail();
+        });
 
         $itemSlug = slug($item->name);
 
@@ -562,12 +586,26 @@ class ItemController extends Controller
             $showPrioEdit = true;
         }
 
+        $priodCharacters = null;
+        if ($guild->is_attendance_hidden && $item->relationLoaded('priodCharacters')) {
+            $priodCharacters = $item->priodCharacters;
+        } else if ($item->relationLoaded('priodCharactersWithAttendance')) {
+            $priodCharacters = $item->priodCharactersWithAttendance;
+        }
+
+        $wishlistCharacters = null;
+        if ($guild->is_attendance_hidden && $item->relationLoaded('wishlistCharacters')) {
+            $wishlistCharacters = $item->wishlistCharacters;
+        } else if ($item->relationLoaded('wishlistCharactersWithAttendance')) {
+            $wishlistCharacters = $item->wishlistCharactersWithAttendance;
+        }
+
         return view('item.show', [
             'currentMember'               => $currentMember,
             'guild'                       => $guild,
             'item'                        => $item,
             'notes'                       => $notes,
-            'priodCharacters'             => $item->relationLoaded('priodCharacters') ? $item->priodCharacters : null,
+            'priodCharacters'             => $priodCharacters,
             'raidGroups'                  => $guild->raidGroups,
             'receivedAndRecipeCharacters' => $item->receivedAndRecipeCharacters,
             'showEdit'                    => $showEdit,
@@ -576,7 +614,7 @@ class ItemController extends Controller
             'showPrioEdit'                => $showPrioEdit,
             'showPrios'                   => $showPrios,
             'showWishlist'                => $showWishlist,
-            'wishlistCharacters'          => $item->relationLoaded('wishlistCharacters') ? $item->wishlistCharacters : null,
+            'wishlistCharacters'          => $wishlistCharacters,
             'itemJson'                    => self::getItemWowheadJson($guild->expansion_id, $item->item_id),
         ]);
     }

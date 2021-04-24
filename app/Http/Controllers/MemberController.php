@@ -6,6 +6,7 @@ use App\{AuditLog, Character, Content, Guild, Member, RaidGroup, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Cache;
 
 class MemberController extends Controller
 {
@@ -89,15 +90,19 @@ class MemberController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $member = Member::where(['guild_id' => $guild->id, 'id' => $memberId])
-            ->with([
-                'charactersWithAttendance',
-                'charactersWithAttendance.raidGroup',
-                'charactersWithAttendance.raidGroup.role',
-                'charactersWithAttendance.recipes',
-                'roles',
-            ])
-            ->first();
+        $member = Cache::remember('member:' . $memberId . ':guild:' . $guild->id . ':attendance:' . $guild->is_attendance_hidden,
+            env('CACHE_MEMBER_SECONDS', 5),
+            function () use ($guild, $memberId) {
+                return Member::where(['guild_id' => $guild->id, 'id' => $memberId])
+                    ->with([
+                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance'),
+                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup',
+                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup.role',
+                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.recipes',
+                        'roles',
+                    ])
+                    ->first();
+        });
 
         if (!$member) {
             request()->session()->flash('status', 'Member not found.');
