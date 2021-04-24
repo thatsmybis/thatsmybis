@@ -118,12 +118,13 @@ class PrioController extends Controller
                             'characters.guild_id' => $guild->id,
                         ]);
                 },
-                'wishlistCharacters' => function ($query) use($guild) {
+                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
                     return $query
                         ->where([
                             'characters.guild_id' => $guild->id,
                             'is_received'         => 0,
-                        ]);
+                        ])
+                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
             ])
             ->get();
@@ -182,30 +183,42 @@ class PrioController extends Controller
             ->groupBy('items.item_id')
             ->with([
                 'priodCharacters' => function ($query) use ($raidGroup) {
-                    return $query->where('character_items.raid_group_Groupid', $raidGroup->id);
+                    return $query
+                        ->where('character_items.raid_group_id', $raidGroup->id)
+                        ->groupBy(['character_items.character_id']);
                 },
                 'receivedAndRecipeCharacters' => function ($query) use($guild) {
                     return $query
                         ->where([
                             'characters.guild_id' => $guild->id,
-                        ]);
+                        ])
+                        ->groupBy(['character_items.character_id']);
                 },
-                'wishlistCharacters' => function ($query) use($guild) {
+                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
                     return $query
                         ->where([
                             'characters.guild_id' => $guild->id,
                             'is_received'         => 0,
-                        ]);
+                        ])
+                        ->groupBy(['character_items.character_id']);
                 },
             ])
             ->firstOrFail();
 
+        $wishlistCharacters = null;
+        if ($guild->is_attendance_hidden && $item->relationLoaded('wishlistCharacters')) {
+            $wishlistCharacters = $item->wishlistCharacters;
+        } else if ($item->relationLoaded('wishlistCharactersWithAttendance')) {
+            $wishlistCharacters = $item->wishlistCharactersWithAttendance;
+        }
+
         return view('item.prioEdit', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'item'          => $item,
-            'maxPrios'      => \App\Http\Controllers\PrioController::MAX_PRIOS,
-            'raidGroup'     => $raidGroup,
+            'currentMember'      => $currentMember,
+            'guild'              => $guild,
+            'item'               => $item,
+            'maxPrios'           => \App\Http\Controllers\PrioController::MAX_PRIOS,
+            'raidGroup'          => $raidGroup,
+            'wishlistCharacters' => $wishlistCharacters,
         ]);
     }
 

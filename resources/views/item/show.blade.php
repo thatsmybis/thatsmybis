@@ -208,6 +208,11 @@
                                                     @if ($character->is_alt)
                                                         <span class="text-legendary">alt</span>
                                                     @endif
+                                                    @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
+                                                        <span class="small">
+                                                            @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
+                                                        </span>
+                                                    @endif
                                                     <span class="js-watchable-timestamp smaller text-muted"
                                                         data-timestamp="{{ $character->pivot->created_at }}"
                                                         data-is-short="1">

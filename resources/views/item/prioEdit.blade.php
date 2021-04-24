@@ -70,17 +70,22 @@
                                 </li>
                             @endif
 
-                            @if ($item->wishlistCharacters->count() > 0)
+                            @if ($wishlistCharacters->count() > 0)
                                 <li title="Characters who have it wishlisted">
                                     <span class="fa-li"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
                                     <ul class="list-inline">
-                                        @foreach ($item->wishlistCharacters as $character)
+                                        @foreach ($wishlistCharacters as $character)
                                              <li class="list-inline-item">
                                                 <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                                     class="tag {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
                                                     <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
                                                     <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_group_color) }}"></span>-->
                                                     <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
+                                                    @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
+                                                        <span class="small">
+                                                            @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
+                                                        </span>
+                                                    @endif
                                                     <span class="js-watchable-timestamp smaller text-muted"
                                                         data-timestamp="{{ $character->pivot->created_at }}"
                                                         data-is-short="1">
