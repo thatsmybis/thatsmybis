@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Batch, Guild, Instance, Item, RaidGroup};
+use App\{AuditLog, Batch, Character, Guild, Instance, Item, RaidGroup};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -62,7 +62,7 @@ class ItemController extends Controller
             $showOfficerNote = true;
         }
 
-        $items = Item::select([
+        $query = Item::select([
                 'items.item_id',
                 'items.name',
                 'items.quality',
@@ -87,8 +87,8 @@ class ItemController extends Controller
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
             $showPrios = true;
-            $items = $items->with([
-                'priodCharacters' => function ($query) use ($guild) {
+            $query = $query->with([
+                ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild) {
                     return $query->where([
                         ['characters.guild_id', $guild->id],
                         ['character_items.is_received', 0],
@@ -100,9 +100,9 @@ class ItemController extends Controller
         $showWishlist = false;
         if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
             $showWishlist = true;
-            $items = $items->with([
-                'wishlistCharacters' => function ($query) use($guild, $characterFields) {
-                    return $query->select($characterFields)
+            $query = $query->with([
+                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $characterFields) {
+                    return $query->addSelect($characterFields)
                         ->leftJoin('members', function ($join) {
                             $join->on('members.id', 'characters.member_id');
                         })
@@ -115,14 +115,13 @@ class ItemController extends Controller
             ]);
         }
 
-        $items = $items->with([
+        $query = $query->with([
                 'receivedAndRecipeCharacters' => function ($query) use($guild) {
-                    return $query
-                        ->where(['characters.guild_id' => $guild->id]);
+                    return $query->where(['characters.guild_id' => $guild->id]);
                 },
             ]);
 
-        $items = $items->get();
+        $items = $query->get();
 
         return view('item.list', [
             'currentMember'   => $currentMember,
@@ -665,7 +664,7 @@ class ItemController extends Controller
                             'is_received'   => 1,
                             'note'          => ($item['note']         ? $item['note'] : null),
                             'officer_note'  => ($item['officer_note'] ? $item['officer_note'] : null),
-                            'received_at'   => ($item['received_at']  ? Carbon::parse($item['received_at'])->toDateTimeString() : null),
+                            'received_at'   => ($item['received_at']  ? Carbon::parse($item['received_at'])->toDateTimeString() : getDateTime()),
                             'import_id'     => ($item['import_id']    ? $item['import_id'] : null),
                             'created_at'    => $now,
                         ];

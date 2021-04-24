@@ -17,7 +17,7 @@
                     <div class="col-12 mb-2">
                         <span class="text-gold font-weight-bold">
                             <span class="fas fa-fw fa-sort-amount-down"></span>
-                            Prio's
+                            Prios
                         </span>
                     </div>
                     <div class="col-12 pb-3">

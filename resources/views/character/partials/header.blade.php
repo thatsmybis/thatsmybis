@@ -39,6 +39,19 @@
         </li>
     @endif
 
+    @if (!$guild->is_attendance_hidden && isset($character->attendance_percentage) || isset($character->raid_count))
+        <li>
+            @if (isset($character->attendance_percentage))
+                <span class="{{ getAttendanceColor($character->attendance_percentage) }}">
+                    {{ $character->attendance_percentage * 100 . '%' }}
+                </span>
+            @endif
+            <span class="small text-muted">
+                {{ isset($character->raid_count) ? $character->raid_count . ' raids' : '' }}
+            </span>
+        </li>
+    @endif
+
     @if (!isset($showDetails) || $showDetails)
         @if ($character->inactive_at || $character->level || $character->race || $character->spec)
             <li>

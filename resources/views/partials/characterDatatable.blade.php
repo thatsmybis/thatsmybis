@@ -126,7 +126,7 @@
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
                     <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
-                    Prio's
+                    Prios
                 </span>
             </li>
         @endif

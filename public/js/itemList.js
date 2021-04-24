@@ -122,7 +122,7 @@ function createTable(lastSource) {
             },
             {
                 "title"  : '<span class="fas fa-fw fa-sort-amount-down text-gold"></span> Prio\'s',
-                "data"   : "priod_characters",
+                "data"   : "priod_characters_with_attendance",
                 "render" : function (data, type, row) {
                     return data && data.length ? getCharacterList(data, 'prio', row.item_id) : '—';
                 },
@@ -132,7 +132,7 @@ function createTable(lastSource) {
             },
             {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
-                "data"   : "wishlist_characters",
+                "data"   : "wishlist_characters_with_attendance",
                 "render" : function (data, type, row) {
                     return data && data.length ? getCharacterList(data, 'wishlist', row.item_id) : '—';
                 },
@@ -214,15 +214,19 @@ function getCharacterList(data, type, itemId) {
                 value="${ type == 'prio' ? character.pivot.order : '' }"
                 class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0 ${ character.pivot.received_at ? 'font-strikethrough' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
-                    title="${ character.raid_group_name ? character.raid_group_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.username ? '(' + character.username + ')' : '' }"
-                    class="text-${ character.class ? character.class.toLowerCase() : '' }-important tag d-inline">
-                    <span class="text-muted">${ type !== 'received' && character.pivot.order ? character.pivot.order : '' }</span>
-                    <span class="text-muted small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
-                    <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_group_color) }"></span>${ character.name }
+                    title="${ character.raid_group_name ? character.raid_group_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.raid_count ? `(${ character.raid_count } raids attended)` : `` } ${ character.username ? '(' + character.username + ')' : '' }"
+                    class="tag text-muted d-inline">
+                    <span class="">${ type !== 'received' && character.pivot.order ? character.pivot.order : '' }</span>
+                    <span class="small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
+                    <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_group_color) }"></span>
+                    <span class="text-${ character.class ? character.class.toLowerCase() : '' }-important">${ character.name }</span>
                     ${ character.is_alt ? `
-                        <span class="text-legendary">alt</span>
+                        <span class="text-warning">alt</span>
                     ` : '' }
-                    <span class="js-watchable-timestamp smaller text-muted"
+                    ${ !guild.is_attendance_hidden && (character.attendance_percentage || character.raid_count) ?
+                        `${ character.attendance_percentage ? `<span class="smaller ${ getAttendanceColor(character.attendance_percentage) }">${ character.attendance_percentage * 100 }%</span>` : '' }${ character.raid_count ? `<span class="smaller">+${ character.raid_count }</span>` : ``}
+                    ` : `` }
+                    <span class="js-watchable-timestamp smaller"
                         data-timestamp="${ character.pivot.created_at }"
                         data-is-short="1">
                     </span>

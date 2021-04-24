@@ -1,9 +1,8 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
-use Auth;
 use App\Item;
+use Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use \Illuminate\Support\Facades\Log;
@@ -35,7 +34,6 @@ class ItemController extends \App\Http\Controllers\Controller
      */
     public function query($expansionId, $query)
     {
-        return Auth::user();
         $validator = Validator::make([
             'expansion_id' => $expansionId,
             'query'        => $query

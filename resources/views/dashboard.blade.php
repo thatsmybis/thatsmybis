@@ -71,7 +71,7 @@
                 @if ($disabled)
                     <ul class="no-bullet no-indent">
                         <li>
-                            <span class="text-muted">old guilds</span>
+                            <span class="text-muted">old & disabled guilds</span>
                             <br>
                             <span id="showInactiveGuilds" class="small text-muted font-italic cursor-pointer">
                                 click to show
@@ -120,26 +120,28 @@
             <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center mt-3 mb-3">
                 <ul class="no-bullet no-indent">
                     @foreach ($existingGuilds as $existingGuild)
-                        <li class="bg-lightest mt-3 mb-3 p-3">
-                            <span class="font-weight-light text-5 text-muted">
-                                <span class="fab fa-fw fa-battle-net"></span>
-                                {{ $expansions->where('id', $existingGuild->expansion_id)->first()->name_short }}
-                            </span>
-                            <h2>
-                                <span class="text-{{ $existingGuild->disabled_at ? 'danger' : getExpansionColor($existingGuild->expansion_id) }} font-weight-medium">
-                                    &lt;{{ $existingGuild->name }}&gt;
+                        @if (!$existingGuild->disabled_at)
+                            <li class="bg-lightest mt-3 mb-3 p-3">
+                                <span class="font-weight-light text-5 text-muted">
+                                    <span class="fab fa-fw fa-battle-net"></span>
+                                    {{ $expansions->where('id', $existingGuild->expansion_id)->first()->name_short }}
                                 </span>
-                            </h2>
-                            <ul class="list-inline">
-                                <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
-                                    <a href="{{ route('guild.home', ['guildId' => $existingGuild->id, 'guildSlug' => $existingGuild->slug]) }}"
-                                        class="btn btn-secondary">
-                                        <span class="fas fa-plus"></span>
-                                        Join Guild
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
+                                <h2>
+                                    <span class="text-{{ $existingGuild->disabled_at ? 'danger' : getExpansionColor($existingGuild->expansion_id) }} font-weight-medium">
+                                        &lt;{{ $existingGuild->name }}&gt;
+                                    </span>
+                                </h2>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item bg-tag rounded pt-0 pl-2 pb-1 pr-2 m-2">
+                                        <a href="{{ route('guild.home', ['guildId' => $existingGuild->id, 'guildSlug' => $existingGuild->slug]) }}"
+                                            class="btn btn-secondary">
+                                            <span class="fas fa-plus"></span>
+                                            Join Guild
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        @else
                     @endforeach
                 </ul>
             </div>

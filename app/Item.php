@@ -65,6 +65,11 @@ class Item extends Model
             ->orderBy('characters.name');
     }
 
+    public function charactersWithAttendance() {
+        $query = $this->characters();
+        return Character::addAttendanceQuery($query);
+    }
+
     public function expansion() {
         return $this->belongsTo(Expansion::class);
     }
@@ -113,6 +118,11 @@ class Item extends Model
             ->orderBy('character_items.order');
     }
 
+    public function priodCharactersWithAttendance() {
+        $query = $this->priodCharacters();
+        return Character::addAttendanceQuery($query);
+    }
+
     public function receivedCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['character_items.type' => self::TYPE_RECEIVED])
@@ -143,6 +153,11 @@ class Item extends Model
                 'received_at',
             ])
             ->orderBy('characters.name');
+    }
+
+    public function receivedCharactersWithAttendance() {
+        $query = $this->receivedCharacters();
+        return Character::addAttendanceQuery($query);
     }
 
     public function receivedAndRecipeCharacters() {
@@ -178,6 +193,11 @@ class Item extends Model
             ->orderBy('characters.name');
     }
 
+    public function receivedAndRecipeCharactersWithAttendance() {
+        $query = $this->receivedAndRecipeCharacters();
+        return Character::addAttendanceQuery($query);
+    }
+
     public function wishlistCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['character_items.type' => self::TYPE_WISHLIST])
@@ -208,5 +228,10 @@ class Item extends Model
                 'order',
             ])
             ->orderBy('character_items.order');
+    }
+
+    public function wishlistCharactersWithAttendance() {
+        $query = $this->wishlistCharacters();
+        return Character::addAttendanceQuery($query);
     }
 }

@@ -74,17 +74,19 @@
                                 <td>
                                     <ul class="list-inline">
                                         @foreach($member->roles->sortBy('name') as $role)
-                                            <li class="list-inline-item">
-                                                @if (in_array($role->discord_id, [$guild->admin_role_id, $guild->gm_role_id, $guild->officer_role_id, $guild->raid_leader_role_id, $guild->class_leader_role_id]))
+                                            @if (in_array($role->discord_id, [$guild->admin_role_id, $guild->gm_role_id, $guild->officer_role_id, $guild->raid_leader_role_id, $guild->class_leader_role_id]))
+                                                <li class="list-inline-item">
                                                     <span class="font-weight-bold text-gold">
                                                         {{ $role->name }}
                                                     </span>
-                                                @elseif(in_array($role->discord_id, $guild->getMemberRoleIds()))
+                                                </li>
+                                            @elseif(in_array($role->discord_id, $guild->getMemberRoleIds()))
+                                                <li class="list-inline-item">
                                                     <span>
                                                         {{ $role->name }}
                                                     </span>
-                                                @endif
-                                            </li>
+                                                </li>
+                                            @endif
                                         @endforeach
                                     </ul>
                                 </td>

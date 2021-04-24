@@ -91,10 +91,10 @@ class MemberController extends Controller
 
         $member = Member::where(['guild_id' => $guild->id, 'id' => $memberId])
             ->with([
-                'characters',
-                'characters.raidGroup',
-                'characters.raidGroup.role',
-                'characters.recipes',
+                'charactersWithAttendance',
+                'charactersWithAttendance.raidGroup',
+                'charactersWithAttendance.raidGroup.role',
+                'charactersWithAttendance.recipes',
                 'roles',
             ])
             ->first();
@@ -107,7 +107,7 @@ class MemberController extends Controller
         $user = User::where('id', $member->user_id)->first();
 
         $recipes = collect();
-        foreach ($member->characters as $character) {
+        foreach ($member->charactersWithAttendance as $character) {
             foreach ($character->recipes as $recipe) {
                 $recipes->add($recipe);
             }
@@ -124,7 +124,7 @@ class MemberController extends Controller
         }
 
         return view('member.show', [
-            'characters'       => $member->characters,
+            'characters'       => $member->charactersWithAttendance,
             'currentMember'    => $currentMember,
             'guild'            => $guild,
             'member'           => $member,

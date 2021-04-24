@@ -1,5 +1,26 @@
 <?php
 
+// Based on attendance percentage, return a CSS color class
+function getAttendanceColor($percentage = 0) {
+    $color = '';
+
+    if ($percentage >= 0.95) {
+        $color = 'text-tier-1';
+    } else if ($percentage >= 0.90) {
+        $color = 'text-tier-2';
+    } else if ($percentage >= 0.85) {
+        $color = 'text-tier-3';
+    } else if ($percentage >= 0.80) {
+        $color = 'text-tier-4';
+    } else if ($percentage >= 0.75) {
+        $color = 'text-tier-5';
+    } else if ($percentage < 0.75) {
+        $color = 'text-tier-6';
+    }
+
+    return $color;
+}
+
 function getHexColorFromDec($color) {
     if ($color) {
         $color = dechex($color);

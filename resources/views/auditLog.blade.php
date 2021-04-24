@@ -39,6 +39,12 @@
 
             <div class="row">
                 @if ($resources)
+                    <div class="col-12 mb-3 text-5">
+                        Filter:
+                        <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small">
+                            reset
+                        </a>
+                    </div>
                     <div class="col-12 pb-3 d-flex flex-wrap">
                         @foreach ($resources as $resource)
                             <div>
@@ -60,6 +66,10 @@
                                         @include('partials/item', ['item' => $resource, 'wowheadLink' => false])
                                     @elseif($resource instanceof \App\Member)
                                         @include('member/partials/header', ['member' => $resource, 'discordUsername' => $resource->user->discord_username, 'headerSize' => 1, 'showEdit' => false, 'titlePrefix' => null])
+                                    @elseif($resource instanceof \App\Raid)
+                                        <div class="mt-1 mb-2 font-weight-bold">
+                                            @include('partials/raid', ['raid' => $resource])
+                                        </div>
                                     @elseif($resource instanceof \App\RaidGroup)
                                         <div class="mt-1 mb-2 font-weight-bold">
                                             @include('partials/raidGroup', ['raidGroup' => $resource, 'raidGroupColor' => $resource->getColor()])
@@ -240,6 +250,14 @@
                                             @if ($log->item_source_id)
                                                 <li class="list-inline-item text-muted">
                                                     {{ $log->item_source_name }}
+                                                </li>
+                                            @endif
+                                            @if ($log->raid_id)
+                                                <li class="list-inline-item text-muted">
+                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $log->raid_id]) }}" class="text-muted">
+                                                        {{ $log->raid_name }}
+                                                        <span class="js-timestamp small" data-timestamp="{{ $log->raid_date }}" data-format="MMM D"></span>
+                                                    </a>
                                                 </li>
                                             @endif
                                             @if ($log->raid_group_id)

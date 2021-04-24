@@ -102,10 +102,10 @@ function createTable() {
                                 </div>
                             </div>
                         </li>
-                        ${ row.is_alt || row.raid_group_name || row.class ? `
+                        ${ row.is_alt || row.raid_group_name || row.class || row.attendance_percentage || row.raid_count ? `
                             <li>
                                 ${ row.is_alt ? `
-                                    <span class="text-legendary font-weight-bold">Alt</span>&nbsp;
+                                    <span class="text-warning font-weight-bold">Alt</span>&nbsp;
                                 ` : '' }
                                 ${ row.raid_group_name ? `
                                     <span class="font-weight-bold">
@@ -116,14 +116,10 @@ function createTable() {
                                 ${ row.class ? row.class : '' }
                             </li>` : `` }
 
-                        ${ row.attendance_percentage || row.raid_count ? `
-                            <li>
-                                ${ row.attendance_percentage ? `
-                                    <span class="${ getAttendanceColor(row.attendance_percentage) }">${ row.attendance_percentage * 100 }%</span>
-                                ` : '' }
-                                ${ row.raid_count ? `
-                                    <span class="small text-muted">${ row.raid_count } raid${ row.raid_count > 1 ? 's' : '' }</span>
-                                ` : ``}
+                        ${ !guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count) ?
+                            `<li>
+                                ${ row.attendance_percentage ? `<span class="${ getAttendanceColor(row.attendance_percentage) }">${ row.attendance_percentage * 100 }%</span>` : '' }
+                                ${ row.raid_count ? `<span class="small text-muted">${ row.raid_count } raid${ row.raid_count > 1 ? 's' : '' }</span>` : ``}
                             </li>` : `` }
 
                         ${ row.level || row.race || row.spec ? `

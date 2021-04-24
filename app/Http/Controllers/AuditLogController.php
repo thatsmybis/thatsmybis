@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Batch, Character, Guild, Instance, Item, ItemSource, Member, RaidGroup, Role};
+use App\{AuditLog, Batch, Character, Guild, Instance, Item, ItemSource, Member, Raid, RaidGroup, Role};
 use Auth;
 use Illuminate\Http\Request;
 
@@ -60,6 +60,8 @@ class AuditLogController extends Controller
                 'members.slug           AS member_slug',
                 'other_members.username AS other_member_username',
                 'other_members.slug     AS other_member_slug',
+                'raids.name             AS raid_name',
+                'raids.date             AS raid_date',
                 'raid_groups.name       AS raid_group_name',
                 'roles.name             AS role_name',
             ])
@@ -86,6 +88,9 @@ class AuditLogController extends Controller
                 })
             ->leftJoin('members as other_members', function ($join) {
                     $join->on('other_members.id', '=', 'audit_logs.other_member_id');
+                })
+            ->leftJoin('raids', function ($join) {
+                    $join->on('raids.id', '=', 'audit_logs.raid_id');
                 })
             ->leftJoin('raid_groups', function ($join) {
                     $join->on('raid_groups.id', '=', 'audit_logs.raid_group_id');
@@ -128,6 +133,11 @@ class AuditLogController extends Controller
         if (!empty(request()->input('batch_id'))) {
             $query = $query->where('batches.id', request()->input('batch_id'));
             $resources[] = Batch::where([['guild_id', $guild->id], ['id', request()->input('batch_id')]])->with('member')->first();
+        }
+
+        if (!empty(request()->input('raid_id'))) {
+            $query = $query->where('raids.id', request()->input('raid_id'));
+            $resources[] = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])->first();
         }
 
         if (!empty(request()->input('raid_group_id'))) {

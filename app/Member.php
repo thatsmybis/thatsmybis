@@ -44,13 +44,16 @@ class Member extends Model
         'personal_note',
     ];
 
-    public function characters()
-    {
-        return $this->hasMany(Character::class)->orderBy('name');
+    public function characters() {
+        return $this->hasMany(Character::class)->orderBy('characters.name');
     }
 
-    public function content()
-    {
+    public function charactersWithAttendance() {
+        $query = $this->characters()->select('characters.*');
+        return Character::addAttendanceQuery($query);
+    }
+
+    public function content() {
         return $this->belongsToMany(Content::class)->whereNull('removed_at');
     }
 
@@ -69,8 +72,7 @@ class Member extends Model
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function roles()
-    {
+    public function roles() {
         return $this->belongsToMany(Role::class, 'role_user', 'user_id', 'role_id')->orderByDesc('position')->withTimestamps();
     }
 
@@ -79,8 +81,7 @@ class Member extends Model
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function permissions()
-    {
+    public function permissions() {
         return $this->belongsToMany(Permission::class, 'permission_user', 'user_id', 'permission_id')->withTimestamps();
     }
 
