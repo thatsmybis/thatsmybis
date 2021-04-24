@@ -259,7 +259,6 @@ class Character extends Model
                 $join->on('raid_characters.raid_id', 'raids.id')
                     ->on('raid_characters.character_id', 'characters.id');
             })
-            // TODO: This group_by sometimes omits characters
             ->groupBy('characters.id');
     }
 

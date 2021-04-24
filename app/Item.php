@@ -4,6 +4,7 @@ namespace App;
 
 use App\{Character, Expansion, Guild, ItemSource};
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
@@ -91,7 +92,7 @@ class Item extends Model
                 'characters.*',
                 'raid_groups.name AS raid_group_name',
                 'raid_group_roles.color AS raid_group_color',
-                'added_by_members.username AS added_by_username',
+                DB::raw('MAX(added_by_members.username) AS added_by_username'),
             ])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raid_groups', function ($join) {
@@ -109,10 +110,10 @@ class Item extends Model
                 'added_by',
                 'raid_group_id',
                 'type',
-                'order',
                 'is_received',
                 'received_at',
                 'created_at',
+                'order',
             ])
             ->orderBy('character_items.raid_group_id')
             ->orderBy('character_items.order');
@@ -130,7 +131,7 @@ class Item extends Model
                 'characters.*',
                 'raid_groups.name AS raid_group_name',
                 'raid_group_roles.color AS raid_group_color',
-                'added_by_members.username AS added_by_username',
+                DB::raw('MAX(added_by_members.username) AS added_by_username'),
             ])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raid_groups', function ($join) {
@@ -167,7 +168,7 @@ class Item extends Model
                 'characters.*',
                 'raid_groups.name AS raid_group_name',
                 'raid_group_roles.color AS raid_group_color',
-                'added_by_members.username AS added_by_username',
+                DB::raw('MAX(added_by_members.username) AS added_by_username'),
             ])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raid_groups', function ($join) {

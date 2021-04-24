@@ -102,7 +102,7 @@ function createTable() {
                                 </div>
                             </div>
                         </li>
-                        ${ row.is_alt || row.raid_group_name || row.class || row.attendance_percentage || row.raid_count ? `
+                        ${ row.is_alt || row.raid_group_name || row.class ? `
                             <li>
                                 ${ row.is_alt ? `
                                     <span class="text-warning font-weight-bold">Alt</span>&nbsp;
