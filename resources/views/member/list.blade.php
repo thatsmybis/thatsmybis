@@ -50,11 +50,20 @@
                         @foreach($guild->allMembers->whereNull('inactive_at')->whereNull('banned_at') as $member)
                             <tr>
                                 <td>
-                                    @include('member/partials/listMember')
+                                    @php
+                                        $raidCount = $member->charactersWithAttendance->sum(function ($character) {
+                                            return $character->raid_count;
+                                        });
+                                        $attendancePercentage = $member->charactersWithAttendance->sum(function ($character) {
+                                            return $character->attendance_percentage;
+                                        });
+                                        $attendancePercentage = $attendancePercentage ? ($attendancePercentage / $member->charactersWithAttendance->count()) : $attendancePercentage;
+                                    @endphp
+                                    @include('member/partials/listMember', ['raidCount' => $raidCount, 'attendancePercentage' => $attendancePercentage])
                                 </td>
                                 <td>
                                     <ul class="list-inline">
-                                        @foreach($member->characters->sortBy('name') as $character)
+                                        @foreach($member->charactersWithAttendance->sortBy('name') as $character)
                                             @include('member/partials/listMemberCharacter')
                                         @endforeach
                                     </ul>

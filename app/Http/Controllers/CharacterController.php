@@ -212,7 +212,9 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $character = Character::where(['id' => $characterId, 'guild_id' => $guild->id])->firstOrFail();
+        $query = Character::select('characters.*')->where(['characters.id' => $characterId, 'characters.guild_id' => $guild->id]);
+        $query = Character::addAttendanceQuery($query);
+        $character = $query->firstOrFail();
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
@@ -282,14 +284,17 @@ class CharacterController extends Controller
 
         $guild->load('allRaidGroups');
 
-        $character = Character::where(['id' => $characterId, 'guild_id' => $guild->id])
+        $query = Character::select('characters.*')
+            ->where(['characters.id' => $characterId, 'characters.guild_id' => $guild->id])
             ->with([
                 'member',
                 'raidGroup',
                 'raidGroup.role',
                 'received',
                 'recipes',
-            ])->firstOrFail();
+            ]);
+        $query = Character::addAttendanceQuery($query);
+        $character = $query->firstOrFail();
 
         $showPrios = false;
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {

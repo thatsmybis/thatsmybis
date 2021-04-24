@@ -164,7 +164,7 @@ class MemberController extends Controller
 
         $guild->load([
             'allMembers',
-            'allMembers.characters',
+            'allMembers.charactersWithAttendance',
             'allMembers.roles',
             'raidGroups',
             'raidGroups.role',

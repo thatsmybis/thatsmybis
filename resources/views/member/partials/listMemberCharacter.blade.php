@@ -12,6 +12,11 @@
                     alt
                 </span>
             @endif
+            @if (!$guild->is_attendance_hidden)
+                <span class="small">
+                    @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'smallRaid' => false])
+                </span>
+            @endif
         </a>
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
             <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">

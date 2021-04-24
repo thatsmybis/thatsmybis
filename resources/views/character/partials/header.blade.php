@@ -39,16 +39,9 @@
         </li>
     @endif
 
-    @if (!$guild->is_attendance_hidden && isset($character->attendance_percentage) || isset($character->raid_count))
-        <li>
-            @if (isset($character->attendance_percentage))
-                <span class="{{ getAttendanceColor($character->attendance_percentage) }}">
-                    {{ $character->attendance_percentage * 100 . '%' }}
-                </span>
-            @endif
-            <span class="small text-muted">
-                {{ isset($character->raid_count) ? $character->raid_count . ' raids' : '' }}
-            </span>
+    @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
+        <li class="small">
+            @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count])
         </li>
     @endif
 

@@ -34,6 +34,11 @@
             @endif
             <li class="list-inline-item">
                 Member
+                @if (!$guild->is_attendance_hidden && (isset($attendancePercentage) || isset($raidCount)))
+                    <span class="small">
+                        @include('partials/attendanceTag', ['attendancePercentage' => (isset($attendancePercentage) ? $attendancePercentage : null), 'raidCount' => (isset($raidCount) ? $raidCount : null), 'smallRaid' => false])
+                    </span>
+                @endif
             </li>
             @if (isset($showEdit) && $showEdit)
                 @if ($member->is_received_unlocked)

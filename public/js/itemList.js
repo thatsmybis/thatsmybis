@@ -122,7 +122,7 @@ function createTable(lastSource) {
             },
             {
                 "title"  : '<span class="fas fa-fw fa-sort-amount-down text-gold"></span> Prio\'s',
-                "data"   : "priod_characters_with_attendance",
+                "data"   : guild.is_attendance_hidden ? "priod_characters" : "priod_characters_with_attendance",
                 "render" : function (data, type, row) {
                     return data && data.length ? getCharacterList(data, 'prio', row.item_id) : '—';
                 },
@@ -132,7 +132,7 @@ function createTable(lastSource) {
             },
             {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
-                "data"   : "wishlist_characters_with_attendance",
+                "data"   : guild.is_attendance_hidden ? "wishlist_characters" : "wishlist_characters_with_attendance",
                 "render" : function (data, type, row) {
                     return data && data.length ? getCharacterList(data, 'wishlist', row.item_id) : '—';
                 },
@@ -224,7 +224,7 @@ function getCharacterList(data, type, itemId) {
                         <span class="text-warning">alt</span>
                     ` : '' }
                     ${ !guild.is_attendance_hidden && (character.attendance_percentage || character.raid_count) ?
-                        `${ character.attendance_percentage ? `<span class="smaller ${ getAttendanceColor(character.attendance_percentage) }">${ character.attendance_percentage * 100 }%</span>` : '' }${ character.raid_count ? `<span class="smaller">+${ character.raid_count }</span>` : ``}
+                        `${ character.attendance_percentage ? `<span title="attendance" class="smaller ${ getAttendanceColor(character.attendance_percentage) }">${ character.attendance_percentage * 100 }%</span>` : '' }${ character.raid_count ? `<span class="smaller">+${ character.raid_count }</span>` : ``}
                     ` : `` }
                     <span class="js-watchable-timestamp smaller"
                         data-timestamp="${ character.pivot.created_at }"
