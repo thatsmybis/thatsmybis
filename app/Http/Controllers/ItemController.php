@@ -88,11 +88,17 @@ class ItemController extends Controller
         if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
             $showPrios = true;
             $query = $query->with([
-                ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild) {
-                    return $query->where([
-                        ['characters.guild_id', $guild->id],
-                        ['character_items.is_received', 0],
-                    ]);
+                ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild, $characterFields) {
+                    return $query
+                        ->addSelect($characterFields)
+                        ->leftJoin('members', function ($join) {
+                            $join->on('members.id', 'characters.member_id');
+                        })
+                        ->where([
+                            ['characters.guild_id', $guild->id],
+                            ['character_items.is_received', 0],
+                        ])
+                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 }
             ]);
         }
@@ -102,7 +108,8 @@ class ItemController extends Controller
             $showWishlist = true;
             $query = $query->with([
                 ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $characterFields) {
-                    return $query->addSelect($characterFields)
+                    return $query
+                        ->addSelect($characterFields)
                         ->leftJoin('members', function ($join) {
                             $join->on('members.id', 'characters.member_id');
                         })
