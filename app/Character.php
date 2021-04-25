@@ -2,7 +2,7 @@
 
 namespace App;
 
-use App\{Item, Guild, Member, RaidGroup};
+use App\{Item, Guild, Member, Raid, RaidGroup};
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
@@ -89,6 +89,19 @@ class Character extends Model
 
     public function raidGroup() {
         return $this->belongsTo(RaidGroup::class);
+    }
+
+    public function raids() {
+        return $this->belongsToMany(Raid::class, 'raid_characters', 'character_id', 'raid_id')
+            ->orderByDesc('raids.date')
+            ->withPivot([
+                'is_exempt',
+                'credit',
+                'remark_id',
+                'public_note',
+                'officer_note',
+            ])
+            ->withTimeStamps();
     }
 
     public function recipes() {

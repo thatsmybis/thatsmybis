@@ -654,6 +654,29 @@ div.dataTables_filter input {
     border-radius: .25rem;
 }
 
+/* Pagination */
+/* Show xx entries */
+.dataTables_wrapper .dataTables_length {
+    color: #fff !important;
+}
+/* previous/next page button */
+.dataTables_wrapper .dataTables_paginate .paginate_button, .dataTables_wrapper .dataTables_paginate .paginate_button:hover {
+    color: #fff !important;
+}
+/* page button */
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 3px 5px 5px 5px !important;
+    border-radius: 3px;
+}
+/* selected page button */
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    padding: 3px 5px 5px 5px !important;
+    color: #fff !important;
+    border: none;
+    border-radius: 3px;
+    background: #32305c;
+}
+
 /* END DATATABLES OVERRIDE */
 
 /* Bootstrap-Slider override */

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Character, Content, Guild, Member, RaidGroup, Role, User};
+use App\{AuditLog, Character, Content, Guild, Member, Raid, RaidGroup, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -98,6 +98,7 @@ class MemberController extends Controller
                         ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance'),
                         ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup',
                         ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup.role',
+                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raids',
                         ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.recipes',
                         'roles',
                     ])
@@ -128,16 +129,29 @@ class MemberController extends Controller
             $showEditLoot = true;
         }
 
+        $viewOfficerNotePermission = false;
+        if ($currentMember->hasPermission('view.officer-notes')) {
+            $viewOfficerNotePermission = true;
+        }
+
+        $editOfficerNotePermission = false;
+        if ($currentMember->hasPermission('edit.officer-notes')) {
+            $showOfficerNotePermission = true;
+        }
+
         return view('member.show', [
-            'characters'       => $member->charactersWithAttendance,
+            'characters'       => ($guild->is_attendance_hidden ? $member->characters : $member->charactersWithAttendance),
             'currentMember'    => $currentMember,
             'guild'            => $guild,
             'member'           => $member,
             'recipes'          => $recipes,
+            'remarks'          => Raid::remarks(),
             'showEdit'         => $showEdit,
             'showEditLoot'     => $showEditLoot,
             'showPersonalNote' => ($currentMember->id == $member->id),
             'user'             => $user,
+            'editOfficerNotePermission' => $editOfficerNotePermission,
+            'viewOfficerNotePermission' => $viewOfficerNotePermission,
         ]);
     }
 

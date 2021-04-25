@@ -12,6 +12,23 @@
             </div>
 
             <div class="row mb-3 pt-3 bg-light rounded">
+                <div class="col-12 mb-2">
+                    <span class="font-weight-bold">
+                        <span class="fas fa-fw fa-helmet-battle text-dk"></span>
+                        Raid History
+                    </span>
+                </div>
+
+                <div class="col-12 pb-3">
+                    @if ($character->raids->count())
+                        @include('partials/raidHistoryTable', ['raids' => $character->raids, 'showOfficerNote' => ($viewOfficerNotePermission && !isStreamerMode())])
+                    @else
+                        None yet
+                    @endif
+                </div>
+            </div>
+
+            <div class="row mb-3 pt-3 bg-light rounded">
 
                 @if ($showPrios)
                     <div class="col-12 mb-2">
@@ -229,11 +246,11 @@
                     </div>
                     <div class="col-12 mb-3 pl-4">
                         <span class="js-markdown-inline">{{ $character->public_note ? $character->public_note : '—' }}</span>
-                        @if ($currentMember->id == $character->member_id || $currentMember->hasPermission('edit.officer-notes'))
+                        @if ($currentMember->id == $character->member_id || $editOfficerNotePermission)
                             <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                         @endif
                     </div>
-                    @if ($currentMember->id == $character->member_id || $currentMember->hasPermission('edit.officer-notes'))
+                    @if ($currentMember->id == $character->member_id || $editOfficerNotePermission)
                         <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                             <div class="form-group">
                                 <label for="public_note" class="font-weight-bold">
@@ -245,7 +262,7 @@
                         </div>
                     @endif
 
-                    @if ($currentMember->hasPermission('view.officer-notes'))
+                    @if ($viewOfficerNotePermission)
                         <div class="col-12">
                             <span class="text-muted font-weight-bold">
                                 <span class="fas fa-fw fa-shield"></span>
@@ -255,7 +272,7 @@
                         <div class="col-12 mb-3 pl-4">
                             @if (!isStreamerMode())
                                 <span class="js-markdown-inline">{{ $character->officer_note ? $character->officer_note : '—' }}</span>
-                                @if ($currentMember->hasPermission('edit.officer-notes'))
+                                @if ($editOfficerNotePermission)
                                     <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                                 @endif
                             @else
@@ -313,6 +330,18 @@
 
 @section('scripts')
 <script>
-    $(document).ready(() => warnBeforeLeaving("#noteForm"));
+    $(document).ready(function () {
+        $("#raids").DataTable({
+            "order"       : [], // Disable initial auto-sort; relies on server-side sorting
+            "paging"      : true,
+            "pageLength"  : 3,
+            "fixedHeader" : false, // Header row sticks to top of window when scrolling down
+            "columns" : [
+                { "orderable" : false },
+            ]
+        });
+
+        warnBeforeLeaving("#noteForm");
+    });
 </script>
 @endsection

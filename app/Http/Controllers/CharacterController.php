@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Character, Content, Guild, Item, RaidGroup, Role, User};
+use App\{AuditLog, Character, Content, Guild, Item, Raid, RaidGroup, Role, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -294,6 +294,7 @@ class CharacterController extends Controller
                         'member',
                         'raidGroup',
                         'raidGroup.role',
+                        'raids',
                         'received',
                         'recipes',
                     ]);
@@ -327,20 +328,27 @@ class CharacterController extends Controller
             $showEditLoot = true;
         }
 
-        $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
-            $showOfficerNote = true;
+        $viewOfficerNotePermission = false;
+        if ($currentMember->hasPermission('view.officer-notes')) {
+            $viewOfficerNotePermission = true;
+        }
+
+        $editOfficerNotePermission = false;
+        if ($currentMember->hasPermission('edit.officer-notes')) {
+            $showOfficerNotePermission = true;
         }
 
         return view('character.show', [
-            'character'        => $character,
-            'currentMember'    => $currentMember,
-            'guild'            => $guild,
-            'showEdit'         => $showEdit,
-            'showEditLoot'     => $showEditLoot,
-            'showOfficerNote'  => $showOfficerNote,
-            'showPrios'        => $showPrios,
-            'showWishlist'     => $showWishlist,
+            'character'       => $character,
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'remarks'         => Raid::remarks(),
+            'showEdit'        => $showEdit,
+            'showEditLoot'    => $showEditLoot,
+            'showPrios'       => $showPrios,
+            'showWishlist'    => $showWishlist,
+            'editOfficerNotePermission' => $editOfficerNotePermission,
+            'viewOfficerNotePermission' => $viewOfficerNotePermission,
         ]);
     }
 

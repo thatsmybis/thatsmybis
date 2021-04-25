@@ -170,9 +170,9 @@
                                                     @endif
                                                 </li>
                                             @else
-                                                <li class="text-tier-1">
+                                                <li class="{{ getAttendanceColor($character->pivot->credit) }}">
                                                     <span class="fas fa-fw fa-user-chart text-muted"></span>
-                                                    {{ $character->pivot->credit * 100 }}%
+                                                    {{ $character->pivot->credit * 100 }}% credit
                                                     @if ($character->pivot->remark_id)
                                                         <span class="text-muted">
                                                             {{ $remarks[$character->pivot->remark_id] }}
@@ -184,11 +184,13 @@
                                     </td>
                                     <td>
                                         <ul class="list-inline">
-                                            @if ($character->pivot->public_note)
-                                                <div>
+                                            <div>
+                                                @if ($character->pivot->public_note)
                                                     <span class="js-markdown-inline">{{ $character->pivot->public_note }}</span>
-                                                </div>
-                                            @endif
+                                                @else
+                                                    —
+                                                @endif
+                                            </div>
                                             @if ($showOfficerNote && $character->pivot->officer_note)
                                                 <div>
                                                     <span class="font-weight-bold small font-italic text-gold">Officer's Note</span>

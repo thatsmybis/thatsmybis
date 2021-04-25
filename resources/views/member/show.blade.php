@@ -31,6 +31,34 @@
             <div class="row mb-3 pt-3 bg-light rounded">
                 <div class="col-12 mb-2">
                     <span class="font-weight-bold">
+                        <span class="fas fa-fw fa-helmet-battle text-dk"></span>
+                        Raid History
+                    </span>
+                </div>
+
+                <div class="col-12 pb-3">
+                    @if ($member->characters->count())
+                        @php
+                            $raids = collect();
+                            foreach ($member->characters as $character) {
+                                $raids = $raids->merge($character->raids);
+                            }
+                            $raids = $raids->keyBy('date')->sortKeysDesc();
+                        @endphp
+                        @if ($raids->count())
+                            @include('partials/raidHistoryTable', ['raids' => $raids, 'characters' => $member->characters, 'showOfficerNote' => ($viewOfficerNotePermission && !isStreamerMode())])
+                        @else
+                            None yet
+                        @endif
+                    @else
+                        None yet
+                    @endif
+                </div>
+            </div>
+
+            <div class="row mb-3 pt-3 bg-light rounded">
+                <div class="col-12 mb-2">
+                    <span class="font-weight-bold">
                         <span class="fas fa-fw fa-user text-muted"></span>
                         Characters
                     </span>
@@ -144,7 +172,7 @@
                         </div>
                     @endif
 
-                    @if ($currentMember->hasPermission('view.officer-notes'))
+                    @if ($viewOfficerNotePermission)
                         <div class="col-12">
                             <span class="text-muted font-weight-bold">
                                 <span class="fas fa-fw fa-shield"></span>
@@ -154,14 +182,14 @@
                         <div class="col-12 mb-3 pl-4">
                             @if (!isStreamerMode())
                                 <span class="js-markdown-inline">{{ $member->officer_note ? $member->officer_note : '—' }}</span>
-                                @if ($currentMember->hasPermission('edit.officer-notes'))
+                                @if ($editOfficerNotePermission)
                                     <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                                 @endif
                             @else
                                 Hidden in streamer mode
                             @endif
                         </div>
-                        @if ($currentMember->hasPermission('edit.officer-notes') && !isStreamerMode())
+                        @if ($editOfficerNotePermission && !isStreamerMode())
                             <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                                 <div class="form-group">
                                     <label for="officer_note" class="font-weight-bold">
@@ -223,6 +251,16 @@
 <script>
 $(document).ready(function () {
     warnBeforeLeaving("#noteForm");
+
+    $("#raids").DataTable({
+        "order"       : [], // Disable initial auto-sort; relies on server-side sorting
+        "paging"      : true,
+        "pageLength"  : 3,
+        "fixedHeader" : false, // Header row sticks to top of window when scrolling down
+        "columns" : [
+            { "orderable" : false },
+        ]
+    });
 
     $("#showInactiveCharacters").click(function () {
         $(".js-inactive-characters").toggle();
