@@ -41,43 +41,49 @@
                     Anon (Patreon)
                 </li>
                 <li>
+                    A4uronn (Raider)
+                </li>
+                <li>
                     Busmonstret (Raider)
                 </li>
                 <li>
-                     Calaris (Patreon: Main Tank)
+                     Calaris (Main Tank)
                 </li>
                 <li>
-                     Finvy (Patreon: Raider)
+                     Finvy (Raider)
                 </li>
                 <li>
-                     Kral (Patreon: Parser)
+                     Kral (Parser)
                 </li>
                 <li>
-                     mattyp237 (Patreon: Parser)
+                     mattyp237 (Parser)
                 </li>
                 <li>
-                     Mister Awesomesauce (Patreon: Raider)
+                     Mister Awesomesauce (Raider)
                 </li>
                 <li>
                      niph (Paypal)
                 </li>
                 <li>
-                     Panya (Patreon: Parser)
+                     Panya (Parser)
                 </li>
                 <li>
-                     Sangwa (Patreon: Raider)
+                     Sangwa (Raider)
                 </li>
                 <li>
-                     Sentence (Patreon: Raider)
+                     Sentence (Raider)
                 </li>
                 <li>
-                     Strix (Patreon: Black Lotus)
+                     Strix (Black Lotus)
                 </li>
                 <li>
-                     TideAd (Patreon: Parser)
+                     TideAd (Parser)
                 </li>
                 <li>
-                     Tron (Patreon: Main Tank)
+                     Tron (Main Tank)
+                </li>
+                <li>
+                     Zura (Parser)
                 </li>
             </ul>
         </div>

@@ -124,12 +124,12 @@ class DashboardController extends Controller
         }
 
         $showPrios = false;
-        if (!$this->is_prio_private || $currentMember->hasPermission('view.prios')) {
+        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
             $showPrios = true;
         }
 
         $showWishlist = false;
-        if (!$this->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
+        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
             $showWishlist = true;
         }
 

@@ -1,7 +1,9 @@
 <li class="list-inline-item">
     <div class="dropdown">
         <a class="dropdown-toggle text-{{ $text }}" id="raid{{ $raid->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="role-circle" style="background-color:{{ $raidGroup ? $raidGroup->getColor() : null }}"></span>
+            @if (isset($raidGroup) && $raidGroup)
+                <span class="role-circle" style="background-color:{{ $raidGroup->getColor() }}"></span>
+            @endif
             <span class="{{ isset($bold) && $bold ? 'font-weight-bold' : '' }}">
             {{ $raid->name }}
             @if ($raid->cancelled_at)

@@ -96,35 +96,6 @@
                                 <li class="pt-3 pb-3 pl-3 p-1 rounded">
 
                                     <ul class="list-inline">
-                                        @include('raids/partials/listRaid', ['bold' => true, 'text' => (!$isFuture || $raid->cancelled_at ? 'muted' : 'white')])
-
-                                        <li class="list-inline-item text-muted">
-                                            {{ $raid->character_count }} raiders
-                                        </li>
-                                        @if (!$isFuture)
-                                            <li class="list-inline-item text-muted">
-                                                {{ $raid->item_count }} items
-                                            </li>
-                                        @endif
-                                    </ul>
-                                    <ul class="list-inline">
-                                        <li class="list-inline-item text-muted">
-                                            {{ $isFuture ? 'in' : '' }}
-                                            <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
-                                            {{ !$isFuture ? 'ago' : '' }}
-                                            <span class="js-timestamp" data-timestamp="{{ $raid->date }}" data-format="@ h:mm a, ddd MMM D {{ $isFuture ? '' : 'YYYY' }}"></span>
-                                        </li>
-
-                                        @if ($raid->instances->count() > 0)
-                                            <li class="list-inline-item">
-                                                <ul class="list-inline font-weight-bold text-muted">
-                                                    @foreach ($raid->instances as $instance)
-                                                        <span class="text-{{ $raid->cancelled_at ? 'muted' : 'legendary' }}">{{ $instance->short_name }}</span>{{ !$loop->last ? ',' : '' }}
-                                                    @endforeach
-                                                </ul>
-                                            </li>
-                                        @endif
-
                                         @if ($raid->raidGroups->count() > 0)
                                             <li class="list-inline-item">
                                                 <ul class="list-inline">
@@ -136,6 +107,39 @@
                                                 </ul>
                                             </li>
                                         @endif
+
+                                        @if ($raid->instances->count() > 0)
+                                            <li class="list-inline-item">
+                                                <ul class="list-inline font-weight-bold text-muted">
+                                                    @foreach ($raid->instances as $instance)
+                                                        <span class="text-{{ $raid->cancelled_at ? 'muted' : 'legendary' }}">{{ $instance->short_name }}</span>{{ !$loop->last ? ',' : '' }}
+                                                    @endforeach
+                                                </ul>
+                                            </li>
+                                        @endif
+                                    </ul>
+
+                                    <ul class="list-inline">
+                                        @include('raids/partials/listRaid', ['bold' => true, 'text' => (!$isFuture || $raid->cancelled_at ? 'muted' : 'white'), 'raidGroup' => null])
+
+                                        <li class="list-inline-item text-muted">
+                                            {{ $raid->character_count }} raiders
+                                        </li>
+                                        @if (!$isFuture)
+                                            <li class="list-inline-item text-muted">
+                                                {{ $raid->item_count }} items
+                                            </li>
+                                        @endif
+                                    </ul>
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item">
+                                            <span class="{{ $isFuture ? '' : 'text-muted' }}">
+                                                {{ $isFuture ? 'in' : '' }}
+                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
+                                                {{ !$isFuture ? 'ago' : '' }}
+                                                <span class="js-timestamp text-muted" data-timestamp="{{ $raid->date }}" data-format="@ h:mm a, ddd MMM D {{ $isFuture ? '' : 'YYYY' }}"></span>
+                                            </span>
+                                        </li>
                                     </ul>
                                 </li>
                             @endforeach

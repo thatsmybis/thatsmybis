@@ -40,13 +40,14 @@
                     @if ($member->characters->count())
                         @php
                             $raids = collect();
-                            foreach ($member->characters as $character) {
+                            $characeters = ($guild->is_attendance_hidden ? $member->characters : $member->charactersWithAttendance);
+                            foreach ($characters as $character) {
                                 $raids = $raids->merge($character->raids);
                             }
-                            $raids = $raids->keyBy('date')->sortKeysDesc();
+                            $raids = $raids->sortByDesc('date');
                         @endphp
                         @if ($raids->count())
-                            @include('partials/raidHistoryTable', ['raids' => $raids, 'characters' => $member->characters, 'showOfficerNote' => ($viewOfficerNotePermission && !isStreamerMode())])
+                            @include('partials/raidHistoryTable', ['raids' => $raids, 'characters' => $characters, 'showOfficerNote' => ($viewOfficerNotePermission && !isStreamerMode())])
                         @else
                             None yet
                         @endif
@@ -255,7 +256,7 @@ $(document).ready(function () {
     $("#raids").DataTable({
         "order"       : [], // Disable initial auto-sort; relies on server-side sorting
         "paging"      : true,
-        "pageLength"  : 3,
+        "pageLength"  : 5,
         "fixedHeader" : false, // Header row sticks to top of window when scrolling down
         "columns" : [
             { "orderable" : false },

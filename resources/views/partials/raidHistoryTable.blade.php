@@ -12,25 +12,29 @@
             @php
                 $now = getDateTime();
                 $isFuture = $raid->date > $now;
-            @endphp
+                $limit = date('Y-m-d H:i:s', strtotime(getDateTime() . " - {$guild->attendance_decay_days} days"));
+                $withinLimit = $raid->date > $limit;
+             @endphp
             <tr>
                 <td>
                     <div class="row">
                         <div class="col-lg-6 col-12">
                             <ul class="list-inline mb-0">
                                 @if ($raid->pivot->is_exempt)
-                                    <li class="list-inline-item text-warning">
+                                    <li class="list-inline-item {{ $withinLimit ? 'text-warning' : 'text-muted' }}">
                                         Excused
                                     </li>
                                 @elseif (!$isFuture)
-                                    <li class="list-inline-item {{ getAttendanceColor($raid->pivot->credit) }}">
+                                    <li class="list-inline-item {{ $withinLimit ? getAttendanceColor($raid->pivot->credit) : 'text-muted' }}"
+                                        title="{{ !$withinLimit ? "outside of guild's counted attendance" : '' }}">
                                         {{ $raid->pivot->credit * 100 }}% credit
                                     </li>
                                 @endif
                                 <li class="list-inline-item">
-                                    <span class="text-white font-weight-bold">
+                                    <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->name]) }}"
+                                        class="text-white font-weight-bold">
                                         {{ $raid->name }}
-                                    </span>
+                                    </a>
                                     <span class="small">
                                         {{ $isFuture ? 'in' : '' }}
                                         <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>

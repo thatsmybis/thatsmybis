@@ -257,20 +257,21 @@ class Character extends Model
     static public function addAttendanceQuery($query) {
         return $query
             ->addSelect([
-                DB::raw('COALESCE(MAX(`raid_characters`.`raid_count`), 0) AS `raid_count`'),
-                DB::raw('COALESCE(ROUND(MAX(`raid_characters`.`credit`) / MAX(`raid_characters`.`raid_count`), 3), 0) AS `attendance_percentage`'),
+                DB::raw('COALESCE(COUNT(`raid_characters`.`id`), 0) AS `raid_count`'),
+                DB::raw('IF(COUNT(`raid_characters`.`id`), COALESCE(ROUND(SUM(`raid_characters`.`credit`) / COUNT(`raid_characters`.`id`), 3), 0), 0) AS `attendance_percentage`'),
+                // DB::raw('COALESCE(MAX(`raid_characters`.`raid_count`), 0) AS `raid_count`'),
+                // DB::raw('COALESCE(ROUND(MAX(`raid_characters`.`credit`) / MAX(`raid_characters`.`raid_count`), 3), 0) AS `attendance_percentage`'),
             ])
             ->join('guilds', 'guilds.id', 'characters.guild_id')
             ->leftJoin('raids', function ($join) {
                 $join->on('raids.guild_id', 'characters.guild_id')
-                    ->whereRaw('`raids`.`date` BETWEEN CURDATE() - INTERVAL `guilds`.`attendance_decay_days` DAY AND CURDATE()')
+                    ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 2) . ' HOUR)')
                     ->whereNull('raids.cancelled_at');
             })
-            ->leftJoin(DB::raw(
-                "(SELECT COUNT(*) AS `raid_count`, SUM(`raid_characters`.`credit`) AS `credit`, MAX(`raid_characters`.`raid_id`) AS `raid_id`, MAX(`raid_characters`.`character_id`) AS `character_id` FROM `raid_characters` WHERE `raid_characters`.`is_exempt` = 0 GROUP BY `raid_characters`.`character_id`) `raid_characters`"
-            ), function ($join) {
+            ->leftJoin('raid_characters', function ($join) {
                 $join->on('raid_characters.raid_id', 'raids.id')
-                    ->on('raid_characters.character_id', 'characters.id');
+                    ->on('raid_characters.character_id', 'characters.id')
+                    ->where('raid_characters.is_exempt', 0);
             })
             ->groupBy('characters.id');
     }

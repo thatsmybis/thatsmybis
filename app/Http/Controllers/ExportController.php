@@ -13,7 +13,7 @@ class ExportController extends Controller {
 
     const LOOT_HEADERS = [
         "type",
-        "raid_group_name",
+        "raid_name", // "raid_group_name",
         "member_name",
         "character_name",
         "character_class",

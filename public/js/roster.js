@@ -118,7 +118,7 @@ function createTable() {
 
                         ${ !guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count) ?
                             `<li>
-                                ${ row.attendance_percentage ? `<span title="attendance" class="${ getAttendanceColor(row.attendance_percentage) }">${ row.attendance_percentage * 100 }%</span>` : '' }
+                                ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<span title="attendance" class="${ getAttendanceColor(row.attendance_percentage) }">${ Math.round(row.attendance_percentage * 100) }%</span>` : '' }
                                 ${ row.raid_count ? `<span class="small text-muted">${ row.raid_count } raid${ row.raid_count > 1 ? 's' : '' }</span>` : ``}
                             </li>` : `` }
 

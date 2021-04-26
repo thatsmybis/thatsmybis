@@ -302,7 +302,7 @@ class CharacterController extends Controller
                 if (!$guild->is_attendance_hidden) {
                     $query = Character::addAttendanceQuery($query);
                 }
-
+// dd($query->toSql());
                 return $query->firstOrFail();
         });
 

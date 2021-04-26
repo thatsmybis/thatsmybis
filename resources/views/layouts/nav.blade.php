@@ -145,11 +145,11 @@
                             Raids
                         </a>
                         <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
-                            <a class="dropdown-item" href="{{ route('item.massInput', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Assign Loot
-                            </a>
                             <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 List Raids
+                            </a>
+                            <a class="dropdown-item" href="{{ route('item.massInput', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                Assign Loot
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 Create Raid

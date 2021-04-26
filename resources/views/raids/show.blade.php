@@ -1,6 +1,9 @@
 @extends('layouts.app')
 @section('title', $raid->name . ' - ' . config('app.name'))
 
+@php
+    $isFuture = $raid->date > getDateTime();
+@endphp
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -37,9 +40,6 @@
 
                             <ul class="no-indent no-bullet">
                                 <li class="mt-2 text-5 font-weight-bold">
-                                    @php
-                                        $isFuture = $raid->date > getDateTime();
-                                    @endphp
                                     {{ $isFuture ? 'in' : '' }}
                                     <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
                                     {{ !$isFuture ? 'ago' : '' }}
@@ -169,7 +169,7 @@
                                                         </span>
                                                     @endif
                                                 </li>
-                                            @else
+                                            @elseif (!$isFuture)
                                                 <li class="{{ getAttendanceColor($character->pivot->credit) }}">
                                                     <span class="fas fa-fw fa-user-chart text-muted"></span>
                                                     {{ $character->pivot->credit * 100 }}% credit
@@ -202,7 +202,7 @@
                                     </td>
                                     <td>
                                         @if($loop->first)
-                                            feature coming soon™
+                                            feature coming when it's done™
                                         @endif
                                     </td>
                                 </tr>

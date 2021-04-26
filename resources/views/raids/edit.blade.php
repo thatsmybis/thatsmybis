@@ -23,8 +23,10 @@
                             <h1 class="font-weight-medium ">
                                 @if ($raid)
                                     @if ($copy)
+                                        <span class="text-muted fas fa-fw fa-copy"></span>
                                         Copying
                                     @else
+                                        <span class="text-muted fas fa-fw fa-pencil"></span>
                                         Editing
                                     @endif
                                     <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => ($copy ? $originalRaid->id : $raid->id), 'raidSlug' => ($copy ? $originalRaid->slug : $raid->slug)]) }}"
@@ -32,6 +34,7 @@
                                         {{ $copy ? $originalRaid->name : $raid->name }}
                                     </a>
                                 @else
+                                    <span class="text-muted fas fa-fw fa-plus"></span>
                                     Create a Raid
                                 @endif
                             </h1>
@@ -39,7 +42,7 @@
                         <li class="list-inline-item">
                             @if ($raid && !$copy)
                                 <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
-                                    <span class="fas fa-copy"></span> copy
+                                    <span class="fas fa-fw fa-copy"></span> copy
                                 </a>
                             @endif
                         </li>
@@ -483,7 +486,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ $raid ? 'Update' : 'Save' }}</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ $raid && !$copy ? 'Update' : 'Create' }}</button>
                 </div>
             </form>
         </div>
