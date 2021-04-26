@@ -38,6 +38,11 @@
                                     Create a Raid
                                 @endif
                             </h1>
+                            <p class="lead text-warning">
+                                <span class="font-weight-bold">This feature is an early prototype</span>
+                                <br>
+                                Please report bugs by using the Give Feedback button in the bottom right
+                            </p>
                         </li>
                         <li class="list-inline-item">
                             @if ($raid && !$copy)

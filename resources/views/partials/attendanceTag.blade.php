@@ -1,4 +1,4 @@
-@if (isset($attendancePercentage))
+@if (isset($attendancePercentage) && ((isset($raidCount) && $raidCount) || !isset($raidCount)))
     <span class="{{ getAttendanceColor($attendancePercentage) }}" title="attendance">{{ round($attendancePercentage * 100, 2) }}%</span>
 @endif
 @if (isset($raidCount))
