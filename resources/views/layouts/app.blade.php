@@ -86,8 +86,6 @@
 <body class="@yield('bodyClass')">
     @include('layouts/nav')
 
-    <div class="text-center font-weight-bold text-warning mt-2 mb-4">2 hours SCHEDULED DOWNTIME TONIGHT at 11pm PST / 2am EST / 6am UTC</div>
-
     @if (session('status'))
         <div class="container-fluid container-width-capped">
             <div class="row">
