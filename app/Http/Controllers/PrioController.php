@@ -110,7 +110,9 @@ class PrioController extends Controller
             ->orderBy('items.name')
             ->with([
                 'priodCharacters' => function ($query) use ($raidGroup) {
-                    return $query->where('character_items.raid_group_id', $raidGroup->id);
+                    return $query
+                        ->where('character_items.raid_group_id', $raidGroup->id)
+                        ->groupBy(['character_items.character_id', 'character_items.item_id']);;
                 },
                 'receivedAndRecipeCharacters' => function ($query) use($guild) {
                     return $query
