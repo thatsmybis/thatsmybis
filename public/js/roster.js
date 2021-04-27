@@ -261,7 +261,7 @@ function createTable() {
                 var column = this;
 
                 let select1 = null;
-                let select2 = null; // Iniitalize this beside select1 if we want a secondary sort
+                let select2 = null; // Initialize this beside select1 if we want a secondary sort
 
                 if (index == colClass) {
                     select1 = $("#class_filter");

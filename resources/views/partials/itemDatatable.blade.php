@@ -5,7 +5,7 @@
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                 Raid Group
             </label>
-            <select id="raid_filter" class="form-control dark">
+            <select id="raid_group_filter" class="form-control dark">
                 <option value="">—</option>
                 @if ($raidGroups)
                     @foreach ($raidGroups as $raidGroup)
