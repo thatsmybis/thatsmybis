@@ -3,12 +3,15 @@
 
 @section('content')
 <div class="container-fluid container-width-capped">
-    <div class="row bg-light pt-5 pb-5 mb-5 rounded">
+    <div class="row bg-light pt-5 pb-5 mb-3 rounded">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h1>Donate &lt;3 &lt;3 &lt;3</h1>
+            <h1>Support the website! &lt;3</h1>
+            <p class="mt-3 text-muted">
+                None of this would be here without the generous donors listed below  &lt;3 &lt;3 &lt;3
+            </p>
             <ul class="no-bullet mt-5">
-                <li class="mb-5 rounded">
-                    <a class="text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
+                <li class="mb-5">
+                    <a class="text-4 text-patreon patreon-button p-3" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
                         <span class="fab fa-fw fa-patreon text-white"></span>
                         Patreon
                     </a>
@@ -33,58 +36,73 @@
         </div>
     </div>
 
+    @php
+        $donors = [
+            [
+                'icon' => 'crown', 'name' => 'Anonymous', 'title' => 'Patreon',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'A4uronn', 'title' => 'Raider',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Busmonstret', 'title' => 'Raider',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Calaris', 'title' => 'Main Tank',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Finvy', 'title' => 'Raider',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Khashte', 'title' => 'Parser',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Kral', 'title' => 'Parser',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'mattyp237', 'title' => 'Parser',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Mister Awesomesauce', 'title' => 'Raider',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'niph', 'title' => 'Paypal',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Panya', 'title' => 'Parser',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Sangwa', 'title' => 'Raider',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Sentence', 'title' => 'Raider',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Strix', 'title' => 'Black Lotus',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'TideAd', 'title' => 'Parser',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Tron', 'title' => 'Main Tank',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Zura', 'title' => 'Parser',
+            ],
+        ];
+    @endphp
+
     <div class="row bg-light pt-5 pb-5 mb-5 rounded">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h2>Donors</h2>
-            <ul>
-                <li>
-                    Anon (Patreon)
-                </li>
-                <li>
-                    A4uronn (Raider)
-                </li>
-                <li>
-                    Busmonstret (Raider)
-                </li>
-                <li>
-                     Calaris (Main Tank)
-                </li>
-                <li>
-                     Finvy (Raider)
-                </li>
-                <li>
-                     Kral (Parser)
-                </li>
-                <li>
-                     mattyp237 (Parser)
-                </li>
-                <li>
-                     Mister Awesomesauce (Raider)
-                </li>
-                <li>
-                     niph (Paypal)
-                </li>
-                <li>
-                     Panya (Parser)
-                </li>
-                <li>
-                     Sangwa (Raider)
-                </li>
-                <li>
-                     Sentence (Raider)
-                </li>
-                <li>
-                     Strix (Black Lotus)
-                </li>
-                <li>
-                     TideAd (Parser)
-                </li>
-                <li>
-                     Tron (Main Tank)
-                </li>
-                <li>
-                     Zura (Parser)
-                </li>
+            <h1>Donors</h1>
+            <ul class="fa-ul">
+                @foreach ($donors as $donor)
+                    <li>
+                        <span class="fa-li fas fa-{{ $donor['icon'] }}"></span>
+                        <span class="text-uncommon">{{ $donor['name'] }}</span>
+                        <span class="text-muted">{{ $donor['title'] }}</span>
+                    </li>
+                @endforeach
             </ul>
         </div>
     </div>

@@ -30,10 +30,12 @@
                                 Support TMB
                             </a>
                             <div class="dropdown-menu text-center" aria-labelledby="donateDropdown">
-                                <a class="dropdown-item text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
-                                    <span class="fab fa-fw fa-patreon text-white"></span>
-                                    Patreon
-                                </a>
+                                <span class="dropdown-item">
+                                    <a class="text-4 text-patreon patreon-button" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
+                                        <span class="fab fa-fw fa-patreon text-white"></span>
+                                        Patreon
+                                    </a>
+                                </span>
                                 <span class="dropdown-item">
                                     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                                         <input type="hidden" name="cmd" value="_s-xclick" />

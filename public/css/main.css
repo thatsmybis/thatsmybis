@@ -292,6 +292,15 @@ body {
         display: none !important;
     }
 }
+.patreon-button {
+    display: inline-block;
+    text-align: center;
+    border: 1px solid #6865b9;;
+    background: #32305c;
+    border-radius: 3px;
+    width: 300px;
+    padding: 10px;
+}
 
 .font-weight-medium {
     font-weight: 600 !important;
@@ -347,10 +356,6 @@ body {
     .navbar-brand-guild {
         font-size: 1.25vmax;
     }
-}
-
-.dropdown-divider { /* bootstrap override */
-    border-top-color: #8e8d9c;
 }
 
 ul.no-bullet, ol.no-bullet, li.no-bullet  {
@@ -416,6 +421,7 @@ kbd {
 /* Nice well contrasted backgrounds with the dark theme */
 .dropdown-menu {
     background-color: #32305c;
+    z-index: 9001; /* datetime picker has a 9000 index */
 }
 .dropdown-menu a, .dropdown-menu a:hover {
     color: #fff;
@@ -428,6 +434,9 @@ kbd {
 }
 .dropdown-item.selected.active{
     background-color: #161523;
+}
+.dropdown-divider { /* bootstrap override */
+    border-top-color: #8e8d9c;
 }
 
 .form-control:focus, .btn-light.focus, .btn-light:focus {
@@ -820,6 +829,10 @@ div.dataTables_filter input {
     color: #ff8000 !important;
     border: 1px solid #ff8000 !important;
     font-weight: 900 !important;
+}
+/* year and month picker */
+.xdsoft_datetimepicker .xdsoft_label {
+    z-index: 9000;
 }
 
 .ui-autocomplete {
