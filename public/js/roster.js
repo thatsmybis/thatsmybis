@@ -89,7 +89,7 @@ function createTable() {
                                         Profile
                                     </a>
                                     <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/audit-log?character_id=${ row.id }" target="_blank">
-                                        Logs
+                                        History
                                     </a>
                                     ${ showEdit ?
                                         `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/edit" target="_blank">

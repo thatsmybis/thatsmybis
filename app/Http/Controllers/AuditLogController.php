@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\{AuditLog, Batch, Character, Guild, Instance, Item, ItemSource, Member, Raid, RaidGroup, Role};
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class AuditLogController extends Controller
 {
@@ -31,6 +32,12 @@ class AuditLogController extends Controller
         $currentMember = request()->get('currentMember');
 
         $guild->load(['characters', 'members', 'raidGroups']);
+
+        $instances = Cache::remember('instances:expansion:' . $guild->expansion_id,
+            env('CACHE_INSTANCES_SECONDS', 600),
+            function () use ($guild) {
+                return Instance::where('expansion_id', $guild->expansion_id)->get();
+        });
 
         $resources = [];
 
@@ -77,9 +84,6 @@ class AuditLogController extends Controller
             ->leftJoin('instances', function ($join) {
                     $join->on('instances.id', '=', 'audit_logs.instance_id');
                 })
-            ->leftJoin('items', function ($join) {
-                    $join->on('items.item_id', '=', 'audit_logs.item_id');
-                })
             ->leftJoin('item_sources', function ($join) {
                     $join->on('item_sources.id', '=', 'audit_logs.item_source_id');
                 })
@@ -118,6 +122,26 @@ class AuditLogController extends Controller
                 return $query->where([['audit_logs.type', '!=', Item::TYPE_WISHLIST]])
                     ->orWhereNull('audit_logs.type');
             });
+        }
+
+        // Require item to exist
+        if (!empty(request()->input('item_instance_id'))) {
+            $query = $query
+                ->join('items', 'items.item_id', 'audit_logs.item_id')
+                ->join('item_item_sources AS item_item_sources2', 'item_item_sources2.item_id', 'items.item_id')
+                ->join('item_sources AS item_sources2', 'item_sources2.id', 'item_item_sources2.item_source_id')
+                ->where('item_sources2.instance_id', request()->input('item_instance_id'));
+        } else { // Okay if no item present
+            $query = $query->leftJoin('items', function ($join) {
+                    $join->on('items.item_id', '=', 'audit_logs.item_id');
+                });
+        }
+
+        if (!empty(request()->input('min_date'))) {
+            $query = $query->where('audit_logs.created_at', '>',  request()->input('min_date'));
+        }
+        if (!empty(request()->input('max_date'))) {
+            $query = $query->where('audit_logs.created_at', '<',  request()->input('max_date'));
         }
 
         if (!empty(request()->input('character_id'))) {
@@ -165,6 +189,7 @@ class AuditLogController extends Controller
         return view('auditLog', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'instances'     => $instances,
             'logs'          => $logs,
             'resources'     => $resources,
             'showPrios'     => $showPrios,

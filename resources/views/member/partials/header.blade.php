@@ -17,7 +17,7 @@
             @if (isset($showLogs) && $showLogs)
                 <li class="list-inline-item">
                     <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}">
-                        <span class="fas fa-fw fa-clipboard-list-check"></span>logs
+                        <span class="fas fa-fw fa-clipboard-list-check"></span>history
                     </a>
                 </li>
             @endif

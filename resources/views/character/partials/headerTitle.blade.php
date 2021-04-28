@@ -14,7 +14,7 @@
             </a>
             @if (isset($showLogs) && $showLogs)
                 <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}" target="_blank">
-                    Logs
+                    History
                 </a>
             @endif
             @if (isset($showEdit) && $showEdit)
@@ -58,7 +58,7 @@
         @if (isset($showLogs) && $showLogs)
             <li class="list-inline-item">
                 <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}">
-                    <span class="fas fa-fw fa-clipboard-list-check"></span>logs
+                    <span class="fas fa-fw fa-clipboard-list-check"></span>history
                 </a>
             </li>
         @endif

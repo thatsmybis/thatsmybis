@@ -82,8 +82,43 @@
                 @endif
             </div>
 
+
+
             <div class="row">
-                <div class="col-md-3 col-6">
+                <div class="col-lg-2 col-md-3 col-6">
+                    <div class="form-group">
+                        <label for="min_date" class="font-weight-bold">
+                            <span class="fas fa-fw fa-users text-muted"></span>
+                            Min Date
+                        </label>
+                        <input name="min_date" min="2004-09-22"
+                            max="{{ getDateTime('Y-m-d') }}"
+                            value="{{ Request::get('min_date') ? Request::get('min_date') : ''}}"
+                            type="date"
+                            placeholder="—"
+                            class="form-control dark"
+                            autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-6">
+                    <div class="form-group">
+                        <label for="max_date" class="font-weight-bold">
+                            <span class="fas fa-fw fa-users text-muted"></span>
+                            Max Date
+                        </label>
+                        <input name="max_date"
+                            min="2004-09-22"
+                            value="{{ Request::get('max_date') ? Request::get('max_date') : ''}}"
+                            max="{{ getDateTime('Y-m-d') }}"
+                            type="date"
+                            placeholder="—"
+                            class="form-control dark"
+                            autocomplete="off">
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
                         <label for="character_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-users text-muted"></span>
@@ -150,7 +185,7 @@
                     <div class="form-group">
                         <label for="type" class="font-weight-bold">
                             <span class="fas fa-fw fa-scroll-old text-muted"></span>
-                            Category
+                            Loot Type
                         </label>
                         <select name="type" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="" data-tokens="">
@@ -160,6 +195,16 @@
                                 data-tokens="{{ \App\Item::TYPE_PRIO }}"
                                 {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_PRIO ? 'selected' : ''}}>
                                 Prio
+                            </option>
+                            <option value="{{ \App\Item::TYPE_RECIPE }}"
+                                data-tokens="{{ \App\Item::TYPE_RECIPE }}"
+                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_RECIPE ? 'selected' : ''}}>
+                                Recipe
+                            </option>
+                            <option value="{{ \App\Item::TYPE_WISHLIST }}"
+                                data-tokens="{{ \App\Item::TYPE_WISHLIST }}"
+                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_WISHLIST ? 'selected' : ''}}>
+                                Wishlist
                             </option>
                             <option value="{{ 'received_all' }}"
                                 data-tokens="received_all"
@@ -176,16 +221,6 @@
                                 {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_RECEIVED ? 'selected' : ''}}>
                                 Received (via character loot page)
                             </option>
-                            <option value="{{ \App\Item::TYPE_RECIPE }}"
-                                data-tokens="{{ \App\Item::TYPE_RECIPE }}"
-                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_RECIPE ? 'selected' : ''}}>
-                                Recipe
-                            </option>
-                            <option value="{{ \App\Item::TYPE_WISHLIST }}"
-                                data-tokens="{{ \App\Item::TYPE_WISHLIST }}"
-                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_WISHLIST ? 'selected' : ''}}>
-                                Wishlist
-                            </option>
                         </select>
                     </div>
                 </div>
@@ -197,6 +232,26 @@
                         </label>
                         <input name="item_id" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete-link js-input-text form-control dark">
                         <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <div class="form-group">
+                        <label for="item_instance_id" class="font-weight-bold">
+                            <span class="fas fa-fw fa-dungeon text-muted"></span>
+                            Item Dungeon
+                        </label>
+                        <select name="item_instance_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
+                            <option value="" data-tokens="">
+                                —
+                            </option>
+                            @foreach ($instances as $instance)
+                                <option value="{{ $instance->id }}"
+                                    data-tokens="{{ $instance->name }}"
+                                    {{ Request::get('item_instance_id') && Request::get('item_instance_id') == $instance->id ? 'selected' : ''}}>
+                                    {{ $instance->name }}
+                                </option>
+                            @endforeach
+                        </select>
                     </div>
                 </div>
             </div>
@@ -300,6 +355,10 @@
 @section('scripts')
 <script>
     var guild = {!! $guild->toJson() !!};
+
+    $("input[type='date']").change(function () {
+        updateUrl($(this).prop("name"), $(this).val());
+    });
 
     $("select").change(function () {
         updateUrl($(this).prop("name"), $(this).val());

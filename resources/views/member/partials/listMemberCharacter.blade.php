@@ -26,7 +26,7 @@
             @if (!isset($showLogs) || $showLogs)
                 <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}" target="_blank">
                     <span class="text-muted fa-fw fas fa-"></span>
-                    Logs
+                    History
                 </a>
             @endif
             @if (!isset($showEditLoot) || $showEditLoot)

@@ -33,7 +33,7 @@
                                         </li>
                                         <li class="list-inline-item">
                                             <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_group_id' => $raidGroup->id]) }}">
-                                                <span class="fas fa-fw fa-clipboard-list-check"></span>logs
+                                                <span class="fas fa-fw fa-clipboard-list-check"></span>history
                                             </a>
                                         </li>
                                         <li class="list-inline-item">

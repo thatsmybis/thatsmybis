@@ -54,6 +54,15 @@
                 'icon' => 'crown', 'name' => 'Finvy', 'title' => 'Raider',
             ],
             [
+                'icon' => 'crown', 'name' => 'Hadiya', 'title' => 'Main Tank',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Junior', 'title' => 'Main Tank',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Kazczyk', 'title' => 'Parser',
+            ],
+            [
                 'icon' => 'crown', 'name' => 'Khashte', 'title' => 'Parser',
             ],
             [
@@ -67,6 +76,9 @@
             ],
             [
                 'icon' => 'crown', 'name' => 'niph', 'title' => 'Paypal',
+            ],
+            [
+                'icon' => 'crown', 'name' => 'Nompire', 'title' => 'Parser',
             ],
             [
                 'icon' => 'crown', 'name' => 'Panya', 'title' => 'Parser',
