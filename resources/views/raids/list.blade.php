@@ -15,6 +15,9 @@
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
                         Raids
                     </h1>
+                    <span class="small text-muted">
+                        times shown are local to you
+                    </span>
                 </div>
                 <div class="col-12 pt-2 mb-2">
                     <p class="text-warning font-weight-bold">
