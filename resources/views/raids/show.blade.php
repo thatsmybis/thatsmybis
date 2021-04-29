@@ -44,6 +44,7 @@
                                     <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
                                     {{ !$isFuture ? 'ago' : '' }}
                                     <span class="js-timestamp" data-timestamp="{{ $raid->date }}" data-format="@ h:mm a, ddd MMM D {{ $isFuture ? '' : 'YYYY' }}"></span>
+                                    <span class="small text-muted">in your timezone</span>
                                 </li>
                                 @if ($raid->instances->count())
                                     <li class="mt-2">
