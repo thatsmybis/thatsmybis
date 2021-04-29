@@ -65,8 +65,15 @@ class SeeUser
                 }
             }
 
+            // Did we get the param to bust the cache?
+            $bustCache = false;
+            if (!empty(request()->input('b')) && request()->input('b')) {
+                $bustCache = true;
+            }
+
             // Store the user for later access.
             $request->attributes->add([
+                'bustCache'      => $bustCache,
                 'currentUser'    => $user,
                 'isAdmin'        => $user->is_admin,
                 'isStreamerMode' => $user->is_streamer_mode

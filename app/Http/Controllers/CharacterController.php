@@ -285,25 +285,29 @@ class CharacterController extends Controller
 
         $guild->load('allRaidGroups');
 
-        $character = Cache::remember('character:' . $characterId . ':guild:' . $guild->id . ':attendance:' . $guild->is_attendance_hidden,
-            env('CACHE_CHARACTER_SECONDS', 5),
-            function () use ($guild, $characterId) {
-                $query = Character::select('characters.*')
-                    ->where(['characters.id' => $characterId, 'characters.guild_id' => $guild->id])
-                    ->with([
-                        'member',
-                        'raidGroup',
-                        'raidGroup.role',
-                        'raids',
-                        'received',
-                        'recipes',
-                    ]);
+        $cacheKey = 'character:' . $characterId . ':guild:' . $guild->id . ':attendance:' . $guild->is_attendance_hidden;
 
-                if (!$guild->is_attendance_hidden) {
-                    $query = Character::addAttendanceQuery($query);
-                }
-// dd($query->toSql());
-                return $query->firstOrFail();
+        if (request()->get('bustCache')) {
+            Cache::forget($cacheKey);
+        }
+
+        $character = Cache::remember($cacheKey, env('CACHE_CHARACTER_SECONDS', 5), function () use ($guild, $characterId) {
+            $query = Character::select('characters.*')
+                ->where(['characters.id' => $characterId, 'characters.guild_id' => $guild->id])
+                ->with([
+                    'member',
+                    'raidGroup',
+                    'raidGroup.role',
+                    'raids',
+                    'received',
+                    'recipes',
+                ]);
+
+            if (!$guild->is_attendance_hidden) {
+                $query = Character::addAttendanceQuery($query);
+            }
+
+            return $query->firstOrFail();
         });
 
         $showPrios = false;
@@ -629,7 +633,7 @@ class CharacterController extends Controller
         if (request()->input('recipes')) {
             $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember, false);
         }
-        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
     }
 
     /**
@@ -700,7 +704,7 @@ class CharacterController extends Controller
 
         request()->session()->flash('status', "Successfully updated " . $character->name ."'s note.");
 
-        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
     }
 
     /**

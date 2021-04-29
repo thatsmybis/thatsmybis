@@ -73,9 +73,13 @@ class ItemController extends Controller
             $showWishlist = true;
         }
 
-        $items = Cache::remember('items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0) . ':attendance:' . $guild->is_attendance_hidden,
-            env('CACHE_INSTANCE_ITEMS_SECONDS', 5),
-            function () use ($guild, $instance, $currentMember, $characterFields, $showPrios, $showWishlist) {
+        $cacheKey = 'items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0) . ':attendance:' . $guild->is_attendance_hidden;
+
+        if (request()->get('bustCache')) {
+            Cache::forget($cacheKey);
+        }
+
+        $items = Cache::remember($cacheKey, env('CACHE_INSTANCE_ITEMS_SECONDS', 5), function () use ($guild, $instance, $currentMember, $characterFields, $showPrios, $showWishlist) {
             $query = Item::select([
                     'items.item_id',
                     'items.name',
@@ -490,9 +494,13 @@ class ItemController extends Controller
             $showWishlist = true;
         }
 
-        $item = Cache::remember('item:guild:' . $guild->id . 'item:' . $id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':attendance:' . $guild->is_attendance_hidden,
-            env('CACHE_ITEM_SECONDS', 5),
-            function () use ($id, $guild, $showPrios, $showWishlist) {
+        $cacheKey = 'item:guild:' . $guild->id . 'item:' . $id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':attendance:' . $guild->is_attendance_hidden;
+
+        if (request()->get('bustCache')) {
+            Cache::forget($cacheKey);
+        }
+
+        $item = Cache::remember($cacheKey, env('CACHE_ITEM_SECONDS', 5), function () use ($id, $guild, $showPrios, $showWishlist) {
             $item = Item::where([
                     ['item_id', $id],
                     ['expansion_id', $guild->expansion_id],
@@ -957,7 +965,7 @@ class ItemController extends Controller
 
         request()->session()->flash('status', "Successfully " . $noticeVerb . " " . $item->name ."'s note.");
 
-        return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name)]);
+        return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name), 'b' => 1]);
     }
 
     public static function getItemAverageTiers($instance, $expansionId) {

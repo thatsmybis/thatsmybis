@@ -52,6 +52,10 @@ Redis has been chosen for caching. The `CACHE_DRIVER` environment variable will 
 
 You should install and use the [phpredis](https://github.com/phpredis/phpredis#installation) PHP extension. Alternatively (say; in a dev environment) `predis/predis` can be added with Composer. It is written in PHP, and it is far slower thhan `phpredis`, which is written in C.
 
+### Cache Busting
+
+Some pages allow for certain elements to be cache busted. To bust the cache, pass the `b=1` parameter in the url. The `SeeUser` middleware will check for this, and set a variable for cache busting to true. Certain controller elements will check for this variable before loading from the cache. If it's set to true, it will bust the cache on that **specific** bit that it wants to fetch before fetching it.
+
 ### phpredis Installation
 
 #### Option 1

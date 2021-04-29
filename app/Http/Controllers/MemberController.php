@@ -90,19 +90,23 @@ class MemberController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $member = Cache::remember('member:' . $memberId . ':guild:' . $guild->id . ':attendance:' . $guild->is_attendance_hidden,
-            env('CACHE_MEMBER_SECONDS', 5),
-            function () use ($guild, $memberId) {
-                return Member::where(['guild_id' => $guild->id, 'id' => $memberId])
-                    ->with([
-                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance'),
-                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup',
-                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup.role',
-                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raids',
-                        ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.recipes',
-                        'roles',
-                    ])
-                    ->first();
+        $cacheKey = 'member:' . $memberId . ':guild:' . $guild->id . ':attendance:' . $guild->is_attendance_hidden;
+
+        if (request()->get('bustCache')) {
+            Cache::forget($cacheKey);
+        }
+
+        $member = Cache::remember($cacheKey, env('CACHE_MEMBER_SECONDS', 5), function () use ($guild, $memberId) {
+            return Member::where(['guild_id' => $guild->id, 'id' => $memberId])
+                ->with([
+                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance'),
+                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup',
+                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup.role',
+                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raids',
+                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.recipes',
+                    'roles',
+                ])
+                ->first();
         });
 
         if (!$member) {
@@ -410,7 +414,7 @@ class MemberController extends Controller
         }
 
         request()->session()->flash('status', 'Successfully updated profile.');
-        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]);
+        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug, 'b' => 1]);
     }
 
     /**
@@ -490,6 +494,6 @@ class MemberController extends Controller
         }
 
         request()->session()->flash('status', "Successfully updated " . $member->username ."'s note.");
-        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]);
+        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug, 'b' => 1]);
     }
 }
