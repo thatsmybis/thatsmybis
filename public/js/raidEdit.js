@@ -10,7 +10,7 @@ $(document).ready(function () {
         inline: true,
         step: 30,
         theme: 'dark',
-        value: null,
+        value: moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss"),
     });
 
     $("[name=date_input]").change(function () {
@@ -139,7 +139,7 @@ function updateDate() {
     if ($("[name=date_input]").val()) {
         $("[name=date]").val(moment($("[name=date_input]").val()).utc().format("YYYY-MM-DD HH:mm:ss"));
     } else {
-        $("[name=date]").val("");
+        $("[name=date]").val(date);
+        $("[name=date_input]").val(moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss"));
     }
-    console.log($("[name=date]").val());
 }
