@@ -16,6 +16,12 @@
                         Raids
                     </h1>
                 </div>
+                <div class="col-12 pt-2 mb-2">
+                    <p class="text-warning font-weight-bold">
+                        <span class="fas fa-fw fa-exclamation-triangle"></span>
+                        <span class="text-danger">Raids created before April 29th have inaccurate times.</span> There was a timezone bug. It's been fixed. Please update your raid times.
+                    </p>
+                </div>
             </div>
 
             <div class="row">

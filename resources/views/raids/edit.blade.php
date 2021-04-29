@@ -2,6 +2,15 @@
 @section('title', ($raid ? "Edit" : "Create") . " Raid - " . config('app.name'))
 
 @php
+    $date = null;
+    if (old('date')) {
+        $date = old('date');
+    } else if ($raid && $raid->date) {
+        $date = $raid->date;
+    } else {
+        $date = getDateTime('Y-m-d') . " 17:00:00";
+    }
+
     $maxDate = (new \DateTime())->modify('+2 year')->format('Y-m-d');
 
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
@@ -79,13 +88,14 @@
                                         Date <span class="small text-muted">your local time</span>
                                     </label>
                                     <div>
+                                        <input type="text" name="date" hidden value="{{ $date }}">
                                         <input
                                             required
-                                            name="date"
+                                            name="date_input"
                                             type="text"
                                             min="2004-09-22"
                                             max="{{ $maxDate }}"
-                                            value="{{ old('date') ? old('date') : ($raid ? $raid->date : '') }}">
+                                            value="">
                                     </div>
                                 </div>
                             </div>
@@ -502,7 +512,7 @@
 @section('scripts')
 <script>
     var characters = {!! $showOfficerNote ? $guild->characters->makeVisible('officer_note')->toJson() : $guild->characters->toJson() !!};
-    var raidDate = '{{ $raid ? $raid->date : getDateTime('Y-m-d') . " 17:00:00" }}';
+    var date = '{{ $date }}';
 </script>
 <script src="{{ loadScript('raidEdit.js') }}"></script>
 @endsection
