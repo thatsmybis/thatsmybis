@@ -322,7 +322,7 @@ class ExportController extends Controller {
                 ci.updated_at  AS 'updated_at'
             FROM character_items ci
                 JOIN characters c        ON c.id = ci.character_id
-                JOIN members m           ON m.id = c.member_id
+                LEFT JOIN members m           ON m.id = c.member_id
                 LEFT JOIN raid_groups rg ON rg.id = c.raid_group_id
                 JOIN items i             ON i.item_id = ci.item_id
                 LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
