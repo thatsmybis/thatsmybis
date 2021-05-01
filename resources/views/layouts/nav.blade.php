@@ -113,6 +113,9 @@
                         <a class="dropdown-item" href="{{ route('guild.recipe.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             Guild Recipes
                         </a>
+                        <a class="dropdown-item text-muted" href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            Sitewide wishlists
+                        </a>
                     </div>
                 </li>
 

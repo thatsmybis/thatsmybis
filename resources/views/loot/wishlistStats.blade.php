@@ -30,7 +30,7 @@
                     </h2>
                     <ol>
                         @foreach($wishlist as $item)
-                            <li class="margin-bottom-small text-tier-{{ $loop->iteration <= 5 ? '1' : ($loop->iteration <= 10 ? '2' : ($loop->iteration <= 20 ? '3' : ($loop->iteration <= 30 ? '4' : '5'))) }}">
+                            <li class="mb-2 text-tier-{{ $loop->iteration <= 5 ? '1' : ($loop->iteration <= 10 ? '2' : ($loop->iteration <= 20 ? '3' : ($loop->iteration <= 30 ? '4' : '5'))) }}">
                                 @include('partials/item', ['wowheadLink' => false,])
                                 <small class="text-muted">
                                     <span class="font-weight-bold">
