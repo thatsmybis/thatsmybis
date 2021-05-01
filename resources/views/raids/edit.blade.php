@@ -16,9 +16,9 @@
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
     // So we're iterating over the characters only one time, saving the results, and printing them.
 
-    $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->characters, 'raidGroups' => $guild->raidGroups]);
+    $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->allCharacters, 'raidGroups' => $guild->raidGroups]);
 
-    $remarkSelectOptions = (string)View::make('partials.remarkOptions', ['characters' => $guild->characters]);
+    $remarkSelectOptions = (string)View::make('partials.remarkOptions');
 @endphp
 
 @section('content')
