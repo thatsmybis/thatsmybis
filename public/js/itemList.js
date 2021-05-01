@@ -230,6 +230,7 @@ function getCharacterList(data, type, itemId) {
                         data-timestamp="${ character.pivot.created_at }"
                         data-is-short="1">
                     </span>
+                    <span style="display:none;">${ character.discord_username } ${ character.username }</span>
                 </a>
             </li>`;
     });

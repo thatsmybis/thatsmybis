@@ -192,6 +192,7 @@ class Guild extends Model
             'characters.public_note',
             'characters.inactive_at',
             'members.username',
+            'users.discord_username',
             'members.is_wishlist_unlocked',
             'members.is_received_unlocked',
             'raid_groups.name AS raid_group_name',
@@ -205,6 +206,9 @@ class Guild extends Model
         $query = Character::select($characterFields)
             ->leftJoin('members', function ($join) {
                 $join->on('members.id', 'characters.member_id');
+            })
+            ->leftJoin('users', function ($join) {
+                $join->on('users.id', 'members.user_id');
             })
             ->leftJoin('raid_groups', function ($join) {
                 $join->on('raid_groups.id', 'characters.raid_group_id');

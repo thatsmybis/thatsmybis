@@ -251,6 +251,22 @@ function createTable() {
                 },
                 "visible" : false,
             },
+            {
+                "title"  : "Username",
+                "data"   : "username",
+                "render" : function (data, type, row) {
+                    return (row.username ? row.username : null);
+                },
+                "visible" : false,
+            },
+            {
+                "title"  : "Discord Username",
+                "data"   : "discord_username",
+                "render" : function (data, type, row) {
+                    return (row.discord_username ? row.discord_username : null);
+                },
+                "visible" : false,
+            },
         ],
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
         "paging" : false,

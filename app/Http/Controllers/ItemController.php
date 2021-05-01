@@ -51,6 +51,7 @@ class ItemController extends Controller
             'characters.class',
             'characters.is_alt',
             'members.username',
+            'users.discord_username',
             'raid_groups.name          AS raid_group_name',
             'raid_group_roles.color    AS raid_group_color',
             'added_by_members.username AS added_by_username',
@@ -110,6 +111,9 @@ class ItemController extends Controller
                             ->leftJoin('members', function ($join) {
                                 $join->on('members.id', 'characters.member_id');
                             })
+                            ->leftJoin('users', function ($join) {
+                                $join->on('users.id', 'members.user_id');
+                            })
                             ->where([
                                 ['characters.guild_id', $guild->id],
                                 ['character_items.is_received', 0],
@@ -126,6 +130,9 @@ class ItemController extends Controller
                             ->addSelect($characterFields)
                             ->leftJoin('members', function ($join) {
                                 $join->on('members.id', 'characters.member_id');
+                            })
+                            ->leftJoin('users', function ($join) {
+                                $join->on('users.id', 'members.user_id');
                             })
                             ->where([
                                     ['characters.guild_id', $guild->id],
