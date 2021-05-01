@@ -57,14 +57,17 @@ class ItemController extends Controller
             'added_by_members.username AS added_by_username',
         ];
 
+        $viewPrioPermission = $currentMember->hasPermission('view.prios');
+        $viewOfficerNotesPermission = $currentMember->hasPermission('view.officer-notes');
+
         $showOfficerNote = false;
-        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+        if ($viewOfficerNotesPermission && !isStreamerMode()) {
             $characterFields[] = 'characters.officer_note';
             $showOfficerNote = true;
         }
 
         $showPrios = false;
-        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+        if (!$guild->is_prio_private || $viewPrioPermission) {
             $showPrios = true;
 
         }
@@ -162,6 +165,8 @@ class ItemController extends Controller
             'showOfficerNote' => $showOfficerNote,
             'showPrios'       => $showPrios,
             'showWishlist'    => $showWishlist,
+            'viewPrioPermission'         => $viewPrioPermission,
+            'viewOfficerNotesPermission' => $viewOfficerNotesPermission,
         ]);
     }
 

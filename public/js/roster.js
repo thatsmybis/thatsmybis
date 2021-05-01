@@ -92,7 +92,7 @@ function createTable() {
                                         <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/loot" target="_blank">Loot</a>`
                                         : `` }
                                     ${ row.member_id ?
-                                        `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.username.toLowerCase() }" target="_blank">${ row.discord_username ? row.discord_username : row.username }</a>`
+                                        `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.username.toLowerCase() }" target="_blank">${ row.username }</a>`
                                     : `` }
                                 </div>
                             </div>

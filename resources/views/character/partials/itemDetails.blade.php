@@ -4,7 +4,7 @@
             <ul class="list-inline">
                 @if ($item->pivot->is_offspec)
                     <li class="list-inline-item">
-                        <span class="font-weight-bold" title="Offspec">OS</span>
+                        <span class="font-weight-bold text-white" title="Offspec">OS</span>
                     </li>
                 @endif
                 @if ($item->pivot->received_at || ((!isset($hideCreatedAt) || !$hideCreatedAt) && $item->pivot->created_at))

@@ -585,6 +585,12 @@ button.close:hover {
     color: #e5e5e5;
 }
 
+.close-top-right {
+    position: absolute;
+    top: 1px;
+    right: 5px;
+}
+
 .list-timestamp {
     min-width: 100px;
 }

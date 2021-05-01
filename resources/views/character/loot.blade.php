@@ -98,7 +98,7 @@
                                 <input id="wishlist" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
                                 <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
-                                <ul class="js-sortable no-bullet no-indent mb-0">
+                                <ul class="js-sortable no-bullet no-indent mb-0 bg-light">
                                     @for ($i = 0; $i < $maxWishlistItems; $i++)
                                         @php
                                             $item      = null;
@@ -118,13 +118,21 @@
                                                 $itemLabel = $item->name;
                                             }
                                         @endphp
-                                        <li class="input-item {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
+                                        <li class="input-item position-relative {{ $itemId ? 'd-flex' : '' }} {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
                                             style="{{ $itemId ? '' : 'display:none;' }}">
                                             <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;" />
                                             <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;" />
                                             <input type="checkbox" checked name="wishlist[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" style="display:none;"/>
-                                            <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable d-inline-block">
+
+                                            <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
+
+                                            <div class="js-sort-handle move-cursor text-4 text-unselectable d-flex mr-1">
+                                                <div class="justify-content-center align-self-center">
+                                                    <span class="fas fa-fw fa-grip-vertical text-muted"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="js-input-label">
                                                 <span class="js-item-display">
                                                     @includeWhen($itemId, 'partials/item', [
                                                         'wowheadLink' => false,
@@ -138,7 +146,7 @@
                                                     @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                                 </span>
                                                 @include('character/partials/itemEdit', ['name' => 'wishlist', 'index' => $i])
-                                            </span>&nbsp;
+                                            </div>
                                         </li>
                                         @if ($errors->has('wishlist.' . $i . '.item_id'))
                                             <li class="'text-danger font-weight-bold'">
@@ -209,15 +217,26 @@
                                                 $itemLabel = $item->name;
                                             }
                                         @endphp
-                                        <li class="input-item {{ $errors->has('received.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ $itemId ? '' : 'display:none;' }}">
+                                        <li class="input-item position-relative {{ $itemId ? 'd-flex' : '' }} {{ $errors->has('received.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
+                                            style="{{ $itemId ? '' : 'display:none;' }}">
                                             <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
                                             <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
                                             <input type="checkbox" checked name="received[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" style="display:none;"/>
-                                            <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                            <span class="js-sort-handle js-input-label move-cursor text-unselectable d-inline-block">
-                                                @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
-                                                @include('character/partials/itemDetails', ['hideCreatedAt' => true])
-                                            </span>&nbsp;
+
+                                            <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
+
+                                            <div class="js-sort-handle move-cursor text-4 text-unselectable d-flex mr-1">
+                                                <div class="justify-content-center align-self-center">
+                                                    <span class="fas fa-fw fa-grip-vertical text-muted"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="js-input-label">
+                                                <span class="js-item-display">
+                                                    @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
+                                                    @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                                </span>
+                                            </div>
                                         </li>
                                         @if ($errors->has('received.' . $i . '.item_id'))
                                             <li class="'text-danger font-weight-bold'">
@@ -265,15 +284,26 @@
                                             $itemLabel = $item->name;
                                         }
                                     @endphp
-                                    <li class="input-item {{ $errors->has('recipes.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}" style="{{ $itemId ? '' : 'display:none;' }}">
+                                    <li class="input-item position-relative {{ $itemId ? 'd-flex' : '' }} {{ $errors->has('recipes.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
+                                        style="{{ $itemId ? '' : 'display:none;' }}">
                                         <input type="checkbox" checked name="recipes[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
                                         <input type="checkbox" checked name="recipes[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
                                         <input type="checkbox" checked name="recipes[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" style="display:none;"/>
-                                        <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                        <span class="js-sort-handle js-input-label move-cursor text-unselectable d-inline-block">
-                                            @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? $item->pivot->created_at : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
-                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
-                                        </span>&nbsp;
+
+                                        <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
+
+                                        <div class="js-sort-handle move-cursor text-4 text-unselectable d-flex mr-1">
+                                            <div class="justify-content-center align-self-center">
+                                                <span class="fas fa-fw fa-grip-vertical text-muted"></span>
+                                            </div>
+                                        </div>
+
+                                        <span class="js-input-label">
+                                            <span class="js-item-display">
+                                                @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? $item->pivot->created_at : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
+                                                @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                            </span>
+                                        </span>
                                     </li>
                                     @if ($errors->has('recipes.' . $i . '.item_id'))
                                         <li class="'text-danger font-weight-bold'">

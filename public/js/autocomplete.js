@@ -76,7 +76,6 @@ function addItemListSelectHandler() {
         value = $(this).find(":selected").val();
         label = $(this).find(":selected").html().trim();
         $nextInput = $(this).next("ul").children("li").children("input[value='']").first();
-
         if ($nextInput.val() == "") {
         // Add the item.
             $nextInput.parent("li").show();
@@ -182,7 +181,7 @@ function addItemRemoveHandler() {
         $(this).prev("input").val(""); // Clear the pivot input (note: doesn't always exist)
         $(this).prev("input").prev("input").val(""); // Clear the label input
         $(this).prev("input").prev("input").prev("input").val(""); // Clear the value input
-        $(this).parent("li").hide();
+        $(this).parent("li").removeClass("d-flex").hide();
 
         // Remove the select's warning message.
         let select = $(this).parent("li").parent("ul").siblings(".js-input-select");
@@ -217,7 +216,7 @@ function addTag($this, value, label) {
         $nextInput = $($this).next().next("ul").children("li").children("input:first-child[value='']").first();
 
         if ($nextInput.val() == "") {
-            $nextInput.parent("li").show();
+            $nextInput.parent("li").show().addClass("d-flex");
             $nextInput.val(value);
             // Populate the hidden input's sibling that holds onto the label
             // Useful if submission fails on the server side and the server wants to send the label back

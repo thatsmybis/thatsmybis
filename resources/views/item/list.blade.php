@@ -14,6 +14,20 @@
                 <p class="font-weight-bold text-gold">
                     To assign Prios and Wishlists sign in and register your guild.
                 </p>
+            @elseif ($viewPrioPermission || $viewOfficerNotesPermission)
+                <ul class="list-inline">
+                    @if ($viewOfficerNotesPermission)
+                        <li class="list-inline-item">
+                            <a href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">edit notes</a>
+                        </li>
+                    @endif
+                    @if ($viewPrioPermission)
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">edit prios</a>
+                        </li>
+                    @endif
+                </ul>
             @endif
         </div>
         <div class="col-12 pr-0 pl-0">

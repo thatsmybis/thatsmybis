@@ -277,7 +277,7 @@ class PrioController extends Controller
         $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raidGroup);
 
         request()->session()->flash('status', 'Successfully updated prios for ' . $modifiedCount . ' items in ' . $raidGroup->name . '.');
-        return redirect()->route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]);
+        return redirect()->route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'b' => 1]);
     }
 
     /**
@@ -332,6 +332,7 @@ class PrioController extends Controller
             'guildSlug' => $guild->slug,
             'item_id'   => $itemsWithExistingPrios->first()->item_id,
             'slug'      => slug($itemsWithExistingPrios->first()->name),
+            'b'         => 1,
         ]);
     }
 

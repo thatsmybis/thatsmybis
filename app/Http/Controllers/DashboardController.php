@@ -133,9 +133,13 @@ class DashboardController extends Controller
             $showWishlist = true;
         }
 
-        $characters = Cache::remember('roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden,
-            env('CACHE_ROSTER_SECONDS', 5),
-            function () use ($guild, $showOfficerNote, $showPrios, $showWishlist) {
+        $cacheKey = 'roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden;
+
+        if (request()->get('bustCache')) {
+            Cache::forget($cacheKey);
+        }
+
+        $characters = Cache::remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist) {
             return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, false);
         });
 

@@ -214,7 +214,7 @@ function getCharacterList(data, type, itemId) {
                 value="${ type == 'prio' ? character.pivot.order : '' }"
                 class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0 ${ character.pivot.received_at ? 'font-strikethrough' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
-                    title="${ character.raid_group_name ? character.raid_group_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.raid_count ? `(${ character.raid_count } raid${ character.raid_count > 1 ? 's' : '' } attended)` : `` } ${ character.discord_username ? '(' + character.discord_username + ')' : '' }"
+                    title="${ character.raid_group_name ? character.raid_group_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.raid_count ? `(${ character.raid_count } raid${ character.raid_count > 1 ? 's' : '' } attended)` : `` } ${ character.username ? '(' + character.username + ')' : '' }"
                     class="tag text-muted d-inline">
                     <span class="">${ type !== 'received' && character.pivot.order ? character.pivot.order : '' }</span>
                     <span class="small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
