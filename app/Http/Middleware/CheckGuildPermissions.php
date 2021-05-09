@@ -53,34 +53,35 @@ class CheckGuildPermissions
                             'user.id' => (int)$user->discord_id
                         ]);
                     } catch (Exception $e) {
-                        // Yeah, I know...
+                        // Fail silently
                         return null;
                     }
                 }
             );
 
-            if (!$discordMember && $user->id != $guild->user_id && !$isAdmin) { // Guild owner gets a pass
-                request()->session()->flash('status', 'That Discord server is either missing the ' . env('APP_NAME') . ' bot or we\'re unable to find you on it.');
-                return redirect()->route('home');
-            }
-
-            // Guild owner doesn't have to go through this process
-            // This ensures they never lock themselves out due to messing with roles
-            if ($user->id != $guild->user_id && !$isAdmin) {
-                if ($guild->getMemberRoleIds()) {
-                    // Check that the Discord user has one of the role(s) required to access this guild
-                    $matchingRoles = array_intersect($guild->getMemberRoleIds(), $discordMember->roles);
-
-                    if (count($matchingRoles) <= 0) {
-                        request()->session()->flash('status', 'Insufficient Discord role to access that guild.');
-                        return redirect()->route('home');
-                    }
+            // Don't do these checks if the member is trying to gquit...
+            if (!request()->routeIs('member.showGquit') && !request()->routeIs('member.submitGquit')) {
+                if (!$discordMember && $user->id != $guild->user_id && !$isAdmin) { // Guild owner gets a pass
+                    request()->session()->flash('status', 'That Discord server is either missing the ' . env('APP_NAME') . ' bot or we\'re unable to find you on it.');
+                    return redirect()->route('home');
                 }
 
-                // They're on the Discord and they have an appropriate role if they get this far
-            }
+                // Guild owner doesn't have to go through this process
+                // This ensures they never lock themselves out due to messing with roles
+                if ($user->id != $guild->user_id && !$isAdmin) {
+                    if ($guild->getMemberRoleIds()) {
+                        // Check that the Discord user has one of the role(s) required to access this guild
+                        $matchingRoles = array_intersect($guild->getMemberRoleIds(), $discordMember->roles);
 
-            if (!request()->routeIs('member.showGquit') && !request()->routeIs('member.submitGquit')) {
+                        if (count($matchingRoles) <= 0) {
+                            request()->session()->flash('status', 'Insufficient Discord role to access that guild.');
+                            return redirect()->route('home');
+                        }
+                    }
+
+                    // They're on the Discord and they have an appropriate role if they get this far
+                }
+
                 // Check if the guild is disabled
                 if ($guild->disabled_at && $user->id != $guild->user_id && !$isAdmin) {
                     $message = '';
