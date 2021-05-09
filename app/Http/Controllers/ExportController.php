@@ -133,7 +133,7 @@ class ExportController extends Controller {
                             WHEN items.quality = 4 THEN 'epic'
                             WHEN items.quality = 5 THEN 'legendary'
                             WHEN items.quality = 6 THEN 'artifact'
-                            WHEN items.quality = 7 THEN 'hierloom'
+                            WHEN items.quality = 7 THEN 'heirloom'
                         END AS 'item_quality',
                         -- items.quality AS 'item_quality'
                         items.item_id AS 'item_id',

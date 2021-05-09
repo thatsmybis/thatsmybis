@@ -57,10 +57,16 @@
                                             </a>
                                         </li>
                                     @endforeach
-                                    <li class="list-inline-item bg-tag rounded pt-0 pl-1 pb-1 pr-1">
+                                    <li class="list-inline-item pt-0 pl-1 pb-1 pr-1">
                                         <a href="{{ route('character.showCreate', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}">
                                             <span class="fas fa-plus"></span>
                                             create character
+                                        </a>
+                                    </li>
+                                    <li class="list-inline-item pt-0 pl-1 pb-1 pr-1">
+                                        <a href="{{ route('member.showGquit', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}"
+                                            class="text-danger font-weight-light">
+                                            /gquit
                                         </a>
                                     </li>
                                 </ul>
@@ -87,13 +93,20 @@
                                 </h3>
                                 <ul class="list-inline">
                                     @if ($member->guild->disabled_at)
-                                        <li>
+                                        <li class="list-inline-item">
                                             <span class="small text-muted">guild disabled</span>
                                         </li>
                                     @endif
                                     @if ($member->inactive_at || $member->banned_at)
-                                        <li>
+                                        <li class="list-inline-item">
                                             <span class="small text-muted">your membership has been disabled</span>
+                                        </li>
+                                    @else
+                                        <li class="list-inline-item pl-1">
+                                            <a href="{{ route('member.showGquit', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}"
+                                                class="text-danger font-weight-light">
+                                                /gquit
+                                            </a>
                                         </li>
                                     @endif
                                 </ul>
