@@ -38,6 +38,20 @@
                             <p>
                                 All of the loot in your guild, plus all of your guild's notes and tiers for items.
                             </p>
+                            <ul class="text-warning mb-2">
+                                <li class="no-bullet font-weight-bold">
+                                    Recently changed:
+                                </li>
+                                <li>
+                                    Added character_note (after character_inactive_at).
+                                </li>
+                                <li>
+                                    Added is_offspec (after item_id).
+                                </li>
+                                <li>
+                                    Renamed raid_name to raid_group_name.
+                                </li>
+                            </ul>
                             <p>
                                 Fields exported:
                             </p>
