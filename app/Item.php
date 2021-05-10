@@ -17,6 +17,7 @@ class Item extends Model
      */
     protected $fillable = [
         'expansion_id',
+        'parent_id',
         'name',
         'source',
         'profession',
