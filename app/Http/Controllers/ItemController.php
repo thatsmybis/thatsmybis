@@ -513,7 +513,7 @@ class ItemController extends Controller
         }
 
         $item = Cache::remember($cacheKey, env('CACHE_ITEM_SECONDS', 5), function () use ($id, $guild, $showPrios, $showWishlist) {
-            $item = Item::where([
+            $query = Item::where([
                     ['item_id', $id],
                     ['expansion_id', $guild->expansion_id],
                 ])
@@ -535,7 +535,7 @@ class ItemController extends Controller
                 ]);
 
             if ($showPrios) {
-                $item = $item->with([
+                $query = $query->with([
 
                     ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild) {
                         return $query
@@ -546,26 +546,33 @@ class ItemController extends Controller
             }
 
             if ($showWishlist) {
-                $item = $item->with([
-
-                    ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
-                        return $query
-                            ->where([
-                                ['characters.guild_id', $guild->id],
-                                ['character_items.is_received', 0],
-                            ])
-                            ->groupBy(['character_items.character_id'])
-                            ->with([
-                                'prios',
-                                'received',
-                                'recipes',
-                                'wishlist',
-                            ]);
-                    },
-                ]);
+                $query = $this->addWishlistQuery($query, $guild);
             }
 
-            return $item->firstOrFail();
+            $query = $query->with([
+                'childItems' => function ($query) use ($guild, $showWishlist) {
+                    return $this->addWishlistQuery($query, $guild);
+                },
+                'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                    return $query
+                        ->where(['characters.guild_id' => $guild->id]);
+                },
+            ]);
+
+            $item = $query->firstOrFail();
+
+            if ($showWishlist) {
+                // Merge child items' wishlist characters into item's wishlist characters
+                foreach ($item->childItems as $childItem) {
+                    if ($guild->is_attendance_hidden) {
+                        $item->wishlistCharacters = $item->wishlistCharacters->merge($childItem->wishlistCharacters);
+                    } else {
+                        $item->wishlistCharactersWithAttendance = $item->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance);
+                    }
+                }
+            }
+
+            return $item;
         });
 
         $itemSlug = slug($item->name);
@@ -978,6 +985,25 @@ class ItemController extends Controller
         request()->session()->flash('status', "Successfully " . $noticeVerb . " " . $item->name ."'s note.");
 
         return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name), 'b' => 1]);
+    }
+
+    private function addWishlistQuery($query, $guild) {
+        return $query->with([
+            ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
+                return $query
+                    ->where([
+                        ['characters.guild_id', $guild->id],
+                        ['character_items.is_received', 0],
+                    ])
+                    ->groupBy(['character_items.character_id'])
+                    ->with([
+                        'prios',
+                        'received',
+                        'recipes',
+                        'wishlist',
+                    ]);
+            },
+        ]);
     }
 
     public static function getItemAverageTiers($instance, $expansionId) {

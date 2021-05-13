@@ -48,6 +48,10 @@ class Item extends Model
     const TYPE_RECIPE   = 'recipe';
     const TYPE_WISHLIST = 'wishlist';
 
+    public function childItems() {
+        return $this->hasMany(Item::class, 'parent_id', 'id')->orderBy('items.name');
+    }
+
     public function characters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->select([
@@ -203,13 +207,13 @@ class Item extends Model
     public function wishlistCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['character_items.type' => self::TYPE_WISHLIST])
+            ->whereNull('characters.inactive_at')
             ->select([
                 'characters.*',
                 'raid_groups.name AS raid_group_name',
                 'raid_group_roles.color AS raid_group_color',
                 'added_by_members.username AS added_by_username',
             ])
-            ->whereNull('characters.inactive_at')
             ->leftJoin('raid_groups', function ($join) {
                 $join->on('raid_groups.id', 'characters.raid_group_id');
             })
