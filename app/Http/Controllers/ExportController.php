@@ -163,12 +163,22 @@ class ExportController extends Controller {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if ($lootType == Item::TYPE_WISHLIST && $guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
+        $showPrios = true;
+        if ($guild->is_prio_private && !$currentMember->hasPermission('view.prios')) {
+            $showPrios = false;
+        }
+
+        $showWishlist = true;
+        if ($guild->is_wishlist_private && !$currentMember->hasPermission('view.wishlists')) {
+            $showWishlist = false;
+        }
+
+        if ($lootType == Item::TYPE_WISHLIST && !$showWishlist) {
             request()->session()->flash('status', 'You don\'t have permissions to view wishlists.');
             return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
         }
 
-        if ($lootType == Item::TYPE_PRIO && $guild->is_prio_private && !$currentMember->hasPermission('edit.prios')) {
+        if ($lootType == Item::TYPE_PRIO && !$showPrios) {
             request()->session()->flash('status', 'You don\'t have permissions to view prios.');
             return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
         }
@@ -180,8 +190,8 @@ class ExportController extends Controller {
 
         // $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
 
-        $csv = Cache::remember("export:{$lootType}:guild:{$guild->id}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($lootType, $guild) {
-            $rows = DB::select(DB::raw($this->getLootBaseSql($lootType, $guild)));
+        $csv = Cache::remember("export:{$lootType}:guild:{$guild->id}:showPrios:{$showPrios}:showWishlist:{$showWishlist}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($lootType, $guild, $showPrios, $showWishlist) {
+            $rows = DB::select(DB::raw($this->getLootBaseSql($lootType, $guild, $showPrios, $showWishlist)));
 
             if ($lootType == 'all') {
                 $rows = array_merge(
@@ -295,11 +305,28 @@ class ExportController extends Controller {
      *
      * @var string    $lootType The type of loot to fetch.
      * @var App/Guild $guild    The guild it belongs to.
+     * @var bool      $showPrios
+     * @var bool      $showWishlist
      *
      * @return The thing to present to the user.
      */
-    private function getLootBaseSql($lootType, $guild) {
+    private function getLootBaseSql($lootType, $guild, $showPrios = true, $showWishlist = true) {
         $tierLabelField = $this->getTierLabelField($guild);
+
+        $lootTypeFragment = "";
+
+        if (!$showPrios) {
+            $lootTypeFragment .= " ci.type != 'prio' AND";
+        }
+
+        if (!$showWishlist) {
+            $lootTypeFragment .= " ci.type != 'wishlist' AND";
+        }
+
+        if ($lootType != "all") {
+            " ci.type = '{$lootType}' AND";
+        }
+
         return
             "SELECT
                 ci.type        AS 'type',
@@ -330,7 +357,7 @@ class ExportController extends Controller {
                 LEFT JOIN raid_groups rg ON rg.id = c.raid_group_id
                 JOIN items i             ON i.item_id = ci.item_id
                 LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
-            WHERE " . ($lootType == "all" ? "" : "ci.type = '{$lootType}' AND") . " c.guild_id = {$guild->id}
+            WHERE " . $lootTypeFragment . " c.guild_id = {$guild->id}
                 AND i.expansion_id = {$guild->expansion_id}
             ORDER BY ci.type, rg.name, c.name, ci.`order`;";
     }
