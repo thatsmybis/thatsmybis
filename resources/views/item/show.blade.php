@@ -232,6 +232,22 @@
                             @endif
                         </li>
                     @endif
+                    @if ($item->childItems)
+                        <li class="list-inline-item bg-lightest rounded p-3 mt-3 align-top">
+                            <ul class="no-indent no-bullet">
+                                <li class="">
+                                    <h2 class="font-weight-bold mb-3">
+                                        Associated Items
+                                    </h2>
+                                </li>
+                                @foreach ($item->childItems as $childItem)
+                                    <li class="">
+                                        @include('partials/item', ['item' => $childItem, 'wowheadLink' => false])
+                                    </li>
+                                @endforeach
+                            </ul>
+                        </li>
+                    @endif
                 @endif
             </ul>
         </div>
