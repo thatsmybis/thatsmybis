@@ -204,7 +204,7 @@ function getCharacterList(data, type, itemId) {
             lastRaidGroupId = character.pivot.raid_group_id;
             characters += `
                 <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small">
-                    ${ raidGroups.find(raidGroup => raidGroup.id === character.pivot.raid_group_id).name }
+                    ${ raidGroups.length && raidGroups.find(raidGroup => raidGroup.id === character.pivot.raid_group_id).name }
                 </li>
             `;
         }
