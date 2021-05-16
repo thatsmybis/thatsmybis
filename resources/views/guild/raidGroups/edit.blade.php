@@ -56,6 +56,7 @@
                                         Discord Role
                                     </label>
                                     <small class="text-muted">
+                                        Only used for color coding
                                     </small>
 
                                     <div class="form-group">
