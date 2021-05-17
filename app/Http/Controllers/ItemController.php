@@ -83,8 +83,23 @@ class ItemController extends Controller
             Cache::forget($cacheKey);
         }
 
+        // $items = Item::
+        //         leftJoin('item_item_sources', 'item_item_sources.item_id', '=', 'items.item_id')
+        //         // ->leftJoin('item_sources', 'item_sources.id', '=', 'item_item_sources.item_source_id')
+        //         // ->leftJoin('guild_items', function ($join) use ($guild) {
+        //         //     $join->on('guild_items.item_id', 'items.item_id')
+        //         //         ->where('guild_items.guild_id', $guild->id);
+        //         // })
+        //         // ->whereNull('items.parent_id')
+        //         // ->orderBy('item_sources.order')
+        //         // ->orderBy('items.name')
+        //         ->with('childItems')
+        //         ->where('items.item_id', 30242);
+        // dd($items->first());
+
         $items = Cache::remember($cacheKey, env('CACHE_INSTANCE_ITEMS_SECONDS', 5), function () use ($guild, $instance, $currentMember, $characterFields, $showPrios, $showWishlist) {
             $query = Item::select([
+                    'items.id',
                     'items.item_id',
                     'items.name',
                     'items.quality',
@@ -103,6 +118,7 @@ class ItemController extends Controller
                     ['item_sources.instance_id', $instance->id],
                     ['items.expansion_id', $guild->expansion_id],
                 ])
+                ->whereNull('items.parent_id')
                 ->orderBy('item_sources.order')
                 ->orderBy('items.name');
 
@@ -142,8 +158,24 @@ class ItemController extends Controller
                                     ['character_items.is_received', 0],
                                 ])
                             ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                    },
+                    'childItems' => function ($query) use ($guild) {
+                        return $query->with([
+                            ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
+                                return $query
+                                    ->where([
+                                        ['characters.guild_id', $guild->id],
+                                    ])
+                                    ->groupBy(['character_items.character_id']);
+                            },
+                        ]);
                     }
                 ]);
+
+                $query = $query->with([
+                    ]);
+            } else {
+                $query = $query->with(['childItems']);
             }
 
             $query = $query->with([
@@ -152,7 +184,51 @@ class ItemController extends Controller
                     },
                 ]);
 
-            return $query->get();
+            $items = $query->get();
+dd(
+    $items->where('item_id', 30245)->first()->childItems->where('item_id', 30172)->first()->toArray(),
+    $items->where('item_id', 30242)->first()->childItems->where('item_id', 30190)->first()->toArray(),
+    // $items->where('item_id', 30242)->first()->childItems()->with('wishlistCharacters')->get()->where('item_id', 30190)->first()->toArray()
+);
+            if ($showWishlist) {
+                // Merge items' child items' wishlist characters into parent items' wishlist characters
+                foreach ($items->filter(function ($item, $key) { return $item->childItems->count(); }) as $item) {
+                    if ($guild->is_attendance_hidden) {
+                        foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
+                            $items->where('id', $item->id)->first()->wishlistCharacters = $items->where('id', $item->id)->first()->wishlistCharacters->merge($childItem->wishlistCharacters);
+                        }
+                    } else {
+                        foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }) as $childItem) {
+                            // dd(
+                            //     $childItem,
+                            // //     $items->where('id', $item->id)->first(),
+                            //     // $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance),
+                            //     $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance
+                            // );
+                            // TODO: this is adding a new attribute rather than
+                            $items->where('id', $item->id)->first()->setRelation('wishlistCharactersWithAttendance', $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance));
+                            // dd(
+                            //     $items->where('id', $item->id)->first()
+                            // );
+                        }
+                    }
+                    // dd($items->where('id', $item->id)->first()->wishlistCharactersWithAttendance);
+                    // if ($guild->is_attendance_hidden) {
+                    //     $item->wishlistCharacters = $item->wishlistCharacters->merge($childItem->wishlistCharacters);
+                    // } else {
+                    //     $item->wishlistCharactersWithAttendance = $item->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance);
+                    // }
+                }
+            }
+            // dd($items->whereIn('item_id', [30245])->toArray());
+            dd($items->whereIn('item_id', [30242])->toArray());
+            // dd(
+            //     $items->where('item_id', 30245)->first(),
+            //     // $childItem,
+            //     // $items->where('item_id', 30172)->first(),
+            //     // $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance)
+            // );
+            return $items;
         });
 
         return view('item.list', [
@@ -532,6 +608,7 @@ class ItemController extends Controller
                         return $query
                             ->where(['characters.guild_id' => $guild->id]);
                     },
+                    'parentItem',
                 ]);
 
             if ($showPrios) {
@@ -547,12 +624,15 @@ class ItemController extends Controller
 
             if ($showWishlist) {
                 $query = $this->addWishlistQuery($query, $guild);
+                $query = $query->with([
+                'childItems' => function ($query) use ($guild) {
+                    return $this->addWishlistQuery($query, $guild);
+                }]);
+            } else {
+                $query = $query->with(['childItems']);
             }
 
             $query = $query->with([
-                'childItems' => function ($query) use ($guild, $showWishlist) {
-                    return $this->addWishlistQuery($query, $guild);
-                },
                 'receivedAndRecipeCharacters' => function ($query) use($guild) {
                     return $query
                         ->where(['characters.guild_id' => $guild->id]);
