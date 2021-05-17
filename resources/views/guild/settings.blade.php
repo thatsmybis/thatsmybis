@@ -175,7 +175,7 @@
                                         <label>
                                             <input type="checkbox" name="show_message" value="1" class="" autocomplete="off"
                                                 {{ old('message') && old('message') == 1 ? 'checked' : ($guild->message ? 'checked' : '') }}>
-                                                Show a guild Message of the Day
+                                                Show Message of the Day and/or Rules
                                         </label>
                                     </div>
                                 </div>

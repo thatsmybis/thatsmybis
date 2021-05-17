@@ -18,7 +18,7 @@
                             @foreach ($guild->allRaidGroups as $raidGroup)
                                 <li class="p-3 mb-3 rounded">
                                     <span class="role-circle" style="{{ $raidGroup->role ? 'background-color:' . $raidGroup->role->getColor() : '' }}" title="{{ $raidGroup->role ? $raidGroup->role->getColor() : ''}}"></span>
-                                    <span class="font-weight-bold text-danger">{{ $raidGroup->disabled_at ? 'DISABLED' : '' }}</span>
+                                    <span class="font-weight-bold text-danger">{{ $raidGroup->disabled_at ? 'ARCHIVED' : '' }}</span>
                                     <span title="{{ $raidGroup->slug }}">{{ $raidGroup->name }}</span>
                                     <small class="text-muted">
                                         @if ($raidGroup->role)
@@ -45,7 +45,7 @@
                                                 <button type="submit"
                                                     class="btn btn-link text-{{ $raidGroup->disabled_at ? 'success' : 'danger' }} p-0 m-0 ml-3"
                                                     title="{{ $raidGroup->disabled_at ? 'Raid Group is shown in dropdowns again' : 'Raid Group is no longer shown in dropdowns. Characters already assigned to this raid group will remain assigned to it.' }}">
-                                                    <span class="fas fa-fw fa-{{ $raidGroup->disabled_at ? 'trash-undo' : 'trash' }}"></span>{{ $raidGroup->disabled_at ? 'enable' : 'disable' }}
+                                                    <span class="fas fa-fw fa-{{ $raidGroup->disabled_at ? 'trash-undo' : 'trash' }}"></span>{{ $raidGroup->disabled_at ? 'unarchive' : 'archive' }}
                                                 </button>
                                             </form>
                                         </li>

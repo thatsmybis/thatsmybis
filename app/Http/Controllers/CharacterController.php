@@ -521,9 +521,9 @@ class CharacterController extends Controller
 
         if (array_key_exists('inactive_at', $updateValues)) {
             if ($updateValues['inactive_at']) {
-                $auditMessage .= ' (made inactive)';
+                $auditMessage .= ' (archived)';
             } else {
-                $auditMessage .= ' (made active)';
+                $auditMessage .= ' (unarchived)';
             }
         }
 

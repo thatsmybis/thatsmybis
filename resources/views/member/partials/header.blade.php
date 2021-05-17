@@ -28,7 +28,7 @@
             @if ($member->inactive_at)
                 <li class="list-inline-item">
                     <small>
-                        <span class="font-weight-bold text-danger">INACTIVE</span>
+                        <span class="font-weight-bold text-danger">ARCHIVED</span>
                     </small>
                 </li>
             @endif

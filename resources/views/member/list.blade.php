@@ -105,7 +105,7 @@
                             <tr>
                                 <td>
                                     <span class="font-weight-bold text-muted">
-                                        Inactive Members
+                                        Archived Members
                                     </span>
                                     <br>
                                     <span id="showInactiveMembers" class="small font-italic cursor-pointer">
@@ -115,7 +115,7 @@
                                 <td>
                                     <ul id="inactiveMembers" class="list-inline" style="display:none;">
                                         @foreach($guild->allMembers->whereNotNull('inactive_at') as $member)
-                                            @include('member/partials/listMember')
+                                            @include('member/partials/listMember', ['attendancePercentage' => null, 'raidCount' => null])
                                         @endforeach
                                     </ul>
                                 </td>
