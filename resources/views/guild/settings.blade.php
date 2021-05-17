@@ -175,7 +175,7 @@
                                         <label>
                                             <input type="checkbox" name="show_message" value="1" class="" autocomplete="off"
                                                 {{ old('message') && old('message') == 1 ? 'checked' : ($guild->message ? 'checked' : '') }}>
-                                                Show a guild Message of the Day
+                                                Show Message of the Day and/or Rules
                                         </label>
                                     </div>
                                 </div>
@@ -502,6 +502,8 @@
                                     Members
                                     <br>
                                     <small class="text-muted">
+                                        If this is empty, anyone on the Discord server can join this guild
+                                        <br>
                                         Discord users with <strong>any</strong> of these roles are allowed to join
                                         <br>
                                         Guild Masters, Officers, and Raid Leaders must also have at least one of these roles

@@ -247,7 +247,7 @@ class MemberController extends Controller
         $currentMember->update($updateValues);
 
         AuditLog::create([
-            'description'     => $currentMember->username . ' gquit. Their profile and characters were automatically flagged as inactive and were hidden.',
+            'description'     => $currentMember->username . ' gquit. Their profile and characters were automatically flagged as archived and were hidden.',
             'member_id'       => $currentMember->id,
             'guild_id'        => $guild->id,
             'other_member_id' => null,
@@ -381,7 +381,7 @@ class MemberController extends Controller
                     }
                 }
 
-                $auditMessage .= ' (made inactive, including their characters)';
+                $auditMessage .= ' (archived, including their characters)';
             } else {
                 // Make characters active
                 foreach ($member->characters as $character) {
@@ -391,7 +391,7 @@ class MemberController extends Controller
                     }
                 }
 
-                $auditMessage .= ' (made active, including their characters)';
+                $auditMessage .= ' (unarchived, including their characters)';
             }
         }
 

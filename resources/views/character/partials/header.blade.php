@@ -49,7 +49,7 @@
         @if ($character->inactive_at || $character->level || $character->race || $character->spec)
             <li>
                 <small>
-                    <span class="font-weight-bold text-danger">{{ $character->inactive_at ? 'INACTIVE' : '' }}</span>
+                    <span class="font-weight-bold text-danger">{{ $character->inactive_at ? 'ARCHIVED' : '' }}</span>
                     {{ $character->level ? $character->level : '' }}
                     {{ $character->race  ? $character->race : '' }}
                     {{ $character->spec  ? $character->spec : '' }}

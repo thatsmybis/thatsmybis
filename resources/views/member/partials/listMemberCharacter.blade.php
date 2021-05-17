@@ -50,7 +50,7 @@
             </span>
             @if ($character->inactive_at)
                 <span class="dropdown-item disabled font-weight-bold text-danger">
-                    INACTIVE
+                    ARCHIVED
                 </span>
             @endif
         </div>

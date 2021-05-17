@@ -57,7 +57,7 @@
                                     You <strong>will not</strong> be able to rejoin without help
                                 </li>
                                 <li class="">
-                                    To rejoin, an officer will need to unflag your profile as inactive
+                                    To rejoin, an officer will need to unflag your profile as archived
                                 </li>
                                 <li class="">
                                     This <strong>will not</strong> affect your Discord or ingame status with
