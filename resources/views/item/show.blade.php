@@ -232,7 +232,7 @@
                             @endif
                         </li>
                     @endif
-                    @if ($item->childItems)
+                    @if ($item->childItems->count() || $item->parentItem)
                         <li class="list-inline-item bg-lightest rounded p-3 mt-3 align-top">
                             <ul class="no-indent no-bullet">
                                 <li class="">
@@ -240,6 +240,11 @@
                                         Associated Items
                                     </h2>
                                 </li>
+                                @if ($item->parentItem)
+                                    <li class="">
+                                        @include('partials/item', ['item' => $item->parentItem, 'wowheadLink' => false])
+                                    </li>
+                                @endif
                                 @foreach ($item->childItems as $childItem)
                                     <li class="">
                                         @include('partials/item', ['item' => $childItem, 'wowheadLink' => false])
