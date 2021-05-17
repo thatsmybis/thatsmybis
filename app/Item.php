@@ -90,6 +90,10 @@ class Item extends Model
         return $this->belongsToMany(ItemSource::class, 'item_item_sources', 'item_id', 'item_source_id');
     }
 
+    public function parentItem() {
+        return $this->belongsTo(Item::class, 'parent_id', 'id')->orderBy('items.name');
+    }
+
     public function priodCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['character_items.type' => self::TYPE_PRIO])
