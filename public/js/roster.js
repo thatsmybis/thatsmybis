@@ -242,7 +242,7 @@ function createTable() {
                 "title"  : "Raid Group",
                 "data"   : "raid_group",
                 "render" : function (data, type, row) {
-                    return (row.raid_group_name ? row.raid_group_name : null);
+                    return (row.raid_group_id ? row.raid_group_id : null);
                 },
                 "visible" : false,
             },
