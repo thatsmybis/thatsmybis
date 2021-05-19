@@ -7,7 +7,7 @@
             </label>
             <select id="raid_group_filter" class="form-control dark">
                 <option value="">—</option>
-                @foreach ($raidGroups as $raidGroup)
+                @foreach ($raidGroups->whereNull('disabled_at') as $raidGroup)
                     <option value="{{ $raidGroup->name }}" style="color:{{ $raidGroup->getColor() }};">
                         {{ $raidGroup->name }}
                     </option>
