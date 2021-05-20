@@ -387,12 +387,19 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
 
         if (type == 'prio' && item.pivot.raid_group_id && item.pivot.raid_group_id != lastRaidGroupId) {
             lastRaidGroupId = item.pivot.raid_group_id;
+            let raidGroupName = '';
+            if (raidGroups.length) {
+                let raidGroup = raidGroups.find(raidGroup => raidGroup.id === item.pivot.raid_group_id);
+                 if (raidGroup) {
+                    raidGroupName = raidGroup.name;
+                }
+            }
             items += `
                 <li data-raid-group-id="" class="${ clipItem ? 'js-clipped-item' : '' } js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small"
                     style="${ clipItem ? 'display:none;' : '' }"
                     data-type="${ type }"
                     data-id="${ characterId }">
-                    ${ raidGroups.length > 0 ? raidGroups.find(val => val.id === item.pivot.raid_group_id).name : '' }
+                    ${ raidGroupName }
                 </li>
             `;
         }

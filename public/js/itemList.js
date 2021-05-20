@@ -202,9 +202,16 @@ function getCharacterList(data, type, itemId) {
     $.each(data, function (index, character) {
         if (type == 'prio' && character.pivot.raid_group_id && character.pivot.raid_group_id != lastRaidGroupId) {
             lastRaidGroupId = character.pivot.raid_group_id;
+            let raidGroupName = '';
+            if (raidGroups.length) {
+                let raidGroup = raidGroups.find(raidGroup => raidGroup.id === character.pivot.raid_group_id);
+                 if (raidGroup) {
+                    raidGroupName = raidGroup.name;
+                }
+            }
             characters += `
                 <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small">
-                    ${ raidGroups.length && raidGroups.find(raidGroup => raidGroup.id === character.pivot.raid_group_id).name }
+                    ${ raidGroupName }
                 </li>
             `;
         }
