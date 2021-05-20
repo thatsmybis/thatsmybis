@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{AuditLog, Character, Guild, Instance, Item, RaidGroup};
+use App\Http\Controllers\ItemController;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -81,6 +82,7 @@ class PrioController extends Controller
             ->firstOrFail();
 
         $items = Item::select([
+                'items.id',
                 'items.item_id',
                 'items.name',
                 'items.quality',
@@ -103,6 +105,7 @@ class PrioController extends Controller
                 ['item_sources.instance_id', $instance->id],
                 ['items.expansion_id', $guild->expansion_id],
             ])
+            ->whereNull('items.parent_id')
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
             // This is problematic because the notes entered may differ, but we can only take one.
             ->groupBy('items.item_id')
@@ -130,8 +133,23 @@ class PrioController extends Controller
                         ])
                         ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
+                'childItems' => function ($query) use ($guild, $raidGroup) {
+                    return $query->with([
+                        ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
+                            return $query
+                                ->where([
+                                    'characters.guild_id'      => $guild->id,
+                                    'characters.raid_group_id' => $raidGroup->id,
+                                    'is_received'              => 0,
+                                ])
+                            ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        },
+                    ]);
+                },
             ])
             ->get();
+
+        $items = ItemController::mergeTokenWishlists($items, $guild);
 
         return view('guild.prios.massInput', [
             'currentMember' => $currentMember,
@@ -161,7 +179,8 @@ class PrioController extends Controller
 
         $raidGroup = RaidGroup::where(['guild_id' => $guild->id, 'id' => $raidGroupId])->firstOrFail();
 
-        $item = Item::select([
+        $items = Item::select([
+                'items.id',
                 'items.item_id',
                 'items.name',
                 'items.quality',
@@ -184,6 +203,7 @@ class PrioController extends Controller
                 ['items.item_id', $itemId],
                 ['items.expansion_id', $guild->expansion_id],
             ])
+            ->whereNull('items.parent_id')
             ->groupBy('items.item_id')
             ->with([
                 'priodCharacters' => function ($query) use ($raidGroup) {
@@ -208,8 +228,25 @@ class PrioController extends Controller
                         ])
                         ->groupBy(['character_items.character_id']);
                 },
+                'childItems' => function ($query) use ($guild, $raidGroup) {
+                    return $query->with([
+                        ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
+                            return $query
+                                ->where([
+                                    'characters.guild_id'      => $guild->id,
+                                    'characters.raid_group_id' => $raidGroup->id,
+                                    'is_received'              => 0,
+                                ])
+                            ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        },
+                    ]);
+                },
             ])
-            ->firstOrFail();
+            ->get();
+
+        $items = ItemController::mergeTokenWishlists($items, $guild);
+
+        $item = $items->first();
 
         $wishlistCharacters = null;
         if ($guild->is_attendance_hidden && $item->relationLoaded('wishlistCharacters')) {
