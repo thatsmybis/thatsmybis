@@ -157,9 +157,6 @@ class ItemController extends Controller
                         ]);
                     }
                 ]);
-
-                $query = $query->with([
-                    ]);
             } else {
                 $query = $query->with(['childItems']);
             }
@@ -173,18 +170,7 @@ class ItemController extends Controller
             $items = $query->get();
 
             if ($showWishlist) {
-                // Merge items' child items' wishlist characters into parent items' wishlist characters
-                foreach ($items->filter(function ($item, $key) { return $item->childItems->count(); }) as $item) {
-                    if ($guild->is_attendance_hidden) {
-                        foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
-                            $items->where('id', $item->id)->first()->wishlistCharacters = $items->where('id', $item->id)->first()->wishlistCharacters->merge($childItem->wishlistCharacters);
-                        }
-                    } else {
-                        foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }) as $childItem) {
-                            $items->where('id', $item->id)->first()->setRelation('wishlistCharactersWithAttendance', $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance));
-                        }
-                    }
-                }
+                $items = $this->mergeTokenWishlists($items, $guild);
             }
 
             return $items;
@@ -247,6 +233,7 @@ class ItemController extends Controller
                 ['item_sources.instance_id', $instance->id],
                 ['items.expansion_id', $guild->expansion_id],
             ])
+            ->whereNull('items.parent_id')
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
             // This is problematic because the notes entered may differ, but we can only take one.
             ->groupBy('items.item_id')
@@ -598,20 +585,13 @@ class ItemController extends Controller
                 },
             ]);
 
-            $item = $query->firstOrFail();
+            $items = $query->get();
 
             if ($showWishlist) {
-                // Merge child items' wishlist characters into item's wishlist characters
-                foreach ($item->childItems as $childItem) {
-                    if ($guild->is_attendance_hidden) {
-                        $item->wishlistCharacters = $item->wishlistCharacters->merge($childItem->wishlistCharacters);
-                    } else {
-                        $item->wishlistCharactersWithAttendance = $item->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance);
-                    }
-                }
+                $items = $this->mergeTokenWishlists($items, $guild);
             }
 
-            return $item;
+            return $items->first();
         });
 
         $itemSlug = slug($item->name);
@@ -1103,5 +1083,26 @@ class ItemController extends Controller
         }
 
         return $json;
+    }
+
+    /**
+     * Take an array of items fetched fresh from the database. Items should have with('childItems', 'childItems.wishlists').
+     * Merge all of the childItems' wishlists into their parents.
+     * This causes tokens to show anyone who wishlisted the items they get turned in for... provided the DB has those relationships set up/inserted.
+     */
+    public static function mergeTokenWishlists($items, $guild) {
+        // Merge items' child items' wishlist characters into parent items' wishlist characters
+        foreach ($items->filter(function ($item, $key) { return $item->childItems->count(); }) as $item) {
+            if ($guild->is_attendance_hidden) {
+                foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
+                    $items->where('id', $item->id)->first()->wishlistCharacters = $items->where('id', $item->id)->first()->wishlistCharacters->merge($childItem->wishlistCharacters);
+                }
+            } else {
+                foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }) as $childItem) {
+                    $items->where('id', $item->id)->first()->setRelation('wishlistCharactersWithAttendance', $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance));
+                }
+            }
+        }
+        return $items;
     }
 }
