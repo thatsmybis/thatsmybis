@@ -114,17 +114,19 @@ class PrioController extends Controller
                         ->where('character_items.raid_group_id', $raidGroup->id)
                         ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
-                'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                'receivedAndRecipeCharacters' => function ($query) use($guild, $raidGroup) {
                     return $query
                         ->where([
-                            'characters.guild_id' => $guild->id,
+                            'characters.guild_id'      => $guild->id,
+                            'characters.raid_group_id' => $raidGroup->id,
                         ]);
                 },
-                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
+                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
                     return $query
                         ->where([
-                            'characters.guild_id' => $guild->id,
-                            'is_received'         => 0,
+                            'characters.guild_id'      => $guild->id,
+                            'characters.raid_group_id' => $raidGroup->id,
+                            'is_received'              => 0,
                         ])
                         ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
@@ -189,18 +191,20 @@ class PrioController extends Controller
                         ->where('character_items.raid_group_id', $raidGroup->id)
                         ->groupBy(['character_items.character_id']);
                 },
-                'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                'receivedAndRecipeCharacters' => function ($query) use($guild, $raidGroup) {
                     return $query
                         ->where([
-                            'characters.guild_id' => $guild->id,
+                            'characters.guild_id'      => $guild->id,
+                            'characters.raid_group_id' => $raidGroup->id,
                         ])
                         ->groupBy(['character_items.character_id']);
                 },
-                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
+                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
                     return $query
                         ->where([
-                            'characters.guild_id' => $guild->id,
-                            'is_received'         => 0,
+                            'characters.guild_id'      => $guild->id,
+                            'characters.raid_group_id' => $raidGroup->id,
+                            'is_received'              => 0,
                         ])
                         ->groupBy(['character_items.character_id']);
                 },
