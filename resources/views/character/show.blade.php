@@ -99,7 +99,7 @@
                                 @php
                                 $lastInstanceId = null;
                                 @endphp
-                                @foreach ($character->wishlist->sortByDesc('instance_order')->sortBy('order') as $item)
+                                @foreach ($character->wishlist->sortBy('order')->sortByDesc('instance_order') as $item)
                                     @if ($item->instance_id != $lastInstanceId)
                                         <li class="no-bullet no-indent {{ !$loop->first ? 'mt-3' : '' }}">
                                             {{ $item->instance_name }}
