@@ -263,6 +263,7 @@
                         <div class="form-group">
                             <label for="max_wishlist_items" class="">
                                 Max Wishlist Items
+                                <small class="text-muted">existing wishlists will need to be resubmitted</small>
                             </label>
                             <input name="max_wishlist_items" min="0" max="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" value="{{ old('max_wishlist_items') ? old('max_wishlist_items') : $guild->max_wishlist_items }}" />
                         </div>
