@@ -318,6 +318,7 @@ class GuildController extends Controller
             'is_wishlist_locked'        => 'nullable|boolean',
             'is_prio_autopurged'        => 'nullable|boolean',
             'is_wishlist_autopurged'    => 'nullable|boolean',
+            'max_wishlist_items'        => 'nullable|integer|min:0|max:50',
             'do_sort_items_by_instance' => 'nullable|boolean',
             'is_attendance_hidden'      => 'nullable|boolean',
             'attendance_decay_days'     => 'nullable|integer|min:1|max:730',
@@ -341,6 +342,7 @@ class GuildController extends Controller
         $updateValues['is_wishlist_locked']        = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
         $updateValues['is_prio_autopurged']        = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
         $updateValues['is_wishlist_autopurged']    = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
+        $updateValues['max_wishlist_items']        = request()->input('max_wishlist_items');
         $updateValues['do_sort_items_by_instance'] = request()->input('do_sort_items_by_instance') == 1 ? 1 : 0;
         $updateValues['is_attendance_hidden']      = request()->input('is_attendance_hidden') == 1 ? 1 : 0;
         $updateValues['attendance_decay_days']     = request()->input('attendance_decay_days') ? request()->input('attendance_decay_days') : 36500;

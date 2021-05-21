@@ -269,7 +269,7 @@ class CharacterController extends Controller
 
             'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
             'maxRecipes'       => self::MAX_RECIPES,
-            'maxWishlistItems' => self::MAX_WISHLIST_ITEMS,
+            'maxWishlistItems' => $guild->max_wishlist_items ? $guild->max_wishlist_items : self::MAX_WISHLIST_ITEMS,
         ]);
     }
 
@@ -620,17 +620,20 @@ class CharacterController extends Controller
 
         if (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked)) {
             if (request()->input('wishlist')) {
-                $this->syncItems($character->wishlist, request()->input('wishlist'), Item::TYPE_WISHLIST, $character, $currentMember, true);
+                $maxWishlistItems = $guild->max_wishlist_items ? $guild->max_wishlist_items : self::MAX_WISHLIST_ITEMS;
+                $this->syncItems($character->wishlist, array_slice(request()->input('wishlist'), 0, $maxWishlistItems), Item::TYPE_WISHLIST, $character, $currentMember, true);
             }
         }
 
         if (!$guild->is_received_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_received_unlocked)) {
             if (request()->input('received')) {
+                // Don't bother enforcing an item limit here
                 $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember, false);
             }
         }
 
         if (request()->input('recipes')) {
+            // Don't bother enforcing an item limit here
             $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember, false);
         }
         return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
