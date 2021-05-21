@@ -30,7 +30,7 @@ class AdminController extends Controller
     {
         $currentMember = request()->get('currentMember');
 
-        $guilds = Guild::
+        $query = Guild::
             select([
                 'guilds.*',
                 'owner.username',
@@ -74,9 +74,38 @@ class AdminController extends Controller
             ->leftJoin('members',                 'members.guild_id',             '=', 'guilds.id')
             ->leftJoin('members AS owner_member', 'owner_member.user_id',         '=', 'owner.id')
             ->leftJoin('raid_groups',             'raid_groups.guild_id',         '=', 'guilds.id')
-            ->orderBy('guilds.name', 'asc')
-            ->groupBy('guilds.id')
-            ->paginate(self::GUILDS_PER_PAGE);
+            ->groupBy('guilds.id');
+
+        // These both require joining on members
+        if (!empty(request()->input('member_name')) || (!empty(request()->input('discord_username')))) {
+            $query = $query->join('members AS req_members', 'req_members.guild_id', 'guilds.id');
+        }
+
+        if (!empty(request()->input('character_name'))) {
+            $query = $query->join('characters', 'characters.guild_id', 'guilds.id')
+                ->where('characters.name', 'like', '%' . request()->input('character_name') . '%');
+        }
+
+        if (!empty(request()->input('guild_name'))) {
+            $query = $query->where('guilds.name', 'like', '%' . request()->input('guild_name') . '%');
+        }
+
+        if (!empty(request()->input('discord_username'))) {
+            $query = $query->join('users', 'users.id', 'req_members.user_id')
+                ->where('users.discord_username', 'like', '%' . request()->input('discord_username') . '%');
+        }
+
+        if (!empty(request()->input('member_name'))) {
+            $query = $query->where('req_members.username', 'like', '%' . request()->input('member_name') . '%');
+        }
+
+        if (!empty(request()->input('order_by'))) {
+            $query = $query->orderBy(request()->input('order_by'), 'desc');
+        } else {
+            $query = $query->orderBy('guilds.name', 'asc');
+        }
+
+        $guilds = $query->paginate(self::GUILDS_PER_PAGE);
 
         return view('admin.guilds', [
             'currentMember' => $currentMember,

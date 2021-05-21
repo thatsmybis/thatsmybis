@@ -11,8 +11,8 @@
                         <span class="fas fa-fw fa-users-crown text-gold"></span>
                         Guild Settings
                     </h1>
-                    <p class="">
-                        <span class="font-weight-bold text-warning">NOTICE:</span> You cannot reset/delete guilds. If you want play with test data, <strong>I recommend</strong> making a guild that isn't tied to your main Discord.
+                    <p class="text-warning">
+                        <span class="font-weight-bold">NOTICE:</span> You cannot reset/delete guilds. If you want play with test data, I recommend making a guild that isn't tied to your main Discord.
                     </p>
                 </div>
             </div>

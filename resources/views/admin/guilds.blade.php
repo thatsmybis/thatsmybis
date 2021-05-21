@@ -11,6 +11,9 @@
                         <span class="fas fa-fw fa-users-crown text-gold"></span>
                         Guilds
                     </h1>
+                    <div class="text-5 text-danger">
+                        <span class="font-weight-bold">DANGER! DO NOT</span> modify anything in guilds that you do not belong to. That isn't supported yet and will break many things.
+                    </div>
                 </div>
             </div>
 
@@ -30,6 +33,90 @@
         </div>
     </div>
 
+    <form class="form-horizontal" role="form" method="GET" action="{{ route('admin.guilds') }}">
+        <div class="row">
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="form-group">
+                    <label for="guild_name" class="font-weight-bold">
+                        <span class="fas fa-fw fa-users-crown text-muted"></span>
+                        Guild Name
+                    </label>
+                    <input name="guild_name"
+                        value="{{ Request::get('guild_name') ? Request::get('guild_name') : ''}}"
+                        placeholder=""
+                        class="form-control dark">
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="form-group">
+                    <label for="discord_username" class="font-weight-bold">
+                        <span class="fab fa-fw fa-discord text-muted"></span>
+                        Discord Username
+                    </label>
+                    <input name="discord_username"
+                        value="{{ Request::get('discord_username') ? Request::get('discord_username') : ''}}"
+                        placeholder=""
+                        class="form-control dark">
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="form-group">
+                    <label for="member_name" class="font-weight-bold">
+                        <span class="fas fa-fw fa-user text-muted"></span>
+                        Member Name
+                    </label>
+                    <input name="member_name"
+                        value="{{ Request::get('member_name') ? Request::get('member_name') : ''}}"
+                        placeholder=""
+                        class="form-control dark">
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="form-group">
+                    <label for="character_name" class="font-weight-bold">
+                        <span class="fas fa-fw fa-users text-muted"></span>
+                        Char Name
+                    </label>
+                    <input name="character_name"
+                        value="{{ Request::get('character_name') ? Request::get('character_name') : ''}}"
+                        placeholder=""
+                        class="form-control dark">
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-3 col-6">
+                <div class="form-group">
+                    <label for="order_by" class="font-weight-bold">
+                        <span class="fas fa-fw fa-users text-muted"></span>
+                        Sort By
+                    </label>
+
+                    <select name="order_by" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
+                        <option value="" data-tokens="">
+                            Guild Name
+                        </option>
+                        <option value="member_count"
+                            data-tokens="member_count"
+                            {{ Request::get('order_by') && Request::get('order_by') == 'member_count' ? 'selected' : ''}}>
+                            Member Count
+                        </option>
+                    </select>
+                </div>
+            </div>
+
+            {{ csrf_field() }}
+
+            <div class="col-12">
+                <div class="form-group">
+                    <button class="btn btn-success float-right"><span class="fas fa-fw fa-search"></span> Query</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
     <div class="row pt-2 mb-3">
         <div class="col-12 mt-3">
             {{ $guilds->appends(request()->input())->links() }}
@@ -44,12 +131,12 @@
                                 Guild
                             </th>
                             <th>
-                                <span class="fas fa-fw fa-box text-muted"></span>
-                                Things
+                                <span class="fas fa-fw fa-object-group text-muted"></span>
+                                Objects
                             </th>
                             <th>
                                 <span class="fas fa-fw fa-sack text-muted"></span>
-                                Items
+                                Loot
 
                             </th>
                             <th>
