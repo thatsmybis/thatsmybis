@@ -79,40 +79,7 @@ class GuildController extends Controller
     {
         $user = request()->get('currentUser');
 
-        $guildArray = [];
-
-        // Fetch guilds the user can join that already exist on this website
-        if ($user->discord_token) {
-            $discord = new DiscordClient([
-                'token' => $user->discord_token,
-                'tokenType' => 'OAuth',
-            ]);
-
-            $guilds = $discord->user->getCurrentUserGuilds();
-
-            if ($guilds) {
-                foreach ($guilds as $guild) {
-                    // only add guilds they have admin permissions for
-                    if (($guild->permissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) {
-                        $guildArray[$guild->id] = [
-                            'id'          => $guild->id,
-                            'name'        => $guild->name,
-                            'registered'  => false,
-                            'permissions' => $guild->permissions,
-                        ];
-                    }
-                }
-
-                $existingGuilds = Guild::whereIn('discord_id', array_keys($guildArray))->get();
-
-                // Flag guilds that are already registered
-                foreach ($existingGuilds as $guild) {
-                    if (isset($guildArray[$guild->discord_id])) {
-                        $guildArray[$guild->discord_id]['registered'] = true;
-                    }
-                }
-            }
-        }
+        $guildArray = $this->getDiscordServers($user);
 
         return view('guild.register', [
             'expansions' => Expansion::all(),
@@ -446,6 +413,96 @@ class GuildController extends Controller
     }
 
     /**
+     * Show the page to change a guild's Discord server
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function changeDiscord($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+        $user          = request()->get('currentUser');
+
+        if (!request()->get('isGuildAdmin')) {
+            request()->session()->flash('status', 'You don\'t have permissions to unlink the guild from that Discord server. Only the current owner can do that');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $guildArray = $this->getDiscordServers($user, $guild->expansion_id);
+
+        return view('guild.changeDiscord', [
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'guilds'        => $guildArray,
+        ]);
+    }
+
+    /**
+     * Permanently change a guild's Discord server
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function submitChangeDiscord($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!request()->get('isGuildAdmin')) {
+            request()->session()->flash('status', 'You don\'t have permissions to change the guild\'s Discord server. Only the current owner can do that.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $validationRules =  [
+            'discord_id_select' => 'nullable|string|max:255|required_without:discord_id',
+            'discord_id'        => 'nullable|string|max:255|required_without:discord_id_select',
+            'bot_added'         => 'numeric|gte:1',
+        ];
+
+        $this->validate(request(), $validationRules);
+
+        $discordId = null;
+
+        if (request()->input('discord_id')) {
+            $discordId = request()->input('discord_id');
+        } else if (request()->input('discord_id_select')) {
+            $discordId = request()->input('discord_id_select');
+        }
+
+        $existingGuild = Guild::where([
+            'discord_id'   => $discordId,
+            'expansion_id' => $guild->expansion_id
+        ])->first();
+
+        if ($existingGuild) {
+            request()->session()->flash('status', 'A guild is already registered on that server for that expansion.');
+            redirect()->back();
+        }
+
+        $message = '';
+
+        if ($discordId) {
+            if ($discordId == $guild->discord_id) {
+                $message = 'unchanged';
+            } else {
+                $guild->update(['discord_id' => $discordId]);
+
+                AuditLog::create([
+                    'description' => $currentMember->username . ' changed the guild\'s Discord Server.',
+                    'member_id'   => $currentMember->id,
+                    'guild_id'    => $guild->id,
+                ]);
+
+                $message = 'changed';
+            }
+        } else {
+            $message = 'unchanged';
+        }
+
+        request()->session()->flash('status', 'Guild Discord server ' . $message . '.');
+        return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+    }
+
+    /**
      * Wipes out ALL old role permissions and re-adds them.
      *
      * @param $guild        The guild object we're working on, with its roles relationship eager loaded.
@@ -514,7 +571,7 @@ class GuildController extends Controller
     }
 
     /**
-     * Creates a new guild.
+     * Creates a new guild for a specified expansion.
      *
      * @var string   $guildName
      * @var int      $discordId
@@ -588,5 +645,47 @@ class GuildController extends Controller
         $member = Member::create($user, $discordMember, $guild);
 
         return [$guild, $member];
+    }
+
+    private function getDiscordServers($user, $expansionId = null) {
+        $guildArray = [];
+
+        // Fetch guilds the user can join that already exist on this website
+        if ($user->discord_token) {
+            $discord = new DiscordClient([
+                'token' => $user->discord_token,
+                'tokenType' => 'OAuth',
+            ]);
+
+            $guilds = $discord->user->getCurrentUserGuilds();
+
+            if ($guilds) {
+                foreach ($guilds as $guild) {
+                    // only add guilds they have admin permissions for
+                    if (($guild->permissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) {
+                        $guildArray[$guild->id] = [
+                            'id'          => $guild->id,
+                            'name'        => $guild->name,
+                            'registered'  => false,
+                            'permissions' => $guild->permissions,
+                        ];
+                    }
+                }
+
+                $query = Guild::whereIn('discord_id', array_keys($guildArray));
+                if ($expansionId) {
+                    $query->where('expansion_id', $expansionId);
+                }
+                $existingGuilds = $query->get();
+
+                // Flag guilds that are already registered
+                foreach ($existingGuilds as $guild) {
+                    if (isset($guildArray[$guild->discord_id])) {
+                        $guildArray[$guild->discord_id]['registered'] = true;
+                    }
+                }
+            }
+        }
+        return $guildArray;
     }
 }

@@ -11,9 +11,6 @@
                         <span class="fas fa-fw fa-users-crown text-gold"></span>
                         Guild Settings
                     </h1>
-                    <p class="text-warning">
-                        <span class="font-weight-bold">NOTICE:</span> You cannot reset/delete guilds. If you want play with test data, I recommend making a guild that isn't tied to your main Discord.
-                    </p>
                 </div>
             </div>
             @if (count($errors) > 0)
@@ -115,9 +112,10 @@
                             <div class="col-md-8 col-12">
                                 <div class="form-group">
                                     <label for="discord_id" class="font-weight-normal">
-                                        <span class="text-muted">Discord ID</span>
-                                        <small class="text-muted">
-                                            locked
+                                        <span class="text-muted">Discord Server ID</span>
+                                        <a href="{{ route('guild.changeDiscord', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">change</a>
+                                        <small class="text-warning font-italic">
+                                            useful for starting over
                                         </small>
                                     </label>
                                     <input disabled
