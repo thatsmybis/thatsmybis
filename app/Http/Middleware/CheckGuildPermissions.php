@@ -59,7 +59,7 @@ class CheckGuildPermissions
                 }
             );
 
-            if ($discordMember->user->username . '#' . $discordMember->user->discriminator != $user->discord_username) {
+            if ($discordMember && $discordMember->user->username . '#' . $discordMember->user->discriminator != $user->discord_username) {
                 $user->update([
                     'discord_username' => $discordMember->user->username . '#' . $discordMember->user->discriminator,
                 ]);
