@@ -60,6 +60,7 @@
             ['icon' => 'crown', 'name' => 'niph', 'title' => 'Paypal'],
             ['icon' => 'crown', 'name' => 'Nompire', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Panya', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'samspayde', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Sangwa', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Sarafina', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Sentence', 'title' => 'Raider'],
