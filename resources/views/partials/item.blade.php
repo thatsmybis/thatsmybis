@@ -41,7 +41,13 @@ if (isset($showTier) && $showTier) {
     }
 }
 
-$wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadSubdomain . '" data-wowhead-link="https://' . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadSubdomain . '"';
+$wowheadAttribs =
+      'data-wowhead="item=' . $itemId . '?domain=' . $wowheadSubdomain. '" '
+    . 'data-wowhead-link="https://' . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadSubdomain . '"';
+
+if (isset($iconSize) && $iconSize) {
+    $wowheadAttribs .= ' data-wh-icon-size="' . $iconSize . ' "';
+}
 @endphp
 
 <span class="font-weight-{{ isset($fontWeight) && $fontWeight ? $fontWeight : 'medium' }}">

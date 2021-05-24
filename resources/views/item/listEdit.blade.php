@@ -83,6 +83,20 @@
                                             'targetBlank' => true,
                                             ])
                                     </div>
+                                    @if ($item->childItems->count())
+                                        <ul class="ml-3 small list-inline">
+                                            @foreach ($item->childItems as $childItem)
+                                                <li class="list-inline-item">
+                                                    @include('partials/item', [
+                                                        'item' => $childItem,
+                                                        'iconSize' => 'small',
+                                                        'wowheadLink' => false,
+                                                        'targetBlank' => true,
+                                                    ])
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
                                 </div>
 
                                 <div class="col-lg-1 col-12 {{ $errors->has('items.' . $loop->iteration . '.tier') ? 'bg-danger rounded font-weight-bold' : '' }}" style="{{ $guild->tier_mode ? '' : 'display:none;' }}">
