@@ -168,6 +168,9 @@ Route::group([
     Route::get( '/change-owner',  'GuildController@owner')      ->name('guild.owner');
     Route::post('/change-owner',  'GuildController@submitOwner')->name('guild.submitOwner');
 
+    Route::get( '/change-discord', 'GuildController@changeDiscord')      ->name('guild.changeDiscord');
+    Route::post('/change-discord', 'GuildController@submitChangeDiscord')->name('guild.submitChangeDiscord');
+
     // Can't get the permissions working right now (2019-12-02), so I'm disabling this.
     Route::get( '/permissions', 'PermissionsController@permissions')->name('guild.permissions');
     Route::get( '/addPermissions', 'PermissionsController@addPermissions')->name('guild.addPermissions');

@@ -112,9 +112,10 @@
                             <div class="col-md-8 col-12">
                                 <div class="form-group">
                                     <label for="discord_id" class="font-weight-normal">
-                                        <span class="text-muted">Discord ID</span>
-                                        <small class="text-muted">
-                                            locked
+                                        <span class="text-muted">Discord Server ID</span>
+                                        <a href="{{ route('guild.changeDiscord', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">change</a>
+                                        <small class="text-warning font-italic">
+                                            useful for starting over
                                         </small>
                                     </label>
                                     <input disabled
@@ -259,6 +260,13 @@
 
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="form-group">
+                            <label for="max_wishlist_items" class="">
+                                Max Wishlist Items
+                                <small class="text-muted">won't affect existing wishlists</small>
+                            </label>
+                            <input name="max_wishlist_items" min="0" max="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" value="{{ old('max_wishlist_items') ? old('max_wishlist_items') : $guild->max_wishlist_items }}" />
+                        </div>
                         <div class="form-group mb-0">
                             <div class="checkbox">
                                 <label>

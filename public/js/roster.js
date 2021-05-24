@@ -165,7 +165,7 @@ function createTable() {
                 "render" : function (data, type, row) {
                     if (data && data.length) {
                         // Create a copy of data, then sort it by instance_order DESC, user chosen order ASC
-                        let dataSorted = data.slice().sort((a, b) => b.instance_order - a.instance_order || a.pivot.order - b.pivot.order);
+                        let dataSorted = data.slice().sort((a, b) => a.instance_order - b.instance_order || a.pivot.order - b.pivot.order);
                         let list = ``;
                         list += getItemList(dataSorted, 'wishlist', row.id, true, true, 'js-wishlist-sorted', (guild.do_sort_items_by_instance ? true : false));
                         list += getItemList(data, 'wishlist', row.id, true, false, 'js-wishlist-unsorted', (guild.do_sort_items_by_instance ? false : true));

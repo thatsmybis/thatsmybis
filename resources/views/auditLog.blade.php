@@ -85,15 +85,17 @@
 
 
             <div class="row">
+
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
-                        <label for="min_date" class="font-weight-bold">
-                            <span class="fas fa-fw fa-users text-muted"></span>
-                            Min Date
+                        <label for="max_date" class="font-weight-bold">
+                            <span class="fas fa-fw fa-calendar-plus text-muted"></span>
+                            Max Date
                         </label>
-                        <input name="min_date" min="2004-09-22"
+                        <input name="max_date"
+                            min="2004-09-22"
+                            value="{{ Request::get('max_date') ? Request::get('max_date') : ''}}"
                             max="{{ getDateTime('Y-m-d') }}"
-                            value="{{ Request::get('min_date') ? Request::get('min_date') : ''}}"
                             type="date"
                             placeholder="—"
                             class="form-control dark"
@@ -103,14 +105,13 @@
 
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
-                        <label for="max_date" class="font-weight-bold">
-                            <span class="fas fa-fw fa-users text-muted"></span>
-                            Max Date
+                        <label for="min_date" class="font-weight-bold">
+                            <span class="fas fa-fw fa-calendar-minus text-muted"></span>
+                            Min Date
                         </label>
-                        <input name="max_date"
-                            min="2004-09-22"
-                            value="{{ Request::get('max_date') ? Request::get('max_date') : ''}}"
+                        <input name="min_date" min="2004-09-22"
                             max="{{ getDateTime('Y-m-d') }}"
+                            value="{{ Request::get('min_date') ? Request::get('min_date') : ''}}"
                             type="date"
                             placeholder="—"
                             class="form-control dark"

@@ -59,6 +59,12 @@ class CheckGuildPermissions
                 }
             );
 
+            if ($discordMember && $discordMember->user->username . '#' . $discordMember->user->discriminator != $user->discord_username) {
+                $user->update([
+                    'discord_username' => $discordMember->user->username . '#' . $discordMember->user->discriminator,
+                ]);
+            }
+
             // Don't do these checks if the member is trying to gquit...
             if (!request()->routeIs('member.showGquit') && !request()->routeIs('member.submitGquit')) {
                 if (!$discordMember && $user->id != $guild->user_id && !$isAdmin) { // Guild owner gets a pass

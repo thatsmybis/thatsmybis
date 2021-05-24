@@ -38,69 +38,40 @@
 
     @php
         $donors = [
-            [
-                'icon' => 'crown', 'name' => 'Anonymous', 'title' => 'Patreon',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'A4uronn', 'title' => 'Raider',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Busmonstret', 'title' => 'Raider',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Calaris', 'title' => 'Main Tank',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Finvy', 'title' => 'Raider',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Hadiya', 'title' => 'Main Tank',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Junior', 'title' => 'Main Tank',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Kazczyk', 'title' => 'Parser',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Khashte', 'title' => 'Parser',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Kral', 'title' => 'Parser',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'mattyp237', 'title' => 'Parser',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Mister Awesomesauce', 'title' => 'Raider',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'niph', 'title' => 'Paypal',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Nompire', 'title' => 'Parser',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Panya', 'title' => 'Parser',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Sangwa', 'title' => 'Raider',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Sentence', 'title' => 'Raider',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Strix', 'title' => 'Black Lotus',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'TideAd', 'title' => 'Parser',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Tron', 'title' => 'Main Tank',
-            ],
-            [
-                'icon' => 'crown', 'name' => 'Zura', 'title' => 'Parser',
-            ],
+            ['icon' => 'crown', 'name' => 'Adilar/Myras', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Anonymous', 'title' => 'Patreon'],
+            ['icon' => 'crown', 'name' => 'A4uronn', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Busmonstret', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Calaris', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'diadia', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'Drezdan', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'EmpKain', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Finvy', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Hadiya', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'Hello', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Jensok', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Junior', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'Kazczyk', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Khashte', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Kral', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'mattyp237', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Mister Awesomesauce', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Nectu', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'niph', 'title' => 'Paypal'],
+            ['icon' => 'crown', 'name' => 'Nompire', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Panya', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'samspayde', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Sangwa', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Sarafina', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Sentence', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'SHIELD', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'Strix', 'title' => 'Black Lotus'],
+            ['icon' => 'crown', 'name' => 'Sumorex', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'TideAd', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Tron', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'Vejusatko', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'weirdGuy', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Zura', 'title' => 'Parser'],
         ];
     @endphp
 
