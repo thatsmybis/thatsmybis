@@ -86,6 +86,10 @@
 <body class="@yield('bodyClass')">
     @include('layouts/nav')
 
+    <div class="text-center font-weight-bold text-warning">
+        <!-- Sitewide warning message, good for downtime announcements -->
+    </div>
+
     @if (session('status'))
         <div class="container-fluid container-width-capped">
             <div class="row">
