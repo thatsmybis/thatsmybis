@@ -86,36 +86,7 @@ function createTable(lastSource) {
                 "title"  : '<span class="fas fa-fw fa-sack text-success"></span> Loot',
                 "data"   : "",
                 "render" : function (data, type, row) {
-                    let wowheadData = `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ row.item_id }"
-                        data-wowhead="item=${ row.item_id }?domain=${ wowheadSubdomain }"`;
-                    let url = "";
-                    if (guild) {
-                        url = `/${ guild.id }/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }`;
-                    } else {
-                        url = "";
-                    }
-                    return `
-                    <ul class="no-bullet no-indent mb-0">
-                        <li>
-                            ${ guild.tier_mode ?
-                                `<span class="text-monospace font-weight-medium text-tier-${ row.guild_tier ? row.guild_tier : '' }">${ row.guild_tier ? getItemTierLabel(row, guild.tier_mode) : '&nbsp;' }</span>`
-                            : `` }
-                            <a href="${ url }"
-                                class="${ row.quality ? 'q' + row.quality : '' }"
-                                ${ wowheadData }>
-                                ${ row.name }
-                            </a>
-                        </li>
-
-                        ${ row.is_bis || row.is_bis_horde || row.is_bis_alliance ? `
-                            <li>
-                                <small>
-                                    ${ row.is_bis ? 'BIS' : '' }
-                                    ${ row.is_bis_alliance  ? '<span class="text-shaman">A</span>' : '' }
-                                    ${ row.is_bis_horde  ? '<span class="text-dk">H</span>' : '' }
-                                </small>
-                            </li>` : `` }
-                    </ul>`;
+                    return getItemLink(row);
                 },
                 "visible" : true,
                 "width"   : "330px",
@@ -154,7 +125,7 @@ function createTable(lastSource) {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
                 "data"   : "guild_note",
                 "render" : function (data, type, row) {
-                    return (data ? `<span class="js-markdown-inline">${ nl2br(data) }</span>` : '—');
+                    return getNotes(row, data);
                 },
                 "orderable" : false,
                 "visible" : showNotes ? true : false,
@@ -244,4 +215,53 @@ function getCharacterList(data, type, itemId) {
 
     characters += `</ul>`;
     return characters;
+}
+
+function getNotes(row, note) {
+    let childItems = null;
+    // Uncomment to show child items
+    // if (row.child_items.length) {
+    //     childItems = '<ul class="list-inline">';
+    //     row.child_items.forEach(function (item, index) {
+    //         item.quality = 0;
+    //         childItems += `<li class="list-inline-item smaller">${ getItemLink(item, ' ') }</li>`;
+    //     });
+    //     childItems += '</ul>';
+    // }
+    if (note || childItems) {
+        note = `<span class="js-markdown-inline">${ note ? nl2br(note) : '' }</span>${ childItems ? childItems : '' }`;
+    } else {
+        note = '—';
+    }
+    return note;
+}
+
+function getItemLink(row, iconSize = null) {
+    let wowheadData =
+    `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ row.item_id }"
+    data-wowhead="item=${ row.item_id }?domain=${ wowheadSubdomain }"`;
+
+    if (iconSize) {
+        wowheadData += ` data-wh-icon-size="${ iconSize }"`;
+    }
+
+    let url = "";
+    if (guild) {
+        url = `/${ guild.id }/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }`;
+    } else {
+        url = "";
+    }
+    return `
+    <ul class="no-bullet no-indent mb-0">
+        <li>
+            ${ guild.tier_mode ?
+                `<span class="text-monospace font-weight-medium text-tier-${ row.guild_tier ? row.guild_tier : '' }">${ row.guild_tier ? getItemTierLabel(row, guild.tier_mode) : '&nbsp;' }</span>`
+            : `` }
+            <a href="${ url }"
+                class="${ row.quality ? 'q' + row.quality : '' }"
+                ${ wowheadData }>
+                ${ row.name }
+            </a>
+        </li>
+    </ul>`;
 }

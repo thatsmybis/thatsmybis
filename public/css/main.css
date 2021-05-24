@@ -217,6 +217,9 @@ body {
 }
 
 /* wowhead link colors */
+.q0 {
+    color: #8d8d8d!important;
+}
 .q1 {
     color: #fff!important;
 }
