@@ -819,17 +819,28 @@ class ItemController extends Controller
         // For each item added, attempt to delete or flag a matching item from the character's wishlist and prios
         foreach ($detachRows as $detachRow) {
             $whereClause = [
-                'item_id'      => $detachRow['item_id'],
-                'character_id' => $detachRow['character_id'],
-                'type'         => Item::TYPE_WISHLIST,
+                'character_items.character_id' => $detachRow['character_id'],
+                'character_items.type'         => Item::TYPE_WISHLIST,
             ];
 
             if (!$deleteWishlist) {
-                $whereClause['is_received'] = 0;
+                $whereClause['character_items.is_received'] = 0;
             }
 
             // Find wishlist for this item
-            $wishlistRow = DB::table('character_items')->where($whereClause)->limit(1)->orderBy('is_received')->orderBy('order')->first();
+            $wishlistRow = DB::table('character_items')
+                ->select('character_items.*')
+                // Look for both the original item and the possible token reward for the item
+                ->join('items', function ($join) {
+                    return $join->on('items.item_id', 'character_items.item_id')
+                        ->orWhereRaw('`items`.`parent_item_id` = `character_items`.`item_id`');
+                })
+                ->where($whereClause)
+                ->whereRaw("(items.item_id = {$detachRow['item_id']} OR items.parent_item_id = {$detachRow['item_id']})")
+                ->limit(1)
+                ->orderBy('character_items.is_received')
+                ->orderBy('character_items.order')
+                ->first();
 
             if ($wishlistRow) {
                 if ($deleteWishlist) {
