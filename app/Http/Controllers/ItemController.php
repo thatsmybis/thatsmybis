@@ -143,7 +143,8 @@ class ItemController extends Controller
                                     ['characters.guild_id', $guild->id],
                                     ['character_items.is_received', 0],
                                 ])
-                            ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                            ->groupBy(['character_items.character_id', 'character_items.item_id'])
+                            ->orderBy('character_items.order');
                     },
                     'childItems' => function ($query) use ($guild) {
                         return $query->with([
@@ -152,7 +153,8 @@ class ItemController extends Controller
                                     ->where([
                                         ['characters.guild_id', $guild->id],
                                     ])
-                                ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                                ->groupBy(['character_items.character_id', 'character_items.item_id'])
+                                ->orderBy('character_items.order');
                             },
                         ]);
                     }
@@ -643,9 +645,9 @@ class ItemController extends Controller
 
         $wishlistCharacters = null;
         if ($guild->is_attendance_hidden && $item->relationLoaded('wishlistCharacters')) {
-            $wishlistCharacters = $item->wishlistCharacters;
+            $wishlistCharacters = $item->wishlistCharacters->values();
         } else if ($item->relationLoaded('wishlistCharactersWithAttendance')) {
-            $wishlistCharacters = $item->wishlistCharactersWithAttendance;
+            $wishlistCharacters = $item->wishlistCharactersWithAttendance->values();
         }
 
         return view('item.show', [
@@ -1108,11 +1110,11 @@ class ItemController extends Controller
         foreach ($items->filter(function ($item, $key) { return $item->childItems->count(); }) as $item) {
             if ($guild->is_attendance_hidden) {
                 foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
-                    $items->where('id', $item->id)->first()->wishlistCharacters = $items->where('id', $item->id)->first()->wishlistCharacters->merge($childItem->wishlistCharacters);
+                    $items->where('id', $item->id)->first()->setRelation('wishlistCharacters', $items->where('id', $item->id)->first()->wishlistCharacters->merge($childItem->wishlistCharacters)->sortBy('pivot.order'));
                 }
             } else {
                 foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }) as $childItem) {
-                    $items->where('id', $item->id)->first()->setRelation('wishlistCharactersWithAttendance', $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance));
+                    $items->where('id', $item->id)->first()->setRelation('wishlistCharactersWithAttendance', $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance)->sortBy('pivot.order'));
                 }
             }
         }
