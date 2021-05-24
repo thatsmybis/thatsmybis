@@ -141,8 +141,16 @@ function numToSTier($float) {
         $whole = floor($float);
         $decimal = $float - $whole;
 
-        return $tiers[ceil($float)] . ltrim($decimal, '0');
+        $affix = '';
+        if ($decimal > 0.66) {
+            $affix = '++';
+        } else if ($decimal > 0.33) {
+            $affix = '+';
+        }
+
+        return $tiers[ceil($float)] . $affix;
     } else {
         return '';
     }
 }
+

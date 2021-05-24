@@ -133,7 +133,11 @@
                                             <span class="font-weight-light text-muted small">
                                                 avg.
                                                 <span class="text-tier-">
-                                                    {{  $guild->tier_mode == App\Guild::TIER_MODE_S ? numToSTier(number_format($averageTiers[$item->item_id]->average_tier, 1)) : number_format($averageTiers[$item->item_id]->average_tier, 1) }}
+                                                    @if ($guild->tier_mode == App\Guild::TIER_MODE_S)
+                                                        {{ numToSTier(number_format($averageTiers[$item->item_id]->average_tier, 1)) }}
+                                                    @else
+                                                        {{ number_format($averageTiers[$item->item_id]->average_tier, 1) }}
+                                                    @endif
                                                 </span>
                                             </span>
                                         @endif
