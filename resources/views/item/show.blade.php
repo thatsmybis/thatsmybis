@@ -41,6 +41,21 @@
                     @if ($itemJson)
                         {!! $itemJson->tooltip !!}
                     @endif
+
+                    @if ($item->itemSources->count())
+                        <ul class="list-inline mt-3">
+                            <li class="list-inline-item">
+                                Source(s)
+                            </li>
+                            @foreach ($item->itemSources as $itemSource)
+                                <li class="list-inline-item">
+                                    <a class="text-muted" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $itemSource->instance->slug]) }}">
+                                        {{ $itemSource->name}}
+                                    </a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @endif
                 </li>
                 @if ($guild)
                     <li class="list-inline-item bg-lightest rounded p-3 mt-3 align-top item-notes">
