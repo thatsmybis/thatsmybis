@@ -194,7 +194,7 @@ class ItemController extends Controller
     }
 
     /**
-     * List the items
+     * List the items for editing tier, note, and prio note
      *
      * @return \Illuminate\Http\Response
      */
@@ -213,6 +213,7 @@ class ItemController extends Controller
             ->firstOrFail();
 
         $items = Item::select([
+                'items.id',
                 'items.item_id',
                 'items.name',
                 'items.quality',
@@ -241,6 +242,7 @@ class ItemController extends Controller
             ->groupBy('items.item_id')
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
+            ->with('childItems')
             ->get();
 
         $averageTiers = $this->getItemAverageTiers($instance, $guild->expansion_id);

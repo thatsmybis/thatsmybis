@@ -252,7 +252,7 @@
                             <ul class="no-indent no-bullet">
                                 <li class="">
                                     <h2 class="font-weight-bold mb-3">
-                                        Associated Items
+                                        Related
                                     </h2>
                                 </li>
                                 @if ($item->parentItem)

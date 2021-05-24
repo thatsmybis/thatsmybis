@@ -90,6 +90,20 @@
                                             'tierMode'    => $guild->tier_mode,
                                             ])
                                     </div>
+                                    @if ($item->childItems->count())
+                                        <ul class="ml-3 small list-inline">
+                                            @foreach ($item->childItems as $childItem)
+                                                <li class="list-inline-item">
+                                                    @include('partials/item', [
+                                                        'item' => $childItem,
+                                                        'iconSize' => 'small',
+                                                        'wowheadLink' => false,
+                                                        'targetBlank' => true,
+                                                    ])
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    @endif
                                 </div>
 
                                 <div class="col-lg-5 col-12">

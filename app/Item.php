@@ -50,7 +50,10 @@ class Item extends Model
     const TYPE_WISHLIST = 'wishlist';
 
     public function childItems() {
-        return $this->hasMany(Item::class, 'parent_id', 'id')->orderBy('items.name');
+        return $this->hasMany(Item::class, 'parent_id', 'id')
+            ->groupBy('items.item_id') // The same item in multiple expansions could otherwise show up multiple times
+            ->orderBy('items.expansion_id')
+            ->orderBy('items.name');
     }
 
     public function characters() {
