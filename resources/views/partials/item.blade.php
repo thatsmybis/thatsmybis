@@ -46,7 +46,7 @@ $wowheadAttribs =
     . 'data-wowhead-link="https://' . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadSubdomain . '"';
 
 if (isset($iconSize) && $iconSize) {
-    $wowheadAttribs .= ' data-wh-icon-size="' . $iconSize . ' "';
+    $wowheadAttribs .= ' data-wh-icon-size="' . $iconSize . '"';
 }
 @endphp
 
