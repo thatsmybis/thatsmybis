@@ -550,6 +550,8 @@ class ItemController extends Controller
                         ])
                         ->where('guilds.id', $guild->id);
                     },
+                    'itemSources',
+                    'itemSources.instance',
                     'receivedAndRecipeCharacters' => function ($query) use($guild) {
                         return $query
                             ->where(['characters.guild_id' => $guild->id]);
