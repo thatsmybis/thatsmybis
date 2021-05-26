@@ -409,17 +409,20 @@ class ItemController extends Controller
                 $join->on('guild_items.item_id', 'items.item_id')
                     ->where('guild_items.guild_id', $guild->id);
             })
+            // First WHERE...
             ->where([
-                // Only get items that this guild already has
-                ['character_items.type', Item::TYPE_RECIPE],
                 ['characters.guild_id', $guild->id],
                 ['items.expansion_id',  $guild->expansion_id],
             ])
+            ->whereIn('character_items.type', [Item::TYPE_RECIPE])
+            // Second WHERE...
             ->orWhere([
                 ['characters.guild_id', $guild->id],
                 ['items.expansion_id',  $guild->expansion_id],
             ])
-            ->whereRaw("(`items`.`name` LIKE '%Design%'
+            ->whereIn('character_items.type', [Item::TYPE_RECIPE])
+            // Third WHERE...
+            ->orWhereRaw("(`items`.`name` LIKE '%Design%'
                 OR `items`.`name` LIKE '%Enchant%'
                 OR `items`.`name` LIKE '%Formula%'
                 OR `items`.`name` LIKE '%Pattern%'
@@ -427,6 +430,12 @@ class ItemController extends Controller
                 OR `items`.`name` LIKE '%Recipe%'
                 OR `items`.`name` LIKE '%Schematic%')"
             )
+            ->where([
+                ['characters.guild_id', $guild->id],
+                ['items.expansion_id',  $guild->expansion_id],
+            ])
+            ->whereIn('character_items.type', [Item::TYPE_RECIPE, Item::TYPE_RECEIVED])
+            // End the WHERE's
             ->orderBy('items.name')
             ->groupBy('items.id')
             ->with([
