@@ -2,7 +2,7 @@
     <li>
         @include('character/partials/headerTitle')
     </li>
-    @if ($character->raid_group_id || $character->class || $character->is_alt)
+    @if ($character->raid_group_id || $character->class || $character->is_alt || $character->spec)
         <li>
             <ul class="list-inline">
                 @if ($character->is_alt)
@@ -33,6 +33,7 @@
                     </li>
                 @endif
                 <li class="list-inline-item">
+                    {{ $character->spec  ? $character->spec : '' }}
                     {{ $character->class ? $character->class : '' }}
                 </li>
             </ul>
@@ -46,13 +47,12 @@
     @endif
 
     @if (!isset($showDetails) || $showDetails)
-        @if ($character->inactive_at || $character->level || $character->race || $character->spec)
+        @if ($character->inactive_at || $character->level || $character->race)
             <li>
                 <small>
                     <span class="font-weight-bold text-danger">{{ $character->inactive_at ? 'ARCHIVED' : '' }}</span>
                     {{ $character->level ? $character->level : '' }}
                     {{ $character->race  ? $character->race : '' }}
-                    {{ $character->spec  ? $character->spec : '' }}
                 </small>
             </li>
         @endif
