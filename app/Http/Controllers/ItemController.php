@@ -656,9 +656,9 @@ class ItemController extends Controller
 
         $wishlistCharacters = null;
         if ($guild->is_attendance_hidden && $item->relationLoaded('wishlistCharacters')) {
-            $wishlistCharacters = $item->wishlistCharacters->values();
+            $wishlistCharacters = $item->wishlistCharacters;
         } else if ($item->relationLoaded('wishlistCharactersWithAttendance')) {
-            $wishlistCharacters = $item->wishlistCharactersWithAttendance->values();
+            $wishlistCharacters = $item->wishlistCharactersWithAttendance;
         }
 
         return view('item.show', [
@@ -1121,11 +1121,11 @@ class ItemController extends Controller
         foreach ($items->filter(function ($item, $key) { return $item->childItems->count(); }) as $item) {
             if ($guild->is_attendance_hidden) {
                 foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
-                    $items->where('id', $item->id)->first()->setRelation('wishlistCharacters', $items->where('id', $item->id)->first()->wishlistCharacters->merge($childItem->wishlistCharacters)->sortBy('pivot.order'));
+                    $items->where('id', $item->id)->first()->setRelation('wishlistCharacters', $items->where('id', $item->id)->first()->wishlistCharacters->merge($childItem->wishlistCharacters)->sortBy('pivot.order')->values());
                 }
             } else {
                 foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }) as $childItem) {
-                    $items->where('id', $item->id)->first()->setRelation('wishlistCharactersWithAttendance', $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance)->sortBy('pivot.order'));
+                    $items->where('id', $item->id)->first()->setRelation('wishlistCharactersWithAttendance', $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance)->sortBy('pivot.order')->values());
                 }
             }
         }
