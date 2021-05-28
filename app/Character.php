@@ -91,6 +91,10 @@ class Character extends Model
         return $this->belongsTo(RaidGroup::class);
     }
 
+    public function secondaryRaidGroups() {
+        return $this->belongsToMany(RaidGroup::class, 'character_raid_groups', 'character_id', 'raid_group_id');
+    }
+
     public function raids() {
         return $this->belongsToMany(Raid::class, 'raid_characters', 'character_id', 'raid_id')
             ->orderByDesc('raids.date')
