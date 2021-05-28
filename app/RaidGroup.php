@@ -28,6 +28,10 @@ class RaidGroup extends Model
     protected $hidden = [
     ];
 
+    public function characters() {
+        return $this->hasMany(Character::class);
+    }
+
     public function priodCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'raid_group_id', 'character_id')
             ->where(['character_items.type' => self::TYPE_PRIO])
@@ -54,6 +58,10 @@ class RaidGroup extends Model
 
     public function role() {
         return $this->belongsTo(Role::class);
+    }
+
+    public function secondaryCharacters() {
+        return $this->belongsToMany(RaidGroup::class, 'character_raid_groups', 'character_id', 'raid_group_id');
     }
 
     /**
