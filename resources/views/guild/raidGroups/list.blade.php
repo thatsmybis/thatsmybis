@@ -17,14 +17,37 @@
                         <ol class="no-bullet no-indent striped">
                             @foreach ($guild->allRaidGroups as $raidGroup)
                                 <li class="p-3 mb-3 rounded">
-                                    <span class="role-circle" style="{{ $raidGroup->role ? 'background-color:' . $raidGroup->role->getColor() : '' }}" title="{{ $raidGroup->role ? $raidGroup->role->getColor() : ''}}"></span>
-                                    <span class="font-weight-bold text-danger">{{ $raidGroup->disabled_at ? 'ARCHIVED' : '' }}</span>
-                                    <span title="{{ $raidGroup->slug }}">{{ $raidGroup->name }}</span>
-                                    <small class="text-muted">
+                                    <ul class="list-inline">
+                                        <li class="list-inline-item">
+                                            <span class="role-circle" style="{{ $raidGroup->role ? 'background-color:' . $raidGroup->role->getColor() : '' }}" title="{{ $raidGroup->role ? $raidGroup->role->getColor() : ''}}"></span>
+                                            <span class="font-weight-bold text-danger">{{ $raidGroup->disabled_at ? 'ARCHIVED' : '' }}</span>
+                                            <span class="font-weight-medium" title="{{ $raidGroup->slug }}">{{ $raidGroup->name }}</span>
+                                        </li>
                                         @if ($raidGroup->role)
-                                            - <span title="Discord Role: {{ $raidGroup->role->discord_id }}">{{ $raidGroup->role->name }}</span>
+                                            <li class="list-inline-item text-muted small">
+                                                &sdot;
+                                            </li>
+                                            <li class="list-inline-item text-muted small">
+                                                <span title="Discord Role: {{ $raidGroup->role->discord_id }}">{{ $raidGroup->role->name }}</span>
+                                            </li>
                                         @endif
-                                    </small>
+                                        <li class="list-inline-item text-muted small">
+                                            &sdot;
+                                        </li>
+                                        <li class="list-inline-item text-muted small">
+                                            <a href="{{ route('guild.raidGroup.characters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
+                                                {{ $raidGroup->characters_count }} main char{{ $raidGroup->characters_count != 1 ? 's' : '' }}
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item text-muted small">
+                                            &sdot;
+                                        </li>
+                                        <li class="list-inline-item text-muted small">
+                                            <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
+                                                {{ $raidGroup->secondary_characters_count }} other char{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+                                            </a>
+                                        </li>
+                                    </ul>
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
                                             <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
