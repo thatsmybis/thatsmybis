@@ -77,7 +77,7 @@ class CheckGuildPermissions
                 if ($user->id != $guild->user_id && !$isAdmin) {
                     if ($guild->getMemberRoleIds()) {
                         // Check that the Discord user has one of the role(s) required to access this guild
-                        $matchingRoles = array_intersect($guild->getMemberRoleIds(), $discordMember->roles);
+                        $matchingRoles = array_intersect(array_merge($guild->getMemberRoleIds(), [$guild->gm_role_id, $guild->officer_role_id, $guild->raid_leader_role_id]), $discordMember->roles);
 
                         if (count($matchingRoles) <= 0) {
                             request()->session()->flash('status', 'Insufficient Discord role to access that guild.');
