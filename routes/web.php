@@ -142,12 +142,14 @@ Route::group([
     });
 
     Route::group(['prefix' => 'raid-groups'], function () {
-        Route::get( '/',               'RaidGroupController@raidGroups')   ->name('guild.raidGroups');
-        Route::get( '/create',         'RaidGroupController@edit')         ->name('guild.raidGroup.create');
-        Route::get( '/edit/{id?}',     'RaidGroupController@edit')         ->where('id', '[0-9]+')->name('guild.raidGroup.edit');
-        Route::post('/toggle-disable', 'RaidGroupController@toggleDisable')->name('guild.raidGroup.toggleDisable');
-        Route::post('/update',         'RaidGroupController@update')       ->name('guild.raidGroup.update');
-        Route::post('/',               'RaidGroupController@create')       ->name('guild.raidGroup.create'); // TODO: This or the copy a few lines up needs to go, wuth some testing
+        Route::get( '/',                       'RaidGroupController@raidGroups')         ->name('guild.raidGroups');
+        Route::get( '/create',                 'RaidGroupController@edit')               ->name('guild.raidGroup.create');
+        Route::get( '/edit/{id?}',             'RaidGroupController@edit')               ->where('id', '[0-9]+')->name('guild.raidGroup.edit');
+        Route::get( '/characters/{id?}',       'RaidGroupController@characters')         ->where('id', '[0-9]+')->name('guild.raidGroup.characters');
+        Route::get( '/characters/{id?}/other', 'RaidGroupController@secondaryCharacters')->where('id', '[0-9]+')->name('guild.raidGroup.secondaryCharacters');
+        Route::post('/toggle-disable',         'RaidGroupController@toggleDisable')      ->name('guild.raidGroup.toggleDisable');
+        Route::post('/update',                 'RaidGroupController@update')             ->name('guild.raidGroup.update');
+        Route::post('/',                       'RaidGroupController@create')             ->name('guild.raidGroup.create'); // TODO: This or the copy a few lines up needs to go, wuth some testing
 
         Route::group(['prefix' => 'prio'], function () {
             Route::get( '/{instanceSlug}',               'PrioController@chooseRaidGroup')->name('guild.prios.chooseRaidGroup');

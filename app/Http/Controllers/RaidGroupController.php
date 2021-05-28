@@ -20,6 +20,45 @@ class RaidGroupController extends Controller
     }
 
     /**
+     * Show a raid group's characters for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function characters($guildId, $guildSlug, $id = null, $secondary = false)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.raids')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $guild->load([
+            'allRaidGroups' => function ($query) use ($id, $secondary) {
+                return $query->where('id', $id)
+                    ->with([($secondary ? 'secondaryCharacters' : 'characters'), 'role'])
+                    ->withCount([($secondary ? 'characters' : 'secondaryCharacters')]);
+            }]);
+
+        $raidGroup = null;
+
+        if ($id) {
+            $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
+
+            if (!$raidGroup) {
+                abort(404, 'Raid Group not found.');
+            }
+        }
+
+        return view('guild.raidGroups.' . ($secondary ? 'secondaryCharacters' : 'characters'), [
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'raidGroup'     => $raidGroup,
+        ]);
+    }
+
+    /**
      * Show a raid group for editing
      *
      * @return \Illuminate\Http\Response
@@ -115,6 +154,16 @@ class RaidGroupController extends Controller
     }
 
     /**
+     * Show a raid group's secondary characters for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function secondaryCharacters($guildId, $guildSlug, $id = null)
+    {
+        return $this->characters($guildId, $guildSlug, $id, true);
+    }
+
+    /**
      * Disable a raid group
      * @return
      */
@@ -177,7 +226,12 @@ class RaidGroupController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load(['allRaidGroups', 'allRaidGroups.role']);
+        $guild->load([
+            'allRaidGroups' => function ($query) {
+                return $query->withCount(['characters', 'secondaryCharacters']);
+            },
+            'allRaidGroups.role',
+        ]);
 
         return view('guild.raidGroups.list', [
             'currentMember' => $currentMember,
