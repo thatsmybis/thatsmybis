@@ -94,12 +94,9 @@ function addItemListSelectHandler() {
      * Change the selected value back to the default value.
      **/
     $(".js-input-select").change(function () {
-        $(this).find(":selected").val();
-        $(this).find(":selected").html().trim();
-
-        value = $(this).find(":selected").val();
-        label = $(this).find(":selected").html().trim();
-        $nextInput = $(this).parent().next("ol").children("li").children("input[value='']").first();
+        const value = $(this).find(":selected").val();
+        const label = $(this).find(":selected").html().trim();
+        const $nextInput = $(this).parent().next("ol").children("li").children("input[value='']").first();
 
         if ($nextInput.val() == "") {
         // Add the item.

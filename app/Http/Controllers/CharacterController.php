@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class CharacterController extends Controller
 {
+    const MAX_RAID_GROUPS    = 30;
     const MAX_RECEIVED_ITEMS = 200;
     const MAX_RECIPES        = 50;
     const MAX_WISHLIST_ITEMS = 50;
@@ -37,7 +38,16 @@ class CharacterController extends Controller
             'profession_2'  => ['nullable', 'string', 'different:profession_1', Rule::in(Character::professions($guild->expansion_id))],
             'rank'          => 'nullable|integer|min:1|max:14',
             'rank_goal'     => 'nullable|integer|min:1|max:14',
-            'raid_group_id' => 'nullable|integer|exists:raid_groups,id',
+            'raid_group_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
+            ],
+            'raid_groups.*' => [
+                'nullable',
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
+            ],
             'public_note'   => 'nullable|string|max:140',
             'officer_note'  => 'nullable|string|max:140',
             'personal_note' => 'nullable|string|max:2000',
@@ -153,8 +163,11 @@ class CharacterController extends Controller
                 ->with([
                     'member',
                 ]);
-
             },
+            'raidGroups',
+            'raidGroups.role',
+            'allRaidGroups',
+            'allRaidGroups.role',
         ]);
 
         $character = $guild->allCharacters->first();
@@ -180,6 +193,7 @@ class CharacterController extends Controller
             'createMore'    => false,
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'maxRaidGroups' => self::MAX_RAID_GROUPS,
         ]);
     }
 
@@ -283,7 +297,7 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load('allRaidGroups');
+        $guild->load(['raidGroups', 'allRaidGroups']);
 
         $cacheKey = 'character:' . $characterId . ':guild:' . $guild->id . ':attendance:' . $guild->is_attendance_hidden;
 
@@ -301,6 +315,8 @@ class CharacterController extends Controller
                     'raids',
                     'received',
                     'recipes',
+                    'secondaryRaidGroups',
+                    'secondaryRaidGroups.role',
                 ]);
 
             if (!$guild->is_attendance_hidden) {
@@ -380,6 +396,13 @@ class CharacterController extends Controller
             $memberId = request()->input('member_id');
         }
 
+        $guild->load([
+            'raidGroups',
+            'raidGroups.role',
+            'allRaidGroups',
+            'allRaidGroups.role',
+        ]);
+
         return view('character.edit', [
             'character'     => null,
             'createMore'    => $createMore,
@@ -399,7 +422,7 @@ class CharacterController extends Controller
 
         $guild->load([
             'members' => function ($query) {
-                return $query->Where('members.id', request()->input('member_id'));
+                return $query->where('members.id', request()->input('member_id'));
             },
             'allCharacters' => function ($query) {
                 return $query->whereRaw('LOWER(characters.name) COLLATE utf8mb4_bin = (?)', strtolower(request()->input('name')))
@@ -409,6 +432,7 @@ class CharacterController extends Controller
         ]);
 
         $character = $guild->allCharacters->where('id', request()->input('id'))->first();
+        $character->load('secondaryRaidGroups');
         $sameNameCharacter = $guild->allCharacters->where('name', request()->input('name'))->first();
 
         if (!$character) {
@@ -504,7 +528,7 @@ class CharacterController extends Controller
         }
 
         if ($updateValues['raid_group_id'] != $character->raid_group_id) {
-            $auditMessage .= ' (changed Raid Group to ' . ($raidGroup ? $raidGroup->name : 'none') . ')';
+            $auditMessage .= ' (changed main raid group to ' . ($raidGroup ? $raidGroup->name : 'none') . ')';
         }
 
         if (array_key_exists('member_id', $updateValues) && $updateValues['member_id'] != $character->member_id) {
@@ -528,6 +552,18 @@ class CharacterController extends Controller
         }
 
         $character->update($updateValues);
+
+        $oldRaidGroups = $character->secondaryRaidGroups->keyBy('id')->keys()->toArray();
+        // Drop duplicates and nulls
+        $newRaidGroups = array_unique(array_filter(request()->input('raid_groups')));
+
+        sort($oldRaidGroups);
+        sort($newRaidGroups);
+
+        if ($oldRaidGroups != $newRaidGroups) {
+            $character->secondaryRaidGroups()->sync($newRaidGroups);
+            $auditMessage .= ' (changed general raid groups [' . count($oldRaidGroups) . ' -> ' . count($newRaidGroups) . ' groups])';
+        }
 
         AuditLog::create([
             'description'  => $currentMember->username . ' updated a character ' . ($auditMessage ? $auditMessage : ''),

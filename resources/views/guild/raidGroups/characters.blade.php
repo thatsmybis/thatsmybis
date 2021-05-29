@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $raidGroup->name . ($isSecondary ? 'General Raiders' : 'Mains') . ' - ' . config('app.name'))
+@section('title', $raidGroup->name . ($isSecondary ? ' General Raiders' : ' Mains') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
-                        <span class="fas fa-fw fa-helmet-battle text-dk"></span>
+                        <span class="fas fa-fw fa-helmet-battle text-{{ $isSecondary ? 'muted' : 'gold' }}"></span>
                         <span style="{{ $raidGroup->role ? 'color:' . $raidGroup->getColor() : '' }}">{{ $raidGroup->name }}</span> {{ $isSecondary ? 'General' : 'Main' }} Raiders
                     </h1>
                     <span class="text-muted">

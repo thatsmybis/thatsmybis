@@ -87,6 +87,26 @@
         </li>
     @endif
 
+    @if (!isset($showSecondaryRaidGroups) && $character->relationLoaded('secondaryRaidGroups')
+        || isset($showSecondaryRaidGroups) && $showSecondaryRaidGroups && $character->relationLoaded('secondaryRaidGroups')
+    )
+        <li class="mt-2">
+            <ul class="list-inline small">
+                @foreach($character->secondaryRaidGroups as $raidGroup)
+                    <li class="list-inline-item">
+                        @php
+                            $raidGroupColor = null;
+                            if ($raidGroup->relationLoaded('role')) {
+                                $raidGroupColor = $raidGroup->getColor();
+                            }
+                        @endphp
+                        @include('partials/raidGroup', ['text' => 'muted'])
+                    </li>
+                @endforeach
+            </ul>
+        </li>
+    @endif
+
     @if (isset($showEdit) && $showEdit && $character->member_id && $character->relationLoaded('member'))
         @if ($character->member->is_received_unlocked)
             <li class="list-inline-item">

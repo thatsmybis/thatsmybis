@@ -385,14 +385,14 @@ class RaidGroupController extends Controller
         }
 
         AuditLog::create([
-            'description'   => "{$currentMember->username} updated the " . ($isSecondary ? 'other' : 'main') . " characters in a Raid Group ({$oldCount} -> " . count($characters) . ")",
+            'description'   => "{$currentMember->username} updated the " . ($isSecondary ? 'other' : 'main') . " characters in a Raid Group ({$oldCount} -> " . count($characters) . " characters)",
             'member_id'     => $currentMember->id,
             'guild_id'      => $guild->id,
             'raid_group_id' => $raidGroup->id,
         ]);
 
         request()->session()->flash('status', 'Successfully updated ' . $raidGroup->name . '\'s ' . ($isSecondary ? 'other' : 'main') . ' characters.');
-        return redirect()->route('guild.raidGroup.' . ($isSecondary ? 'secondaryCharacters' : 'characters'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]);
+        return redirect()->route('guild.raidGroup.' . ($isSecondary ? 'secondaryCharacters' : 'mainCharacters'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]);
     }
 
     public function updateMainCharacters() {
