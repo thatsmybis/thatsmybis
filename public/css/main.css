@@ -544,6 +544,7 @@ select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
     width: 12px;
     height: 12px;
     margin-right: 4px;
+    margin-bottom: -2px;
 }
 
 .role-circle-large {
@@ -614,6 +615,10 @@ button.close:hover {
 /* Sortable list that can be emptied */
 .sortable-no-empty {
     min-height: 300px;
+}
+/* One list has a 'save' button which bumps its margins; this makes top margins in both lists the same */
+.sortable-no-empty-header {
+    min-height: 46px;
 }
 
 /* DATATABLES OVERRIDE */

@@ -25,7 +25,7 @@ class RaidGroupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function characters($guildId, $guildSlug, $id, $secondary = false)
+    private function characters($guildId, $guildSlug, $id, $isSecondary = false)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -36,15 +36,15 @@ class RaidGroupController extends Controller
         }
 
         $guild->load([
-            'allRaidGroups' => function ($query) use ($id, $secondary) {
+            'allRaidGroups' => function ($query) use ($id, $isSecondary) {
                 return $query->where('id', $id)
                     ->with([
-                        ($secondary ? 'secondaryCharacters' : 'characters') => function ($query) {
+                        ($isSecondary ? 'secondaryCharacters' : 'characters') => function ($query) {
                             return $query->with(['raidGroup', 'raidGroup.role']);
                         },
                         'role'
                     ])
-                    ->withCount([($secondary ? 'characters' : 'secondaryCharacters')]);
+                    ->withCount(['characters', 'secondaryCharacters']);
             },
             'characters',
             'characters.raidGroup',
@@ -52,19 +52,48 @@ class RaidGroupController extends Controller
         ]);
 
         $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
-// dd($raidGroup->toArray());
+
         if (!$raidGroup) {
             request()->session()->flash('status', 'Raid group not found');
             return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
         }
 
-        $guild->setRelation('characters', $guild->characters->diff($raidGroup->characters));
+        if ($isSecondary) {
+            // Filter out selected characters so that they don't show up in the 'Available characters' menu
+            $guild->setRelation('characters', $guild->characters->diff($raidGroup->secondaryCharacters));
+            $selectedCharacters = $raidGroup->secondaryCharacters;
+        } else {
+            $guild->setRelation('characters', $guild->characters->diff($raidGroup->characters));
+            $selectedCharacters = $raidGroup->characters;
+        }
 
-        return view('guild.raidGroups.' . ($secondary ? 'secondaryCharacters' : 'characters'), [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'raidGroup'     => $raidGroup,
+        return view('guild.raidGroups.characters', [
+            'selectedCharacters' => $selectedCharacters,
+            'currentMember'      => $currentMember,
+            'guild'              => $guild,
+            'raidGroup'          => $raidGroup,
+            'isSecondary'        => $isSecondary,
         ]);
+    }
+
+    /**
+     * Show a raid group's main characters for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function mainCharacters($guildId, $guildSlug, $id)
+    {
+        return $this->characters($guildId, $guildSlug, $id, false);
+    }
+
+    /**
+     * Show a raid group's secondary characters for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function secondaryCharacters($guildId, $guildSlug, $id)
+    {
+        return $this->characters($guildId, $guildSlug, $id, true);
     }
 
     /**
@@ -160,16 +189,6 @@ class RaidGroupController extends Controller
 
         request()->session()->flash('status', 'Successfully created Raid Group.');
         return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
-    }
-
-    /**
-     * Show a raid group's secondary characters for editing
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function secondaryCharacters($guildId, $guildSlug, $id = null)
-    {
-        return $this->characters($guildId, $guildSlug, $id, true);
     }
 
     /**
@@ -315,19 +334,11 @@ class RaidGroupController extends Controller
         return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
-    public function updateCharacters() {
-        return $this->doUpdateCharacters(false);
-    }
-
-    public function updateSecondaryCharacters() {
-        return $this->doUpdateCharacters(true);
-    }
-
     /**
      * Update a raid group's characters
      * @return
      */
-    private function doUpdateCharacters($isSecondary = false) {
+    private function updateCharacters($isSecondary = false) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -374,13 +385,21 @@ class RaidGroupController extends Controller
         }
 
         AuditLog::create([
-            'description'   => "{$currentMember->username} updated the " . ($isSecondary ? '' : 'main ') . "characters in a Raid Group ({$oldCount} -> " . count($characters) . ")",
+            'description'   => "{$currentMember->username} updated the " . ($isSecondary ? 'other' : 'main') . " characters in a Raid Group ({$oldCount} -> " . count($characters) . ")",
             'member_id'     => $currentMember->id,
             'guild_id'      => $guild->id,
             'raid_group_id' => $raidGroup->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully updated ' . $raidGroup->name . '.');
+        request()->session()->flash('status', 'Successfully updated ' . $raidGroup->name . '\'s ' . ($isSecondary ? 'other' : 'main') . ' characters.');
         return redirect()->route('guild.raidGroup.' . ($isSecondary ? 'secondaryCharacters' : 'characters'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]);
+    }
+
+    public function updateMainCharacters() {
+        return $this->updateCharacters(false);
+    }
+
+    public function updateSecondaryCharacters() {
+        return $this->updateCharacters(true);
     }
 }

@@ -145,11 +145,11 @@ Route::group([
         Route::get( '/',                        'RaidGroupController@raidGroups')               ->name('guild.raidGroups');
         Route::get( '/create',                  'RaidGroupController@edit')                     ->name('guild.raidGroup.create');
         Route::get( '/edit/{id?}',              'RaidGroupController@edit')                     ->where('id', '[0-9]+')->name('guild.raidGroup.edit');
-        Route::get( '/characters/{id}/mains',   'RaidGroupController@characters')               ->where('id', '[0-9]+')->name('guild.raidGroup.characters');
-        Route::get( '/characters/{id}',         'RaidGroupController@secondaryCharacters')      ->where('id', '[0-9]+')->name('guild.raidGroup.secondaryCharacters');
+        Route::get( '/{id}/characters/main',    'RaidGroupController@mainCharacters')               ->where('id', '[0-9]+')->name('guild.raidGroup.mainCharacters');
+        Route::get( '/{id}/characters/general', 'RaidGroupController@secondaryCharacters')      ->where('id', '[0-9]+')->name('guild.raidGroup.secondaryCharacters');
         Route::post('/toggle-disable',          'RaidGroupController@toggleDisable')            ->name('guild.raidGroup.toggleDisable');
         Route::post('/update',                  'RaidGroupController@update')                   ->name('guild.raidGroup.update');
-        Route::post('/update-characters',       'RaidGroupController@updateCharacters')         ->name('guild.raidGroup.updateCharacters');
+        Route::post('/update-characters',       'RaidGroupController@updateMainCharacters')     ->name('guild.raidGroup.updateMainCharacters');
         Route::post('/update-other-characters', 'RaidGroupController@updateSecondaryCharacters')->name('guild.raidGroup.updateSecondaryCharacters');
         Route::post('/',                        'RaidGroupController@create')                   ->name('guild.raidGroup.create'); // TODO: This or the copy a few lines up needs to go, wuth some testing
 
