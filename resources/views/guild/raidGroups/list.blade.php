@@ -12,7 +12,9 @@
                         Raid Groups
                     </h1>
                     <span class="text-muted">
-                        If you don't want the concept of "main raiders", use <strong>other</strong> and don't use "main" at all
+                        Each character can be assigned <strong>one</strong> main raid and <strong>many</strong> other raids.
+                        <br>
+                        Only a character's main raid will show up beside their name across the site.
                     </span>
                 </div>
                 <div class="col-12 mt-3 mb-3">
@@ -43,7 +45,7 @@
                                             &sdot;
                                         </li>
                                         <li class="list-inline-item text-muted small">
-                                            <a href="{{ route('guild.raidGroup.characters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
+                                            <a href="{{ route('guild.raidGroup.mainCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
                                                 {{ $raidGroup->characters_count }} main raider{{ $raidGroup->characters_count != 1 ? 's' : '' }}
                                             </a>
                                         </li>
@@ -52,7 +54,7 @@
                                         </li>
                                         <li class="list-inline-item text-muted small">
                                             <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-                                                {{ $raidGroup->secondary_characters_count }} other raider{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+                                                {{ $raidGroup->secondary_characters_count }} general raider{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
                                             </a>
                                         </li>
                                     </ul>

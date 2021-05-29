@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $raidGroup->name . ' Mains - ' . config('app.name'))
+@section('title', $raidGroup->name . ($isSecondary ? 'General Raiders' : 'Mains') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -14,24 +14,44 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                        <span style="{{ $raidGroup->role ? 'color:' . $raidGroup->getColor() : '' }}">{{ $raidGroup->name }}</span> Main Raiders
+                        <span style="{{ $raidGroup->role ? 'color:' . $raidGroup->getColor() : '' }}">{{ $raidGroup->name }}</span> {{ $isSecondary ? 'General' : 'Main' }} Raiders
                     </h1>
-                    {{ $raidGroup->secondary_characters_count }} other raider{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+                    <span class="text-muted">
+                        Each character can be assigned <strong>one</strong> main raid and <strong>many</strong> other raids.
+                        <br>
+                        Only a character's main raid will show up beside their name across the site.
+                        <br>
+                        @if ($isSecondary)
+                            This raid group also has
+                            <a href="{{ route('guild.raidGroup.mainCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
+                                {{ $raidGroup->characters_count }} main raider{{ $raidGroup->characters_count != 1 ? 's' : '' }}
+                            </a>
+                        @else
+                            This raid group also has
+                            <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
+                                {{ $raidGroup->secondary_characters_count }} general raider{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+                            </a>
+                        @endif
+                    </span>
                 </div>
                 <!-- Doing some funky flex and 100% width magic to get the lists to take up the whole height -->
                 <div class="d-flex col-6 pr-2 pt-3 pb-1 mb-2 bg-light rounded">
-                    <form id="characterForm" class="d-flex flex-column w-100 form-horizontal" role="form" method="POST" action="{{ route('guild.raidGroup.updateCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                    <form id="characterForm"
+                        class="d-flex flex-column w-100 form-horizontal"
+                        role="form"
+                        method="POST"
+                        action="{{ route('guild.raidGroup.' . ($isSecondary ? 'updateSecondaryCharacters' : 'updateMainCharacters'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                         {{ csrf_field() }}
                         <input hidden name="raid_group_id" value="{{ $raidGroup->id }}" />
 
-                        <div>
+                        <div class="sortable-no-empty-header">
                             <h4>
                                 Selected &nbsp; <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
                             </h4>
                         </div>
                         <div class="d-flex" style="flex:1"> <!-- flex:1 will make it take up the full vertical space -->
                             <ul id="selectedCharacters" class="w-100 sortable-no-empty no-bullet no-indent pt-3 pl-3 pr-3 pb-2 bg-dark rounded">
-                                @foreach ($raidGroup->characters as $character)
+                                @foreach ($selectedCharacters as $character)
                                     @include('guild/raidGroups/partials/movableCharacter')
                                 @endforeach
                             </ul>
@@ -42,7 +62,7 @@
                     </form>
                 </div>
                 <div class="d-flex w-100 flex-column col-6 pl-2 pt-3 pb-1 mb-2 bg-light rounded">
-                    <div>
+                    <div class="sortable-no-empty-header">
                         <h4>Available</h4>
                     </div>
                     <div class="d-flex" style="flex:1">
