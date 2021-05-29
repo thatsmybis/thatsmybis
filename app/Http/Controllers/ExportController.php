@@ -346,7 +346,7 @@ class ExportController extends Controller {
                 ci.received_at AS 'received_at',
                 ci.import_id   AS 'import_id',
                 REPLACE(REPLACE(gi.note, CHAR(13), ' '), CHAR(10), ' ') AS 'item_note',
-                gi.priority    AS 'item_prio_note',
+                REPLACE(REPLACE(gi.priority, CHAR(13), ' '), CHAR(10), ' ') AS 'item_prio_note',
                 gi.tier        AS 'item_tier',
                 {$tierLabelField}
                 ci.created_at  AS 'created_at',
