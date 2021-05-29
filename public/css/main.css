@@ -611,6 +611,11 @@ button.close:hover {
     z-index: 99;
 }
 
+/* Sortable list that can be emptied */
+.sortable-no-empty {
+    min-height: 300px;
+}
+
 /* DATATABLES OVERRIDE */
 .dataTables_wrapper .dataTables_filter,
 .dataTables_wrapper .dataTables_info,

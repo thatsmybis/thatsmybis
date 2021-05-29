@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Guild, RaidGroup, User};
+use App\{AuditLog, Character, Guild, RaidGroup, User};
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use Kodeine\Acl\Models\Eloquent\Permission;
 
 class RaidGroupController extends Controller
@@ -24,7 +25,7 @@ class RaidGroupController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function characters($guildId, $guildSlug, $id = null, $secondary = false)
+    public function characters($guildId, $guildSlug, $id, $secondary = false)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -37,19 +38,27 @@ class RaidGroupController extends Controller
         $guild->load([
             'allRaidGroups' => function ($query) use ($id, $secondary) {
                 return $query->where('id', $id)
-                    ->with([($secondary ? 'secondaryCharacters' : 'characters'), 'role'])
+                    ->with([
+                        ($secondary ? 'secondaryCharacters' : 'characters') => function ($query) {
+                            return $query->with(['raidGroup', 'raidGroup.role']);
+                        },
+                        'role'
+                    ])
                     ->withCount([($secondary ? 'characters' : 'secondaryCharacters')]);
-            }]);
+            },
+            'characters',
+            'characters.raidGroup',
+            'characters.raidGroup.role',
+        ]);
 
-        $raidGroup = null;
-
-        if ($id) {
-            $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
-
-            if (!$raidGroup) {
-                abort(404, 'Raid Group not found.');
-            }
+        $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
+// dd($raidGroup->toArray());
+        if (!$raidGroup) {
+            request()->session()->flash('status', 'Raid group not found');
+            return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
         }
+
+        $guild->setRelation('characters', $guild->characters->diff($raidGroup->characters));
 
         return view('guild.raidGroups.' . ($secondary ? 'secondaryCharacters' : 'characters'), [
             'currentMember' => $currentMember,
@@ -304,5 +313,74 @@ class RaidGroupController extends Controller
 
         request()->session()->flash('status', 'Successfully updated ' . $raidGroup->name . '.');
         return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+    }
+
+    public function updateCharacters() {
+        return $this->doUpdateCharacters(false);
+    }
+
+    public function updateSecondaryCharacters() {
+        return $this->doUpdateCharacters(true);
+    }
+
+    /**
+     * Update a raid group's characters
+     * @return
+     */
+    private function doUpdateCharacters($isSecondary = false) {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.raids')) {
+            request()->session()->flash('status', 'You don\'t have permissions to edit Raid Groups.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $validationRules =  [
+            'raid_group_id' => [
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
+            ],
+            'characters.*.character_id' => [
+                'integer',
+                Rule::exists('characters', 'id')->where('characters.guild_id', $guild->id),
+            ],
+        ];
+
+        $this->validate(request(), $validationRules);
+
+        $characters = [];
+        foreach (request()->input('characters') as $character) {
+            // This has the added effect of filtering out duplicates
+            $characters[$character['character_id']] = $character;
+        }
+
+        $raidGroup = $guild->raidGroups()->where('id', request()->input('raid_group_id'))->with($isSecondary ? 'secondaryCharacters' : 'characters')->first();
+
+        if ($isSecondary) {
+            $oldCount = $raidGroup->characters->count();
+        } else {
+            $oldCount = $raidGroup->secondaryCharacters->count();
+        }
+
+
+        if ($isSecondary) {
+            $raidGroup->secondaryCharacters()->sync($characters);
+        } else {
+            // Drop the old main characters
+            $guild->characters()->where('raid_group_id', $raidGroup->id)->update(['raid_group_id' => null]);
+            // Add the new/updated ones
+            Character::where('guild_id', $guild->id)->whereIn('id', array_keys($characters))->update(['raid_group_id' => $raidGroup->id]);
+        }
+
+        AuditLog::create([
+            'description'   => "{$currentMember->username} updated the " . ($isSecondary ? '' : 'main ') . "characters in a Raid Group ({$oldCount} -> " . count($characters) . ")",
+            'member_id'     => $currentMember->id,
+            'guild_id'      => $guild->id,
+            'raid_group_id' => $raidGroup->id,
+        ]);
+
+        request()->session()->flash('status', 'Successfully updated ' . $raidGroup->name . '.');
+        return redirect()->route('guild.raidGroup.' . ($isSecondary ? 'secondaryCharacters' : 'characters'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]);
     }
 }

@@ -29,7 +29,7 @@ class RaidGroup extends Model
     ];
 
     public function characters() {
-        return $this->hasMany(Character::class);
+        return $this->hasMany(Character::class)->orderBy('name');
     }
 
     public function priodCharacters() {
@@ -61,7 +61,7 @@ class RaidGroup extends Model
     }
 
     public function secondaryCharacters() {
-        return $this->belongsToMany(Character::class, 'character_raid_groups', 'raid_group_id', 'character_id');
+        return $this->belongsToMany(Character::class, 'character_raid_groups', 'raid_group_id', 'character_id')->orderBy('name');
     }
 
     /**

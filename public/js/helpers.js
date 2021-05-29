@@ -46,6 +46,9 @@ $(document).ready(function () {
     // For toggling hidden note inputs
     addNoteHandlers();
 
+    // For enabling sortable elements
+    addSortHandlers();
+
     // For enabling wishlist sorting
     addWishlistSortHandlers();
 
@@ -101,6 +104,15 @@ function addNestedDropdownSupport() {
 function addNoteHandlers() {
     $(".js-show-note-edit").click(function () {
         $(".js-note-input").toggle();
+    });
+}
+
+// For enabling sortable elements
+function addSortHandlers() {
+    $(".js-sortable").sortable({handle: ".js-sort-handle"});
+    // sortable() is slow to initialize when applied to hundreds of elements, so this solves for that scenario
+    $(".js-sortable-lazy").one("mouseenter", function() {
+        $(this).sortable({handle: ".js-sort-handle"});
     });
 }
 
