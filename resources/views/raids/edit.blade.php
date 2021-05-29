@@ -217,7 +217,7 @@
                             <span class="fas fa-fw fa-users text-muted"></span>
                             Raid Group(s)
                         </label>
-                        @for ($i = 0; $i < $maxRaids; $i++)
+                        @for ($i = 0; $i < $maxRaidGroups; $i++)
                             <div class="form-group {{ $i > 0 ? 'js-hide-empty' : '' }}" style="{{ $i > 0 ? 'display:none;' : '' }}">
                                 <select name="raid_group_id[]" class="form-control dark {{ $i >= 0 ? 'js-show-next' : '' }}" autocomplete="off">
                                     <option value="" selected>

@@ -11,6 +11,14 @@
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
                         Raid Groups
                     </h1>
+                    <span class="text-muted">
+                        If you don't want the concept of "main raiders", use <strong>other</strong> and don't use "main" at all
+                    </span>
+                </div>
+                <div class="col-12 mt-3 mb-3">
+                    <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
+                        <span class="fas fa-fw fa-plus"></span> Create
+                    </a>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     @if ($guild->allRaidGroups->count() > 0)
@@ -36,7 +44,7 @@
                                         </li>
                                         <li class="list-inline-item text-muted small">
                                             <a href="{{ route('guild.raidGroup.characters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-                                                {{ $raidGroup->characters_count }} main char{{ $raidGroup->characters_count != 1 ? 's' : '' }}
+                                                {{ $raidGroup->characters_count }} main raider{{ $raidGroup->characters_count != 1 ? 's' : '' }}
                                             </a>
                                         </li>
                                         <li class="list-inline-item text-muted small">
@@ -44,7 +52,7 @@
                                         </li>
                                         <li class="list-inline-item text-muted small">
                                             <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-                                                {{ $raidGroup->secondary_characters_count }} other char{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+                                                {{ $raidGroup->secondary_characters_count }} other raider{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
                                             </a>
                                         </li>
                                     </ul>
@@ -81,11 +89,6 @@
                         No raid groups yet
                     </p>
                     @endif
-                </div>
-                <div class="col-12 mt-3">
-                    <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
-                        <span class="fas fa-fw fa-plus"></span> Create New Raid Group
-                    </a>
                 </div>
             </div>
         </div>

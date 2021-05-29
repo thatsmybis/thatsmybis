@@ -3,11 +3,6 @@ $(document).ready(function () {
     addItemListSelectHandler();
     addItemRemoveHandler();
     addTagInputHandlers();
-    $(".js-sortable").sortable({handle: ".js-sort-handle"});
-    // sortable() is slow to initialize when applied to hundreds of elements, so this solves for that scenario
-    $(".js-sortable-lazy").one("mouseenter", function() {
-        $(this).sortable({handle: ".js-sort-handle"});
-    });
 });
 
 // Adds autocomplete for items!
