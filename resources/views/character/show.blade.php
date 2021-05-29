@@ -7,7 +7,13 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
-                    @include('character/partials/header', ['headerSize' => 1, 'showEdit' => $showEdit, 'showIcon' => false, 'showLogs' => true])
+                    @include('character/partials/header', [
+                        'headerSize' => 1,
+                        'showEdit' => $showEdit,
+                        'showIcon' => false,
+                        'showLogs' => true,
+                        'showSecondaryRaidGroups' => true,
+                    ])
                 </div>
             </div>
 
