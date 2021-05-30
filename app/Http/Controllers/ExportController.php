@@ -60,8 +60,7 @@ class ExportController extends Controller {
 
     const RAID_GROUPS_HEADERS = [
         "raid_group_name",
-        "raid_group_role",
-        "raid_group_color",
+        "status",
         "character_name",
         "character_class",
         "member_name",
@@ -266,44 +265,53 @@ class ExportController extends Controller {
 
         $csv = Cache::remember("export:raidGroups:guild:{$guild->id}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild) {
             $rows = DB::select(DB::raw(
-
-
-
-
-
-
-
-
                 "SELECT
-                    raid_groups.name AS raid_group_name
-                    role.name AS raid_group_role
-                    role.color AS raid_group_color
-                    characters.name AS character_name
-                    .character_class AS character_class
-                    .member_name AS member_name
-                    .member_discord_username AS member_discord_username
-                    i.name            AS 'item_name',
-                    i.item_id         AS 'item_id',
-                    instances.name    AS 'instance_name',
-                    item_sources.name AS 'source_name',
-                    gi.note           AS 'item_note',
-                    gi.priority       AS 'item_prio_note',
-                    gi.tier           AS 'tier',
-                    {$tierLabelField}
-                    gi.created_at     AS 'created_at',
-                    gi.updated_at     AS 'updated_at'
-                FROM items i
-                    JOIN item_item_sources iis ON iis.item_id = i.item_id
-                    JOIN item_sources          ON item_sources.id = iis.item_source_id
-                    JOIN instances             ON instances.id = item_sources.instance_id
-                    LEFT JOIN guild_items gi   ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
-                WHERE i.expansion_id = {$guild->expansion_id}
-                ORDER BY instances.`order` DESC, i.name ASC;"));
+                    raid_group_name,
+                    status,
+                    character_name,
+                    character_class,
+                    character_id,
+                    member_name,
+                    member_discord_username
+                FROM
+                    (
+                    SELECT
+                        raid_groups.name AS raid_group_name,
+                        characters.name  AS character_name,
+                        characters.class AS character_class,
+                        characters.id    AS character_id,
+                        members.username AS member_name,
+                        users.discord_username AS member_discord_username,
+                        'general' AS status
+                    FROM guilds
+                        JOIN raid_groups ON raid_groups.guild_id = guilds.id
+                        LEFT JOIN character_raid_groups ON character_raid_groups.raid_group_id = raid_groups.id
+                        LEFT JOIN characters ON characters.id = character_raid_groups.character_id
+                        LEFT JOIN members    ON members.id = characters.member_id
+                        LEFT JOIN users      ON users.id = members.user_id
+                    WHERE guilds.id = {$guild->id}
+                    UNION
+                    SELECT
+                            raid_groups.name AS raid_group_name,
+                            characters.name  AS character_name,
+                            characters.class AS character_class,
+                            characters.id    AS character_id,
+                            members.username AS member_name,
+                            users.discord_username AS member_discord_username,
+                            'main' AS status
+                        FROM guilds
+                            JOIN raid_groups ON raid_groups.guild_id = guilds.id
+                            LEFT JOIN characters ON characters.raid_group_id = raid_groups.id
+                            LEFT JOIN members    ON members.id = characters.member_id
+                            LEFT JOIN users      ON users.id = members.user_id
+                        WHERE guilds.id = {$guild->id}
+                    ) raiders
+                ORDER BY raid_group_name ASC, character_name ASC;"));
 
-            return $this->createCsv($rows, self::ITEM_NOTE_HEADERS);
+            return $this->createCsv($rows, self::RAID_GROUPS_HEADERS);
         });
 
-        return $this->getExport($csv, 'Item Notes', $fileType);
+        return $this->getExport($csv, 'Raid Groups', $fileType);
     }
 
     /**
