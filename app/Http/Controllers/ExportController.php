@@ -63,6 +63,7 @@ class ExportController extends Controller {
         "status",
         "character_name",
         "character_class",
+        "character_id",
         "member_name",
         "member_discord_username",
     ];
