@@ -162,13 +162,20 @@ class RaidController extends Controller
                 ['guild_id', $guild->id],
                 ['id', $id],
             ])->first();
-            $raid->load('characters', 'instances', 'raidGroups');
+            $raid->load([
+                'characters',
+                'instances',
+                'raidGroups'
+            ]);
         }
 
         $guild->load([
             'allCharacters',
+            'characters',
+            'characters.secondaryRaidGroups',
             'raidGroups',
-            'raidGroups.role']);
+            'raidGroups.role',
+        ]);
 
         $instances = Instance::where('expansion_id', $guild->expansion_id)->get();
 

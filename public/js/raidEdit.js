@@ -81,7 +81,15 @@ function findExistingCharacter(characterId, except = null) {
 
 // Add characters belonging to the given raid group to the character list if they're not already in it
 function fillCharactersFromRaid(raidGroupId) {
-    const raidGroupCharacters = characters.filter(character => character.raid_group_id == raidGroupId);
+    const mainRaidGroupCharacters = characters.filter(character => character.raid_group_id == raidGroupId);
+    const secondaryRaidGroupCharacters = characters.filter(character =>
+        character.secondary_raid_groups.filter(raidGroup => raidGroup.id == raidGroupId).length > 0
+    );
+
+    // Combine the two arrays and sort by name
+    const raidGroupCharacters = mainRaidGroupCharacters
+        .concat(secondaryRaidGroupCharacters)
+        .sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
 
     let addedCount = 0;
     let alreadyAddedCount = 0;
