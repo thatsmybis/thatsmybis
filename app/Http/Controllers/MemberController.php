@@ -102,6 +102,8 @@ class MemberController extends Controller
                     ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance'),
                     ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup',
                     ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup.role',
+                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.secondaryRaidGroups',
+                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.secondaryRaidGroups.role',
                     ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raids',
                     ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.recipes',
                     'roles',
