@@ -241,9 +241,16 @@
 
                 <div class="row">
                     <div class="col-12 pt-2">
-                        <h2 class="font-weight-medium ">
-                            Attendees
-                        </h2>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <h2 class="font-weight-medium ">
+                                    Attendees
+                                </h2>
+                            </li>
+                            <li class="list-inline-item">
+                                <span class="js-clear-attendees text-link cursor-pointer"><span class="fas fa-fw fa-trash"></span> reset list</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 

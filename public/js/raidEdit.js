@@ -68,8 +68,36 @@ $(document).ready(function () {
         }
     }).change();
 
+    $(".js-clear-attendees").click(function () {
+        resetAttendees()
+    });
+
     initializing = false;
 });
+
+// Reset and empty the attendee list.
+function resetAttendees () {
+    if (confirm("Are you sure you want to empty and reset the attendee list?")) {
+        // Raid group selects
+        $('select[name^=raid_group_id]').val('').change();
+        // Char select
+        $('select[name^=characters][name$=\\[character_id\\]]').val('').change();
+        // Excused
+        $(".js-attendance-skip").prop("checked", false).change();
+        // Note / remark
+        $('select[name^=characters][name$=\\[remark_id\\]]').val('').change();
+        // Credit slider
+        $("[name^=characters][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
+        // Public note
+        $('[name^=characters][name$=\\[public_note\\]]').val('');
+        // Officer note
+        $('[name^=characters][name$=\\[officer_note\\]]').val('');
+        // Show the custom note toggle
+        $(".js-show-notes").show();
+        // Hide the custom notes
+        $(`.js-notes`).hide();
+    }
+}
 
 function findExistingCharacter(characterId, except = null) {
     if (except) {
