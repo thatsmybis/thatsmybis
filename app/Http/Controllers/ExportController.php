@@ -58,6 +58,16 @@ class ExportController extends Controller {
         "url",
     ];
 
+    const RAID_GROUPS_HEADERS = [
+        "raid_group_name",
+        "raid_group_role",
+        "raid_group_color",
+        "character_name",
+        "character_class",
+        "member_name",
+        "member_discord_username",
+    ];
+
     /**
      * Create a new controller instance.
      *
@@ -220,6 +230,58 @@ class ExportController extends Controller {
             $tierLabelField = $this->getTierLabelField($guild);
             $rows = DB::select(DB::raw(
                 "SELECT
+                    i.name            AS 'item_name',
+                    i.item_id         AS 'item_id',
+                    instances.name    AS 'instance_name',
+                    item_sources.name AS 'source_name',
+                    gi.note           AS 'item_note',
+                    gi.priority       AS 'item_prio_note',
+                    gi.tier           AS 'tier',
+                    {$tierLabelField}
+                    gi.created_at     AS 'created_at',
+                    gi.updated_at     AS 'updated_at'
+                FROM items i
+                    JOIN item_item_sources iis ON iis.item_id = i.item_id
+                    JOIN item_sources          ON item_sources.id = iis.item_source_id
+                    JOIN instances             ON instances.id = item_sources.instance_id
+                    LEFT JOIN guild_items gi   ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
+                WHERE i.expansion_id = {$guild->expansion_id}
+                ORDER BY instances.`order` DESC, i.name ASC;"));
+
+            return $this->createCsv($rows, self::ITEM_NOTE_HEADERS);
+        });
+
+        return $this->getExport($csv, 'Item Notes', $fileType);
+    }
+
+    /**
+     * Export a guild's raid groups
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportRaidGroups($guildId, $guildSlug, $fileType)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $csv = Cache::remember("export:raidGroups:guild:{$guild->id}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild) {
+            $rows = DB::select(DB::raw(
+
+
+
+
+
+
+
+
+                "SELECT
+                    raid_groups.name AS raid_group_name
+                    role.name AS raid_group_role
+                    role.color AS raid_group_color
+                    characters.name AS character_name
+                    .character_class AS character_class
+                    .member_name AS member_name
+                    .member_discord_username AS member_discord_username
                     i.name            AS 'item_name',
                     i.item_id         AS 'item_id',
                     instances.name    AS 'instance_name',

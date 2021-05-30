@@ -409,6 +409,7 @@ class CharacterController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'memberId'      => $memberId,
+            'maxRaidGroups' => self::MAX_RAID_GROUPS,
         ]);
     }
 
