@@ -10,21 +10,21 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
             <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
-                Profile
+                <span class="fas fa-fw fa-user"></span> Profile
             </a>
             @if (isset($showLogs) && $showLogs)
                 <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}" target="_blank">
-                    History
+                    <span class="fas fa-fw fa-clipboard-list-check"></span> History
                 </a>
             @endif
             @if (isset($showEdit) && $showEdit)
                 <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
-                    Edit
+                    <span class="fas fa-fw fa-pencil"></span> Edit
                 </a>
             @endif
             @if (isset($showEditLoot) && $showEditLoot)
                 <a class="dropdown-item" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
-                    Loot
+                    <span class="fas fa-fw fa-sack"></span> Wishlist & Loot
                 </a>
             @endif
         </div>
@@ -51,7 +51,7 @@
         @if (isset($showEditLoot) && $showEditLoot)
             <li class="list-inline-item">
                 <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
-                    <span class="fas fa-fw fa-sack"></span>loot
+                    <span class="fas fa-fw fa-sack"></span>wishlist & loot
                 </a>
             </li>
         @endif
