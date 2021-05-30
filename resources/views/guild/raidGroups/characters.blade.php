@@ -77,7 +77,9 @@
         </div>
     </div>
 </div>
+
 @endsection
+
 
 @section('scripts')
 <script src="{{ loadScript('raidGroupCharacters.js') }}"></script>
