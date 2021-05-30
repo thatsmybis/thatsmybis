@@ -17,7 +17,7 @@
                         <span style="{{ $raidGroup->role ? 'color:' . $raidGroup->getColor() : '' }}">{{ $raidGroup->name }}</span> {{ $isSecondary ? 'General' : 'Main' }} Raiders
                     </h1>
                     <span class="text-muted">
-                        Each character can be assigned <strong>one</strong> main raid and <strong>many</strong> other raids.
+                        Each character can be a main raider in just <strong>one</strong> raid, and a general raider in <strong>many</strong> other raids.
                         <br>
                         Only a character's main raid will show up beside their name across the site.
                         <br>
