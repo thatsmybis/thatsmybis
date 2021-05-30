@@ -31,28 +31,28 @@
                                         <li class="list-inline-item">
                                             <span class="role-circle" style="{{ $raidGroup->role ? 'background-color:' . $raidGroup->role->getColor() : '' }}" title="{{ $raidGroup->role ? $raidGroup->role->getColor() : ''}}"></span>
                                             <span class="font-weight-bold text-danger">{{ $raidGroup->disabled_at ? 'ARCHIVED' : '' }}</span>
-                                            <span class="font-weight-medium" title="{{ $raidGroup->slug }}">{{ $raidGroup->name }}</span>
+                                            <span class="text-5 font-weight-medium" title="{{ $raidGroup->slug }}">{{ $raidGroup->name }}</span>
                                         </li>
                                         @if ($raidGroup->role)
-                                            <li class="list-inline-item text-muted small">
+                                            <li class="list-inline-item text-muted">
                                                 &sdot;
                                             </li>
-                                            <li class="list-inline-item text-muted small">
+                                            <li class="list-inline-item text-muted">
                                                 <span title="Discord Role: {{ $raidGroup->role->discord_id }}">{{ $raidGroup->role->name }}</span>
                                             </li>
                                         @endif
-                                        <li class="list-inline-item text-muted small">
+                                        <li class="list-inline-item text-muted">
                                             &sdot;
                                         </li>
-                                        <li class="list-inline-item text-muted small">
+                                        <li class="list-inline-item text-muted">
                                             <a href="{{ route('guild.raidGroup.mainCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
                                                 {{ $raidGroup->characters_count }} main raider{{ $raidGroup->characters_count != 1 ? 's' : '' }}
                                             </a>
                                         </li>
-                                        <li class="list-inline-item text-muted small">
+                                        <li class="list-inline-item text-muted">
                                             &sdot;
                                         </li>
-                                        <li class="list-inline-item text-muted small">
+                                        <li class="list-inline-item text-muted">
                                             <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
                                                 {{ $raidGroup->secondary_characters_count }} general raider{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
                                             </a>
