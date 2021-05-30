@@ -219,7 +219,20 @@ class Guild extends Model
             })
             ->where('characters.guild_id', $this->id)
             ->orderBy('characters.name')
-            ->with(['received']);
+            ->with([
+                'received',
+                'secondaryRaidGroups' => function ($query) {
+                    return $query
+                        ->select([
+                            'raid_groups.id',
+                            'raid_groups.name',
+                            'roles.color',
+                        ])
+                        ->leftJoin('roles', function ($join) {
+                            $join->on('roles.id', 'raid_groups.role_id');
+                        });
+                    },
+                ]);
 
         $query = Character::addAttendanceQuery($query);
 

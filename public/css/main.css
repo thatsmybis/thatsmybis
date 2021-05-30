@@ -544,6 +544,8 @@ select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
     width: 12px;
     height: 12px;
     margin-right: 4px;
+}
+.role-circle.align-fix {
     margin-bottom: -2px;
 }
 

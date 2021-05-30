@@ -16,7 +16,7 @@
                     }
                 @endphp
                 @if ($character->raidGroup)
-                    <div class="small tag d-inline font-weight-normal text-muted float-right" style="border-color:{{ $raidGroupColor }};"><span class="role-circle" style="background-color:{{ $raidGroupColor }}"></span>
+                    <div class="small tag d-inline font-weight-normal text-muted float-right" style="border-color:{{ $raidGroupColor }};"><span class="role-circle align-fix" style="background-color:{{ $raidGroupColor }}"></span>
                         {{ $character->raidGroup->name }}
                     </div>
                 @endif
