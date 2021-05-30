@@ -129,7 +129,7 @@
                                             </li>
                                         @endif
 
-                                        @if (($guild->is_attendance_hidden && $item->wishlistCharacters->count() > 0) || (!$guild->is_attendance_hidden && $item->wishlistCharactersWithAttendance->count() > 0))
+                                        @if (!$guild->is_wishlist_disabled && (($guild->is_attendance_hidden && $item->wishlistCharacters->count() > 0) || (!$guild->is_attendance_hidden && $item->wishlistCharactersWithAttendance->count() > 0)))
                                             <li>
                                                 <span class="fa-li mt-1" title="Characters who have it wishlisted"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
                                                 <ul class="list-inline">

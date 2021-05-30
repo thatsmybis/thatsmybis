@@ -175,7 +175,7 @@
                     $editCharacters = $currentMember->hasPermission('edit.characters');
                     $editGuild      = $currentMember->hasPermission('edit.guild');
                     $editItems      = $currentMember->hasPermission('edit.items');
-                    $editPrios      = $currentMember->hasPermission('edit.prios');
+                    $editPrios      = !$guild->is_prio_disabled && $currentMember->hasPermission('edit.prios');
                 @endphp
 
                 @if ($viewRoles || $viewRaids || $editCharacters || $editGuild || $editItems || $editPrios)

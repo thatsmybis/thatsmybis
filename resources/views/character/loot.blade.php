@@ -26,7 +26,7 @@
 
                 <input hidden name="id" value="{{ $character->id }}" />
 
-                @if ($showPrios)
+                @if ($showPrios && !$guild->is_prio_disabled)
                     <div class="row mb-3 pt-2 bg-light rounded">
                         <div class="col-12 mb-2">
                             <span class="text-gold font-weight-bold">
@@ -53,112 +53,113 @@
                     </div>
                 @endif
 
-                <div class="row">
-                    <div class="col-12 mb-3">
-                        <small>
-                            <span class="font-weight-bold">Hint:</span> Your top 4 items are displayed first; make them count
-                        </small>
+                @if (!$guild->is_wishlist_disabled)
+                    <div class="row">
+                        <div class="col-12 mb-3">
+                            <small>
+                                <span class="font-weight-bold">Hint:</span> Your top 4 items are displayed first; make them count
+                            </small>
+                        </div>
                     </div>
-                </div>
+                    <div class="row mb-3 pt-2 bg-light rounded">
+                        <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
+                            <label for="wishlist">
+                                <span class="font-weight-bold text-legendary">
+                                    <span class="fas fa-fw fa-scroll-old"></span>
+                                    Wishlist
+                                </span>
+                                @if ($lockWishlist)
+                                    <small class="text-warning font-weight-normal">locked by your guild master(s)</small>
+                                @elseif (!$unlockWishlist && $guild->is_wishlist_locked)
+                                    <small class="text-warning font-weight-normal">locked for raiders</small> <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
+                                @else
+                                    <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
+                                @endif
+                                <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">see what other people wishlisted</a>
+                            </label>
 
-                <div class="row mb-3 pt-2 bg-light rounded">
-                    <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
-                        <label for="wishlist">
-                            <span class="font-weight-bold text-legendary">
-                                <span class="fas fa-fw fa-scroll-old"></span>
-                                Wishlist
-                            </span>
                             @if ($lockWishlist)
-                                <small class="text-warning font-weight-normal">locked by your guild master(s)</small>
-                            @elseif (!$unlockWishlist && $guild->is_wishlist_locked)
-                                <small class="text-warning font-weight-normal">locked for raiders</small> <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
+                                @if ($character->wishlist->count() > 0)
+                                    <ol class="lesser-indent">
+                                        @foreach ($character->wishlist as $item)
+                                            <li class="mb-2" value="{{ $item->pivot->order }}">
+                                                @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                                @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                            </li>
+                                        @endforeach
+                                    </ol>
+                                @else
+                                    <div class="pl-4">
+                                        —
+                                    </div>
+                                @endif
                             @else
-                                <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
-                            @endif
-                            <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">see what other people wishlisted</a>
-                        </label>
+                                <div class="{{ $errors->has('wishlist.*') ? 'has-error' : '' }}">
+                                    <input id="wishlist" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
+                                    <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
-                        @if ($lockWishlist)
-                            @if ($character->wishlist->count() > 0)
-                                <ol class="lesser-indent">
-                                    @foreach ($character->wishlist as $item)
-                                        <li class="mb-2" value="{{ $item->pivot->order }}">
-                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
-                                            @include('character/partials/itemDetails', ['hideCreatedAt' => true])
-                                        </li>
-                                    @endforeach
-                                </ol>
-                            @else
-                                <div class="pl-4">
-                                    —
+                                    <ul class="js-sortable no-bullet no-indent mb-0 bg-light">
+                                        @for ($i = 0; $i < $maxWishlistItems; $i++)
+                                            @php
+                                                $item      = null;
+                                                $itemId    = null;
+                                                $itemLabel = null;
+
+                                                if (old('wishlist.' . $i . '.item_id')) {
+                                                    $itemId = old('wishlist.' . $i . '.item_id');
+                                                    if (old('wishlist.' . $i . '.label')) {
+                                                        $itemLabel = old('wishlist.' . $i . '.label');
+                                                    } else {
+                                                        $itemLabel = $itemId;
+                                                    }
+                                                } else if ($character->wishlist && $character->wishlist->get($i)) {
+                                                    $item      = $character->wishlist->get($i);
+                                                    $itemId    = $item->item_id;
+                                                    $itemLabel = $item->name;
+                                                }
+                                            @endphp
+                                            <li class="input-item position-relative {{ $itemId ? 'd-flex' : '' }} {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
+                                                style="{{ $itemId ? '' : 'display:none;' }}">
+                                                <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;" />
+                                                <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;" />
+                                                <input type="checkbox" checked name="wishlist[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" style="display:none;"/>
+
+                                                <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
+
+                                                <div class="js-sort-handle move-cursor text-4 text-unselectable d-flex mr-1">
+                                                    <div class="justify-content-center align-self-center">
+                                                        <span class="fas fa-fw fa-grip-vertical text-muted"></span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="js-input-label">
+                                                    <span class="js-item-display">
+                                                        @includeWhen($itemId, 'partials/item', [
+                                                            'wowheadLink' => false,
+                                                            'targetBlank' => true,
+                                                            'itemId' => $itemId,
+                                                            'itemName' => $itemLabel,
+                                                            'itemDate' => ($item ? $item->pivot->created_at : null),
+                                                            'itemUsername' => ($item ? $item->added_by_username : null),
+                                                            'strikeThrough' => ($item ? $item->pivot->is_received : null)
+                                                        ])
+                                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true])
+                                                    </span>
+                                                    @include('character/partials/itemEdit', ['name' => 'wishlist', 'index' => $i])
+                                                </div>
+                                            </li>
+                                            @if ($errors->has('wishlist.' . $i . '.item_id'))
+                                                <li class="'text-danger font-weight-bold'">
+                                                    {{ $errors->first('wishlist.' . $i . '.item_id') }}
+                                                </li>
+                                            @endif
+                                        @endfor
+                                    </ul>
                                 </div>
                             @endif
-                        @else
-                            <div class="{{ $errors->has('wishlist.*') ? 'has-error' : '' }}">
-                                <input id="wishlist" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
-                                <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
-
-                                <ul class="js-sortable no-bullet no-indent mb-0 bg-light">
-                                    @for ($i = 0; $i < $maxWishlistItems; $i++)
-                                        @php
-                                            $item      = null;
-                                            $itemId    = null;
-                                            $itemLabel = null;
-
-                                            if (old('wishlist.' . $i . '.item_id')) {
-                                                $itemId = old('wishlist.' . $i . '.item_id');
-                                                if (old('wishlist.' . $i . '.label')) {
-                                                    $itemLabel = old('wishlist.' . $i . '.label');
-                                                } else {
-                                                    $itemLabel = $itemId;
-                                                }
-                                            } else if ($character->wishlist && $character->wishlist->get($i)) {
-                                                $item      = $character->wishlist->get($i);
-                                                $itemId    = $item->item_id;
-                                                $itemLabel = $item->name;
-                                            }
-                                        @endphp
-                                        <li class="input-item position-relative {{ $itemId ? 'd-flex' : '' }} {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
-                                            style="{{ $itemId ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;" />
-                                            <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;" />
-                                            <input type="checkbox" checked name="wishlist[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" style="display:none;"/>
-
-                                            <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
-
-                                            <div class="js-sort-handle move-cursor text-4 text-unselectable d-flex mr-1">
-                                                <div class="justify-content-center align-self-center">
-                                                    <span class="fas fa-fw fa-grip-vertical text-muted"></span>
-                                                </div>
-                                            </div>
-
-                                            <div class="js-input-label">
-                                                <span class="js-item-display">
-                                                    @includeWhen($itemId, 'partials/item', [
-                                                        'wowheadLink' => false,
-                                                        'targetBlank' => true,
-                                                        'itemId' => $itemId,
-                                                        'itemName' => $itemLabel,
-                                                        'itemDate' => ($item ? $item->pivot->created_at : null),
-                                                        'itemUsername' => ($item ? $item->added_by_username : null),
-                                                        'strikeThrough' => ($item ? $item->pivot->is_received : null)
-                                                    ])
-                                                    @include('character/partials/itemDetails', ['hideCreatedAt' => true])
-                                                </span>
-                                                @include('character/partials/itemEdit', ['name' => 'wishlist', 'index' => $i])
-                                            </div>
-                                        </li>
-                                        @if ($errors->has('wishlist.' . $i . '.item_id'))
-                                            <li class="'text-danger font-weight-bold'">
-                                                {{ $errors->first('wishlist.' . $i . '.item_id') }}
-                                            </li>
-                                        @endif
-                                    @endfor
-                                </ul>
-                            </div>
-                        @endif
+                        </div>
                     </div>
-                </div>
+                @endif
 
                 <div class="row mb-3 pt-2 bg-light rounded">
                     <div class="form-group mb-2 col-md-8 col-sm-10 col-12">

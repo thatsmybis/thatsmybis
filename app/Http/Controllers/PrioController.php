@@ -34,8 +34,12 @@ class PrioController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!$currentMember->hasPermission('edit.prios')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+        if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
+            if ($guild->is_prio_disabled) {
+                request()->session()->flash('status', 'Prios are disabled by the man.');
+            } else {
+                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -63,8 +67,12 @@ class PrioController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!$currentMember->hasPermission('edit.prios')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+        if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
+            if ($guild->is_prio_disabled) {
+                request()->session()->flash('status', 'Prios are disabled by the man.');
+            } else {
+                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -81,7 +89,7 @@ class PrioController extends Controller
             ->with('itemSources')
             ->firstOrFail();
 
-        $items = Item::select([
+        $query = Item::select([
                 'items.id',
                 'items.item_id',
                 'items.name',
@@ -124,6 +132,14 @@ class PrioController extends Controller
                             'characters.raid_group_id' => $raidGroup->id,
                         ]);
                 },
+            ]);
+
+        if ($guild->is_wishlist_disabled) {
+            $query = $query->with([
+                'childItems',
+            ]);
+        } else {
+            $query = $query->with([
                 ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
                     return $query
                         ->where([
@@ -146,8 +162,10 @@ class PrioController extends Controller
                         },
                     ]);
                 },
-            ])
-            ->get();
+            ]);
+        }
+
+        $items = $query->get();
 
         $items = ItemController::mergeTokenWishlists($items, $guild);
 
@@ -170,8 +188,12 @@ class PrioController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!$currentMember->hasPermission('edit.prios')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+        if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
+            if ($guild->is_prio_disabled) {
+                request()->session()->flash('status', 'Prios are disabled by the man.');
+            } else {
+                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -269,8 +291,12 @@ class PrioController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!$currentMember->hasPermission('edit.prios')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+        if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
+            if ($guild->is_prio_disabled) {
+                request()->session()->flash('status', 'Prios are disabled by the man.');
+            } else {
+                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -330,8 +356,12 @@ class PrioController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!$currentMember->hasPermission('edit.prios')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+        if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
+            if ($guild->is_prio_disabled) {
+                request()->session()->flash('status', 'Prios are disabled by the man.');
+            } else {
+                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 

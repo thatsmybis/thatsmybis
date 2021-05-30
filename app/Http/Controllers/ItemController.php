@@ -67,13 +67,13 @@ class ItemController extends Controller
         }
 
         $showPrios = false;
-        if (!$guild->is_prio_private || $viewPrioPermission) {
+        if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $viewPrioPermission)) {
             $showPrios = true;
 
         }
 
         $showWishlist = false;
-        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
+        if (!$guild->is_wishlist_disabled && (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists'))) {
             $showWishlist = true;
         }
 

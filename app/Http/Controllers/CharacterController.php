@@ -247,7 +247,7 @@ class CharacterController extends Controller
         $character = $character->load(['member', 'raidGroup', 'raidGroup.role', 'received', 'recipes', 'wishlist']);
 
         $showPrios = false;
-        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+        if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $currentMember->hasPermission('view.prios'))) {
             $showPrios = true;
             $character = $character->load('prios');
         }
@@ -264,7 +264,7 @@ class CharacterController extends Controller
 
         $lockWishlist   = false;
         $unlockWishlist = false;
-        if ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters')) {
+        if (!$guild->is_wishlist_disabled && ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters'))) {
             if ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked) {
                 $unlockWishlist = true;
             } else {
@@ -335,13 +335,13 @@ class CharacterController extends Controller
         });
 
         $showPrios = false;
-        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+        if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $currentMember->hasPermission('view.prios'))) {
             $showPrios = true;
             $character = $character->load('prios');
         }
 
         $showWishlist = false;
-        if (!$guild->is_wishlist_private || $character->member_id == $currentMember->id || $currentMember->hasPermission('view.wishlists')) {
+        if (!$guild->is_wishlist_disabled && (!$guild->is_wishlist_private || $character->member_id == $currentMember->id || $currentMember->hasPermission('view.wishlists'))) {
             $showWishlist = true;
             $character = $character->load(['wishlist']);
         }
@@ -669,7 +669,7 @@ class CharacterController extends Controller
             ]);
         }
 
-        if (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked)) {
+        if (!$guild->is_wishlist_disabled && (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked))) {
             if (request()->input('wishlist')) {
                 $maxWishlistItems = $guild->max_wishlist_items ? $guild->max_wishlist_items : self::MAX_WISHLIST_ITEMS;
                 $this->syncItems($character->wishlist, array_slice(request()->input('wishlist'), 0, $maxWishlistItems), Item::TYPE_WISHLIST, $character, $currentMember, true);
