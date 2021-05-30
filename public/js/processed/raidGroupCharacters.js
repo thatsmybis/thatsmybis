@@ -1,1 +1,1 @@
-
+function sort(a){var e=$(a),t=$("li",e);t.sort(function(a,e){return $(a).data("val")>$(e).data("val")?1:-1}),e.append(t),$(a).change()}$(document).ready(function(){warnBeforeLeaving("#characterForm"),$("#selectedCharacters").sortable({connectWith:"#availableCharacters",handle:".js-sort-handle",stop:function stop(a,e){sort("#availableCharacters"),sort("#selectedCharacters")}}),$("#availableCharacters").sortable({connectWith:"#selectedCharacters",handle:".js-sort-handle",stop:function stop(a,e){sort("#availableCharacters"),sort("#selectedCharacters")}})});
