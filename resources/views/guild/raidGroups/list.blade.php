@@ -70,6 +70,23 @@
                                             </a>
                                         </li>
                                         <li class="list-inline-item">
+                                            <div class="dropdown">
+                                                <a class="dropdown-toggle" id="raidGroup{{ $raidGroup->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                    Export
+                                                </a>
+                                                <div class="dropdown-menu" aria-labelledby="raidGroup{{ $raidGroup->id }}Dropdown">
+                                                    <a class="dropdown-item" href="{{ route('guild.export.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'raidGroupId' => $raidGroup->id]) }}" target="_blank" class="tag">
+                                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                                        Download CSV
+                                                    </a>
+                                                    <a class="dropdown-item" href="{{ route('guild.export.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'raidGroupId' => $raidGroup->id]) }}" target="_blank" class="tag">
+                                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                                        View CSV
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="list-inline-item">
                                             <form class="form-inline" role="form" method="POST" action="{{ route('guild.raidGroup.toggleDisable', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                                 {{ csrf_field() }}
                                                 <input hidden name="id" value="{{ $raidGroup->id }}">

@@ -259,12 +259,13 @@ class ExportController extends Controller {
      *
      * @return \Illuminate\Http\Response
      */
-    public function exportRaidGroups($guildId, $guildSlug, $fileType)
+    public function exportRaidGroups($guildId, $guildSlug, $fileType, $raidGroupId = null)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $csv = Cache::remember("export:raidGroups:guild:{$guild->id}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild) {
+        $csv = Cache::remember("export:raidGroups:guild:{$guild->id}:file:{$fileType}:raidGroupId:{$raidGroupId}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild, $raidGroupId) {
+            $raidGroupIdClause = $raidGroupId ? "AND raid_groups.id = {$raidGroupId}" : '';
             $rows = DB::select(DB::raw(
                 "SELECT
                     raid_group_name,
@@ -290,7 +291,7 @@ class ExportController extends Controller {
                         LEFT JOIN characters ON characters.id = character_raid_groups.character_id
                         LEFT JOIN members    ON members.id = characters.member_id
                         LEFT JOIN users      ON users.id = members.user_id
-                    WHERE guilds.id = {$guild->id}
+                    WHERE guilds.id = {$guild->id} {$raidGroupIdClause}
                     UNION
                     SELECT
                             raid_groups.name AS raid_group_name,
@@ -305,7 +306,7 @@ class ExportController extends Controller {
                             LEFT JOIN characters ON characters.raid_group_id = raid_groups.id
                             LEFT JOIN members    ON members.id = characters.member_id
                             LEFT JOIN users      ON users.id = members.user_id
-                        WHERE guilds.id = {$guild->id}
+                        WHERE guilds.id = {$guild->id} {$raidGroupIdClause}
                     ) raiders
                 ORDER BY raid_group_name ASC, character_name ASC;"));
 
