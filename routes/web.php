@@ -126,7 +126,7 @@ Route::group([
     // Route::get( '/resources/{slug}', 'ContentController@show') ->name('showContent');
     // Route::get( '/posts/{slug}',     'ContentController@show') ->name('showPost');
 
-    Route::get( '/roster',          'DashboardController@roster')->name('guild.roster');
+    Route::get( '/roster',          'RosterController@roster')->name('guild.roster');
 
     Route::get( '/assign-loot', 'ItemController@massInput')      ->name('item.massInput');
     Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
