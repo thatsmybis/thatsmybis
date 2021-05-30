@@ -117,7 +117,6 @@ class CharacterController extends Controller
         $createValues['profession_2']  = request()->input('profession_2');
         $createValues['rank']          = request()->input('rank');
         $createValues['rank_goal']     = request()->input('rank_goal');
-        $createValues['raid_group_id'] = request()->input('raid_group_id');
         $createValues['public_note']   = request()->input('public_note');
         $createValues['is_alt']        = (request()->input('is_alt') == "1" ? true : false);
 
@@ -129,7 +128,15 @@ class CharacterController extends Controller
 
         $createValues['guild_id']      = $guild->id;
 
+        if (!$guild->is_raid_group_locked || $currentMember->hasPermission('edit.raids')) {
+            $createValues['raid_group_id'] = request()->input('raid_group_id');
+        }
+
         $character = Character::create($createValues);
+
+        if (!$guild->is_raid_group_locked || $currentMember->hasPermission('edit.raids')) {
+            $character->secondaryRaidGroups()->sync(array_unique(array_filter(request()->input('raid_groups'))));
+        }
 
         AuditLog::create([
             'description'  => $currentMember->username . ' created a character',
@@ -192,6 +199,7 @@ class CharacterController extends Controller
             'character'     => $character,
             'createMore'    => false,
             'currentMember' => $currentMember,
+            'editRaidGroups' => (!$guild->is_raid_group_locked || $currentMember->hasPermission('edit.raids')),
             'guild'         => $guild,
             'maxRaidGroups' => self::MAX_RAID_GROUPS,
         ]);
@@ -407,6 +415,7 @@ class CharacterController extends Controller
             'character'     => null,
             'createMore'    => $createMore,
             'currentMember' => $currentMember,
+            'editRaidGroups' => (!$guild->is_raid_group_locked || $currentMember->hasPermission('edit.raids')),
             'guild'         => $guild,
             'memberId'      => $memberId,
             'maxRaidGroups' => self::MAX_RAID_GROUPS,
@@ -505,7 +514,6 @@ class CharacterController extends Controller
         $updateValues['profession_2']  = request()->input('profession_2');
         $updateValues['rank']          = request()->input('rank');
         $updateValues['rank_goal']     = request()->input('rank_goal');
-        $updateValues['raid_group_id'] = request()->input('raid_group_id');
         $updateValues['public_note']   = request()->input('public_note');
         $updateValues['is_alt']        = (request()->input('is_alt') == "1" ? true : false);
 
@@ -528,10 +536,6 @@ class CharacterController extends Controller
             $auditMessage .= ' (renamed from ' . $character->name . ' to ' . $updateValues['name'] . ')';
         }
 
-        if ($updateValues['raid_group_id'] != $character->raid_group_id) {
-            $auditMessage .= ' (changed main raid group to ' . ($raidGroup ? $raidGroup->name : 'none') . ')';
-        }
-
         if (array_key_exists('member_id', $updateValues) && $updateValues['member_id'] != $character->member_id) {
             $auditMessage .= ' (changed owner to ' . ($selectedMember ? $selectedMember->username : 'NONE') . ')';
         }
@@ -552,18 +556,28 @@ class CharacterController extends Controller
             }
         }
 
+        if (!$guild->is_raid_group_locked || $currentMember->hasPermission('edit.raids')) {
+            $updateValues['raid_group_id'] = request()->input('raid_group_id');
+
+            if ($updateValues['raid_group_id'] != $character->raid_group_id) {
+                $auditMessage .= ' (changed main raid group to ' . ($raidGroup ? $raidGroup->name : 'none') . ')';
+            }
+        }
+
         $character->update($updateValues);
 
-        $oldRaidGroups = $character->secondaryRaidGroups->keyBy('id')->keys()->toArray();
-        // Drop duplicates and nulls
-        $newRaidGroups = array_unique(array_filter(request()->input('raid_groups')));
+        if (!$guild->is_raid_group_locked || $currentMember->hasPermission('edit.raids')) {
+            $oldRaidGroups = $character->secondaryRaidGroups->keyBy('id')->keys()->toArray();
+            // Drop duplicates and nulls
+            $newRaidGroups = array_unique(array_filter(request()->input('raid_groups')));
 
-        sort($oldRaidGroups);
-        sort($newRaidGroups);
+            sort($oldRaidGroups);
+            sort($newRaidGroups);
 
-        if ($oldRaidGroups != $newRaidGroups) {
-            $character->secondaryRaidGroups()->sync($newRaidGroups);
-            $auditMessage .= ' (changed general raid groups [' . count($oldRaidGroups) . ' -> ' . count($newRaidGroups) . ' groups])';
+            if ($oldRaidGroups != $newRaidGroups) {
+                $character->secondaryRaidGroups()->sync($newRaidGroups);
+                $auditMessage .= ' (changed general raid groups [' . count($oldRaidGroups) . ' -> ' . count($newRaidGroups) . ' groups])';
+            }
         }
 
         AuditLog::create([

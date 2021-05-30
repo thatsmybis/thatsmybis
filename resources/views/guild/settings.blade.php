@@ -188,7 +188,7 @@
                                         Message Of The Day
                                         <small class="text-muted">your guildmates will see this</small>
                                     </label>
-                                    <textarea maxlength="500" data-max-length="500" name="message" rows="2" placeholder="a short message about what's happening" class="form-control dark">{{ old('message') ? old('message') : $guild->message }}</textarea>
+                                    <textarea maxlength="500" data-max-length="500" name="message" rows="2" placeholder="a short message about what's happening and/or some rules" class="form-control dark">{{ old('message') ? old('message') : $guild->message }}</textarea>
                                 </div>
                             </div>
                         </div>
@@ -196,96 +196,38 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
-                        <div class="form-group mb-0">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
-                                        {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
-                                        Limit <strong>prio visibility</strong> to Raid Leaders <span class="text-muted small">character prios are hidden, but prio notes on items are still visible</span>
-                                </label>
-                            </div>
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
-                                        {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
-                                        Limit <strong>wishlist visibility</strong> to Raid Leaders <span class="text-muted small">members can still see <em>their own</em> characters' wishlists</span>
-                                </label>
-                            </div>
-                        </div>
+                    <div class="col-12 pt-2 mt-3 mb-2">
+                        <h2 class="font-weight-medium">
+                            <span class="fas fa-fw fa-ballot-check text-muted"></span>
+                            Settings
+                        </h2>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="form-group mb-0">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
-                                        {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
-                                        Lock wishlists <span class="text-muted small">Raid Leader and above can still edit</span>
-                                </label>
-                            </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_received_locked" value="1" class="" autocomplete="off"
                                         {{ old('is_received_locked') && old('is_received_locked') == 1 ? 'checked' : ($guild->is_received_locked ? 'checked' : '') }}>
-                                        Lock loot received <span class="text-muted small">Raid Leader and above can still edit</span>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
-                        <div class="form-group mb-0">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_prio_autopurged" value="1" class="" autocomplete="off"
-                                        {{ old('is_prio_autopurged') && old('is_prio_autopurged') == 1 ? 'checked' : ($guild->is_prio_autopurged ? 'checked' : '') }}>
-                                        By default, delete items from prio lists when they are distributed
+                                        Lock loot received <span class="text-muted small">raid leader and above can still edit</span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="is_wishlist_autopurged" value="1" class="" autocomplete="off"
-                                        {{ old('is_wishlist_autopurged') && old('is_wishlist_autopurged') == 1 ? 'checked' : ($guild->is_wishlist_autopurged ? 'checked' : '') }}>
-                                        By default, delete items from wishlists when they are distributed
+                                    <input type="checkbox" name="is_raid_group_locked" value="1" class="" autocomplete="off"
+                                        {{ old('is_raid_group_locked') && old('is_raid_group_locked') == 1 ? 'checked' : ($guild->is_raid_group_locked ? 'checked' : '') }}>
+                                        Lock raid groups <span class="text-muted small">raid leader and above can still edit</span>
                                 </label>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
-                        <div class="form-group">
-                            <label for="max_wishlist_items" class="">
-                                Max Wishlist Items
-                                <small class="text-muted">won't affect existing wishlists</small>
-                            </label>
-                            <input name="max_wishlist_items" min="0" max="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" value="{{ old('max_wishlist_items') ? old('max_wishlist_items') : $guild->max_wishlist_items }}" />
-                        </div>
-                        <div class="form-group mb-0">
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="do_sort_items_by_instance" value="1" class="" autocomplete="off"
-                                        {{ old('do_sort_items_by_instance') && old('do_sort_items_by_instance') == 1 ? 'checked' : ($guild->do_sort_items_by_instance ? 'checked' : '') }}>
-                                        Sort wishlists by dungeon <span class="text-muted small">default is to sort by user's priority</span>
-                                        <!--
-                                            Q: Why is this a guild setting and not a user setting?
-                                            A: So that everyone in the guild sees the same thing, avoiding inconsistencies and mistakes.
-                                        -->
+                                    <input type="checkbox" name="is_attendance_hidden" value="1" class="" autocomplete="off"
+                                        {{ old('is_attendance_hidden') && old('is_attendance_hidden') == 1 ? 'checked' : ($guild->is_attendance_hidden ? 'checked' : '') }}>
+                                        Don't show attendance
                                 </label>
                             </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
-                        <div class="form-group mb-0">
                             <div class="form-group">
                                 <label for="attendance_decay_days">
                                     Attendance decay rate <span class="small text-muted">how far back to count attendance</span>
@@ -323,42 +265,125 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group mb-0">
-                            <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="is_attendance_hidden" value="1" class="" autocomplete="off"
-                                        {{ old('is_attendance_hidden') && old('is_attendance_hidden') == 1 ? 'checked' : ($guild->is_attendance_hidden ? 'checked' : '') }}>
-                                        Don't show attendance
-                                </label>
-                            </div>
+                        <div class="form-group">
+                            <label for="tier_mode">
+                                <span class="fas fa-fw fa-trophy text-muted"></span>
+                                Tier mode
+                                <span class="small text-muted">
+                                    rank each item in the Item Notes admin dropdown menu
+                                </span>
+                            </label>
+                            <select name="tier_mode" class="form-control dark">
+                                <option value="s"
+                                    {{ old('tier_mode') && old('tier_mode') == 's' || $guild->tier_mode == 's' ? 'selected' : '' }}>
+                                    S-tier
+                                </option>
+                                <option value="num"
+                                    {{ old('tier_mode') && old('tier_mode') == 'num' || $guild->tier_mode == 'num' ? 'selected' : '' }}>
+                                    Numbered
+                                </option>
+                                <option value="" {{ old('tier_mode') && old('tier_mode') == '' || $guild->tier_mode == '' ? 'selected' : '' }}>
+                                    Off
+                                </option>
+                            </select>
                         </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 mt-3 mb-2">
+                        <h2 class="font-weight-medium">
+                            <span class="fas fa-fw fa-scroll-old text-legendary"></span>
+                            Wishlists
+                        </h2>
                     </div>
                 </div>
 
                 <div class="row">
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="form-group mb-0">
-                            <div class="form-group">
-                                <label for="tier_mode">
-                                    <span class="fas fa-fw fa-trophy text-muted"></span>
-                                    Tier mode
-                                    <span class="small text-muted">
-                                        rank each item in the Item Notes admin dropdown menu
-                                    </span>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
+                                        Lock wishlists <span class="text-muted small">raid leader and above can still edit</span>
                                 </label>
-                                <select name="tier_mode" class="form-control dark">
-                                    <option value="s"
-                                        {{ old('tier_mode') && old('tier_mode') == 's' || $guild->tier_mode == 's' ? 'selected' : '' }}>
-                                        S-tier
-                                    </option>
-                                    <option value="num"
-                                        {{ old('tier_mode') && old('tier_mode') == 'num' || $guild->tier_mode == 'num' ? 'selected' : '' }}>
-                                        Numbered
-                                    </option>
-                                    <option value="" {{ old('tier_mode') && old('tier_mode') == '' || $guild->tier_mode == '' ? 'selected' : '' }}>
-                                        Off
-                                    </option>
-                                </select>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
+                                        Limit <strong>wishlist visibility</strong> to Raid Leaders <span class="text-muted small">members can still see <em>their own</em> characters' wishlists</span>
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_wishlist_autopurged" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_autopurged') && old('is_wishlist_autopurged') == 1 ? 'checked' : ($guild->is_wishlist_autopurged ? 'checked' : '') }}>
+                                        By default, delete items from wishlists when they are distributed
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="do_sort_items_by_instance" value="1" class="" autocomplete="off"
+                                        {{ old('do_sort_items_by_instance') && old('do_sort_items_by_instance') == 1 ? 'checked' : ($guild->do_sort_items_by_instance ? 'checked' : '') }}>
+                                        Sort wishlists by dungeon <span class="text-muted small">default is to sort by user's priority</span>
+                                        <!--
+                                            Q: Why is this a guild setting and not a user setting?
+                                            A: So that everyone in the guild sees the same thing, avoiding inconsistencies and mistakes.
+                                        -->
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_wishlist_disabled" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_disabled') && old('is_wishlist_disabled') == 1 ? 'checked' : ($guild->is_wishlist_disabled ? 'checked' : '') }}>
+                                        Disable wishlists <span class="text-muted small">if your guild doesn't use them</span>
+                                </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="max_wishlist_items" class="">
+                                    Max Wishlist Items
+                                    <small class="text-muted">won't affect existing wishlists</small>
+                                </label>
+                                <input name="max_wishlist_items" min="0" max="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" value="{{ old('max_wishlist_items') ? old('max_wishlist_items') : $guild->max_wishlist_items }}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 mt-3 mb-2">
+                        <h2 class="font-weight-medium">
+                            <span class="fas fa-fw fa-sort-amount-down text-gold"></span>
+                            Prios
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="form-group mb-0">
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
+                                        {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
+                                        Limit <strong>prio visibility</strong> to Raid Leaders <span class="text-muted small">character prios are hidden, but prio notes on items are still visible</span>
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_prio_autopurged" value="1" class="" autocomplete="off"
+                                        {{ old('is_prio_autopurged') && old('is_prio_autopurged') == 1 ? 'checked' : ($guild->is_prio_autopurged ? 'checked' : '') }}>
+                                        By default, delete items from prio lists when they are distributed
+                                </label>
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_prio_disabled" value="1" class="" autocomplete="off"
+                                        {{ old('is_prio_disabled') && old('is_prio_disabled') == 1 ? 'checked' : ($guild->is_prio_disabled ? 'checked' : '') }}>
+                                        Disable prios <span class="text-muted small">if your guild doesn't use them</span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -510,8 +535,9 @@
                                     Members
                                     <br>
                                     <small class="text-muted">
+                                        <!-- I don't know if this is true...
                                         If this is empty, anyone on the Discord server can join this guild
-                                        <br>
+                                        <br> -->
                                         Discord users with <strong>any</strong> of these roles are allowed to join
                                     </small>
                                 </label>

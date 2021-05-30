@@ -316,13 +316,16 @@ class GuildController extends Controller
             'name'                      => 'string|max:36',
             'disabled_at'               => 'nullable|boolean',
             'is_prio_private'           => 'nullable|boolean',
+            'is_prio_disabled'          => 'nullable|boolean',
             'is_received_locked'        => 'nullable|boolean',
             'is_wishlist_private'       => 'nullable|boolean',
             'is_wishlist_locked'        => 'nullable|boolean',
+            'is_wishlist_disabled'      => 'nullable|boolean',
             'is_prio_autopurged'        => 'nullable|boolean',
             'is_wishlist_autopurged'    => 'nullable|boolean',
             'max_wishlist_items'        => 'nullable|integer|min:0|max:50',
             'do_sort_items_by_instance' => 'nullable|boolean',
+            'is_raid_group_locked'      => 'nullable|boolean',
             'is_attendance_hidden'      => 'nullable|boolean',
             'attendance_decay_days'     => 'nullable|integer|min:1|max:730',
             'tier_mode'                 => 'nullable|string|in:s,num',
@@ -340,13 +343,16 @@ class GuildController extends Controller
         $updateValues['name']                      = request()->input('name');
         $updateValues['slug']                      = slug(request()->input('name'));
         $updateValues['is_prio_private']           = request()->input('is_prio_private') == 1 ? 1 : 0;
+        $updateValues['is_prio_disabled']          = request()->input('is_prio_disabled') == 1 ? 1 : 0;
         $updateValues['is_received_locked']        = request()->input('is_received_locked') == 1 ? 1 : 0;
         $updateValues['is_wishlist_private']       = request()->input('is_wishlist_private') == 1 ? 1 : 0;
         $updateValues['is_wishlist_locked']        = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_disabled']      = request()->input('is_wishlist_disabled') == 1 ? 1 : 0;
         $updateValues['is_prio_autopurged']        = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
         $updateValues['is_wishlist_autopurged']    = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
         $updateValues['max_wishlist_items']        = request()->input('max_wishlist_items');
         $updateValues['do_sort_items_by_instance'] = request()->input('do_sort_items_by_instance') == 1 ? 1 : 0;
+        $updateValues['is_raid_group_locked']      = request()->input('is_raid_group_locked') == 1 ? 1 : 0;
         $updateValues['is_attendance_hidden']      = request()->input('is_attendance_hidden') == 1 ? 1 : 0;
         $updateValues['attendance_decay_days']     = request()->input('attendance_decay_days') ? request()->input('attendance_decay_days') : 36500;
         $updateValues['tier_mode']                 = request()->input('tier_mode');

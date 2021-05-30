@@ -169,21 +169,38 @@
                                 <span class="fas fa-fw fa-helmet-battle text-gold"></span>
                                 Main Raid Group
                             </label>
-                            <div class="form-group">
-                                <select name="raid_group_id" class="form-control dark">
-                                    <option value="" selected>
-                                        —
-                                    </option>
-
-                                    @foreach ($guild->raidGroups as $raidGroup)
-                                        <option value="{{ $raidGroup->id }}"
-                                            style="color:{{ $raidGroup->getColor() }};"
-                                            {{ old('raid_group_id') ? (old('raid_group_id') == $raidGroup->id ? 'selected' : '') : ($character && $character->raidGroup && $character->raidGroup->id == $raidGroup->id ? 'selected' : '') }}>
-                                            {{ $raidGroup->name }}
+                            @if ($editRaidGroups)
+                                <div class="form-group">
+                                    <select name="raid_group_id" class="form-control dark">
+                                        <option value="" selected>
+                                            —
                                         </option>
-                                    @endforeach
-                                </select>
-                            </div>
+
+                                        @foreach ($guild->raidGroups as $raidGroup)
+                                            <option value="{{ $raidGroup->id }}"
+                                                style="color:{{ $raidGroup->getColor() }};"
+                                                {{ old('raid_group_id') ? (old('raid_group_id') == $raidGroup->id ? 'selected' : '') : ($character && $character->raidGroup && $character->raidGroup->id == $raidGroup->id ? 'selected' : '') }}>
+                                                {{ $raidGroup->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            @else
+                                <div>
+                                    <span class="text-muted">locked by the man</span>
+                                </div>
+                                <div>
+                                    @if ($character && $character->raidGroup)
+                                        @php
+                                            $raidGroupColor = null;
+                                            if ($character->raidGroup->relationLoaded('role')) {
+                                                $raidGroupColor = $character->raidGroup->getColor();
+                                            }
+                                        @endphp
+                                        @include('partials/raidGroup', ['raidGroup' => $character->raidGroup])
+                                    @endif
+                                </div>
+                            @endif
                         </div>
                     </div>
                     <div class="col-sm-6 col-12">
@@ -193,57 +210,80 @@
                                 General Raid Groups
                             </label>
                             <div class="form-group">
-                                <select name="raid_groups" class="js-input-select form-control dark selectpicker" autocomplete="off">
-                                    <option value="" selected>
-                                        —
-                                    </option>
-
-                                    @foreach ($guild->raidGroups as $raidGroup)
-                                        <option value="{{ $raidGroup->id }}"
-                                            data-tokens="{{ $raidGroup->id }}"
-                                            style="color:{{ $raidGroup->getColor() }};">
-                                            {{ $raidGroup->name }}
+                                @if ($editRaidGroups)
+                                    <select name="raid_groups" class="js-input-select form-control dark selectpicker" autocomplete="off">
+                                        <option value="" selected>
+                                            —
                                         </option>
-                                    @endforeach
-                                </select>
 
-                                <ol class="list-inline mt-3">
-                                    @for ($i = 0; $i < $maxRaidGroups; $i++)
-                                        <li class="list-unstyled pt-1 pb-2 pr-2 mt-1 bg-dark rounded"
-                                            style="{{ old('raid_groups.' . $i) || ($character && $character->secondaryRaidGroups->get($i)) ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked
-                                                name="raid_groups[{{ $i }}]"
-                                                value="{{ old('raid_groups.' . $i) ? old('raid_groups.' . $i) : ($character && $character->secondaryRaidGroups->get($i) ? $character->secondaryRaidGroups->get($i)->id : '') }}"
-                                                class="js-input-item"
-                                                style="display:none;">
-                                            <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                            @php
-                                                $label = '';
-                                                $raidGroup = null;
-                                                if (old('raid_groups.' . $i)) {
-                                                    $raidGroup = $guild->allRaidGroups->where('id', old('raid_groups.' . $i))->first();
-                                                } else if ($character && $character->secondaryRaidGroups->get($i)) {
-                                                    $raidGroup = $guild->allRaidGroups->where('id',  $character->secondaryRaidGroups->get($i)->id)->first();
-                                                }
+                                        @foreach ($guild->raidGroups as $raidGroup)
+                                            <option value="{{ $raidGroup->id }}"
+                                                data-tokens="{{ $raidGroup->id }}"
+                                                style="color:{{ $raidGroup->getColor() }};">
+                                                {{ $raidGroup->name }}
+                                            </option>
+                                        @endforeach
+                                    </select>
 
-                                                if ($raidGroup) {
-                                                    $label = $raidGroup->name;
-                                                }
-                                            @endphp
-                                            <span class="js-input-label">
-                                                @if ($raidGroup)
-                                                    @php
-                                                        $raidGroupColor = null;
-                                                        if ($raidGroup->relationLoaded('role')) {
-                                                            $raidGroupColor = $raidGroup->getColor();
-                                                        }
-                                                    @endphp
-                                                    @include('partials/raidGroup', ['text' => 'muted'])
-                                                @endif
-                                            </span>
-                                        </li>
-                                    @endfor
-                                </ol>
+                                    <ol class="list-inline mt-3">
+                                        @for ($i = 0; $i < $maxRaidGroups; $i++)
+                                            <li class="list-unstyled pt-1 pb-2 pr-2 mt-1 bg-dark rounded"
+                                                style="{{ old('raid_groups.' . $i) || ($character && $character->secondaryRaidGroups->get($i)) ? '' : 'display:none;' }}">
+                                                <input type="checkbox" checked
+                                                    name="raid_groups[{{ $i }}]"
+                                                    value="{{ old('raid_groups.' . $i) ? old('raid_groups.' . $i) : ($character && $character->secondaryRaidGroups->get($i) ? $character->secondaryRaidGroups->get($i)->id : '') }}"
+                                                    class="js-input-item"
+                                                    style="display:none;">
+                                                <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
+                                                @php
+                                                    $label = '';
+                                                    $raidGroup = null;
+                                                    if (old('raid_groups.' . $i)) {
+                                                        $raidGroup = $guild->allRaidGroups->where('id', old('raid_groups.' . $i))->first();
+                                                    } else if ($character && $character->secondaryRaidGroups->get($i)) {
+                                                        $raidGroup = $guild->allRaidGroups->where('id',  $character->secondaryRaidGroups->get($i)->id)->first();
+                                                    }
+
+                                                    if ($raidGroup) {
+                                                        $label = $raidGroup->name;
+                                                    }
+                                                @endphp
+                                                <span class="js-input-label">
+                                                    @if ($raidGroup)
+                                                        @php
+                                                            $raidGroupColor = null;
+                                                            if ($raidGroup->relationLoaded('role')) {
+                                                                $raidGroupColor = $raidGroup->getColor();
+                                                            }
+                                                        @endphp
+                                                        @include('partials/raidGroup', ['text' => 'muted'])
+                                                    @endif
+                                                </span>
+                                            </li>
+                                        @endfor
+                                    </ol>
+                                @else
+                                    <div>
+                                        <span class="text-muted">locked by the man</span>
+                                    </div>
+                                    <div>
+                                        @if ($character && $character->secondaryRaidGroups->count())
+                                            <ul class="list-inline">
+                                                @foreach ($character->secondaryRaidGroups as $raidGroup)
+                                                    <li class="list-inline-item">
+                                                        @php
+                                                            $raidGroupColor = null;
+                                                            if ($raidGroup->relationLoaded('role')) {
+                                                                $raidGroupColor = $raidGroup->getColor();
+                                                            }
+                                                        @endphp
+                                                        @include('partials/raidGroup')
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @endif
+                                    </div>
+                                @endif
                             </div>
                         </div>
                     </div>
