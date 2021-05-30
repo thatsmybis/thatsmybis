@@ -103,10 +103,10 @@ function createTable() {
                                     <span class="text-warning font-weight-bold">Alt</span>&nbsp;
                                 ` : '' }
                                 ${ row.raid_group_name ? `
-                                    <span class="font-weight-bold">
+                                    <span class="font-weight-bold d-inline tag">
                                         <span class="role-circle" style="background-color:${ row.raid_group_color ? getColorFromDec(parseInt(row.raid_group_color)) : '' }"></span>
                                         ${ row.raid_group_name ? row.raid_group_name : '' }
-                                    </span>
+                                    </span>&nbsp;
                                 ` : ``}
                                 ${ row.class ? row.class : '' }
                             </li>` : `` }
@@ -223,8 +223,7 @@ function createTable() {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
                 "data"   : "public_note",
                 "render" : function (data, type, row) {
-                    return (row.public_note ? `<span class="js-markdown-inline">${ nl2br(row.public_note) }</span>` : '—')
-                        + (row.officer_note ? `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ nl2br(row.officer_note) }</span>` : '');
+                    return getNotes(data, type, row);
                 },
                 "orderable" : false,
                 "visible" : true,
@@ -242,7 +241,13 @@ function createTable() {
                 "title"  : "Raid Group",
                 "data"   : "raid_group",
                 "render" : function (data, type, row) {
-                    return (row.raid_group_id ? row.raid_group_id : null);
+                    let contents = (row.raid_group_id ? row.raid_group_id : null);
+                    if (row.secondary_raid_groups && row.secondary_raid_groups.length) {
+                        row.secondary_raid_groups.forEach(function (raidGroup, index) {
+                            contents += ` ${raidGroup.id}`;
+                        });
+                    }
+                    return contents;
                 },
                 "visible" : false,
             },
@@ -450,4 +455,18 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
 
     items += `</ol>`;
     return items;
+}
+
+function getNotes(data, type, row) {
+    let secondaryRaidGroups = '';
+    if (row.secondary_raid_groups && row.secondary_raid_groups.length) {
+        secondaryRaidGroups = `<ul class="list-inline">`;
+        row.secondary_raid_groups.forEach(function (raidGroup, index) {
+            secondaryRaidGroups += `<li class="list-inline-item small"><span class="tag text-muted"><span class="role-circle align-fix" style="background-color:${ raidGroup.color ? getColorFromDec(parseInt(raidGroup.color)) : '' }"></span>${raidGroup.name}</span></li>`;
+        });
+        secondaryRaidGroups += `</ul>`;
+    }
+    return (row.public_note ? `<span class="js-markdown-inline">${ nl2br(row.public_note) }</span>` : '—')
+        + (row.officer_note ? `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ nl2br(row.officer_note) }</span>` : '')
+        + (secondaryRaidGroups ? `<br>${secondaryRaidGroups}` : ``);
 }

@@ -52,7 +52,7 @@
                         <div class="d-flex" style="flex:1"> <!-- flex:1 will make it take up the full vertical space -->
                             <ul id="selectedCharacters" class="w-100 sortable-no-empty no-bullet no-indent pt-3 pl-3 pr-3 pb-2 bg-dark rounded">
                                 @foreach ($selectedCharacters as $character)
-                                    @include('guild/raidGroups/partials/movableCharacter')
+                                    @include('guild/raidGroups/partials/sortableCharacter')
                                 @endforeach
                             </ul>
                         </div>
@@ -68,7 +68,7 @@
                     <div class="d-flex" style="flex:1">
                         <ul id="availableCharacters" class="w-100 sortable-no-empty no-bullet no-indent pt-3 pl-3 pr-3 pb-2 bg-dark rounded">
                             @foreach ($guild->characters as $character)
-                                @include('guild/raidGroups/partials/movableCharacter')
+                                @include('guild/raidGroups/partials/sortableCharacter')
                             @endforeach
                         </ul>
                     </div>
