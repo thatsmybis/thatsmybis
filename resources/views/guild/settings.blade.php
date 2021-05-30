@@ -218,7 +218,7 @@
                                 <label>
                                     <input type="checkbox" name="is_raid_group_locked" value="1" class="" autocomplete="off"
                                         {{ old('is_raid_group_locked') && old('is_raid_group_locked') == 1 ? 'checked' : ($guild->is_raid_group_locked ? 'checked' : '') }}>
-                                        Lock raid groups <span class="text-muted small">raid leader and above can still edit</span>
+                                        Don't let members set their raid group <span class="text-muted small">raid leader and above can still edit</span>
                                 </label>
                             </div>
                             <div class="checkbox">
