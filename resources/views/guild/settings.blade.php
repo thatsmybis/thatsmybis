@@ -513,8 +513,6 @@
                                         If this is empty, anyone on the Discord server can join this guild
                                         <br>
                                         Discord users with <strong>any</strong> of these roles are allowed to join
-                                        <br>
-                                        Guild Masters, Officers, and Raid Leaders must also have at least one of these roles
                                     </small>
                                 </label>
                             </div>

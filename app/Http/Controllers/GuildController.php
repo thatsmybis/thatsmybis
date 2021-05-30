@@ -279,6 +279,9 @@ class GuildController extends Controller
             'roles'
         ]);
 
+        // Remove the @everyone role; it doesn't work
+        $guild->roles->forget($guild->roles->where('name', '@everyone')->keys()->first());
+
         $owner = $guild->members()->where([
             ['user_id', $guild->user_id],
         ])->with('user')->first();
