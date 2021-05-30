@@ -282,7 +282,7 @@ class ExportController extends Controller {
                         characters.id    AS character_id,
                         members.username AS member_name,
                         users.discord_username AS member_discord_username,
-                        'general' AS status
+                        CASE WHEN characters.inactive_at THEN 'archived' ELSE 'general' END AS status
                     FROM guilds
                         JOIN raid_groups ON raid_groups.guild_id = guilds.id
                         LEFT JOIN character_raid_groups ON character_raid_groups.raid_group_id = raid_groups.id
@@ -298,7 +298,7 @@ class ExportController extends Controller {
                             characters.id    AS character_id,
                             members.username AS member_name,
                             users.discord_username AS member_discord_username,
-                            'main' AS status
+                            CASE WHEN characters.inactive_at THEN 'archived' ELSE 'main' END AS status
                         FROM guilds
                             JOIN raid_groups ON raid_groups.guild_id = guilds.id
                             LEFT JOIN characters ON characters.raid_group_id = raid_groups.id
