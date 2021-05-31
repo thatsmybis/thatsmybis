@@ -11,7 +11,7 @@
                         @include('character/partials/header', ['headerSize' => 1, 'showEdit' => false, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
 
                         <div class="mb-3">
-                            <a class="" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" target="_blank">
+                            <a class="" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                                 <span class="fas fa-fw fa-sack text-success"></span> Edit wishlist & loot
                             </a>
                         </div>
