@@ -93,7 +93,7 @@ function addItemListSelectHandler() {
      * Move the selected value to the list under the select.
      * Change the selected value back to the default value.
      **/
-    $(".js-input-select").change(function () { // TODO: Why is this triggering four times?
+    $(".js-input-select").change(function () { // TODO: Why is this triggering four times? This bug has always been here. Change trigger from change() to the fancy select event.
         const value = $(this).find(":selected").val();
         const label = $(this).find(":selected").html().trim();
         let $nextInput = $(this).parent().next("ol").children("li").children("input[value='']").first(); // TODO: Check only against the input we care about (id/name/whatever)
