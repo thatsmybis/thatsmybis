@@ -128,50 +128,6 @@
                                                 <span class="js-markdown-inline">{{ $item->guild_priority }}</span>
                                             </li>
                                         @endif
-
-                                        @if (!$guild->is_wishlist_disabled && (($guild->is_attendance_hidden && $item->wishlistCharacters->count() > 0) || (!$guild->is_attendance_hidden && $item->wishlistCharactersWithAttendance->count() > 0)))
-                                            <li>
-                                                <span class="fa-li mt-1" title="Characters who have it wishlisted"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
-                                                <ul class="list-inline">
-                                                    @foreach (($guild->is_attendance_hidden ? $item->wishlistCharacters : $item->wishlistCharactersWithAttendance) as $character)
-                                                        <li class="list-inline-item">
-                                                            <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                                                class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
-                                                                <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
-                                                                <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_group_color) }}"></span>-->
-                                                                <span class="text-muted small font-weight-bold">{{ $character->pivot->is_offspec ? 'OS' : '' }}</span>
-                                                                <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
-                                                                @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
-                                                                    <span class="small">
-                                                                        @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
-                                                                    </span>
-                                                                @endif
-                                                                <span class="js-watchable-timestamp smaller text-muted"
-                                                                    data-timestamp="{{ $character->pivot->created_at }}"
-                                                                    data-is-short="1">
-                                                                </span>
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </li>
-                                        @endif
-
-                                        @if ($item->receivedAndRecipeCharacters->count() > 0)
-                                            <li>
-                                                <span class="fa-li mt-1" title="Characters who have received it"><span class="fal fa-fw fa-sack text-success"></span></span>
-                                                <ul class="list-inline">
-                                                    @foreach ($item->receivedAndRecipeCharacters as $character)
-                                                        <li class="list-inline-item">
-                                                            <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                                                class="tag" target="_blank">
-                                                                <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
-                                                            </a>
-                                                        </li>
-                                                    @endforeach
-                                                </ul>
-                                            </li>
-                                        @endif
                                     </ul>
                                 </div>
 
@@ -205,19 +161,84 @@
                                         </select>
 
                                         <ol class="js-sortable-lazy no-indent mt-3 mb-0">
+                                            {{-- TODO: This is slow; optimize --}}
                                             @for ($i = 0; $i < $maxPrios; $i++)
-                                                <li class="input-item {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}
-                                                    {{ (!old('items.' . $item->item_id . '.characters.' . $i) && $item->priodCharacters->get($i)) || (old('items.' . $item->item_id . '.characters.' . $i) && $item->priodCharacters->get($i) && old('items.' . $item->item_id . '.characters.' . $i . 'character_id') == $item->priodCharacters->get($i)->id) ? ($item->priodCharacters->get($i)->pivot->received_at ? 'font-strikethrough' : '') : '' }}"
-                                                    style="{{ old('items.' . $item->item_id . '.characters.' . $i) && old('items.' . $item->item_id . '.characters.' . $i)['character_id']  || $item->priodCharacters->get($i) ? '' : 'display:none;' }}">
+                                                @php
+                                                    $oldInputName   = 'items.' . $item->item_id . '.characters.' . $i;
+                                                    $character      = $item->priodCharacters->get($i) ? $item->priodCharacters->get($i) : null;
+                                                    $characterId    = old($oldInputName . '.character_id') ? old($oldInputName . '.character_id') : ($character ? $character->id : null);
+                                                    $characterLabel = old($oldInputName . '.label') ? old($oldInputName . '.label') : ($character ? $character->name . ' (' . $character->class . ')' : null);
+                                                    $characterOrder = old($oldInputName . '.order') ? old($oldInputName . '.order') : ($character ? $character->order : null);
+                                                    $strikeThrough  = (!old($oldInputName) && $character) || (old($oldInputName) && $character && old($oldInputName . 'character_id') == $character->id) ? ($character->pivot->received_at ? 'font-strikethrough' : null) : null;
+                                                    // $isReceived     = old($oldInputName . '.is_received') && old($oldInputName . '.is_received') == 1 ? 'checked' : ($character && $character->pivot->is_received ? 'checked' : null);
+                                                    // $isOffspec      = old($oldInputName . '.is_offspec') && old($oldInputName . '.is_offspec') == 1 ? 'checked' : ($character && $character->pivot->is_offspec ? 'checked' : null);
+                                                @endphp
+                                                <li class="input-item position-relative {{ $characterId ? 'd-flex' : '' }} {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }} {{ $strikeThrough }}"
+                                                    style="{{ $characterId ? '' : 'display:none;' }}">
 
-                                                    <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][character_id]"
-                                                        value="{{ old('items.' . $item->item_id . '.characters.' . $i . '.character_id') ? old('items.' . $item->item_id . '.characters.' . $i . '.character_id') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->id : '') }}" style="display:none;">
-                                                    <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][label]"
-                                                        value="{{ old('items.' . $item->item_id . '.characters.' . $i . '.label') ? old('items.' . $item->item_id . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name : '') }}" style="display:none;">
-                                                    <button type="button" class="js-input-button close pull-left" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>&nbsp;
-                                                    <span class="js-sort-handle js-input-label move-cursor text-unselectable">{!! old('items.' . $item->item_id . '.characters.' . $i . '.label') ? old('items.' . $item->item_id . '.characters.' . $i . '.label') : ($item->priodCharacters->get($i) ? $item->priodCharacters->get($i)->name . ' (' . $item->priodCharacters->get($i)->class . ')' : '') !!}</span>&nbsp;
+                                                    <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][character_id]" value="{{ $characterId }}" style="display:none;">
+                                                    <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][label]" value="{{ $characterLabel }}" style="display:none;">
 
+                                                    <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
+
+                                                    <div class="js-sort-handle js-input-label d-flex move-cursor text-unselectable mr-1 text-4">
+                                                        <div class="justify-content-center align-self-center">
+                                                            <span class="fas fa-fw fa-grip-vertical text-muted"></span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="js-input-label">
+                                                        <span class="text-{{ $character ? strtolower($character->class) : '' }} font-weight-medium">
+                                                            {!! $characterLabel !!}
+                                                        </span>
+
+                                                        <ul class="list-inline">
+                                                            <li class="list-inline-item">
+                                                                <div class="form-inline">
+                                                                    <div class="form-group">
+                                                                        <label for="items[{{ $item->item_id }}][characters][{{ $i }}][order]">
+                                                                            Rank
+                                                                        </label>
+                                                                        <input name="items[{{ $item->item_id }}][characters][{{ $i }}][order]"
+                                                                            type="number"
+                                                                            min="0"
+                                                                            max="{{ $maxPrios }}"
+                                                                            class="form-control dark"
+                                                                            placeholder="auto"
+                                                                            autocomplete="off"
+                                                                            style="width:85px;"
+                                                                            value="{{ $characterOrder }}" />
+                                                                    </div>
+                                                                </div>
+                                                            </li>
+                                                            {{--
+                                                            Removed until I can get some optimizations added to this page... can't just have maxInputs*items*fields... it's up to like 10k inputs
+                                                            Need to add these fields dynamically; as needed server-side, and then as-needed client-side
+                                                            <li class="list-inline-item">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_received]" value="1" class="" autocomplete="off"
+                                                                            {{ $isReceived }}>
+                                                                            Received
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                            <li class="list-inline-item">
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_offspec]" value="1" class="" autocomplete="off"
+                                                                            {{ $isOffspec }}>
+                                                                            OS
+                                                                    </label>
+                                                                </div>
+                                                            </li>
+                                                            --}}
+                                                        </ul>
+
+
+                                                    </div>
                                                 </li>
+
                                                 @if ($errors->has('items.' . $item->item_id . '.characters.*'))
                                                     <li class="'text-danger font-weight-bold'">
                                                         {{ $errors->first('items.' . $item->item_id . '.characters.*') }}
