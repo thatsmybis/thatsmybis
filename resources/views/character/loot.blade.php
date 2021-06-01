@@ -98,7 +98,7 @@
                                     <input id="wishlist" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
                                     <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
-                                    <ul class="js-sortable no-bullet no-indent mb-0 bg-light">
+                                    <ul class="js-sortable-lazy no-bullet no-indent mb-0 bg-light">
                                         @for ($i = 0; $i < $maxWishlistItems; $i++)
                                             @php
                                                 $item      = null;
@@ -126,7 +126,7 @@
 
                                                 <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
 
-                                                <div class="js-sort-handle move-cursor text-4 text-unselectable d-flex mr-1">
+                                                <div class="js-sort-handle move-cursor d-flex text-4 text-unselectable mr-1">
                                                     <div class="justify-content-center align-self-center">
                                                         <span class="fas fa-fw fa-grip-vertical text-muted"></span>
                                                     </div>
