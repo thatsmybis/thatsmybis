@@ -493,6 +493,10 @@ select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
     border-color: #5e5ba6;
 }
 
+input.order {
+    max-width: 85px;
+}
+
 .dropdown-toggle.btn-light {
     background-color: #32305c;
     border-color: #6865b9;

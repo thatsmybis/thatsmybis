@@ -143,7 +143,7 @@
                                             @endif
                                         </label>
 
-                                        <select name="" class="js-input-select form-control dark selectpicker" data-live-search="true" autocomplete="off">
+                                        <select id="{{ $loop->index }}" name="" class="js-input-select form-control dark selectpicker" data-live-search="true" autocomplete="off">
                                             <option value="">
                                                 —
                                             </option>
@@ -161,82 +161,80 @@
                                         </select>
 
                                         <ol class="js-sortable-lazy no-indent mt-3 mb-0">
-                                            {{-- TODO: This is slow; optimize --}}
                                             @for ($i = 0; $i < $maxPrios; $i++)
                                                 @php
                                                     $oldInputName   = 'items.' . $item->item_id . '.characters.' . $i;
                                                     $character      = $item->priodCharacters->get($i) ? $item->priodCharacters->get($i) : null;
                                                     $characterId    = old($oldInputName . '.character_id') ? old($oldInputName . '.character_id') : ($character ? $character->id : null);
-                                                    $characterLabel = old($oldInputName . '.label') ? old($oldInputName . '.label') : ($character ? $character->name . ' (' . $character->class . ')' : null);
-                                                    $characterOrder = old($oldInputName . '.order') ? old($oldInputName . '.order') : ($character ? $character->order : null);
                                                     $strikeThrough  = (!old($oldInputName) && $character) || (old($oldInputName) && $character && old($oldInputName . 'character_id') == $character->id) ? ($character->pivot->received_at ? 'font-strikethrough' : null) : null;
-                                                    // $isReceived     = old($oldInputName . '.is_received') && old($oldInputName . '.is_received') == 1 ? 'checked' : ($character && $character->pivot->is_received ? 'checked' : null);
-                                                    // $isOffspec      = old($oldInputName . '.is_offspec') && old($oldInputName . '.is_offspec') == 1 ? 'checked' : ($character && $character->pivot->is_offspec ? 'checked' : null);
                                                 @endphp
                                                 <li class="input-item position-relative {{ $characterId ? 'd-flex' : '' }} {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }} {{ $strikeThrough }}"
+                                                    data-input-prefix="items[{{ $item->item_id }}][characters][{{ $i }}]"
+                                                    data-needs-template="{{ !$characterId ? '1' : '0' }}"
                                                     style="{{ $characterId ? '' : 'display:none;' }}">
+                                                    @if ($characterId)
+                                                        @php
+                                                            $characterLabel = old($oldInputName . '.label') ? old($oldInputName . '.label') : ($character ? $character->name . ' (' . $character->class . ')' : null);
+                                                            $characterOrder = old($oldInputName . '.order') ? old($oldInputName . '.order') : ($character ? $character->order : null);
+                                                            $isReceived     = old($oldInputName . '.is_received') && old($oldInputName . '.is_received') == 1 ? 'checked' : ($character && $character->pivot->is_received ? 'checked' : null);
+                                                            $isOffspec      = old($oldInputName . '.is_offspec') && old($oldInputName . '.is_offspec') == 1 ? 'checked' : ($character && $character->pivot->is_offspec ? 'checked' : null);
+                                                        @endphp
+                                                        <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][character_id]" value="{{ $characterId }}" style="display:none;">
+                                                        <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][label]" value="{{ $characterLabel }}" style="display:none;">
 
-                                                    <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][character_id]" value="{{ $characterId }}" style="display:none;">
-                                                    <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][label]" value="{{ $characterLabel }}" style="display:none;">
+                                                        <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
 
-                                                    <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
-
-                                                    <div class="js-sort-handle js-input-label d-flex move-cursor text-unselectable mr-1 text-4">
-                                                        <div class="justify-content-center align-self-center">
-                                                            <span class="fas fa-fw fa-grip-vertical text-muted"></span>
+                                                        <div class="js-sort-handle js-input-label d-flex move-cursor text-unselectable mr-1 text-4">
+                                                            <div class="justify-content-center align-self-center">
+                                                                <span class="fas fa-fw fa-grip-vertical text-muted"></span>
+                                                            </div>
                                                         </div>
-                                                    </div>
 
-                                                    <div class="js-input-label">
-                                                        <span class="text-{{ $character ? strtolower($character->class) : '' }} font-weight-medium">
-                                                            {!! $characterLabel !!}
-                                                        </span>
+                                                        <div class="js-input-label">
+                                                            <span class="text-{{ $character ? strtolower($character->class) : '' }} font-weight-medium">
+                                                                {!! $characterLabel !!}
+                                                            </span>
 
-                                                        <ul class="list-inline">
-                                                            <li class="list-inline-item">
-                                                                <div class="form-inline">
-                                                                    <div class="form-group">
-                                                                        <label for="items[{{ $item->item_id }}][characters][{{ $i }}][order]">
-                                                                            Rank
-                                                                        </label>
-                                                                        <input name="items[{{ $item->item_id }}][characters][{{ $i }}][order]"
-                                                                            type="number"
-                                                                            min="0"
-                                                                            max="{{ $maxPrios }}"
-                                                                            class="form-control dark"
-                                                                            placeholder="auto"
-                                                                            autocomplete="off"
-                                                                            style="width:85px;"
-                                                                            value="{{ $characterOrder }}" />
+                                                            <ul class="list-inline">
+                                                                <li class="list-inline-item">
+                                                                    <div class="form-inline">
+                                                                        <div class="form-group">
+                                                                            <label for="items[{{ $item->item_id }}][characters][{{ $i }}][order]">
+                                                                                Rank
+                                                                            </label>
+                                                                            &nbsp;
+                                                                            <input name="items[{{ $item->item_id }}][characters][{{ $i }}][order]"
+                                                                                type="number"
+                                                                                min="0"
+                                                                                max="{{ $maxPrios }}"
+                                                                                class="d-inline form-control dark order"
+                                                                                placeholder="auto"
+                                                                                autocomplete="off"
+                                                                                value="{{ $characterOrder }}" />
+                                                                        </div>
                                                                     </div>
-                                                                </div>
-                                                            </li>
-                                                            {{--
-                                                            Removed until I can get some optimizations added to this page... can't just have maxInputs*items*fields... it's up to like 10k inputs
-                                                            Need to add these fields dynamically; as needed server-side, and then as-needed client-side
-                                                            <li class="list-inline-item">
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_received]" value="1" class="" autocomplete="off"
-                                                                            {{ $isReceived }}>
-                                                                            Received
-                                                                    </label>
-                                                                </div>
-                                                            </li>
-                                                            <li class="list-inline-item">
-                                                                <div class="checkbox">
-                                                                    <label>
-                                                                        <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_offspec]" value="1" class="" autocomplete="off"
-                                                                            {{ $isOffspec }}>
-                                                                            OS
-                                                                    </label>
-                                                                </div>
-                                                            </li>
-                                                            --}}
-                                                        </ul>
-
-
-                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_received]" value="1" class="" autocomplete="off"
+                                                                                {{ $isReceived }}>
+                                                                                Received
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+                                                                <li class="list-inline-item">
+                                                                    <div class="checkbox">
+                                                                        <label>
+                                                                            <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_offspec]" value="1" class="" autocomplete="off"
+                                                                                {{ $isOffspec }}>
+                                                                                OS
+                                                                        </label>
+                                                                    </div>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    @endif
                                                 </li>
 
                                                 @if ($errors->has('items.' . $item->item_id . '.characters.*'))
@@ -274,6 +272,59 @@
 @endsection
 
 @section('scripts')
+<script>
+    var inputTemplate =
+        `<input type="checkbox" checked name="[character_id]" value="" style="display:none;">
+        <input type="checkbox" checked name="[label]" value="" style="display:none;">
+
+        <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
+
+        <div class="js-sort-handle js-input-label d-flex move-cursor text-unselectable mr-1 text-4">
+            <div class="justify-content-center align-self-center">
+                <span class="fas fa-fw fa-grip-vertical text-muted"></span>
+            </div>
+        </div>
+
+        <div class="js-input-label">
+            <span class="font-weight-medium">
+            </span>
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    <div class="form-inline">
+                        <div class="form-group">
+                            <label for="[order]">
+                                Rank
+                            </label>
+                            <input name="[order]"
+                                type="number"
+                                min="0"
+                                max="{{ $maxPrios }}"
+                                class="form-control dark order"
+                                placeholder="auto"
+                                autocomplete="off"
+                                value="" />
+                        </div>
+                    </div>
+                </li>
+                <li class="list-inline-item">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="[is_received]" value="1" class="" autocomplete="off">
+                                Received
+                        </label>
+                    </div>
+                </li>
+                <li class="list-inline-item">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="[is_offspec]" value="1" class="" autocomplete="off">
+                                OS
+                        </label>
+                    </div>
+                </li>
+            </ul>
+        </div>`;
+</script>
 <script src="{{ loadScript('autocomplete.js') }}"></script>
 <script>
     $(document).ready(() => warnBeforeLeaving("#editForm"));
