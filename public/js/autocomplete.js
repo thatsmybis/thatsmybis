@@ -93,42 +93,80 @@ function addItemListSelectHandler() {
      * Move the selected value to the list under the select.
      * Change the selected value back to the default value.
      **/
-    $(".js-input-select").change(function () { // TODO: Why is this triggering four times? This bug has always been here. Change trigger from change() to the fancy select event.
+    $("select.js-input-select").change(function () { // 'select' is specified because: https://stackoverflow.com/a/62642923/1196517
         const value = $(this).find(":selected").val();
         const label = $(this).find(":selected").html().trim();
-        let $nextInput = $(this).parent().next("ol").children("li").children("input[value='']").first(); // TODO: Check only against the input we care about (id/name/whatever)
+
+        const cssClass = $(this).find(":selected").data("class") || '';
+
+        // Optional: Specif which input we want to look for. Useful when there are multiple inputs
+        // in the next input's group.
+        const key = $(this).data("input-key");
+
+        let $nextInput = null;
+
+        if (key) {
+            // Optional: We may specify what the inputs for the next selects should be prefixed with.
+            // Useful for array inputs that we want to generate on the fly.
+            const prefix = $(this).data("input-prefix") || null;
+            $nextInput = $(this).parent().next("ol").children("li").find(`input${ prefix ? `[name^="${ prefix }"]` : `` }[name$="${ key }"][value=""]`).first(); // TODO: This not finding the appropriate value
+            console.log('woooo', `input[value=""]${ prefix ? `[name^="${ prefix }"]` : `` }[name$="${ key }"]`, $nextInput);
+            console.log($(this).parent().next("ol").children("li").find(`input${ prefix ? `[name^="${ prefix }"]` : `` }[name$="${ key }"][value=""]`).first());
+        } else {
+            $nextInput = $(this).parent().next("ol").children("li").find("input[value='']").first();
+
+        }
 
         // Couldn't find an open input. Check and see if there are any potential inputs that
         // are waiting for a template instead. (template should be defined on the page)
         if ($nextInput.val() != "") {
             $nextInput = $(this).parent().next("ol").children("li[data-needs-template='1']").first();
-            $nextInput.html(inputTemplate);
+            if ($nextInput.length) {
+                $nextInput.html(inputTemplate);
+                $nextInput.attr("data-needs-template", 0);
+                addItemRemoveHandler(); // Add handlers to the new html
 
-            const prefix = $nextInput.data("input-prefix");
+                const prefix = $nextInput.data("input-prefix");
 
-            if (prefix) {
-                // The template doesn't have fully populated names for inputs... set the input names.
-                $nextInput.find("input").each(function () {
-                    $(this).attr("name", prefix + $(this).attr('name'));
-                });
+                if (prefix) {
+                    // The template doesn't have fully populated names for inputs... set the input names.
+                    $nextInput.find("input").each(function () {
+                        $(this).attr("name", prefix + $(this).attr('name'));
+                    });
+                    $nextInput.find("label").each(function () {
+                        $(this).attr("for", prefix + $(this).attr('for'));
+                    });
+                }
+
+                $nextInput = $nextInput.children("input[value='']").first();
             }
-
-            $nextInput.data("needs-template", 0);
-
-            $nextInput = $nextInput.children("input[value='']").first();
         }
-
 
         if ($nextInput.val() == "") {
         // Add the item.
             $nextInput.parent("li").show();
 
+            if ($nextInput.parent("li").data("flex")) {
+                $nextInput.parent("li").addClass("d-flex");
+            }
+
             // Populate the ID
             $nextInput.val(value);
-            $nextInput.siblings(".js-input-label").html(" " + label);
+            $nextInput.siblings().find(".js-input-label").first().html(" " + label)
+                // Remove any previous colours that might have been on this
+                .removeClass(function (index, className) { return (className.match (/(^|\s)text-\S+/g) || []).join(' '); })
+                .addClass(cssClass);
             // Populate the label
             $label = $nextInput.next("input").first();
             $label.val(label);
+
+            // TODO: populate / reset OS flag
+
+            // TODO: populate / reset received flag
+
+            // TODO: populate / reset order flag
+
+            addItemRemoveHandler();
 
             // Reset the select
             $(this).val("");
@@ -192,6 +230,7 @@ function addItemRemoveHandler() {
      * Remove the chosen tag from the list that appears below the select.
      */
     $(".js-input-button").click(function () {
+        $(this).unbind(); // Remove previous handler if there was one
         $(this).prev("input").val(""); // Clear the pivot input (note: doesn't always exist)
         $(this).prev("input").prev("input").val(""); // Clear the label input
         $(this).prev("input").prev("input").prev("input").val(""); // Clear the value input

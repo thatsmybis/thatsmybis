@@ -194,7 +194,6 @@
 @endsection
 
 @section('scripts')
-<script src="{{ loadScript('autocomplete.js') }}"></script>
 @endsection
 
 @section('wowheadIconSize', 'medium')

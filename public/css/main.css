@@ -494,7 +494,7 @@ select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
 }
 
 input.order {
-    max-width: 85px;
+    max-width: 100px;
 }
 
 .dropdown-toggle.btn-light {
