@@ -109,9 +109,7 @@ function addItemListSelectHandler() {
             // Optional: We may specify what the inputs for the next selects should be prefixed with.
             // Useful for array inputs that we want to generate on the fly.
             const prefix = $(this).data("input-prefix") || null;
-            $nextInput = $(this).parent().next("ol").children("li").find(`input${ prefix ? `[name^="${ prefix }"]` : `` }[name$="${ key }"][value=""]`).first(); // TODO: This not finding the appropriate value
-            console.log('woooo', `input[value=""]${ prefix ? `[name^="${ prefix }"]` : `` }[name$="${ key }"]`, $nextInput);
-            console.log($(this).parent().next("ol").children("li").find(`input${ prefix ? `[name^="${ prefix }"]` : `` }[name$="${ key }"][value=""]`).first());
+            $nextInput = $(this).parent().next("ol").children("li").find(`input${ prefix ? `[name^="${ prefix }"]` : `` }[name$="${ key }"][value=""]`).first();
         } else {
             $nextInput = $(this).parent().next("ol").children("li").find("input[value='']").first();
 
@@ -127,14 +125,22 @@ function addItemListSelectHandler() {
                 addItemRemoveHandler(); // Add handlers to the new html
 
                 const prefix = $nextInput.data("input-prefix");
+                const index = $nextInput.data("index");
 
                 if (prefix) {
                     // The template doesn't have fully populated names for inputs... set the input names.
                     $nextInput.find("input").each(function () {
-                        $(this).attr("name", prefix + $(this).attr('name'));
+                        $(this).attr("name", prefix + $(this).attr("name"));
                     });
                     $nextInput.find("label").each(function () {
-                        $(this).attr("for", prefix + $(this).attr('for'));
+                        $(this).attr("for", prefix + $(this).attr("for"));
+                    });
+                }
+
+                if (index) {
+                    // Update any placeholders that need to be equal to the current index.
+                    $nextInput.find(`input[name$="[order]"]`).each(function () {
+                        $(this).attr("placeholder", index + 1);
                     });
                 }
 

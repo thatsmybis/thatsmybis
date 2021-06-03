@@ -377,6 +377,15 @@ ul.striped > li:nth-of-type(odd), ol.striped > li:nth-of-type(odd) {
     background: #28264f;
 }
 
+/* Show numbers like in an ordered list */
+ul.numbered, ol.numbered {
+    counter-reset: numberedList;
+}
+ul.numbered .numbered::before, ol.numbered .numbered::before {
+    counter-increment: numberedList;
+    content: counter(numberedList);
+}
+
 .fa-li-single { /* For doing fa-li when not wrapped in a fa-ul list */
     left: 1.5em;
     position: absolute;
@@ -494,7 +503,7 @@ select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
 }
 
 input.order {
-    max-width: 100px;
+    max-width: 70px;
 }
 
 .dropdown-toggle.btn-light {

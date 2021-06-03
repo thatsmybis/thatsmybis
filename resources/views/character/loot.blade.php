@@ -369,6 +369,9 @@
 <script>
     var guild = {!! $guild->toJson() !!};
 
-    $(document).ready(() => warnBeforeLeaving("#itemForm"));
+    $(document).ready(function () {
+        warnBeforeLeaving("#itemForm");
+        addSortHandlers();
+    });
 </script>
 @endsection

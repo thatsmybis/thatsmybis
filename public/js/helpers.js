@@ -46,9 +46,6 @@ $(document).ready(function () {
     // For toggling hidden note inputs
     addNoteHandlers();
 
-    // For enabling sortable elements
-    addSortHandlers();
-
     // For enabling wishlist sorting
     addWishlistSortHandlers();
 

@@ -166,7 +166,7 @@
                                             @endif
                                         </select>
 
-                                        <ol class="js-sortable-lazy no-indent mt-3 mb-0">
+                                        <ol class="js-sortable-lazy numbered no-indent mt-3 mb-0">
                                             @for ($i = 0; $i < $maxPrios; $i++)
                                                 @php
                                                     $oldInputName   = 'items.' . $item->item_id . '.characters.' . $i;
@@ -176,6 +176,7 @@
                                                 @endphp
                                                 <li class="input-item position-relative {{ $characterId ? 'd-flex' : '' }} {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }} {{ $strikeThrough }}"
                                                     data-needs-template="{{ !$characterId ? '1' : '0' }}"
+                                                    data-index="{{ $i }}"
                                                     data-input-prefix="items[{{ $item->item_id }}][characters][{{ $i }}]"
                                                     data-flex="1"
                                                     style="{{ $characterId ? '' : 'display:none;' }}">
@@ -225,16 +226,16 @@
                                                                     <div class="form-inline">
                                                                         <div class="form-group">
                                                                             <label for="items[{{ $item->item_id }}][characters][{{ $i }}][order]">
-                                                                                #
+                                                                              Rank
                                                                             </label>
                                                                             &nbsp;
                                                                             <input name="items[{{ $item->item_id }}][characters][{{ $i }}][order]"
                                                                                 type="number"
                                                                                 min="0"
                                                                                 max="{{ $maxPrios }}"
-                                                                                class="d-inline form-control dark order"
-                                                                                placeholder="default"
+                                                                                class="d-inline numbered form-control dark order"
                                                                                 autocomplete="off"
+                                                                                placeholder="{{ $i + 1 }}"
                                                                                 value="{{ $characterOrder }}" />
                                                                         </div>
                                                                     </div>
@@ -279,6 +280,7 @@
 @endsection
 
 @section('scripts')
+<script src="{{ loadScript('prio.js') }}"></script>
 <script>
     var inputTemplate =
         `<input type="checkbox" checked name="[character_id]" value="" style="display:none;">
@@ -316,15 +318,15 @@
                     <div class="form-inline">
                         <div class="form-group">
                             <label for="[order]">
-                                #
+                                Rank
                             </label>
                             &nbsp;
                             <input name="[order]"
                                 type="number"
                                 min="0"
                                 max="{{ $maxPrios }}"
-                                class="form-control dark order"
-                                placeholder="default"
+                                class="d-inline numbered form-control dark order"
+                                placeholder=""
                                 autocomplete="off"
                                 value="" />
                         </div>
@@ -332,12 +334,6 @@
                 </li>
             </ul>
         </div>`;
-</script>
-<script>
-    $(document).ready(function () {
-        warnBeforeLeaving("#editForm")
-        initializing = false;
-    });
 </script>
 @endsection
 
