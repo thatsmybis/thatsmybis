@@ -281,7 +281,7 @@ class PrioController extends Controller
             'currentMember'      => $currentMember,
             'guild'              => $guild,
             'item'               => $item,
-            'maxPrios'           => \App\Http\Controllers\PrioController::MAX_PRIOS,
+            'maxPrios'           => self::MAX_PRIOS,
             'raidGroup'          => $raidGroup,
             'wishlistCharacters' => $wishlistCharacters,
         ]);
@@ -301,14 +301,22 @@ class PrioController extends Controller
         }
 
         $validationRules =  [
-            'instance_id' => 'required|exists:instances,id',
-            'items.*.id'  => [
+            'instance_id'   => 'required|exists:instances,id',
+            'raid_group_id' => 'required|exists:raid_groups,id',
+            'items.*.item_id' => [
                 'nullable',
                 'integer',
                 Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
             ],
-            'items.*.characters.id' => 'nullable|integer|exists:characters,id',
-            'raid_group_id'         => 'required|exists:raid_groups,id',
+            'items.*.characters.*.character_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('characters', 'id')->where('characters.guild_id', $guild->id),
+            ],
+            'items.*.characters.*.character_id' => 'nullable|integer|exists:characters,id',
+            'items.*.characters.*.is_received'  => 'nullable|boolean',
+            'items.*.characters.*.is_offspec'   => 'nullable|boolean',
+            'items.*.characters.*.order'        => 'nullable|integer|min:0|max:' . self::MAX_PRIOS,
         ];
 
         $this->validate(request(), $validationRules);
@@ -366,13 +374,21 @@ class PrioController extends Controller
         }
 
         $validationRules =  [
+            'raid_group_id' => 'required|exists:raid_groups,id',
             'item_id' => [
                 'required',
                 'integer',
                 Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
             ],
-            'raid_group_id' => 'required|exists:raid_groups,id',
-            'items.*.characters.id' => 'nullable|integer|exists:characters,id',
+            'items.*.characters.*.character_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('characters', 'id')->where('characters.guild_id', $guild->id),
+            ],
+            'items.*.characters.*.character_id' => 'nullable|integer|exists:characters,id',
+            'items.*.characters.*.is_received'  => 'nullable|boolean',
+            'items.*.characters.*.is_offspec'   => 'nullable|boolean',
+            'items.*.characters.*.order'        => 'nullable|integer|min:0|max:' . self::MAX_PRIOS,
         ];
 
         $this->validate(request(), $validationRules);
@@ -463,6 +479,7 @@ class PrioController extends Controller
                             // We found a match
                             if (!isset($inputPrios[$inputPrioKey]['resolved']) && $existingPrio->id == $inputPrio['character_id']) {
                                 $found = true;
+                                // TODO: Update the logic for the custom order, is_received, and is_offspec
                                 if ($existingPrio->pivot->order != $i) {
                                     // Update the metadata
                                     $toUpdate[] = [
