@@ -241,10 +241,10 @@ function createTable() {
                 "title"  : "Raid Group",
                 "data"   : "raid_group",
                 "render" : function (data, type, row) {
-                    let contents = (row.raid_group_id ? row.raid_group_id : null);
+                    let contents = '' + (row.raid_group_id ? row.raid_group_id : '');
                     if (row.secondary_raid_groups && row.secondary_raid_groups.length) {
                         row.secondary_raid_groups.forEach(function (raidGroup, index) {
-                            contents += ` ${raidGroup.id}`;
+                            contents += `${raidGroup.id} `;
                         });
                     }
                     return contents;
