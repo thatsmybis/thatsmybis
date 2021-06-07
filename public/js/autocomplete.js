@@ -97,91 +97,104 @@ function addItemListSelectHandler() {
         const value = $(this).find(":selected").val();
         const label = $(this).find(":selected").html().trim();
 
-        const cssClass = $(this).find(":selected").data("class") || '';
+        if (value) {
+            const cssClass = $(this).find(":selected").data("class") || '';
 
-        // Optional: Specif which input we want to look for. Useful when there are multiple inputs
-        // in the next input's group.
-        const key = $(this).data("input-key");
+            // Optional: Specif which input we want to look for. Useful when there are multiple inputs
+            // in the next input's group.
+            const key = $(this).data("input-key");
 
-        let $nextInput = null;
+            const dupeProtection = $(this).data("no-dupes");
 
-        if (key) {
-            // Optional: We may specify what the inputs for the next selects should be prefixed with.
-            // Useful for array inputs that we want to generate on the fly.
-            const prefix = $(this).data("input-prefix") || null;
-            $nextInput = $(this).parent().next("ol").children("li").find(`input${ prefix ? `[name^="${ prefix }"]` : `` }[name$="${ key }"][value=""]`).first();
-        } else {
-            $nextInput = $(this).parent().next("ol").children("li").find("input[value='']").first();
-
-        }
-
-        // Couldn't find an open input. Check and see if there are any potential inputs that
-        // are waiting for a template instead. (template should be defined on the page)
-        if ($nextInput.val() != "") {
-            $nextInput = $(this).parent().next("ol").children("li[data-needs-template='1']").first();
-            if ($nextInput.length) {
-                $nextInput.html(inputTemplate);
-                $nextInput.attr("data-needs-template", 0);
-                addItemRemoveHandler(); // Add handlers to the new html
-
-                const prefix = $nextInput.data("input-prefix");
-                const index = $nextInput.data("index");
-
-                if (prefix) {
-                    // The template doesn't have fully populated names for inputs... set the input names.
-                    $nextInput.find("input").each(function () {
-                        $(this).attr("name", prefix + $(this).attr("name"));
-                    });
-                    $nextInput.find("label").each(function () {
-                        $(this).attr("for", prefix + $(this).attr("for"));
-                    });
+            if (dupeProtection) {
+                // Find existing with the same value
+                const existing = $(this).parent().next("ol").children("li").find(`input${ key ? `[name$="${ key }"]` : `` }[value="${value}"]`).first();
+                if (existing.length) {
+                    $(this).val("");
+                    return;
                 }
-
-                if (index) {
-                    // Update any placeholders that need to be equal to the current index.
-                    $nextInput.find(`input[name$="[order]"]`).each(function () {
-                        $(this).attr("placeholder", index + 1);
-                    });
-                }
-
-                $nextInput = $nextInput.children("input[value='']").first();
-            }
-        }
-
-        if ($nextInput.val() == "") {
-        // Add the item.
-            $nextInput.parent("li").show();
-
-            if ($nextInput.parent("li").data("flex")) {
-                $nextInput.parent("li").addClass("d-flex");
             }
 
-            // Populate the ID
-            $nextInput.val(value);
-            $nextInput.siblings().find(".js-input-label").first().html(" " + label)
-                // Remove any previous colours that might have been on this
-                .removeClass(function (index, className) { return (className.match (/(^|\s)text-\S+/g) || []).join(' '); })
-                .addClass(cssClass);
-            // Populate the label
-            $label = $nextInput.next("input").first();
-            $label.val(label);
+            let $nextInput = null;
 
-            // TODO: populate / reset OS flag
+            if (key) {
+                // Optional: We may specify what the inputs for the next selects should be prefixed with.
+                // Useful for array inputs that we want to generate on the fly.
+                const prefix = $(this).data("input-prefix") || null;
+                $nextInput = $(this).parent().next("ol").children("li").find(`input${ prefix ? `[name^="${ prefix }"]` : `` }[name$="${ key }"][value=""]`).first();
+            } else {
+                $nextInput = $(this).parent().next("ol").children("li").find("input[value='']").first();
 
-            // TODO: populate / reset received flag
+            }
 
-            // TODO: populate / reset order flag
+            // Couldn't find an open input. Check and see if there are any potential inputs that
+            // are waiting for a template instead. (template should be defined on the page)
+            if ($nextInput.val() != "") {
+                $nextInput = $(this).parent().next("ol").children("li[data-needs-template='1']").first();
+                if ($nextInput.length) {
+                    $nextInput.html(inputTemplate);
+                    $nextInput.attr("data-needs-template", 0);
+                    addItemRemoveHandler(); // Add handlers to the new html
 
-            addItemRemoveHandler();
+                    const prefix = $nextInput.data("input-prefix");
+                    const index = $nextInput.data("index");
 
-            // Reset the select
-            $(this).val("");
-            $(this).find("option:first").text("—");
-        } else {
-        // Can't add any more.
-            $(this).val("");
-            // If a select input triggered this
-            $(this).find("option:first").text("maximum added");
+                    if (prefix) {
+                        // The template doesn't have fully populated names for inputs... set the input names.
+                        $nextInput.find("input").each(function () {
+                            $(this).attr("name", prefix + $(this).attr("name"));
+                        });
+                        $nextInput.find("label").each(function () {
+                            $(this).attr("for", prefix + $(this).attr("for"));
+                        });
+                    }
+
+                    if (index) {
+                        // Update any placeholders that need to be equal to the current index.
+                        $nextInput.find(`input[name$="[order]"]`).each(function () {
+                            $(this).attr("placeholder", index + 1);
+                        });
+                    }
+
+                    $nextInput = $nextInput.children("input[value='']").first();
+                }
+            }
+
+            if ($nextInput.val() == "") {
+            // Add the item.
+                $nextInput.parent("li").show();
+
+                if ($nextInput.parent("li").data("flex")) {
+                    $nextInput.parent("li").addClass("d-flex");
+                }
+
+                // Populate the ID
+                $nextInput.val(value);
+                $nextInput.siblings().find(".js-input-label").first().html(" " + label)
+                    // Remove any previous colours that might have been on this
+                    .removeClass(function (index, className) { return (className.match (/(^|\s)text-\S+/g) || []).join(' '); })
+                    .addClass(cssClass);
+                // Populate the label
+                $label = $nextInput.next("input").first();
+                $label.val(label);
+
+                // TODO: populate / reset OS flag
+
+                // TODO: populate / reset received flag
+
+                // TODO: populate / reset order flag
+
+                addItemRemoveHandler();
+
+                // Reset the select
+                $(this).val("");
+                $(this).find("option:first").text("—");
+            } else {
+            // Can't add any more.
+                $(this).val("");
+                // If a select input triggered this
+                $(this).find("option:first").text("maximum added");
+            }
         }
     });
 }
