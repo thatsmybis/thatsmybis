@@ -183,9 +183,14 @@
                                                     @if ($characterId)
                                                         @php
                                                             $characterLabel = old($oldInputName . '.label') ? old($oldInputName . '.label') : ($character ? $character->name : null);
-                                                            $characterOrder = old($oldInputName . '.order') ? old($oldInputName . '.order') : ($character ? $character->order : null);
+                                                            $characterOrder = old($oldInputName . '.order') ? old($oldInputName . '.order') : ($character && $character->pivot->order ? $character->pivot->order : null);
                                                             $isReceived     = old($oldInputName . '.is_received') && old($oldInputName . '.is_received') == 1 ? 'checked' : ($character && $character->pivot->is_received ? 'checked' : null);
                                                             $isOffspec      = old($oldInputName . '.is_offspec') && old($oldInputName . '.is_offspec') == 1 ? 'checked' : ($character && $character->pivot->is_offspec ? 'checked' : null);
+
+                                                            // Let the order field auto-generate if it's not different from the index
+                                                            if ($characterOrder && $characterOrder == $i + 1) {
+                                                                $characterOrder = null;
+                                                            }
                                                         @endphp
                                                         <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][character_id]" value="{{ $characterId }}" style="display:none;">
                                                         <input type="checkbox" checked name="items[{{ $item->item_id }}][characters][{{ $i }}][label]" value="{{ $characterLabel }}" style="display:none;">
@@ -231,7 +236,7 @@
                                                                             &nbsp;
                                                                             <input name="items[{{ $item->item_id }}][characters][{{ $i }}][order]"
                                                                                 type="number"
-                                                                                min="0"
+                                                                                min="1"
                                                                                 max="{{ $maxPrios }}"
                                                                                 class="d-inline numbered form-control dark order"
                                                                                 autocomplete="off"

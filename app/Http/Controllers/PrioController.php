@@ -321,7 +321,7 @@ class PrioController extends Controller
             'items.*.characters.*.character_id' => 'nullable|integer|exists:characters,id',
             'items.*.characters.*.is_received'  => 'nullable|boolean',
             'items.*.characters.*.is_offspec'   => 'nullable|boolean',
-            'items.*.characters.*.order'        => 'nullable|integer|min:0|max:' . self::MAX_PRIOS,
+            'items.*.characters.*.order'        => 'nullable|integer|min:1|max:' . self::MAX_PRIOS,
         ];
 
         $this->validate(request(), $validationRules);
@@ -462,7 +462,11 @@ class PrioController extends Controller
 
             if ($inputItem) {
                 // Filter out empty inputs
-                $inputPrios = array_filter($inputItem['characters'], function ($value) {return $value['character_id'];});
+                if (isset($inputItem['characters'])) {
+                    $inputPrios = array_filter($inputItem['characters'], function ($value) {return $value['character_id'];});
+                } else {
+                    $inputPrios = [];
+                }
 
                 $existingPrios = $existingItem->priodCharacters;
 
@@ -484,15 +488,37 @@ class PrioController extends Controller
                             // We found a match
                             if (!isset($inputPrios[$inputPrioKey]['resolved']) && $existingPrio->id == $inputPrio['character_id']) {
                                 $found = true;
-                                // TODO: Update the logic for the custom order, is_received, and is_offspec
-                                if ($existingPrio->pivot->order != $i) {
+                                $changed = false;
+                                $newValues = [];
+
+                                $order      = isset($inputPrio['order']) ? $inputPrio['order'] : $i;
+                                $isReceived = isset($inputPrio['is_received']) && $inputPrio['is_received'] ? 1 : 0;
+                                $isOffspec  = isset($inputPrio['is_offspec']) && $inputPrio['is_offspec'] ? 1 : 0;
+
+                                if ($existingPrio->pivot->order != $order) {
                                     // Update the metadata
-                                    $toUpdate[] = [
-                                        'id'         => $existingPrio->pivot->id,
-                                        'order'      => $i,
-                                    ];
+                                    $changed = true;
+                                    $newValues['id']    = $existingPrio->pivot->id;
+                                    $newValues['order'] = $order;
+                                }
+
+                                if ($isReceived && $existingPrio->pivot->is_received != $isReceived) {
+                                    $changed = true;
+                                    $newValues['id']          = $existingPrio->pivot->id;
+                                    $newValues['is_received'] = $isReceived;
+                                }
+
+                                if ($isOffspec && $existingPrio->pivot->is_offspec != $isOffspec) {
+                                    $changed = true;
+                                    $newValues['id']         = $existingPrio->pivot->id;
+                                    $newValues['is_offspec'] = $isOffspec;
+                                }
+
+                                if ($changed) {
+                                    $toUpdate[] = $newValues;
                                     $toUpdateCount++;
                                 }
+
                                 // Mark the input item as resolved so that we don't go over it again (we've already resolved what to do with this item)
                                 $inputPrios[$inputPrioKey]['resolved'] = true;
                                 break;
@@ -536,10 +562,12 @@ class PrioController extends Controller
                         $toAdd[] = [
                             'item_id'       => $inputItem['item_id'],
                             'character_id'  => $inputPrio['character_id'],
+                            'is_offspec'    => isset($inputPrio['is_offspec']) && $inputPrio['is_offspec'] ? 1 : 0,
+                            'is_received'   => isset($inputPrio['is_received']) && $inputPrio['is_received'] ? 1 : 0,
                             'added_by'      => $currentMember->id,
                             'raid_group_id' => $raidGroup->id,
                             'type'          => Item::TYPE_PRIO,
-                            'order'         => $i,
+                            'order'         => isset($inputPrio['order']) && $inputPrio['order'] ? $inputPrio['order'] : $i,
                             'created_at'    => $now,
                             'updated_at'    => $now,
                         ];
