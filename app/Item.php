@@ -124,12 +124,14 @@ class Item extends Model
                 'raid_group_id',
                 'type',
                 'is_received',
+                'is_offspec',
                 'received_at',
                 'created_at',
                 'order',
             ])
             ->orderBy('character_items.raid_group_id')
-            ->orderBy('character_items.order');
+            ->orderBy('character_items.order')
+            ->orderBy('characters.name');
     }
 
     public function priodCharactersWithAttendance() {
