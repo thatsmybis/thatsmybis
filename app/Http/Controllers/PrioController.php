@@ -270,6 +270,11 @@ class PrioController extends Controller
 
         $item = $items->first();
 
+        if (!$item) {
+            request()->session()->flash('status', 'Item not found. Can\'t set prios on items that don\'t drop from a boss or aren\'t in our loot tables, including token rewards.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
         $wishlistCharacters = null;
         if ($guild->is_attendance_hidden && $item->relationLoaded('wishlistCharacters')) {
             $wishlistCharacters = $item->wishlistCharacters;
