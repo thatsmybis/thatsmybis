@@ -11,7 +11,6 @@ $(document).ready(function () {
             },
         });
     });
-
 });
 
 // Update the placeholder values of anything with the given name.

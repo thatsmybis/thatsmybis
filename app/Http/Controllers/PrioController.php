@@ -282,7 +282,7 @@ class PrioController extends Controller
             $wishlistCharacters = $item->wishlistCharactersWithAttendance;
         }
 
-        return view('item.prioEdit', [
+        return view('guild.prios.singleInput', [
             'currentMember'      => $currentMember,
             'guild'              => $guild,
             'item'               => $item,
@@ -393,7 +393,7 @@ class PrioController extends Controller
             'items.*.characters.*.character_id' => 'nullable|integer|exists:characters,id',
             'items.*.characters.*.is_received'  => 'nullable|boolean',
             'items.*.characters.*.is_offspec'   => 'nullable|boolean',
-            'items.*.characters.*.order'        => 'nullable|integer|min:0|max:' . self::MAX_PRIOS,
+            'items.*.characters.*.order'        => 'nullable|integer|min:1|max:' . self::MAX_PRIOS,
         ];
 
         $this->validate(request(), $validationRules);
@@ -506,6 +506,11 @@ class PrioController extends Controller
                                     $changed = true;
                                     $newValues['id']          = $existingPrio->pivot->id;
                                     $newValues['is_received'] = $isReceived;
+                                    if ($isReceived) {
+                                        $newValues['received_at'] = $now;
+                                    } else {
+                                        $newValues['received_at'] = null;
+                                    }
                                 }
 
                                 if ($isOffspec && $existingPrio->pivot->is_offspec != $isOffspec) {
@@ -564,6 +569,7 @@ class PrioController extends Controller
                             'character_id'  => $inputPrio['character_id'],
                             'is_offspec'    => isset($inputPrio['is_offspec']) && $inputPrio['is_offspec'] ? 1 : 0,
                             'is_received'   => isset($inputPrio['is_received']) && $inputPrio['is_received'] ? 1 : 0,
+                            'received_at'   => isset($inputPrio['is_received']) && $inputPrio['is_received'] ? $now : null,
                             'added_by'      => $currentMember->id,
                             'raid_group_id' => $raidGroup->id,
                             'type'          => Item::TYPE_PRIO,
@@ -613,14 +619,12 @@ class PrioController extends Controller
         // I'm sure there's some clever way to perform an UPDATE statement with CASE statements... https://stackoverflow.com/questions/3432/multiple-updates-in-mysql
         // Don't have time to implement that.
         foreach ($toUpdate as $item) {
+            $item ['updated_at'] = $now;
             DB::table('character_items')
                 ->where('id', $item['id'])
-                ->update([
-                    'order'      => $item['order'],
-                    'updated_at' => $now,
-                ]);
+                ->update($item);
 
-            // If we want to log EVERY prio change (this has a cascading effect and can result in thousands of audits)
+            // If we want to log EVERY prio change (this has a cascading effect when orders change and can result in thousands of audits)
             // $audits[] = [
             //     'description'  => $currentMember->username . ' updated prio order on a character (prio set to ' . $item['order'] . ')',
             //     'member_id'    => $currentMember->id,
