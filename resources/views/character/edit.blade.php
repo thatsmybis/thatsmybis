@@ -414,7 +414,7 @@
                     --}}
                 </div>
                 <div class="row mb-3 pt-2 pb-1 bg-light rounded">
-                    @if ($character)
+                    @if ($character && $character->member)
                         <div class="col-12">
                             <div class="form-group">
                                 <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'usernameSlug' => $character->member->slug]) }}">
