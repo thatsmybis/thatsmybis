@@ -563,6 +563,8 @@ class PrioController extends Controller
                 foreach ($inputPrios as $inputPrio) {
                     $i++;
 
+                    $order = isset($inputPrio['order']) && $inputPrio['order'] ? $inputPrio['order'] : $i;
+
                     if (!isset($inputPrio['resolved'])) {
                         $toAdd[] = [
                             'item_id'       => $inputItem['item_id'],
@@ -573,14 +575,14 @@ class PrioController extends Controller
                             'added_by'      => $currentMember->id,
                             'raid_group_id' => $raidGroup->id,
                             'type'          => Item::TYPE_PRIO,
-                            'order'         => isset($inputPrio['order']) && $inputPrio['order'] ? $inputPrio['order'] : $i,
+                            'order'         => $order,
                             'created_at'    => $now,
                             'updated_at'    => $now,
                         ];
 
                         $isModified = true;
                         $audits[] = [
-                            'description'   => $currentMember->username . ' prio\'d an item to a character (' . $i . ')',
+                            'description'   => $currentMember->username . ' prio\'d an item to a character (' . $order . ')',
                             'type'          => Item::TYPE_PRIO,
                             'member_id'     => $currentMember->id,
                             'guild_id'      => $currentMember->guild_id,
