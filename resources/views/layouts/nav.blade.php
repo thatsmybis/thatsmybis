@@ -311,6 +311,11 @@
                             Raids
                         </a>
                         <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
+                            @if ($viewRaids)
+                                <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                    Raid Groups
+                                </a>
+                            @endif
                             <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 List Raids
                             </a>
@@ -357,9 +362,9 @@
                         </a>
 
                         @if ($viewRaids)
-                            <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Raid Groups
-                            </a>
+                            <span class="dropdown-item disabled">
+                                Raid Groups moved to <strong>Raids</strong>
+                            </span>
                         @endif
 
                         @if ($editItems || $editPrios)
