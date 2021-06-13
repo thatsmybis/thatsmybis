@@ -39,8 +39,10 @@
     @php
         $donors = [
             ['icon' => 'crown', 'name' => 'Adilar/Myras', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'andrew_g', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Anonymous', 'title' => 'Patreon'],
             ['icon' => 'crown', 'name' => 'A4uronn', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'bakedbread', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Blezner', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'botnet', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Busmonstret', 'title' => 'Raider'],
@@ -68,6 +70,7 @@
             ['icon' => 'crown', 'name' => 'Sarafina', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Sentence', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'SHIELD', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'skoz', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Strix', 'title' => 'Black Lotus'],
             ['icon' => 'crown', 'name' => 'Sumorex', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'TideAd', 'title' => 'Parser'],
