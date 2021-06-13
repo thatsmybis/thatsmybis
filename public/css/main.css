@@ -459,6 +459,18 @@ kbd {
     box-shadow: inset 0px 1px 1px 0px rgba(0, 0, 0, 0.075), 0 0 8px 1px rgb(255, 0, 0);
 }
 
+/* Hide up/down arrows for number inputs */
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
 input[type='checkbox'] {
     -webkit-appearance:none;
     width:20px;
@@ -503,7 +515,7 @@ select.dark:disabled, input.dark:disabled, textarea.dark:disabled {
 }
 
 input.order {
-    max-width: 70px;
+    max-width: 50px;
 }
 
 .dropdown-toggle.btn-light {
