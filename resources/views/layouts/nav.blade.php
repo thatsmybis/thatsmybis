@@ -15,8 +15,8 @@
                 title="{{ isset($guild) && $guild->disabled_at ? 'guild is disabled' : '' }}">
                 {!! isset($guild) && $guild->name ? $guild->name : env('APP_NAME') !!}
             </a>
-            <a href="{{ route('toggleStreamerMode') }}" class="text-white">
-                <span class="fa-fw {!! isStreamerMode() ? 'fas fa-shield-alt' : 'fal fa-shield' !!}"></span>
+            <a href="{{ route('toggleStreamerMode') }}" class="text-muted small">
+                <span class="fa-fw {!! isStreamerMode() ? 'fas fa-lock' : 'fal fa-unlock' !!}"></span>
             </a>
         </span>
     </span>
@@ -375,7 +375,7 @@
             @if (isset($guild))
                 <li class="nav-item mr-3 d-patreon-block">
                     <a class="dropdown-item text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
-                    <a href="https://www.patreon.com/lemmings19" target="_blank" class="nav-link active font-weight-bold text-patreon"
+                    <a href="https://www.patreon.com/lemmings19" target="_blank" class="nav-link active small font-weight-bold text-patreon"
                         title="Toss a coin to your web dev">
                         <span class="fas fa-fw fa-sack"></span>
                         Support TMB
