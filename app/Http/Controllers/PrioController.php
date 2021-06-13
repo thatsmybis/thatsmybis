@@ -613,7 +613,7 @@ class PrioController extends Controller
                 }
             }
         }
-dd($toDrop);
+
         // Delete...
         DB::table('character_items')->whereIn('id', $toDrop)->delete();
 
