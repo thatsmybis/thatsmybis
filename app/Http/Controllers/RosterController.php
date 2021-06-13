@@ -26,8 +26,9 @@ class RosterController extends Controller
             $showOfficerNote = true;
         }
 
+        $viewPrioPermission = $currentMember->hasPermission('view.prios');
         $showPrios = false;
-        if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $currentMember->hasPermission('view.prios'))) {
+        if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $viewPrioPermission)) {
             $showPrios = true;
         }
 
@@ -36,14 +37,14 @@ class RosterController extends Controller
             $showWishlist = true;
         }
 
-        $cacheKey = 'roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden;
+        $cacheKey = 'roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':viewPrioPermission:' . $viewPrioPermission . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden;
 
         if (request()->get('bustCache')) {
             Cache::forget($cacheKey);
         }
 
-        $characters = Cache::remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist) {
-            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, false);
+        $characters = Cache::remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
+            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false);
         });
 
         $showEdit = false;

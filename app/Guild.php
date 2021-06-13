@@ -177,7 +177,7 @@ class Guild extends Model
      *
      * @return array
      */
-    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $showInactive) {
+    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, $showInactive) {
         $characterFields = [
             'characters.id',
             'characters.member_id',
@@ -245,7 +245,15 @@ class Guild extends Model
         }
 
         if ($showPrios) {
-            $query = $query->with('prios');
+            if ($this->prio_show_count && !$viewPrioPermission) {
+                $query = $query->with(['prios' => function ($query) {
+                    return $query->where([
+                        ['character_items.order', '<=', $this->prio_show_count],
+                    ]);
+                }]);
+            } else {
+                $query = $query->with('prios');
+            }
         }
 
         if ($showWishlist) {
