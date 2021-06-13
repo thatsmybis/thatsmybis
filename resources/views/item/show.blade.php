@@ -208,11 +208,12 @@
                                                 @endif
                                                 @php
                                                     $lastRaidGroup = $character->pivot->raid_group_id;
+                                                    $newRaidGroup = $raidGroups->where('id', $character->pivot->raid_group_id)->first();
                                                 @endphp
                                                 <li class="list-inline-item align-top">
                                                     <ol class="lesser-indent">
                                                         <li data-raid-group-id="{{ $character->pivot->raid_group_id }}" class="no-bullet font-weight-bold mt-2">
-                                                            {{ $raidGroups->where('id', $character->pivot->raid_group_id)->first()->name }}
+                                                            {{ $newRaidGroup ? $newRaidGroup->name : '' }}
                                                         </li>
                                             @endif
                                                 <li data-raid-group-id="{{ $character->pivot->raid_group_id }}"

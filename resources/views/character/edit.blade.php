@@ -414,13 +414,15 @@
                     --}}
                 </div>
                 <div class="row mb-3 pt-2 pb-1 bg-light rounded">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
-                                Unlock member's wishlist or received loot list
-                            </a>
+                    @if ($character)
+                        <div class="col-12">
+                            <div class="form-group">
+                                <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'usernameSlug' => $character->member->slug]) }}">
+                                    Unlock member's wishlist or received loot list
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    @endif
                     @if ($character && ($currentMember->hasPermission('inactive.characters') || $currentMember->id == $character->member_id))
                         <div class="col-6">
                             <div class="form-group mb-0">
