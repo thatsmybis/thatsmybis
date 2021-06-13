@@ -402,7 +402,7 @@ class ExportController extends Controller {
         }
 
         if ($lootType != "all") {
-            " ci.type = '{$lootType}' AND";
+            $lootTypeFragment .= " ci.type = '{$lootType}' AND";
         }
 
         return
