@@ -449,6 +449,14 @@
                             </div>
                         </div>
                     @endif
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
+                                Unlock member's wishlist or received loot list
+                            </a>
+                        </div>
+                    </div>
                 </div>
                 <div class="form-group">
                     <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
