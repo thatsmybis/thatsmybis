@@ -39,6 +39,21 @@
                             Profile
                         </a>
                     </li>
+                    @if ($currentMember->characters->count())
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['character.loot']) ? 'active font-weight-bold' : '' }}" href="#" id="wishlistNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Wishlist
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="wishlistNavDropdown">
+                                @foreach ($currentMember->characters as $character)
+                                    <a class="dropdown-item text-{{ strtolower($character->class) }}-important" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                                        {{ $character->name }}
+                                    </a>
+                                @endforeach
+                            </div>
+                        </li>
+                    @endif
+                </li>
                 @elseif ($currentMember->guild_id != $guild->id)
                     <li class="nav-item">
                         <a class="nav-link">

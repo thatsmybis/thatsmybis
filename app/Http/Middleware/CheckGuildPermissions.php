@@ -102,7 +102,7 @@ class CheckGuildPermissions
             }
 
             // Fetch their existing member object
-            $currentMember = Member::where(['guild_id' => $guild->id, 'user_id' => Auth::id()])->with('roles')->first();
+            $currentMember = Member::where(['guild_id' => $guild->id, 'user_id' => Auth::id()])->with(['characters', 'roles'])->first();
 
             if ($currentMember && ($currentMember->banned_at || $currentMember->inactive_at) && !$isAdmin) {
                 request()->session()->flash('status-danger',  'Your membership has been disabled. To reverse this, an officer would need to access your member page and re-enable it.');

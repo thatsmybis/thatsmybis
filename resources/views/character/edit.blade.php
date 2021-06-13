@@ -8,13 +8,7 @@
             <div class="row mb-3">
                 @if ($character)
                     <div class="col-12 pt-2 bg-lightest rounded">
-                        @include('character/partials/header', ['headerSize' => 1, 'showEdit' => false, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
-
-                        <div class="mb-3">
-                            <a class="" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
-                                <span class="fas fa-fw fa-sack text-success"></span> Edit wishlist & loot
-                            </a>
-                        </div>
+                        @include('character/partials/header', ['headerSize' => 1, 'showEdit' => false, 'showLogs' => true, 'showEditLoot' => true, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
                     </div>
                 @else
                     <div class="col-12 pt-2 mb-2">
