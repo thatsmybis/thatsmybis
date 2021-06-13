@@ -223,7 +223,7 @@
                                                         class="text-{{ $character->class ? strtolower($character->class) : ''}}-important tag d-inline">
                                                         <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_group_color ? $character->raid_group_color : '')) }}"></span>{{ $character->name }}
                                                         @if ($character->is_alt)
-                                                            <span class="text-legendary">alt</span>
+                                                            <span class="text-gold">alt</span>
                                                         @endif
                                                         @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
                                                             <span class="small">

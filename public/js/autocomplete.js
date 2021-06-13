@@ -149,7 +149,7 @@ function addItemListSelectHandler() {
                         });
                     }
 
-                    if (index) {
+                    if (Number.isInteger(index)) {
                         // Update any placeholders that need to be equal to the current index.
                         $nextInput.find(`input[name$="[order]"]`).each(function () {
                             $(this).attr("placeholder", index + 1);
@@ -163,6 +163,7 @@ function addItemListSelectHandler() {
             if ($nextInput.val() == "") {
             // Add the item.
                 $nextInput.parent("li").show();
+                addItemRemoveHandler();
 
                 if ($nextInput.parent("li").data("flex")) {
                     $nextInput.parent("li").addClass("d-flex");
@@ -178,16 +179,11 @@ function addItemListSelectHandler() {
                 $label = $nextInput.next("input").first();
                 $label.val(label);
 
-                // TODO: populate / reset OS flag
-
-                // TODO: populate / reset received flag
-
-                // TODO: populate / reset order flag
-
-                addItemRemoveHandler();
-
                 // Reset the select
                 $(this).val("");
+                $nextInput.parent().find(`input[name$="[is_offspec]"]`).prop("checked", false);
+                $nextInput.parent().find(`input[name$="[is_received]"]`).prop("checked", false);
+                $nextInput.parent().find(`input[name$="[order]"]`).val("");
                 $(this).find("option:first").text("—");
             } else {
             // Can't add any more.
@@ -293,6 +289,12 @@ function addTag($this, value, label) {
             // Populate the hidden input's sibling that holds onto the label
             // Useful if submission fails on the server side and the server wants to send the label back
             $nextInput.siblings("input[value='']").first().val(label);
+
+            $nextInput.parent().find(`input[name$="[is_offspec]"]`).prop("checked", false);
+            $nextInput.parent().find(`input[name$="[is_received]"]`).prop("checked", false);
+            $nextInput.parent().find(`input[name$="[order]"]`).val("");
+
+            addItemRemoveHandler();
 
             let link = "";
             if (guild) {

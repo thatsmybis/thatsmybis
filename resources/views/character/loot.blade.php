@@ -54,13 +54,6 @@
                 @endif
 
                 @if (!$guild->is_wishlist_disabled)
-                    <div class="row">
-                        <div class="col-12 mb-3">
-                            <small>
-                                <span class="font-weight-bold">Hint:</span> Your top 4 items are displayed first; make them count
-                            </small>
-                        </div>
-                    </div>
                     <div class="row mb-3 pt-2 bg-light rounded">
                         <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
                             <label for="wishlist">
