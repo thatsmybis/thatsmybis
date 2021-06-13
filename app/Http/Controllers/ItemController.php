@@ -69,7 +69,6 @@ class ItemController extends Controller
         $showPrios = false;
         if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $viewPrioPermission)) {
             $showPrios = true;
-
         }
 
         $showWishlist = false;
@@ -83,7 +82,7 @@ class ItemController extends Controller
             Cache::forget($cacheKey);
         }
 
-        $items = Cache::remember($cacheKey, env('CACHE_INSTANCE_ITEMS_SECONDS', 5), function () use ($guild, $instance, $currentMember, $characterFields, $showPrios, $showWishlist) {
+        $items = Cache::remember($cacheKey, env('CACHE_INSTANCE_ITEMS_SECONDS', 5), function () use ($guild, $instance, $currentMember, $characterFields, $showPrios, $showWishlist, $viewPrioPermission) {
             $query = Item::select([
                     'items.id',
                     'items.item_id',
@@ -110,7 +109,13 @@ class ItemController extends Controller
 
             if ($showPrios) {
                 $query = $query->with([
-                    ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild, $characterFields) {
+                    ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild, $characterFields, $viewPrioPermission) {
+                        if ($guild->prio_show_count && !$viewPrioPermission) {
+                            $query = $query->where([
+                                ['character_items.order', '<=', $guild->prio_show_count],
+                            ]);
+                        }
+
                         return $query
                             ->addSelect($characterFields)
                             ->leftJoin('members', function ($join) {

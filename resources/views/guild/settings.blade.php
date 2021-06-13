@@ -344,7 +344,7 @@
                             <div class="form-group">
                                 <label for="max_wishlist_items" class="">
                                     Max Wishlist Items
-                                    <small class="text-muted">won't affect existing wishlists</small>
+                                    <small class="text-muted">won't affect existing wishlists until they're resubmitted</small>
                                 </label>
                                 <input name="max_wishlist_items" min="0" max="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\CharacterController::MAX_WISHLIST_ITEMS }}" value="{{ old('max_wishlist_items') ? old('max_wishlist_items') : $guild->max_wishlist_items }}" />
                             </div>
@@ -384,6 +384,12 @@
                                         {{ old('is_prio_disabled') && old('is_prio_disabled') == 1 ? 'checked' : ($guild->is_prio_disabled ? 'checked' : '') }}>
                                         Disable prios <span class="text-muted small">if your guild doesn't use them</span>
                                 </label>
+                            </div>
+                            <div class="form-group">
+                                <label for="prio_show_count" class="">
+                                    Prios to show <span class="text-muted small">eg. only show top 3 prios to raiders</span>
+                                </label>
+                                <input name="prio_show_count" min="1" max="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" value="{{ old('prio_show_count') ? old('prio_show_count') : $guild->prio_show_count }}" />
                             </div>
                         </div>
                     </div>

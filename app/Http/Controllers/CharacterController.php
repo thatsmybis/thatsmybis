@@ -249,7 +249,15 @@ class CharacterController extends Controller
         $showPrios = false;
         if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $currentMember->hasPermission('view.prios'))) {
             $showPrios = true;
-            $character = $character->load('prios');
+            if ($guild->prio_show_count && !$currentMember->hasPermission('view.prios')) {
+                $character = $character->load(['prios' => function ($query) use ($guild) {
+                    return $query->where([
+                        ['character_items.order', '<=', $guild->prio_show_count],
+                    ]);
+                }]);
+            } else {
+                $character = $character->load('prios');
+            }
         }
 
         $lockReceived   = false;
@@ -337,7 +345,15 @@ class CharacterController extends Controller
         $showPrios = false;
         if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $currentMember->hasPermission('view.prios'))) {
             $showPrios = true;
-            $character = $character->load('prios');
+            if ($guild->prio_show_count && !$currentMember->hasPermission('view.prios')) {
+                $character = $character->load(['prios' => function ($query) use ($guild) {
+                    return $query->where([
+                        ['character_items.order', '<=', $guild->prio_show_count],
+                    ]);
+                }]);
+            } else {
+                $character = $character->load('prios');
+            }
         }
 
         $showWishlist = false;
