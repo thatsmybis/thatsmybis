@@ -54,6 +54,7 @@ class ItemController extends \App\Http\Controllers\Controller
                     //     ['+' . $query . ''] // note the prefixed or suffixed character(s) https://dev.mysql.com/doc/refman/5.5/en/fulltext-boolean.html
                     // )
                     ->orderByDesc('weight')
+                    ->orderBy('name')
                     ->limit(15)
                     ->get();
 
