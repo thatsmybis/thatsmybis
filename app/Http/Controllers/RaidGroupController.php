@@ -361,9 +361,11 @@ class RaidGroupController extends Controller
         $this->validate(request(), $validationRules);
 
         $characters = [];
-        foreach (request()->input('characters') as $character) {
-            // This has the added effect of filtering out duplicates
-            $characters[$character['character_id']] = $character;
+        if (request()->input('characters')) {
+            foreach (request()->input('characters') as $character) {
+                // This has the added effect of filtering out duplicates
+                $characters[$character['character_id']] = $character;
+            }
         }
 
         $raidGroup = $guild->raidGroups()->where('id', request()->input('raid_group_id'))->with($isSecondary ? 'secondaryCharacters' : 'characters')->first();
