@@ -225,6 +225,9 @@
                                                         @if ($character->is_alt)
                                                             <span class="text-gold">alt</span>
                                                         @endif
+                                                        @if ($character->pivot->is_offspec)
+                                                            <span class="text-muted">OS</span>
+                                                        @endif
                                                         @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
                                                             <span class="small">
                                                                 @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])

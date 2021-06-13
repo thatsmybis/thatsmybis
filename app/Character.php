@@ -205,6 +205,7 @@ class Character extends Model
                 'added_by',
                 'type',
                 'order',
+                'is_offspec',
                 'is_received',
                 'received_at',
                 'raid_group_id',
