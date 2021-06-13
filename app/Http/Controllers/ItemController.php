@@ -589,7 +589,7 @@ class ItemController extends Controller
 
                         return $query
                             ->where(['characters.guild_id' => $guild->id])
-                            ->groupBy(['character_items.character_id']);
+                            ->groupBy(['character_items.character_id', 'character_items.raid_group_id']);
                     },
                 ]);
             }
