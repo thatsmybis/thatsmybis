@@ -93,8 +93,9 @@ class ExportController extends Controller {
             $showOfficerNote = true;
         }
 
+        $viewPrioPermission = $currentMember->hasPermission('view.prios');
         $showPrios = false;
-        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+        if (!$guild->is_prio_private || $viewPrioPermission) {
             $showPrios = true;
         }
 
@@ -103,10 +104,10 @@ class ExportController extends Controller {
             $showWishlist = true;
         }
 
-        $characters = Cache::remember('export:roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden,
+        $characters = Cache::remember('export:roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':viewPrioPermission:' . $viewPrioPermission . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden,
             env('EXPORT_CACHE_SECONDS', 120),
-            function () use ($guild, $showOfficerNote, $showPrios, $showWishlist) {
-            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, false);
+            function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
+            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false);
         });
 
         return $this->getExport($characters['characters'], 'Character JSON', $fileType);
@@ -173,8 +174,9 @@ class ExportController extends Controller {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $viewPrioPermission = $currentMember->hasPermission('view.prios');
         $showPrios = true;
-        if ($guild->is_prio_private && !$currentMember->hasPermission('view.prios')) {
+        if ($guild->is_prio_private && !$viewPrioPermission) {
             $showPrios = false;
         }
 
@@ -200,8 +202,8 @@ class ExportController extends Controller {
 
         // $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
 
-        $csv = Cache::remember("export:{$lootType}:guild:{$guild->id}:showPrios:{$showPrios}:showWishlist:{$showWishlist}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($lootType, $guild, $showPrios, $showWishlist) {
-            $rows = DB::select(DB::raw($this->getLootBaseSql($lootType, $guild, $showPrios, $showWishlist)));
+        $csv = Cache::remember("export:{$lootType}:guild:{$guild->id}:showPrios:{$showPrios}:viewPrioPermission:{$viewPrioPermission}:showWishlist:{$showWishlist}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($lootType, $guild, $showPrios, $showWishlist, $viewPrioPermission) {
+            $rows = DB::select(DB::raw($this->getLootBaseSql($lootType, $guild, $showPrios, $showWishlist, $viewPrioPermission)));
 
             if ($lootType == 'all') {
                 $rows = array_merge(
@@ -382,13 +384,17 @@ class ExportController extends Controller {
      *
      * @return The thing to present to the user.
      */
-    private function getLootBaseSql($lootType, $guild, $showPrios = true, $showWishlist = true) {
+    private function getLootBaseSql($lootType, $guild, $showPrios = true, $showWishlist = true, $viewPrioPermission) {
         $tierLabelField = $this->getTierLabelField($guild);
 
         $lootTypeFragment = "";
 
         if (!$showPrios) {
             $lootTypeFragment .= " ci.type != 'prio' AND";
+        }
+
+        if ($guild->prio_show_count && !$viewPrioPermission) {
+            $lootTypeFragment .= " ((type = 'prio' AND ci.`order` <= {$guild->prio_show_count}) OR (type != 'prio')) AND";
         }
 
         if (!$showWishlist) {
@@ -429,7 +435,8 @@ class ExportController extends Controller {
                 LEFT JOIN raid_groups rg ON rg.id = c.raid_group_id
                 JOIN items i             ON i.item_id = ci.item_id
                 LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
-            WHERE " . $lootTypeFragment . " c.guild_id = {$guild->id}
+            WHERE {$lootTypeFragment}
+                c.guild_id = {$guild->id}
                 AND i.expansion_id = {$guild->expansion_id}
             ORDER BY ci.type, rg.name, c.name, ci.`order`;";
     }

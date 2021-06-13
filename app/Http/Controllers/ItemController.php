@@ -536,8 +536,9 @@ class ItemController extends Controller
             $showOfficerNote = true;
         }
 
+        $viewPrioPermission = $currentMember->hasPermission('view.prios');
         $showPrios = false;
-        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+        if (!$guild->is_prio_private || $viewPrioPermission) {
             $showPrios = true;
         }
 
@@ -552,7 +553,7 @@ class ItemController extends Controller
             Cache::forget($cacheKey);
         }
 
-        $item = Cache::remember($cacheKey, env('CACHE_ITEM_SECONDS', 5), function () use ($id, $guild, $showPrios, $showWishlist) {
+        $item = Cache::remember($cacheKey, env('CACHE_ITEM_SECONDS', 5), function () use ($id, $guild, $showPrios, $showWishlist, $viewPrioPermission) {
             $query = Item::where([
                     ['item_id', $id],
                     ['expansion_id', $guild->expansion_id],
@@ -579,8 +580,13 @@ class ItemController extends Controller
 
             if ($showPrios) {
                 $query = $query->with([
+                    ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild, $viewPrioPermission) {
+                        if ($guild->prio_show_count && !$viewPrioPermission) {
+                            $query = $query->where([
+                                ['character_items.order', '<=', $guild->prio_show_count],
+                            ]);
+                        }
 
-                    ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild) {
                         return $query
                             ->where(['characters.guild_id' => $guild->id])
                             ->groupBy(['character_items.character_id']);
