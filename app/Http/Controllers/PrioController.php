@@ -127,10 +127,14 @@ class PrioController extends Controller
                 },
                 'receivedAndRecipeCharacters' => function ($query) use($guild, $raidGroup) {
                     return $query
+                        ->leftJoin('character_raid_groups', function ($join) {
+                            $join->on('character_raid_groups.character_id', 'characters.id');
+                        })
                         ->where([
-                            'characters.guild_id'      => $guild->id,
-                            'characters.raid_group_id' => $raidGroup->id,
-                        ]);
+                            'characters.guild_id' => $guild->id,
+                        ])
+                        ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
+                        ->groupBy(['character_items.character_id']);
                 },
             ]);
 
@@ -142,23 +146,30 @@ class PrioController extends Controller
             $query = $query->with([
                 ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
                     return $query
+                        ->leftJoin('character_raid_groups', function ($join) {
+                            $join->on('character_raid_groups.character_id', 'characters.id');
+                        })
                         ->where([
                             'characters.guild_id'      => $guild->id,
-                            'characters.raid_group_id' => $raidGroup->id,
                             'is_received'              => 0,
                         ])
-                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
+                        ->groupBy(['character_items.character_id']);
                 },
                 'childItems' => function ($query) use ($guild, $raidGroup) {
                     return $query->with([
                         ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
                             return $query
+                                ->leftJoin('character_raid_groups', function ($join) {
+                                    $join->on('character_raid_groups.character_id', 'characters.id');
+                                })
                                 ->where([
                                     'characters.guild_id'      => $guild->id,
-                                    'characters.raid_group_id' => $raidGroup->id,
                                     'is_received'              => 0,
                                 ])
-                            ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                                ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
+                                ->whereNull('characters.inactive_at')
+                                ->groupBy(['character_items.character_id', 'character_items.item_id']);
                         },
                     ]);
                 },
@@ -235,31 +246,41 @@ class PrioController extends Controller
                 },
                 'receivedAndRecipeCharacters' => function ($query) use($guild, $raidGroup) {
                     return $query
+                        ->leftJoin('character_raid_groups', function ($join) {
+                            $join->on('character_raid_groups.character_id', 'characters.id');
+                        })
                         ->where([
-                            'characters.guild_id'      => $guild->id,
-                            'characters.raid_group_id' => $raidGroup->id,
+                            'characters.guild_id' => $guild->id,
                         ])
+                        ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
                         ->groupBy(['character_items.character_id']);
                 },
                 ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
                     return $query
+                        ->leftJoin('character_raid_groups', function ($join) {
+                            $join->on('character_raid_groups.character_id', 'characters.id');
+                        })
                         ->where([
                             'characters.guild_id'      => $guild->id,
-                            'characters.raid_group_id' => $raidGroup->id,
                             'is_received'              => 0,
                         ])
+                        ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
                         ->groupBy(['character_items.character_id']);
                 },
                 'childItems' => function ($query) use ($guild, $raidGroup) {
                     return $query->with([
                         ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
                             return $query
+                                ->leftJoin('character_raid_groups', function ($join) {
+                                    $join->on('character_raid_groups.character_id', 'characters.id');
+                                })
                                 ->where([
                                     'characters.guild_id'      => $guild->id,
-                                    'characters.raid_group_id' => $raidGroup->id,
                                     'is_received'              => 0,
                                 ])
-                            ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                                ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
+                                ->whereNull('characters.inactive_at')
+                                ->groupBy(['character_items.character_id', 'character_items.item_id']);
                         },
                     ]);
                 },
