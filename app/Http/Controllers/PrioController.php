@@ -64,7 +64,6 @@ class PrioController extends Controller
      */
     public function massInput($guildId, $guildSlug, $instanceSlug, $raidGroupId)
     {
-        dd('prio edits temporarily down while I debug a possible problem; sorry!');
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -186,7 +185,6 @@ class PrioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function singleInput($guildId, $guildSlug, $itemId, $raidGroupId) {
-        dd('prio edits temporarily down while I debug a possible problem; sorry!');
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -295,7 +293,6 @@ class PrioController extends Controller
     }
 
     public function submitMassInput($guildId, $guildSlug) {
-        dd('prio edits temporarily down while I debug a possible problem; sorry!');
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -369,7 +366,6 @@ class PrioController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function submitSingleInput($guildId, $guildSlug) {
-        dd('prio edits temporarily down while I debug a possible problem; sorry!');
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -617,7 +613,7 @@ class PrioController extends Controller
                 }
             }
         }
-
+dd($toDrop);
         // Delete...
         DB::table('character_items')->whereIn('id', $toDrop)->delete();
 
