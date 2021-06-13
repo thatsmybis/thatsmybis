@@ -1,0 +1,32 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class AddPrioShowCountToGuilds extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::table('guilds', function (Blueprint $table) {
+            $table->unsignedTinyInteger('prio_show_count')->nullable()->after('max_wishlist_items');
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::table('guilds', function (Blueprint $table) {
+            //
+        });
+    }
+}

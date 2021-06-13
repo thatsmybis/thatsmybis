@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{AuditLog, Expansion, Guild, Member, Permission, Role, User};
+use App\Http\Controllers\{CharacterController, PrioController};
 use Auth;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -323,7 +324,8 @@ class GuildController extends Controller
             'is_wishlist_disabled'      => 'nullable|boolean',
             'is_prio_autopurged'        => 'nullable|boolean',
             'is_wishlist_autopurged'    => 'nullable|boolean',
-            'max_wishlist_items'        => 'nullable|integer|min:0|max:50',
+            'max_wishlist_items'        => 'nullable|integer|min:1|max:' . CharacterController::MAX_WISHLIST_ITEMS,
+            'prio_show_count'           => 'nullable|integer|min:1|max:' . PrioController::MAX_PRIOS,
             'do_sort_items_by_instance' => 'nullable|boolean',
             'is_raid_group_locked'      => 'nullable|boolean',
             'is_attendance_hidden'      => 'nullable|boolean',
@@ -351,6 +353,7 @@ class GuildController extends Controller
         $updateValues['is_prio_autopurged']        = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
         $updateValues['is_wishlist_autopurged']    = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
         $updateValues['max_wishlist_items']        = request()->input('max_wishlist_items');
+        $updateValues['prio_show_count']           = request()->input('prio_show_count');
         $updateValues['do_sort_items_by_instance'] = request()->input('do_sort_items_by_instance') == 1 ? 1 : 0;
         $updateValues['is_raid_group_locked']      = request()->input('is_raid_group_locked') == 1 ? 1 : 0;
         $updateValues['is_attendance_hidden']      = request()->input('is_attendance_hidden') == 1 ? 1 : 0;
