@@ -134,7 +134,7 @@ class PrioController extends Controller
                             'characters.guild_id' => $guild->id,
                         ])
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
-                        ->groupBy(['character_items.character_id']);
+                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
             ]);
 
@@ -154,7 +154,7 @@ class PrioController extends Controller
                             'is_received'              => 0,
                         ])
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
-                        ->groupBy(['character_items.character_id']);
+                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
                 'childItems' => function ($query) use ($guild, $raidGroup) {
                     return $query->with([
@@ -253,7 +253,7 @@ class PrioController extends Controller
                             'characters.guild_id' => $guild->id,
                         ])
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
-                        ->groupBy(['character_items.character_id']);
+                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
                 ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
                     return $query
@@ -265,7 +265,7 @@ class PrioController extends Controller
                             'is_received'              => 0,
                         ])
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
-                        ->groupBy(['character_items.character_id']);
+                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
                 'childItems' => function ($query) use ($guild, $raidGroup) {
                     return $query->with([
