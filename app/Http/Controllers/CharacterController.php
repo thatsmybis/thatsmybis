@@ -13,7 +13,7 @@ class CharacterController extends Controller
 {
     const MAX_RAID_GROUPS    = 30;
     const MAX_RECEIVED_ITEMS = 200;
-    const MAX_RECIPES        = 50;
+    const MAX_RECIPES        = 100;
     const MAX_WISHLIST_ITEMS = 50;
 
     /**
