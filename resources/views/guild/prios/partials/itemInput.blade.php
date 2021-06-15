@@ -32,7 +32,7 @@
         @endif
     </div>
 
-    <div class="col-lg-5 col-12">
+    <div class="col-lg-4 col-12">
         <label for="items[details]" class="font-weight-bold {{ $loop->iteration > 1 ? 'd-none' : '' }}">
             @if ($loop->first)
                 Notes
@@ -101,7 +101,7 @@
         </ul>
     </div>
 
-    <div class="col-lg-3 col-12 {{ $errors->has('items.' . $item->item_id . '.*') ? 'bg-danger rounded font-weight-bold' : '' }}">
+    <div class="col-lg-4 col-12 {{ $errors->has('items.' . $item->item_id . '.*') ? 'bg-danger rounded font-weight-bold' : '' }}">
         <div class="form-group mb-2">
             <label for="items[{{ $item->item_id }}][characters]" class="font-weight-bold {{ $loop->iteration > 1 ? 'd-none' : '' }}">
                 @if ($loop->first)
@@ -174,11 +174,7 @@
                                 </div>
                             </div>
 
-                            <div class="">
-                                <span class="js-input-label text-{{ $character ? strtolower($character->class) : '' }} font-weight-medium">
-                                    {!! $characterLabel !!}
-                                </span>
-
+                            <div class="mt-2">
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <div class="form-inline">
@@ -199,17 +195,22 @@
                                         </div>
                                     </li>
                                     <li class="list-inline-item">
+                                        <span class="js-input-label text-{{ $character ? strtolower($character->class) : '' }} font-weight-medium">
+                                            {!! $characterLabel !!}
+                                        </span>
+                                    </li>
+                                    <li class="list-inline-item">
                                         <div class="checkbox">
-                                            <label>
+                                            <label class="small text-muted">
                                                 <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_offspec]" value="1" class="" autocomplete="off"
                                                     {{ $isOffspec }}>
-                                                    Offspec
+                                                    OS
                                             </label>
                                         </div>
                                     </li>
                                     <li class="list-inline-item">
                                         <div class="checkbox">
-                                            <label>
+                                            <label class="small text-muted">
                                                 <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_received]" value="1" class="" autocomplete="off"
                                                     {{ $isReceived }}>
                                                     Received

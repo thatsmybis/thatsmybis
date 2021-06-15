@@ -10,9 +10,7 @@ var inputTemplate =
         </div>
     </div>
 
-    <div class="">
-        <span class="js-input-label font-weight-medium">
-        </span>
+    <div class="mt-2">
         <ul class="list-inline">
             <li class="list-inline-item">
                 <div class="form-inline">
@@ -33,8 +31,11 @@ var inputTemplate =
                 </div>
             </li>
             <li class="list-inline-item">
+                <span class="js-input-label font-weight-medium"></span>
+            </li>
+            <li class="list-inline-item">
                 <div class="checkbox">
-                    <label>
+                    <label class="small text-muted">
                         <input type="checkbox" name="[is_offspec]" value="1" class="" autocomplete="off">
                             Offspec
                     </label>
@@ -42,7 +43,7 @@ var inputTemplate =
             </li>
             <li class="list-inline-item">
                 <div class="checkbox">
-                    <label>
+                    <label class="small text-muted">
                         <input type="checkbox" name="[is_received]" value="1" class="" autocomplete="off">
                             Received
                     </label>
