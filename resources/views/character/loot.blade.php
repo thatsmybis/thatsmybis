@@ -251,7 +251,7 @@
                                 <span class="fas fa-fw fa-book"></span>
                                 Rare Recipes
                             </span>
-                            <small class="text-muted font-weight-normal">Max {{ $maxRecipes }}</small>
+                            <small class="text-muted font-weight-normal" title="Max {{ $maxRecipes }}">just the rare ones</small>
                         </label>
 
                         <div class="{{ $errors->has('recipes.*') ? 'has-error' : '' }}">
