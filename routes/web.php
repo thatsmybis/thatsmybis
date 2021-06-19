@@ -95,7 +95,7 @@ Route::group([
     Route::get( '/gquit', 'MemberController@showGquit')  ->name('member.showGquit');
     Route::post('/gquit', 'MemberController@submitGquit')->name('member.submitGquit');
 
-    Route::get( '/loot/recipes',   'ItemController@listRecipesWithGuild')    ->name('guild.recipe.list');
+    Route::get( '/loot/recipes',   'RecipesController@listRecipesWithGuild') ->name('guild.recipe.list');
     Route::get( '/loot/wishlists', 'LootController@showWishlistStatsInGuild')->name('guild.loot.wishlist');
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')       ->name('guild.item.list');
@@ -128,8 +128,8 @@ Route::group([
 
     Route::get( '/roster',          'RosterController@roster')->name('guild.roster');
 
-    Route::get( '/assign-loot', 'ItemController@massInput')      ->name('item.massInput');
-    Route::post('/assign-loot', 'ItemController@submitMassInput')->name('item.massInput.submit');
+    Route::get( '/assign-loot', 'AssignLootController@massInput')      ->name('item.massInput');
+    Route::post('/assign-loot', 'AssignLootController@submitMassInput')->name('item.massInput.submit');
 
     Route::group(['prefix' => 'raids'], function () {
         Route::get( '/',                'RaidController@list')    ->name('guild.raids.list');
