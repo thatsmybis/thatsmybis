@@ -98,13 +98,13 @@ Route::group([
     Route::get( '/loot/recipes',   'RecipesController@listRecipesWithGuild') ->name('guild.recipe.list');
     Route::get( '/loot/wishlists', 'LootController@showWishlistStatsInGuild')->name('guild.loot.wishlist');
 
-    Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')       ->name('guild.item.list');
-    Route::get( '/loot/{instanceSlug}/edit', 'ItemController@listWithGuildEdit')   ->name('guild.item.list.edit');
-    Route::post('/loot/{instanceSlug}/edit', 'ItemController@listWithGuildSubmit') ->name('guild.item.list.submit');
+    Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')           ->name('guild.item.list');
+    Route::get( '/loot/{instanceSlug}/edit', 'ItemNoteController@listWithGuildEdit')   ->name('guild.item.list.edit');
+    Route::post('/loot/{instanceSlug}/edit', 'ItemNoteController@listWithGuildSubmit') ->name('guild.item.list.submit');
 
     Route::group(['prefix' => 'i'], function () {
-        Route::get( '/{item_id}/{slug?}',        'ItemController@showWithGuild')    ->name('guild.item.show');
-        Route::post('/note/update',              'ItemController@updateNote')       ->name('guild.item.updateNote');
+        Route::get( '/{item_id}/{slug?}', 'ItemController@showWithGuild') ->name('guild.item.show');
+        Route::post('/note/update',       'ItemNoteController@updateNote')->name('guild.item.updateNote');
 
         Route::get( '/{item_id}/{raidGroupId}/prios', 'PrioController@singleInput')      ->name('guild.item.prios');
         Route::post('/prios',                         'PrioController@submitSingleInput')->name('guild.item.prios.submit');
