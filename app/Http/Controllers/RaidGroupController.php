@@ -368,7 +368,7 @@ class RaidGroupController extends Controller
             }
         }
 
-        $raidGroup = $guild->raidGroups()->where('id', request()->input('raid_group_id'))->with($isSecondary ? 'secondaryCharacters' : 'characters')->first();
+        $raidGroup = $guild->raidGroups()->where('id', request()->input('raid_group_id'))->with($isSecondary ? 'secondaryCharacters' : 'characters')->firstOrFail();
 
         if ($isSecondary) {
             $oldCount = $raidGroup->characters->count();

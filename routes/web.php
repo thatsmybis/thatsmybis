@@ -84,12 +84,12 @@ Route::group([
         Route::get( '/create',                        'CharacterController@showCreate')->name('character.showCreate');
         Route::post('/create',                        'CharacterController@create')    ->name('character.create');
         Route::get( '/{characterId}/{nameSlug}/edit', 'CharacterController@edit')      ->name('character.edit');
-        Route::get( '/{characterId}/{nameSlug}/loot', 'CharacterController@loot')      ->name('character.loot');
         Route::post('/update',                        'CharacterController@update')    ->name('character.update');
-        Route::post('/loot/update',                   'CharacterController@updateLoot')->name('character.updateLoot');
         Route::post('/note/update',                   'CharacterController@updateNote')->name('character.updateNote');
         Route::get( '/{characterId}/{nameSlug}',      'CharacterController@show')      ->name('character.show');
         Route::get( '/{nameSlug}',                    'CharacterController@find')      ->name('character.find');
+        Route::get( '/{characterId}/{nameSlug}/loot', 'CharacterLootController@loot')      ->name('character.loot');
+        Route::post('/loot/update',                   'CharacterLootController@updateLoot')->name('character.updateLoot');
     });
 
     Route::get( '/gquit', 'MemberController@showGquit')  ->name('member.showGquit');
