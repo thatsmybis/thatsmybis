@@ -81,7 +81,7 @@
                         @endforeach
                         @if ($characters->whereNotNull('inactive_at')->count() > 0)
                             <li class="pt-2 pl-3 pb-3 pr-3 rounded">
-                                <span class="text-muted">Inactive characters</span>
+                                <span class="text-muted">Archived characters</span>
                                 <br>
                                 <span id="showInactiveCharacters" class="small text-muted font-italic cursor-pointer">
                                     click to show

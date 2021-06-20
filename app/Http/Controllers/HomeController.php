@@ -95,6 +95,7 @@ class HomeController extends Controller
                             'token'     => $user->discord_token,
                             'tokenType' => 'OAuth',
                         ]);
+                        // TODO: Handle this failing; sometimes gives 401 or 500 or whatever.
                         return $discord->user->getCurrentUserGuilds();
                     }
                 );
