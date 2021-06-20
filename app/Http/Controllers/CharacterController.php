@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 
 class CharacterController extends Controller
 {
-    const MAX_RAID_GROUPS    = 30;
+    const MAX_RAID_GROUPS = 30;
 
     /**
      * Create a new controller instance.

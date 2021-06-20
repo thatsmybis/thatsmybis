@@ -125,7 +125,7 @@ class ItemController extends Controller
                                 ['characters.guild_id', $guild->id],
                                 ['character_items.is_received', 0],
                             ])
-                            ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                            ->groupBy(['character_items.character_id', 'character_items.raid_group_id']);
                     }
                 ]);
             }

@@ -3,10 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\{AuditLog, Character, Item};
-use Auth;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class CharacterLootController extends Controller
@@ -183,20 +179,21 @@ class CharacterLootController extends Controller
         if (!$guild->is_wishlist_disabled && (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked))) {
             if (request()->input('wishlist')) {
                 $maxWishlistItems = $guild->max_wishlist_items ? $guild->max_wishlist_items : self::MAX_WISHLIST_ITEMS;
-                $this->syncItems($character->wishlist, array_slice(request()->input('wishlist'), 0, $maxWishlistItems), Item::TYPE_WISHLIST, $character, $currentMember, true);
+                $this->syncItems($character->wishlist, array_slice(request()->input('wishlist'), 0, $maxWishlistItems), Item::TYPE_WISHLIST, $character, $currentMember, true, false);
             }
         }
 
         if (!$guild->is_received_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_received_unlocked)) {
             if (request()->input('received')) {
+                $markAsReceived = (request()->input('mark_as_received') == "1" ? true : false);
                 // Don't bother enforcing an item limit here
-                $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember, false);
+                $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember, false, $markAsReceived);
             }
         }
 
         if (request()->input('recipes')) {
             // Don't bother enforcing an item limit here
-            $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember, false);
+            $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember, false, false);
         }
         return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
     }
@@ -210,14 +207,15 @@ class CharacterLootController extends Controller
      * If you want to see a much more succinct version using Laravel's sync() and some basic
      * PHP array checks, look at this file in commit 8064d3f09cfe52083e6ca5d288deb034251c9322
      *
-     * @param Collection    $existingItems The items already attached to the character for this item type.
-     * @param Array         $inputItems    The items provided from the HTML form input.
-     * @param string        $itemType      The type of item. (ie. received, recipe, wishlist)
-     * @param App\Character $character     The character to sync the items to.
-     * @param App\Member    $currentMember The member syncing these items.
-     * @param boolean       $updateFlags   Should we check for and update the OS and received flag?
+     * @param Collection    $existingItems  The items already attached to the character for this item type.
+     * @param Array         $inputItems     The items provided from the HTML form input.
+     * @param string        $itemType       The type of item. (ie. received, recipe, wishlist)
+     * @param App\Character $character      The character to sync the items to.
+     * @param App\Member    $currentMember  The member syncing these items.
+     * @param boolean       $updateFlags    Should we check for and update the OS and received flag?
+     * @param boolean       $markAsReceived Should we mark correlated prios/wishlists as received?
      */
-    private function syncItems($existingItems, $inputItems, $itemType, $character, $currentMember, $updateFlags) {
+    private function syncItems($existingItems, $inputItems, $itemType, $character, $currentMember, $updateFlags, $markAsReceived) {
         $toAdd    = [];
         $toUpdate = [];
         $toDrop   = [];
@@ -337,7 +335,10 @@ class CharacterLootController extends Controller
                 ];
 
                 $audits[] = [
-                    'description'  => $currentMember->username . ' added item to a character (' . $itemType . ')' . ($isReceived ? ' (received)' : null) . ($isOffspec ? ' (OS)' : null),
+                    'description'  => "{$currentMember->username} added item to a character ({$itemType})"
+                        . ($isReceived ? ' (received)' : null)
+                        . ($isOffspec ? ' (OS)' : null)
+                        . ($itemType == Item::TYPE_RECEIVED && $markAsReceived ? ' (prios and wishlists marked received)' : null),
                     'type'         => $itemType,
                     'member_id'    => $currentMember->id,
                     'guild_id'     => $currentMember->guild_id,
@@ -423,6 +424,24 @@ class CharacterLootController extends Controller
 
         // Insert...
         DB::table('character_items')->insert($toAdd);
+
+        // Find any wishlist or prio items that match what was just set as received, and flag them
+        // as having been received.
+        if ($itemType == Item::TYPE_RECEIVED && $markAsReceived) {
+            $itemIds = array_map(function ($toAdd) {return $toAdd['item_id'];}, $toAdd);
+            // Find all of the wishlist and prio items associated with this character
+            // that are in the IDs of the items we're adding.
+            DB::table('character_items')->where([
+                    'character_id' => $character->id,
+                    'is_received' => 0,
+                ])
+                ->whereIn('type', [Item::TYPE_WISHLIST, Item::TYPE_PRIO])
+                ->whereIn('item_id', [$itemIds])
+                ->update([
+                    'is_received' => 1,
+                    'received_at' => $now,
+                ]);
+        }
 
         AuditLog::insert($audits);
     }

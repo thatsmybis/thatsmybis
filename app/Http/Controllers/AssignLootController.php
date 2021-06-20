@@ -53,6 +53,7 @@ class ItemController extends Controller
         ]);
     }
 
+    // Submit a whole bunch of loot at once
     public function submitMassInput($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -248,7 +249,7 @@ class ItemController extends Controller
                     DB::table('character_items')->where(['id' => $wishlistRow->id])
                         ->update([
                             'is_received' => 1,
-                            'received_at' => getDateTime()
+                            'received_at' => $now,
                         ]);
 
                     $audits[] = [
@@ -296,7 +297,8 @@ class ItemController extends Controller
                     DB::table('character_items')->where(['id' => $prioRow->id])
                         ->update([
                             'is_received' => 1,
-                            'received_at' => getDateTime()
+                            'received_at' => $now,
+
                         ]);
                     $auditMessage = 'flagged 1 prio as received';
                 }
