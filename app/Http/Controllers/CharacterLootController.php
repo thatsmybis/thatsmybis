@@ -429,18 +429,20 @@ class CharacterLootController extends Controller
         // as having been received.
         if ($itemType == Item::TYPE_RECEIVED && $markAsReceived) {
             $itemIds = array_map(function ($toAdd) {return $toAdd['item_id'];}, $toAdd);
-            // Find all of the wishlist and prio items associated with this character
-            // that are in the IDs of the items we're adding.
-            DB::table('character_items')->where([
-                    'character_id' => $character->id,
-                    'is_received' => 0,
-                ])
-                ->whereIn('type', [Item::TYPE_WISHLIST, Item::TYPE_PRIO])
-                ->whereIn('item_id', [$itemIds])
-                ->update([
-                    'is_received' => 1,
-                    'received_at' => $now,
-                ]);
+            if (count($itemIds) > 0) {
+                // Find all of the wishlist and prio items associated with this character
+                // that are in the IDs of the items we're adding.
+                DB::table('character_items')->where([
+                        'character_id' => $character->id,
+                        'is_received' => 0,
+                    ])
+                    ->whereIn('type', [Item::TYPE_WISHLIST, Item::TYPE_PRIO])
+                    ->whereIn('item_id', [$itemIds])
+                    ->update([
+                        'is_received' => 1,
+                        'received_at' => $now,
+                    ]);
+            }
         }
 
         AuditLog::insert($audits);
