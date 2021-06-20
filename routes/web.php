@@ -95,7 +95,7 @@ Route::group([
     Route::get( '/gquit', 'MemberController@showGquit')  ->name('member.showGquit');
     Route::post('/gquit', 'MemberController@submitGquit')->name('member.submitGquit');
 
-    Route::get( '/loot/recipes',   'RecipesController@listRecipesWithGuild') ->name('guild.recipe.list');
+    Route::get( '/loot/recipes',   'RecipeController@listRecipesWithGuild')  ->name('guild.recipe.list');
     Route::get( '/loot/wishlists', 'LootController@showWishlistStatsInGuild')->name('guild.loot.wishlist');
 
     Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')           ->name('guild.item.list');
