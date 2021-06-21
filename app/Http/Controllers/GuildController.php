@@ -324,7 +324,7 @@ class GuildController extends Controller
             'is_wishlist_disabled'      => 'nullable|boolean',
             'is_prio_autopurged'        => 'nullable|boolean',
             'is_wishlist_autopurged'    => 'nullable|boolean',
-            'max_wishlist_items'        => 'nullable|integer|min:1|max:' . CharacterController::MAX_WISHLIST_ITEMS,
+            'max_wishlist_items'        => 'nullable|integer|min:1|max:' . CharacterLootController::MAX_WISHLIST_ITEMS,
             'prio_show_count'           => 'nullable|integer|min:1|max:' . PrioController::MAX_PRIOS,
             'do_sort_items_by_instance' => 'nullable|boolean',
             'is_raid_group_locked'      => 'nullable|boolean',
