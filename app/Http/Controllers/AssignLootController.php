@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
-class ItemController extends Controller
+class AssignLootController extends Controller
 {
     /**
      * Create a new controller instance.
