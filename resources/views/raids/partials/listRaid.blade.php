@@ -4,7 +4,7 @@
             @if (isset($raidGroup) && $raidGroup)
                 <span class="role-circle" style="background-color:{{ $raidGroup->getColor() }}"></span>
             @endif
-            <span class="{{ isset($bold) && $bold ? 'font-weight-bold' : '' }}">
+            <span class="{{ isset($bold) && $bold ? 'font-weight-bold' : '' }} text-5">
             {{ $raid->name }}
             @if ($raid->cancelled_at)
                 <span class="small text-warning">

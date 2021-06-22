@@ -311,20 +311,20 @@
                             Raids
                         </a>
                         <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
-                            @if ($viewRaids)
-                                <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                    Raid Groups
-                                </a>
-                            @endif
-                            <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                List Raids
-                            </a>
                             <a class="dropdown-item" href="{{ route('item.massInput', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 Assign Loot
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 Create Raid
                             </a>
+                            <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                List Raids
+                            </a>
+                            @if ($viewRaids)
+                                <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                    Raid Groups
+                                </a>
+                            @endif
                         </div>
                     </li>
                 @else
