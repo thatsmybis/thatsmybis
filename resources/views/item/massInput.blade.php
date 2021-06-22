@@ -2,6 +2,8 @@
 @section('title', "Assign Loot - " . config('app.name'))
 
 @php
+    $now = getDateTime();
+
     $maxDate = (new \DateTime())->modify('+1 day')->format('Y-m-d');
 
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
@@ -168,11 +170,34 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                                 Raid Group
                             </label>
-                            <select name="raid_group_id" class="form-control dark">
+                            <select name="raid_group_id" class="form-control dark" data-live-search="true">
                                 <option value="">—</option>
+                                @php
+                                    $oldRaidGroupId = old('raid_group_id') ? old('raid_group_id') : null;
+                                @endphp
                                 @foreach ($guild->raidGroups as $raidGroup)
-                                    <option value="{{ $raidGroup->id }}" style="color:{{ $raidGroup->getColor() }};">
+                                    <option value="{{ $raidGroup->id }}" style="color:{{ $raidGroup->getColor() }};" {{ $raidGroup->id == $oldRaidGroupId ? 'checked' : '' }}>
                                         {{ $raidGroup->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <!-- Raid -->
+                        <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
+                            <label for="raid_id font-weight-light">
+                                <span class="text-muted fas fa-fw fa-calendar-alt"></span>
+                                Raid
+                            </label>
+                            <select name="raid_id" class="form-control dark" data-live-search="true">
+                                <option value="">—</option>
+                                @php
+                                    $oldRaidId = old('raid_id') ? old('raid_id') : null;
+                                @endphp
+                                @foreach ($guild->raids as $raid)
+                                    <option value="{{ $raid->id }}" {{ $raid->id == $oldRaidId ? 'checked' : '' }}>
+                                        {{ $raid->name }}
+                                        {{ $raid->date ? '(' . ($raid->date > $now ? 'in ' . timeUntil(strtotime($raid->date)) : timeSince(strtotime($raid->date)) . ' ago')  . ')' : null }}
                                     </option>
                                 @endforeach
                             </select>

@@ -39,6 +39,9 @@ class AssignLootController extends Controller
         $guild->load([
             'characters',
             'raidGroups',
+            'raids' => function ($query) {
+                return $query->limit(100);
+            },
         ]);
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
@@ -59,7 +62,16 @@ class AssignLootController extends Controller
         $currentMember = request()->get('currentMember');
 
         $validationRules = [
-            'raid_group_id' => 'nullable|integer|exists:raid_groups,id',
+            'raid_group_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
+            ],
+            'raid_id'       => [
+                'nullable',
+                'integer',
+                Rule::exists('raids', 'id')->where('raids.guild_id', $guild->id),
+            ],
             'items.*.id' => [
                 'nullable',
                 'integer',
@@ -101,22 +113,41 @@ class AssignLootController extends Controller
         }
 
         $raidGroupInputId = request()->input('raid_group_id');
+        $raidInputId      = request()->input('raid_id');
+
+        $raidGroup = null;
+        if ($raidGroupInputId) {
+            $guild->load([
+                'raidGroups' => function ($query) use ($raidGroupInputId) {
+                    return $query->where('id', $raidGroupInputId);
+                }
+            ]);
+            $raidGroup = $guild->raidGroups->first();
+        }
+
+        $raid = null;
+        if ($raidInputId) {
+            $guild->load([
+                'raids' => function ($query) use ($raidInputId) {
+                    return $query->where('id', $raidInputId);
+                }
+            ]);
+            $raid = $guild->raids->first();
+        }
 
         $guild->load([
             // Allow adding items to inactive characters as well
             // Perhaps someone deactivated a character while the raid leader was still editing the form
             // We don't want the submission to fail because of that
             'allCharacters',
-            'raidGroups' => function ($query) use ($raidGroupInputId) {
-                return $query->where('id', $raidGroupInputId);
-            }
         ]);
 
-        $raidGroup = $guild->raidGroups->first();
+
 
         $deleteWishlist = request()->input('delete_wishlist_items') ? true : false;
         $deletePrio     = request()->input('delete_prio_items') ? true : false;
         $raidGroupId    = $raidGroup ? $raidGroup->id : null;
+        $raidId         = $raid ? $raid->id : null;
 
         $warnings   = '';
         $newRows    = [];
@@ -138,6 +169,7 @@ class AssignLootController extends Controller
                             'character_id'  => $item['character_id'],
                             'added_by'      => $currentMember->id,
                             'raid_group_id' => $raidGroupId,
+                            'raid_id'       => $raidId,
                             'type'          => Item::TYPE_RECEIVED,
                             'order'         => '0', // Put this item at the top of the list
                             'is_offspec'    => (isset($item['is_offspec']) && $item['is_offspec'] == true ? 1 : 0),
@@ -171,6 +203,7 @@ class AssignLootController extends Controller
                             'character_id'  => $item['character_id'],
                             'guild_id'      => $currentMember->guild_id,
                             'raid_group_id' => $raidGroupId,
+                            'raid_id'       => $raidId,
                             'item_id'       => $item['id'],
                             'created_at'    => $now,
                         ];
@@ -189,11 +222,12 @@ class AssignLootController extends Controller
         // Doing this right before we do the inserts just in case something went wrong beforehand
         $batch = Batch::create([
             'name'          => request()->input('name') ? request()->input('name') : null,
-            'note'          => $currentMember->username . ' assigned ' . count($newRows) . ' items' . ($raidGroup ? ' on raid group ' . $raidGroup->name : ''),
+            'note'          => $currentMember->username . ' assigned ' . count($newRows) . ' items' . ($raidGroup ? ' on raid group ' . $raidGroup->name : '')  . ($raid ? ' on raid ' . $raid->name : ''),
             'type'          => AuditLog::TYPE_ASSIGN,
             'guild_id'      => $guild->id,
             'member_id'     => $currentMember->id,
             'raid_group_id' => $raidGroupId,
+            'raid_id'       => $raidId,
             'user_id'       => $currentMember->user_id,
         ]);
 

@@ -154,3 +154,61 @@ function numToSTier($float) {
     }
 }
 
+
+/**
+ * In English, get the time since the given timestamp.
+ *
+ * eg. '30 seconds' or '5 minutes' or '5 days', etc.
+ *
+ * @param string $timestamp A unix timestamp from the past
+ *
+ * @return string
+ */
+function timeSince ($timestamp) {
+    $time = time() - $timestamp; // to get the time since that moment
+    $time = ($time < 1) ? 1 : $time;
+    $tokens = array (
+        31536000 => 'year',
+        2592000 => 'month',
+        604800 => 'week',
+        86400 => 'day',
+        3600 => 'hour',
+        60 => 'minute',
+        1 => 'second'
+    );
+
+    foreach ($tokens as $unit => $text) {
+        if ($time < $unit) continue;
+        $numberOfUnits = floor($time / $unit);
+        return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '');
+    }
+}
+
+/**
+ * In English, get the time until the given timestamp.
+ *
+ * eg. '30 seconds' or '5 minutes' or '5 days', etc.
+ *
+ * @param string $timestamp A unix timestamp from the past
+ *
+ * @return string
+ */
+function timeUntil ($timestamp) {
+    $time = $timestamp - time(); // to get the time until that moment
+    $time = ($time < 1) ? 1 : $time;
+    $tokens = array (
+        31536000 => 'year',
+        2592000 => 'month',
+        604800 => 'week',
+        86400 => 'day',
+        3600 => 'hour',
+        60 => 'minute',
+        1 => 'second'
+    );
+
+    foreach ($tokens as $unit => $text) {
+        if ($time < $unit) continue;
+        $numberOfUnits = floor($time / $unit);
+        return $numberOfUnits . ' ' . $text . (($numberOfUnits > 1) ? 's' : '');
+    }
+}
