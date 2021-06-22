@@ -19,7 +19,7 @@
                 </div>
                 <div class="col-12 mt-3 mb-3">
                     <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
-                        <span class="fas fa-fw fa-plus"></span> Create
+                        <span class="fas fa-fw fa-plus"></span> Create Raid Group
                     </a>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">

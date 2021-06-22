@@ -11,19 +11,21 @@
         <div class="col-12">
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
-                    <h1 class="font-weight-medium">
-                        <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                        Raids
-                    </h1>
-                    <span class="small text-muted">
-                        times shown are local to you
-                    </span>
-                </div>
-                <div class="col-12 pt-2 mb-2">
-                    <p class="text-warning font-weight-bold">
-                        <span class="fas fa-fw fa-exclamation-triangle"></span>
-                        <span class="text-danger">Raids created before April 29th have inaccurate times.</span> There was a timezone bug. It's been fixed. Please update your raid times.
-                    </p>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <h1 class="font-weight-medium mb-0">
+                                <span class="fas fa-fw fa-helmet-battle text-dk"></span>
+                                Raids
+                            </h1>
+                            <span class="small text-muted">
+                                times shown are local to you
+                            </span>
+                        </li>
+                    </ul>
+                    <a class="btn btn-success" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                        <span class="fas fa-fw fa-plus"></span>
+                        Create Raid
+                    </a>
                 </div>
             </div>
 
@@ -105,6 +107,19 @@
                                 <li class="pt-3 pb-3 pl-3 p-1 rounded">
 
                                     <ul class="list-inline">
+                                        @include('raids/partials/listRaid', ['bold' => true, 'text' => (!$isFuture || $raid->cancelled_at ? 'muted' : 'white'), 'raidGroup' => null])
+
+                                        <li class="list-inline-item text-muted">
+                                            {{ $raid->character_count }} raiders
+                                        </li>
+                                        @if (!$isFuture)
+                                            <li class="list-inline-item text-muted">
+                                                {{ $raid->item_count }} items
+                                            </li>
+                                        @endif
+                                    </ul>
+
+                                    <ul class="list-inline">
                                         @if ($raid->raidGroups->count() > 0)
                                             <li class="list-inline-item">
                                                 <ul class="list-inline">
@@ -128,18 +143,6 @@
                                         @endif
                                     </ul>
 
-                                    <ul class="list-inline">
-                                        @include('raids/partials/listRaid', ['bold' => true, 'text' => (!$isFuture || $raid->cancelled_at ? 'muted' : 'white'), 'raidGroup' => null])
-
-                                        <li class="list-inline-item text-muted">
-                                            {{ $raid->character_count }} raiders
-                                        </li>
-                                        @if (!$isFuture)
-                                            <li class="list-inline-item text-muted">
-                                                {{ $raid->item_count }} items
-                                            </li>
-                                        @endif
-                                    </ul>
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
                                             <span class="{{ $isFuture ? '' : 'text-muted' }}">

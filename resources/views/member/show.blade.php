@@ -68,7 +68,7 @@
                     <ol class="striped no-bullet no-indent">
                         @if ($showEdit)
                             <li class="pt-3 pl-3 pb-3 pr-3 rounded">
-                                <a href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}" class="font-weight-medium">
+                                <a href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}" class="btn btn-success font-weight-medium">
                                     <span class="fas fa-plus"></span>
                                     Create character
                                 </a>
