@@ -146,7 +146,7 @@ class ItemController extends Controller
                                     ['character_items.is_received', 0],
                                 ])
                             ->groupBy(['character_items.character_id', 'character_items.item_id'])
-                            ->orderByDesc('characters.raid_group_id')
+                            ->orderBy('raid_group_name')
                             ->orderBy('character_items.order');
 
                     },
@@ -158,7 +158,7 @@ class ItemController extends Controller
                                         ['characters.guild_id', $guild->id],
                                     ])
                                 ->groupBy(['character_items.character_id', 'character_items.item_id'])
-                                ->orderByDesc('characters.raid_group_id')
+                                ->orderBy('raid_group_name')
                                 ->orderBy('character_items.order');
                             },
                         ]);
@@ -452,7 +452,7 @@ class ItemController extends Controller
                                 ->first()->wishlistCharacters
                                 ->merge($childItem->wishlistCharacters)
                                 ->sortBy('pivot.order')
-                                ->sortByDesc('raid_group_id')
+                                ->sortBy('raid_group_name')
                                 ->values()
                         );
                 }
@@ -466,7 +466,7 @@ class ItemController extends Controller
                                 ->first()->wishlistCharactersWithAttendance
                                 ->merge($childItem->wishlistCharactersWithAttendance)
                                 ->sortBy('pivot.order')
-                                ->sortByDesc('raid_group_id')
+                                ->sortBy('raid_group_name')
                                 ->values()
                         );
                 }
