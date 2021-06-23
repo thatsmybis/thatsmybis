@@ -365,10 +365,10 @@ class CharacterLootController extends Controller
                 $auditMessage .= ($item['is_received'] ? 'set as received, ' : 'set as unreceived, ');
             }
             // Don't bother showing this until we have a manual received date input
-            // if (isset($item['received_at'])) {
-            //     $newValues['received_at'] = $item['received_at'];
-            //     $auditMessage .= ($item['received_at'] ? 'added a received date, ' : 'removed received date, ');
-            // }
+            if (isset($item['received_at'])) {
+                $newValues['received_at'] = $item['received_at'];
+                // $auditMessage .= ($item['received_at'] ? 'added a received date, ' : 'removed received date, ');
+            }
             if (isset($item['is_offspec'])) {
                 $newValues['is_offspec'] = $item['is_offspec'];
                 $auditMessage .= ($item['is_offspec'] ? 'set as OS, ' : 'set as MS, ');
