@@ -232,7 +232,7 @@ function getCharacterList(data, type, itemId) {
                         <span class="text-warning">alt</span>
                     ` : '' }
                     ${ !guild.is_attendance_hidden && (character.attendance_percentage || character.raid_count) ?
-                        `${ character.raid_count && typeof character.attendance_percentage === 'number' ? `<span title="attendance" class="smaller ${ getAttendanceColor(character.attendance_percentage) }">${ Math.round(character.attendance_percentage * 100) }%</span>` : '' }${ character.raid_count ? `<span class="smaller">+${ character.raid_count }</span>` : ``}
+                        `${ character.raid_count && typeof character.attendance_percentage === 'number' ? `<span title="attendance" class="smaller ${ getAttendanceColor(character.attendance_percentage) }">${ Math.round(character.attendance_percentage * 100) }%</span>` : '' }${ character.raid_count ? `<span class="smaller"> ${ character.raid_count }r</span>` : ``}
                     ` : `` }
                     <span class="js-watchable-timestamp smaller"
                         data-timestamp="${ character.pivot.created_at }"
