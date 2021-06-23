@@ -242,8 +242,7 @@ class Item extends Model
                 'is_offspec',
                 'received_at',
                 'order',
-            ])
-            ->orderBy('character_items.order');
+            ]);
     }
 
     public function wishlistCharactersWithAttendance() {

@@ -187,6 +187,30 @@ function getCharacterList(data, type, itemId) {
             `;
         }
 
+        if (type == 'wishlist' && (
+            (character.raid_group_id && character.raid_group_id != lastRaidGroupId) ||
+            (!character.raid_group_id && lastRaidGroupId)
+        )) {
+            let raidGroupName = '';
+            if (!character.raid_group_id && lastRaidGroupId) {
+                raidGroupName = 'no raid group';
+                lastRaidGroupId = null;
+            } else {
+                lastRaidGroupId = character.raid_group_id;
+                if (raidGroups.length) {
+                    let raidGroup = raidGroups.find(raidGroup => raidGroup.id === character.raid_group_id);
+                     if (raidGroup) {
+                        raidGroupName = raidGroup.name;
+                    }
+                }
+            }
+            characters += `
+                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small">
+                    ${ raidGroupName }
+                </li>
+            `;
+        }
+
         characters += `
             <li data-raid-group-id="${ type == 'prio' ? character.pivot.raid_group_id : character.raid_group_id }"
                 value="${ type == 'prio' ? character.pivot.order : '' }"
