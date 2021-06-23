@@ -444,7 +444,7 @@ kbd {
 .dropdown-item:hover {
     background-color: #201f3c;
 }
-.dropdown-item.selected.active{
+.dropdown-item.selected.active, .dropdown-item.active, .dropdown-item:active {
     background-color: #161523;
 }
 .dropdown-divider { /* bootstrap override */
