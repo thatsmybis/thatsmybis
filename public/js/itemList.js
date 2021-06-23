@@ -80,7 +80,7 @@ function createTable(lastSource) {
                 },
                 "visible"   : true,
                 "width"     : "130px",
-                "className" : "text-right",
+                "className" : "text-right width-130",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-sack text-success"></span> Loot',
@@ -90,6 +90,7 @@ function createTable(lastSource) {
                 },
                 "visible" : true,
                 "width"   : "330px",
+                "className" : "width-330",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-sort-amount-down text-gold"></span> Prio\'s',
@@ -100,6 +101,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : showPrios ? true : false,
                 "width"   : "300px",
+                "className" : "width-300",
             },
             {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
@@ -110,6 +112,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : showWishlist ? true : false,
                 "width"   : "400px",
+                "className" : "width-400",
             },
             {
                 "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Received',
@@ -120,6 +123,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : true,
                 "width"   : "300px",
+                "className" : "width-300",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
@@ -130,6 +134,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : showNotes ? true : false,
                 "width"   : "200px",
+                "className" : "width-200",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Prio Notes',
@@ -140,6 +145,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : showNotes ? true : false,
                 "width"   : "200px",
+                "className" : "width-200",
             },
         ],
         "order"       : [], // Disable initial auto-sort; relies on server-side sorting

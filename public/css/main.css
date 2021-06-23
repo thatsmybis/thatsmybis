@@ -735,6 +735,29 @@ div.dataTables_filter input {
     background: #32305c;
 }
 
+/* workaround for a FixedHeader bug that wipes column widths https://github.com/DataTables/FixedHeader/issues/94 */
+.dataTable .width-130 {
+    width: 130px;
+}
+.dataTable .width-200 {
+    width: 200px;
+}
+.dataTable .width-250 {
+    width: 250px;
+}
+.dataTable .width-280 {
+    width: 280px;
+}
+.dataTable .width-300 {
+    width: 300px;
+}
+.dataTable .width-330 {
+    width: 330px;
+}
+.dataTable .width-400 {
+    width: 400px;
+}
+
 /* END DATATABLES OVERRIDE */
 
 /* Bootstrap-Slider override */

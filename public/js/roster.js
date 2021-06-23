@@ -145,6 +145,7 @@ function createTable() {
                 },
                 "visible" : true,
                 "width"   : "250px",
+                "className" : "width-250",
             },
             {
                 "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Loot Received',
@@ -155,6 +156,7 @@ function createTable() {
                 "orderable" : false,
                 "visible" : true,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
                 "title"  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist
@@ -177,6 +179,7 @@ function createTable() {
                 "orderable" : false,
                 "visible" : showWishlist ? true : false,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
                 "title"  : '<span class="text-gold fas fa-fw fa-sort-amount-down"></span> Prio\'s',
@@ -187,6 +190,7 @@ function createTable() {
                 "orderable" : false,
                 "visible" : showPrios ? true : false,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
                 "title"  : '<span class="text-gold fas fa-fw fa-book"></span> Recipes',
@@ -197,6 +201,7 @@ function createTable() {
                 "orderable" : false,
                 "visible" : false,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
                 /* this feature has been cut */
@@ -228,6 +233,7 @@ function createTable() {
                 "orderable" : false,
                 "visible" : true,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
                 "title"  : "Class",
