@@ -230,8 +230,8 @@ class RaidController extends Controller
 
         $query = Raid::select([
                 'raids.*',
-                DB::raw('COUNT(DISTINCT `raid_characters`.`character_id`) AS `character_count`'),
-                DB::raw('COUNT(DISTINCT `character_items`.`item_id`) AS `item_count`'),
+                DB::raw('COUNT(DISTINCT `raid_characters`.`id`) AS `character_count`'),
+                DB::raw('COUNT(DISTINCT `character_items`.`id`) AS `item_count`'),
             ])
             ->leftJoin('raid_characters', 'raid_characters.raid_id', '=', 'raids.id')
             ->leftJoin('character_items', 'character_items.raid_id', '=', 'raids.id')
