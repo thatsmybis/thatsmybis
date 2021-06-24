@@ -468,7 +468,7 @@ function getNotes(data, type, row) {
     if (row.secondary_raid_groups && row.secondary_raid_groups.length) {
         secondaryRaidGroups = `<ul class="list-inline">`;
         row.secondary_raid_groups.forEach(function (raidGroup, index) {
-            secondaryRaidGroups += `<li class="list-inline-item small"><span class="tag text-muted"><span class="role-circle align-fix" style="background-color:${ raidGroup.color ? getColorFromDec(parseInt(raidGroup.color)) : '' }"></span>${raidGroup.name}</span></li>`;
+            secondaryRaidGroups += `<li class="list-inline-item small"><span class="tag text-muted"><span class="role-circle align-fix" style="background-color:${ getColorFromDec(parseInt(raidGroup.color)) }"></span>${raidGroup.name}</span></li>`;
         });
         secondaryRaidGroups += `</ul>`;
     }

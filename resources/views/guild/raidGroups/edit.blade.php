@@ -39,6 +39,7 @@
                                         Raid Group Name
                                     </label>
                                     <input name="name"
+                                        autofocus
                                         maxlength="255"
                                         type="text"
                                         class="form-control dark"
