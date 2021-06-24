@@ -65,6 +65,7 @@
             ['icon' => 'crown', 'name' => 'Nompire', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Onehalf', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Panya', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'ryooki', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'samspayde', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Sangwa', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Sarafina', 'title' => 'Parser'],
@@ -74,10 +75,12 @@
             ['icon' => 'crown', 'name' => 'Strix', 'title' => 'Black Lotus'],
             ['icon' => 'crown', 'name' => 'Sumorex', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'TideAd', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Tric', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'Tron', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'Vejusatko', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Waughter', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'weirdGuy', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Yjay', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Zura', 'title' => 'Parser'],
         ];
     @endphp
