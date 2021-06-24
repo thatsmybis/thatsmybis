@@ -311,7 +311,7 @@ function parseMarkdown(element = null) {
     // };
 
     if (element && !element.hasClass("js-markdown-parsed")) {
-        element.html(marked(element.html(), {renderer: render}));
+        element.html(marked(DOMPurify.sanitize(element.html()), {renderer: render}));
         element.addClass("js-markdown-parsed"); // To avoid going over the same element twice
     } else {
         $(".js-markdown").each(function () {
