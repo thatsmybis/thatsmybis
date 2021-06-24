@@ -1,11 +1,11 @@
 var table = null;
 
-var colSource = 0;
-var colName = 1;
-var colPrios = 2;
+var colSource   = 0;
+var colName     = 1;
+var colPrios    = 2;
 var colWishlist = 3;
 var colReceived = 4;
-var colNotes = 5;
+var colNotes    = 5;
 var colPriority = 6;
 
 // For keeping track of the loot's source

@@ -105,13 +105,15 @@
                 Defaults
             </span>
         </li>
-        <li class="list-inline-item">&sdot;</li>
-        <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="1">
-                <span class="text-muted fal fa-fw fa-sack"></span>
-                Loot Received
-            </span>
-        </li>
+        @if ($showPrios)
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="1">
+                    <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
+                    Prios
+                </span>
+            </li>
+        @endif
         @if ($showWishlist)
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
@@ -121,15 +123,13 @@
                 </span>
             </li>
         @endif
-        @if ($showPrios)
-            <li class="list-inline-item">&sdot;</li>
-            <li class="list-inline-item">
-                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
-                    <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
-                    Prios
-                </span>
-            </li>
-        @endif
+        <li class="list-inline-item">&sdot;</li>
+        <li class="list-inline-item">
+            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
+                <span class="text-muted fal fa-fw fa-sack"></span>
+                Received
+            </span>
+        </li>
         <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
