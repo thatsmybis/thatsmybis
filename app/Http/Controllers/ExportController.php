@@ -138,7 +138,7 @@ class ExportController extends Controller {
             REPLACE(REPLACE(gi.priority, CHAR(13), ' '), CHAR(10), ' ') AS 'item_prio_note',
             {$tierLabelField}";
 
-        $rows = DB::select(DB::raw($this->getLootBaseSql('all', $guild, $showPrios, $showWishlist, $viewPrioPermission, $fields)));
+        $rows = DB::select(DB::raw($this->getLootBaseSql('noRecipes', $guild, $showPrios, $showWishlist, $viewPrioPermission, $fields)));
 
         $fields = "'item_note'    AS 'type',
             null           AS 'character_name',
@@ -486,7 +486,9 @@ class ExportController extends Controller {
             $lootTypeFragment .= " ci.type != 'wishlist' AND";
         }
 
-        if ($lootType != "all") {
+        if ($lootType == "noRecipes") {
+            $lootTypeFragment .= " ci.type IN('prio', 'wishlist', 'received') AND";
+        } else if ($lootType != "all") {
             $lootTypeFragment .= " ci.type = '{$lootType}' AND";
         }
 
