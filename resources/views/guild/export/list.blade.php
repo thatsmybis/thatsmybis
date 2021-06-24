@@ -52,17 +52,11 @@
                         </li>
                         <li class="p-3 mb-3 rounded">
                             <p class="text-4">
-                                Exports are <span class="font-weight-bold">CACHED FOR {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} MINUTE{{ env('EXPORT_CACHE_SECONDS', 120) / 60 == 1 ? '' : 'S' }}</span>.
-                                <abbr title="This applies across your entire guild. If you're the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 's' : '' }} for the data to update. Officers may get a different cache than members depending on wishlist/prio visibility.">more info</abbr>
+                                Exports are <span class="font-weight-bold">CACHED</span> for {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 == 1 ? '' : 's' }}.
+                                <abbr title="This applies across your entire guild. If you're the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 's' : '' }} for the data to update. Officers may get a different cache than members depending on wishlist/prio visibility.">?</abbr>
                             </p>
                             <p>
-                                Publicly sharable copy of the generic loot tables <a href="{{ route('loot') }}" target="_blank">here</a>
-                            </p>
-                            <p>
-                                <strong>The format of the data being exported is subject to change.</strong>
-                            </p>
-                            <p>
-                                If you need access to data that isn't here, please reach out on
+                                Publicly sharable copy of the generic loot tables <a href="{{ route('loot') }}" target="_blank">here</a>. The format of the data being exported is subject to change. If you need access to data that isn't here, please reach out on
                                 <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
                             </p>
                         </li>
