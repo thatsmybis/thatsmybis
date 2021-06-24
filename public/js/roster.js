@@ -472,7 +472,7 @@ function getNotes(data, type, row) {
         });
         secondaryRaidGroups += `</ul>`;
     }
-    return (row.public_note ? `<span class="js-markdown-inline">${ nl2br(row.public_note) }</span>` : '—')
-        + (row.officer_note ? `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ nl2br(row.officer_note) }</span>` : '')
+    return (row.public_note ? `<span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(row.public_note)) }</span>` : '—')
+        + (row.officer_note ? `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(row.officer_note)) }</span>` : '')
         + (secondaryRaidGroups ? `<br>${secondaryRaidGroups}` : ``);
 }

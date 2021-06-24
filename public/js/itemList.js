@@ -259,7 +259,7 @@ function getNotes(row, note) {
     //     childItems += '</ul>';
     // }
     if (note || childItems) {
-        note = `<span class="js-markdown-inline">${ note ? nl2br(note) : '' }</span>${ childItems ? childItems : '' }`;
+        note = `<span class="js-markdown-inline">${ note ? DOMPurify.sanitize(nl2br(note)) : '' }</span>${ childItems ? childItems : '' }`;
     } else {
         note = '—';
     }

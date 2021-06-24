@@ -316,14 +316,16 @@ function parseMarkdown(element = null) {
     } else {
         $(".js-markdown").each(function () {
             if (!$(this).hasClass("js-markdown-parsed")) {
-                $(this).html(marked(DOMPurify.sanitize($.trim($(this).text())), {renderer: render}));
+                const text = DOMPurify.sanitize($.trim($(this).text()));
+                $(this).html(marked(text), {renderer: render});
                 $(this).addClass("js-markdown-parsed");
             }
         });
 
         $(".js-markdown-inline").each(function () {
             if (!$(this).hasClass("js-markdown-parsed")) {
-                $(this).html(marked.parseInline(DOMPurify.sanitize($.trim($(this).text())), {renderer: render}));
+                const text = DOMPurify.sanitize($.trim($(this).text()));
+                $(this).html(marked.parseInline(text), {renderer: render});
                 $(this).addClass("js-markdown-parsed");
             }
         });
