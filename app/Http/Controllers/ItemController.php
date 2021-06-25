@@ -449,10 +449,13 @@ class ItemController extends Controller
                         ->setRelation(
                             'wishlistCharacters',
                             $items->where('id', $item->id)
-                                ->first()->wishlistCharacters
+                                ->first()
+                                ->wishlistCharacters
                                 ->merge($childItem->wishlistCharacters)
-                                ->sortBy('pivot.order')
-                                ->sortBy('raid_group_name')
+                                ->sortBy(function($character) {
+                                    // RE: -strtotime(): rofl, rofl, kekw, bur, kek, roflmao sort by newest to oldest date wishlisted.
+                                    return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
+                                })
                                 ->values()
                         );
                 }
@@ -463,10 +466,12 @@ class ItemController extends Controller
                         ->setRelation(
                             'wishlistCharactersWithAttendance',
                             $items->where('id', $item->id)
-                                ->first()->wishlistCharactersWithAttendance
+                                ->first()
+                                ->wishlistCharactersWithAttendance
                                 ->merge($childItem->wishlistCharactersWithAttendance)
-                                ->sortBy('pivot.order')
-                                ->sortBy('raid_group_name')
+                                ->sortBy(function($character) {
+                                    return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
+                                })
                                 ->values()
                         );
                 }
