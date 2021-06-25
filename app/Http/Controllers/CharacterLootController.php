@@ -362,6 +362,9 @@ class CharacterLootController extends Controller
             // These keys only exist if we're changing them.
             if (isset($item['is_received'])) {
                 $newValues['is_received'] = $item['is_received'];
+                if (!$item['is_received']) {
+                    $newValues['received_at'] = null;
+                }
                 $auditMessage .= ($item['is_received'] ? 'set as received, ' : 'set as unreceived, ');
             }
             // Don't bother showing this until we have a manual received date input
@@ -429,6 +432,7 @@ class CharacterLootController extends Controller
         // as having been received.
         if ($itemType == Item::TYPE_RECEIVED && $markAsReceived) {
             $itemIds = array_map(function ($toAdd) {return $toAdd['item_id'];}, $toAdd);
+
             if (count($itemIds) > 0) {
                 // Find all of the wishlist and prio items associated with this character
                 // that are in the IDs of the items we're adding.
@@ -437,7 +441,7 @@ class CharacterLootController extends Controller
                         'is_received' => 0,
                     ])
                     ->whereIn('type', [Item::TYPE_WISHLIST, Item::TYPE_PRIO])
-                    ->whereIn('item_id', [$itemIds])
+                    ->whereIn('item_id', $itemIds)
                     ->update([
                         'is_received' => 1,
                         'received_at' => $now,
