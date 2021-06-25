@@ -104,7 +104,7 @@ function createTable() {
                                 ` : '' }
                                 ${ row.raid_group_name ? `
                                     <span class="font-weight-bold d-inline tag">
-                                        <span class="role-circle" style="background-color:${ row.raid_group_color ? getColorFromDec(parseInt(row.raid_group_color)) : '' }"></span>
+                                        <span class="role-circle" style="background-color:${ getColorFromDec(parseInt(row.raid_group_color)) }"></span>
                                         ${ row.raid_group_name ? row.raid_group_name : '' }
                                     </span>&nbsp;
                                 ` : ``}
