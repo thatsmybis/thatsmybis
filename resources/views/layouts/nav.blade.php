@@ -307,11 +307,11 @@
 
                 @if ($currentMember->hasPermission('edit.raid-loot'))
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.raids.edit', 'guild.raids.list', 'guild.raids.new', 'guild.raids.show', 'item.massInput']) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.raids.edit', 'guild.raids.list', 'guild.raids.new', 'guild.raids.show', 'item.assignLoot']) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Raids
                         </a>
                         <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
-                            <a class="dropdown-item" href="{{ route('item.massInput', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 Assign Loot
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">

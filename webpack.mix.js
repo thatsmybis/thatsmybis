@@ -35,7 +35,7 @@ mix.babel('public/js/autocomplete.js',         'public/js/processed/autocomplete
     .babel('public/js/guildSettings.js',       'public/js/processed/guildSettings.js')
     .babel('public/js/helpers.js',             'public/js/processed/helpers.js')
     .babel('public/js/itemList.js',            'public/js/processed/itemList.js')
-    .babel('public/js/itemMassInput.js',       'public/js/processed/itemMassInput.js')
+    .babel('public/js/assignLoot.js',          'public/js/processed/assignLoot.js')
     .babel('public/js/prio.js',                'public/js/processed/prio.js')
     .babel('public/js/roster.js',              'public/js/processed/roster.js')
     .babel('public/js/raidEdit.js',            'public/js/processed/raidEdit.js')
