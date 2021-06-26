@@ -146,7 +146,9 @@ class ItemController extends Controller
                                     ['character_items.is_received', 0],
                                 ])
                             ->groupBy(['character_items.character_id', 'character_items.item_id'])
+                            ->orderBy('raid_group_name')
                             ->orderBy('character_items.order');
+
                     },
                     'childItems' => function ($query) use ($guild) {
                         return $query->with([
@@ -156,6 +158,7 @@ class ItemController extends Controller
                                         ['characters.guild_id', $guild->id],
                                     ])
                                 ->groupBy(['character_items.character_id', 'character_items.item_id'])
+                                ->orderBy('raid_group_name')
                                 ->orderBy('character_items.order');
                             },
                         ]);
@@ -393,7 +396,8 @@ class ItemController extends Controller
                         'received',
                         'recipes',
                         'wishlist',
-                    ]);
+                    ])
+                    ->orderBy('character_items.order');
             },
         ]);
     }
@@ -440,11 +444,36 @@ class ItemController extends Controller
         foreach ($items->filter(function ($item, $key) { return $item->childItems->count(); }) as $item) {
             if ($guild->is_attendance_hidden) {
                 foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
-                    $items->where('id', $item->id)->first()->setRelation('wishlistCharacters', $items->where('id', $item->id)->first()->wishlistCharacters->merge($childItem->wishlistCharacters)->sortBy('pivot.order')->values());
+                    $items->where('id', $item->id)
+                        ->first()
+                        ->setRelation(
+                            'wishlistCharacters',
+                            $items->where('id', $item->id)
+                                ->first()
+                                ->wishlistCharacters
+                                ->merge($childItem->wishlistCharacters)
+                                ->sortBy(function($character) {
+                                    // RE: -strtotime(): rofl, rofl, kekw, bur, kek, roflmao sort by newest to oldest date wishlisted.
+                                    return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
+                                })
+                                ->values()
+                        );
                 }
             } else {
                 foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }) as $childItem) {
-                    $items->where('id', $item->id)->first()->setRelation('wishlistCharactersWithAttendance', $items->where('id', $item->id)->first()->wishlistCharactersWithAttendance->merge($childItem->wishlistCharactersWithAttendance)->sortBy('pivot.order')->values());
+                    $items->where('id', $item->id)
+                        ->first()
+                        ->setRelation(
+                            'wishlistCharactersWithAttendance',
+                            $items->where('id', $item->id)
+                                ->first()
+                                ->wishlistCharactersWithAttendance
+                                ->merge($childItem->wishlistCharactersWithAttendance)
+                                ->sortBy(function($character) {
+                                    return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
+                                })
+                                ->values()
+                        );
                 }
             }
         }

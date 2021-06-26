@@ -13,22 +13,53 @@
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
-                    <p class="text-4">
-                        Exports are <span class="font-weight-bold">CACHED FOR {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} MINUTE{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 'S' : '' }}</span>.
-                        <abbr title="This applies across your entire guild. If you're the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 's' : '' }} for the data to update.">more info</abbr>
-                    </p>
-                    <p>
-                        Publicly sharable copy of the generic loot tables <a href="{{ route('loot') }}" target="_blank">here</a>
-                    </p>
-                    <p>
-                        <strong>The format of the data being exported is subject to change.</strong> We might change a field or two as development on this project continues.
-                    </p>
-                    <p>
-                        If you absolutely need access to some data or for a specific export format to not change, please reach out on
-                        <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
-                        I will not give you access to data you wouldn't normally have access to in your guild (such as officer notes) but I will try to help you as best I can.
-                    </p>
                     <ol class="no-bullet no-indent striped">
+                        <!-- TMB Tooltips Addon -->
+                        <li class="p-3 mb-3 rounded">
+                            <h2 class="text-uncommon font-weight-bold">
+                                <span class="fab fa-fw fa-battle-net text-mage"></span>
+                                <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="text-uncommon">
+                                    TMB Tooltips Addon
+                                </a>
+                            </h2>
+                            <p>
+                                Copy+paste this into the <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank">TMB Tooltips Addon</a>
+                            </p>
+                            <!--
+                            <p>
+                                Fields exported:
+                            </p>
+                            <div class="bg-dark rounded p-2">
+                                <code>
+                                    {{ collect(App\Http\Controllers\ExportController::LOOT_HEADERS)->implode(', ') }}
+                                </code>
+                            </div>
+                            -->
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        Download CSV
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-uncommon"></span>
+                                        <span class="text-uncommon font-weight-bold">View CSV</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li class="p-3 mb-3 rounded">
+                            <p class="text-4">
+                                Exports are <span class="font-weight-bold">CACHED</span> for {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 == 1 ? '' : 's' }}.
+                                <abbr title="This applies across your entire guild. If you're the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 's' : '' }} for the data to update. Officers may get a different cache than members depending on wishlist/prio visibility.">?</abbr>
+                            </p>
+                            <p>
+                                Publicly sharable copy of the generic loot tables <a href="{{ route('loot') }}" target="_blank">here</a>. The format of the data being exported is subject to change. If you need access to data that isn't here, please reach out on
+                                <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
+                            </p>
+                        </li>
                         <!-- Loot Received -->
                         <li class="p-3 mb-3 rounded">
                             <h2>
@@ -38,20 +69,6 @@
                             <p>
                                 All of the loot in your guild, plus all of your guild's notes and tiers for items.
                             </p>
-                            <ul class="text-warning mb-2">
-                                <li class="no-bullet font-weight-bold">
-                                    Recently changed:
-                                </li>
-                                <li>
-                                    Added character_note (after character_inactive_at).
-                                </li>
-                                <li>
-                                    Added is_offspec (after item_id).
-                                </li>
-                                <li>
-                                    Renamed raid_name to raid_group_name.
-                                </li>
-                            </ul>
                             <p>
                                 Fields exported:
                             </p>

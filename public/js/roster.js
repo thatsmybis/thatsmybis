@@ -1,9 +1,9 @@
 var table = null;
 
 var colName      = 0;
-var colLoot      = 1;
+var colPrios     = 1;
 var colWishlist  = 2;
-var colPrios     = 3;
+var colLoot      = 3;
 var colRecipes   = 4;
 var colRoles     = 5;
 var colNotes     = 6;
@@ -104,7 +104,7 @@ function createTable() {
                                 ` : '' }
                                 ${ row.raid_group_name ? `
                                     <span class="font-weight-bold d-inline tag">
-                                        <span class="role-circle" style="background-color:${ row.raid_group_color ? getColorFromDec(parseInt(row.raid_group_color)) : '' }"></span>
+                                        <span class="role-circle" style="background-color:${ getColorFromDec(parseInt(row.raid_group_color)) }"></span>
                                         ${ row.raid_group_name ? row.raid_group_name : '' }
                                     </span>&nbsp;
                                 ` : ``}
@@ -145,16 +145,18 @@ function createTable() {
                 },
                 "visible" : true,
                 "width"   : "250px",
+                "className" : "width-250",
             },
             {
-                "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Loot Received',
-                "data"   : "received",
+                "title"  : '<span class="text-gold fas fa-fw fa-sort-amount-down"></span> Prio\'s',
+                "data"   : "prios",
                 "render" : function (data, type, row) {
-                    return data && data.length ? getItemList(data, 'received', row.id) : '—';
+                    return data && data.length ? getItemList(data, 'prio', row.id, true) : '—';
                 },
                 "orderable" : false,
-                "visible" : true,
+                "visible" : showPrios ? true : false,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
                 "title"  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist
@@ -177,16 +179,18 @@ function createTable() {
                 "orderable" : false,
                 "visible" : showWishlist ? true : false,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
-                "title"  : '<span class="text-gold fas fa-fw fa-sort-amount-down"></span> Prio\'s',
-                "data"   : "prios",
+                "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Received',
+                "data"   : "received",
                 "render" : function (data, type, row) {
-                    return data && data.length ? getItemList(data, 'prio', row.id, true) : '—';
+                    return data && data.length ? getItemList(data, 'received', row.id) : '—';
                 },
                 "orderable" : false,
-                "visible" : showPrios ? true : false,
+                "visible" : true,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
                 "title"  : '<span class="text-gold fas fa-fw fa-book"></span> Recipes',
@@ -197,6 +201,7 @@ function createTable() {
                 "orderable" : false,
                 "visible" : false,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
                 /* this feature has been cut */
@@ -228,6 +233,7 @@ function createTable() {
                 "orderable" : false,
                 "visible" : true,
                 "width"   : "280px",
+                "className" : "width-280",
             },
             {
                 "title"  : "Class",
@@ -462,11 +468,11 @@ function getNotes(data, type, row) {
     if (row.secondary_raid_groups && row.secondary_raid_groups.length) {
         secondaryRaidGroups = `<ul class="list-inline">`;
         row.secondary_raid_groups.forEach(function (raidGroup, index) {
-            secondaryRaidGroups += `<li class="list-inline-item small"><span class="tag text-muted"><span class="role-circle align-fix" style="background-color:${ raidGroup.color ? getColorFromDec(parseInt(raidGroup.color)) : '' }"></span>${raidGroup.name}</span></li>`;
+            secondaryRaidGroups += `<li class="list-inline-item small"><span class="tag text-muted"><span class="role-circle align-fix" style="background-color:${ getColorFromDec(parseInt(raidGroup.color)) }"></span>${raidGroup.name}</span></li>`;
         });
         secondaryRaidGroups += `</ul>`;
     }
-    return (row.public_note ? `<span class="js-markdown-inline">${ nl2br(row.public_note) }</span>` : '—')
-        + (row.officer_note ? `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ nl2br(row.officer_note) }</span>` : '')
+    return (row.public_note ? `<span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(row.public_note)) }</span>` : '—')
+        + (row.officer_note ? `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(row.officer_note)) }</span>` : '')
         + (secondaryRaidGroups ? `<br>${secondaryRaidGroups}` : ``);
 }

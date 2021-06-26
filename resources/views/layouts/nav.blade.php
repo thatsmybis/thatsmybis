@@ -354,6 +354,9 @@
                             </a>
                         @endif
 
+                        <a class="dropdown-item" target="_blank" href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}">
+                            Export for TMB Tooltips
+                        </a>
                         <a class="dropdown-item" href="{{ route('guild.exports', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             Exports
                         </a>

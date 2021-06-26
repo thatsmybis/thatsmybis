@@ -11,6 +11,22 @@ class ExportController extends Controller {
     const HTML = 'html';
     const JSON = 'json';
 
+    const ADDON_HEADERS = [
+        "type",
+        "character_name",
+        "character_class",
+        "character_is_alt",
+        "character_inactive_at",
+        "character_note",
+        "sort_order",
+        "item_id",
+        "is_offspec",
+        // "officer_note",
+        "received_at",
+        "item_prio_note",
+        "item_tier_label",
+    ];
+
     const LOOT_HEADERS = [
         "type",
         "raid_group_name",
@@ -76,6 +92,76 @@ class ExportController extends Controller {
     public function __construct()
     {
         $this->middleware(['auth', 'seeUser'])->except(['exportExpansionLoot']);
+    }
+
+    /**
+     * Export a guild's loot data for consumption in the TMB Helper addon
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function exportAddonItems ($guildId, $guildSlug, $fileType)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $viewPrioPermission = $currentMember->hasPermission('view.prios');
+        $showPrios = true;
+        if ($guild->is_prio_private && !$viewPrioPermission) {
+            $showPrios = false;
+        }
+
+        $showWishlist = true;
+        if ($guild->is_wishlist_private && !$currentMember->hasPermission('view.wishlists')) {
+            $showWishlist = false;
+        }
+
+        // $showOfficerNote = false;
+        // if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+        //     $showOfficerNote = true;
+        // }
+
+        // $officerNote = ($showOfficerNote ? 'ci.officer_note' : 'NULL');
+
+        $tierLabelField = $this->getTierLabelField($guild);
+        $fields =
+            "ci.type        AS 'type',
+            c.name         AS 'character_name',
+            c.class        AS 'character_class',
+            c.is_alt       AS 'character_is_alt',
+            c.inactive_at  AS 'character_inactive_at',
+            REPLACE(REPLACE(c.public_note, CHAR(13), ' '), CHAR(10), ' ') AS 'character_note', -- remove newlines
+            ci.`order`     AS 'sort_order',
+            ci.item_id     AS 'item_id',
+            ci.is_offspec  AS 'is_offspec',
+            -- {officerNote} AS 'officer_note',
+            ci.received_at AS 'received_at',
+            REPLACE(REPLACE(gi.priority, CHAR(13), ' '), CHAR(10), ' ') AS 'item_prio_note',
+            {$tierLabelField}";
+
+        $rows = DB::select(DB::raw($this->getLootBaseSql('noRecipes', $guild, $showPrios, $showWishlist, $viewPrioPermission, $fields)));
+
+        $fields = "'item_note'    AS 'type',
+            null           AS 'character_name',
+            null           AS 'character_class',
+            null           AS 'character_is_alt',
+            null           AS 'character_inactive_at',
+            null           AS 'character_note',
+            null           AS 'sort_order',
+            i.item_id      AS 'item_id',
+            null           AS 'is_offspec',
+            -- {officerNote} AS 'officer_note',
+            null           AS 'received_at',
+            gi.priority    AS 'item_prio_note',
+            {$tierLabelField}";
+
+        $rows = array_merge(
+            $rows,
+            DB::select(DB::raw($this->getNotesBaseSql($guild, $fields)))
+        );
+
+        $csv = $this->createCsv($rows, self::ADDON_HEADERS);
+
+        return $this->getExport($csv, 'TMB Helper Export', $fileType);
     }
 
     /**
@@ -239,7 +325,7 @@ class ExportController extends Controller {
                     gi.note           AS 'item_note',
                     gi.priority       AS 'item_prio_note',
                     gi.tier           AS 'tier',
-                    {$tierLabelField}
+                    {$tierLabelField},
                     gi.created_at     AS 'created_at',
                     gi.updated_at     AS 'updated_at'
                 FROM items i
@@ -381,12 +467,11 @@ class ExportController extends Controller {
      * @var App/Guild $guild    The guild it belongs to.
      * @var bool      $showPrios
      * @var bool      $showWishlist
+     * @var string    $fields       The fields to SELECT. Used to override this function's default fields.
      *
      * @return The thing to present to the user.
      */
-    private function getLootBaseSql($lootType, $guild, $showPrios = true, $showWishlist = true, $viewPrioPermission) {
-        $tierLabelField = $this->getTierLabelField($guild);
-
+    private function getLootBaseSql($lootType, $guild, $showPrios = true, $showWishlist = true, $viewPrioPermission, $fields = null) {
         $lootTypeFragment = "";
 
         if (!$showPrios) {
@@ -401,13 +486,16 @@ class ExportController extends Controller {
             $lootTypeFragment .= " ci.type != 'wishlist' AND";
         }
 
-        if ($lootType != "all") {
+        if ($lootType == "noRecipes") {
+            $lootTypeFragment .= " ci.type IN('prio', 'wishlist', 'received') AND";
+        } else if ($lootType != "all") {
             $lootTypeFragment .= " ci.type = '{$lootType}' AND";
         }
 
-        return
-            "SELECT
-                ci.type        AS 'type',
+        if (!$fields) {
+            $tierLabelField = $this->getTierLabelField($guild);
+            $fields =
+                "ci.type        AS 'type',
                 rg.name        AS 'raid_group_name',
                 m.username     AS 'member_name',
                 c.name         AS 'character_name',
@@ -426,9 +514,14 @@ class ExportController extends Controller {
                 REPLACE(REPLACE(gi.note, CHAR(13), ' '), CHAR(10), ' ') AS 'item_note',
                 REPLACE(REPLACE(gi.priority, CHAR(13), ' '), CHAR(10), ' ') AS 'item_prio_note',
                 gi.tier        AS 'item_tier',
-                {$tierLabelField}
+                {$tierLabelField},
                 ci.created_at  AS 'created_at',
-                ci.updated_at  AS 'updated_at'
+                ci.updated_at  AS 'updated_at'";
+        }
+
+        return
+            "SELECT
+                {$fields}
             FROM character_items ci
                 JOIN characters c        ON c.id = ci.character_id
                 LEFT JOIN members m      ON m.id = c.member_id
@@ -444,15 +537,15 @@ class ExportController extends Controller {
     /**
      * Get the SQL used for the guild note exports that can be combined with the character exports
      *
-     * @var App/Guild $guild    The guild it belongs to.
+     * @var App/Guild $guild  The guild it belongs to.
+     * @var string    $fields Custom fields that override the default ones.
      *
      * @return The thing to present to the user.
      */
-    private function getNotesBaseSql($guild) {
-        $tierLabelField = $this->getTierLabelField($guild);
-        return
-            "SELECT
-                'item_note'    AS 'type',
+    private function getNotesBaseSql($guild, $fields = null) {
+        if (!$fields) {
+            $tierLabelField = $this->getTierLabelField($guild);
+            $fields = "'item_note'    AS 'type',
                 null           AS 'raid_group_name',
                 null           AS 'member_name',
                 null           AS 'character_name',
@@ -471,9 +564,13 @@ class ExportController extends Controller {
                 gi.note        AS 'item_note',
                 gi.priority    AS 'item_prio_note',
                 gi.tier        AS 'item_tier',
-                {$tierLabelField}
+                {$tierLabelField},
                 gi.created_at  AS 'created_at',
-                gi.updated_at  AS 'updated_at'
+                gi.updated_at  AS 'updated_at'";
+        }
+        return
+            "SELECT
+                {$fields}
             FROM items i
                 JOIN item_item_sources iis ON iis.item_id = i.item_id
                 JOIN item_sources          ON item_sources.id = iis.item_source_id
@@ -501,11 +598,11 @@ class ExportController extends Controller {
                     WHEN gi.tier = 4 THEN '{$tiers[4]}'
                     WHEN gi.tier = 5 THEN '{$tiers[5]}'
                     WHEN gi.tier = 6 THEN '{$tiers[6]}'
-                END AS 'item_tier_label',";
+                END AS 'item_tier_label'";
         } else if ($guild->tier_mode == Guild::TIER_MODE_NUM) {
-            return "gi.tier AS 'item_tier_label',";
+            return "gi.tier AS 'item_tier_label'";
         } else {
-            return "null AS 'item_tier_label',";
+            return "null AS 'item_tier_label'";
         }
     }
 }

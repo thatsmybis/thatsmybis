@@ -68,6 +68,7 @@
                                 @else
                                     <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
                                 @endif
+                                <small class="text-muted font-weight-normal">&sdot;</small>
                                 <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">see what other people wishlisted</a>
                             </label>
 
@@ -260,7 +261,10 @@
                                 <span class="fas fa-fw fa-book"></span>
                                 Rare Recipes
                             </span>
-                            <small class="text-muted font-weight-normal" title="Max {{ $maxRecipes }}">just the rare ones</small>
+                            <small class="text-muted font-weight-normal" title="Max {{ $maxRecipes }}">just the rare ones &sdot;</small>
+                            <a href="{{ route('guild.recipe.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">
+                                view guild recipes
+                            </a>
                         </label>
 
                         <div class="{{ $errors->has('recipes.*') ? 'has-error' : '' }}">

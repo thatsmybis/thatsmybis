@@ -311,19 +311,21 @@ function parseMarkdown(element = null) {
     // };
 
     if (element && !element.hasClass("js-markdown-parsed")) {
-        element.html(marked(element.html(), {renderer: render}));
+        element.html(marked(DOMPurify.sanitize(element.html()), {renderer: render}));
         element.addClass("js-markdown-parsed"); // To avoid going over the same element twice
     } else {
         $(".js-markdown").each(function () {
             if (!$(this).hasClass("js-markdown-parsed")) {
-                $(this).html(marked($.trim($(this).text()), {renderer: render}));
+                const text = DOMPurify.sanitize($.trim($(this).text()));
+                $(this).html(marked(text), {renderer: render});
                 $(this).addClass("js-markdown-parsed");
             }
         });
 
         $(".js-markdown-inline").each(function () {
             if (!$(this).hasClass("js-markdown-parsed")) {
-                $(this).html(marked.parseInline($.trim($(this).text()), {renderer: render}));
+                const text = DOMPurify.sanitize($.trim($(this).text()));
+                $(this).html(marked.parseInline(text), {renderer: render});
                 $(this).addClass("js-markdown-parsed");
             }
         });

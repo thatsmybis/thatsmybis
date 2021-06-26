@@ -132,10 +132,11 @@ $(document).ready(function () {
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting
         "paging" : false,
         "fixedHeader" : true, // Header row sticks to top of window when scrolling down
+        "autoWidth" : true,
         "columns" : [
-            null,
-            { "orderable" : false },
-            { "orderable" : false },
+            { "class" : "width-200" },
+            { "class" : "width-130", "orderable" : true },
+            { "class" : "width-400", "orderable" : true },
         ]
     });
 

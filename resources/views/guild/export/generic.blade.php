@@ -5,7 +5,7 @@
     <title>{{ $name }} - {{ env('APP_NAME') }}</title>
 </head>
 <body>
-    <span style="white-space: pre-line;white-space: pre-wrap;">{!! $data !!}</span>
+    <span style="white-space: pre-line;white-space: pre-wrap;">{{ $data }}</span>
 </body>
 </html>
 

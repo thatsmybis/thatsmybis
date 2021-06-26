@@ -1,11 +1,11 @@
 var table = null;
 
-var colSource = 0;
-var colName = 1;
-var colPrios = 2;
+var colSource   = 0;
+var colName     = 1;
+var colPrios    = 2;
 var colWishlist = 3;
 var colReceived = 4;
-var colNotes = 5;
+var colNotes    = 5;
 var colPriority = 6;
 
 // For keeping track of the loot's source
@@ -80,7 +80,7 @@ function createTable(lastSource) {
                 },
                 "visible"   : true,
                 "width"     : "130px",
-                "className" : "text-right",
+                "className" : "text-right width-130",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-sack text-success"></span> Loot',
@@ -90,6 +90,7 @@ function createTable(lastSource) {
                 },
                 "visible" : true,
                 "width"   : "330px",
+                "className" : "width-330",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-sort-amount-down text-gold"></span> Prio\'s',
@@ -100,6 +101,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : showPrios ? true : false,
                 "width"   : "300px",
+                "className" : "width-300",
             },
             {
                 "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
@@ -110,6 +112,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : showWishlist ? true : false,
                 "width"   : "400px",
+                "className" : "width-400",
             },
             {
                 "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Received',
@@ -120,6 +123,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : true,
                 "width"   : "300px",
+                "className" : "width-300",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
@@ -130,6 +134,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : showNotes ? true : false,
                 "width"   : "200px",
+                "className" : "width-200",
             },
             {
                 "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Prio Notes',
@@ -140,6 +145,7 @@ function createTable(lastSource) {
                 "orderable" : false,
                 "visible" : showNotes ? true : false,
                 "width"   : "200px",
+                "className" : "width-200",
             },
         ],
         "order"       : [], // Disable initial auto-sort; relies on server-side sorting
@@ -187,6 +193,30 @@ function getCharacterList(data, type, itemId) {
             `;
         }
 
+        if (type == 'wishlist' && (
+            (character.raid_group_id && character.raid_group_id != lastRaidGroupId) ||
+            (!character.raid_group_id && lastRaidGroupId)
+        )) {
+            let raidGroupName = '';
+            if (!character.raid_group_id && lastRaidGroupId) {
+                raidGroupName = 'no raid group';
+                lastRaidGroupId = null;
+            } else {
+                lastRaidGroupId = character.raid_group_id;
+                if (raidGroups.length) {
+                    let raidGroup = raidGroups.find(raidGroup => raidGroup.id === character.raid_group_id);
+                     if (raidGroup) {
+                        raidGroupName = raidGroup.name;
+                    }
+                }
+            }
+            characters += `
+                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small">
+                    ${ raidGroupName }
+                </li>
+            `;
+        }
+
         characters += `
             <li data-raid-group-id="${ type == 'prio' ? character.pivot.raid_group_id : character.raid_group_id }"
                 value="${ type == 'prio' ? character.pivot.order : '' }"
@@ -202,7 +232,7 @@ function getCharacterList(data, type, itemId) {
                         <span class="text-warning">alt</span>
                     ` : '' }
                     ${ !guild.is_attendance_hidden && (character.attendance_percentage || character.raid_count) ?
-                        `${ character.raid_count && typeof character.attendance_percentage === 'number' ? `<span title="attendance" class="smaller ${ getAttendanceColor(character.attendance_percentage) }">${ Math.round(character.attendance_percentage * 100) }%</span>` : '' }${ character.raid_count ? `<span class="smaller">+${ character.raid_count }</span>` : ``}
+                        `${ character.raid_count && typeof character.attendance_percentage === 'number' ? `<span title="attendance" class="smaller ${ getAttendanceColor(character.attendance_percentage) }">${ Math.round(character.attendance_percentage * 100) }%</span>` : '' }${ character.raid_count ? `<span class="smaller"> ${ character.raid_count }r</span>` : ``}
                     ` : `` }
                     <span class="js-watchable-timestamp smaller"
                         data-timestamp="${ character.pivot.created_at }"
@@ -229,7 +259,7 @@ function getNotes(row, note) {
     //     childItems += '</ul>';
     // }
     if (note || childItems) {
-        note = `<span class="js-markdown-inline">${ note ? nl2br(note) : '' }</span>${ childItems ? childItems : '' }`;
+        note = `<span class="js-markdown-inline">${ note ? DOMPurify.sanitize(nl2br(note)) : '' }</span>${ childItems ? childItems : '' }`;
     } else {
         note = '—';
     }
