@@ -31,7 +31,7 @@ class AssignLootController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function massInput($guildId, $guildSlug)
+    public function assignLoot($guildId, $guildSlug)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -49,7 +49,7 @@ class AssignLootController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        return view('item.massInput', [
+        return view('item.assignLoot', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'maxItems'      => self::MAX_ITEMS,
@@ -57,7 +57,7 @@ class AssignLootController extends Controller
     }
 
     // Submit a whole bunch of loot at once
-    public function submitMassInput($guildId, $guildSlug) {
+    public function submitAssignLoot($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 

@@ -128,8 +128,8 @@ Route::group([
 
     Route::get( '/roster',          'RosterController@roster')->name('guild.roster');
 
-    Route::get( '/assign-loot', 'AssignLootController@massInput')      ->name('item.massInput');
-    Route::post('/assign-loot', 'AssignLootController@submitMassInput')->name('item.massInput.submit');
+    Route::get( '/assign-loot', 'AssignLootController@assignLoot')      ->name('item.assignLoot');
+    Route::post('/assign-loot', 'AssignLootController@submitAssignLoot')->name('item.assignLoot.submit');
 
     Route::group(['prefix' => 'raids'], function () {
         Route::get( '/',                'RaidController@list')    ->name('guild.raids.list');
@@ -155,8 +155,8 @@ Route::group([
 
         Route::group(['prefix' => 'prio'], function () {
             Route::get( '/{instanceSlug}',               'PrioController@chooseRaidGroup')->name('guild.prios.chooseRaidGroup');
-            Route::get( '/{instanceSlug}/{raidGroupId}', 'PrioController@massInput')      ->where('raidGroupId', '[0-9]+')->name('guild.prios.massInput');
-            Route::post('/',                             'PrioController@submitMassInput')->name('guild.prios.massInput.submit');
+            Route::get( '/{instanceSlug}/{raidGroupId}', 'PrioController@assignPrios')       ->where('raidGroupId', '[0-9]+')->name('guild.prios.assignPrios');
+            Route::post('/',                             'PrioController@submitAssignPrios')->name('guild.prios.assignPrios.submit');
         });
     });
 

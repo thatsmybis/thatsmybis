@@ -62,7 +62,7 @@ class PrioController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function massInput($guildId, $guildSlug, $instanceSlug, $raidGroupId)
+    public function assignPrios($guildId, $guildSlug, $instanceSlug, $raidGroupId)
     {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -182,7 +182,7 @@ class PrioController extends Controller
 
         $items = ItemController::mergeTokenWishlists($items, $guild);
 
-        return view('guild.prios.massInput', [
+        return view('guild.prios.assignPrios', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'raidGroup'     => $raidGroup,
@@ -315,7 +315,7 @@ class PrioController extends Controller
         ]);
     }
 
-    public function submitMassInput($guildId, $guildSlug) {
+    public function submitAssignPrios($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 

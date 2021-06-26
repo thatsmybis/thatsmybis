@@ -170,13 +170,14 @@
                                         <span class="text-muted fas fa-fw fa-link"></span>
                                         Link to Raid Logs
                                     </label>
-                                    <input name="logs"
-                                        autocomplete="off"
-                                        maxlength="250"
-                                        type="text"
-                                        class="form-control dark"
-                                        placeholder="a warcraftlogs.com link perhaps?"
-                                        value="{{ old('logs') ? old('logs') : ($raid ? $raid->logs : '') }}" />
+                                        <input name="logs"
+                                            autocomplete="off"
+                                            maxlength="250"
+                                            type="text"
+                                            class="form-control dark"
+                                            placeholder="a warcraftlogs.com link perhaps?"
+                                            value="{{ old('logs') ? old('logs') : ($raid ? $raid->logs : '') }}"
+                                            style="" />
                                 </div>
                             </div>
                         </div>
@@ -190,15 +191,18 @@
                             Dungeon(s)
                         </label>
                         @for ($i = 0; $i < $maxInstances; $i++)
-                            <div class="form-group {{ $i > 0 ? 'js-hide-empty' : '' }}" style="{{ $i > 0 ? 'display:none;' : '' }}">
-                                <select name="instance_id[]" class="form-control dark {{ $i >= 0 ? 'js-show-next' : '' }}" autocomplete="off">
+                            @php
+                                $oldInstanceId = old('instance_id.' . $i) ? old('instance_id.' . $i) : ($raid && $raid->instances->slice($i, 1)->count() ? $raid->instances->slice($i, 1)->first()->id : null);
+                            @endphp
+                            <div class="form-group {{ $i > 0 ? 'js-hide-empty' : '' }}" style="{{ !$oldInstanceId && $i > 0 ? 'display:none;' : '' }}">
+                                <select name="instance_id[]" class="js-show-next form-control dark" autocomplete="off">
                                     <option value="" selected>
                                         —
                                     </option>
 
                                     @foreach ($instances as $instance)
                                         <option value="{{ $instance->id }}"
-                                            {{ old('instance_id.' . $i) && old('instance_id.' . $i) == $instance->id ? 'selected' : ($raid && $raid->instances->slice($i, 1)->count() && $raid->instances->slice($i, 1)->first()->id == $instance->id ? 'selected' : '') }}>
+                                            {{ $oldInstanceId == $instance->id ? 'selected' : '' }}>
                                             {{ $instance->name }}
                                         </option>
                                     @endforeach
@@ -243,7 +247,7 @@
                                 </h2>
                             </li>
                             <li class="list-inline-item">
-                                <span class="js-clear-attendees text-link cursor-pointer"><span class="fas fa-fw fa-trash"></span> reset list</span>
+                                <span class="js-clear-attendees text-link cursor-pointer"><span class="fas fa-fw fa-trash"></span> clear attendees</span>
                             </li>
                         </ul>
                     </div>
@@ -267,7 +271,7 @@
                                 }
                             @endphp
 
-                            <div class="js-row row striped-light pb-4 pt-4 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $hide ? 'display:none;' : '' }}">
+                            <div class="js-row row striped-light pb-1 pt-1 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $hide ? 'display:none;' : '' }}">
 
                                 <!-- Exempt -->
                                 <div class="col-lg-1 col-2 {{ $errors->has('characters.' . $i . '.is_exempt') ? 'text-danger font-weight-bold' : '' }}">
@@ -305,7 +309,6 @@
                                                         <span class="fas fa-fw fa-user text-muted"></span>
                                                         Character
                                                     @else
-                                                        <span class="fas fa-fw fa-user text-muted"></span>
                                                         <span class="sr-only">
                                                             Character
                                                         </span>
@@ -356,7 +359,6 @@
                                                         <span class="fas fa-fw fa-quote-left text-muted"></span>
                                                         Note
                                                     @else
-                                                        <span class="fas fa-fw fa-quote-left text-muted"></span>
                                                         <span class="sr-only">
                                                             Note
                                                         </span>
@@ -404,9 +406,8 @@
                                                     @if ($i == 0)
                                                         <span class="fas fa-fw fa-user-chart text-muted"></span>
                                                         Attendance Credit
-                                                    @else
-                                                        <span class="fas fa-fw fa-user-chart text-muted"></span>
-                                                        <span class="sr-only">
+                                                    @els
+e                                                        <span class="sr-only">
                                                             Attendance Credit
                                                         </span>
                                                     @endif
