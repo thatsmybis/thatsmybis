@@ -40,6 +40,9 @@ $(document).ready(function () {
     // Watch any watchable times on the page
     trackTimestamps();
 
+    // For local to UTC time conversions before the date is sent to the server
+    addDateInputHandlers();
+
     // Don't submit forms when the user presses enter in a textbox
     addInputAntiSubmitHandler();
 
@@ -55,6 +58,19 @@ $(document).ready(function () {
         $(".js-content[data-id=" + id + "]").toggle();
     });
 });
+
+// Take the visible date input, and convert its time to UTC, update the hidden date input.
+function addDateInputHandlers() {
+    $(".js-date-input").change(function () {
+        let realInput = $(this).prev(".js-date");
+        if ($(this).val()) {
+            realInput.val(moment($(this).val()).utc().format("YYYY-MM-DD HH:mm:ss"));
+        } else {
+            realInput.val(date);
+            $(this).val(moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss"));
+        }
+    });
+}
 
 /**
  * Prevents inputs from submitting their form when enter is pressed.

@@ -51,11 +51,12 @@
                         @include('item/assignLoot/partials/metadata')
 
                         <div class="col-sm-6 col-12 pt-2 mb-2">
-                            <label for="new_date">
+                            <label for="date_input">
                                 <span class="text-muted fas fa-fw fa-calendar-alt"></span>
                                 Date Assigned <span class="text-muted small">optional, overwrites all old dates</span>
                             </label>
-                            <input name="new_date" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="form-control dark" autocomplete="off">
+                            <input class="js-date" type="text" name="new_date" hidden value="{{ old('new_date') ? old('new_date') : '' }}">
+                            <input min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="js-date-input form-control dark" autocomplete="off">
                         </div>
                     </div>
 
@@ -106,6 +107,8 @@
 
 @section('scripts')
 <script>
-    $(document).ready(() => warnBeforeLeaving("#editForm"));
+    $(document).ready(function () {
+        warnBeforeLeaving("#editForm");
+    });
 </script>
 @endsection

@@ -5,7 +5,7 @@ $(document).ready(function () {
 
     // Always initialize to null, let the javascript convert from UTC time to local browser time,
     // then it will populate the date.
-    $("[name=date_input]").datetimepicker({
+    $(".js-date-input").datetimepicker({
         format: 'Y-m-d H:i:s',
         inline: true,
         step: 30,
@@ -13,11 +13,8 @@ $(document).ready(function () {
         value: moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss"),
     });
 
-    $("[name=date_input]").change(function () {
-        updateDate();
-    });
-
-    updateDate();
+    // Trigger a date change to make it convert to UTC and stuff.
+    $(".js-date-input").change();
 
     $("[name=raid_group_id\\[\\]]").change(function () {
         if (!initializing) {
@@ -167,15 +164,5 @@ function showNextCharacter(currentElement) {
         nextElement.show();
         nextElement.find("select[name^=characters][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
         fixSliderLabels();
-    }
-}
-
-// Take the visible date input, and convert its time to UTC, update the hidden date input.
-function updateDate() {
-    if ($("[name=date_input]").val()) {
-        $("[name=date]").val(moment($("[name=date_input]").val()).utc().format("YYYY-MM-DD HH:mm:ss"));
-    } else {
-        $("[name=date]").val(date);
-        $("[name=date_input]").val(moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss"));
     }
 }

@@ -95,10 +95,10 @@
                                         Date <span class="small text-muted">your local time</span>
                                     </label>
                                     <div>
-                                        <input type="text" name="date" hidden value="{{ $date }}">
+                                        <input class="js-date" type="text" name="date" hidden value="{{ $date }}">
                                         <input
+                                            class="js-date-input"
                                             required
-                                            name="date_input"
                                             type="text"
                                             min="2004-09-22"
                                             max="{{ $maxDate }}"
