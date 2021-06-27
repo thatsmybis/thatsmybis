@@ -316,7 +316,7 @@
                                 }
                             @endphp
 
-                            <div class="js-row row striped-light pb-1 pt-1 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $hide ? 'display:none;' : '' }}">
+                            <div class="js-row row striped-light pb-0 {{ $i == 0 ? 'pt-3' : 'pt-0' }} rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $hide ? 'display:none;' : '' }}">
 
                                 <!-- Exempt -->
                                 <div class="col-lg-1 col-2 {{ $errors->has('characters.' . $i . '.is_exempt') ? 'text-danger font-weight-bold' : '' }}">
