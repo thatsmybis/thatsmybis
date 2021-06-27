@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Batch, Character, Instance, Item, Member, RaidGroup};
+use App\{AuditLog, Batch, Character, Instance, Item, Member, Raid, RaidGroup};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -26,6 +26,9 @@ class AssignLootController extends Controller
     // Maximum number of items that can be added at any one time
     const MAX_ITEMS = 150;
 
+    // How many past raids to show in the raid select dropdown
+    const RAID_HISTORY_LIMIT = 200;
+
     const RESULTS_PER_PAGE = 20;
 
     /**
@@ -42,7 +45,7 @@ class AssignLootController extends Controller
             'characters',
             'raidGroups',
             'raids' => function ($query) {
-                return $query->limit(100);
+                return $query->limit(self::RAID_HISTORY_LIMIT);
             },
         ]);
 
@@ -51,10 +54,17 @@ class AssignLootController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
+        $raid = null;
+        if (!empty(request()->input('raid_id'))) {
+            $raid = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])->first();
+        }
+
         return view('item.assignLoot', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'maxItems'      => self::MAX_ITEMS,
+            'currentMember'    => $currentMember,
+            'guild'            => $guild,
+            'maxItems'         => self::MAX_ITEMS,
+            'raid'             => $raid,
+            'raidHistoryLimit' => self::RAID_HISTORY_LIMIT,
         ]);
     }
 

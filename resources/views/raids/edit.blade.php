@@ -48,13 +48,25 @@
                                 @endif
                             </h1>
                         </li>
-                        <li class="list-inline-item">
+
                             @if ($raid && !$copy)
-                                <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
-                                    <span class="fas fa-fw fa-copy"></span> copy
-                                </a>
+                                <li class="list-inline-item">
+                                    <a class="text-success" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
+                                        <span class="fa-fw fas fa-sack"></span>
+                                        Assign Loot
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
+                                        <span class="fas fa-fw fa-copy"></span> copy
+                                    </a>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
+                                        <span class="fas fa-clipboard-list-check"></span>
+                                        history
+                                    </a>
+                                </li>
                             @endif
-                        </li>
                     </ul>
                 </div>
             </div>
