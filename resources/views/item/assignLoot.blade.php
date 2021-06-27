@@ -21,6 +21,9 @@
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-gift text-gold"></span>
                         Assign Loot
+                        @if ($raid)
+                            to Raid
+                        @endif
                     </h1>
                     <small>
                         <strong>Hint:</strong> Keep the roster and/or item pages open in another window to review who deserves what
@@ -186,7 +189,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                                 Raid Group
                             </label>
-                            <select name="raid_group_id" class="form-control dark" data-live-search="true">
+                            <select name="raid_group_id" class="form-control dark selectpicker" data-live-search="true">
                                 <option value="">—</option>
                                 @php
                                     $oldRaidGroupId = old('raid_group_id') ? old('raid_group_id') : null;
@@ -200,31 +203,48 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                         </div>
 
                         <!-- Raid -->
-                        <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
-                            <label for="raid_id font-weight-light">
-                                <span class="text-muted fas fa-fw fa-calendar-alt"></span>
-                                Raid
-                            </label>
-                            <select name="raid_id" class="form-control dark" data-live-search="true">
-                                <option value="">—</option>
-                                @php
-                                    $oldRaidId = old('raid_id') ? old('raid_id') : null;
-                                @endphp
-                                @foreach ($guild->raids as $raid)
-                                    <option value="{{ $raid->id }}" {{ $raid->id == $oldRaidId ? 'checked' : '' }}>
-                                        {{ $raid->name }}
-                                        {{ $raid->date ? '(' . ($raid->date > $now ? 'in ' . timeUntil(strtotime($raid->date)) : timeSince(strtotime($raid->date)) . ' ago')  . ')' : null }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        @if ($raid)
+                            <input hidden name="raid_id" value="{{ $raid->id }}" />
+                            <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
+                                <label for="raid_id font-weight-light">
+                                    <span class="text-muted fas fa-fw fa-calendar-alt"></span>
+                                    Raid
+                                    <span class="text-muted">locked</span>
+                                </label>
+                                <input
+                                    disabled
+                                    type="text"
+                                    class="form-control dark text-warning font-weight-bold"
+                                    value="{{ $raid->name }}" />
+                            </div>
+                        @else
+                            <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
+                                <label for="raid_id font-weight-light">
+                                    <span class="text-muted fas fa-fw fa-calendar-alt"></span>
+                                    Raid
+                                    <span class="small text-muted">last {{ $raidHistoryLimit }} raids shown</span>
+                                </label>
+                                <select name="raid_id" class="form-control dark selectpicker" data-live-search="true">
+                                    <option value="">—</option>
+                                    @php
+                                        $oldRaidId = old('raid_id') ? old('raid_id') : null;
+                                    @endphp
+                                    @foreach ($guild->raids as $raid)
+                                        <option value="{{ $raid->id }}" {{ $raid->id == $oldRaidId ? 'checked' : '' }}>
+                                            {{ $raid->name }}
+                                            {{ $raid->date ? '(' . ($raid->date > $now ? 'in ' . timeUntil(strtotime($raid->date)) : timeSince(strtotime($raid->date)) . ' ago')  . ')' : null }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
 
                         <!-- Character select filter -->
                         <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
                             <label for="raid_group_filter font-weight-light">
                                 <span class="text-muted">Character dropdown filter</span>
                             </label>
-                            <select id="raid_group_filter" class="form-control dark">
+                            <select id="raid_group_filter" class="form-control dark selectpicker" data-live-search="true">
                                 <option value="">—</option>
                                 @foreach ($guild->raidGroups as $raidGroup)
                                     <option value="{{ $raidGroup->id }}" style="color:{{ $raidGroup->getColor() }};">

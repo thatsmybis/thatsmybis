@@ -17,10 +17,12 @@
                 <span class="text-muted fa-fw fas fa-"></span>
                 View
             </a>
-            <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
-                <span class="text-muted fa-fw fas fa-"></span>
-                History
-            </a>
+            @if (!isset($showEdit) || $showEdit)
+                <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
+                    <span class="text-muted fa-fw fas fa-sack"></span>
+                    Assign Loot
+                </a>
+            @endif
             @if (!isset($showEdit) || $showEdit)
                 <a class="dropdown-item" href="{{ route('guild.raids.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
                     <span class="text-muted fa-fw fas fa-pencil"></span>
@@ -31,6 +33,10 @@
                     copy
                 </a>
             @endif
+            <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
+                <span class="text-muted fa-fw fas fa-"></span>
+                History
+            </a>
             @if ($raid->archived_at)
                 <span class="dropdown-item disabled font-weight-bold text-danger">
                     ARCHIVED
