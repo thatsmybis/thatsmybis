@@ -299,7 +299,7 @@
                 </div>
 
                 <div class="row">
-                    <div class="col-12 mt-3 mb-3 bg-light rounded">
+                    <div class="col-12 mt-3 mb-3 bg-light rounded numbered-start">
                         @for ($i = 0; $i < $maxCharacters; $i++)
                             @php
                                 $characterId = 'characters.' . $i . '.id';
@@ -320,7 +320,7 @@
 
                                 <!-- Exempt -->
                                 <div class="col-lg-1 col-2 {{ $errors->has('characters.' . $i . '.is_exempt') ? 'text-danger font-weight-bold' : '' }}">
-                                    <div class="form-group text-center">
+                                    <div class="form-group mb-1 text-center">
                                         <label for="characters[{{ $i }}][is_exempt]">
                                             @if ($i == 0)
                                                 <span class="fas fa-fw fa-redo text-muted"></span>
@@ -328,13 +328,12 @@
                                                     Excused
                                                 </span>
                                             @else
-                                                <span class="fas fa-fw fa-redo text-muted"></span>
                                                 <span class="small text-muted">
                                                     excused
                                                 </span>
                                             @endif
                                         </label>
-                                        <div class="checkbox">
+                                        <div class="checkbox numbered text-muted">
                                             <label title="skip this character's attendance check">
                                                 <input data-index="{{ $i }}" class="js-attendance-skip" type="checkbox" name="characters[{{ $i }}][is_exempt]" value="1" autocomplete="off"
                                                     {{ old('characters.' . $i . '.is_exempt') && old('characters.' . $i . '.is_exempt') == 1  ? 'checked' : (!old('characters.' . $i . '.is_exempt') && $character && $character->pivot->is_exempt ? 'checked' : '') }}>
@@ -347,7 +346,7 @@
                                     <div class="row">
                                         <!-- Character dropdown -->
                                         <div class="col-xl-5 col-lg-5 col-12">
-                                            <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
+                                            <div class="form-group mb-1 {{ $errors->has('characters.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
 
                                                 <label for="characters[{{ $i }}][character_id]" class="font-weight-bold">
                                                     @if ($i == 0)
@@ -397,18 +396,25 @@
 
                                         <!-- Remarks dropdown -->
                                         <div class="col-lg-4 col-sm-6 col-12">
-                                            <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.remark_id') ? 'text-danger font-weight-bold' : '' }}">
+                                            <div class="form-group mb-1 {{ $errors->has('characters.' . $i . '.remark_id') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                <label for="characters[{{ $i }}][remark_id]" class="font-weight-bold">
-                                                    @if ($i == 0)
-                                                        <span class="fas fa-fw fa-quote-left text-muted"></span>
-                                                        Note
-                                                    @else
-                                                        <span class="sr-only">
-                                                            Note
-                                                        </span>
-                                                    @endif
-                                                </label>
+                                                <div class="d-flex justify-content-between">
+                                                    <div>
+                                                        <label for="characters[{{ $i }}][remark_id]" class="font-weight-bold full-width">
+                                                            @if ($i == 0)
+                                                                <span class="fas fa-fw fa-quote-left text-muted"></span>
+                                                                Note
+                                                            @else
+                                                                <span class="sr-only">
+                                                                    Note
+                                                                </span>
+                                                            @endif
+                                                        </label>
+                                                    </div>
+                                                    <div>
+                                                        <span data-index="{{ $i }}" class="js-show-notes text-link cursor-pointer font-weight-light">+ custom note</span>
+                                                    </div>
+                                                </div>
 
                                                 <select name="characters[{{ $i }}][remark_id]" class="form-control dark {{ $errors->has('characters.' . $i . '.remark_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
                                                     <option value="">
@@ -438,21 +444,18 @@
                                                     </div>
                                                 @endif
                                             </div>
-                                            <div class="text-right">
-                                                <span data-index="{{ $i }}" class="js-show-notes text-link cursor-pointer">+ custom note</span>
-                                            </div>
                                         </div>
 
                                         <!-- Credit slider -->
                                         <div class="col-lg-3 col-sm-6 col-12">
-                                            <div class="form-group text-center  mb-0 {{ $errors->has('characters.' . $i . '.credit') ? 'text-danger font-weight-bold' : '' }}">
+                                            <div class="form-group mb-1 text-center {{ $errors->has('characters.' . $i . '.credit') ? 'text-danger font-weight-bold' : '' }}">
 
                                                 <label for="characters[{{ $i }}][credit]" class="font-weight-bold">
                                                     @if ($i == 0)
                                                         <span class="fas fa-fw fa-user-chart text-muted"></span>
                                                         Attendance Credit
-                                                    @els
-e                                                        <span class="sr-only">
+                                                    @else
+                                                        <span class="sr-only">
                                                             Attendance Credit
                                                         </span>
                                                     @endif

@@ -378,10 +378,10 @@ ul.striped > li:nth-of-type(odd), ol.striped > li:nth-of-type(odd) {
 }
 
 /* Show numbers like in an ordered list */
-ul.numbered, ol.numbered {
+ul.numbered, ol.numbered, .numbered-start {
     counter-reset: numberedList;
 }
-ul.numbered .numbered::before, ol.numbered .numbered::before {
+ul.numbered .numbered::before, ol.numbered .numbered::before, .numbered-start .numbered::before {
     counter-increment: numberedList;
     content: counter(numberedList);
 }
