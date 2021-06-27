@@ -355,15 +355,18 @@ class RaidController extends Controller
             'raidGroups.role'
         ]);
 
+        $manualItemAssignmentCount = $manualAssignments = $raid->items()->whereNull('character_items.batch_id')->count();
+
         return view('raids.show', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'raid'          => $raid,
-            'remarks'       => Raid::remarks(),
-            'showEditCharacter'     => $showEditCharacter,
-            'showEditCharacterLoot' => $showEditCharacterLoot,
-            'showEditRaid'          => $showEditRaid,
-            'showOfficerNote'       => $showOfficerNote,
+            'currentMember'             => $currentMember,
+            'guild'                     => $guild,
+            'manualItemAssignmentCount' => $manualItemAssignmentCount,
+            'raid'                      => $raid,
+            'remarks'                   => Raid::remarks(),
+            'showEditCharacter'         => $showEditCharacter,
+            'showEditCharacterLoot'     => $showEditCharacterLoot,
+            'showEditRaid'              => $showEditRaid,
+            'showOfficerNote'           => $showOfficerNote,
         ]);
     }
 
@@ -498,8 +501,9 @@ class RaidController extends Controller
         foreach ($newLogs as $key => $newLog) {
             // Filter out any duplicates in the input
             foreach ($newLogs as $otherKey => $possibleDuplicate) {
-                if (!$key != $otherKey && $newLog['name'] == $possibleDuplicate['name']) {
+                if ($key != $otherKey && $newLog['name'] == $possibleDuplicate['name']) {
                     unset($newLogs[$key]);
+                    continue 2;
                 }
             }
 
@@ -510,7 +514,7 @@ class RaidController extends Controller
                 }
             }
 
-            if (!$exists && $newLog['name']) {
+            if (!$exists && trim($newLog['name'])) {
                 $toAdd[] = [
                     'name'    => $newLog['name'],
                     'raid_id' => $raidId,
