@@ -8,7 +8,7 @@
     if (isset($item) && $item) {
         $oldIsReceived = old($name . '.' . $i . '.is_received');
         $oldIsOffspec  = old($name . '.' . $i . '.is_offspec');
-        $oldReceivedAt = old($name . '.' . $i . '.received_at');
+        $oldReceivedAt = old($name . '.' . $i . '.new_received_at');
         $oldRaidId     = old($name . '.' . $i . '.new_raid_id');
     }
 @endphp
@@ -35,11 +35,11 @@
     </li>
     @if ($name == 'received')
         <li class="list-inline-item">
-            <label for="{{ $name }}[{{ $index }}][new_received_at]" class="sr-only font-weight-light">
+            <label for="{{ $name }}[{{ $index }}][date_input]" class="sr-only font-weight-light">
                 Date
             </label>
-            <input name="{{ $name }}[{{ $index }}][new_received_at]" value="{{ $oldReceivedAt ? $oldReceivedAt : '' }}"
-                min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="leave blank to keep existing" class="form-control dark slim-date" autocomplete="off">
+            <input class="js-date" type="text" name="{{ $name }}[{{ $index }}][new_received_at]" hidden value="{{ $oldReceivedAt ? $oldReceivedAt : '' }}">
+            <input value="" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="leave blank to keep existing" class="js-date-input form-control dark slim-date" autocomplete="off">
         </li>
         <li class="list-inline-item">
             <label for="{{ $name }}[{{ $index }}][new_raid_id]" class="sr-only font-weight-light">
