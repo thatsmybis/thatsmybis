@@ -38,7 +38,7 @@ class Raid extends Model
         'archived_at',
         'public_note',
         'officer_note',
-        'logs',
+        'logs_deprecated',
     ];
 
     /**
@@ -50,7 +50,7 @@ class Raid extends Model
     ];
 
     public function batches() {
-        return $this->hasMany(Batch::class)->orderBy('id');
+        return $this->hasMany(Batch::class)->orderBy('batches.name');
     }
 
     public function characters() {
@@ -107,6 +107,10 @@ class Raid extends Model
             ->withTimeStamps();
 
         return ($query);
+    }
+
+    public function logs() {
+        return $this->hasMany(Log::class)->orderBy('logs.name');
     }
 
     public function member() {

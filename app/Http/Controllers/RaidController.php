@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Guild, Instance, Raid, RaidGroup};
+use App\{AuditLog, Guild, Instance, Log, Raid, RaidGroup};
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Kodeine\Acl\Models\Eloquent\Permission;
@@ -59,7 +60,6 @@ class RaidController extends Controller
         $createValues['name']         = request()->input('name');
         $createValues['public_note']  = request()->input('public_note');
         $createValues['officer_note'] = request()->input('officer_note');
-        $createValues['logs']         = request()->input('logs');
 
         $createValues['slug']         = slug(request()->input('name'));
         $createValues['guild_id']     = $guild->id;
@@ -145,7 +145,6 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        // TODO: Is this permission check ok? Different permission?
         if (!$currentMember->hasPermission('edit.raid-loot')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
@@ -166,6 +165,7 @@ class RaidController extends Controller
             $raid->load([
                 'characters',
                 'instances',
+                'logs',
                 'raidGroups'
             ]);
         }
@@ -186,12 +186,12 @@ class RaidController extends Controller
             $originalRaid = clone $raid;
             $raid->id     = null;
             $raid->name   = $raid->name . ' Copy';
-            $raid->cancelled_at = null;
-            $raid->archived_at  = null;
-            $raid->logs         = null;
-            $raid->member_id    = null;
-            $raid->created_at   = null;
-            $raid->updated_at   = null;
+            $raid->cancelled_at    = null;
+            $raid->archived_at     = null;
+            $raid->logs_deprecated = null;
+            $raid->member_id       = null;
+            $raid->created_at      = null;
+            $raid->updated_at      = null;
             $raid->characters->transform(function ($character) {
                 $character->pivot->raid_id      = null;
                 $character->pivot->is_exempt    = null;
@@ -230,6 +230,12 @@ class RaidController extends Controller
 
         $showArchived = request()->input('show_archived');
 
+        $instances = Cache::remember('instances:expansion:' . $guild->expansion_id,
+            env('CACHE_INSTANCES_SECONDS', 600),
+            function () use ($guild) {
+                return Instance::where('expansion_id', $guild->expansion_id)->get();
+        });
+
         $guild->load(['allCharacters', 'members', 'raidGroups', 'raidGroups.role']);
 
         $query = Raid::select([
@@ -253,6 +259,12 @@ class RaidController extends Controller
         if (!empty(request()->input('character_id'))) {
             $query = $query->leftJoin('raid_characters AS raid_characters2', 'raid_characters2.raid_id', '=', 'raids.id')
                 ->where('raid_characters2.character_id', request()->input('character_id'));
+        }
+
+        if (!empty(request()->input('item_instance_id'))) {
+            $query = $query
+                ->join('raid_instances', 'raid_instances.raid_id', 'raids.id')
+                ->where('raid_instances.instance_id', request()->input('item_instance_id'));
         }
 
         if (!empty(request()->input('member_id'))) {
@@ -281,6 +293,7 @@ class RaidController extends Controller
         return view('raids.list', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'instances'     => $instances,
             'raids'         => $raids,
             'showArchived'  => $showArchived,
             'showEdit'      => $showEdit,
@@ -392,7 +405,7 @@ class RaidController extends Controller
         $updateValues['name']         = request()->input('name');
         $updateValues['public_note']  = request()->input('public_note');
         $updateValues['officer_note'] = request()->input('officer_note');
-        $updateValues['logs']         = request()->input('logs');
+        $updateValues['logs_deprecated'] = request()->input('logs_deprecated');
 
         $updateValues['slug']         = slug(request()->input('name'));
         $updateValues['cancelled_at'] = request()->input('is_cancelled') && request()->input('is_cancelled') == 1 ? ($raid->cancelled_at ? $raid->cancelled_at : getDateTime()) : null;
@@ -421,6 +434,19 @@ class RaidController extends Controller
         // Sync instances
         $instances = $this->filterInstanceInputs(request()->input('instance_id'));
         $raid->instances()->sync($instances);
+
+        // Replace old logs with new ones
+        $raid->logs()->delete();
+        $raid->logs()->createMany(request()->input('logs'));
+        // $newLogs = [];
+        // foreach (request()->input('logs') as $log) {
+        //     $newLogs[] = [
+        //         'raid_id' => $raid->id,
+        //         'name' => $log['name'],
+        //     ];
+        // }
+        // Log::createMany($newLogs);
+        // TODO: get this working
 
         // Sync raid groups
         $raidGroups = $this->filterRaidGroupInputs(request()->input('raid_group_id'));
@@ -461,7 +487,6 @@ class RaidController extends Controller
         return $instances;
     }
 
-
     // Removes duplicates, indexes array by ID.
     private function filterRaidGroupInputs($raidGroupInputs) {
         $raidGroupInputs = array_filter($raidGroupInputs, function ($raidGroup) { return $raidGroup; });
@@ -480,7 +505,8 @@ class RaidController extends Controller
             'name'            => 'required|string|max:75',
             'public_note'     => 'nullable|string|max:250',
             'officer_note'    => 'nullable|string|max:250',
-            'logs'            => 'nullable|string|max:250',
+            'logs_deprecated' => 'nullable|string|max:250',
+            'logs.*.name'     => 'nullable|string|max:250',
             'instance_id.*'   => [
                 'nullable',
                 'integer',
