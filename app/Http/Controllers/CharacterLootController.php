@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\{AuditLog, Character, Item};
+use App\Http\Controllers\AssignLootController;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class CharacterLootController extends Controller
 {
@@ -41,6 +44,9 @@ class CharacterLootController extends Controller
         }
 
         $character = $character->load(['member', 'raidGroup', 'raidGroup.role', 'received', 'recipes', 'wishlist']);
+        $guild->load(['raids' => function ($query) {
+            return $query->limit(AssignLootController::RAID_HISTORY_LIMIT);
+        }]);
 
         $showPrios = false;
         if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $currentMember->hasPermission('view.prios'))) {
@@ -127,7 +133,14 @@ class CharacterLootController extends Controller
             'wishlist.*.item_id'     => 'nullable|integer|exists:items,item_id',
             'wishlist.*.is_received' => 'nullable|boolean',
             'wishlist.*.is_offspec'  => 'nullable|boolean',
-            'received.*.item_id' => 'nullable|integer|exists:items,item_id',
+            'received.*.item_id'     => 'nullable|integer|exists:items,item_id',
+            'received.*.is_offspec'  => 'nullable|boolean',
+            'received.*.new_received_at' => 'nullable|date|before:tomorrow|after:2004-09-22',
+            'received.*.new_raid_id'    => [
+                'nullable',
+                'integer',
+                Rule::exists('raids', 'id')->where('raids.guild_id', $guild->id),
+            ],
             'recipes.*.item_id'  => 'nullable|integer|exists:items,item_id',
             'public_note'        => 'nullable|string|max:140',
             'officer_note'       => 'nullable|string|max:140',
@@ -263,6 +276,14 @@ class CharacterLootController extends Controller
                             $newValues['received_at'] = null;
                         }
                     }
+                    // Received at date changed
+                    if (isset($inputItem['new_received_at'])) {
+                        $newValues['received_at'] = Carbon::parse($inputItem['new_received_at'])->toDateTimeString();
+                    }
+                    // Raid changed
+                    if (isset($inputItem['new_raid_id']) && $itemType == 'received') {
+                        $newValues['raid_id'] = $inputItem['new_raid_id'];
+                    }
                     // Is Offspec flag changed
                     if ($updateFlags && $existingItem->pivot->is_offspec != $inputItem['is_offspec']) {
                         if ($inputItem['is_offspec']) {
@@ -300,6 +321,7 @@ class CharacterLootController extends Controller
                     'description'  => $currentMember->username . ' removed item from a character (' . $itemType . ')' . $message,
                     'type'         => $itemType,
                     'member_id'    => $currentMember->id,
+                    'raid_id'      => $existingItem->pivot->raid_id,
                     'guild_id'     => $currentMember->guild_id,
                     'character_id' => $character->id,
                     'item_id'      => $existingItem->item_id,
@@ -322,12 +344,24 @@ class CharacterLootController extends Controller
                 $isReceived = isset($inputItem['is_received']) ? 1 : 0;
                 $isOffspec  = isset($inputItem['is_offspec']) ? 1 : 0;
 
+                $receivedAt = null;
+                if (isset($inputItem['new_received_at'])) {
+                    $receivedAt = Carbon::parse($inputItem['new_received_at'])->toDateTimeString();
+                }
+
+                $raidId = null;
+                if (isset($inputItem['new_raid_id']) && $itemType == 'received') {
+                    $raidId = $inputItem['new_raid_id'];
+                }
+
                 $toAdd[] = [
                     'item_id'      => $inputItem['item_id'],
                     'is_received'  => $isReceived,
                     'is_offspec'   => $isOffspec,
                     'character_id' => $character->id,
                     'added_by'     => $currentMember->id,
+                    'received_at'  => $receivedAt,
+                    'raid_id'      => $raidId,
                     'type'         => $itemType,
                     'order'        => $i,
                     'created_at'   => $now,
@@ -341,6 +375,7 @@ class CharacterLootController extends Controller
                         . ($itemType == Item::TYPE_RECEIVED && $markAsReceived ? ' (prios and wishlists marked received)' : null),
                     'type'         => $itemType,
                     'member_id'    => $currentMember->id,
+                    'raid_id'      => $raidId,
                     'guild_id'     => $currentMember->guild_id,
                     'character_id' => $character->id,
                     'item_id'      => $inputItem['item_id'],
@@ -360,17 +395,16 @@ class CharacterLootController extends Controller
             $auditMessage = '';
 
             // These keys only exist if we're changing them.
-            if (isset($item['is_received'])) {
+            if (isset($item['is_received']) && $itemType != 'received') {
                 $newValues['is_received'] = $item['is_received'];
                 if (!$item['is_received']) {
                     $newValues['received_at'] = null;
                 }
                 $auditMessage .= ($item['is_received'] ? 'set as received, ' : 'set as unreceived, ');
             }
-            // Don't bother showing this until we have a manual received date input
             if (isset($item['received_at'])) {
                 $newValues['received_at'] = $item['received_at'];
-                // $auditMessage .= ($item['received_at'] ? 'added a received date, ' : 'removed received date, ');
+                $auditMessage .= 'set received date, ';
             }
             if (isset($item['is_offspec'])) {
                 $newValues['is_offspec'] = $item['is_offspec'];
@@ -381,6 +415,10 @@ class CharacterLootController extends Controller
                 if ($auditMessage) {
                     $auditMessage .= 'order ' . $item['old_order'] . ' -> ' . $item['order'] . ', ';
                 }
+            }
+            if (isset($item['raid_id']) && $itemType == 'received') {
+                $newValues['raid_id'] = $item['raid_id'];
+                $auditMessage .= 'changed raid, ';
             }
             $auditMessage = rtrim($auditMessage, ', ');
 
@@ -405,6 +443,7 @@ class CharacterLootController extends Controller
                     'description'  => $currentMember->username . ' changed an item on ' . $character->name . ' (' . $itemType . '): ' . $auditMessage,
                     'type'         => $itemType,
                     'member_id'    => $currentMember->id,
+                    'raid_id'      => isset($newValues['raid_id']) ? $newValues['raid_id'] : null,
                     'guild_id'     => $currentMember->guild_id,
                     'character_id' => $character->id,
                     'item_id'      => $item['item_id'],
@@ -418,6 +457,7 @@ class CharacterLootController extends Controller
                 'description'  => $currentMember->username . ' re-ordered items for a character (' . $itemType . ' items)',
                 'type'         => $itemType,
                 'member_id'    => $currentMember->id,
+                'raid_id'      => null,
                 'guild_id'     => $currentMember->guild_id,
                 'character_id' => $character->id,
                 'item_id'      => null,

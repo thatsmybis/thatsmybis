@@ -139,12 +139,15 @@ class Character extends Model
                 'items.*',
                 'added_by_members.username AS added_by_username',
                 'raid_groups.name          AS raid_group_name',
+                'raids.name                AS raid_name',
+                'raids.slug                AS raid_slug',
                 'instances.id              AS instance_id',
                 'guild_items.tier          AS guild_tier',
             ])
             ->join(    'characters',                  'characters.id',                    '=', 'character_items.character_id')
             ->leftJoin('members AS added_by_members', 'added_by_members.id',              '=', 'character_items.added_by')
             ->leftJoin('raid_groups',                 'raid_groups.id',                   '=', 'character_items.raid_group_id')
+            ->leftJoin('raids',                       'character_items.raid_id',          '=', 'raids.id')
             ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
             ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
@@ -166,6 +169,7 @@ class Character extends Model
                 'officer_note',
                 'is_offspec',
                 'raid_group_id',
+                'raid_id',
                 'received_at',
                 'created_at'
             ])
@@ -249,6 +253,7 @@ class Character extends Model
                 'is_received',
                 'received_at',
                 'raid_group_id',
+                'raid_id',
                 'created_at',
             ])
             ->withTimeStamps();

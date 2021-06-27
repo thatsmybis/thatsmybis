@@ -157,6 +157,7 @@ class AssignLootController extends Controller
                 'integer',
                 Rule::exists('batches', 'id')->where('guild_id', $guild->id),
             ],
+            'new_date' => 'nullable|date|before:tomorrow|after:2004-09-22',
         ]);
         $this->validate(request(), $validationRules, []);
 
@@ -169,6 +170,7 @@ class AssignLootController extends Controller
 
         $raidGroupId = request()->input('raid_group_id');
         $raidId = request()->input('raid_id');
+        $newDate = request()->input('new_date');
 
         if ($raidId != $batch->raid_id) {
             $updateValues['raid_id'] = $raidId;
@@ -188,11 +190,23 @@ class AssignLootController extends Controller
                 $description .= " (raid group removed)";
             }
         }
+        if ($newDate) {
+            $newDate = Carbon::parse($newDate)->toDateTimeString();
+            $updateValues['received_at'] = $newDate;
+            $description .= " (item dates changed to {$newDate} UTC)";
+        }
 
         if (count($updateValues) > 0) {
             DB::table('character_items')
                 ->where(['batch_id' => $batch->id])
                 ->update($updateValues);
+        }
+
+
+        if ($newDate) {
+            $newDate = Carbon::parse($newDate)->toDateTimeString();
+            unset($updateValues['received_at']);
+            $updateValues['created_at'] = $newDate;
         }
 
         $name = request()->input('name');
