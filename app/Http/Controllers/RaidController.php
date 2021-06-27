@@ -436,17 +436,9 @@ class RaidController extends Controller
         $raid->instances()->sync($instances);
 
         // Replace old logs with new ones
-        $raid->logs()->delete();
-        $raid->logs()->createMany(request()->input('logs'));
-        // $newLogs = [];
-        // foreach (request()->input('logs') as $log) {
-        //     $newLogs[] = [
-        //         'raid_id' => $raid->id,
-        //         'name' => $log['name'],
-        //     ];
-        // }
-        // Log::createMany($newLogs);
-        // TODO: get this working
+        // $raid->logs()->delete();
+        // $raid->logs()->createMany(request()->input('logs'));
+        $this->syncLogs(request()->input('logs'), $raid->logs, $raid->id);
 
         // Sync raid groups
         $raidGroups = $this->filterRaidGroupInputs(request()->input('raid_group_id'));
@@ -497,6 +489,54 @@ class RaidController extends Controller
             $raidGroups[$raidGroup] = $raidGroup;
         }
         return $raidGroups;
+    }
+
+    private function syncLogs($newLogs, $oldLogs, $raidId) {
+        $toAdd = [];
+        $toDrop = [];
+
+        foreach ($newLogs as $key => $newLog) {
+            // Filter out any duplicates in the input
+            foreach ($newLogs as $otherKey => $possibleDuplicate) {
+                if (!$key != $otherKey && $newLog['name'] == $possibleDuplicate['name']) {
+                    unset($newLogs[$key]);
+                }
+            }
+
+            $exists = false;
+            foreach ($oldLogs as $oldLog) {
+                if ($oldLog->name == $newLog['name']) {
+                    $exists = true;
+                }
+            }
+
+            if (!$exists && $newLog['name']) {
+                $toAdd[] = [
+                    'name'    => $newLog['name'],
+                    'raid_id' => $raidId,
+                ];
+                unset($newLogs[$key]);
+            }
+        }
+
+        // See which logs no longer exist and need to be rmoved
+        foreach ($oldLogs as $oldLog) {
+            $found = false;
+            foreach ($newLogs as $newLog) {
+                if ($oldLog->name == $newLog['name']) {
+                    $found = true;
+                }
+            }
+
+            if (!$found) {
+                $toDrop[] = $oldLog->id;
+            }
+        }
+
+        Log::insert($toAdd);
+        Log::whereIn('id', $toDrop)->delete();
+
+        return true;
     }
 
     private function getValidationRules($guild) {
