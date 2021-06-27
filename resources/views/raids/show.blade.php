@@ -163,7 +163,7 @@
                                                     </li>
                                                 @endif
                                                 <li class="list-inline-item">
-                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="text-white">
+                                                    <a href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="text-white">
                                                         {{ $batch->name ? $batch->name : "Batch {$batch->id}" }}
                                                     </a>
                                                 </li>

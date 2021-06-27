@@ -63,7 +63,6 @@ class Item extends Model
                 'raid_groups.name AS raid_group_name',
                 'raid_group_roles.color AS raid_group_color'])
             ->whereNull('characters.inactive_at')
-
             ->leftJoin('raid_groups', function ($join) {
                 $join->on('raid_groups.id', 'characters.raid_group_id');
             })

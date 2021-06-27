@@ -284,6 +284,9 @@
                                                     </li>
                                                 @endif
                                                 @if ($log->other_member_id)
+                                                    <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
                                                     <li class="list-inline-item">
                                                         <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->other_member_slug]) }}" class="text-muted">
                                                             {{ $log->other_member_username }}
@@ -291,6 +294,9 @@
                                                     </li>
                                                 @endif
                                                 @if ($log->character_id)
+                                                    <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
                                                     <li class="list-inline-item">
                                                         <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'nameSlug' => $log->character_slug]) }}" class="text-muted">
                                                             {{ $log->character_name }}
@@ -299,15 +305,24 @@
                                                 @endif
                                                 @if ($log->instance_id)
                                                     <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
+                                                    <li class="list-inline-item text-muted">
                                                         {{ $log->instance_name }}
                                                     </li>
                                                 @endif
                                                 @if ($log->item_source_id)
                                                     <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
+                                                    <li class="list-inline-item text-muted">
                                                         {{ $log->item_source_name }}
                                                     </li>
                                                 @endif
                                                 @if ($log->raid_id)
+                                                    <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
                                                     <li class="list-inline-item text-muted">
                                                         <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $log->raid_id, 'raidSlug' => $log->raid_slug]) }}" class="text-muted">
                                                             {{ $log->raid_name }}
@@ -317,6 +332,9 @@
                                                 @endif
                                                 @if ($log->raid_group_id)
                                                     <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
+                                                    <li class="list-inline-item text-muted">
                                                         <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_group_id' => $log->raid_group_id]) }}" class="text-muted">
                                                             {{ $log->raid_group_name }}
                                                         </a>
@@ -324,11 +342,17 @@
                                                 @endif
                                                 @if ($log->role_id)
                                                     <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
+                                                    <li class="list-inline-item text-muted">
                                                         {{ $log->role_name }}
                                                     </li>
                                                 @endif
 
                                                 @if ($log->batch_id)
+                                                    <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
                                                     <li class="list-inline-item text-muted">
                                                         <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $log->batch_id]) }}" class="small text-muted">
                                                             {{ $log->batch_name ? $log->batch_name : 'Batch ' . $log->batch_id }}

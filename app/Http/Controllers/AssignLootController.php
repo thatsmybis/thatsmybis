@@ -31,6 +31,22 @@ class AssignLootController extends Controller
 
     const RESULTS_PER_PAGE = 20;
 
+    private function getValidationRules($guild) {
+        return [
+            'name' => 'nullable|string|max:75',
+            'raid_group_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
+            ],
+            'raid_id'       => [
+                'nullable',
+                'integer',
+                Rule::exists('raids', 'id')->where('raids.guild_id', $guild->id),
+            ],
+        ];
+    }
+
     /**
      * Show the mass input page
      *
@@ -41,6 +57,11 @@ class AssignLootController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        if (!$currentMember->hasPermission('edit.raid-loot')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
         $guild->load([
             'characters',
             'raidGroups',
@@ -49,11 +70,6 @@ class AssignLootController extends Controller
             },
         ]);
 
-        if (!$currentMember->hasPermission('edit.raid-loot')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
-        }
-
         $raid = null;
         if (!empty(request()->input('raid_id'))) {
             $raid = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])
@@ -61,12 +77,153 @@ class AssignLootController extends Controller
                 ->first();
         }
 
-        return view('item.assignLoot', [
+        return view('item.assignLoot.create', [
             'currentMember'    => $currentMember,
             'guild'            => $guild,
             'maxItems'         => self::MAX_ITEMS,
             'raid'             => $raid,
             'raidHistoryLimit' => self::RAID_HISTORY_LIMIT,
+        ]);
+    }
+
+    /**
+     * Show page to edit an assignment
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function assignLootShowEdit($guildId, $guildSlug, $id)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.raid-loot')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $batch = Batch::where([
+                'id'       => $id,
+                'guild_id' => $guild->id,
+            ])
+            ->with(['items' => function ($query) { return $query->orderBy('items.name');}])
+            ->firstOrFail();
+
+        $guild->load([
+            'allCharacters',
+            'raidGroups',
+            'raids' => function ($query) {
+                return $query->limit(self::RAID_HISTORY_LIMIT);
+            },
+        ]);
+
+        if ($batch->raid_id) {
+            $raid = Raid::find($batch->raid_id);
+            // Raids input should always include this raid
+            $guild->setRelation(
+                'raids',
+                $guild->raids
+                    ->merge(collect([$raid]))
+                    ->sortByDesc('date')
+                    ->values()
+            );
+        }
+
+        return view('item.assignLoot.edit', [
+            'batch'            => $batch,
+            'currentMember'    => $currentMember,
+            'guild'            => $guild,
+            'raidHistoryLimit' => self::RAID_HISTORY_LIMIT,
+        ]);
+    }
+
+    /**
+     * Submit assignment edit
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function assignLootSubmitEdit($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.raid-loot')) {
+            request()->session()->flash('status', 'You don\'t have permissions to submit that.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $validationRules = array_merge($this->getValidationRules($guild), [
+            'id' => [
+                'required',
+                'integer',
+                Rule::exists('batches', 'id')->where('guild_id', $guild->id),
+            ],
+        ]);
+        $this->validate(request(), $validationRules, []);
+
+        $batch = Batch::find(request()->input('id'));
+        $itemCount = DB::table('character_items')->where('batch_id', $batch->id)->count();
+
+        $description = $currentMember->username . " updated details for assigned loot (containing {$itemCount} items)";
+
+        $updateValues = [];
+
+        $raidGroupId = request()->input('raid_group_id');
+        $raidId = request()->input('raid_id');
+
+        if ($raidId != $batch->raid_id) {
+            $updateValues['raid_id'] = $raidId;
+            if ($raidId) {
+                $raid = Raid::find($raidId);
+                $description .= " (raid changed to {$raid->name})";
+            } else {
+                $description .= " (raid removed)";
+            }
+        }
+        if ($raidGroupId != $batch->raid_group_id) {
+            $updateValues['raid_group_id'] = $raidGroupId;
+            if ($raidGroupId) {
+                $raidGroup = RaidGroup::find($raidGroupId);
+                $description .= " (raid group changed to {$raidGroup->name})";
+            } else {
+                $description .= " (raid group removed)";
+            }
+        }
+
+        if (count($updateValues) > 0) {
+            DB::table('character_items')
+                ->where(['batch_id' => $batch->id])
+                ->update($updateValues);
+        }
+
+        $name = request()->input('name');
+        if ($name != $batch->name) {
+            $updateValues['name'] = request()->input('name');
+            if ($name) {
+                $description .= " (name changed to {$name})";
+            } else {
+                $description .= " (name set to default)";
+            }
+        }
+
+        $batch->update($updateValues);
+
+        AuditLog::create([
+            'description'   => $description,
+            'type'          => AuditLog::TYPE_ASSIGN,
+            'member_id'     => $currentMember->id,
+            'guild_id'      => $currentMember->guild_id,
+            'batch_id'      => $batch->id,
+            'raid_group_id' => $raidGroupId,
+            'raid_id'       => $raidId,
+            'created_at'    => getDateTime(),
+        ]);
+
+        request()->session()->flash('status', "Successfully updated loot assignment (containing {$itemCount} items).");
+
+        return redirect()->route('item.assignLoot.list', [
+            'guildId'   => $guild->id,
+            'guildSlug' => $guild->slug,
+            'batch_id'  => $batch->id,
         ]);
     }
 
@@ -125,6 +282,11 @@ class AssignLootController extends Controller
             })
             ->groupBy('batches.id');
 
+        if (!empty(request()->input('batch_id'))) {
+            $query = $query->where('batches.id', request()->input('batch_id'));
+            $resources[] = Batch::where([['guild_id', $guild->id], ['id', request()->input('batch_id')]])->first();
+        }
+
         if (!empty(request()->input('min_date'))) {
             $query = $query->where('batches.created_at', '>',  request()->input('min_date'));
         }
@@ -182,18 +344,12 @@ class AssignLootController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $validationRules = [
-            'name' => 'nullable|string|max:75',
-            'raid_group_id' => [
-                'nullable',
-                'integer',
-                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
-            ],
-            'raid_id'       => [
-                'nullable',
-                'integer',
-                Rule::exists('raids', 'id')->where('raids.guild_id', $guild->id),
-            ],
+        if (!$currentMember->hasPermission('edit.raid-loot')) {
+            request()->session()->flash('status', 'You don\'t have permissions to submit that.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $validationRules = array_merge($this->getValidationRules($guild), [
             'items.*.id' => [
                 'nullable',
                 'integer',
@@ -203,7 +359,7 @@ class AssignLootController extends Controller
                 'nullable',
                 'integer',
                 'exists:characters,id',
-        ],
+            ],
             'item.*.is_offspec'     => 'nullable|boolean',
             'item.*.note'           => 'nullable|string|max:140',
             'item.*.officer_note'   => 'nullable|string|max:140',
@@ -215,7 +371,7 @@ class AssignLootController extends Controller
             'delete_wishlist_items'   => 'nullable|boolean',
             'delete_prio_items'       => 'nullable|boolean',
             'skip_missing_characters' => 'nullable|boolean',
-        ];
+        ]);
 
         // We're not skipping characters, so add the rule that character_id must be set.
         if (!request()->input('skip_missing_characters')) {
@@ -228,11 +384,6 @@ class AssignLootController extends Controller
         ];
 
         $this->validate(request(), $validationRules, $validationMessages);
-
-        if (!$currentMember->hasPermission('edit.raid-loot')) {
-            request()->session()->flash('status', 'You don\'t have permissions to submit that.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
-        }
 
         $raidGroupInputId = request()->input('raid_group_id');
         $raidInputId      = request()->input('raid_id');

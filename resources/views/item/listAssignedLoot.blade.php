@@ -26,7 +26,13 @@
                         @foreach ($resources as $resource)
                             <div>
                                 <div class="bg-light rounded pt-1 pb-1 pl-3 pr-3 mr-3 mb-3">
-                                    @if($resource instanceof \App\Item)
+                                    @if($resource instanceof \App\Batch)
+                                        @if ($resource->name)
+                                            {{ $resource->name }}
+                                        @else
+                                            Batch {{ $resource->id }}
+                                        @endif
+                                    @elseif($resource instanceof \App\Item)
                                         @include('partials/item', ['item' => $resource, 'wowheadLink' => false])
                                     @elseif($resource instanceof \App\Character)
                                         @include('character/partials/header', ['character' => $resource, 'headerSize' => 1, 'showEdit' => false, 'showIcon' => false])
@@ -198,17 +204,23 @@
                                         <div class="p-2">
                                             <ul class="list-inline">
                                                 <li class="list-inline-item">
-                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="text-white">
+                                                    <a href="{{ route('item.assignLoot.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batchId' => $batch->id]) }}" class="text-white">
                                                         {{ $batch->name ? $batch->name : "Batch {$batch->id}" }}
                                                     </a>
                                                 </li>
-                                                <li class="list-inline-item">
-                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}">
+                                                <li class="list-inline-item text-muted">
+                                                    &sdot;
+                                                </li>
+                                                <li class="list-inline-item text-muted">
+                                                    <a href="{{ route('item.assignLoot.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batchId' => $batch->id]) }}">
                                                         <span class="text-uncommon">{{ $batch->item_count }}</span> <span class="text-muted">items</span>
                                                     </a>
                                                 </li>
 
                                                 @if ($batch->raid_id)
+                                                    <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
                                                     <li class="list-inline-item text-muted">
                                                         <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $batch->raid_id, 'raidSlug' => $batch->raid_slug]) }}" class="text-muted">
                                                             {{ $batch->raid_name }}
@@ -218,14 +230,30 @@
                                                 @endif
                                                 @if ($batch->raid_group_id)
                                                     <li class="list-inline-item text-muted">
+                                                        &sdot;
+                                                    </li>
+                                                    <li class="list-inline-item text-muted">
                                                         <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $batch->raid_group_id]) }}" class="text-muted">
                                                             @include('partials/raidGroup', ['raidGroupName' => $batch->raid_group_name, 'raidGroupColor' => getHexColorFromDec($batch->raid_group_color)])
                                                         </a>
                                                     </li>
                                                 @endif
+                                                <li class="list-inline-item text-muted">
+                                                    &sdot;
+                                                </li>
+                                                <li class="list-inline-item text-muted">
+                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="">
+                                                        history
+                                                    </a>
+                                                </li>
                                             </ul>
+                                            @if ($batch->note)
+                                                <div class="text-muted small">
+                                                    {{ $batch->note }}
+                                                </div>
+                                            @endif
                                         </div>
-                                    </a>
+                                    </div>
                                 </li>
                             @endforeach
                         @else
