@@ -116,15 +116,24 @@
 
                             @if ($raid && !$copy)
                                 <div class="col-lg-6 col-12 {{ $errors->has('raid.is_cancelled') ? 'text-danger font-weight-bold' : '' }}">
-                                    <div class="form-group mb-0">
-                                        <label>
-                                            &nbsp;
-                                        </label>
+                                    <div class="form-group mt-2">
                                         <div class="checkbox text-warning">
                                             <label>
                                                 <input type="checkbox" name="is_cancelled" value="1" class="" autocomplete="off"
                                                     {{ old('is_cancelled') && old('is_cancelled') == 1 ? 'checked' : ($raid && $raid->cancelled_at ? 'checked' : '') }}>
-                                                    Cancelled <small class="text-muted">there is no delete option</small>
+                                                    Cancelled <small class="text-muted">attendance will not count</small>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-lg-6 col-12 {{ $errors->has('raid.is_archived') ? 'text-danger font-weight-bold' : '' }}">
+                                    <div class="form-group">
+                                        <div class="checkbox text-danger">
+                                            <label>
+                                                <input type="checkbox" name="is_archived" value="1" class="" autocomplete="off"
+                                                    {{ old('is_archived') && old('is_archived') == 1 ? 'checked' : ($raid && $raid->archived_at ? 'checked' : '') }}>
+                                                    Archived <small class="text-muted">raid will be hidden</small>
                                             </label>
                                         </div>
                                     </div>

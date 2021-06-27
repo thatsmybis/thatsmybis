@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Audit Log - ' . config('app.name'))
+@section('title', 'Assigned Loot - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -8,32 +8,9 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
-                        <span class="fas fa-fw fa-clipboard-list-check text-gold"></span>
-                        Audit Log
+                        <span class="fas fa-fw fa-gift text-gold"></span>
+                        Assigned Loot
                     </h1>
-                    <ul>
-                        <li class="small no-bullet font-italic">
-                            Whodunit?
-                        </li>
-                        @if (!$showPrios)
-                            <li class="small text-danger">
-                                Prios are hidden by your guild master(s)
-                            </li>
-                        @elseif ($guild->is_prio_private)
-                            <li class="small text-warning">
-                                Prios are hidden from raiders
-                            </li>
-                        @endif
-                        @if (!$showWishlist)
-                            <li class="small text-danger">
-                                Wishlists are hidden by your guild master(s)
-                            </li>
-                        @elseif ($guild->is_wishlist_private)
-                            <li class="small text-warning">
-                                Wishlists are hidden from raiders
-                            </li>
-                        @endif
-                    </ul>
                 </div>
             </div>
 
@@ -41,7 +18,7 @@
                 @if ($resources)
                     <div class="col-12 mb-3 text-5">
                         Filter:
-                        <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                        <a href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             reset
                         </a>
                     </div>
@@ -49,21 +26,10 @@
                         @foreach ($resources as $resource)
                             <div>
                                 <div class="bg-light rounded pt-1 pb-1 pl-3 pr-3 mr-3 mb-3">
-                                    @if($resource instanceof \App\Batch)
-                                        @if ($resource->name)
-                                            {{ $resource->name }}
-                                        @else
-                                            Batch {{ $resource->id }}
-                                        @endif
-                                        @if ($resource->note)
-                                            <p>
-                                                {{ $resource->note }}
-                                            </p>
-                                        @endif
+                                    @if($resource instanceof \App\Item)
+                                        @include('partials/item', ['item' => $resource, 'wowheadLink' => false])
                                     @elseif($resource instanceof \App\Character)
                                         @include('character/partials/header', ['character' => $resource, 'headerSize' => 1, 'showEdit' => false, 'showIcon' => false])
-                                    @elseif($resource instanceof \App\Item)
-                                        @include('partials/item', ['item' => $resource, 'wowheadLink' => false])
                                     @elseif($resource instanceof \App\Member)
                                         @include('member/partials/header', ['member' => $resource, 'discordUsername' => $resource->user->discord_username, 'headerSize' => 1, 'showEdit' => false, 'titlePrefix' => null])
                                     @elseif($resource instanceof \App\Raid)
@@ -180,49 +146,6 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-3 col-6">
-                    <div class="form-group">
-                        <label for="type" class="font-weight-bold">
-                            <span class="fas fa-fw fa-scroll-old text-muted"></span>
-                            Loot Type
-                        </label>
-                        <select name="type" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
-                            <option value="" data-tokens="">
-                                —
-                            </option>
-                            <option value="{{ \App\Item::TYPE_PRIO }}"
-                                data-tokens="{{ \App\Item::TYPE_PRIO }}"
-                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_PRIO ? 'selected' : ''}}>
-                                Prio
-                            </option>
-                            <option value="{{ \App\Item::TYPE_RECIPE }}"
-                                data-tokens="{{ \App\Item::TYPE_RECIPE }}"
-                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_RECIPE ? 'selected' : ''}}>
-                                Recipe
-                            </option>
-                            <option value="{{ \App\Item::TYPE_WISHLIST }}"
-                                data-tokens="{{ \App\Item::TYPE_WISHLIST }}"
-                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_WISHLIST ? 'selected' : ''}}>
-                                Wishlist
-                            </option>
-                            <option value="{{ 'received_all' }}"
-                                data-tokens="received_all"
-                                {{ Request::get('type') && Request::get('type') == 'received_all' ? 'selected' : ''}}>
-                                Received (all)
-                            </option>
-                            <option value="{{ \App\AuditLog::TYPE_ASSIGN }}"
-                                data-tokens="{{ \App\AuditLog::TYPE_ASSIGN }}"
-                                {{ Request::get('type') && Request::get('type') == \App\AuditLog::TYPE_ASSIGN ? 'selected' : ''}}>
-                                Received (via assign loot page)
-                            </option>
-                            <option value="{{ \App\Item::TYPE_RECEIVED }}"
-                                data-tokens="{{ \App\Item::TYPE_RECEIVED }}"
-                                {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_RECEIVED ? 'selected' : ''}}>
-                                Received (via character loot page)
-                            </option>
-                        </select>
-                    </div>
-                </div>
                 <div class="col-md-3 col-6">
                     <div class="form-group">
                         <label for="item_id" class="font-weight-bold">
@@ -258,80 +181,45 @@
             <div class="row">
                 <div class="col-12">
                     <ol class="no-bullet no-indent striped">
-                        @if ($logs->count())
-                            @foreach ($logs as $log)
+                        @if ($batches->count())
+                            @foreach ($batches as $batch)
                                 <li class="p-1 pl-3 rounded">
                                     <div class="d-flex flex-row">
                                         <div class="list-timestamp text-right text-muted p-2 small">
-                                            @if ($log->member_id)
-                                                <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->member_slug]) }}" class="text-muted">
-                                                    <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago
+                                            @if ($batch->member_id)
+                                                <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $batch->member_id, 'usernameSlug' => $batch->member_slug]) }}" class="text-muted">
+                                                    <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $batch->created_at }}"></span> ago
                                                 </a>
                                             @else
-                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago
+                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $batch->created_at }}"></span> ago
                                             @endif
                                         </div>
 
                                         <div class="p-2">
                                             <ul class="list-inline">
                                                 <li class="list-inline-item">
-                                                    {{ $log->description }}
+                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="text-white">
+                                                        {{ $batch->name ? $batch->name : "Batch {$batch->id}" }}
+                                                    </a>
+                                                </li>
+                                                <li class="list-inline-item">
+                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}">
+                                                        <span class="text-uncommon">{{ $batch->item_count }}</span> <span class="text-muted">items</span>
+                                                    </a>
                                                 </li>
 
-                                                @if ($log->item_id)
-                                                    <li class="list-inline-item">
-                                                        @include('partials/item', ['wowheadLink' => false, 'auditLink' => false, 'itemId' => $log->item_id, 'itemName' => $log->item_name, 'fontWeight' => 'light'])
-                                                    </li>
-                                                @endif
-                                                @if ($log->other_member_id)
-                                                    <li class="list-inline-item">
-                                                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->other_member_slug]) }}" class="text-muted">
-                                                            {{ $log->other_member_username }}
+                                                @if ($batch->raid_id)
+                                                    <li class="list-inline-item text-muted">
+                                                        <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $batch->raid_id, 'raidSlug' => $batch->raid_slug]) }}" class="text-muted">
+                                                            {{ $batch->raid_name }}
+                                                            <span class="js-timestamp small" data-timestamp="{{ $batch->raid_date }}" data-format="MMM D"></span>
                                                         </a>
                                                     </li>
                                                 @endif
-                                                @if ($log->character_id)
-                                                    <li class="list-inline-item">
-                                                        <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'nameSlug' => $log->character_slug]) }}" class="text-muted">
-                                                            {{ $log->character_name }}
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                @if ($log->instance_id)
+                                                @if ($batch->raid_group_id)
                                                     <li class="list-inline-item text-muted">
-                                                        {{ $log->instance_name }}
-                                                    </li>
-                                                @endif
-                                                @if ($log->item_source_id)
-                                                    <li class="list-inline-item text-muted">
-                                                        {{ $log->item_source_name }}
-                                                    </li>
-                                                @endif
-                                                @if ($log->raid_id)
-                                                    <li class="list-inline-item text-muted">
-                                                        <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $log->raid_id, 'raidSlug' => $log->raid_slug]) }}" class="text-muted">
-                                                            {{ $log->raid_name }}
-                                                            <span class="js-timestamp small" data-timestamp="{{ $log->raid_date }}" data-format="MMM D"></span>
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                @if ($log->raid_group_id)
-                                                    <li class="list-inline-item text-muted">
-                                                        <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_group_id' => $log->raid_group_id]) }}" class="text-muted">
-                                                            {{ $log->raid_group_name }}
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                @if ($log->role_id)
-                                                    <li class="list-inline-item text-muted">
-                                                        {{ $log->role_name }}
-                                                    </li>
-                                                @endif
-
-                                                @if ($log->batch_id)
-                                                    <li class="list-inline-item text-muted">
-                                                        <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $log->batch_id]) }}" class="small text-muted">
-                                                            {{ $log->batch_name ? $log->batch_name : 'Batch ' . $log->batch_id }}
+                                                        <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $batch->raid_group_id]) }}" class="text-muted">
+                                                            @include('partials/raidGroup', ['raidGroupName' => $batch->raid_group_name, 'raidGroupColor' => getHexColorFromDec($batch->raid_group_color)])
                                                         </a>
                                                     </li>
                                                 @endif
@@ -349,7 +237,7 @@
                 </div>
 
                 <div class="col-12 mt-3">
-                    {{ $logs->appends(request()->input())->links() }}
+                    {{ $batches->appends(request()->input())->links() }}
                 </div>
             </div>
         </div>

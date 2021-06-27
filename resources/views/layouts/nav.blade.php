@@ -333,7 +333,7 @@
                                 List Raids
                             </a>
                             <a class="dropdown-item" href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Past Loot
+                                Old Loot Assignments
                             </a>
                             @if ($viewRaids)
                                 <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">

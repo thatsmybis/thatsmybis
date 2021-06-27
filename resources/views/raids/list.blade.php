@@ -15,11 +15,25 @@
                         <li class="list-inline-item">
                             <h1 class="font-weight-medium mb-0">
                                 <span class="fas fa-fw fa-helmet-battle text-dk"></span>
+                                @if ($showArchived)
+                                    <span class="text-danger">Archived</span>
+                                @endif
                                 Raids
                             </h1>
                             <span class="small text-muted">
                                 times shown are local to you
                             </span>
+                            @if ($showArchived)
+                                &sdot;
+                                <a href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                    show unarchived raids
+                                </a>
+                            @else
+                                &sdot;
+                                <a href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'show_archived' => 1]) }}" class="small">
+                                    show archived raids
+                                </a>
+                            @endif
                         </li>
                     </ul>
                     <a class="btn btn-success" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
@@ -107,6 +121,12 @@
                                 <li class="pt-3 pb-3 pl-3 p-1 rounded">
 
                                     <ul class="list-inline">
+                                        @if ($raid->archived_at)
+                                            <li class="list-inline-item text-danger">
+                                                ARCHIVED
+                                            </li>
+                                        @endif
+
                                         @include('raids/partials/listRaid', ['bold' => true, 'text' => (!$isFuture || $raid->cancelled_at ? 'muted' : 'white'), 'raidGroup' => null])
 
                                         <li class="list-inline-item text-muted">
@@ -158,7 +178,7 @@
                         </ol>
                     @else
                         <p class="mt-4 ml-2  text-3">
-                            No raids found
+                            No {{ $showArchived ? 'archived' : '' }} raids found
                         </p>
                     @endif
                 </div>
