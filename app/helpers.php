@@ -21,6 +21,7 @@ function getAttendanceColor($percentage = 0) {
     return $color;
 }
 
+// Takes an integer, converts it to hex
 function getHexColorFromDec($color) {
     if ($color) {
         $color = dechex($color);
@@ -43,11 +44,11 @@ function getDateTime($format = 'Y-m-d H:i:s') {
 // Gets a CSS color for an expansion
 function getExpansionColor($expansionId) {
     switch ($expansionId) {
-        case 1:
+        case 1: // Classic
             return 'gold';
-        case 2:
+        case 2: // TBC
             return 'uncommon';
-        case 3:
+        case 3: // WOTLK
             return 'mage';
         default:
             return 'white';

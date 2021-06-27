@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Batch, Item};
+use App\{AuditLog, Batch, Instance, Item};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -25,6 +25,8 @@ class AssignLootController extends Controller
 
     // Maximum number of items that can be added at any one time
     const MAX_ITEMS = 150;
+
+    const RESULTS_PER_PAGE = 50;
 
     /**
      * Show the mass input page
@@ -56,12 +58,107 @@ class AssignLootController extends Controller
         ]);
     }
 
+    /**
+     * List the loot assignments made by this guild
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function listAssignedLoot($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $guild->load([
+            'raidGroups',
+        ]);
+
+        if (!$currentMember->hasPermission('edit.raid-loot')) {
+            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        }
+
+        $instances = Cache::remember('instances:expansion:' . $guild->expansion_id,
+            env('CACHE_INSTANCES_SECONDS', 600),
+            function () use ($guild) {
+                return Instance::where('expansion_id', $guild->expansion_id)->get();
+        });
+
+        $resources = [];
+
+        $query = Batch::select([
+                'batches.*',
+                'members.username AS member_username',
+                'members.slug     AS member_slug',
+                'raid_groups.name AS raid_group_name',
+                'raid_group_roles.color AS raid_group_color',
+                'raids.name       AS raid_name',
+                'raids.slug       AS raid_slug',
+                'raids.date       AS raid_date',
+                DB::raw('COUNT(DISTINCT `character_items`.`id`) AS `item_count`'),
+            ])
+            ->leftJoin('character_items', function ($join) {
+                $join->on('character_items.batch_id', '=', 'batches.id');
+            })
+            ->leftJoin('items', function ($join) use ($guild) {
+                $join->on('items.item_id', '=', 'character_items.item_id')
+                ->where('items.expansion_id', $guild->expansion_id);
+            })
+            ->leftJoin('members', function ($join) {
+                $join->on('members.id', '=', 'batches.member_id');
+            })
+            ->leftJoin('raid_groups', function ($join) {
+                $join->on('raid_groups.id', '=', 'batches.raid_group_id');
+            })
+            ->leftJoin('roles AS raid_group_roles', function ($join) {
+                $join->on('raid_group_roles.id', 'raid_groups.role_id');
+            })
+            ->leftJoin('raids', function ($join) {
+                $join->on('raids.id', '=', 'batches.raid_id');
+            })
+            ->groupBy('batches.id');
+
+        if (!empty(request()->input('min_date'))) {
+            $query = $query->where('batches.created_at', '>',  request()->input('min_date'));
+        }
+        if (!empty(request()->input('max_date'))) {
+            $query = $query->where('batches.created_at', '<',  request()->input('max_date'));
+        }
+
+        if (!empty(request()->input('character_id'))) {
+            $query = $query->where('character_items.character_id', request()->input('character_id'));
+            $resources[] = Character::where([['guild_id', $guild->id], ['id', request()->input('character_id')]])->with('member')->first();
+        }
+
+        if (!empty(request()->input('raid_group_id'))) {
+            $query = $query->where('raid_groups.id', request()->input('raid_group_id'));
+            $resources[] = RaidGroup::where([['guild_id', $guild->id], ['id', request()->input('raid_group_id')]])->with('role')->first();
+        }
+
+        if (!empty(request()->input('item_id'))) {
+            $query = $query->where('items.item_id', request()->input('item_id'));
+            $resources[] = Item::find(request()->input('item_id'));
+        }
+
+        $batches = $query->where(['batches.guild_id' => $guild->id])
+            ->orderBy('batches.created_at', 'desc')
+            ->paginate(self::RESULTS_PER_PAGE);
+
+        return view('item.listAssignedLoot', [
+            'batches'       => $batches,
+            'currentMember' => $currentMember,
+            'guild'         => $guild,
+            'instances'     => $instances,
+            'resources'     => $resources,
+        ]);
+    }
+
     // Submit a whole bunch of loot at once
     public function submitAssignLoot($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
         $validationRules = [
+            'name' => 'nullable|string|max:75',
             'raid_group_id' => [
                 'nullable',
                 'integer',
@@ -81,7 +178,7 @@ class AssignLootController extends Controller
                 'nullable',
                 'integer',
                 'exists:characters,id',
-            ],
+        ],
             'item.*.is_offspec'     => 'nullable|boolean',
             'item.*.note'           => 'nullable|string|max:140',
             'item.*.officer_note'   => 'nullable|string|max:140',
@@ -141,8 +238,6 @@ class AssignLootController extends Controller
             // We don't want the submission to fail because of that
             'allCharacters',
         ]);
-
-
 
         $deleteWishlist = request()->input('delete_wishlist_items') ? true : false;
         $deletePrio     = request()->input('delete_prio_items') ? true : false;
@@ -230,6 +325,10 @@ class AssignLootController extends Controller
             'raid_id'       => $raidId,
             'user_id'       => $currentMember->user_id,
         ]);
+
+        if (!request()->input('name')) {
+            $batch->update(['name' => "Batch {$batch->id}"]);
+        }
 
         // Add the batch ID to the items we're going to insert
         array_walk($newRows, function (&$value, $key) use ($batch) {

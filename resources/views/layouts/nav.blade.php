@@ -307,7 +307,7 @@
 
                 @if ($currentMember->hasPermission('edit.raid-loot'))
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.raids.edit', 'guild.raids.list', 'guild.raids.new', 'guild.raids.show', 'item.assignLoot']) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.raids.edit', 'guild.raids.list', 'guild.raids.new', 'guild.raids.show', 'item.assignLoot', 'item.assignLoot.list']) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Raids
                         </a>
                         <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
@@ -319,6 +319,9 @@
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 List Raids
+                            </a>
+                            <a class="dropdown-item" href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                Past Loot
                             </a>
                             @if ($viewRaids)
                                 <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
