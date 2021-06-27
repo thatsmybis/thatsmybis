@@ -82,8 +82,6 @@
                 @endif
             </div>
 
-
-
             <div class="row">
 
                 <div class="col-lg-2 col-md-3 col-6">
@@ -263,7 +261,7 @@
                         @foreach ($logs as $log)
                             <li class="p-1 pl-3 rounded">
                                 <div class="d-flex flex-row">
-                                    <div class="list-timestamp text-right text-muted p-2">
+                                    <div class="list-timestamp text-right text-muted p-2 small">
                                         @if ($log->member_id)
                                             <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->member_slug]) }}" class="text-muted">
                                                 <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago

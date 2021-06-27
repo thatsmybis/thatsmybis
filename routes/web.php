@@ -128,8 +128,9 @@ Route::group([
 
     Route::get( '/roster',          'RosterController@roster')->name('guild.roster');
 
-    Route::get( '/assign-loot', 'AssignLootController@assignLoot')      ->name('item.assignLoot');
-    Route::post('/assign-loot', 'AssignLootController@submitAssignLoot')->name('item.assignLoot.submit');
+    Route::get( '/assign-loot',      'AssignLootController@assignLoot')      ->name('item.assignLoot');
+    Route::post('/assign-loot',      'AssignLootController@submitAssignLoot')->name('item.assignLoot.submit');
+    Route::get( '/assign-loot/list', 'AssignLootController@listAssignedLoot')->name('item.assignLoot.list');
 
     Route::group(['prefix' => 'raids'], function () {
         Route::get( '/',                'RaidController@list')    ->name('guild.raids.list');
@@ -145,7 +146,7 @@ Route::group([
         Route::get( '/',                        'RaidGroupController@raidGroups')               ->name('guild.raidGroups');
         Route::get( '/create',                  'RaidGroupController@edit')                     ->name('guild.raidGroup.create');
         Route::get( '/edit/{id?}',              'RaidGroupController@edit')                     ->where('id', '[0-9]+')->name('guild.raidGroup.edit');
-        Route::get( '/{id}/characters/main',    'RaidGroupController@mainCharacters')               ->where('id', '[0-9]+')->name('guild.raidGroup.mainCharacters');
+        Route::get( '/{id}/characters/main',    'RaidGroupController@mainCharacters')           ->where('id', '[0-9]+')->name('guild.raidGroup.mainCharacters');
         Route::get( '/{id}/characters/general', 'RaidGroupController@secondaryCharacters')      ->where('id', '[0-9]+')->name('guild.raidGroup.secondaryCharacters');
         Route::post('/toggle-disable',          'RaidGroupController@toggleDisable')            ->name('guild.raidGroup.toggleDisable');
         Route::post('/update',                  'RaidGroupController@update')                   ->name('guild.raidGroup.update');

@@ -109,7 +109,7 @@
                                         maxlength="75"
                                         type="text"
                                         class="form-control dark"
-                                        placeholder="eg. MC 42 Binding Run"
+                                        placeholder="eg. MC Binding Run 42"
                                         value="{{ old('name') ? old('name') : ($raid ? $raid->name : '') }}" />
                                 </div>
                             </div>
