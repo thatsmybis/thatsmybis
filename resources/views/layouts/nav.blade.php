@@ -80,7 +80,7 @@
                 @endif
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.item.list']) ? 'active font-weight-bold' : '' }}" href="#" id="lootNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.item.list', 'guild.item.list.edit', 'guild.prios.chooseRaidGroup']) ? 'active font-weight-bold' : '' }}" href="#" id="lootNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Loot
                     </a>
                     <div class="dropdown-menu" aria-labelledby="lootNavDropdown">
@@ -307,8 +307,20 @@
 
                 @if ($currentMember->hasPermission('edit.raid-loot'))
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.raids.edit', 'guild.raids.list', 'guild.raids.new', 'guild.raids.show', 'item.assignLoot', 'item.assignLoot.list']) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Raids
+                        <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), [
+                                'guild.raidGroups',
+                                'guild.raidGroup.create',
+                                'guild.raidGroup.edit',
+                                'guild.raidGroup.mainCharacters',
+                                'guild.raidGroup.secondaryCharacters',
+                                'guild.raids.edit',
+                                'guild.raids.list',
+                                'guild.raids.new',
+                                'guild.raids.show',
+                                'item.assignLoot',
+                                'item.assignLoot.list'
+                            ]) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Raiding
                         </a>
                         <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
                             <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
@@ -337,7 +349,15 @@
                 @endif
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link {{ $menuColor }} dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link {{ $menuColor }} {{ in_array(Route::currentRouteName(), [
+                            'guild.settings',
+                            'guild.auditLog',
+                            'guild.exports',
+                            'guild.members.list',
+                            'guild.recipe.list',
+                            'guild.roles',
+                        ]) ? 'active font-weight-bold' : '' }}
+                        dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         Guild
                     </a>
                     <div class="dropdown-menu" aria-labelledby="adminNavDropdown">
@@ -366,18 +386,6 @@
                         <a class="dropdown-item" href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             Members
                         </a>
-
-                        @if ($viewRaids)
-                            <span class="dropdown-item disabled">
-                                Raid Groups moved to <strong>Raids</strong>
-                            </span>
-                        @endif
-
-                        @if ($editItems || $editPrios)
-                            <span class="dropdown-item disabled">
-                                Prios/Notes moved to <strong>Loot</strong>
-                            </span>
-                        @endif
 
                         <a class="dropdown-item" href="{{ route('guild.recipe.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             Recipes
