@@ -70,7 +70,7 @@ class Raid extends Model
 
     public function items() {
         $query = $this
-            ->belongsToMany(Item::class, 'character_items', 'raid_id')
+            ->belongsToMany(Item::class, 'character_items', 'raid_id', 'item_id')
             ->select([
                 'items.*',
                 'characters.id             AS character_id',

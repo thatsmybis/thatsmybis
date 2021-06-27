@@ -82,11 +82,6 @@
                                     <li class="mt-2">
                                         <ul class="list-inline">
                                             @foreach ($raid->raidGroups as $raidGroup)
-                                                @if (!$loop->first)
-                                                    <li class="list-inline-item">
-                                                        &sdot;
-                                                    </li>
-                                                @endif
                                                 <li class="list-inline-item">
                                                     @include('partials/raidGroup', ['raidGroupColor' => $raidGroup->getColor()])
                                                 </li>
@@ -99,22 +94,68 @@
                     </div>
 
                     <div class="row">
-                        @if ($raid->logs)
+                        @if ($raid->logs->count())
                             <div class="col-lg-6 col-12">
-                                <div class="mb-3">
+                                <div class="list-group-item rounded mb-3">
                                     <span class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-link"></span>
                                         Raid Logs
                                     </span>
-                                    <div class="js-markdown-inline">
-                                        {{ $raid->logs }}
-                                    </div>
+                                    <ul>
+                                        @foreach ($raid->logs as $log)
+                                            <li class="js-markdown-inline">
+                                                {{ $log->name }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
                                 </div>
                             </div>
                         @endif
-                    </div>
 
-                    <div class="row">
+
+                        <div class="col-lg-6 col-12">
+                            <div class="list-group-item rounded mb-3">
+                                <span class="font-weight-bold">
+                                    <span class="text-muted fas fa-fw fa-gift"></span>
+                                    Loot Assignments
+                                </span>
+                                <div>
+                                    <ul class="list-inline">
+                                        @if ($raid->batches->count())
+                                            @foreach($raid->batches as $batch)
+                                                @if (!$loop->first)
+                                                    <li class="list-inline-item">
+                                                        &sdot;
+                                                    </li>
+                                                @endif
+                                                <li class="list-inline-item">
+                                                    <a href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}">
+                                                        {{ $batch->name ? $batch->name : "Batch {$batch->id}" }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        @else
+                                            <li class="list-inline-item">
+                                                No batch assignments
+                                            </li>
+                                        @endif
+                                        <li class="list-inline-item">
+                                            &sdot;
+                                        </li>
+                                        <li class="list-inline-item">
+                                            @if ($manualItemAssignmentCount)
+                                                <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id, 'type' => 'received']) }}">
+                                                    {{ $manualItemAssignmentCount }} individual assignments
+                                                </a>
+                                            @else
+                                                No individual assignments
+                                            @endif
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+
                         @if ($raid->public_note)
                             <div class="col-lg-6 col-12">
                                 <div class="list-group-item rounded mb-3">
@@ -135,40 +176,13 @@
                             <div class="col-lg-6 col-12">
                                 <div class="list-group-item rounded mb-3">
                                     <span class="font-weight-bold">
-                                        <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
+                                        <span class="text-muted fas fa-fw fa-shield"></span>
                                         Officer Notes
                                     </span>
                                     <div>
                                         <p class="js-markdown-inline">
                                             {{ $raid->officer_note }}
                                         </p>
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-
-                        @if ($raid->batches->count())
-                            <div class="col-lg-6 col-12">
-                                <div class="list-group-item rounded mb-3">
-                                    <span class="font-weight-bold">
-                                        <span class="text-muted fas fa-fw fa-gift"></span>
-                                        Loot Assignments
-                                    </span>
-                                    <div>
-                                        <ul class="list-inline">
-                                            @foreach($raid->batches as $batch)
-                                                @if (!$loop->first)
-                                                    <li class="list-inline-item">
-                                                        &sdot;
-                                                    </li>
-                                                @endif
-                                                <li class="list-inline-item">
-                                                    <a href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="text-white">
-                                                        {{ $batch->name ? $batch->name : "Batch {$batch->id}" }}
-                                                    </a>
-                                                </li>
-                                            @endforeach
-                                        </ul>
                                     </div>
                                 </div>
                             </div>
