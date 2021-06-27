@@ -7,7 +7,7 @@
                         <span class="font-weight-bold text-white" title="Offspec">OS</span>
                     </li>
                 @endif
-                @if ($item->pivot->received_at || ((!isset($hideCreatedAt) || !$hideCreatedAt) && $item->pivot->created_at))
+                @if ((!isset($hideCreatedAt) || !$hideCreatedAt) && $item->pivot->created_at))
                     <li class="cursor-pointer js-timestamp-title list-inline-item" data-timestamp="{{ $item->pivot->created_at }}">
                         added <span class="js-watchable-timestamp" data-timestamp="{{ $item->pivot->created_at }}"></span> ago
                         @if (isset($item->pivot->type) && $item->pivot->type == App\Item::TYPE_RECEIVED)
@@ -15,25 +15,27 @@
                         @endif
                     </li>
                 @endif
-                <li class="list-inline-item">
-                    by
-                    <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $item->pivot->added_by, 'usernameSlug' => slug($item->added_by_username)]) }}" class="text-muted" target="_blank">
-                        {{ $item->added_by_username }}
-                    </a>
-                    @if ((!isset($hideRaidGroup) || !$hideRaidGroup) && $item->raid_group_name)
-                        / {{ $item->raid_group_name }}
-                    @endif
-                </li>
+                @if (!isset($hideAddedBy) || !$hideAddedBy)
+                    <li class="list-inline-item">
+                        by
+                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $item->pivot->added_by, 'usernameSlug' => slug($item->added_by_username)]) }}" class="text-muted" target="_blank">
+                            {{ $item->added_by_username }}
+                        </a>
+                        @if ((!isset($hideRaidGroup) || !$hideRaidGroup) && $item->raid_group_name)
+                            / {{ $item->raid_group_name }}
+                        @endif
+                    </li>
+                @endif
             </ul>
         </li>
         @if ($item->pivot->note)
             <li>
-                <strong>Note:</strong> {{ $item->pivot->note }}
+                <span class="font-weight-medium">Note:</span> {{ $item->pivot->note }}
             </li>
         @endif
         @if (isset($showOfficerNote) && $showOfficerNote && $item->pivot->officer_note)
             <li>
-                <strong>Officer Note:</strong> {{ $item->pivot->officer_note }}
+                <span class="font-weight-medium">Officer Note:</span> {{ $item->pivot->officer_note }}
             </li>
         @endif
     </ul>
