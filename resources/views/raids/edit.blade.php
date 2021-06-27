@@ -189,16 +189,39 @@
                                 <div class="form-group">
                                     <label for="logs" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-link"></span>
-                                        Link to Raid Logs
+                                        Link to Raid Logs <span class="text-muted small">max {{ $maxInstances }}</span>
                                     </label>
-                                        <input name="logs"
+
+                                    @if ($raid && $raid->logs_deprecated)
+                                        <!-- DEPRECATED -->
+                                        <div class="text-warning">
+                                            This raid is using the old raid logs feature (only supports one log). To use the new raid logs feature, remove this log and save the raid. You'll then be able to come back and use the new logs feature on this raid.
+                                        </div>
+                                        <input name="logs_deprecated"
                                             autocomplete="off"
                                             maxlength="250"
                                             type="text"
                                             class="form-control dark"
                                             placeholder="a warcraftlogs.com link perhaps?"
-                                            value="{{ old('logs') ? old('logs') : ($raid ? $raid->logs : '') }}"
+                                            value="{{ old('logs_deprecated') ? old('logs_deprecated') : ($raid ? $raid->logs_deprecated : '') }}"
                                             style="" />
+                                    @else
+                                        @for ($i = 0; $i < $maxInstances; $i++)
+                                            @php
+                                                $oldLog = old('logs.' . $i . '.name') ? old('logs.' . $i . '.name') : ($raid && $raid->logs->slice($i, 1)->count() ? $raid->logs->slice($i, 1)->first()->name : null);
+                                            @endphp
+                                            <div class="form-group {{ $i > 0 ? 'js-hide-empty' : '' }}" style="{{ !$oldLog && $i > 0 ? 'display:none;' : '' }}">
+                                                <input name="logs[{{ $i }}][name]"
+                                                    autocomplete="off"
+                                                    maxlength="250"
+                                                    type="text"
+                                                    class="js-show-next form-control dark"
+                                                    placeholder="a warcraftlogs.com link perhaps?"
+                                                    value="{{ $oldLog }}"
+                                                    style="" />
+                                            </div>
+                                        @endfor
+                                    @endif
                                 </div>
                             </div>
                         </div>
@@ -210,6 +233,7 @@
                         <label for="instance_id[0]" class="font-weight-bold">
                             <span class="fas fa-fw fa-dungeon text-muted"></span>
                             Dungeon(s)
+                            <span class="text-muted small">max {{ $maxInstances }}</span>
                         </label>
                         @for ($i = 0; $i < $maxInstances; $i++)
                             @php
@@ -235,7 +259,7 @@
                     <div class="offset-xl-2 col-xl-4 col-sm-6 col-12 {{ $errors->has('raid.raid_group_id.*') ? 'text-danger font-weight-bold' : '' }}">
                         <label for="raid_group_id[0]" class="font-weight-bold">
                             <span class="fas fa-fw fa-users text-muted"></span>
-                            Raid Group(s)
+                            Raid Group(s) <span class="text-muted small">max {{ $maxRaidGroups }}</span>
                         </label>
                         @for ($i = 0; $i < $maxRaidGroups; $i++)
                             <div class="form-group {{ $i > 0 ? 'js-hide-empty' : '' }}" style="{{ $i > 0 ? 'display:none;' : '' }}">

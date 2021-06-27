@@ -108,6 +108,26 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <div class="form-group">
+                        <label for="item_instance_id" class="font-weight-bold">
+                            <span class="fas fa-fw fa-dungeon text-muted"></span>
+                            Dungeon
+                        </label>
+                        <select name="item_instance_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
+                            <option value="" data-tokens="">
+                                —
+                            </option>
+                            @foreach ($instances as $instance)
+                                <option value="{{ $instance->id }}"
+                                    data-tokens="{{ $instance->name }}"
+                                    {{ Request::get('item_instance_id') && Request::get('item_instance_id') == $instance->id ? 'selected' : ''}}>
+                                    {{ $instance->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
