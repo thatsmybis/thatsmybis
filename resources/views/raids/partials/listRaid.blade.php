@@ -31,6 +31,11 @@
                     copy
                 </a>
             @endif
+            @if ($raid->archived_at)
+                <span class="dropdown-item disabled font-weight-bold text-danger">
+                    ARCHIVED
+                </span>
+            @endif
             @if ($raid->cancelled_at)
                 <span class="dropdown-item disabled font-weight-bold text-warning">
                     CANCELLED

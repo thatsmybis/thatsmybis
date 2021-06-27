@@ -16,6 +16,10 @@
                             <ul class="list-inline">
                                 <li class="list-inline-item">
                                     <h1 class="font-weight-bold">
+                                        <span class="fa-fw fas fa-helmet-battle text-dk"></span>
+                                        @if ($raid->archived_at)
+                                            <span class="text-danger">archived</span>
+                                        @endif
                                         @if ($raid->cancelled_at)
                                             <span class="text-warning">cancelled</span>
                                         @endif
@@ -36,6 +40,12 @@
                                         </a>
                                     </li>
                                 @endif
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
+                                        <span class="fas fa-clipboard-list-check"></span>
+                                        history
+                                    </a>
+                                </li>
                             </ul>
 
                             <ul class="no-indent no-bullet">

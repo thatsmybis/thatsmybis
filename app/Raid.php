@@ -35,6 +35,7 @@ class Raid extends Model
         'member_id',
         'date',
         'cancelled_at',
+        'archived_at',
         'public_note',
         'officer_note',
         'logs',

@@ -68,6 +68,7 @@ class AuditLogController extends Controller
                 'other_members.username AS other_member_username',
                 'other_members.slug     AS other_member_slug',
                 'raids.name             AS raid_name',
+                'raids.slug             AS raid_slug',
                 'raids.date             AS raid_date',
                 'raid_groups.name       AS raid_group_name',
                 'roles.name             AS role_name',

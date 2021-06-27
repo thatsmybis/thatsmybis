@@ -65,6 +65,7 @@ class RaidController extends Controller
         $createValues['guild_id']     = $guild->id;
         $createValues['member_id']    = $currentMember->id;
         $createValues['cancelled_at'] = null;
+        $createValues['archived_at'] = null;
 
         $raid = Raid::create($createValues);
 
@@ -186,6 +187,7 @@ class RaidController extends Controller
             $raid->id     = null;
             $raid->name   = $raid->name . ' Copy';
             $raid->cancelled_at = null;
+            $raid->archived_at  = null;
             $raid->logs         = null;
             $raid->member_id    = null;
             $raid->created_at   = null;
@@ -226,6 +228,8 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $showArchived = request()->input('show_archived');
+
         $guild->load(['allCharacters', 'members', 'raidGroups', 'raidGroups.role']);
 
         $query = Raid::select([
@@ -239,6 +243,12 @@ class RaidController extends Controller
             ->orderBy('raids.date', 'desc')
             ->with(['instances', 'member', 'raidGroups', 'raidGroups.role'])
             ->groupBy('raids.id');
+
+        if ($showArchived) {
+            $query = $query->whereNotNull('raids.archived_at');
+        } else {
+            $query = $query->whereNull('raids.archived_at');
+        }
 
         if (!empty(request()->input('character_id'))) {
             $query = $query->leftJoin('raid_characters AS raid_characters2', 'raid_characters2.raid_id', '=', 'raids.id')
@@ -272,6 +282,7 @@ class RaidController extends Controller
             'currentMember' => $currentMember,
             'guild'         => $guild,
             'raids'         => $raids,
+            'showArchived'  => $showArchived,
             'showEdit'      => $showEdit,
         ]);
     }
@@ -348,7 +359,8 @@ class RaidController extends Controller
                 'integer',
                 Rule::exists('raids', 'id')->where('raids.guild_id', $guild->id),
             ],
-            'cancelled_at' => 'nullable|date_format:Y-m-d H:i:s',
+            'is_cancelled' => 'nullable|boolean',
+            'is_archived'  => 'nullable|boolean',
         ]);
 
         $validationMessages = ['id' => 'Raid ID must match one of the raids in your guild.'];
@@ -370,6 +382,7 @@ class RaidController extends Controller
 
         $updateValues['slug']         = slug(request()->input('name'));
         $updateValues['cancelled_at'] = request()->input('is_cancelled') && request()->input('is_cancelled') == 1 ? ($raid->cancelled_at ? $raid->cancelled_at : getDateTime()) : null;
+        $updateValues['archived_at'] = request()->input('is_archived') && request()->input('is_archived') == 1 ? ($raid->is_archived ? $raid->is_archived : getDateTime()) : null;
 
         $raid->update($updateValues);
 
@@ -380,7 +393,11 @@ class RaidController extends Controller
         }
 
         if ($updateValues['cancelled_at'] != $raid->cancelled_at) {
-            $auditMessage .= $updateValues['cancelled_at'] ? '(cancelled)' : '(un-cancelled)';
+            $auditMessage .= $updateValues['cancelled_at'] ? ' (cancelled)' : ' (un-cancelled)';
+        }
+
+        if ($updateValues['archived_at'] != $raid->archived_at) {
+            $auditMessage .= $updateValues['archived_at'] ? ' (archived)' : ' (unarchived)';
         }
 
         // Sync characters

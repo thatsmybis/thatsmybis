@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Batch, Instance, Item};
+use App\{AuditLog, Batch, Character, Instance, Item, Member, RaidGroup};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -26,7 +26,7 @@ class AssignLootController extends Controller
     // Maximum number of items that can be added at any one time
     const MAX_ITEMS = 150;
 
-    const RESULTS_PER_PAGE = 50;
+    const RESULTS_PER_PAGE = 20;
 
     /**
      * Show the mass input page
@@ -94,15 +94,15 @@ class AssignLootController extends Controller
                 'raids.name       AS raid_name',
                 'raids.slug       AS raid_slug',
                 'raids.date       AS raid_date',
-                DB::raw('COUNT(DISTINCT `character_items`.`id`) AS `item_count`'),
+                DB::raw('COUNT(DISTINCT `items_count`.`id`) AS `item_count`'),
             ])
-            ->leftJoin('character_items', function ($join) {
-                $join->on('character_items.batch_id', '=', 'batches.id');
+            ->leftJoin('character_items as items_count', function ($join) {
+                $join->on('items_count.batch_id', '=', 'batches.id');
             })
-            ->leftJoin('items', function ($join) use ($guild) {
-                $join->on('items.item_id', '=', 'character_items.item_id')
-                ->where('items.expansion_id', $guild->expansion_id);
-            })
+            // ->leftJoin('items', function ($join) use ($guild) {
+            //     $join->on('items.item_id', '=', 'items_count.item_id')
+            //     ->where('items.expansion_id', $guild->expansion_id);
+            // })
             ->leftJoin('members', function ($join) {
                 $join->on('members.id', '=', 'batches.member_id');
             })
@@ -129,13 +129,30 @@ class AssignLootController extends Controller
             $resources[] = Character::where([['guild_id', $guild->id], ['id', request()->input('character_id')]])->with('member')->first();
         }
 
+        if (!empty(request()->input('item_instance_id'))) {
+            $query = $query
+                ->join('character_items as character_items_2', 'character_items_2.batch_id', 'batches.id')
+                ->join('item_item_sources AS item_item_sources_2', 'item_item_sources_2.item_id', 'character_items_2.item_id')
+                ->join('item_sources AS item_sources_2', 'item_sources_2.id', 'item_item_sources_2.item_source_id')
+                ->where('item_sources_2.instance_id', request()->input('item_instance_id'));
+        }
+
+        if (!empty(request()->input('member_id'))) {
+            $query = $query->where('members.id', request()->input('member_id'));
+            $resources[] = Member::where([['guild_id', $guild->id], ['id', request()->input('member_id')]])->with('user')->first();
+        }
+
         if (!empty(request()->input('raid_group_id'))) {
             $query = $query->where('raid_groups.id', request()->input('raid_group_id'));
             $resources[] = RaidGroup::where([['guild_id', $guild->id], ['id', request()->input('raid_group_id')]])->with('role')->first();
         }
 
         if (!empty(request()->input('item_id'))) {
-            $query = $query->where('items.item_id', request()->input('item_id'));
+            $query = $query
+                ->leftJoin('character_items', function ($join) {
+                    $join->on('character_items.batch_id', '=', 'batches.id');
+                })
+                ->where('character_items.item_id', request()->input('item_id'));
             $resources[] = Item::find(request()->input('item_id'));
         }
 
