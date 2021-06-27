@@ -23,6 +23,7 @@ class Batch extends Model
         'raid_id',
         'raid_group_id',
         'user_id',
+        'created_at',
     ];
 
     /**

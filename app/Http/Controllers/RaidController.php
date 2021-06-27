@@ -355,7 +355,17 @@ class RaidController extends Controller
             'raidGroups.role'
         ]);
 
-        $manualItemAssignmentCount = $manualAssignments = $raid->items()->whereNull('character_items.batch_id')->count();
+        // TODO: Get this to also count items where the raid_id matches, but the batch.raid_id
+        // was from a different raid. This means it was individually swapped over.
+        // I couldn't get the quey to work without spending too much time, so I'm ignoring it.
+        $manualItemAssignmentCount = DB::table('character_items')
+            ->where([
+                'character_items.raid_id' => $raid->id,
+                'character_items.type' => 'received',
+            ])
+            ->whereNull('character_items.batch_id')
+            ->groupBy('character_items.id')
+            ->count();
 
         return view('raids.show', [
             'currentMember'             => $currentMember,

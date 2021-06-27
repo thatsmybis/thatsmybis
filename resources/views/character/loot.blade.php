@@ -1,6 +1,14 @@
 @extends('layouts.app')
 @section('title', "Loot for " . $character->name . " - " . config('app.name'))
 
+@php
+    $maxDate = (new \DateTime())->modify('+1 day')->format('Y-m-d');
+
+    // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
+    // So we're iterating over the characters only one time, saving the results, and printing them.
+    $raidSelectOptions = (string)View::make('partials.raidOptions', ['raids' => $guild->raids]);
+@endphp
+
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
@@ -133,7 +141,7 @@
                                                             'targetBlank' => true,
                                                             'itemId' => $itemId,
                                                             'itemName' => $itemLabel,
-                                                            'itemDate' => ($item ? $item->pivot->created_at : null),
+                                                            'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
                                                             'itemUsername' => ($item ? $item->added_by_username : null),
                                                             'strikeThrough' => ($item ? $item->pivot->is_received : null)
                                                         ])
@@ -186,7 +194,11 @@
                                 <ul class="lesser-indent no-bullet">
                                     @foreach ($character->received as $item)
                                         <li class="mb-2" value="{{ $item->pivot->order ? $item->pivot->order : '' }}">
-                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username])
+                                            @include('partials/item', [
+                                                'wowheadLink' => false,
+                                                'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                                'itemUsername' => $item->added_by_username
+                                            ])
                                             @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                         </li>
                                     @endforeach
@@ -201,7 +213,7 @@
                                 <input id="received" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
                                 <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
 
-                                <ul class="js-sortable no-bullet no-indent mb-0">
+                                <ul class="js-sortable-lazy no-bullet no-indent mb-0 bg-light">
                                     @for ($i = 0; $i < $maxReceivedItems; $i++)
                                         @php
                                             $item      = null;
@@ -223,13 +235,13 @@
                                         @endphp
                                         <li class="input-item position-relative {{ $itemId ? 'd-flex' : '' }} {{ $errors->has('received.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
                                             style="{{ $itemId ? '' : 'display:none;' }}">
-                                            <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;">
-                                            <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;">
+                                            <input type="checkbox" checked name="received[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;" />
+                                            <input type="checkbox" checked name="received[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;" />
                                             <input type="checkbox" checked name="received[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" style="display:none;"/>
 
                                             <button type="button" class="js-input-button close close-top-right text-unselectable" aria-label="Close"><span aria-hidden="true" class="filter-button">&times;</span></button>
 
-                                            <div class="js-sort-handle move-cursor text-4 text-unselectable d-flex mr-1">
+                                            <div class="js-sort-handle move-cursor d-flex text-4 text-unselectable mr-1">
                                                 <div class="justify-content-center align-self-center">
                                                     <span class="fas fa-fw fa-grip-vertical text-muted"></span>
                                                 </div>
@@ -237,9 +249,18 @@
 
                                             <div class="js-input-label">
                                                 <span class="js-item-display">
-                                                    @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
+                                                    @includeWhen($itemId, 'partials/item', [
+                                                        'wowheadLink' => false,
+                                                        'targetBlank' => true,
+                                                        'itemId' => $itemId,
+                                                        'itemName' => $itemLabel,
+                                                        'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                                        'itemUsername' => ($item ? $item->added_by_username : null),
+                                                        'strikeThrough' => ($item ? $item->pivot->is_received : null)
+                                                    ])
                                                     @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                                 </span>
+                                                @include('character/partials/itemEdit', ['name' => 'received', 'index' => $i])
                                             </div>
                                         </li>
                                         @if ($errors->has('received.' . $i . '.item_id'))

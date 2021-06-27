@@ -3,6 +3,7 @@
 
 @php
     $now = getDateTime();
+    $maxDate = (new \DateTime())->modify('+1 day')->format('Y-m-d');
 @endphp
 
 @section('content')
@@ -48,6 +49,14 @@
                         </div>
 
                         @include('item/assignLoot/partials/metadata')
+
+                        <div class="col-sm-6 col-12 pt-2 mb-2">
+                            <label for="new_date">
+                                <span class="text-muted fas fa-fw fa-calendar-alt"></span>
+                                Date Assigned <span class="text-muted small">optional, overwrites all old dates</span>
+                            </label>
+                            <input name="new_date" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="form-control dark" autocomplete="off">
+                        </div>
                     </div>
 
                     <div class="form-group">
@@ -65,23 +74,29 @@
     <div class="row mt-3">
         @if ($batch->items)
             <div class="col-12 bg-light rounded pt-2">
-                <span class="text-4">The following loot assignments will be updated to match the Raid and Raid Group that you select:</span>
-                <ul>
-                    @foreach($batch->items as $item)
+                <span class="text-4">The following loot assignments will be updated to match the details you select:</span>
+                <ul class="mt-3">
+                    @if ($batch->items->count())
+                        @foreach($batch->items as $item)
+                            <li>
+                                @include('partials/item', ['wowheadLink' => false])
+                                @if ($item->pivot->is_offspec)
+                                    OS
+                                @endif
+                                @if ($item->character_name)
+                                    to
+                                    <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $item->character_id, 'nameSlug' => $item->character_slug]) }}" class="text-{{ strtolower($item->character_class) }}">
+                                        {{ $item->character_name }}
+                                    </a>
+                                    {{ $item->character_is_alt ? 'alt' : '' }}
+                                @endif
+                            </li>
+                        @endforeach
+                    @else
                         <li>
-                            @include('partials/item', ['wowheadLink' => false])
-                            @if ($item->pivot->is_offspec)
-                                OS
-                            @endif
-                            @if ($item->character_name)
-                                to
-                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $item->character_id, 'nameSlug' => $item->character_slug]) }}" class="text-{{ strtolower($item->character_class) }}">
-                                    {{ $item->character_name }}
-                                </a>
-                                {{ $item->character_is_alt ? 'alt' : '' }}
-                            @endif
+                            There are no items associated with this
                         </li>
-                    @endforeach
+                    @endif
                 </ul>
             </div>
         @endif

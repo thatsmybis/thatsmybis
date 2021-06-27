@@ -187,7 +187,7 @@
                                                     type="number"
                                                     min="1"
                                                     max="{{ $maxPrios }}"
-                                                    class="d-inline numbered form-control dark order"
+                                                    class="d-inline numbered form-control dark slim-order"
                                                     autocomplete="off"
                                                     placeholder="{{ $i + 1 }}"
                                                     value="{{ $characterOrder }}" />

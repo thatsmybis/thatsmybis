@@ -18,11 +18,18 @@
                 @if (!isset($hideAddedBy) || !$hideAddedBy)
                     <li class="list-inline-item">
                         by
-                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $item->pivot->added_by, 'usernameSlug' => slug($item->added_by_username)]) }}" class="text-muted" target="_blank">
+                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $item->pivot->added_by, 'usernameSlug' => slug($item->added_by_username)]) }}" class="text-muted">
                             {{ $item->added_by_username }}
                         </a>
                         @if ((!isset($hideRaidGroup) || !$hideRaidGroup) && $item->raid_group_name)
-                            / {{ $item->raid_group_name }}
+                            &sdot;
+                            {{ $item->raid_group_name }}
+                        @endif
+                        @if ((!isset($hideRaid) || !$hideRaid) && $item->raid_name)
+                            &sdot;
+                            <a class="text-muted" href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $item->pivot->raid_id, 'raidSlug' => ($item->raid_slug ? $item->raid_slug : null)]) }}">
+                                {{ $item->raid_name }}
+                            </a>
                         @endif
                     </li>
                 @endif
