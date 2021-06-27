@@ -146,6 +146,33 @@
                                 </div>
                             </div>
                         @endif
+
+                        @if ($raid->batches->count())
+                            <div class="col-lg-6 col-12">
+                                <div class="list-group-item rounded mb-3">
+                                    <span class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-gift"></span>
+                                        Loot Assignments
+                                    </span>
+                                    <div>
+                                        <ul class="list-inline">
+                                            @foreach($raid->batches as $batch)
+                                                @if (!$loop->first)
+                                                    <li class="list-inline-item">
+                                                        &sdot;
+                                                    </li>
+                                                @endif
+                                                <li class="list-inline-item">
+                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="text-white">
+                                                        {{ $batch->name ? $batch->name : "Batch {$batch->id}" }}
+                                                    </a>
+                                                </li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -218,8 +245,17 @@
                                         </ul>
                                     </td>
                                     <td>
-                                        @if($loop->first)
-                                            feature coming when it's done™
+                                        @if($character->received->count())
+                                            <ul class="list-inline">
+                                                @foreach ($character->received as $item)
+                                                    <li class="list-inline-item">
+                                                        @include('partials/item', ['wowheadLink' => false])
+                                                        @include('character/partials/itemDetails', ['hideAddedBy' => true, 'hideCreatedAt' => true])
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        @else
+                                            —
                                         @endif
                                     </td>
                                 </tr>

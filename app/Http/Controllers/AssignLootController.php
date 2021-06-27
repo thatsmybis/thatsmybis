@@ -56,7 +56,9 @@ class AssignLootController extends Controller
 
         $raid = null;
         if (!empty(request()->input('raid_id'))) {
-            $raid = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])->first();
+            $raid = Raid::where([['guild_id', $guild->id], ['id', request()->input('raid_id')]])
+                ->with('raidGroups')
+                ->first();
         }
 
         return view('item.assignLoot', [
@@ -109,10 +111,6 @@ class AssignLootController extends Controller
             ->leftJoin('character_items as items_count', function ($join) {
                 $join->on('items_count.batch_id', '=', 'batches.id');
             })
-            // ->leftJoin('items', function ($join) use ($guild) {
-            //     $join->on('items.item_id', '=', 'items_count.item_id')
-            //     ->where('items.expansion_id', $guild->expansion_id);
-            // })
             ->leftJoin('members', function ($join) {
                 $join->on('members.id', '=', 'batches.member_id');
             })
@@ -402,6 +400,7 @@ class AssignLootController extends Controller
                         'character_id'  => $wishlistRow->character_id,
                         'guild_id'      => $currentMember->guild_id,
                         'raid_group_id' => $wishlistRow->raid_group_id,
+                        'raid_id'       => $raidId,
                         'item_id'       => $wishlistRow->item_id,
                         'created_at'    => $now,
                     ];
@@ -419,6 +418,7 @@ class AssignLootController extends Controller
                         'character_id'  => $wishlistRow->character_id,
                         'guild_id'      => $currentMember->guild_id,
                         'raid_group_id' => $wishlistRow->raid_group_id,
+                        'raid_id'       => $raidId,
                         'item_id'       => $wishlistRow->item_id,
                         'created_at'    => $now,
                     ];
@@ -470,6 +470,7 @@ class AssignLootController extends Controller
                     'character_id'  => $prioRow->character_id,
                     'guild_id'      => $currentMember->guild_id,
                     'raid_group_id' => $prioRow->raid_group_id,
+                    'raid_id'       => $raidId,
                     'item_id'       => $prioRow->item_id,
                     'created_at'    => $now,
                 ];

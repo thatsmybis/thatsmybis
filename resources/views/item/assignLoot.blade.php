@@ -179,7 +179,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     type="text"
                                     class="form-control dark"
                                     placeholder="eg. Week 1 MC clear"
-                                    value="{{ old('name') ? old('name') : '' }}" />
+                                    value="{{ old('name') ? old('name') : ($raid ? $raid->name . ' loot' : '') }}" />
                             </div>
                         </div>
 
@@ -192,10 +192,10 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                             <select name="raid_group_id" class="form-control dark selectpicker" data-live-search="true">
                                 <option value="">—</option>
                                 @php
-                                    $oldRaidGroupId = old('raid_group_id') ? old('raid_group_id') : null;
+                                    $oldRaidGroupId = old('raid_group_id') ? old('raid_group_id') : ($raid && $raid->raidGroups->first() ? $raid->raidGroups->first()->id : '');
                                 @endphp
                                 @foreach ($guild->raidGroups as $raidGroup)
-                                    <option value="{{ $raidGroup->id }}" style="color:{{ $raidGroup->getColor() }};" {{ $raidGroup->id == $oldRaidGroupId ? 'checked' : '' }}>
+                                    <option value="{{ $raidGroup->id }}" style="color:{{ $raidGroup->getColor() }};" {{ $oldRaidGroupId && $oldRaidGroupId == $raidGroup->id ? 'selected' : '' }}>
                                         {{ $raidGroup->name }}
                                     </option>
                                 @endforeach
@@ -210,6 +210,9 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     <span class="text-muted fas fa-fw fa-calendar-alt"></span>
                                     Raid
                                     <span class="text-muted">locked</span>
+                                    <a class="" target="_blank" href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
+                                        open raid
+                                    </a>
                                 </label>
                                 <input
                                     disabled

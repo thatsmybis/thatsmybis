@@ -326,7 +326,21 @@ class RaidController extends Controller
             $showOfficerNote = true;
         }
 
-        $raid->load('batches', 'characters', 'instances', /*'items',*/ 'raidGroups', 'raidGroups.role');
+        $raid->load([
+            'batches',
+            'characters' => function ($query) use ($raid) {
+                return $query->with([
+                    'received' => function ($query) use ($raid) {
+                        return $query->where([
+                            'character_items.raid_id' => $raid->id
+                        ]);
+                    }
+                ]);
+            },
+            'instances',
+            'raidGroups',
+            'raidGroups.role'
+        ]);
 
         return view('raids.show', [
             'currentMember' => $currentMember,

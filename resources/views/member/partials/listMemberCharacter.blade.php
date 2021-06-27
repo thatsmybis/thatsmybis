@@ -32,7 +32,7 @@
             @if (!isset($showEditLoot) || $showEditLoot)
                 <a class="dropdown-item" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                     <span class="text-muted fa-fw fas fa-sack"></span>
-                    Loot
+                    Wishlist & Loot
                 </a>
             @endif
             @if (!isset($showEdit) || $showEdit)
