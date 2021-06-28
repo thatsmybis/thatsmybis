@@ -7,7 +7,7 @@
             <span class="{{ isset($bold) && $bold ? 'font-weight-bold' : '' }} text-5">
             {{ $raid->name }}
             @if ($raid->cancelled_at)
-                <span class="small text-warning">
+                <span class="font-weight-bold text-warning">
                     cancelled
                 </span>
             @endif

@@ -20,13 +20,13 @@
         </a>
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
             <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
-                <span class="text-muted fa-fw fas fa-"></span>
+                <span class="text-muted fa-fw fas fa-user"></span>
                 Profile
             </a>
-            @if (!isset($showLogs) || $showLogs)
-                <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}">
-                    <span class="text-muted fa-fw fas fa-"></span>
-                    History
+            @if (!isset($showEdit) || $showEdit)
+                <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                    <span class="text-muted fa-fw fas fa-pencil"></span>
+                    Edit
                 </a>
             @endif
             @if (!isset($showEditLoot) || $showEditLoot)
@@ -35,12 +35,13 @@
                     Wishlist & Loot
                 </a>
             @endif
-            @if (!isset($showEdit) || $showEdit)
-                <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
-                    <span class="text-muted fa-fw fas fa-pencil"></span>
-                    Edit
+            @if (!isset($showLogs) || $showLogs)
+                <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}">
+                    <span class="text-muted fa-fw fas fa-clipboard-list-check"></span>
+                    History
                 </a>
             @endif
+            <div class="dropdown-divider"></div>
             <span class="dropdown-item disabled">
                 @if ($raidGroup)
                     @include('partials/raidGroup', ['raidGroupColor' => $raidGroup->getColor()])

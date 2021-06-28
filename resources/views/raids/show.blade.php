@@ -110,6 +110,20 @@
                                     </ul>
                                 </div>
                             </div>
+                        @elseif ($raid->logs_deprecated)
+                            <div class="col-lg-6 col-12">
+                                <div class="list-group-item rounded mb-3">
+                                    <span class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-link"></span>
+                                        Raid Logs
+                                    </span>
+                                    <ul>
+                                        <li class="js-markdown-inline">
+                                            {{ $raid->logs_deprecated }}
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
                         @endif
 
 
@@ -135,7 +149,7 @@
                                                 </li>
                                             @endforeach
                                         @else
-                                            <li class="list-inline-item">
+                                            <li class="list-inline-item text-muted">
                                                 No batch assignments
                                             </li>
                                         @endif
@@ -148,7 +162,9 @@
                                                     {{ $manualItemAssignmentCount }} individual assignments
                                                 </a>
                                             @else
-                                                No individual assignments
+                                                <span class="text-muted">
+                                                    No individual assignments
+                                                </span>
                                             @endif
                                         </li>
                                     </ul>
@@ -197,11 +213,12 @@
                             <tr>
                                 <th>
                                     <span class="fas fa-fw fa-user text-muted"></span>
-                                    Character
+                                    Character ({{ $raid->characters->where('pivot.is_exempt', 0)->count()}} going)
                                 </th>
                                 <th>
                                     <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
                                     Notes
+                                    ({{ $raid->characters->where('pivot.is_exempt', 1)->count()}} excused)
                                 </th>
                                 <th>
                                     <span class="fas fa-fw fa-sack text-success"></span>
@@ -213,54 +230,56 @@
                             @foreach($raid->characters as $character)
                                 <tr>
                                     <td>
-                                        <ul class="no-indent no-bullet">
+                                        <ul class="no-indent no-bullet mb-0">
                                             <li>
                                                 @include('member/partials/listMemberCharacter', ['bold' => true])
                                             </li>
-                                            @if ($character->pivot->is_exempt)
-                                                <li class="text-warning">
-                                                    <span class="fas fa-fw fa-user-chart text-muted"></span>
-                                                    Excused
-                                                    @if ($character->pivot->remark_id)
-                                                        <span class="text-muted">
-                                                            {{ $remarks[$character->pivot->remark_id] }}
-                                                        </span>
-                                                    @endif
-                                                </li>
-                                            @elseif (!$isFuture)
-                                                <li class="{{ getAttendanceColor($character->pivot->credit) }}">
-                                                    <span class="fas fa-fw fa-user-chart text-muted"></span>
-                                                    {{ $character->pivot->credit * 100 }}% credit
-                                                    @if ($character->pivot->remark_id)
-                                                        <span class="text-muted">
-                                                            {{ $remarks[$character->pivot->remark_id] }}
-                                                        </span>
-                                                    @endif
-                                                </li>
-                                            @endif
                                         </ul>
                                     </td>
                                     <td>
-                                        <ul class="list-inline">
-                                            <div>
-                                                @if ($character->pivot->public_note)
-                                                    <span class="js-markdown-inline">{{ $character->pivot->public_note }}</span>
-                                                @else
+                                        <ul class="no-bullet no-indent mb-0">
+                                            @if (!$character->pivot->is_exempt && $isFuture && !$character->pivot->public_note && !($showOfficerNote && $character->pivot->officer_note))
+                                                <li>
                                                     —
+                                                </li>
+                                            @else
+                                                @if ($character->pivot->is_exempt)
+                                                    <li class="text-warning">
+                                                        Excused
+                                                        @if ($character->pivot->remark_id)
+                                                            <span class="text-muted">
+                                                                {{ $remarks[$character->pivot->remark_id] }}
+                                                            </span>
+                                                        @endif
+                                                    </li>
+                                                @elseif (!$isFuture)
+                                                    <li class="{{ getAttendanceColor($character->pivot->credit) }}">
+                                                        {{ $character->pivot->credit * 100 }}% credit
+                                                        @if ($character->pivot->remark_id)
+                                                            <span class="text-muted">
+                                                                {{ $remarks[$character->pivot->remark_id] }}
+                                                            </span>
+                                                        @endif
+                                                    </li>
                                                 @endif
-                                            </div>
-                                            @if ($showOfficerNote && $character->pivot->officer_note)
-                                                <div>
-                                                    <span class="font-weight-bold small font-italic text-gold">Officer's Note</span>
-                                                    <br>
-                                                    <span class="js-markdown-inline">{{ $character->pivot->officer_note }}</span>
-                                                </div>
+                                                @if ($character->pivot->public_note)
+                                                    <li>
+                                                        <span class="js-markdown-inline">{{ $character->pivot->public_note }}</span>
+                                                    </li>
+                                                @endif
+                                                @if ($showOfficerNote && $character->pivot->officer_note)
+                                                    <li>
+                                                        <span class="font-weight-bold small font-italic text-gold">Officer's Note</span>
+                                                        <br>
+                                                        <span class="js-markdown-inline">{{ $character->pivot->officer_note }}</span>
+                                                    </li>
+                                                @endif
                                             @endif
                                         </ul>
                                     </td>
                                     <td>
                                         @if($character->received->count())
-                                            <ul class="list-inline">
+                                            <ul class="list-inline mb-0">
                                                 @foreach ($character->received as $item)
                                                     <li class="list-inline-item">
                                                         @include('partials/item', ['wowheadLink' => false])
@@ -292,9 +311,9 @@
             "paging" : false,
             "fixedHeader" : true, // Header row sticks to top of window when scrolling down
             "columns" : [
-                { "orderable" : false },
-                { "orderable" : false },
-                { "orderable" : false },
+                { "orderable" : false, "className" : "width-130" },
+                { "orderable" : false, "className" : "width-250" },
+                { "orderable" : false, "className" : "width-200" },
             ]
         });
     });

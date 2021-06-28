@@ -105,7 +105,7 @@ class AssignLootController extends Controller
                 'id'       => $id,
                 'guild_id' => $guild->id,
             ])
-            ->with(['items' => function ($query) { return $query->orderBy('items.name');}])
+            ->with(['items' => function ($query) use ($guild) { return $query->where('items.expansion_id', $guild->expansion_id)->orderBy('items.name');}])
             ->firstOrFail();
 
         $guild->load([
@@ -253,11 +253,6 @@ class AssignLootController extends Controller
         $guild->load([
             'raidGroups',
         ]);
-
-        if (!$currentMember->hasPermission('edit.raid-loot')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
-        }
 
         $instances = Cache::remember('instances:expansion:' . $guild->expansion_id,
             env('CACHE_INSTANCES_SECONDS', 600),
