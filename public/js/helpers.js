@@ -62,11 +62,11 @@ $(document).ready(function () {
 // Take the visible date input, and convert its time to UTC, update the hidden date input.
 function addDateInputHandlers() {
     $(".js-date-input").change(function () {
-        let realInput = $(this).prev(".js-date");
+        let actualInput = $(this).prev(".js-date");
         if ($(this).val()) {
-            realInput.val(moment($(this).val()).utc().format("YYYY-MM-DD HH:mm:ss"));
+            actualInput.val(moment($(this).val()).utc().format("YYYY-MM-DD HH:mm:ss"));
         } else {
-            realInput.val(date);
+            actualInput.val(date);
             $(this).val(moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss"));
         }
     });

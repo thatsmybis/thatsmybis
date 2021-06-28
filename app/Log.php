@@ -14,7 +14,6 @@ class Log extends Model
      */
     protected $fillable = [
         'name',
-        'member_id',
         'raid_id',
     ];
 

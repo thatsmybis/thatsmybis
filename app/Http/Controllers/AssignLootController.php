@@ -202,7 +202,6 @@ class AssignLootController extends Controller
                 ->update($updateValues);
         }
 
-
         if ($newDate) {
             $newDate = Carbon::parse($newDate)->toDateTimeString();
             unset($updateValues['received_at']);
