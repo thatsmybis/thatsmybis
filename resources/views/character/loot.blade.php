@@ -4,8 +4,8 @@
 @php
     $maxDate = (new \DateTime())->modify('+1 day')->format('Y-m-d');
 
-    // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
-    // So we're iterating over the characters only one time, saving the results, and printing them.
+    // Iterating over 100+ raids on 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
+    // So we're iterating over the raids only one time, saving the results, and printing them.
     $raidSelectOptions = (string)View::make('partials.raidOptions', ['raids' => $guild->raids]);
 @endphp
 

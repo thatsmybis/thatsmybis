@@ -449,8 +449,6 @@ class RaidController extends Controller
         $raid->instances()->sync($instances);
 
         // Replace old logs with new ones
-        // $raid->logs()->delete();
-        // $raid->logs()->createMany(request()->input('logs'));
         $this->syncLogs(request()->input('logs'), $raid->logs, $raid->id);
 
         // Sync raid groups
