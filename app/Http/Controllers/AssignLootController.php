@@ -303,7 +303,11 @@ class AssignLootController extends Controller
         }
 
         if (!empty(request()->input('character_id'))) {
-            $query = $query->where('character_items.character_id', request()->input('character_id'));
+            $query = $query
+                ->join('character_items as character_items_1', function ($join) {
+                    $join->on('character_items_1.batch_id', '=', 'batches.id');
+                })
+                ->where('character_items_1.character_id', request()->input('character_id'));
             $resources[] = Character::where([['guild_id', $guild->id], ['id', request()->input('character_id')]])->with('member')->first();
         }
 
