@@ -15,7 +15,6 @@
             <span class="text-muted">optional</span> Give this assignment a name
         </label>
         <input name="name"
-            required
             autocomplete="off"
             maxlength="75"
             type="text"
@@ -63,7 +62,7 @@
             Raid
             <span class="text-muted">locked</span>
             <a class="" target="_blank" href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
-                open raid
+                show raid
             </a>
         </label>
         <input

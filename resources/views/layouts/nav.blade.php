@@ -320,7 +320,7 @@
                                 'item.assignLoot',
                                 'item.assignLoot.list'
                             ]) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Raiding
+                            Raids
                         </a>
                         <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
                             <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', ($raid ? "Edit" : "Create") . " Raid - " . config('app.name'))
+@section('title', ($raid ? ($copy ? "Copy" : "Edit") : "Create") . " Raid - " . config('app.name'))
 
 @php
     $date = null;
@@ -345,7 +345,7 @@
                                 <div class="col-lg-11 col-10">
                                     <div class="row">
                                         <!-- Character dropdown -->
-                                        <div class="col-xl-5 col-lg-5 col-12">
+                                        <div class="col-xl-5 col-lg-5 col-sm-6 col-12">
                                             <div class="form-group mb-1 {{ $errors->has('characters.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
 
                                                 <label for="characters[{{ $i }}][character_id]" class="font-weight-bold">

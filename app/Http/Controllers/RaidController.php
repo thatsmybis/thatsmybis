@@ -192,6 +192,8 @@ class RaidController extends Controller
             $raid->member_id       = null;
             $raid->created_at      = null;
             $raid->updated_at      = null;
+
+            $raid->logs = collect();
             $raid->characters->transform(function ($character) {
                 $character->pivot->raid_id      = null;
                 $character->pivot->is_exempt    = null;
@@ -448,8 +450,10 @@ class RaidController extends Controller
         $instances = $this->filterInstanceInputs(request()->input('instance_id'));
         $raid->instances()->sync($instances);
 
-        // Replace old logs with new ones
-        $this->syncLogs(request()->input('logs'), $raid->logs, $raid->id);
+        if (request()->input('logs')) {
+            // Replace old logs with new ones
+            $this->syncLogs(request()->input('logs'), $raid->logs, $raid->id);
+        }
 
         // Sync raid groups
         $raidGroups = $this->filterRaidGroupInputs(request()->input('raid_group_id'));
