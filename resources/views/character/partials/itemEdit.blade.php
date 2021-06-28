@@ -1,5 +1,4 @@
 @php
-    $item          = null;
     $oldIsReceived = false;
     $oldIsOffspec  = false;
     $oldReceivedAt = null;
@@ -10,6 +9,8 @@
         $oldIsOffspec  = old($name . '.' . $i . '.is_offspec');
         $oldReceivedAt = old($name . '.' . $i . '.new_received_at');
         $oldRaidId     = old($name . '.' . $i . '.new_raid_id');
+    } else {
+        $item = null;
     }
 @endphp
 <ul class="list-inline">
