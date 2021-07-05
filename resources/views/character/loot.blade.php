@@ -282,7 +282,7 @@
                                 <span class="fas fa-fw fa-book"></span>
                                 Rare Recipes
                             </span>
-                            <small class="text-muted font-weight-normal" title="Max {{ $maxRecipes }}">just the rare ones &sdot;</small>
+                            <small class="text-muted font-weight-normal" title="Max {{ $maxRecipes }}">so your guildmates can see &sdot;</small>
                             <a href="{{ route('guild.recipe.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">
                                 view guild recipes
                             </a>

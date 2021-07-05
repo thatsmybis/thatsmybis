@@ -200,7 +200,7 @@ class CharacterLootController extends Controller
             if (request()->input('received')) {
                 $markAsReceived = (request()->input('mark_as_received') == "1" ? true : false);
                 // Don't bother enforcing an item limit here
-                $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember, false, $markAsReceived);
+                $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember, true, $markAsReceived);
             }
         }
 
