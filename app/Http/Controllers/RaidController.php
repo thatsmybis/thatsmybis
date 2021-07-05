@@ -476,6 +476,9 @@ class RaidController extends Controller
         $characters = [];
 
         foreach ($characterInputs as $character) {
+            if (!isset($character['is_exempt'])) {
+                $character['is_exempt'] = 0;
+            }
             // This has the added effect of filtering out duplicates
             $characters[$character['character_id']] = $character;
         }
