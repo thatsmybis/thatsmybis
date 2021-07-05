@@ -456,7 +456,7 @@ class AssignLootController extends Controller
                             'type'          => Item::TYPE_RECEIVED,
                             'order'         => '0', // Put this item at the top of the list
                             'is_offspec'    => (isset($item['is_offspec']) && $item['is_offspec'] == true ? 1 : 0),
-                            'is_received'   => 1,
+                            'is_received'   => 1, // A little redundant
                             'note'          => ($item['note']         ? $item['note'] : null),
                             'officer_note'  => ($item['officer_note'] ? $item['officer_note'] : null),
                             'received_at'   => ($item['received_at']  ? Carbon::parse($item['received_at'])->toDateTimeString() : getDateTime()),

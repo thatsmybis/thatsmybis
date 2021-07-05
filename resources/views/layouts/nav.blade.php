@@ -85,6 +85,9 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="lootNavDropdown">
                         @if ($editItems)
+                            <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                Assign Loot
+                            </a>
                             <div class="dropdown dropright">
                                 <a class="dropdown-item dropdown-toggle" href="#" id="adminItemNotes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     Notes
