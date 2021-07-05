@@ -238,7 +238,11 @@
                                     </td>
                                     <td>
                                         <ul class="no-bullet no-indent mb-0">
-                                            @if (!$character->pivot->is_exempt && $isFuture && !$character->pivot->public_note && !($showOfficerNote && $character->pivot->officer_note))
+                                            @if ($isFuture &&
+                                                !$character->pivot->is_exempt &&
+                                                !$character->pivot->remark_id &&
+                                                !$character->pivot->public_note &&
+                                                !($showOfficerNote && $character->pivot->officer_note))
                                                 <li>
                                                     —
                                                 </li>
@@ -252,9 +256,11 @@
                                                             </span>
                                                         @endif
                                                     </li>
-                                                @elseif (!$isFuture)
+                                                @elseif (!$isFuture || $character->pivot->remark_id)
                                                     <li class="{{ getAttendanceColor($character->pivot->credit) }}">
-                                                        {{ $character->pivot->credit * 100 }}% credit
+                                                        @if (!$isFuture)
+                                                            {{ $character->pivot->credit * 100 }}% credit
+                                                        @endif
                                                         @if ($character->pivot->remark_id)
                                                             <span class="text-muted">
                                                                 {{ $remarks[$character->pivot->remark_id] }}
