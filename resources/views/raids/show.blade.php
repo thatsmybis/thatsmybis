@@ -250,22 +250,17 @@
                                                 @if ($character->pivot->is_exempt)
                                                     <li class="text-warning">
                                                         Excused
-                                                        @if ($character->pivot->remark_id)
-                                                            <span class="text-muted">
-                                                                {{ $remarks[$character->pivot->remark_id] }}
-                                                            </span>
-                                                        @endif
                                                     </li>
-                                                @elseif (!$isFuture || $character->pivot->remark_id)
+                                                @elseif (!$isFuture)
                                                     <li class="{{ getAttendanceColor($character->pivot->credit) }}">
-                                                        @if (!$isFuture)
-                                                            {{ $character->pivot->credit * 100 }}% credit
-                                                        @endif
-                                                        @if ($character->pivot->remark_id)
-                                                            <span class="text-muted">
-                                                                {{ $remarks[$character->pivot->remark_id] }}
-                                                            </span>
-                                                        @endif
+                                                        {{ $character->pivot->credit * 100 }}% credit
+                                                    </li>
+                                                @endif
+                                                @if ($character->pivot->remark_id)
+                                                    <li class="{{ getAttendanceColor($character->pivot->credit) }}">
+                                                        <span class="text-muted">
+                                                            {{ $remarks[$character->pivot->remark_id] }}
+                                                        </span>
                                                     </li>
                                                 @endif
                                                 @if ($character->pivot->public_note)
