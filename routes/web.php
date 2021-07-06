@@ -50,6 +50,7 @@ Route::get( '/faq',     'HomeController@faq')    ->name('faq');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 Route::get( '/donate',  'HomeController@donate') ->name('donate');
+Route::get( '/translations', 'HomeController@translations')->name('translations');
 
 Route::get( '/register-guild', 'GuildController@showRegister')->name('guild.showRegister');
 Route::post('/submit-guild',   'GuildController@register')    ->name('guild.register');
