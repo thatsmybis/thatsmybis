@@ -16,7 +16,7 @@ var inputTemplate =
                 <div class="form-inline">
                     <div class="form-group">
                         <label class="sr-only" for="[order]">
-                            Rank
+                            {{ __("Rank") }}
                         </label>
                         &nbsp;
                         <input name="[order]"
@@ -37,7 +37,7 @@ var inputTemplate =
                 <div class="checkbox">
                     <label class="small text-muted">
                         <input type="checkbox" name="[is_offspec]" value="1" class="" autocomplete="off">
-                            Offspec
+                            {{ __("Offspec") }}
                     </label>
                 </div>
             </li>
@@ -45,7 +45,7 @@ var inputTemplate =
                 <div class="checkbox">
                     <label class="small text-muted">
                         <input type="checkbox" name="[is_received]" value="1" class="" autocomplete="off">
-                            Received
+                            {{ __("Received") }}
                     </label>
                 </div>
             </li>

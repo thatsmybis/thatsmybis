@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Change Owner - " . config('app.name'))
+@section('title', __("Change Owner") . " - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,7 +9,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-bold text-danger">
                         <span class="fas fa-fw fa-exclamation-triangle text-gold"></span>
-                        Change Guild Owner
+                        {{ __("Change Guild Owner") }}
                     </h1>
                 </div>
             </div>
@@ -30,19 +30,19 @@
 
                         <ul class="no-bullet no-indent">
                             <li class="text-danger font-weight-bold">
-                                DANGER ZONE!
+                                {{ __("DANGER ZONE!") }}
                             </li>
                             <li class="text-danger font-weight-bold">
-                                You will lose ownership of the guild on this website
+                                {{ __("You will lose ownership of the guild on this website") }}
                             </li>
                             <li class="">
-                                The user you select will be the new owner
+                                {{ __("The user you select will be the new owner") }}
                             </li>
                             <li class="">
-                                You won't be able to undo this without their help
+                                {{ __("You won't be able to undo this without their help") }}
                             </li>
                             <li class="">
-                                This will <strong>not</strong> affect your Discord server in any way
+                                {{ __("This will") }} <strong>{{ __("not") }}</strong> {{ __("affect your Discord server in any way") }}
                             </li>
                         </ul>
 
@@ -50,7 +50,7 @@
                             <div class="col-12">
                                 <label for="gm_role_id" class="font-weight-bold text-danger">
                                     <span class="fas fa-fw fa-crown text-gold"></span>
-                                    New Guild Owner
+                                    {{ __("New Guild Owner") }}
                                 </label>
                             </div>
                             <div class="col-md-6 col-sm-8 col-12">
@@ -79,7 +79,7 @@
                 <div class="form-group">
                     <button class="btn btn-danger" onClick="return confirm('YOU WILL LOSE OWNERSHIP. Are you sure?');">
                         <span class="fas fa-fw fa-exclamation-triangle"></span>
-                        I want to lose ownership and give it to this member
+                        {{ __("I want to lose ownership and give it to this member") }}
                     </button>
                 </div>
             </form>

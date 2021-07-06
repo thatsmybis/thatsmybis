@@ -1,8 +1,10 @@
 <div class="form-group">
     <label for="discord_id" class="font-weight-bold">
         <span class="text-muted fab fa-fw fa-discord"></span>
-        Discord Server
-        <span class="text-muted font-weight-normal">ones you have admin permissions on</span>
+        {{ __("Discord Server") }}
+        <span class="text-muted font-weight-normal">
+            {{ __("ones you have admin permissions on") }}
+        </span>
     </label>
     <select name="discord_id_select" class="form-control">
         <option value="">
@@ -25,20 +27,21 @@
     <span class="text-muted cursor-pointer" id="discord_id_toggle"
         style="{{ old('discord_id') ? 'display:none;' : '' }}"
         onclick="$('#discord_id').show();$('#discord_id_toggle').hide();">
-        <strong>OR</strong> click here to manually enter a server ID
+        <strong>{{ __("OR") }}</strong>
+        {{ __("click here to manually enter a server ID") }}
     </span>
     <div class="" id="discord_id" style="{{ old('discord_id') ? '' : 'display:none;' }}">
         <label for="discord_id" class="font-weight-light">
             (optional)
             <span class="sr-only">
-                paste your server's ID
+                {{ __("paste your server's ID") }}
             </span>
         </label>
         <span class="text-muted">
             <a href="https://support.discord.com/hc/en-us/articles/206346498-Where-can-I-find-my-User-Server-Message-ID-" target="_blank">
-                instructions
+                {{ __("instructions") }}
             </a>
-            for finding a server ID
+            {{ __("for finding a server ID") }}
         </span>
         <input name="discord_id" maxlength="255" type="text" class="form-control" placeholder="paste your guild's server ID" value="{{ old('discord_id') ? old('discord_id') : null }}" />
     </div>

@@ -1,11 +1,11 @@
 @extends('layouts.app')
-@section('title', 'Permissions - ' . config('app.name'))
+@section('title', _('Permissions') . ' - ' . config('app.name'))
 
 
 @section('content')
 <div class="container-fluid">
     <div class="col-12">
-        Current website permissions:
+        {{ __("Current website permissions:") }}
         <ul class="no-bullet">
             @foreach ($permissions as $permission)
                 <li class="mb-2">
@@ -25,8 +25,8 @@
                 </li>
             @endforeach
         </ul>
-        <a class="btn btn-danger" href="{{ route('guild.addPermissions', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" onclick="return confirm('Are you sure? This only needs to be run once or when a developer is ready to update the permissions.')">
-            (danger) Load Permissions
+        <a class="btn btn-danger" href="{{ route('guild.addPermissions', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" onclick="return confirm("{{__("Are you sure? This only needs to be run once or when a developer is ready to update the permissions.") }}')">
+            {{ __("(danger) Load Permissions") }}
         </a>
     </div>
 </div>

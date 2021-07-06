@@ -47,12 +47,12 @@
                 @if ($currentMember->guild_id == $guild->id)
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['member.edit', 'member.show']) && $currentMember->id == (isset($member) ? $member->id : null) ? 'active' : '' }}">
                         <a class="nav-link {{ $menuColor }}" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]) }}">
-                            Profile
+                            {{ __("Profile") }}
                         </a>
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['character.loot']) ? 'active font-weight-bold' : '' }}" href="#" id="wishlistNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Wishlist
+                            {{ __("Wishlist") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="wishlistNavDropdown">
                             @foreach ($currentMember->characters as $character)
@@ -66,7 +66,7 @@
                             @endif
 
                             <a class="dropdown-item text-muted" href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Sitewide wishlists
+                                {{ __("Sitewide wishlists") }}
                             </a>
                         </div>
                     </li>
@@ -81,73 +81,73 @@
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.item.list', 'guild.item.list.edit', 'guild.prios.chooseRaidGroup']) ? 'active font-weight-bold' : '' }}" href="#" id="lootNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Loot
+                        {{ __("Loot") }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="lootNavDropdown">
                         @if ($editItems)
                             <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Assign Loot
+                                {{ __("Assign Loot") }}
                             </a>
                             <div class="dropdown dropright">
                                 <a class="dropdown-item dropdown-toggle" href="#" id="adminItemNotes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Notes
+                                    {{ __("Notes") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="adminItemNotes">
                                     @if ($guild->expansion_id == 1)
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'zulgurub']) }}">
-                                            Zul'Gurub
+                                            {{ __("Zul'Gurub") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
-                                            Ruins of Ahn'Qiraj
+                                            {{ __("Ruins of Ahn'Qiraj") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'world-bosses']) }}">
-                                            World Bosses
+                                            {{ __("World Bosses") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'molten-core']) }}">
-                                            Molten Core
+                                            {{ __("Molten Core") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair']) }}">
-                                            Onyxia's Lair
+                                            {{ __("Onyxia's Lair") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-lair']) }}">
-                                            Blackwing Lair
+                                            {{ __("Blackwing Lair") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
-                                            Temple of Ahn'Qiraj
+                                            {{ __("Temple of Ahn'Qiraj") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
-                                            Naxxramas
+                                            {{ __("Naxxramas") }}
                                         </a>
                                     @elseif ($guild->expansion_id == 2)
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'karazhan']) }}">
-                                            Karazhan
+                                            {{ __("Karazhan") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gruuls-lair']) }}">
-                                            Gruul's Lair
+                                            {{ __("Gruul's Lair") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'magtheridons-lair']) }}">
-                                            Magtheridon's Lair
+                                            {{ __("Magtheridon's Lair") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'serpentshrine-cavern']) }}">
-                                            Serpentshrine Cavern
+                                            {{ __("Serpentshrine Cavern") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'hyjal-summit']) }}">
-                                            Hyjal Summit
+                                            {{ __("Hyjal Summit") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'tempest-keep']) }}">
-                                            Tempest Keep
+                                            {{ __("Tempest Keep") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'black-temple']) }}">
-                                            Black Temple
+                                            {{ __("Black Temple") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'zulaman']) }}">
-                                            Zul'Aman
+                                            {{ __("Zul'Aman") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'sunwell-plateau']) }}">
-                                            Sunwell Plateau
+                                            {{ __("Sunwell Plateau") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'bc-world-bosses']) }}">
-                                            World Bosses
+                                            {{ __("World Bosses") }}
                                         </a>
                                     @endif
                                 </div>
@@ -157,64 +157,64 @@
                         @if ($editPrios)
                             <div class="dropdown dropright">
                                 <a class="dropdown-item dropdown-toggle" href="#" id="adminPrioDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Prios
+                                    {{ __("Prios") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="adminPrioDropdown">
                                     @if ($guild->expansion_id == 1)
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'zulgurub']) }}">
-                                            Zul'Gurub
+                                            {{ __("Zul'Gurub") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
-                                            Ruins of Ahn'Qiraj
+                                            {{ __("Ruins of Ahn'Qiraj") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'world-bosses']) }}">
-                                            World Bosses
+                                            {{ __("World Bosses") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'molten-core']) }}">
-                                            Molten Core
+                                            {{ __("Molten Core") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair']) }}">
-                                            Onyxia's Lair
+                                            {{ __("Onyxia's Lair") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-lair']) }}">
-                                            Blackwing Lair
+                                            {{ __("Blackwing Lair") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
-                                            Temple of Ahn'Qiraj
+                                            {{ __("Temple of Ahn'Qiraj") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
-                                            Naxxramas
+                                            {{ __("Naxxramas") }}
                                         </a>
                                     @elseif ($guild->expansion_id == 2)
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'karazhan']) }}">
-                                            Karazhan
+                                            {{ __("Karazhan") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gruuls-lair']) }}">
-                                            Gruul's Lair
+                                            {{ __("Gruul's Lair") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'magtheridons-lair']) }}">
-                                            Magtheridon's Lair
+                                            {{ __("Magtheridon's Lair") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'serpentshrine-cavern']) }}">
-                                            Serpentshrine Cavern
+                                            {{ __("Serpentshrine Cavern") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'hyjal-summit']) }}">
-                                            Hyjal Summit
+                                            {{ __("Hyjal Summit") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'tempest-keep']) }}">
-                                            Tempest Keep
+                                            {{ __("Tempest Keep") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'black-temple']) }}">
-                                            Black Temple
+                                            {{ __("Black Temple") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'zulaman']) }}">
-                                            Zul'Aman
+                                            {{ __("Zul'Aman") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'sunwell-plateau']) }}">
-                                            Sunwell Plateau
+                                            {{ __("Sunwell Plateau") }}
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'bc-world-bosses']) }}">
-                                            World Bosses
+                                            {{ __("World Bosses") }}
                                         </a>
                                     @endif
                                 </div>
@@ -227,84 +227,92 @@
 
                         @if ($guild->expansion_id == 1)
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'zulgurub']) }}">
-                                Zul'Gurub
+                                {{ __("Zul'Gurub") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
-                                Ruins of Ahn'Qiraj
+                                {{ __("Ruins of Ahn'Qiraj") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'world-bosses']) }}">
-                                World Bosses
+                                {{ __("World Bosses") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'molten-core']) }}">
-                                Molten Core
+                                {{ __("Molten Core") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair']) }}">
-                                Onyxia's Lair
+                                {{ __("Onyxia's Lair") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-lair']) }}">
-                                Blackwing Lair
+                                {{ __("Blackwing Lair") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
-                                Temple of Ahn'Qiraj
+                                {{ __("Temple of Ahn'Qiraj") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas']) }}">
-                                Naxxramas
+                                {{ __("Naxxramas") }}
                             </a>
                         @elseif ($guild->expansion_id == 2)
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'karazhan']) }}">
-                                Karazhan
+                                {{ __("Karazhan") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gruuls-lair']) }}">
-                                Gruul's Lair
+                                {{ __("Gruul's Lair") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'magtheridons-lair']) }}">
-                                Magtheridon's Lair
+                                {{ __("Magtheridon's Lair") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'serpentshrine-cavern']) }}">
-                                Serpentshrine Cavern
+                                {{ __("Serpentshrine Cavern") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'hyjal-summit']) }}">
-                                Hyjal Summit
+                                {{ __("Hyjal Summit") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'tempest-keep']) }}">
-                                Tempest Keep
+                                {{ __("Tempest Keep") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'black-temple']) }}">
-                                Black Temple
+                                {{ __("Black Temple") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'zulaman']) }}">
-                                Zul'Aman
+                                {{ __("Zul'Aman") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'sunwell-plateau']) }}">
-                                Sunwell Plateau
+                                {{ __("Sunwell Plateau") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'bc-world-bosses']) }}">
-                                World Bosses
+                                {{ __("World Bosses") }}
                             </a>
                         @endif
                     </div>
                 </li>
 
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.roster']) ? 'active' : '' }}">
-                    <a class="nav-link {{ $menuColor }}" href="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Roster</a>
+                    <a class="nav-link {{ $menuColor }}" href="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                        {{ __("Roster") }}
+                    </a>
                 </li>
 
                 {{-- Why hello there... yes. Yes, there is a 'news' page. No, I don't quite think it's ready for the mainstream yet.
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.news']) ? 'active' : '' }}">
-                    <a class="nav-link {{ $menuColor }}" href="{{ route('guild.news', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">News</a>
+                    <a class="nav-link {{ $menuColor }}" href="{{ route('guild.news', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                        {{ __("News") }}
+                    </a>
                 </li>
                 --}}
 
                 {{-- Yep, there's support for a calendar...
                 @if ($guild->calendar_link)
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.calendar']) ? 'active' : '' }}">
-                        <a class="nav-link" href="{{ route('guild.calendar', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Calendar</a>
+                        <a class="nav-link" href="{{ route('guild.calendar', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            {{ __("Calendar") }}
+                        </a>
                     </li>
                 @endif
                 --}}
                 {{-- Why yes, there's a section for hosting resources such as guides... but it's just not time yet!
                 <li class="nav-item {{ in_array(Route::currentRouteName(), ['contentIndex', 'showContent']) ? 'active' : '' }}">
-                    <a class="nav-link {{ $menuColor }}" href="{{ route('contentIndex', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Resources</a>
+                    <a class="nav-link {{ $menuColor }}" href="{{ route('contentIndex', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                        {{ __("Resources") }}
+                    </a>
                 </li>
                 --}}
 
@@ -323,31 +331,33 @@
                                 'item.assignLoot',
                                 'item.assignLoot.list'
                             ]) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Raids
+                            {{ __("Raids") }}
                         </a>
                         <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
                             <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Assign Loot
+                                {{ __("Assign Loot") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Create Raid
+                                {{ __("Create Raid") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                List Raids
+                                {{ __("List Raids") }}
                             </a>
                             <a class="dropdown-item" href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Old Loot Assignments
+                                {{ __("Old Loot Assignments") }}
                             </a>
                             @if ($viewRaids)
                                 <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                    Raid Groups
+                                    {{ __("Raid Groups") }}
                                 </a>
                             @endif
                         </div>
                     </li>
                 @else
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.raids.list']) ? 'active' : '' }}">
-                        <a class="nav-link {{ $menuColor }}" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">Raids</a>
+                        <a class="nav-link {{ $menuColor }}" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            {{ __("Raids") }}
+                        </a>
                     </li>
                 @endif
 
@@ -361,42 +371,42 @@
                             'guild.roles',
                         ]) ? 'active font-weight-bold' : '' }}
                         dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Guild
+                        {{ __("Guild") }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="adminNavDropdown">
                         @if ($editGuild)
                             <a class="dropdown-item" href="{{ route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Settings
+                                {{ __("Settings") }}
                             </a>
                         @endif
 
                         <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            Audit Log
+                            {{ __("Audit Log") }}
                         </a>
 
                         @if ($editCharacters)
                             <a class="dropdown-item" href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'create_more' => 1]) }}">
-                                Create Characters
+                                {{ __("Create Characters") }}
                             </a>
                         @endif
 
                         <a class="dropdown-item" target="_blank" href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}">
-                            Export for TMB Tooltips
+                            {{ __("Export for TMB Tooltips") }}
                         </a>
                         <a class="dropdown-item" href="{{ route('guild.exports', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            Exports
+                            {{ __("Exports") }}
                         </a>
                         <a class="dropdown-item" href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            Members
+                            {{ __("Members") }}
                         </a>
 
                         <a class="dropdown-item" href="{{ route('guild.recipe.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            Recipes
+                            {{ __("Recipes") }}
                         </a>
 
                         @if ($viewRoles)
                             <a class="dropdown-item" href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                Roles
+                                {{ __("Roles") }}
                             </a>
                         @endif
                     </div>
@@ -410,7 +420,7 @@
                     <a href="https://www.patreon.com/lemmings19" target="_blank" class="nav-link active small font-weight-bold text-patreon"
                         title="Toss a coin to your web dev">
                         <span class="fas fa-fw fa-sack"></span>
-                        Support TMB
+                        {{ __("Support TMB") }}
                     </a>
                 </li>
             @endif
@@ -419,14 +429,16 @@
             @if (Auth::guest())
                 <a class="text-white" href="{{ route('discordLogin') }}" title="Sign in with Discord" rel="nofollow">
                     <span class="fal fa-fw fa-sign-in-alt"></span>
-                    Sign In
+                    {{ __("Sign In") }}
                 </a>
             @else
                 <a href="{{ route('logout') }}"
                     class="text-white"
                     onclick="event.preventDefault();
                              document.getElementById('logout-form').submit();">
-                    <span class="text-grey fal fa-fw fa-sign-out"></span> Sign Out ({{ Auth::user()->username }})
+                    <span class="text-grey fal fa-fw fa-sign-out"></span>
+                    {{ __("Sign Out") }}
+                    <span class="small text-muted">({{ Auth::user()->username }})</span>
                 </a>
 
                 <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">

@@ -1,13 +1,13 @@
 @extends('layouts.app')
-@section('title', "Donate - " . config('app.name'))
+@section('title', __("Donate") . " - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row bg-light pt-5 pb-5 mb-3 rounded">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h1>Support the website! &lt;3</h1>
+            <h1>{{ __("Support the website!") }} &lt;3</h1>
             <p class="mt-3 text-muted">
-                None of this would be here without the generous donors listed below  &lt;3 &lt;3 &lt;3
+                {{ __("None of this would be here without the generous donors listed below") }} &lt;3 &lt;3 &lt;3
             </p>
             <ul class="no-bullet mt-5">
                 <li class="mb-5">
@@ -87,7 +87,7 @@
 
     <div class="row bg-light pt-5 pb-5 mb-5 rounded">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h1>Donors</h1>
+            <h1>{{ __("Donors") }}</h1>
             <ul class="fa-ul">
                 @foreach ($donors as $donor)
                     <li>

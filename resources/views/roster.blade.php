@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title',  'Roster - ' . config('app.name'))
+@section('title',  __("Roster") . ' - ' . config('app.name'))
 
 @section('content')
 

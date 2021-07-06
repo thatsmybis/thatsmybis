@@ -7,6 +7,7 @@ use App\Role;
 use App\Notification;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\App;
 
 class SeeUser
 {
@@ -70,6 +71,12 @@ class SeeUser
             if (!empty(request()->input('b')) && request()->input('b')) {
                 $bustCache = true;
             }
+
+            // Set the user's locale
+            // TODO: Change to currentLocale() when migrating to Laravel 8.x
+            // App::setLocale('fr');
+            // $locale = App::getLocale();
+            // dd($locale);
 
             // Store the user for later access.
             $request->attributes->add([

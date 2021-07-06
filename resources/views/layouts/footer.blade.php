@@ -11,15 +11,21 @@
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
-                        <a href="{{ route('about') }}" class="text-white">about</a>
+                        <a href="{{ route('about') }}" class="text-white">
+                            {{ __("about") }}
+                        </a>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
-                        <a href="{{ route('contact') }}" class="text-white">contact</a>
+                        <a href="{{ route('contact') }}" class="text-white">
+                            {{ __("contact") }}
+                        </a>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
-                        <a href="{{ route('terms') }}" class="text-white">terms</a>
+                        <a href="{{ route('terms') }}" class="text-white">
+                            {{ __("terms") }}
+                        </a>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     --}}
@@ -27,13 +33,13 @@
                         <div class="dropdown">
                             <a class="dropdown-toggle font-weight-bold {{ isset($guild) ? 'text-patreon-md' : 'text-patreon' }}" id="donateDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="fas fa-fw fa-sack"></span>
-                                Support TMB
+                                {{ __("Support TMB") }}
                             </a>
                             <div class="dropdown-menu text-center" aria-labelledby="donateDropdown">
                                 <span class="dropdown-item">
                                     <a class="text-4 text-patreon patreon-button" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
                                         <span class="fab fa-fw fa-patreon text-white"></span>
-                                        Patreon
+                                        {{ __("Patreon") }}
                                     </a>
                                 </span>
                                 <span class="dropdown-item">
@@ -53,25 +59,31 @@
                                     </form>
                                 </span>
                                 <div class="dropdown-item">
-                                    <a href="{{ route('donate') }}">view donors</a>
+                                    <a href="{{ route('donate') }}">
+                                        {{ __("view donors") }}
+                                    </a>
                                 </div>
                             </div>
                         </div>
                     </li>
                     <li class="list-inline-item">
-                        <a href="{{ route('faq') }}" class="text-white">FAQ</a>
+                        <a href="{{ route('faq') }}" class="text-white">
+                            {{ __("FAQ") }}
+                        </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="{{ route('privacy') }}" class="text-white">privacy</a>
+                        <a href="{{ route('privacy') }}" class="text-white">
+                            {{ __("privacy") }}
+                        </a>
                     </li>
                     <li class="list-inline-item">
                         <a href="{{ env('LINK_GITHUB') }}" target="_blank" class="text-white">
                             <span class="fab fa-github"></span>
-                            Github
+                            {{ __("Github") }}
                         </a>
                     </li>
                 </ul>
-                <!-- <p class="text-muted small mb-4 mb-lg-0">&copy; {{ env('APP_NAME') }} 2019. All Rights Reserved.</p> -->
+                <!-- who cares? <p class="text-muted small mb-4 mb-lg-0">&copy; {{ env('APP_NAME') }} 2021. All Rights Reserved.</p> -->
             </div>
 
             <div class="col-lg-6 h-100 text-center text-lg-right my-auto">
