@@ -3,7 +3,7 @@
         <tr>
             <th>
                 <span class="fas fa-fw fa-helmet-battle text-muted"></span>
-                Raid
+                {{ __("Raid") }}
             </th>
         </tr>
     </thead>
@@ -22,12 +22,12 @@
                             <ul class="list-inline mb-0">
                                 @if ($raid->pivot->is_exempt)
                                     <li class="list-inline-item {{ $withinLimit ? 'text-warning' : 'text-muted' }}">
-                                        Excused
+                                        {{ __("Excused") }}
                                     </li>
                                 @elseif (!$isFuture)
                                     <li class="list-inline-item {{ $withinLimit ? getAttendanceColor($raid->pivot->credit) : 'text-muted' }}"
                                         title="{{ !$withinLimit ? "outside of guild's counted attendance" : '' }}">
-                                        {{ $raid->pivot->credit * 100 }}% credit
+                                        {{ $raid->pivot->credit * 100 }}% {{ __("credit") }}
                                     </li>
                                 @endif
                                 <li class="list-inline-item">
@@ -36,9 +36,9 @@
                                         {{ $raid->name }}
                                     </a>
                                     <span class="small">
-                                        {{ $isFuture ? 'in' : '' }}
+                                        {{ $isFuture ? __('in') : '' }}
                                         <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
-                                        {{ !$isFuture ? 'ago' : '' }}
+                                        {{ !$isFuture ? __('ago') : '' }}
                                     </span>
                                 </li>
                             </ul>
@@ -73,7 +73,7 @@
                                 </div>
                                 @if ($showOfficerNote && $raid->pivot->officer_note)
                                     <div>
-                                        <span class="font-weight-bold small font-italic text-gold">Officer's Note</span>
+                                        <span class="font-weight-bold small font-italic text-gold">{{ __("Officer's Note") }}</span>
                                         <span class="js-markdown-inline">{{ $raid->pivot->officer_note }}</span>
                                     </div>
                                 @endif

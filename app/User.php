@@ -20,6 +20,7 @@ class User extends Authenticatable
         'username',
         // 'email',
         // 'email_verified_at',
+        'locale',
         'discord_id',
         'discord_username',
         'discord_avatar',

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', _('Permissions') . ' - ' . config('app.name'))
+@section('title', __('Permissions') . ' - ' . config('app.name'))
 
 
 @section('content')

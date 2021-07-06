@@ -4,7 +4,7 @@
     if (old('name')) {
         $oldName = old('name');
     } else if (isset($raid) && $raid) {
-        $oldName = $raid->name . ' loot';
+        $oldName = $raid->name . __('loot');
     } else if (isset($batch) && $batch && $batch->name) {
         $oldName = $batch->name;
     }
@@ -12,7 +12,7 @@
 <div class="col-12 {{ $errors->has('name') ? 'text-danger font-weight-bold' : '' }}">
     <div class="form-group">
         <label for="name" class="font-weight-bold">
-            <span class="text-muted">optional</span> Give this assignment a name
+            <span class="text-muted">{{ __("optional") }}</span> {{ __("Give this assignment a name") }}
         </label>
         <input name="name"
             autocomplete="off"
@@ -38,7 +38,7 @@
 <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
     <label for="raid_group_id font-weight-light">
         <span class="text-muted fas fa-fw fa-helmet-battle"></span>
-        Raid Group
+        {{ __("Raid Group") }}
     </label>
     <select name="raid_group_id" class="form-control dark selectpicker" data-live-search="true" autocomplete="off">
         <option value="">—</option>
@@ -59,10 +59,10 @@
     <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
         <label for="raid_id font-weight-light">
             <span class="text-muted fas fa-fw fa-calendar-alt"></span>
-            Raid
+            {{ __("Raid") }}
             <span class="text-muted">locked</span>
             <a class="" target="_blank" href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
-                show raid
+                {{ __("show raid") }}
             </a>
         </label>
         <input
@@ -83,15 +83,15 @@
     <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
         <label for="raid_id font-weight-light">
             <span class="text-muted fas fa-fw fa-calendar-alt"></span>
-            Raid
-            <span class="small text-muted">last {{ $raidHistoryLimit }} raids shown</span>
+            {{ __("Raid") }}
+            <span class="small text-muted">{{ __("last") }} {{ $raidHistoryLimit }} {{ __("raids shown") }}</span>
         </label>
         <select name="raid_id" class="form-control dark selectpicker" data-live-search="true" autocomplete="off">
             <option value="">—</option>
             @foreach ($guild->raids as $guildRaid)
                 <option value="{{ $guildRaid->id }}" {{ $oldRaidId && $oldRaidId == $guildRaid->id ? 'selected' : '' }}>
                     {{ $guildRaid->name }}
-                    {{ $guildRaid->date ? '(' . ($guildRaid->date > $now ? 'in ' . timeUntil(strtotime($guildRaid->date)) : timeSince(strtotime($guildRaid->date)) . ' ago')  . ')' : null }}
+                    {{ $guildRaid->date ? '(' . ($guildRaid->date > $now ? __('in') . ' ' . timeUntil(strtotime($guildRaid->date)) : timeSince(strtotime($guildRaid->date)) . ' ' . __('ago'))  . ')' : null }}
                 </option>
             @endforeach
         </select>

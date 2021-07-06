@@ -7,7 +7,7 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-12 text-center mt-5 mb-5">
+        <div class="col-12 text-center mt-5">
             <h2 class="">
                 {{ __("Welcome") }}, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
             </h2>
@@ -20,7 +20,11 @@
             More support = more features
         </div>
 
-        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center">
+        <div class="col-12 col-sm-6 offset-sm-3 col-md-4 offset-md-4 mt-3">
+            @include('partials/setLocale')
+        </div>
+
+        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 mt-3 text-center">
             @if ($user->members->count() > 0)
                 <h3 class="font-weight-normal mb-3">
                     <span class="fas fa-fw fa-users text-muted"></span>

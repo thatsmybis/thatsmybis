@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Assigned Loot - ' . config('app.name'))
+@section('title', __('Assigned Loot') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,7 +9,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-gift text-gold"></span>
-                        Assigned Loot
+                        {{ __("Assigned Loot") }}
                     </h1>
                 </div>
             </div>
@@ -17,9 +17,9 @@
             <div class="row">
                 @if ($resources)
                     <div class="col-12 mb-3 text-5">
-                        Filter:
+                        {{ __("Filter") }}:
                         <a href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            reset
+                            {{ __("reset") }}
                         </a>
                     </div>
                     <div class="col-12 pb-3 d-flex flex-wrap">
@@ -60,7 +60,7 @@
                     <div class="form-group">
                         <label for="min_date" class="font-weight-bold">
                             <span class="fas fa-fw fa-calendar-minus text-muted"></span>
-                            Min Date
+                            {{ __("Min Date") }}
                         </label>
                         <input name="min_date" min="2004-09-22"
                             max="{{ getDateTime('Y-m-d') }}"
@@ -76,7 +76,7 @@
                     <div class="form-group">
                         <label for="max_date" class="font-weight-bold">
                             <span class="fas fa-fw fa-calendar-plus text-muted"></span>
-                            Max Date
+                            {{ __("Max Date") }}
                         </label>
                         <input name="max_date"
                             min="2004-09-22"
@@ -93,7 +93,7 @@
                     <div class="form-group">
                         <label for="character_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-users text-muted"></span>
-                            Character
+                            {{ __("Character") }}
                         </label>
                         <select name="character_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
@@ -103,7 +103,7 @@
                                 <option value="{{ $character->id }}"
                                         data-tokens="{{ $character->id }}" class="text-{{ strtolower($character->class) }}-important"
                                         {{ Request::get('character_id') && Request::get('character_id') == $character->id ? 'selected' : ''}}>
-                                    {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? "Alt" : '' }}
+                                    {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? __("Alt") : '' }}
                                 </option>
                             @endforeach
 
@@ -114,7 +114,7 @@
                     <div class="form-group">
                         <label for="member_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-user text-muted"></span>
-                            Member
+                            {{ __("Member") }}
                         </label>
                         <select name="member_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
@@ -135,7 +135,7 @@
                     <div class="form-group">
                         <label for="raid_group_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-helmet-battle text-muted"></span>
-                            Raid Group
+                            {{ __("Raid Group") }}
                         </label>
                         <select name="raid_group_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
@@ -156,17 +156,17 @@
                     <div class="form-group">
                         <label for="item_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-sack text-muted"></span>
-                            Item
+                            {{ __("Item") }}
                         </label>
                         <input name="item_id" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" autocomplete="off" class="js-item-autocomplete-link js-input-text form-control dark">
-                        <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+                        <span class="js-loading-indicator" style="display:none;">{{ __("Searching") }}...</span>&nbsp;
                     </div>
                 </div>
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
                         <label for="item_instance_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-dungeon text-muted"></span>
-                            Item Dungeon
+                            {{ __("Item Dungeon") }}
                         </label>
                         <select name="item_instance_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="" data-tokens="">
@@ -194,10 +194,10 @@
                                         <div class="list-timestamp text-right text-muted p-2 small">
                                             @if ($batch->member_id)
                                                 <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $batch->member_id, 'usernameSlug' => $batch->member_slug]) }}" class="text-muted">
-                                                    <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $batch->created_at }}"></span> ago
+                                                    <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $batch->created_at }}"></span> {{ __("ago") }}
                                                 </a>
                                             @else
-                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $batch->created_at }}"></span> ago
+                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $batch->created_at }}"></span> {{ __("ago") }}
                                             @endif
                                         </div>
 
@@ -213,7 +213,7 @@
                                                 </li>
                                                 <li class="list-inline-item text-muted">
                                                     <a href="{{ route('item.assignLoot.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batchId' => $batch->id]) }}">
-                                                        <span class="text-uncommon">{{ $batch->item_count }}</span> <span class="text-muted">items</span>
+                                                        <span class="text-uncommon">{{ $batch->item_count }}</span> <span class="text-muted">{{ __("items") }}</span>
                                                     </a>
                                                 </li>
 
@@ -243,7 +243,7 @@
                                                 </li>
                                                 <li class="list-inline-item text-muted">
                                                     <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="">
-                                                        history
+                                                        {{ __("history") }}
                                                     </a>
                                                 </li>
                                             </ul>
@@ -258,7 +258,7 @@
                             @endforeach
                         @else
                             <li class="p-3 text-warning">
-                                No results found
+                                {{ __("No results found") }}
                             </li>
                         @endif
                     </ol>
@@ -305,7 +305,7 @@
                         response(data);
                         if (data.length <= 0) {
                             $(self).nextAll(".js-status-indicator").show();
-                            $(self).nextAll(".js-status-indicator").html("<span class=\"bg-danger\">&nbsp;" + request.term + " not found&nbsp;</span>");
+                            $(self).nextAll(".js-status-indicator").html("<span class=\"bg-danger\">&nbsp;" + request.term + " {{ __("not found") }}&nbsp;</span>");
                         }
                     },
                     error: function () {

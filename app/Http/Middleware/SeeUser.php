@@ -72,11 +72,8 @@ class SeeUser
                 $bustCache = true;
             }
 
-            // Set the user's locale
-            // TODO: Change to currentLocale() when migrating to Laravel 8.x
-            // App::setLocale('fr');
-            // $locale = App::getLocale();
-            // dd($locale);
+            // For translations
+            App::setLocale($user->locale);
 
             // Store the user for later access.
             $request->attributes->add([

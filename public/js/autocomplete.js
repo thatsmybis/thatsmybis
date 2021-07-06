@@ -298,8 +298,8 @@ function addTag($this, value, label) {
 
             let link = "";
             if (guild) {
-                let wowheadData = `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ value }"
-                        data-wowhead="item=${ value }?domain=${ wowheadSubdomain }"`;
+                let wowheadData = `data-wowhead-link="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ value }"
+                        data-wowhead="item=${ value }?domain=${ wowheadLocale + wowheadSubdomain }"`;
 
                 link = ` <a href="/${ guild.id }/${ guild.slug }/i/${ value }/${ slug(label) }"
                     target="_blank"
@@ -308,7 +308,7 @@ function addTag($this, value, label) {
                     ${ label }
                 </a>`;
             } else {
-                link = `<a href="https://${ wowheadSubdomain }.wowhead.com/item=${ value }" target="_blank" class="font-weight-medium">${ label }</a>`;
+                link = `<a href="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ value }" target="_blank" class="font-weight-medium">${ label }</a>`;
             }
 
             let inputLabel  = $nextInput.siblings(".js-input-label");

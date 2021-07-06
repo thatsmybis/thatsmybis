@@ -61,7 +61,7 @@ function createTable(lastSource) {
         "data"      : items,
         "columns"   : [
             {
-                "title"  : '<span class="fas fa-fw fa-skull-crossbones"></span> Boss',
+                "title"  : `<span class="fas fa-fw fa-skull-crossbones"></span> ${headerBoss}`,
                 "data"   : "",
                 "render" : function (data, type, row) {
                     if (row.source_name) {
@@ -83,7 +83,7 @@ function createTable(lastSource) {
                 "className" : "text-right width-130",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-sack text-success"></span> Loot',
+                "title"  : `<span class="fas fa-fw fa-sack text-success"></span> ${headerLoot}`,
                 "data"   : "",
                 "render" : function (data, type, row) {
                     return getItemLink(row);
@@ -93,7 +93,7 @@ function createTable(lastSource) {
                 "className" : "width-330",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-sort-amount-down text-gold"></span> Prio\'s',
+                "title"  : `<span class="fas fa-fw fa-sort-amount-down text-gold"></span> ${headerPrios}`,
                 "data"   : guild.is_attendance_hidden ? "priod_characters" : "priod_characters_with_attendance",
                 "render" : function (data, type, row) {
                     return data && data.length ? getCharacterList(data, 'prio', row.item_id) : '—';
@@ -104,7 +104,7 @@ function createTable(lastSource) {
                 "className" : "width-300",
             },
             {
-                "title"  : '<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist',
+                "title"  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> ${headerWishlist}`,
                 "data"   : guild.is_attendance_hidden ? "wishlist_characters" : "wishlist_characters_with_attendance",
                 "render" : function (data, type, row) {
                     return data && data.length ? getCharacterList(data, 'wishlist', row.item_id) : '—';
@@ -115,7 +115,7 @@ function createTable(lastSource) {
                 "className" : "width-400",
             },
             {
-                "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Received',
+                "title"  : `<span class="text-success fas fa-fw fa-sack"></span> ${headerReceived}`,
                 "data"   : "received_and_recipe_characters",
                 "render" : function (data, type, row) {
                     return data && data.length ? getCharacterList(data, 'received', row.item_id) : '—';
@@ -126,7 +126,7 @@ function createTable(lastSource) {
                 "className" : "width-300",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
+                "title"  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerNotes}`,
                 "data"   : "guild_note",
                 "render" : function (data, type, row) {
                     return getNotes(row, data);
@@ -137,7 +137,7 @@ function createTable(lastSource) {
                 "className" : "width-200",
             },
             {
-                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Prio Notes',
+                "title"  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerPrioNotes}`,
                 "data"   : "guild_priority",
                 "render" : function (data, type, row) {
                     return (data ? `<span class="js-markdown-inline">${ nl2br(data) }</span>` : '—');
@@ -229,7 +229,7 @@ function getCharacterList(data, type, itemId) {
                     <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_group_color) }"></span>
                     <span class="text-${ character.class ? character.class.toLowerCase() : '' }-important">${ character.name }</span>
                     ${ character.is_alt ? `
-                        <span class="text-warning">alt</span>
+                        <span class="text-warning">${localeAlt}</span>
                     ` : '' }
                     ${ !guild.is_attendance_hidden && (character.attendance_percentage || character.raid_count) ?
                         `${ character.raid_count && typeof character.attendance_percentage === 'number' ? `<span title="attendance" class="smaller ${ getAttendanceColor(character.attendance_percentage) }">${ Math.round(character.attendance_percentage * 100) }%</span>` : '' }${ character.raid_count ? `<span class="smaller"> ${ character.raid_count }r</span>` : ``}
@@ -268,8 +268,8 @@ function getNotes(row, note) {
 
 function getItemLink(row, iconSize = null) {
     let wowheadData =
-    `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ row.item_id }"
-    data-wowhead="item=${ row.item_id }?domain=${ wowheadSubdomain }"`;
+    `data-wowhead-link="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ row.item_id }"
+    data-wowhead="item=${ row.item_id }?domain=${ wowheadLocale + wowheadSubdomain }"`;
 
     if (iconSize) {
         wowheadData += ` data-wh-icon-size="${ iconSize }"`;

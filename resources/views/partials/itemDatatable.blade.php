@@ -3,7 +3,7 @@
         <li class="list-inline-item">
             <label for="raid_group_filter font-weight-light">
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
-                Raid Group
+                {{ __("Raid Group") }}
             </label>
             <select id="raid_group_filter" class="form-control dark">
                 <option value="">—</option>
@@ -19,14 +19,14 @@
 
         <li class="list-inline-item font-weight-light">
             <span class="text-muted fas fa-fw fa-eye-slash"></span>
-            Columns
+            {{ __("Columns") }}
         </li>
         @if ($showPrios)
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2" href="">
                     <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
-                    Prios
+                    {{ __("Prios") }}
                 </span>
             </li>
         @endif
@@ -35,7 +35,7 @@
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
                     <span class="text-muted fal fa-fw fa-scroll-old"></span>
-                    Wishlist
+                    {{ __("Wishlist") }}
                 </span>
             </li>
         @endif
@@ -43,21 +43,21 @@
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4" href="">
                 <span class="text-muted fal fa-fw fa-sack"></span>
-                Received
+                {{ __("Received") }}
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="5" href="">
                 <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
-                Notes
+                {{ __("Notes") }}
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="6" href="">
                 <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
-                Prio Notes
+                {{ __("Prio Notes") }}
             </span>
         </li>
     </ul>

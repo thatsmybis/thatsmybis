@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Assign Loot - " . config('app.name'))
+@section('title', __("Assign Loot") . " - " . config('app.name'))
 
 @php
     $now = getDateTime();
@@ -20,15 +20,15 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-gift text-gold"></span>
-                        Assign Loot
+                        {{ __("Assign Loot") }}
                         @if ($raid)
-                            to Raid
+                            {{ __("to Raid") }}
                         @endif
                     </h1>
                     <small>
-                        <strong>Hint:</strong> Keep the roster and/or item pages open in another window to review who deserves what
+                        <strong>{{ __("Hint") }}:</strong> {{ __("Keep the roster and/or item pages open in another window to review who deserves what") }}
                         <br>
-                        <strong>Note:</strong> If a character has the same item prio'd in multiple raid groups, we'll only remove/flag the first one we find.
+                        <strong>{{ __("Note") }}:</strong> {{ __("If a character has the same item prio'd in multiple raid groups, we'll only remove/flag the first one we find.") }}
                     </small>
                 </div>
             </div>
@@ -40,15 +40,15 @@
                             <div class="form-group">
                                 <button type="button" class="js-toggle-import btn btn-primary">
                                     <span class="fas fa-fw fa-file-import"></span>
-                                    Import Loot From CSV
+                                    {{ __("Import Loot From CSV") }}
                                 </button>
                             </div>
                         </div>
                         <div id="importArea" class="col-12" style="display:none;">
                             <label for="import_textarea" class="font-weight-bold">
                                 <span class="fas fa-fw fa-align-left text-muted"></span>
-                                Paste your <abbr title="Comma Separated Value">CSV</abbr> data
-                                <span class="small text-muted">max {{ $maxItems }} rows</span>
+                                {{ __("Paste your") }} <abbr title="Comma Separated Value">{{ __("CSV") }}</abbr> {{ __("data") }}
+                                <span class="small text-muted">{{ __("max") }} {{ $maxItems }} {{ __("rows") }}</span>
                             </label>
                             <!-- For supporting other input methods
                             <div class="tabs">
@@ -84,26 +84,26 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                             </div>
                             <div class="form-group">
                                 <p class="small text-muted">
-                                    Doesn't match your data schema? Request support for it <a href="{{ env('APP_DISCORD') }}" target="_blank">on our Discord</a>.
+                                    {{ __("Doesn't match your data schema? Request support for it") }} <a href="{{ env('APP_DISCORD') }}" target="_blank">{{ __("on our Discord") }}</a>.
                                 </p>
                                 <p class="text-danger font-weight-bold">
-                                    WARNING!!! Loading this will remove any items you've already added to this page.
+                                    {{ __("WARNING!!! Loading this will remove any items you've already added to this page.") }}
                                 </p>
                                 <button type="button" id="submitImport" class="btn btn-warning">
                                     <span class="fas fa-fw fa-file-export"></span>
-                                    Load Data
+                                    {{ __("Load Data") }}
                                 </button>
                                 <button type="button" class="js-toggle-import btn btn-primary">
                                     <span class="fas fa-fw fa-times-circle"></span>
-                                    Nevermind
+                                    {{ __("Nevermind") }}
                                 </button>
                                 <div id="loading-indicator" class="mt-3 ml-5" style="display:none;">
                                     <div class="spinner-border" role="status">
-                                      <span class="sr-only">Loading...</span>
+                                      <span class="sr-only">{{ __("Loading") }}...</span>
                                     </div>
                                 </div>
                                 <div id="loaded-indicator" class="text-success font-weight-bold mt-3 ml-5" style="display:none;">
-                                    Finished
+                                    {{ __("Finished") }}
                                 </div>
                                 <div id="status-message" class="mt-3 ml-5" style="display:none;">
                                 </div>
@@ -122,14 +122,14 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     <label class="text-muted">
                                         <input type="checkbox" name="toggle_notes" value="1" class="" autocomplete="off"
                                             {{ old('toggle_notes') && old('toggle_notes') != 1 ? '' : 'checked' }}>
-                                            Show note inputs
+                                            {{ __("Show note inputs") }}
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label class="text-muted">
                                         <input type="checkbox" name="toggle_dates" value="1" class="" autocomplete="off"
                                             {{ old('toggle_dates') && old('toggle_dates') == 1 ? 'checked' : '' }}>
-                                            Show date inputs <span class="text-muted small">for backdating old loot</span>
+                                            {{ __("Show date inputs") }} <span class="text-muted small">{{ __("for backdating old loot") }}</span>
                                     </label>
                                 </div>
                             </div>
@@ -140,7 +140,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                             <div class="form-group">
                                 <label for="date_default" class="font-weight-bold">
                                     <span class="fas fa-fw fa-calendar-alt text-muted"></span>
-                                    Set default date <span class="text-muted small">optional, overwrites all date inputs</span>
+                                    {{ __("Set default date") }} <span class="text-muted small">{{ __("optional, overwrites all date inputs") }}</span>
                                 </label>
                                 <input name="date_default" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="form-control dark" autocomplete="off">
                             </div>
@@ -172,7 +172,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                         <!-- Character select filter -->
                         <div class="col-lg-3 col-sm-6 col-12 pt-2 mb-2">
                             <label for="raid_group_filter font-weight-light">
-                                <span class="text-muted">Character dropdown filter</span>
+                                <span class="text-muted">{{ __("Character dropdown filter") }}</span>
                             </label>
                             <select id="raid_group_filter" class="form-control dark selectpicker" data-live-search="true">
                                 <option value="">—</option>
@@ -201,10 +201,10 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <label for="name" class="font-weight-bold">
                                                 <span class="fas fa-fw fa-sack text-success"></span>
                                                 @if ($i == 0)
-                                                    Item
+                                                    {{ __("Item") }}
                                                 @else
                                                     <span class="sr-only">
-                                                        Item
+                                                        {{ __("Item") }}
                                                     </span>
                                                 @endif
                                             </label>
@@ -212,7 +212,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <input maxlength="50" data-max-length="50" data-is-single-input="1" data-id="{{ $i }}" type="text" placeholder="item name"
                                                 class="js-item-autocomplete js-input-text js-show-next form-control dark {{ $errors->has($itemId) ? 'form-danger' : '' }}" autocomplete="off"
                                                 style="{{ old($itemId) ? 'display:none;' : '' }}">
-                                            <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+                                            <span class="js-loading-indicator" style="display:none;">{{ __("Searching") }}...</span>&nbsp;
 
                                             <ul class="no-bullet no-indent mb-0">
                                                 <li class="input-item {{ $errors->has($itemId) ? 'text-danger font-weight-bold' : '' }} {{ $errors->has($itemId) ? 'form-danger' : '' }}" style="{{ old($itemId) ? '' : 'display:none;' }}">
@@ -241,11 +241,11 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <label for="character_id" class="font-weight-bold">
                                                 @if ($i == 0)
                                                     <span class="fas fa-fw fa-user text-muted"></span>
-                                                    Character
+                                                    {{ __("Character") }}
                                                 @else
                                                     &nbsp;
                                                     <span class="sr-only">
-                                                        Character
+                                                        {{ __("Character") }}
                                                     </span>
                                                 @endif
                                             </label>
@@ -280,10 +280,10 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                         <div class="form-group">
                                             <label for="item[{{ $i }}][is_offspec]" class="font-weight-bold">
                                                 @if ($i == 0)
-                                                    Offspec
+                                                    {{ __("Offspec") }}
                                                 @else
                                                     <span class="sr-only">
-                                                        Offspec
+                                                        {{ __("Offspec") }}
                                                     </span>
                                                     &nbsp;
                                                 @endif
@@ -292,7 +292,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                 <label title="item is offspec">
                                                     <input type="checkbox" name="item[{{ $i }}][is_offspec]" value="1" class="js-show-next" autocomplete="off"
                                                         {{ old('item.' . $i . '.is_offspec') && old('item.' . $i . '.is_offspec') == 1  ? 'checked' : '' }}>
-                                                        OS
+                                                        {{ __("OS") }}
                                                 </label>
                                             </div>
                                         </div>
@@ -305,12 +305,12 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <label for="item[{{ $i }}][note]" class="font-weight-bold">
                                                 @if ($i == 0)
                                                     <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
-                                                    Note
-                                                    <span class="text-muted small">optional</span>
+                                                    {{ __("Note") }}
+                                                    <span class="text-muted small">{{ __("optional") }}</span>
                                                 @else
                                                     &nbsp;
                                                     <span class="sr-only">
-                                                        Optional Note
+                                                        {{ __("Optional Note") }}
                                                     </span>
                                                 @endif
                                             </label>
@@ -327,12 +327,12 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <label for="item[{{ $i }}][officer_note]" class="font-weight-bold">
                                                 @if ($i == 0)
                                                     <span class="fas fa-fw fa-shield text-muted"></span>
-                                                    Officer Note
-                                                    <span class="text-muted small">optional</span>
+                                                    {{ __("Officer Note") }}
+                                                    <span class="text-muted small">{{ __("optional") }}</span>
                                                 @else
                                                     &nbsp;
                                                     <span class="sr-only">
-                                                        Optional Officer Note
+                                                        {{ __("Optional Officer Note") }}
                                                     </span>
                                                 @endif
                                             </label>
@@ -349,12 +349,12 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <label for="item[{{ $i }}][received_at]" class="font-weight-bold">
                                                 @if ($i == 0)
                                                     <span class="fas fa-fw fa-calendar-alt text-muted"></span>
-                                                    <abbr title="RCLC date imports may be off by +/-24h due to timezone issues.">Date</abbr>
-                                                    <span class="text-muted small">optional</span>
+                                                    <abbr title="RCLC date imports may be off by +/-24h due to timezone issues.">{{ __("Date") }}</abbr>
+                                                    <span class="text-muted small">{{ __("optional") }}</span>
                                                 @else
                                                     &nbsp;
                                                     <span class="sr-only">
-                                                        Optional Date
+                                                        {{ __("Optional Date") }}
                                                     </span>
                                                 @endif
                                             </label>
@@ -371,12 +371,12 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <label for="item[{{ $i }}][import_id]" class="font-weight-bold">
                                                 @if ($i == 0)
                                                     <span class="fas fa-fw fa-fingerprint text-muted"></span>
-                                                        <abbr title="We use this to prevent your guild from loading duplicates of the same import data.">Unique Import ID</abbr>
-                                                    <span class="text-muted small">optional</span>
+                                                        <abbr title="We use this to prevent your guild from loading duplicates of the same import data.">{{ __("Unique Import ID") }}</abbr>
+                                                    <span class="text-muted small">{{ __("optional") }}</span>
                                                 @else
                                                     &nbsp;
                                                     <span class="sr-only">
-                                                        Unique Import ID
+                                                        {{ __("Unique Import ID") }}
                                                     </span>
                                                 @endif
                                             </label>
@@ -387,7 +387,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     </div>
                                     @if ($i == $maxItems - 1)
                                         <div class="col-12 mt-3 text-danger font-weight-bold">
-                                            Max items added
+                                            {{ __("Max items added") }}
                                         </div>
                                     @endif
                                 </div>
@@ -402,21 +402,21 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     <label class="text-muted">
                                         <input type="checkbox" name="skip_missing_characters" value="1" class="" autocomplete="off"
                                             {{ (old('skip_missing_characters') && old('skip_missing_characters') == 1) ? 'checked' : '' }}>
-                                            Skip items that don't have a character <abbr title="useful for ignoring characters that aren't in your guild when importing data">?</abbr>
+                                            {{ __("Skip items that don't have a character") }} <abbr title="useful for ignoring characters that aren't in your guild when importing data">?</abbr>
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label class="text-muted">
                                         <input type="checkbox" name="delete_wishlist_items" value="1" class="" autocomplete="off"
                                             {{ (old('delete_wishlist_items') && old('delete_wishlist_items') == 1) || (!old('delete_wishlist_items') && $guild->is_wishlist_autopurged) ? 'checked' : '' }}>
-                                            Delete assigned items from each character's wishlist <abbr title="if unchecked, corresponding wishlist items will be flagged as received but still be visible">?</abbr>
+                                            {{ __("Delete assigned items from each character's wishlist") }} <abbr title="if unchecked, corresponding wishlist items will be flagged as received but still be visible">?</abbr>
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label class="text-muted">
                                         <input type="checkbox" name="delete_prio_items" value="1" class="" autocomplete="off"
                                             {{ (old('delete_prio_items') && old('delete_prio_items') == 1) || (!old('delete_prio_items') && $guild->is_prio_autopurged) ? 'checked' : '' }}>
-                                            Delete assigned items from each character's prio list <abbr title="if unchecked, corresponding prio will be flagged as received but still be visible">?</abbr>
+                                            {{ __("Delete assigned items from each character's prio list") }} <abbr title="if unchecked, corresponding prio will be flagged as received but still be visible">?</abbr>
                                     </label>
                                 </div>
                             </div>
@@ -425,13 +425,13 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                     <div class="form-group">
                         <ul class="no-bullet no-indent">
                             <li class="mb-2">
-                                <button class="btn btn-success" onclick="return showSubmitWarning();"><span class="fas fa-fw fa-save"></span> Submit</button>
+                                <button class="btn btn-success" onclick="return showSubmitWarning();"><span class="fas fa-fw fa-save"></span> {{ __("Submit") }}</button>
                             </li>
                             <li id="raidGroupWarning" style="display:none;">
-                                <span class="text-danger">No raid group selected</span>
+                                <span class="text-danger">{{ __("No raid group selected") }}</span>
                             </li>
                             <li>
-                                <small>WARNING: This form expires if you don't submit it within {{ env('SESSION_LIFETIME') / 60 }} hours (security reasons)</small>
+                                <small>{{ __("WARNING: This form expires if you don't submit it within :hours hours (security reasons)", ['hours' => env('SESSION_LIFETIME') / 60]) }}</small>
                             </li>
                         </ul>
                     </div>

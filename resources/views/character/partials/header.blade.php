@@ -8,7 +8,7 @@
                 @if ($character->is_alt)
                     <li class="list-inline-item font-weight-bold">
                         <span class="tag d-inline" style="color: orange;">
-                            Alt
+                            {{ __("Alt") }}
                         </span>
                     </li>
                 @endif
@@ -50,7 +50,7 @@
         @if ($character->inactive_at || $character->level || $character->race)
             <li>
                 <small>
-                    <span class="font-weight-bold text-danger">{{ $character->inactive_at ? 'ARCHIVED' : '' }}</span>
+                    <span class="font-weight-bold text-danger">{{ $character->inactive_at ? __('ARCHIVED') : '' }}</span>
                     {{ $character->level ? $character->level : '' }}
                     {{ $character->race  ? $character->race : '' }}
                 </small>
@@ -75,12 +75,12 @@
                     {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
                     @if ($character->relationLoaded('member'))
                         <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'usernameSlug' => $character->member->slug]) }}" class="">
-                            {{ $character->member->username }}'s character
+                            {{ $character->member->username }}{{ __("'s character") }}
                         </a>
                     @endif
                 @else
                     <span class="font-weight-bold text-danger">
-                        Unclaimed
+                        {{ __("Unclaimed") }}
                     </span>
                 @endif
             </small>
@@ -110,12 +110,12 @@
     @if (isset($showEdit) && $showEdit && $character->member_id && $character->relationLoaded('member'))
         @if ($character->member->is_received_unlocked)
             <li class="list-inline-item">
-                <span class="text-warning small" title="To lock, edit the member that owns this character">loot unlocked</span>
+                <span class="text-warning small" title="To lock, edit the member that owns this character">{{ __("loot unlocked") }}</span>
             </li>
         @endif
         @if ($character->member->is_wishlist_unlocked)
             <li class="list-inline-item">
-                <span class="text-warning small" title="To lock, edit the member that owns this character">wishlist unlocked</span>
+                <span class="text-warning small" title="To lock, edit the member that owns this character">{{ __("wishlist unlocked") }}</span>
             </li>
         @endif
     @endif

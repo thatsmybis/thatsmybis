@@ -9,7 +9,7 @@
             {{ $character->name }}
             @if ($character->is_alt)
                 <span class="small text-muted">
-                    alt
+                    {{ __("alt") }}
                 </span>
             @endif
             @if (!$guild->is_attendance_hidden)
@@ -21,24 +21,24 @@
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
             <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                 <span class="text-muted fa-fw fas fa-user"></span>
-                Profile
+                {{ __("Profile") }}
             </a>
             @if (!isset($showEdit) || $showEdit)
                 <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                     <span class="text-muted fa-fw fas fa-pencil"></span>
-                    Edit
+                    {{ __("Edit") }}
                 </a>
             @endif
             @if (!isset($showEditLoot) || $showEditLoot)
                 <a class="dropdown-item" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                     <span class="text-muted fa-fw fas fa-sack"></span>
-                    Wishlist & Loot
+                    {{ __("Wishlist & Loot") }}
                 </a>
             @endif
             @if (!isset($showLogs) || $showLogs)
                 <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'character_id' => $character->id]) }}">
                     <span class="text-muted fa-fw fas fa-clipboard-list-check"></span>
-                    History
+                    {{ __("History") }}
                 </a>
             @endif
             <div class="dropdown-divider"></div>
@@ -46,12 +46,12 @@
                 @if ($raidGroup)
                     @include('partials/raidGroup', ['raidGroupColor' => $raidGroup->getColor()])
                 @else
-                    no raid groups
+                    {{ __("no raid groups") }}
                 @endif
             </span>
             @if ($character->inactive_at)
                 <span class="dropdown-item disabled font-weight-bold text-danger">
-                    ARCHIVED
+                    {{ __("ARCHIVED") }}
                 </span>
             @endif
         </div>
