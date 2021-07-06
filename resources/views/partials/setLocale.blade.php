@@ -21,6 +21,13 @@
     </div>
 
     <div class="form-group">
-        <button class="btn btn-secondary"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
+        <ul class="list-inline">
+            <li class="list-inline-item">
+                <button class="btn btn-secondary"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
+            </li>
+            <li class="list-inline-item">
+                <a href="{{ route('translations') }}">{{ __("help with translations") }}</a>
+            </li>
+        </ul>
     </div>
 </form>
