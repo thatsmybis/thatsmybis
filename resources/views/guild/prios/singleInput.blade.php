@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Prios for " . $raidGroup-> name . " " . $item-> name . " - " . config('app.name'))
+@section('title',__("Prios for") . "  " . $raidGroup-> name . " " . $item-> name . " - " . config('app.name'))
 
 @php
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
@@ -16,10 +16,11 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium font-blizz">
                         <span class="fas fa-fw fa-sack text-muted"></span>
-                        {{ $raidGroup->name }} Prios
+                        {{ $raidGroup->name }} {{ __("Prios") }}
                     </h1>
                     <small>
-                        <strong>Note:</strong> When someone receives an item, we'll attempt to automatically remove it from their prios. If they have the same item prio'd in multiple raid groups, we'll remove only the first one we find.
+                        <strong>{{ __("Note") }}:</strong>
+                        {{ __("When someone receives an item, we'll attempt to automatically remove it from their prios. If they have the same item prio'd in multiple raid groups, we'll remove only the first one we find.") }}
                     </small>
                 </div>
             </div>
@@ -45,9 +46,9 @@
                 @endforeach
 
                 <div class="form-group mt-3">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Submit</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Submit") }}</button>
                     <br>
-                    <small>WARNING: This form expires if you don't submit it within {{ env('SESSION_LIFETIME') / 60 }} hours (security reasons)
+                    <small>{{ __("WARNING: This form expires if you don't submit it within") }} {{ env('SESSION_LIFETIME') / 60 }} {{ __("hours (security reasons)") }}
                 </div>
             </form>
         </div>

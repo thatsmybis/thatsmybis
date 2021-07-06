@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Register Guild - ' . config('app.name'))
+@section('title', __('Register Guild') . ' - ' . config('app.name'))
 
 
 @section('content')
@@ -8,21 +8,21 @@
         <div class="col-12 col-lg-8 col-xl-6 offset-lg-2 offset-xl-3">
             <h1>
                 <span class="fas fa-fw fa-users-crown text-gold"></span>
-                Register a Guild
+                {{ __("Register a Guild") }}
             </h1>
         </div>
         <div class="col-12 col-lg-8 col-xl-6 offset-lg-2 offset-xl-3 mt-3 mb-3 pt-3 bg-lightest rounded">
-            <p class="lead">This website uses your guild's Discord server to manage your members' access and permissions.</p>
-            <p class="lead">Instructions:</p>
+            <p class="lead">{{ __("This website uses your guild's Discord server to manage your members' access and permissions.") }}</p>
+            <p class="lead">{{ __("Instructions:") }}</p>
             <ol class="lead">
                 <li>
                     @include('guild/partials/addTheBot')
                 </li>
                 <li>
-                    Fill out the form below.
+                    {{ __("Fill out the form below.") }}
                 </li>
             </ol>
-            <p class="lead">Once registered, invite your guild members by sharing the URL to your guild.</p>
+            <p class="lead">{{ __("Once registered, invite your guild members by sharing the URL to your guild.") }}</p>
         </div>
         <div class="col-12 col-lg-8 col-xl-6 offset-lg-2 offset-xl-3 mb-3 pt-3 bg-lightest rounded">
             @if (count($errors) > 0)
@@ -40,7 +40,7 @@
                 <div class="form-group">
                     <label for="name" class="font-weight-bold">
                         <span class="text-muted fas fa-fw fa-users"></span>
-                        Guild Name
+                        {{ __("Guild Name") }}
                     </label>
                     <input required name="name" maxlength="36" type="text" class="form-control" placeholder="must be unique" value="{{ old('name') ? old('name') : null }}" />
                 </div>
@@ -51,7 +51,7 @@
                 <div class="form-group">
                     <label for="expansion_id" class="font-weight-bold">
                         <span class="text-muted fab fa-fw fa-battle-net"></span>
-                        Expansion
+                        {{ __("Expansion") }}
                     </label>
                     <select name="expansion_id" class="form-control">
                         @foreach ($expansions as $expansion)

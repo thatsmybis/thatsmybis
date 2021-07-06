@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Discord Roles - ' . config('app.name'))
+@section('title', __('Discord Roles') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,22 +9,22 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fab fa-fw fa-discord text-discord"></span>
-                        Discord Roles
+                        {{ __("Discord Roles") }}
                     </h1>
                     <p>
-                        When we see a new role attached to a member, we'll automatically sync this list.
+                        {{ __("When we see a new role attached to a member, we'll automatically sync this list.") }}
                     </p>
                     <p>
-                        Roles listed on offline members are <strong>cached</strong>.
+                        {{ __("Roles listed on offline members are") }} <strong>{{ __("cached") }}</strong>.
                         <br>
-                        They will be properly updated the next time that member logs in.
+                        {{ __("They will be properly updated the next time that member logs in.") }}
                     </p>
                     <p>
-                        If you want to manually trigger an update, hit the button down at the bottom.
+                        {{ __("If you want to manually trigger an update, hit the button down at the bottom.") }}
                         <br>
-                        This will update colors, names, order, add new roles, and remove old ones.
+                        {{ __("This will update colors, names, order, add new roles, and remove old ones.") }}
                         <br>
-                        It <strong>will not</strong> sync the <strong>display only</strong> roles listed alongside offline members.
+                        {{ __("It") }} <strong>{{ __("will not") }}</strong> {{ __("sync the") }} <strong>{{ __("display onl") }}y</strong> {{ __("roles listed alongside offline members.") }}
                     </p>
                 </div>
 
@@ -45,11 +45,11 @@
                 <div class="col-12 mt-3">
                     <a class="btn btn-success" href="{{ route('guild.syncRoles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                         <span class="fas fa-fw fa-sync"></span>
-                        Sync Roles
+                        {{ __("Sync Roles") }}
                     </a>
                     <br>
                     <small class="text-muted">
-                        Fetches roles from your Discord server and adds them to the list of usable roles on here
+                        {{ __("Fetches roles from your Discord server and adds them to the list of usable roles on here") }}
                     </small>
                 </div>
             </div>

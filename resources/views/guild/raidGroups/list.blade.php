@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Raid Groups - ' . config('app.name'))
+@section('title', __('Raid Groups') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,17 +9,17 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                        Raid Groups
+                        {{ __("Raid Groups") }}
                     </h1>
                     <span class="text-muted">
-                        Each character can be assigned <strong>one</strong> main raid and <strong>many</strong> other raids.
+                        {{ __("Each character can be assigned") }} <strong>{{ __("one") }}</strong> {{ __("main raid and") }} <strong>{{ __("many") }}</strong> {{ __("other raids.") }}
                         <br>
-                        Only a character's main raid will show up beside their name across the site.
+                        {{ __("Only a character's main raid will show up beside their name across the site.") }}
                     </span>
                 </div>
                 <div class="col-12 mt-3 mb-3">
                     <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
-                        <span class="fas fa-fw fa-plus"></span> Create Raid Group
+                        <span class="fas fa-fw fa-plus"></span> {{ __("Create Raid Group") }}
                     </a>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
@@ -32,10 +32,10 @@
                             @endforeach
                             @if ($guild->allRaidGroups->whereNotNull('disabled_at')->count() > 0)
                                 <li class="pt-2 pl-3 pb-3 pr-3 rounded">
-                                    <span class="text-muted">Archived raid groups</span>
+                                    <span class="text-muted">{{ __("Archived raid groups") }}</span>
                                     <br>
                                     <span id="showDisabledRaidGroups" class="small text-muted font-italic cursor-pointer">
-                                        click to show
+                                        {{ __("click to show") }}
                                     </span>
                                     <ol class="js-inactive-raid-groups striped no-bullet no-indent" style="display:none;">
                                         @foreach ($guild->allRaidGroups->whereNotNull('disabled_at') as $raidGroup)
@@ -49,7 +49,7 @@
                         </ol>
                     @else
                     <p class="text-4">
-                        No raid groups yet
+                        {{ __("No raid groups yet") }}
                     </p>
                     @endif
                 </div>

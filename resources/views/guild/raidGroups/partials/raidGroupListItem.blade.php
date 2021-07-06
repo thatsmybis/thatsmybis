@@ -1,7 +1,7 @@
 <ul class="list-inline">
     <li class="list-inline-item">
         <span class="role-circle" style="{{ $raidGroup->role ? 'background-color:' . $raidGroup->role->getColor() : '' }}" title="{{ $raidGroup->role ? $raidGroup->role->getColor() : ''}}"></span>
-        <span class="font-weight-bold text-danger">{{ $raidGroup->disabled_at ? 'ARCHIVED' : '' }}</span>
+        <span class="font-weight-bold text-danger">{{ $raidGroup->disabled_at ? __('ARCHIVED') : '' }}</span>
         <span class="text-5 font-weight-medium" title="{{ $raidGroup->slug }}">{{ $raidGroup->name }}</span>
     </li>
     @if ($raidGroup->role)
@@ -17,7 +17,8 @@
     </li>
     <li class="list-inline-item text-muted">
         <a href="{{ route('guild.raidGroup.mainCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-            {{ $raidGroup->characters_count }} main raider{{ $raidGroup->characters_count != 1 ? 's' : '' }}
+            {-- TODO: Fix plural translation --}
+            {{ $raidGroup->characters_count }} {{ __("main raider") }}{{ $raidGroup->characters_count != 1 ? 's' : '' }}
         </a>
     </li>
     <li class="list-inline-item text-muted">
@@ -25,34 +26,35 @@
     </li>
     <li class="list-inline-item text-muted">
         <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-            {{ $raidGroup->secondary_characters_count }} general raider{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+            {-- TODO: Fix plural translation --}
+            {{ $raidGroup->secondary_characters_count }} {{ __("general raider") }}{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
         </a>
     </li>
 </ul>
 <ul class="list-inline">
     <li class="list-inline-item">
         <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-            <span class="fas fa-fw fa-pencil"></span>edit
+            <span class="fas fa-fw fa-pencil"></span>{{ __("edit") }}
         </a>
     </li>
     <li class="list-inline-item">
         <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_group_id' => $raidGroup->id]) }}">
-            <span class="fas fa-fw fa-clipboard-list-check"></span>history
+            <span class="fas fa-fw fa-clipboard-list-check"></span>{{ __("history") }}
         </a>
     </li>
     <li class="list-inline-item">
         <div class="dropdown">
             <a class="dropdown-toggle" id="raidGroup{{ $raidGroup->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Export
+                {{ __("Export") }}
             </a>
             <div class="dropdown-menu" aria-labelledby="raidGroup{{ $raidGroup->id }}Dropdown">
                 <a class="dropdown-item" href="{{ route('guild.export.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'raidGroupId' => $raidGroup->id]) }}" target="_blank" class="tag">
                     <span class="fas fa-fw fa-file-csv text-muted"></span>
-                    Download CSV
+                    {{ __("Download CSV") }}
                 </a>
                 <a class="dropdown-item" href="{{ route('guild.export.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'raidGroupId' => $raidGroup->id]) }}" target="_blank" class="tag">
                     <span class="fas fa-fw fa-file-csv text-muted"></span>
-                    View CSV
+                    {{ __("View CSV") }}
                 </a>
             </div>
         </div>
@@ -66,7 +68,7 @@
             <button type="submit"
                 class="btn btn-link text-{{ $raidGroup->disabled_at ? 'success' : 'danger' }} p-0 m-0 ml-3"
                 title="{{ $raidGroup->disabled_at ? 'Raid Group is shown in dropdowns again' : 'Raid Group is no longer shown in dropdowns. Characters already assigned to this raid group will remain assigned to it.' }}">
-                <span class="fas fa-fw fa-{{ $raidGroup->disabled_at ? 'trash-undo' : 'trash' }}"></span>{{ $raidGroup->disabled_at ? 'unarchive' : 'archive' }}
+                <span class="fas fa-fw fa-{{ $raidGroup->disabled_at ? 'trash-undo' : 'trash' }}"></span>{{ $raidGroup->disabled_at ? __('unarchive') : __('archive') }}
             </button>
         </form>
     </li>

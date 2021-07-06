@@ -6,7 +6,7 @@
         <div class="d-inline-grid align-middle text-5 mb-2">
             <label for="items[{{ $item->item_id }}][name]" class="font-weight-bold d-none d-sm-block">
                 <span class="sr-only">
-                    Item Name
+                    {{ __("Item Name") }}
                 </span>
             </label>
             @include('partials/item', [
@@ -35,9 +35,11 @@
     <div class="col-lg-4 col-12">
         <label for="items[details]" class="font-weight-bold {{ $loop->iteration > 1 ? 'd-none' : '' }}">
             @if ($loop->first)
-                Notes
+                {{ __("Notes") }}
             @else
-                <span class="sr-only">Notes</span>
+                <span class="sr-only">
+                    {{ __("Notes") }}
+                </span>
             @endif
         </label>
         <ul class="fa-ul">
@@ -106,10 +108,10 @@
             <label for="items[{{ $item->item_id }}][characters]" class="font-weight-bold {{ $loop->iteration > 1 ? 'd-none' : '' }}">
                 @if ($loop->first)
                     <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
-                    Prio'd Characters
-                    <span class="text-muted font-weight-normal small">max {{ $maxPrios }}</span>
+                    {{ __("Prio'd Characters") }}
+                    <span class="text-muted font-weight-normal small">{{ __("max") }} {{ $maxPrios }}</span>
                 @else
-                    <span class="sr-only">Priority Characters (max {{ $maxPrios }})</span>
+                    <span class="sr-only">{{ __("Priority Characters (max") }} {{ $maxPrios }})</span>
                 @endif
             </label>
 
@@ -180,7 +182,7 @@
                                         <div class="form-inline">
                                             <div class="form-group">
                                                 <label class="sr-only" for="items[{{ $item->item_id }}][characters][{{ $i }}][order]">
-                                                    Rank
+                                                    {{ __("Rank") }}
                                                 </label>
                                                 &nbsp;
                                                 <input name="items[{{ $item->item_id }}][characters][{{ $i }}][order]"
@@ -204,7 +206,7 @@
                                             <label class="small text-muted">
                                                 <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_offspec]" value="1" class="" autocomplete="off"
                                                     {{ $isOffspec }}>
-                                                    OS
+                                                    {{ __("OS") }}
                                             </label>
                                         </div>
                                     </li>
@@ -213,7 +215,7 @@
                                             <label class="small text-muted">
                                                 <input type="checkbox" name="items[{{ $item->item_id }}][characters][{{ $i }}][is_received]" value="1" class="" autocomplete="off"
                                                     {{ $isReceived }}>
-                                                    Received
+                                                    {{ __("Received") }}
                                             </label>
                                         </div>
                                     </li>

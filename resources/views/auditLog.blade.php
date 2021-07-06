@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Audit Log - ' . config('app.name'))
+@section('title', __("Audit Log") . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,28 +9,28 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-clipboard-list-check text-gold"></span>
-                        Audit Log
+                        {{ __("Audit Log") }}
                     </h1>
                     <ul>
                         <li class="small no-bullet font-italic">
-                            Whodunit?
+                        {{ __("Whodunit?") }}
                         </li>
                         @if (!$showPrios)
                             <li class="small text-danger">
-                                Prios are hidden by your guild master(s)
+                        {{ __("Prios are hidden by your guild master(s)") }}
                             </li>
                         @elseif ($guild->is_prio_private)
                             <li class="small text-warning">
-                                Prios are hidden from raiders
+                                {{ __("Prios are hidden from raiders") }}
                             </li>
                         @endif
                         @if (!$showWishlist)
                             <li class="small text-danger">
-                                Wishlists are hidden by your guild master(s)
+                                {{ __("Wishlists are hidden by your guild master(s)") }}
                             </li>
                         @elseif ($guild->is_wishlist_private)
                             <li class="small text-warning">
-                                Wishlists are hidden from raiders
+                                {{ __("Wishlists are hidden from raiders") }}
                             </li>
                         @endif
                     </ul>
@@ -40,9 +40,9 @@
             <div class="row">
                 @if ($resources)
                     <div class="col-12 mb-3 text-5">
-                        Filter:
+                        {{ __("Filter:") }}
                         <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            reset
+                            {{ __("reset") }}
                         </a>
                     </div>
                     <div class="col-12 pb-3 d-flex flex-wrap">
@@ -53,7 +53,7 @@
                                         @if ($resource->name)
                                             {{ $resource->name }}
                                         @else
-                                            Batch {{ $resource->id }}
+                                            {{ __("Batch") }} {{ $resource->id }}
                                         @endif
                                         @if ($resource->note)
                                             <p>
@@ -88,7 +88,7 @@
                     <div class="form-group">
                         <label for="min_date" class="font-weight-bold">
                             <span class="fas fa-fw fa-calendar-minus text-muted"></span>
-                            Min Date
+                            {{ __("Min Date") }}
                         </label>
                         <input name="min_date" min="2004-09-22"
                             max="{{ getDateTime('Y-m-d') }}"
@@ -104,7 +104,7 @@
                     <div class="form-group">
                         <label for="max_date" class="font-weight-bold">
                             <span class="fas fa-fw fa-calendar-plus text-muted"></span>
-                            Max Date
+                            {{ __("Max Date") }}
                         </label>
                         <input name="max_date"
                             min="2004-09-22"
@@ -121,7 +121,7 @@
                     <div class="form-group">
                         <label for="character_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-users text-muted"></span>
-                            Character
+                            {{ __("Character") }}
                         </label>
                         <select name="character_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
@@ -142,7 +142,7 @@
                     <div class="form-group">
                         <label for="member_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-user text-muted"></span>
-                            Member
+                            {{ __("Member") }}
                         </label>
                         <select name="member_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
@@ -163,7 +163,7 @@
                     <div class="form-group">
                         <label for="raid_group_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-helmet-battle text-muted"></span>
-                            Raid Group
+                            {{ __("Raid Group") }}
                         </label>
                         <select name="raid_group_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
@@ -184,7 +184,7 @@
                     <div class="form-group">
                         <label for="type" class="font-weight-bold">
                             <span class="fas fa-fw fa-scroll-old text-muted"></span>
-                            Loot Type
+                            {{ __("Loot Type") }}
                         </label>
                         <select name="type" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="" data-tokens="">
@@ -193,32 +193,32 @@
                             <option value="{{ \App\Item::TYPE_PRIO }}"
                                 data-tokens="{{ \App\Item::TYPE_PRIO }}"
                                 {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_PRIO ? 'selected' : ''}}>
-                                Prio
+                                {{ __("Prio") }}
                             </option>
                             <option value="{{ \App\Item::TYPE_RECIPE }}"
                                 data-tokens="{{ \App\Item::TYPE_RECIPE }}"
                                 {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_RECIPE ? 'selected' : ''}}>
-                                Recipe
+                                {{ __("Recipe") }}
                             </option>
                             <option value="{{ \App\Item::TYPE_WISHLIST }}"
                                 data-tokens="{{ \App\Item::TYPE_WISHLIST }}"
                                 {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_WISHLIST ? 'selected' : ''}}>
-                                Wishlist
+                                {{ __("Wishlist") }}
                             </option>
                             <option value="{{ 'received_all' }}"
                                 data-tokens="received_all"
                                 {{ Request::get('type') && Request::get('type') == 'received_all' ? 'selected' : ''}}>
-                                Received (all)
+                                {{ __("Received (all)") }}
                             </option>
                             <option value="{{ \App\AuditLog::TYPE_ASSIGN }}"
                                 data-tokens="{{ \App\AuditLog::TYPE_ASSIGN }}"
                                 {{ Request::get('type') && Request::get('type') == \App\AuditLog::TYPE_ASSIGN ? 'selected' : ''}}>
-                                Received (via assign loot page)
+                                {{ __("Received (via assign loot page)") }}
                             </option>
                             <option value="{{ \App\Item::TYPE_RECEIVED }}"
                                 data-tokens="{{ \App\Item::TYPE_RECEIVED }}"
                                 {{ Request::get('type') && Request::get('type') == \App\Item::TYPE_RECEIVED ? 'selected' : ''}}>
-                                Received (via character loot page)
+                                {{ __("Received (via character loot page)") }}
                             </option>
                         </select>
                     </div>
@@ -227,7 +227,7 @@
                     <div class="form-group">
                         <label for="item_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-sack text-muted"></span>
-                            Item
+                            {{ __("Item") }}
                         </label>
                         <input name="item_id" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" autocomplete="off" class="js-item-autocomplete-link js-input-text form-control dark">
                         <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
@@ -237,7 +237,7 @@
                     <div class="form-group">
                         <label for="item_instance_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-dungeon text-muted"></span>
-                            Item Dungeon
+                            {{ __("Item Dungeon") }}
                         </label>
                         <select name="item_instance_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="" data-tokens="">
@@ -366,7 +366,7 @@
                             @endforeach
                         @else
                             <li class="p-3 text-warning">
-                                No results found
+                                {{ __("No results found") }}
                             </li>
                         @endif
                     </ol>

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', (!$raidGroup ? "Create" : "Edit") . " Raid Group - " . config('app.name'))
+@section('title', (!$raidGroup ? __("Create") : __("Edit")) . " " . __("Raid Group") . " - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,7 +9,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                        {{ $raidGroup ? 'Edit' : 'Create' }} Raid Group
+                        {{ $raidGroup ? __('Edit') : __('Create') }} {{ __("Raid Group") }}
                     </h1>
                 </div>
             </div>
@@ -36,7 +36,7 @@
                                 <div class="form-group">
                                     <label for="name" class="font-weight-bold">
                                         <span class="fas fa-fw fa-users text-muted"></span>
-                                        Raid Group Name
+                                        {{ __("Raid Group Name") }}
                                     </label>
                                     <input name="name"
                                         autofocus
@@ -54,10 +54,10 @@
                                 <div class="form-group">
                                     <label for="role_id" class="font-weight-bold">
                                         <span class="fab fa-fw fa-discord text-discord"></span>
-                                        Discord Role
+                                        {{ __("Discord Role") }}
                                     </label>
                                     <small class="text-muted">
-                                        Only used for color coding
+                                        {{ __("Only used for color coding") }}
                                     </small>
 
                                     <div class="form-group">
@@ -82,7 +82,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
                 </div>
             </form>
         </div>

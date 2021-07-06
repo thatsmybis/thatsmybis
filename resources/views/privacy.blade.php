@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Privacy Policy - ' . config('app.name'))
+@section('title', __("Privacy Policy") . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -7,7 +7,7 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <h1>
                 <span class="fas fa-fw fa-lock"></span>
-                Privacy Policy
+                {{ __("Privacy Policy") }}
             </h1>
             <!--
             <p class="text-grey">
