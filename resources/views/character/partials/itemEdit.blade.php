@@ -20,7 +20,7 @@
                 <label>
                     <input type="checkbox" name="{{ $name }}[{{ $index }}][is_received]" value="1" class="" autocomplete="off"
                         {{ $oldIsReceived && $oldIsReceived == 1 ? 'checked' : ($item && $item->pivot->is_received ? 'checked' : '') }}>
-                        Received
+                        {{ __("Received") }}
                 </label>
             </div>
         </li>
@@ -30,27 +30,27 @@
             <label>
                 <input type="checkbox" name="{{ $name }}[{{ $index }}][is_offspec]" value="1" class="" autocomplete="off"
                     {{ $oldIsOffspec && $oldIsOffspec == 1 ? 'checked' : ($item && $item->pivot->is_offspec ? 'checked' : '') }}>
-                    OS
+                    {{ __("OS") }}
             </label>
         </div>
     </li>
     @if ($name == 'received')
         <li class="list-inline-item">
             <label for="{{ $name }}[{{ $index }}][date_input]" class="sr-only font-weight-light">
-                Date
+                {{ __("Date") }}
             </label>
             <input class="js-date" type="text" name="{{ $name }}[{{ $index }}][new_received_at]" hidden value="{{ $oldReceivedAt ? $oldReceivedAt : '' }}">
             <input value="" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="leave blank to keep existing" class="js-date-input form-control dark slim-date" autocomplete="off">
         </li>
         <li class="list-inline-item">
             <label for="{{ $name }}[{{ $index }}][new_raid_id]" class="sr-only font-weight-light">
-                Raid
+                {{ __("Raid") }}
             </label>
             <select name="{{ $name }}[{{ $index }}][new_raid_id]"
                     class="slim-select form-control dark {{ $errors->has($name . '.' . $i . '.new_raid_id') ? 'form-danger' : '' }}"
                     data-live-search="true" autocomplete="off">
                 <option value="" class="text-muted-important">
-                    change raid
+                    {{ __("change raid") }}
                 </option>
 
                 {{-- See the notes at the top for why the options look like this --}}

@@ -68,7 +68,7 @@ function createTable() {
         "data"      : characters,
         "columns"   : [
             {
-                "title"  : '<span class="fas fa-fw fa-user"></span> Character',
+                "title"  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter}`,
                 "data"   : "character",
                 "render" : function (data, type, row) {
                     return `
@@ -100,7 +100,7 @@ function createTable() {
                         ${ row.is_alt || row.raid_group_name || row.class ? `
                             <li>
                                 ${ row.is_alt ? `
-                                    <span class="text-warning font-weight-bold">Alt</span>&nbsp;
+                                    <span class="text-warning font-weight-bold">${localeAlt}</span>&nbsp;
                                 ` : '' }
                                 ${ row.raid_group_name ? `
                                     <span class="font-weight-bold d-inline tag">
@@ -148,7 +148,7 @@ function createTable() {
                 "className" : "width-250",
             },
             {
-                "title"  : '<span class="text-gold fas fa-fw fa-sort-amount-down"></span> Prio\'s',
+                "title"  : `<span class="text-gold fas fa-fw fa-sort-amount-down"></span> ${headerPrios}`,
                 "data"   : "prios",
                 "render" : function (data, type, row) {
                     return data && data.length ? getItemList(data, 'prio', row.id, true) : '—';
@@ -159,7 +159,7 @@ function createTable() {
                 "className" : "width-280",
             },
             {
-                "title"  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> Wishlist
+                "title"  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> ${headerWishlist}
                     <span class="js-sort-wishlists text-link">
                         <span class="fas fa-fw fa-exchange cursor-pointer"></span>
                     </span>`,
@@ -182,7 +182,7 @@ function createTable() {
                 "className" : "width-280",
             },
             {
-                "title"  : '<span class="text-success fas fa-fw fa-sack"></span> Received',
+                "title"  : `<span class="text-success fas fa-fw fa-sack"></span> ${headerReceived}`,
                 "data"   : "received",
                 "render" : function (data, type, row) {
                     return data && data.length ? getItemList(data, 'received', row.id) : '—';
@@ -193,7 +193,7 @@ function createTable() {
                 "className" : "width-280",
             },
             {
-                "title"  : '<span class="text-gold fas fa-fw fa-book"></span> Recipes',
+                "title"  : `<span class="text-gold fas fa-fw fa-book"></span> ${headerRecipes}`,
                 "data"   : "recipes",
                 "render" : function (data, type, row) {
                     return data && data.length ? getItemList(data, 'recipes', row.id) : '—';
@@ -225,7 +225,7 @@ function createTable() {
                 "visible" : false,
             },
             {
-                "title"  : '<span class="fas fa-fw fa-comment-alt-lines"></span> Notes',
+                "title"  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerNotes}`,
                 "data"   : "public_note",
                 "render" : function (data, type, row) {
                     return getNotes(data, type, row);
@@ -428,8 +428,8 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
             `;
         }
 
-        let wowheadData = `data-wowhead-link="https://${ wowheadSubdomain }.wowhead.com/item=${ item.item_id }"
-            data-wowhead="item=${ item.item_id }?domain=${ wowheadSubdomain }"`;
+        let wowheadData = `data-wowhead-link="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ item.item_id }"
+            data-wowhead="item=${ item.item_id }?domain=${ wowheadLocale + wowheadSubdomain }"`;
 
         items += `
             <li class="js-has-instance font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"

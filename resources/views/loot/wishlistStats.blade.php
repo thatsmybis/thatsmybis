@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', getExpansionAbbr($expansionId) . ' Wishlists - ' . config('app.name'))
+@section('title', getExpansionAbbr($expansionId) . ' ' . __('Wishlists') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid">
@@ -7,18 +7,18 @@
         <div class="col-12 text-center">
             <ul class="list-inline">
                 <li class="list-inline-item font-weight-{{ $expansionId == 1 ? 'bold' : 'light' }}">
-                    <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">Classic</a>
+                    <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item font-weight-{{ $expansionId == 2 ? 'bold' : 'light' }}">
-                    <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">TBC</a>
+                    <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
                 </li>
             </ul>
             <h1>
-                <span class="font-weight-bold">Top {{ $maxItems }}</span> Wishlisted
-                <span class="text-{{ getExpansionColor($expansionId) }} font-weight-bold">{{ getExpansionAbbr($expansionId) }}</span> Items
+                <span class="font-weight-bold">{{ __("Top") }} {{ $maxItems }}</span> {{ __("Wishlisted") }}
+                <span class="text-{{ getExpansionColor($expansionId) }} font-weight-bold">{{ getExpansionAbbr($expansionId) }}</span> {{ __("Items") }}
             </h1>
-            <span class="smaller text-muted">Now you can be just like everyone else! :D</span>
+            <span class="smaller text-muted">{{ __("Now you can be just like everyone else!") :D</span>
         </div>
     </div>
     <div class="row">

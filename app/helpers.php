@@ -68,6 +68,21 @@ function getExpansionAbbr($expansionId) {
     }
 }
 
+// Get the list of supported locales
+function getLocales() {
+    return [
+        "de" => "Deutsch",
+        "en" => "English",
+        "es" => "Español",
+        "fr" => "Français",
+        "it" => "Italiano",
+        "pt" => "Português Brasileiro",
+        "ru" => "Русский",
+        "ko" => "한국어",
+        "cn" => "简体中文",
+    ];
+}
+
 // Check the request for whether or not we stored the bool isAdmin as true or false
 function isAdmin() {
     return request()->get('isAdmin');

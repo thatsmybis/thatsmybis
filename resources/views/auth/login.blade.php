@@ -16,7 +16,7 @@ function registerSubmit(token) {
     <div class="row">
         <div class="text-center col-12 p-5">
             <a class="btn btn-light" href="{{ route('discordLogin') }}" title="Sign in with Discord" rel="nofollow">
-                <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> Sign In
+                <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> {{ __("Sign In") }}
             </a>
         </div>
     </div>

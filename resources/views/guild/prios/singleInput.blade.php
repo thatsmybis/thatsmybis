@@ -48,7 +48,7 @@
                 <div class="form-group mt-3">
                     <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Submit") }}</button>
                     <br>
-                    <small>{{ __("WARNING: This form expires if you don't submit it within") }} {{ env('SESSION_LIFETIME') / 60 }} {{ __("hours (security reasons)") }}
+                    <small>{{ __("WARNING: This form expires if you don't submit it within :hours hours (security reasons)", ['hours' =>  env('SESSION_LIFETIME') / 60]) }}</small>
                 </div>
             </form>
         </div>

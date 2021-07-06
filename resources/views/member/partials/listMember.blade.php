@@ -10,15 +10,15 @@
             <div class="dropdown-menu" aria-labelledby="member{{ $member->id }}Dropdown">
                 <a class="dropdown-item" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
                     <span class="text-muted fa-fw fas fa-"></span>
-                    Profile
+                    {{ __("Profile") }}
                 </a>
                 <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}">
                     <span class="text-muted fa-fw fas fa-"></span>
-                    History
+                    {{ __("History") }}
                 </a>
                 <a class="dropdown-item" href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
                     <span class="text-muted fa-fw fas fa-pencil"></span>
-                    Edit
+                    {{ __("Edit") }}
                 </a>
             </div>
         </div>
@@ -35,12 +35,12 @@
     @endif
     @if ($member->is_received_unlocked)
         <li>
-            <span class="font-weight-bold text-warning small">loot unlocked</span>
+            <span class="font-weight-bold text-warning small">{{ __("loot unlocked") }}</span>
         </li>
     @endif
     @if ($member->is_wishlist_unlocked)
         <li>
-            <span class="font-weight-bold text-warning small">wishlist unlocked</span>
+            <span class="font-weight-bold text-warning small">{{ __("wishlist unlocked") }}</span>
         </li>
     @endif
 </ul>

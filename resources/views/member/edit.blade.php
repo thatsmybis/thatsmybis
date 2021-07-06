@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Edit Profile - " . config('app.name'))
+@section('title', __("Edit Profile") . " - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -7,7 +7,7 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row mb-4">
                 <div class="col-12 pt-2 bg-lightest rounded">
-                    @include('member/partials/header', ['discordUsername' => $member->user->discord_username, 'showEdit' => false, 'titlePrefix' => 'Edit '])
+                    @include('member/partials/header', ['discordUsername' => $member->user->discord_username, 'showEdit' => false, 'titlePrefix' => __('Edit') . ' '])
                 </div>
             </div>
 
@@ -30,7 +30,7 @@
                         <div class="form-group">
                             <label for="username" class="font-weight-bold">
                                 <span class="text-muted fas fa-fw fa-user"></span>
-                                Username
+                                {{ __("Username") }}
                             </label>
                             <input name="username"
                                 maxlength="40"
@@ -47,8 +47,10 @@
                         <div class="form-group">
                             <label for="public_note" class="font-weight-bold">
                                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
-                                Public Note
-                                <small class="text-muted">anyone in the guild can see this</small>
+                                {{ __("Public Note") }}
+                                <small class="text-muted">
+                                    {{ __("anyone in the guild can see this") }}
+                                </small>
                             </label>
                             <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($member ? $member->public_note : '') }}</textarea>
                         </div>
@@ -59,12 +61,14 @@
                             <div class="form-group">
                                 <label for="officer_note" class="font-weight-bold">
                                     <span class="text-muted fas fa-fw fa-shield"></span>
-                                    Officer Note
-                                    <small class="text-muted">only officers can see this</small>
+                                    {{ __("Officer Note") }}
+                                    <small class="text-muted">
+                                        {{ __("only officers can see this") }}
+                                    </small>
                                 </label>
                                 @if (isStreamerMode())
                                     <br>
-                                    Hidden in streamer mode
+                                    {{ __("Hidden in streamer mode") }}
                                 @else
                                     <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
                                 @endif
@@ -77,8 +81,10 @@
                             <div class="form-group">
                                 <label for="personal_note" class="font-weight-bold">
                                     <span class="text-muted fas fa-fw fa-eye-slash"></span>
-                                    Personal Note
-                                    <small class="text-muted">only you can see this</small>
+                                    {{ __("Personal Note") }}
+                                    <small class="text-muted">
+                                        {{ __("only you can see this") }}
+                                    </small>
                                 </label>
                                 <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($member ? $member->personal_note : '') }}</textarea>
                             </div>
@@ -94,10 +100,10 @@
                                     <label class="{{ $guild->is_received_locked ? '' : 'text-muted' }}">
                                         <input type="checkbox" name="is_received_unlocked" value="1" class="" autocomplete="off"
                                             {{ old('is_received_unlocked') && old('is_received_unlocked') == 1 ? 'checked' : ($member->is_received_unlocked ? 'checked' : '') }}>
-                                            Unlock received loot list
+                                            {{ __("Unlock received loot list") }}
                                             <small class="text-muted">
-                                                allow member to edit their received loot,
-                                                <span class="font-weight-bold">overrides guild settings {{ $guild->is_received_locked ? '(locked)' : '(already unlocked)' }}</span>
+                                                {{ __("allow member to edit their received loot") }}
+                                                <span class="font-weight-bold">overrides guild settings {{ $guild->is_received_locked ? '(' . __("locked") . ')' : '(' . __("already unlocked") . ')' }}</span>
                                             </small>
                                     </label>
                                 </div>
@@ -114,10 +120,10 @@
                                     <label class="{{ $guild->is_wishlist_locked ? '' : 'text-muted' }}">
                                         <input type="checkbox" name="is_wishlist_unlocked" value="1" class="" autocomplete="off"
                                             {{ old('is_wishlist_unlocked') && old('is_wishlist_unlocked') == 1 ? 'checked' : ($member->is_wishlist_unlocked ? 'checked' : '') }}>
-                                            Unlock wishlists
+                                            {{ __("Unlock wishlists") }}
                                             <small class="text-muted">
-                                                allow member to edit their wishlist,
-                                                <span class="font-weight-bold">overrides guild settings {{ $guild->is_wishlist_locked ? '(locked)' : '(already unlocked)' }}</span>
+                                                {{ __("allow member to edit their wishlist") }}
+                                                <span class="font-weight-bold">overrides guild settings {{ $guild->is_wishlist_locked ? '(' . __("locked") . ')' : '(' . __("already unlocked") . ')' }}</span>
                                             </small>
                                     </label>
                                 </div>
@@ -134,7 +140,7 @@
                                     <label>
                                         <input type="checkbox" name="inactive_at" value="1" class="" autocomplete="off"
                                             {{ old('inactive_at') && old('inactive_at') == 1 ? 'checked' : ($member->inactive_at ? 'checked' : '') }}>
-                                            Archive/Kick/Ban <small class="text-muted">access revoked, hidden from lists, characters also archived</small>
+                                            {{ __("Archive/Kick/Ban") }} <small class="text-muted">{{ __("access revoked, hidden from lists, characters also archived") }}</small>
                                     </label>
                                 </div>
                             </div>
@@ -143,7 +149,7 @@
                 @endif
 
                 <div class="form-group">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
                 </div>
             </form>
         </div>

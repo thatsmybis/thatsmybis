@@ -6,9 +6,7 @@ use App\{AuditLog, Guild, Instance, Item};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Cache;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{App, Cache, DB, Validator};
 use Illuminate\Validation\Rule;
 
 class ItemController extends Controller
@@ -417,12 +415,21 @@ class ItemController extends Controller
             $domain = 'tbc';
         }
 
+        $locale = '';
+        if (App::getLocale() != 'en') {
+            if ($domain == 'www') {
+                $domain .= '.' . App::getLocale() . '.';
+            } else {
+                $locale .= App::getLocale() . '.';
+            }
+        }
+
         try {
             // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)
-            $json = json_decode(file_get_contents('https://' . $domain . '.wowhead.com/tooltip/item/' . (int)$itemId));
+            $json = json_decode(file_get_contents('https://' . $locale . $domain . '.wowhead.com/tooltip/item/' . (int)$itemId));
 
             // Fix link - Not using this because I wasn't easily able to get wowhead's script to not parse the link and do stupid crap to it
-            $json->tooltip = str_replace('href="/', 'href="https://' . $domain . '.wowhead.com/', $json->tooltip);
+            $json->tooltip = str_replace('href="/', 'href="https://' . $locale . $domain . '.wowhead.com/', $json->tooltip);
 
             // Remove links
             $json->tooltip = str_replace('<a ', '<span ', $json->tooltip);

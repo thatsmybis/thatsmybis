@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', ($raid ? ($copy ? "Copy" : "Edit") : "Create") . " Raid - " . config('app.name'))
+@section('title', ($raid ? ($copy ? __("Copy") : __("Edit")) : __("Create")) . " " __("Raid") . " - " . config('app.name'))
 
 @php
     $date = null;
@@ -33,10 +33,10 @@
                                 @if ($raid)
                                     @if ($copy)
                                         <span class="text-muted fas fa-fw fa-copy"></span>
-                                        Copying
+                                        {{ __("Copying") }}
                                     @else
                                         <span class="text-muted fas fa-fw fa-pencil"></span>
-                                        Editing
+                                        {{ __("Editing") }}
                                     @endif
                                     <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => ($copy ? $originalRaid->id : $raid->id), 'raidSlug' => ($copy ? $originalRaid->slug : $raid->slug)]) }}"
                                         class="text-white">
@@ -44,7 +44,7 @@
                                     </a>
                                 @else
                                     <span class="text-muted fas fa-fw fa-plus"></span>
-                                    Create a Raid
+                                    {{ __("Create a Raid") }}
                                 @endif
                             </h1>
                         </li>
@@ -53,17 +53,17 @@
                                 <li class="list-inline-item">
                                     <a class="text-success" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
                                         <span class="fa-fw fas fa-sack"></span>
-                                        Assign Loot
+                                        {{ __("Assign Loot") }}
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
-                                        <span class="fas fa-fw fa-copy"></span> copy
+                                        <span class="fas fa-fw fa-copy"></span> {{ __("copy") }}
                                     </a>
                                 <li class="list-inline-item">
                                     <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
                                         <span class="fas fa-clipboard-list-check"></span>
-                                        history
+                                        {{ __("history") }}
                                     </a>
                                 </li>
                             @endif
@@ -92,7 +92,7 @@
                                 <div class="form-group">
                                     <label for="date" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-calendar"></span>
-                                        Date <span class="small text-muted">your local time</span>
+                                        {{ __("Date") }} <span class="small text-muted">{{ __("your local time") }}</span>
                                     </label>
                                     <div>
                                         <input class="js-date" type="text" name="date" hidden value="{{ $date }}">
@@ -113,7 +113,7 @@
                                 <div class="form-group">
                                     <label for="name" class="font-weight-bold">
                                         <span class="text-dk fas fa-fw fa-helmet-battle"></span>
-                                        Raid Name
+                                        {{ __("Raid Name") }}
                                     </label>
                                     <input name="name"
                                         required
@@ -133,7 +133,7 @@
                                             <label>
                                                 <input type="checkbox" name="is_cancelled" value="1" class="" autocomplete="off"
                                                     {{ old('is_cancelled') && old('is_cancelled') == 1 ? 'checked' : ($raid && $raid->cancelled_at ? 'checked' : '') }}>
-                                                    Cancelled <small class="text-muted">attendance will not count</small>
+                                                    {{ __("Cancelled") }} <small class="text-muted">{{ __("attendance will not count") }}</small>
                                             </label>
                                         </div>
                                     </div>
@@ -145,7 +145,7 @@
                                             <label>
                                                 <input type="checkbox" name="is_archived" value="1" class="" autocomplete="off"
                                                     {{ old('is_archived') && old('is_archived') == 1 ? 'checked' : ($raid && $raid->archived_at ? 'checked' : '') }}>
-                                                    Archived <small class="text-muted">raid will be hidden</small>
+                                                    {{ __("Archived") }} <small class="text-muted">{{ __("raid will be hidden") }}</small>
                                             </label>
                                         </div>
                                     </div>
@@ -158,8 +158,8 @@
                                 <div class="form-group">
                                     <label for="public_note" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
-                                        Public Note
-                                        <small class="text-muted">anyone in the guild can see this</small>
+                                        {{ __("Public Note") }}
+                                        <small class="text-muted">{{ __("anyone in the guild can see this") }}</small>
                                     </label>
                                     <textarea autocomplete="off"  maxlength="250" data-max-length="250" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($raid ? $raid->public_note : '') }}</textarea>
                                 </div>
@@ -170,12 +170,12 @@
                                     <div class="form-group">
                                         <label for="officer_note" class="font-weight-bold">
                                             <span class="text-muted fas fa-fw fa-shield"></span>
-                                            Officer Note
-                                            <small class="text-muted">only officers can see this</small>
+                                            {{ __("Officer Note") }}
+                                            <small class="text-muted">{{ __("only officers can see this") }}</small>
                                         </label>
                                         @if (isStreamerMode())
                                         <div class="mt-1">
-                                            Officer note is hidden in streamer mode
+                                            {{ __("Officer note is hidden in streamer mode") }}
                                         </div>
                                         @else
                                             <textarea autocomplete="off" maxlength="250" data-max-length="250" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($raid ? $raid->officer_note : '') }}</textarea>
@@ -189,13 +189,13 @@
                                 <div class="form-group">
                                     <label for="logs" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-link"></span>
-                                        Link to Raid Logs <span class="text-muted small">max {{ $maxInstances }}</span>
+                                        {{ __("Link to Raid Logs") }} <span class="text-muted small">{{ __("max") }} {{ $maxInstances }}</span>
                                     </label>
 
                                     @if ($raid && $raid->logs_deprecated)
                                         <!-- DEPRECATED -->
                                         <div class="text-warning">
-                                            This raid is using the old raid logs feature (only supports one log). To use the new raid logs feature, remove this log and save the raid. You'll then be able to come back and use the new logs feature on this raid.
+                                            {{ __("This raid is using the old raid logs feature (only supports one log). To use the new raid logs feature, remove this log and save the raid. You'll then be able to come back and use the new logs feature on this raid.") }}
                                         </div>
                                         <input name="logs_deprecated"
                                             autocomplete="off"
@@ -232,8 +232,8 @@
                     <div class="col-xl-4 col-sm-6 col-12 {{ $errors->has('raid.instance_id.*') ? 'text-danger font-weight-bold' : '' }}">
                         <label for="instance_id[0]" class="font-weight-bold">
                             <span class="fas fa-fw fa-dungeon text-muted"></span>
-                            Dungeon(s)
-                            <span class="text-muted small">max {{ $maxInstances }}</span>
+                            {{ __("Dungeon(s)") }}
+                            <span class="text-muted small">{{ __("max") }} {{ $maxInstances }}</span>
                         </label>
                         @for ($i = 0; $i < $maxInstances; $i++)
                             @php
@@ -259,7 +259,7 @@
                     <div class="offset-xl-2 col-xl-4 col-sm-6 col-12 {{ $errors->has('raid.raid_group_id.*') ? 'text-danger font-weight-bold' : '' }}">
                         <label for="raid_group_id[0]" class="font-weight-bold">
                             <span class="fas fa-fw fa-users text-muted"></span>
-                            Raid Group(s) <span class="text-muted small">max {{ $maxRaidGroups }}</span>
+                            {{ __("Raid Group(s)") }} <span class="text-muted small">{{ __("max") }} {{ $maxRaidGroups }}</span>
                         </label>
                         @for ($i = 0; $i < $maxRaidGroups; $i++)
                             <div class="form-group {{ $i > 0 ? 'js-hide-empty' : '' }}" style="{{ $i > 0 ? 'display:none;' : '' }}">
@@ -288,11 +288,11 @@
                         <ul class="list-inline">
                             <li class="list-inline-item">
                                 <h2 class="font-weight-medium ">
-                                    Attendees
+                                    {{ __("Attendees") }}
                                 </h2>
                             </li>
                             <li class="list-inline-item">
-                                <span class="js-clear-attendees text-link cursor-pointer"><span class="fas fa-fw fa-trash"></span> clear attendees</span>
+                                <span class="js-clear-attendees text-link cursor-pointer"><span class="fas fa-fw fa-trash"></span> {{ __("clear attendees") }}</span>
                             </li>
                         </ul>
                     </div>
@@ -325,11 +325,11 @@
                                             @if ($i == 0)
                                                 <span class="fas fa-fw fa-redo text-muted"></span>
                                                 <span class="font-weight-bold">
-                                                    Excused
+                                                    {{ __("Excused") }}
                                                 </span>
                                             @else
                                                 <span class="small text-muted">
-                                                    excused
+                                                    {{ __("excused") }}
                                                 </span>
                                             @endif
                                         </label>
@@ -351,10 +351,10 @@
                                                 <label for="characters[{{ $i }}][character_id]" class="font-weight-bold">
                                                     @if ($i == 0)
                                                         <span class="fas fa-fw fa-user text-muted"></span>
-                                                        Character
+                                                        {{ __("Character") }}
                                                     @else
                                                         <span class="sr-only">
-                                                            Character
+                                                            {{ __("Character") }}
                                                         </span>
                                                     @endif
                                                 </label>
@@ -403,16 +403,16 @@
                                                         <label for="characters[{{ $i }}][remark_id]" class="font-weight-bold full-width">
                                                             @if ($i == 0)
                                                                 <span class="fas fa-fw fa-quote-left text-muted"></span>
-                                                                Note
+                                                                {{ __("Note") }}
                                                             @else
                                                                 <span class="sr-only">
-                                                                    Note
+                                                                    {{ __("Note") }}
                                                                 </span>
                                                             @endif
                                                         </label>
                                                     </div>
                                                     <div>
-                                                        <span data-index="{{ $i }}" class="js-show-notes text-link cursor-pointer font-weight-light">+ custom note</span>
+                                                        <span data-index="{{ $i }}" class="js-show-notes text-link cursor-pointer font-weight-light">+ {{ __("custom note") }}</span>
                                                     </div>
                                                 </div>
 
@@ -453,10 +453,10 @@
                                                 <label for="characters[{{ $i }}][credit]" class="font-weight-bold">
                                                     @if ($i == 0)
                                                         <span class="fas fa-fw fa-user-chart text-muted"></span>
-                                                        Attendance Credit
+                                                        {{ __("Attendance Credit") }}
                                                     @else
                                                         <span class="sr-only">
-                                                            Attendance Credit
+                                                            {{ __("Attendance Credit") }}
                                                         </span>
                                                     @endif
                                                 </label>
@@ -475,7 +475,7 @@
                                                         data-slider-tooltip="hide" />
                                                 </div>
                                                 <div data-attendance-skip-note="{{ $i }}" class="text-warning" style="display:none;">
-                                                    Attendance skipped - this won't count against their overall attendance
+                                                    {{ __("Attendance skipped - this won't count against their overall attendance") }}
                                                 </div>
 
                                                 @if ($errors->has('characters.' . $i))
@@ -496,11 +496,11 @@
                                                         <label for="characters[{{ $i }}][public_note]" class="font-weight-bold">
                                                             @if ($i == 0)
                                                                 <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
-                                                                Custom Note
+                                                                {{ __("Custom Note") }}
                                                             @else
                                                                 &nbsp;
                                                                 <span class="sr-only">
-                                                                    Custom Note
+                                                                    {{ __("Custom Note") }}
                                                                 </span>
                                                             @endif
                                                         </label>
@@ -517,17 +517,17 @@
                                                         <label for="characters[{{ $i }}][officer_note]" class="font-weight-bold">
                                                             @if ($i == 0)
                                                                 <span class="fas fa-fw fa-shield text-muted"></span>
-                                                                Officer Note
+                                                                {{ __("Officer Note") }}
                                                             @else
                                                                 &nbsp;
                                                                 <span class="sr-only">
-                                                                    Optional Officer Note
+                                                                    {{ __("Optional Officer Note") }}
                                                                 </span>
                                                             @endif
                                                         </label>
                                                         @if (isStreamerMode())
                                                             <div class="mt-2">
-                                                                Officer note is hidden in streamer mode
+                                                                {{ __("Officer note is hidden in streamer mode") }}
                                                             </div>
                                                         @endif
                                                         <input name="characters[{{ $i }}][officer_note]" maxlength="250" data-max-length="250" type="text" placeholder="officer note"
@@ -541,7 +541,7 @@
 
                                         @if ($i == $maxCharacters - 1)
                                             <div class="col-12 mt-3 text-danger font-weight-bold">
-                                                Max characters added
+                                                {{ __("Max characters added") }}
                                             </div>
                                         @endif
                                     </div>
@@ -552,7 +552,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ $raid && !$copy ? 'Update' : 'Create' }}</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ $raid && !$copy ? __('Update') : __('Create') }}</button>
                 </div>
             </form>
         </div>

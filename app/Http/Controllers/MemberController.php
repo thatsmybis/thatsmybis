@@ -81,6 +81,27 @@ class MemberController extends Controller
     }
 
     /**
+     * Set the user's locale
+     * @return
+     */
+    public function setLocale() {
+        $user = request()->get('currentUser');
+
+        $validationRules = [
+            'locale' => ['string', 'min:2', 'max:3', Rule::in(array_keys(getLocales()))],
+        ];
+
+        $validationMessages = ['locale' => 'Language must be in supported list of languages.'];
+
+        $this->validate(request(), $validationRules, $validationMessages);
+
+        $user->update(['locale' => request()->input('locale')]);
+
+        request()->session()->flash('status', __("Locale set to :locale", ['locale' => request()->input('locale')]));
+        return redirect()->back();
+    }
+
+    /**
      * Show a member
      *
      * @return \Illuminate\Http\Response

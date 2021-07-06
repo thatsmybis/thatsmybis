@@ -8,43 +8,43 @@
             {{ $raid->name }}
             @if ($raid->cancelled_at)
                 <span class="font-weight-bold text-warning">
-                    cancelled
+                    {{ __("cancelled") }}
                 </span>
             @endif
         </a>
         <div class="dropdown-menu" aria-labelledby="raid{{ $raid->id }}Dropdown">
             <a class="dropdown-item" href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
                 <span class="text-muted fa-fw fas fa-"></span>
-                View
+                {{ __("View") }}
             </a>
             @if (!isset($showEdit) || $showEdit)
                 <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
                     <span class="text-muted fa-fw fas fa-sack"></span>
-                    Assign Loot
+                    {{ __("Assign Loot") }}
                 </a>
             @endif
             @if (!isset($showEdit) || $showEdit)
                 <a class="dropdown-item" href="{{ route('guild.raids.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
                     <span class="text-muted fa-fw fas fa-pencil"></span>
-                    Edit
+                    {{ __("Edit") }}
                 </a>
                 <a class="dropdown-item" href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
                     <span class="text-muted fa-fw fas fa-copy"></span>
-                    copy
+                    {{ __("copy") }}
                 </a>
             @endif
             <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
                 <span class="text-muted fa-fw fas fa-"></span>
-                History
+                {{ __("History") }}
             </a>
             @if ($raid->archived_at)
                 <span class="dropdown-item disabled font-weight-bold text-danger">
-                    ARCHIVED
+                    {{ __("ARCHIVED") }}
                 </span>
             @endif
             @if ($raid->cancelled_at)
                 <span class="dropdown-item disabled font-weight-bold text-warning">
-                    CANCELLED
+                    {{ __("CANCELLED") }}
                 </span>
             @endif
         </div>

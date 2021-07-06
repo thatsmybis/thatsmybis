@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title',  'Members - ' . config('app.name'))
+@section('title',  __('Members') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid">
@@ -11,18 +11,18 @@
                         <tr>
                             <th>
                                 <span class="fas fa-fw fa-user text-muted"></span>
-                                Member
+                                {{ __("Member") }}
                             </th>
                             <th>
                                 <span class="fas fa-fw fa-users text-muted"></span>
-                                Characters
+                                {{ __("Characters") }}
                             </th>
                             <th>
                                 <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
-                                Notes
+                                {{ __("Notes") }}
                             </th>
                             <th>
-                                Roles (<abbr title="these get updated when the user loads a page and may be cached for up to several minutes between page loads">cached</abbr>)
+                                {{ __("Roles") }} (<abbr title="these get updated when the user loads a page and may be cached for up to several minutes between page loads">{{ __("cached") }}</abbr>)
                             </th>
                         </tr>
                     </thead>
@@ -31,7 +31,7 @@
                             <tr>
                                 <td>
                                     <span class="font-weight-bold text-danger">
-                                        Unassigned
+                                        {{ __("Unassigned") }}
                                     </span>
                                 </td>
                                 <td>
@@ -74,7 +74,7 @@
                                     </div>
                                     @if ($showOfficerNote && $member->officer_note)
                                         <div>
-                                            <span class="font-weight-bold small font-italic text-gold">Officer's Note</span>
+                                            <span class="font-weight-bold small font-italic text-gold">{{ __("Officer's Note") }}</span>
                                             <br>
                                             <span class="js-markdown-inline">{{ $member->officer_note }}</span>
                                         </div>
@@ -105,11 +105,11 @@
                             <tr>
                                 <td>
                                     <span class="font-weight-bold text-muted">
-                                        Archived Members
+                                        {{ __("Archived Members") }}
                                     </span>
                                     <br>
                                     <span id="showInactiveMembers" class="small font-italic cursor-pointer">
-                                        click to show
+                                        {{ __("click to show") }}
                                     </span>
                                 </td>
                                 <td>

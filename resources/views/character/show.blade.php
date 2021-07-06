@@ -21,7 +21,7 @@
                 <div class="col-12 mb-2">
                     <span class="font-weight-bold">
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                        Raid History
+                        {{ __("Raid History") }}
                     </span>
                 </div>
 
@@ -29,7 +29,7 @@
                     @if ($character->raids->count())
                         @include('partials/raidHistoryTable', ['raids' => $character->raids, 'showOfficerNote' => ($viewOfficerNotePermission && !isStreamerMode())])
                     @else
-                        None yet
+                        {{ __("None yet") }}
                     @endif
                 </div>
             </div>
@@ -40,7 +40,7 @@
                     <div class="col-12 mb-2">
                         <span class="text-gold font-weight-bold">
                             <span class="fas fa-fw fa-sort-amount-down"></span>
-                            Prios
+                            {{ __("Prios") }}
                         </span>
                     </div>
                     <div class="col-12 pb-3">
@@ -85,14 +85,14 @@
                             <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                                 <span class="text-legendary font-weight-bold">
                                     <span class="fas fa-fw fa-scroll-old"></span>
-                                    Wishlist
+                                    {{ __("Wishlist") }}
                                 </span>
                                 <span class="small align-text- fas fa-fw fa-pencil"></span>
                             </a>
                         @else
                             <span class="text-legendary font-weight-bold">
                                 <span class="fas fa-fw fa-scroll-old"></span>
-                                Wishlist
+                                {{ __("Wishlist") }}
                             </span>
                         @endif
                         <span class="js-sort-wishlists text-link">
@@ -158,14 +158,14 @@
                         <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                             <span class="text-success font-weight-bold">
                                 <span class="fas fa-fw fa-sack"></span>
-                                Loot Received
+                                {{ __("Loot Received") }}
                             </span>
                             <span class="small align-text- fas fa-fw fa-pencil"></span>
                         </a>
                     @else
                         <span class="text-success font-weight-bold">
                             <span class="fas fa-fw fa-sack"></span>
-                            Loot Received
+                            {{ __("Loot Received") }}
                         </span>
                     @endif
                 </div>
@@ -197,14 +197,14 @@
                         <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                             <span class="text-gold font-weight-bold">
                                 <span class="fas fa-fw fa-book"></span>
-                                Recipes
+                                {{ __("Recipes") }}
                             </span>
                             <span class="small align-text- fas fa-fw fa-pencil"></span>
                         </a>
                     @else
                         <span class="text-gold font-weight-bold">
                             <span class="fas fa-fw fa-book"></span>
-                            Recipes
+                            {{ __("Recipes") }}
                         </span>
                     @endif
                 </div>
@@ -247,7 +247,7 @@
                     <div class="col-12">
                         <span class="text-muted font-weight-bold">
                             <span class="fas fa-fw fa-comment-alt-lines"></span>
-                            Public Note
+                            {{ __("Public Note") }}
                         </span>
                     </div>
                     <div class="col-12 mb-3 pl-4">
@@ -260,8 +260,8 @@
                         <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                             <div class="form-group">
                                 <label for="public_note" class="font-weight-bold">
-                                    <span class="sr-only">Public Note</span>
-                                    <small class="text-muted">anyone in the guild can see this</small>
+                                    <span class="sr-only">{{ __("Public Note") }}</span>
+                                    <small class="text-muted">{{ __("anyone in the guild can see this") }}</small>
                                 </label>
                                 <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
                             </div>
@@ -272,7 +272,7 @@
                         <div class="col-12">
                             <span class="text-muted font-weight-bold">
                                 <span class="fas fa-fw fa-shield"></span>
-                                Officer Note
+                                {{ __("Officer Note") }}
                             </span>
                         </div>
                         <div class="col-12 mb-3 pl-4">
@@ -282,17 +282,17 @@
                                     <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                                 @endif
                             @else
-                                Hidden in streamer mode
+                                {{ __("Hidden in streamer mode") }}
                             @endif
                         </div>
                         <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                             <div class="form-group">
                                 <label for="officer_note" class="font-weight-bold">
-                                    <span class="sr-only">Officer Note</span>
-                                    <small class="text-muted">only officers can see this</small>
+                                    <span class="sr-only">{{ __("Officer Note") }}</span>
+                                    <small class="text-muted">{{ __("only officers can see this") }}</small>
                                 </label>
                                 @if (isStreamerMode())
-                                    Hidden in streamer mode
+                                    {{ __("Hidden in streamer mode") }}
                                 @else
                                     <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
                                 @endif
@@ -305,7 +305,7 @@
                             <div class="col-12">
                                 <span class="text-muted font-weight-bold">
                                     <span class="fas fa-fw fa-eye-slash"></span>
-                                    Personal Note
+                                    {{ __("Personal Note") }}
                                 </span>
                             </div>
                             <div class="col-12 mb-3 pl-4">
@@ -315,8 +315,8 @@
                             <div class="js-note-input col-12 pl-4" style="display:none;">
                                 <div class="form-group">
                                     <label for="personal_note" class="font-weight-bold">
-                                        <span class="sr-only">Personal Note</span>
-                                        <small class="text-muted">only you can see this</small>
+                                        <span class="sr-only">{{ __("Personal Note") }}</span>
+                                        <small class="text-muted">{{ __("only you can see this") }}</small>
                                     </label>
                                     <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
                                 </div>
@@ -325,7 +325,7 @@
                     --}}
 
                     <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
-                        <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
+                        <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
                     </div>
                 </div>
             </form>

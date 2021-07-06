@@ -3,7 +3,7 @@
         <li class="list-inline-item">
             <label for="raid_group_filter font-weight-light">
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
-                Raid Group
+                {{ __("Raid Group") }}
             </label>
             <select id="raid_group_filter" class="form-control dark">
                 <option value="">—</option>
@@ -17,12 +17,12 @@
         <li class=" list-inline-item">
             <label for="class_filter font-weight-light">
                 <span class="text-muted fas fa-fw fa-axe-battle"></span>
-                Class
+                {{ __("Class") }}
             </label>
             <select id="class_filter" class="form-control dark">
                 <option value="">—</option>
-                @foreach (App\Character::classes($guild->expansion_id) as $class)
-                    <option value="{{ $class }}" class="text-{{ strtolower($class) }}-important">
+                @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
+                    <option value="{{ $class }}" class="text-{{ strtolower($key) }}-important">
                         {{ $class }}
                     </option>
                 @endforeach
@@ -31,65 +31,65 @@
         <li class="list-inline-item">
             <label for="instance_filter font-weight-light">
                 <span class="text-muted fas fa-fw fa-sack"></span>
-                Dungeon
+                {{ __("Dungeon") }}
             </label>
             <select id="instance_filter" class="form-control dark">
                 <option value="">—</option>
                 @if ($guild->expansion_id == 1)
                     <option value="4">
-                        Zul'Gurub
+                        {{ __("Zul'Gurub") }}
                     </option>
                     <option value="5">
-                        Ruins of Ahn'Qiraj
+                        {{ __("Ruins of Ahn'Qiraj") }}
                     </option>
                     <option value="8">
-                        World Bosses
+                        {{ __("World Bosses") }}
                     </option>
                     <option value="1">
-                        Molten Core
+                        {{ __("Molten Core") }}
                     </option>
                     <option value="2">
-                        Onyxia's Lair
+                        {{ __("Onyxia's Lair") }}
                     </option>
                     <option value="3">
-                        Blackwing Lair
+                        {{ __("Blackwing Lair") }}
                     </option>
                     <option value="6">
-                        Temple of Ahn'Qiraj
+                        {{ __("Temple of Ahn'Qiraj") }}
                     </option>
                     <option value="7">
-                        Naxxramas
+                        {{ __("Naxxramas") }}
                     </option>
                 @elseif ($guild->expansion_id == 2)
                     <option value="9">
-                        Karazhan
+                        {{ __("Karazhan") }}
                     </option>
                     <option value="10">
-                        Gruul's Lair
+                        {{ __("Gruul's Lair") }}
                     </option>
                     <option value="11">
-                        Magtheridon's Lair
+                        {{ __("Magtheridon's Lair") }}
                     </option>
                     <option value="12">
-                        Serpentshrine Cavern
+                        {{ __("Serpentshrine Cavern") }}
                     </option>
                     <option value="13">
-                        Hyjal Summit
+                        {{ __("Hyjal Summit") }}
                     </option>
                     <option value="14">
-                        Tempest Keep
+                        {{ __("Tempest Keep") }}
                     </option>
                     <option value="15">
-                        Black Temple
+                        {{ __("Black Temple") }}
                     </option>
                     <option value="16">
-                        Zul'Aman
+                        {{ __("Zul'Aman") }}
                     </option>
                     <option value="17">
-                        Sunwell Plateau
+                        {{ __("Sunwell Plateau") }}
                     </option>
                     <option value="18">
-                        World Bosses
+                        {{ __("World Bosses") }}
                     </option>
                 @endif
             </select>
@@ -97,12 +97,12 @@
 
         <li class="list-inline-item font-weight-light">
             <span class="text-muted fas fa-fw fa-eye-slash"></span>
-            Columns
+            {{ __("Columns") }}
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column-default text-link cursor-pointer">
-                Defaults
+                {{ __("Defaults") }}
             </span>
         </li>
         @if ($showPrios)
@@ -110,7 +110,7 @@
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="1">
                     <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
-                    Prios
+                    {{ __("Prios") }}
                 </span>
             </li>
         @endif
@@ -119,7 +119,7 @@
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2">
                     <span class="text-muted fal fa-fw fa-scroll-old"></span>
-                    Wishlist
+                    {{ __("Wishlist") }}
                 </span>
             </li>
         @endif
@@ -127,7 +127,7 @@
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
                 <span class="text-muted fal fa-fw fa-sack"></span>
-                Received
+                {{ __("Received") }}
             </span>
         </li>
         <!--
@@ -135,7 +135,7 @@
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
                 <span class="text-muted fas fa-fw fa-book"></span>
-                Recipes
+                {{ __("Recipes") }}
             </span>
         </li>
         -->
@@ -144,7 +144,7 @@
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4">
                 <span class="text-muted fab fa-fw fa-discord"></span>
-                Roles
+                {{ __("Roles") }}
             </span>
         </li>
         -->
@@ -152,14 +152,14 @@
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="6">
                 <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
-                Notes
+                {{ __("Notes") }}
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="js-show-all-clipped-items text-link cursor-pointer font-weight-light" data-column="6">
                 <span class="text-muted fal fa-fw fa-eye"></span>
-                Show all loot
+                {{ __("Show all loot") }}
             </span>
         </li>
     </ul>

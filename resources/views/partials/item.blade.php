@@ -26,6 +26,15 @@ if (isset($guild) && $guild->expansion_id) {
     }
 }
 
+$wowheadLocale = '';
+if (Illuminate\Support\Facades\App::getLocale() != 'en') {
+    if ($wowheadSubdomain == 'www') {
+        $wowheadSubdomain = '.' . Illuminate\Support\Facades\App::getLocale() . '.';
+    } else {
+        $wowheadLocale = Illuminate\Support\Facades\App::getLocale() . '.';
+    }
+}
+
 if (isset($showTier) && $showTier) {
     if (isset($tierMode) && $tierMode) {
         $itemTierText = '&nbsp;';
@@ -42,8 +51,8 @@ if (isset($showTier) && $showTier) {
 }
 
 $wowheadAttribs =
-      'data-wowhead="item=' . $itemId . '?domain=' . $wowheadSubdomain. '" '
-    . 'data-wowhead-link="https://' . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadSubdomain . '"';
+      'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain. '" '
+    . 'data-wowhead-link="https://' . $wowheadLocale . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
 
 if (isset($iconSize) && $iconSize) {
     $wowheadAttribs .= ' data-wh-icon-size="' . $iconSize . '"';
@@ -56,7 +65,7 @@ if (isset($iconSize) && $iconSize) {
     @endif
     <span class="{{ isset($strikeThrough) && $strikeThrough ? 'font-strikethrough' : '' }}">
         @if (isset($wowheadLink) && $wowheadLink)
-            <a href="https://{{ $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
+            <a href="https://{{ $wowheadLocale . $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @elseif (isset($guild) && $guild)
             @if (isset($auditLink) && $auditLink)
                 <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId]) }}"
@@ -74,7 +83,7 @@ if (isset($iconSize) && $iconSize) {
                 </a>
             @endif
         @else
-            <a href="https://{{ $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
+            <a href="https://{{ $wowheadLocale . $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @endif
     </span>
 </span>
