@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', ($raid ? ($copy ? __("Copy") : __("Edit")) : __("Create")) . " " __("Raid") . " - " . config('app.name'))
+@section('title', ($raid ? ($copy ? __("Copy") : __("Edit")) : __("Create")) . " " . __("Raid") . " - " . config('app.name'))
 
 @php
     $date = null;

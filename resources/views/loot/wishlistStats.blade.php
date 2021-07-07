@@ -18,7 +18,7 @@
                 <span class="font-weight-bold">{{ __("Top") }} {{ $maxItems }}</span> {{ __("Wishlisted") }}
                 <span class="text-{{ getExpansionColor($expansionId) }} font-weight-bold">{{ getExpansionAbbr($expansionId) }}</span> {{ __("Items") }}
             </h1>
-            <span class="smaller text-muted">{{ __("Now you can be just like everyone else!") :D</span>
+            <span class="smaller text-muted">{{ __("Now you can be just like everyone else!") }} :D</span>
         </div>
     </div>
     <div class="row">
