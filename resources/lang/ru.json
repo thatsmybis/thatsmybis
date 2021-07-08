@@ -126,7 +126,7 @@
     "You'll be back to square one with an empty guild.": "Вы начнете с чистого листа с пустой гильдией.",
     "INSTRUCTIONS:": "ИНСТРУКЦИЯ:",
     "Choose a server below.": "Выберите сервер в меню ниже.",
-    "Press the little submit button ofc.": "Нажмите незаметную кнопку \"Сохранить\".",
+    "Press the little submit button ofc.": "Сохранить",
     "I UNDERSTAND THAT I MIGHT NOT BE ABLE TO UNDO THIS IF AN ADMIN ON THE CURRENT DISCORD RE-REGISTERS A GUILD ON IT BEFORE I DO": "Я ОСОЗНАЮ, ЧТО ЭТО ДЕЙСТВИЕ НЕОБРАТИМО И АДМИНИСТРАТОР НОВОГО СЕРВЕРА СМОЖЕТ ПЕРЕГИСТРИРОВАТЬ ГИЛЬДИЮ РАНЬШЕ МЕНЯ.",
     "Export Data": "Экспорт данных",
     "Choose Data to Export": "Выберите данные для экспорта",
@@ -173,7 +173,7 @@
     "I've added": "Я добавил",
     "the bot": "бота",
     "to that server": "на сервер",
-    "A little submit button ofc": "Незаметная кнопка \"Сохранить\"",
+    "A little submit button ofc": "Сохранить",
     "Permissions": "Разрешения",
     "Current website permissions:": "Текущие разрешения на сайте:",
     "Are you sure? This only needs to be run once or when a developer is ready to update the permissions.": "Вы уверены? Это требуется настроить единожды или пока разработчик не обновит список разрешений.",
@@ -568,5 +568,5 @@
     "No individual assignments": "Нет индивидуальных распределений",
     "Officer Notes": "Офицерские заметки",
     "going": "идёт",
-    "Translations": "Переводы",
+    "Translations": "Переводы"
 }
