@@ -17,7 +17,7 @@
     </li>
     <li class="list-inline-item text-muted">
         <a href="{{ route('guild.raidGroup.mainCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-            {-- TODO: Fix plural translation --}
+            {{-- TODO: Fix plural translation --}}
             {{ $raidGroup->characters_count }} {{ __("main raider") }}{{ $raidGroup->characters_count != 1 ? 's' : '' }}
         </a>
     </li>
@@ -26,7 +26,7 @@
     </li>
     <li class="list-inline-item text-muted">
         <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-            {-- TODO: Fix plural translation --}
+            {{-- TODO: Fix plural translation --}}
             {{ $raidGroup->secondary_characters_count }} {{ __("general raider") }}{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
         </a>
     </li>

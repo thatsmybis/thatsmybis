@@ -19,17 +19,17 @@
                     <span class="text-muted">
                         {{ __("Each character can be a main raider in just") }} <strong>{{ __("one") }}</strong> {{ __("raid, and a general raider in") }} <strong>{{ __("many") }}</strong> {{ __("other raids.") }}
                         <br>
-                        {{ __("Only a character's main raid will show up beside their name across the site.")
+                        {{ __("Only a character's main raid will show up beside their name across the site.") }}
                         <br>
                         @if ($isSecondary)
-                            This raid group also has
+                            {{ __("This raid group also has") }}
                             <a href="{{ route('guild.raidGroup.mainCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-                                {{ $raidGroup->characters_count }} main raider{{ $raidGroup->characters_count != 1 ? 's' : '' }}
+                                {{ $raidGroup->characters_count }} {{ __("main raider") }}{{ $raidGroup->characters_count != 1 ? 's' : '' }}
                             </a>
                         @else
-                            This raid group also has
+                            {{ __("This raid group also has") }}
                             <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-                                {{ $raidGroup->secondary_characters_count }} general raider{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+                                {{ $raidGroup->secondary_characters_count }} {{ __("general raider") }}{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
                             </a>
                         @endif
                     </span>
