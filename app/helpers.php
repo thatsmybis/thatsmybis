@@ -6,16 +6,14 @@ function getAttendanceColor($percentage = 0) {
 
     if ($percentage >= 0.95) {
         $color = 'text-tier-1';
-    } else if ($percentage >= 0.90) {
+    } else if ($percentage >= 0.9) {
         $color = 'text-tier-2';
-    } else if ($percentage >= 0.85) {
+    } else if ($percentage >= 0.8) {
         $color = 'text-tier-3';
-    } else if ($percentage >= 0.80) {
+    } else if ($percentage >= 0.7) {
         $color = 'text-tier-4';
-    } else if ($percentage >= 0.75) {
+    } else {
         $color = 'text-tier-5';
-    } else if ($percentage < 0.75) {
-        $color = 'text-tier-6';
     }
 
     return $color;
