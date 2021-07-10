@@ -6,6 +6,7 @@
             <label for="locale" class="font-weight-bold">
                 <span class="fas fa-fw fa-user-headset text-muted"></span>
                 {{ __("Language") }}
+                <small class="small text-muted">{{ __("item lookups are only in English") }}</small>
             </label>
             <select name="locale" class="form-control dark" data-live-search="false" autocomplete="off">
                 @foreach (getLocales() as $key => $locale)
