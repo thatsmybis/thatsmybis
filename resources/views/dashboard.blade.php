@@ -120,11 +120,17 @@
                 @endif
             @else
                 <div class="mt-4 mb-4">
+                    <p class="font-weight-bold pt-3 text-4">
+                        {{ __("You've been logged in with your account on") }} <a href="https://discord.com/app" target="_blank">discord.com</a>
+                    </p>
                     <p class="font-weight-normal pt-3 text-4">
                         {{ __("You don't belong to any guilds yet") }}
                     </p>
                     <p class="font-weight-normal pt-3 text-4">
                         {{ __("Make sure you're a member of your guild's Discord") }}
+                    </p>
+                    <p class="font-weight-normal pt-3 text-4">
+                        {{ __("Make sure you're on the correct") }} <a href="https://discord.com/app" target="_blank">{{ __("Discord account") }}</a>
                     </p>
                     <p class="small font-weight-normal pt-3">
                         {{ __("Something wrong with this message? Check the") }} <a href="{{ route('faq') }}">{{ __("FAQ") }}</a> {{ __("for why you might be seeing this.") }}
