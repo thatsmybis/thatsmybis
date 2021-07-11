@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Character, Guild, RaidGroup, User};
+use App\{AuditLog, Character, Guild, Raid, RaidGroup, User};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
@@ -10,6 +10,8 @@ use Kodeine\Acl\Models\Eloquent\Permission;
 
 class RaidGroupController extends Controller
 {
+    const RAIDS_PER_PAGE = 10;
+
     /**
      * Create a new controller instance.
      *
@@ -18,6 +20,61 @@ class RaidGroupController extends Controller
     public function __construct()
     {
         $this->middleware(['auth', 'seeUser']);
+    }
+
+    /**
+     * Show a raid group's attendance
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function attendance($guildId, $guildSlug, $id)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
+        $guild->load([
+            'allRaidGroups' => function ($query) use ($id) {
+                return $query->where('id', $id)
+                    ->with([
+                        'characters',
+                        'role',
+                    ])
+                    ->withCount(['characters', 'secondaryCharacters']);
+            },
+        ]);
+
+        $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
+
+        if (!$raidGroup) {
+            request()->session()->flash('status', 'Raid group not found');
+            return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        }
+
+        // To get the paginator to work, raids is its own query and not a with() on the raidGroup.
+        $raids = Raid::select('raids.*')
+            ->join('raid_raid_groups', 'raid_raid_groups.raid_id', 'raids.id')
+            ->where('raid_raid_groups.raid_group_id', $id)
+            ->with([
+                'characters',
+                'items',
+                'instances',
+            ])
+            ->orderBy('raids.date', 'desc')
+            ->paginate(self::RAIDS_PER_PAGE);
+
+        return view('guild.raidGroups.attendance', [
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'raidGroup'       => $raidGroup,
+            'raids'           => $raids,
+            'remarks'         => Raid::remarks(),
+            'showOfficerNote' => $showOfficerNote,
+        ]);
     }
 
     /**

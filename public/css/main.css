@@ -749,6 +749,9 @@ div.dataTables_filter input {
 }
 
 /* workaround for a FixedHeader bug that wipes column widths https://github.com/DataTables/FixedHeader/issues/94 */
+.dataTable .width-10pct {
+    width: 10%;
+}
 .dataTable .width-130 {
     width: 130px;
 }
