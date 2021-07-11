@@ -43,6 +43,11 @@
         </a>
     </li>
     <li class="list-inline-item">
+        <a href="{{ route('guild.raidGroup.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
+            <span class="fas fa-fw fa-user-check"></span>{{ __("attendance") }}
+        </a>
+    </li>
+    <li class="list-inline-item">
         <div class="dropdown">
             <a class="dropdown-toggle" id="raidGroup{{ $raidGroup->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ __("Export") }}

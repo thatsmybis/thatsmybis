@@ -51,9 +51,8 @@ class RaidGroup extends Model
             ->orderBy('characters.name');
     }
 
-    public function raids()
-    {
-        return $this->hasMany(Raid::class)->orderByDesc('date');
+    public function raids() {
+        return $this->belongsToMany(Raid::class, 'raid_raid_groups', 'raid_group_id', 'raid_id')->orderBy('name');
     }
 
     public function role() {
