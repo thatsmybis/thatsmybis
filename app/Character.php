@@ -261,6 +261,13 @@ class Character extends Model
         return $query;
     }
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function unReceiveditems() {
+        return $this->hasMany(CharacterItem::class)->where('is_received', 0);
+    }
+
     // Takes a query for characters and applies the logic necessary to fetch attendance for those characters.
     // Applies the fields `raid_count` and `attendance_percentage` to the selected fields.
     // Might not work on all queries.
