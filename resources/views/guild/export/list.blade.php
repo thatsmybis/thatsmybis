@@ -50,6 +50,32 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <!-- Gargul -->
+                        <li class="p-3 mb-3 rounded">
+                            <h2>
+                                <span class="fas fa-fw text-legendary"><img src="{{ asset('images/gargul.png') }}" style="width: 40px; height: 40px;"></img></span>
+                                Gargul
+                            </h2>
+                            <p>
+                                Import wishlist and loot priority data into the Gargul addon. Select all ( ctrl+a ), copy ( ctrl+c ) and then paste ( ctrl+v ) in the correct import window (see below for the Gargul commands). For more info check <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank">the Gargul docs on Curseforge</a>. Happy lootin'!
+                            </p>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.gargul.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-code text-muted"></span>
+                                        WishLists ( /gl wl )
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.gargul.priority', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        Loot Priority ( /gl lo )
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="p-3 mb-3 rounded">
                             <p class="text-4">
                                 Exports are <span class="font-weight-bold">CACHED</span> for {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 == 1 ? '' : 's' }}.
