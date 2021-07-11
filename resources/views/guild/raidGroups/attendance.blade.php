@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
-                        <span class="fas fa-fw fa-helmet-battle text-gold"></span>
+                        <span class="fas fa-fw fa-helmet-battle text-dk"></span>
                         <span style="{{ $raidGroup->role ? 'color:' . $raidGroup->getColor() : '' }}">{{ $raidGroup->name }}</span> {{ __("Attendance") }}
                     </h1>
                 </div>
@@ -41,36 +41,42 @@
                                 <span class="fas fa-fw fa-user text-muted"></span>
                                 {{ __("Character") }}
                             </th>
-                            @foreach ($raids as $raid)
-                                <th>
-                                    <ul class="no-indent no-bullet">
-                                        <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
-                                            <li class="">
-                                                <span class="js-timestamp text-muted" data-timestamp="{{ $raid->date }}" data-format="MMM D 'YY"></span>
-                                            </li>
-                                            @if ($raid->instances->count())
+                            @if ($raids->count())
+                                @foreach ($raids as $raid)
+                                    <th>
+                                        <ul class="no-indent no-bullet">
+                                            <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
                                                 <li class="">
-                                                    <ul class="list-inline">
-                                                        @foreach ($raid->instances as $instance)
-                                                            <li class="list-inline-item text-legendary font-weight-bold">
-                                                                {{ $instance->short_name }}
-                                                            </li>
-                                                        @endforeach
-                                                    </ul>
+                                                    <span class="js-timestamp text-muted" data-timestamp="{{ $raid->date }}" data-format="MMM D 'YY"></span>
                                                 </li>
-                                            @endif
+                                                @if ($raid->instances->count())
+                                                    <li class="">
+                                                        <ul class="list-inline">
+                                                            @foreach ($raid->instances as $instance)
+                                                                <li class="list-inline-item text-legendary font-weight-bold">
+                                                                    {{ $instance->short_name }}
+                                                                </li>
+                                                            @endforeach
+                                                        </ul>
+                                                    </li>
+                                                @endif
+                                                <li class="small text-muted font-weight-normal">
+                                                    {{ $raid->name }}
+                                                </li>
+                                            </a>
                                             <li class="small text-muted font-weight-normal">
-                                                {{ $raid->name }}
+                                                <span class="js-show-raid-loot text-muted cursor-pointer" data-raid-id="{{ $raid->id }}">
+                                                    {{ __("show loot") }}
+                                                </span>
                                             </li>
-                                        </a>
-                                        <li class="small text-muted font-weight-normal">
-                                            <span class="js-show-raid-loot text-muted cursor-pointer" data-raid-id="{{ $raid->id }}">
-                                                {{ __("show loot") }}
-                                            </span>
-                                        </li>
-                                    </ul>
+                                        </ul>
+                                    </th>
+                                @endforeach
+                            @else
+                                <th>
+                                    No raids found for this raid group
                                 </th>
-                            @endforeach
+                            @endif
                         </tr>
                     </thead>
                     <tbody>
@@ -88,74 +94,80 @@
                                         </li>
                                     </ul>
                                 </td>
-                                @foreach ($raids as $raid)
-                                    @php
-                                        $raidCharacter = $raid->characters->where('id', $character->id)->first();
-                                        $isFuture = $raid->date > getDateTime();
-                                    @endphp
-                                    <td>
-                                        @if ($raidCharacter)
-                                            @php
-                                                $loot = $raid->items->where('character_id', $raidCharacter->id);
-                                            @endphp
-                                            <ul class="no-bullet no-indent mb-0">
-                                                @if ($isFuture &&
-                                                    !$raidCharacter->pivot->is_exempt &&
-                                                    !$raidCharacter->pivot->remark_id &&
-                                                    !$raidCharacter->pivot->public_note &&
-                                                    !($showOfficerNote && $raidCharacter->pivot->officer_note))
-                                                    <li>
-                                                        —
-                                                    </li>
-                                                @else
-                                                    @if ($raidCharacter->pivot->is_exempt)
-                                                        <li class="text-warning">
-                                                            {{ __("Excused") }}
-                                                        </li>
-                                                    @elseif (!$isFuture)
-                                                        <li class="{{ getAttendanceColor($raidCharacter->pivot->credit) }}">
-                                                            {{ $raidCharacter->pivot->credit * 100 }}% {{ __("credit") }}
-                                                        </li>
-                                                    @endif
-                                                    @if ($raidCharacter->pivot->remark_id)
-                                                        <li class="{{ getAttendanceColor($raidCharacter->pivot->credit) }}">
-                                                            <span class="text-muted">
-                                                                {{ $remarks[$raidCharacter->pivot->remark_id] }}
-                                                            </span>
-                                                        </li>
-                                                    @endif
-                                                    @if ($raidCharacter->pivot->public_note)
+                                @if ($raids->count())
+                                    @foreach ($raids as $raid)
+                                        @php
+                                            $raidCharacter = $raid->characters->where('id', $character->id)->first();
+                                            $isFuture = $raid->date > getDateTime();
+                                        @endphp
+                                        <td>
+                                            @if ($raidCharacter)
+                                                @php
+                                                    $loot = $raid->items->where('character_id', $raidCharacter->id);
+                                                @endphp
+                                                <ul class="no-bullet no-indent mb-0">
+                                                    @if ($isFuture &&
+                                                        !$raidCharacter->pivot->is_exempt &&
+                                                        !$raidCharacter->pivot->remark_id &&
+                                                        !$raidCharacter->pivot->public_note &&
+                                                        !($showOfficerNote && $raidCharacter->pivot->officer_note))
                                                         <li>
-                                                            <span class="js-markdown-inline">{{ $raidCharacter->pivot->public_note }}</span>
+                                                            —
                                                         </li>
+                                                    @else
+                                                        @if ($raidCharacter->pivot->is_exempt)
+                                                            <li class="text-warning">
+                                                                {{ __("Excused") }}
+                                                            </li>
+                                                        @elseif (!$isFuture)
+                                                            <li class="{{ getAttendanceColor($raidCharacter->pivot->credit) }}">
+                                                                {{ $raidCharacter->pivot->credit * 100 }}% {{ __("credit") }}
+                                                            </li>
+                                                        @endif
+                                                        @if ($raidCharacter->pivot->remark_id)
+                                                            <li class="{{ getAttendanceColor($raidCharacter->pivot->credit) }}">
+                                                                <span class="text-muted">
+                                                                    {{ $remarks[$raidCharacter->pivot->remark_id] }}
+                                                                </span>
+                                                            </li>
+                                                        @endif
+                                                        @if ($raidCharacter->pivot->public_note)
+                                                            <li>
+                                                                <span class="js-markdown-inline">{{ $raidCharacter->pivot->public_note }}</span>
+                                                            </li>
+                                                        @endif
+                                                        @if ($showOfficerNote && $raidCharacter->pivot->officer_note)
+                                                            <li>
+                                                                <span class="font-weight-bold small font-italic text-gold">{{ __("Officer's Note") }}</span>
+                                                                <br>
+                                                                <span class="js-markdown-inline">{{ $raidCharacter->pivot->officer_note }}</span>
+                                                            </li>
+                                                        @endif
                                                     @endif
-                                                    @if ($showOfficerNote && $raidCharacter->pivot->officer_note)
-                                                        <li>
-                                                            <span class="font-weight-bold small font-italic text-gold">{{ __("Officer's Note") }}</span>
-                                                            <br>
-                                                            <span class="js-markdown-inline">{{ $raidCharacter->pivot->officer_note }}</span>
-                                                        </li>
-                                                    @endif
-                                                @endif
-                                            </ul>
-                                            @if($loot->count())
-                                                <span class="js-show-loot small text-muted cursor-pointer" data-raid-id="{{ $raid->id }}" data-character-id="{{ $raidCharacter->id }}">
-                                                    {{ __("loot") }} ({{ $loot->count() }})
-                                                </span>
-                                                <ul class="js-loot list-inline mb-0" data-raid-id="{{ $raid->id }}" data-character-id="{{ $raidCharacter->id }}" style="display:none;">
-                                                    @foreach ($raid->items->where('character_id', $raidCharacter->id) as $item)
-                                                        <li class="list-inline-item">
-                                                            @include('partials/item', ['wowheadLink' => false])
-                                                            @include('character/partials/itemDetails', ['hideAddedBy' => true, 'hideCreatedAt' => true])
-                                                        </li>
-                                                    @endforeach
                                                 </ul>
+                                                @if($loot->count())
+                                                    <span class="js-show-loot small text-muted cursor-pointer" data-raid-id="{{ $raid->id }}" data-character-id="{{ $raidCharacter->id }}">
+                                                        {{ __("loot") }} ({{ $loot->count() }})
+                                                    </span>
+                                                    <ul class="js-loot list-inline mb-0" data-raid-id="{{ $raid->id }}" data-character-id="{{ $raidCharacter->id }}" style="display:none;">
+                                                        @foreach ($raid->items->where('character_id', $raidCharacter->id) as $item)
+                                                            <li class="list-inline-item">
+                                                                @include('partials/item', ['wowheadLink' => false])
+                                                                @include('character/partials/itemDetails', ['hideAddedBy' => true, 'hideCreatedAt' => true])
+                                                            </li>
+                                                        @endforeach
+                                                    </ul>
+                                                @endif
+                                            @else
+                                                {{ __("n/a") }}
                                             @endif
-                                        @else
-                                            {{ __("n/a") }}
-                                        @endif
+                                        </td>
+                                    @endforeach
+                                @else
+                                    <td>
+                                        {{ __("n/a") }}
                                     </td>
-                                @endforeach
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>
@@ -175,9 +187,13 @@ $(document).ready(function () {
         "fixedHeader" : true, // Header row sticks to top of window when scrolling down
         "columns" : [
             { "orderable" : true, "className": "width-10pct"},
-            @foreach ($raids as $raid)
+            @if ($raids->count())
+                @foreach ($raids as $raid)
+                    { "orderable" : false, "className": "width-10pct"},
+                @endforeach
+            @else
                 { "orderable" : false, "className": "width-10pct"},
-            @endforeach
+            @endif
         ]
     });
 });

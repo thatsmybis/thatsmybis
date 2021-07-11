@@ -43,8 +43,7 @@ class RaidGroupController extends Controller
                     ->with([
                         'characters',
                         'role',
-                    ])
-                    ->withCount(['characters', 'secondaryCharacters']);
+                    ]);
             },
         ]);
 
