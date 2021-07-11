@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Guild, Item, GuildItem};
+use App\{Guild, GuildItem, Item};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
