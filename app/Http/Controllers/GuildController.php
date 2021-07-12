@@ -423,7 +423,7 @@ class GuildController extends Controller
         ]);
 
         request()->session()->flash('status', 'Guild settings updated.');
-        return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'b' => 1]);
     }
 
     /**

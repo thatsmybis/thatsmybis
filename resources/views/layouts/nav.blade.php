@@ -351,7 +351,7 @@
                                     {{ __("Raid Groups") }}
                                 </a>
                             @endif
-                            @if ($guild->raidGroups->count())
+                            @if (!$guild->is_attendance_hidden && $guild->raidGroups->count())
                                 <div class="dropdown dropright">
                                     <a title="{{ __("Only show attendance for a specific raid group") }}" class="dropdown-item dropdown-toggle" href="#" id="raidGroupAttendanceFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                         {{ __("Attendance Filter") }}
