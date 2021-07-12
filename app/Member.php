@@ -30,6 +30,7 @@ class Member extends Model
         'personal_note',
         'is_wishlist_unlocked',
         'is_received_unlocked',
+        'raid_group_id_filter',
         'banned_at',
         'inactive_at',
     ];

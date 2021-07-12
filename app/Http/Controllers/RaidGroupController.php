@@ -244,7 +244,7 @@ class RaidGroupController extends Controller
         ]);
 
         request()->session()->flash('status', 'Successfully created Raid Group.');
-        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'b' => 1]);
     }
 
     /**
@@ -292,7 +292,7 @@ class RaidGroupController extends Controller
         ]);
 
         request()->session()->flash('status', 'Successfully ' . ($disabledAt ? 'disabled' : 'enabled') . ' ' . $raidGroup->name . '.');
-        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'b' => 1]);
     }
 
     /**

@@ -20,7 +20,19 @@ class CheckGuildPermissions
     public function handle($request, Closure $next)
     {
         if ($request->route('guildId') !== null) {
-            $guild = Guild::where('id', $request->route('guildId'))->first();
+
+            $cacheKey = 'guild:' . $request->route('guildId');
+
+            if (request()->get('bustCache')) {
+                Cache::forget($cacheKey);
+            }
+
+            $guild = Cache::remember($cacheKey, env('GUILD_CACHE_SECONDS', 5), function () use ($request) {
+                return Guild::
+                    where('id', $request->route('guildId'))
+                    ->with(['raidGroups' => function ($query) { return $query->whereNull('disabled_at'); }])
+                    ->first();
+            });
 
             if (!$guild) {
                 abort(404, 'Guild not found.');
@@ -42,9 +54,15 @@ class CheckGuildPermissions
 
             $discordMember = null;
 
+            $cacheKey = 'user:' . $user->id . ':guild:' . $guild->id . ':discordMember';
+
+            if (request()->get('bustCache')) {
+                Cache::forget($cacheKey);
+            }
+
             // Check if current user is on that guild's Discord
             // Cache to results
-            $discordMember = Cache::remember('user:' . $user->id . ':guild:' . $guild->id . ':discordMember', env('DISCORD_ROLE_CACHE_SECONDS'),
+            $discordMember = Cache::remember($cacheKey, env('DISCORD_ROLE_CACHE_SECONDS', 30),
                 function () use ($user, $guild) {
                     try {
                         $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);

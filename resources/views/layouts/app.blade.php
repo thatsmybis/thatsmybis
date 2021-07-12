@@ -86,6 +86,40 @@
 <body class="@yield('bodyClass')">
     @include('layouts/nav')
 
+    @if (isset($currentMember) && $currentMember && (isStreamerMode() || $currentMember->raid_group_id_filter))
+        <div class="container-fluid container-width-capped">
+            <div class="row">
+                <div class="col-12">
+                    <ul class="list-inline">
+                        @if (isStreamerMode())
+                            <li class="list-inline-item">
+                                <a href="{{ route('toggleStreamerMode') }}" class="small">
+                                    <span class="fa-fw fas fa-times"></span>
+                                    {{ __("Streamer mode ON") }}
+                                </a>
+                            </li>
+                        @endif
+
+                        @if($currentMember->raid_group_id_filter)
+                            <li class="list-inline-item">
+                                <form role="form" method="POST" action="{{ route('setRaidGroupFilter', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                    {{ csrf_field() }}
+                                    <input hidden name="raid_group_id" value="" />
+                                    <button class="link">
+                                        <span class="small">
+                                            <span class="fa-fw fas fa-times"></span>
+                                            {{ __("Attendance filter:") }} {{ $guild->raidGroups->where('id', $currentMember->raid_group_id_filter)->first()->name }}
+                                        </span>
+                                    </button>
+                                </form>
+                            </li>
+                        @endif
+                    </ul>
+                </div>
+            </div>
+        </div>
+    @endif
+
     <div class="text-center font-weight-bold text-warning">
         <!-- Sitewide warning message, good for downtime announcements -->
     </div>

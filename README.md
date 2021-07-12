@@ -56,6 +56,8 @@ You should install and use the [phpredis](https://github.com/phpredis/phpredis#i
 
 Some pages allow for certain elements to be cache busted. To bust the cache, pass the `b=1` parameter in the url. The `SeeUser` middleware will check for this, and set a variable for cache busting to true. Certain controller elements will check for this variable before loading from the cache. If it's set to true, it will bust the cache on that **specific** bit that it wants to fetch before fetching it.
 
+This feature isn't 100% implemented everywhere, so the cryptic name `b` has been opted for. Otherwise some users would see `bust` or `bustCache`, and expect everything to get busted all the time. They may then become confused or annoyed when it doesn't work.
+
 ### phpredis Installation
 
 #### Option 1
