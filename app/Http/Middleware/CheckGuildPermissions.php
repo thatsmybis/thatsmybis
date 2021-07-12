@@ -27,7 +27,7 @@ class CheckGuildPermissions
                 Cache::forget($cacheKey);
             }
 
-            $guild = Cache::remember($cacheKey, env('GUILD_CACHE_SECONDS', 5), function () use ($request) {
+            $guild = Cache::remember($cacheKey, env('CACHE_GUILD_SECONDS', 5), function () use ($request) {
                 return Guild::
                     where('id', $request->route('guildId'))
                     ->with(['raidGroups' => function ($query) { return $query->whereNull('disabled_at'); }])
