@@ -351,6 +351,22 @@
                                     {{ __("Raid Groups") }}
                                 </a>
                             @endif
+                            @if ($guild->raidGroups->count())
+                                <div class="dropdown dropright">
+                                    <a title="{{ __("Only show attendance for a specific raid group") }}" class="dropdown-item dropdown-toggle" href="#" id="raidGroupAttendanceFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        {{ __("Attendance Filter") }}
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="raidGroupAttendanceFilter">
+                                        @foreach ($guild->raidGroups as $raidGroup)
+                                            <form class="dropdown-item" role="form" method="POST" action="{{ route('setRaidGroupFilter', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                                {{ csrf_field() }}
+                                                <input hidden name="raid_group_id" value="{{ $raidGroup->id }}" />
+                                                <button class="link text-white">{{ $raidGroup->name }}</button>
+                                            </form>
+                                        @endforeach
+                                    </div>
+                                </div>
+                            @endif
                         </div>
                     </li>
                 @else

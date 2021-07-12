@@ -15,7 +15,7 @@ class CreateLogsTable extends Migration
     {
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 255)->nullable();;
+            $table->string('name', 255)->nullable();
             $table->bigInteger('raid_id')->unsigned()->nullable();
             $table->timestamps();
 

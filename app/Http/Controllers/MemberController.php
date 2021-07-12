@@ -43,12 +43,12 @@ class MemberController extends Controller
         $member = $guild->allMembers->first();
 
         if (!$member) {
-            request()->session()->flash('status', 'Member not found.');
+            request()->session()->flash('status', __('Member not found.'));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
         if ($member->id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit someone else.');
+            request()->session()->flash('status', __('You don\'t have permissions to edit someone else.'));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -73,7 +73,7 @@ class MemberController extends Controller
         $member = Member::select(['id', 'slug', 'guild_id'])->where(['slug' => $usernameSlug, 'guild_id' => $guild->id])->first();
 
         if (!$member) {
-            request()->session()->flash('status', 'Could not find member.');
+            request()->session()->flash('status', __('Could not find member.'));
             return redirect()->route('home');
         }
 
@@ -98,7 +98,32 @@ class MemberController extends Controller
         $user->update(['locale' => request()->input('locale')]);
 
         request()->session()->flash('status', __("Language set to :locale. To help with translations in your language, reach out on TMB's Discord server.", ['locale' => request()->input('locale')]));
-        return redirect()->back();
+        return redirect()->back()->withInput(['b' => 1]);;
+    }
+
+    /**
+     * Set the member's raid filter
+     * @return
+     */
+    public function setRaidGroupFilter() {
+        $currentMember = request()->get('currentMember');
+
+        $validationRules = [
+            'raid_group_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $currentMember->guild_id),
+            ],
+        ];
+
+        $validationMessages = [];
+
+        $this->validate(request(), $validationRules, $validationMessages);
+
+        $currentMember->update(['raid_group_id_filter' => request()->input('raid_group_id')]);
+
+        request()->session()->flash('status', __("Raid Group Filter set."));
+        return redirect()->back()->withInput(['b' => 1]);
     }
 
     /**
@@ -133,7 +158,7 @@ class MemberController extends Controller
         });
 
         if (!$member) {
-            request()->session()->flash('status', 'Member not found.');
+            request()->session()->flash('status', __('Member not found.'));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -251,7 +276,7 @@ class MemberController extends Controller
         $currentMember = request()->get('currentMember');
 
         if ($currentMember->user_id == $guild->user_id) {
-            request()->session()->flash('status', 'You are the guild master. The guild master may not gquit.');
+            request()->session()->flash('status', __('You are the guild master. The guild master may not gquit.'));
             return redirect()->back();
         }
 
@@ -276,7 +301,7 @@ class MemberController extends Controller
             'other_member_id' => null,
         ]);
 
-        request()->session()->flash('status', 'Successfully gquit.');
+        request()->session()->flash('status', __('Successfully gquit.'));
         return redirect()->route('home');
     }
 
@@ -291,8 +316,8 @@ class MemberController extends Controller
 
         $user->update(['is_streamer_mode' => $toggle]);
 
-        request()->session()->flash('status', 'Streamer mode ' . ($toggle ? 'on' : 'off') . '. Officer notes ' . ($toggle ? 'hidden' : 'visible') . '.');
-        return redirect()->route('home');
+        request()->session()->flash('status', __('Streamer mode') . ' ' . ($toggle ? __('on') : __('off')) . '. ' . __('Officer notes') . ' ' . ($toggle ? __('hidden') : __('visible')) . '.');
+        return redirect()->back()->withInput(['b' => 1]);;
     }
 
     /**
@@ -314,13 +339,13 @@ class MemberController extends Controller
         $sameNameMember = $guild->members->where('username', request()->input('username'))->first();
 
         if (!$member) {
-            abort(404, 'Guild member not found.');
+            abort(404, __('Guild member not found.'));
         }
 
         // Can't create a duplicate name
         if ($sameNameMember && ($member->id != $sameNameMember->id)) {
-            abort(403, 'Name taken.');
-            request()->session()->flash('status', 'Name taken.');
+            abort(403, __('Name taken.'));
+            request()->session()->flash('status', __('Name taken.'));
             return redirect()->back();
         }
 
@@ -436,7 +461,7 @@ class MemberController extends Controller
             ]);
         }
 
-        request()->session()->flash('status', 'Successfully updated profile.');
+        request()->session()->flash('status', __('Successfully updated profile.'));
         return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug, 'b' => 1]);
     }
 
@@ -516,7 +541,7 @@ class MemberController extends Controller
             ]);
         }
 
-        request()->session()->flash('status', "Successfully updated " . $member->username ."'s note.");
+        request()->session()->flash('status', __("Successfully updated") . " " . $member->username ."'s " . __("note") . ".");
         return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug, 'b' => 1]);
     }
 }
