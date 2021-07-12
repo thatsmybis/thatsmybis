@@ -55,7 +55,9 @@
                         <li class="p-3 mb-3 rounded">
                             <h2>
                                 <span class="fas fa-fw text-legendary"><img src="{{ asset('images/gargul.png') }}" style="width: 40px; height: 40px;"></img></span>
-                                Gargul
+                                <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-epic">
+                                    Gargul
+                                </a>
                             </h2>
                             <p>
                                 {!! __("Import wishlist and loot priority data into the Gargul addon. Select all ( ctrl+a ), copy ( ctrl+c ) and then paste ( ctrl+v ) in the correct import window (/gl wl or /gl lo). For more info check :curseforge_url on Curseforge. Happy lootin'!", ['curseforge_url' => "<a href='https://www.curseforge.com/wow/addons/gargul' target='_blank'>Gargul</a>"]) !!}
