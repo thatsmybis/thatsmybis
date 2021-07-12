@@ -184,9 +184,6 @@ class ExportController extends Controller {
             ->with([
                 'unReceiveditems' => function ($query) {
                     return $query->select('character_id', 'item_id', 'order', 'is_offspec');
-                },
-                'unReceiveditems.item' => function ($query) {
-                    return $query->select('item_id', 'name');
                 }
             ])
             ->select('id', 'name')
@@ -197,16 +194,12 @@ class ExportController extends Controller {
             foreach ($character->unReceiveditems as $item) {
                 $itemId = $item->item->item_id;
                 $characterName = mb_strtolower($character->name);
-                $itemName = mb_strtolower($item->item->name);
 
                 if (!isset($wishlistData[$itemId])) {
-                    $wishlistData[$itemId] = [
-                        'name' => $itemName,
-                        'characters' => [],
-                    ];
+                    $wishlistData[$itemId] = [];
                 }
 
-                $wishlistData[$itemId]['characters'][] = sprintf(
+                $wishlistData[$itemId][] = sprintf(
                     '%s%s|%s',
                     $characterName,
                     $item->is_offspec ? '(OS)' : '',
