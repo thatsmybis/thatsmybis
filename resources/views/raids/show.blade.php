@@ -18,10 +18,10 @@
                                     <h1 class="font-weight-bold">
                                         <span class="fa-fw fas fa-helmet-battle text-dk"></span>
                                         @if ($raid->archived_at)
-                                            <span class="text-danger">archived</span>
+                                            <span class="text-danger">{{ __("archived") }}</span>
                                         @endif
                                         @if ($raid->cancelled_at)
-                                            <span class="text-warning">cancelled</span>
+                                            <span class="text-warning">{{ __("cancelled") }}</span>
                                         @endif
                                         {{ $raid->name }}
                                     </h1>
@@ -30,37 +30,37 @@
                                     <li class="list-inline-item">
                                         <a href="{{ route('guild.raids.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
                                             <span class="fas fa-pencil"></span>
-                                            edit
+                                            {{ __("edit") }}
                                         </a>
                                     </li>
                                     <li class="list-inline-item">
                                         <a class="text-success" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
                                             <span class="fa-fw fas fa-sack"></span>
-                                            Assign Loot
+                                            {{ __("Assign Loot") }}
                                         </a>
                                     </li>
                                     <li class="list-inline-item">
                                         <a href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
                                             <span class="fas fa-copy"></span>
-                                            copy
+                                            {{ __("copy") }}
                                         </a>
                                     </li>
                                 @endif
                                 <li class="list-inline-item">
                                     <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
                                         <span class="fas fa-clipboard-list-check"></span>
-                                        history
+                                        {{ __("history") }}
                                     </a>
                                 </li>
                             </ul>
 
                             <ul class="no-indent no-bullet">
                                 <li class="mt-2 text-5 font-weight-bold">
-                                    {{ $isFuture ? 'in' : '' }}
+                                    {{ $isFuture ? __('in') : '' }}
                                     <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
-                                    {{ !$isFuture ? 'ago' : '' }}
+                                    {{ !$isFuture ? __('ago') : '' }}
                                     <span class="js-timestamp" data-timestamp="{{ $raid->date }}" data-format="@ h:mm a, ddd MMM D {{ $isFuture ? '' : 'YYYY' }}"></span>
-                                    <span class="small text-muted">in your timezone</span>
+                                    <span class="small text-muted">{{ __("in your timezone") }}</span>
                                 </li>
                                 @if ($raid->instances->count())
                                     <li class="mt-2">
@@ -99,7 +99,7 @@
                                 <div class="list-group-item rounded mb-3">
                                     <span class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-link"></span>
-                                        Raid Logs
+                                        {{ __("Raid Logs") }}
                                     </span>
                                     <ul>
                                         @foreach ($raid->logs as $log)
@@ -115,7 +115,7 @@
                                 <div class="list-group-item rounded mb-3">
                                     <span class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-link"></span>
-                                        Raid Logs
+                                        {{ __("Raid Logs") }}
                                     </span>
                                     <ul>
                                         <li class="js-markdown-inline">
@@ -131,7 +131,7 @@
                             <div class="list-group-item rounded mb-3">
                                 <span class="font-weight-bold">
                                     <span class="text-muted fas fa-fw fa-gift"></span>
-                                    Loot Assignments
+                                    {{ __("Loot Assignments") }}
                                 </span>
                                 <div>
                                     <ul class="list-inline">
@@ -150,7 +150,7 @@
                                             @endforeach
                                         @else
                                             <li class="list-inline-item text-muted">
-                                                No batch assignments
+                                                {{ __("No batch assignments") }}
                                             </li>
                                         @endif
                                         <li class="list-inline-item">
@@ -159,11 +159,11 @@
                                         <li class="list-inline-item">
                                             @if ($manualItemAssignmentCount)
                                                 <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id, 'type' => 'received']) }}">
-                                                    {{ $manualItemAssignmentCount }} individual assignments
+                                                    {{ $manualItemAssignmentCount }} {{ __("individual assignments") }}
                                                 </a>
                                             @else
                                                 <span class="text-muted">
-                                                    No individual assignments
+                                                    {{ __("No individual assignments") }}
                                                 </span>
                                             @endif
                                         </li>
@@ -177,7 +177,7 @@
                                 <div class="list-group-item rounded mb-3">
                                     <span class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
-                                        Notes
+                                        {{ __("Notes") }}
                                     </span>
                                     <div>
                                         <p class="js-markdown-inline">
@@ -193,7 +193,7 @@
                                 <div class="list-group-item rounded mb-3">
                                     <span class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-shield"></span>
-                                        Officer Notes
+                                        {{ __("Officer Notes") }}
                                     </span>
                                     <div>
                                         <p class="js-markdown-inline">
@@ -213,16 +213,16 @@
                             <tr>
                                 <th>
                                     <span class="fas fa-fw fa-user text-muted"></span>
-                                    Character ({{ $raid->characters->where('pivot.is_exempt', 0)->count()}} going)
+                                    {{ __("Character") }} ({{ $raid->characters->where('pivot.is_exempt', 0)->count()}} {{ __("going") }})
                                 </th>
                                 <th>
                                     <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
-                                    Notes
-                                    ({{ $raid->characters->where('pivot.is_exempt', 1)->count()}} excused)
+                                    {{ __("Notes") }}
+                                    ({{ $raid->characters->where('pivot.is_exempt', 1)->count()}} {{ __("excused") }})
                                 </th>
                                 <th>
                                     <span class="fas fa-fw fa-sack text-success"></span>
-                                    Loot Received
+                                    {{ __("Loot Received") }}
                                 </th>
                             </tr>
                         </thead>
@@ -249,11 +249,11 @@
                                             @else
                                                 @if ($character->pivot->is_exempt)
                                                     <li class="text-warning">
-                                                        Excused
+                                                        {{ __("Excused") }}
                                                     </li>
                                                 @elseif (!$isFuture)
                                                     <li class="{{ getAttendanceColor($character->pivot->credit) }}">
-                                                        {{ $character->pivot->credit * 100 }}% credit
+                                                        {{ $character->pivot->credit * 100 }}% {{ __("credit") }}
                                                     </li>
                                                 @endif
                                                 @if ($character->pivot->remark_id)
@@ -270,7 +270,7 @@
                                                 @endif
                                                 @if ($showOfficerNote && $character->pivot->officer_note)
                                                     <li>
-                                                        <span class="font-weight-bold small font-italic text-gold">Officer's Note</span>
+                                                        <span class="font-weight-bold small font-italic text-gold">{{ __("Officer's Note") }}</span>
                                                         <br>
                                                         <span class="js-markdown-inline">{{ $character->pivot->officer_note }}</span>
                                                     </li>

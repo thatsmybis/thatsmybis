@@ -20,10 +20,15 @@
                                         } elseif ($guild->expansion_id === 2) {
                                             $wowheadSubdomain = 'tbc';
                                         }
+
+                                        $wowheadLocale = '';
+                                        if (Illuminate\Support\Facades\App::getLocale()) {
+                                            $wowheadLocale = Illuminate\Support\Facades\App::getLocale() . '.';
+                                        }
                                     @endphp
 
                                     {{-- %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want --}}
-                                    <a class="q{!! $itemJson->quality !!}" href="https://{{ $wowheadSubdomain }}.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
+                                    <a class="q{!! $itemJson->quality !!}" href="https://{{ $wowheadLocale . $wowheadSubdomain }}.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
                                         <span class="iconlarge">
                                             <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
                                     </a>
@@ -34,7 +39,7 @@
                         </li>
                         <li class="list-inline-item">
                             <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id]) }}">
-                                <span class="fas fa-fw fa-clipboard-list-check"></span>history
+                                <span class="fas fa-fw fa-clipboard-list-check"></span>{{ __("history") }}
                             </a>
                         </li>
                     </ul>
@@ -81,7 +86,7 @@
                                 <div class="col-12" style="{{ $guild->tier_mode ? '' : 'display:none;' }}">
                                     <span class="text-muted font-weight-bold">
                                         <span class="fas fa-fw fa-trophy"></span>
-                                        Guild Tier
+                                        {{ __("Guild Tier") }}
                                     </span>
                                 </div>
                                 <div class="col-12 mb-3 pl-4 font-weight-bold text-tier-{{ $notes['tier'] ? $notes['tier'] : '' }}" style="{{ $guild->tier_mode ? '' : 'display:none;' }}">
@@ -94,7 +99,7 @@
                                     <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                                         <div class="form-group">
                                             <label for="tier" class="sr-only">
-                                                Item Tier
+                                                {{ __("Item Tier") }}
                                             </label>
                                             <select name="tier" class="form-control dark">
                                                 <option value="" selected>
@@ -115,7 +120,7 @@
                                 <div class="col-12">
                                     <span class="text-muted font-weight-bold">
                                         <span class="fas fa-fw fa-comment-alt-lines"></span>
-                                        Guild Note
+                                        {{ __("Guild Note") }}
                                     </span>
                                 </div>
                                 <div class="col-12 mb-3 pl-4">
@@ -128,7 +133,7 @@
                                     <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                                         <div class="form-group">
                                             <label for="note" class="sr-only">
-                                                Item Note
+                                                {{ __("Item Note") }}
                                             </label>
                                             <textarea maxlength="140" data-max-length="140" name="note" rows="2" placeholder="add a note" class="form-control dark">{{ old('note') ? old('note') : ($item ? $notes['note'] : '') }}</textarea>
                                         </div>
@@ -138,7 +143,7 @@
                                 <div class="col-12">
                                     <span class="text-muted font-weight-bold">
                                         <span class="fas fa-fw fa-sort-amount-down"></span>
-                                        Guild Prio Note
+                                        {{ __("Guild Prio Note") }}
                                     </span>
                                 </div>
                                 <div class="col-12 mb-3 pl-4">
@@ -151,7 +156,7 @@
                                     <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
                                         <div class="form-group">
                                             <label for="priority" class="sr-only">
-                                                Item Priority
+                                                {{ __("Item Priority") }}
                                             </label>
                                             <textarea maxlength="140" data-max-length="140" name="priority" rows="2" placeholder="eg. mage > warlock > boomkin > arcane shot hunter" class="form-control dark">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
                                         </div>
@@ -170,7 +175,7 @@
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <h2 class="font-weight-bold mb-3">
-                                            Character Prios
+                                            {{ __("Character Prios") }}
                                         </h2>
                                     </li>
 
@@ -179,7 +184,7 @@
                                             <div class="dropdown">
                                                 <span class="dropdown-toggle text-link" role="button" id="editPrioLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <span class="fas fa-fw fa-pencil"></span>
-                                                    edit
+                                                    {{ __("edit") }}
                                                 </span>
                                                 <div class="dropdown-menu" aria-labelledby="editPrioLink">
                                                     @foreach ($raidGroups as $raidGroup)
@@ -188,7 +193,7 @@
                                                         </a>
                                                     @endforeach
                                                     <a class="dropdown-item" href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                                        <span class="fas fa-fw fa-plus"></span> Create New Raid Group
+                                                        <span class="fas fa-fw fa-plus"></span> {{ __("Create New Raid Group") }}
                                                     </a>
                                                 </div>
                                             </div>
@@ -224,10 +229,10 @@
                                                         class="text-{{ $character->class ? strtolower($character->class) : ''}}-important tag d-inline">
                                                         <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_group_color ? $character->raid_group_color : '')) }}"></span>{{ $character->name }}
                                                         @if ($character->is_alt)
-                                                            <span class="text-gold">alt</span>
+                                                            <span class="text-gold">{{ __("alt") }}</span>
                                                         @endif
                                                         @if ($character->pivot->is_offspec)
-                                                            <span class="text-muted">OS</span>
+                                                            <span class="text-muted">{{ __("OS") }}</span>
                                                         @endif
                                                         @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
                                                             <span class="small">
@@ -248,12 +253,12 @@
                                     </ul>
                                 @else
                                     <div class="lead ml-4 mt-3">
-                                        <em>None</em>
+                                        <em>{{ __("None") }}</em>
                                     </div>
                                 @endif
                             @else
                                 <div class="text-muted">
-                                    Can't set prios for this item <abbr title="Cannot set prios for items that aren't in the loot tables for a boss. This includes token rewards. Set prios on the token instead.">?</abbr>
+                                    {{ __("Can't set prios for this item") }} <abbr title="{{ __("Cannot set prios for items that aren't in the loot tables for a boss. This includes token rewards. Set prios on the token instead.") }}">?</abbr>
                                 </div>
                             @endif
                         </li>
@@ -263,7 +268,7 @@
                             <ul class="no-indent no-bullet">
                                 <li class="">
                                     <h2 class="font-weight-bold mb-3">
-                                        Related
+                                        {{ __("Related") }}
                                     </h2>
                                 </li>
                                 @if ($item->parentItem)
@@ -287,7 +292,9 @@
     {{--
     <div class="row pt-2 mb-3 bg-lightest rounded">
         <div class="col-12">
-            <h2 class="font-weight-bold pl-2">Prio'd</h2>
+            <h2 class="font-weight-bold pl-2">
+                {{ __("Prio'd") }}
+            </h2>
         </div>
         <div class="col-12 pr-0 pl-0">
             @if ($priodCharacters && $priodCharacters->count() > 0)
@@ -295,7 +302,7 @@
             @else
                 <ul>
                     <li class="lead no-bullet">
-                        <em>Nobody has been prio'd for this item yet</em>
+                        <em>{{ __("Nobody has been prio'd for this item yet") }}</em>
                     </li>
                 </ul>
             @endif
@@ -308,8 +315,8 @@
             <div class="col-12">
                 <h2 class="font-weight-bold pl-2">
                     <span class="fas fa-fw fa-scroll-old text-legendary"></span>
-                    Wishlisted
-                    <span class="small text-muted">ordered by who ranked it higher</span>
+                    {{ __("Wishlisted") }}
+                    <span class="small text-muted">{{ __("ordered by who ranked it higher") }}</span>
                 </h2>
             </div>
             <div class="col-12 pr-0 pl-0">
@@ -318,7 +325,7 @@
                 @else
                     <ul>
                         <li class="lead no-bullet">
-                            <em>Nobody has this item in their wishlist yet</em>
+                            <em>{{ __("Nobody has this item in their wishlist yet") }}</em>
                         </li>
                     </ul>
                 @endif
@@ -330,7 +337,7 @@
         <div class="col-12">
             <h2>
                 <span class="fas fa-fw fa-sack text-success"></span>
-                Have It
+                {{ __("Have It") }}
             </h2>
             @if ($receivedAndRecipeCharacters->count() > 0)
                 <ul class="list-inline striped">
@@ -339,14 +346,14 @@
                             <ul class="list-inline">
                                 @if ($character->pivot->is_offspec)
                                     <li class="list-inline-item font-weight-bold">
-                                        <span title="offspec item">OS</span>
+                                        <span title="offspec item">{{ __("OS") }}</span>
                                     </li>
                                 @endif
                                 @if ($character->pivot->received_at || $character->pivot->created_at)
                                     <li class="list-inline-item text-muted small">
-                                        received
+                                        {{ __("received") }}
                                         <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->received_at ? $character->pivot->received_at : $character->pivot->created_at }}"></span>
-                                        ago
+                                        {{ __("ago") }}
                                     </li>
                                 @endif
                             </ul>
@@ -356,7 +363,7 @@
                 </ul>
             @else
                 <div class="lead mb-3">
-                    <em>Nobody has this item in their character sheet yet</em>
+                    <em>{{ __("Nobody has this item in their character sheet yet") }}</em>
                 </div>
             @endif
         </div>

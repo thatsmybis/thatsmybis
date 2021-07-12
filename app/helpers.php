@@ -6,16 +6,14 @@ function getAttendanceColor($percentage = 0) {
 
     if ($percentage >= 0.95) {
         $color = 'text-tier-1';
-    } else if ($percentage >= 0.90) {
+    } else if ($percentage >= 0.9) {
         $color = 'text-tier-2';
-    } else if ($percentage >= 0.85) {
+    } else if ($percentage >= 0.8) {
         $color = 'text-tier-3';
-    } else if ($percentage >= 0.80) {
+    } else if ($percentage >= 0.7) {
         $color = 'text-tier-4';
-    } else if ($percentage >= 0.75) {
+    } else {
         $color = 'text-tier-5';
-    } else if ($percentage < 0.75) {
-        $color = 'text-tier-6';
     }
 
     return $color;
@@ -66,6 +64,21 @@ function getExpansionAbbr($expansionId) {
         default:
             return '';
     }
+}
+
+// Get the list of supported locales
+function getLocales() {
+    return [
+        "de" => "Deutsch (partial)",
+        "en" => "English",
+        "es" => "Español (item links only)",
+        "fr" => "Français",
+        "it" => "Italiano (item links only)",
+        "pt" => "Português Brasileiro (item links only)",
+        "ru" => "Русский",
+        "ko" => "한국어 (item links only)",
+        "cn" => "简体中文 (item links only)",
+    ];
 }
 
 // Check the request for whether or not we stored the bool isAdmin as true or false

@@ -7,6 +7,7 @@ use App\Role;
 use App\Notification;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
+use Illuminate\Support\Facades\App;
 
 class SeeUser
 {
@@ -70,6 +71,9 @@ class SeeUser
             if (!empty(request()->input('b')) && request()->input('b')) {
                 $bustCache = true;
             }
+
+            // For translations
+            App::setLocale($user->locale);
 
             // Store the user for later access.
             $request->attributes->add([

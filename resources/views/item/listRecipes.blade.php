@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title',  'Guild Recipes - ' . config('app.name'))
+@section('title',  __('Guild Recipes') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid">
@@ -7,63 +7,63 @@
         <div class="col-12 text-center pr-0 pl-0">
             <h1 class="font-weight-medium mb-0 font-blizz">
                 <span class="fas fa-fw fa-book text-gold"></span>
-                Guild Recipes
+                {{ __("Guild Recipes") }}
             </h1>
         </div>
         <div class="col-12 pr-0 pl-0">
             <div class="pr-2 pl-2">
                 <ul class="list-inline mb-0">
                     <li class="list-inline-item text-muted">
-                        Quick Filters:
+                        {{ __("Quick Filters:") }}
                     </li>
                     <li class="list-inline-item font-weight-light">
                         <span data-value="" class="js-quick-filter text-link cursor-pointer">
                             <span class="fas fa-fw fa-undo"></span>
-                            All
+                            {{ __("All") }}
                         </span>
                     </li>
                     @if ($guild->expansion_id > 1)
                         <li class="list-inline-item">&sdot;</li>
                         <li class="list-inline-item">
                             <span data-value="design" class="js-quick-filter text-link cursor-pointer">
-                                Design
+                                {{ __("Design") }}
                             </span>
                         </li>
                     @endif
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
                         <span data-value="enchant" class="js-quick-filter text-link cursor-pointer">
-                            Enchant
+                            {{ __("Enchant") }}
                         </span>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
                         <span data-value="formula" class="js-quick-filter text-link cursor-pointer">
-                            Formula
+                            {{ __("Formula") }}
                         </span>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
                         <span data-value="pattern" class="js-quick-filter text-link cursor-pointer">
-                            Pattern
+                            {{ __("Pattern") }}
                         </span>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
                         <span data-value="plans" class="js-quick-filter text-link cursor-pointer">
-                            Plans
+                            {{ __("Plans") }}
                         </span>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
                         <span data-value="recipe" class="js-quick-filter text-link cursor-pointer">
-                            Recipe
+                            {{ __("Recipe") }}
                         </span>
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
                         <span data-value="schematic" class="js-quick-filter text-link cursor-pointer">
-                            Schematic
+                            {{ __("Schematic") }}
                         </span>
                     </li>
                 </ul>
@@ -74,15 +74,15 @@
                         <tr>
                             <th>
                                 <span class="fas fa-fw fa-book text-muted"></span>
-                                Recipe
+                                {{ __("Recipe") }}
                             </th>
                             <th>
                                 <span class="fas fa-fw fa-users text-muted"></span>
-                                Characters
+                                {{ __("Characters") }}
                             </th>
                             <th>
                                 <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
-                                Notes
+                                {{ __("Notes") }}
                             </th>
                         </tr>
                     </thead>

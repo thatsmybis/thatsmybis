@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', $instance-> name . " Notes - " . config('app.name'))
+@section('title', $instance-> name . " " . __("Notes") . " - " . config('app.name'))
 
 @php
     // Iterating over 6+ tiers 100+ items results in a lot of needless iterations.
@@ -75,7 +75,7 @@
                                     <div class="d-inline-grid align-middle text-5 mb-2">
                                         <label for="items[{{ $loop->iteration }}][name]" class="font-weight-bold d-none d-sm-block">
                                             <span class="sr-only">
-                                                Item Name
+                                                {{ __("Item Name") }}
                                             </span>
                                         </label>
                                         @include('partials/item', [
@@ -105,9 +105,9 @@
                                         <label for="items[{{ $loop->iteration }}][tier]" class="font-weight-bold">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-trophy text-muted"></span>
-                                                Tier
+                                                {{ __("Tier") }}
                                             @else
-                                                <span class="sr-only">Tier</span>
+                                                <span class="sr-only">{{ __("Tier") }}</span>
                                             @endif
                                         </label>
 
@@ -156,9 +156,9 @@
                                         <label for="items[{{ $loop->iteration }}][note]" class="font-weight-bold">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-sticky-note text-muted"></span>
-                                                Note
+                                                {{ __("Note") }}
                                             @else
-                                                <span class="sr-only">Note</span>
+                                                <span class="sr-only">{{ __("Note") }}</span>
                                             @endif
                                         </label>
 
@@ -179,9 +179,9 @@
                                         <label for="priority" class="font-weight-bold">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
-                                                Priority
+                                                {{ __("Priority") }}
                                             @else
-                                                <span class="sr-only">Priority</span>
+                                                <span class="sr-only">{{ __("Priority") }}</span>
                                             @endif
                                         </label>
 
@@ -204,9 +204,9 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Submit</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Submit") }}</button>
                     <br>
-                    <small>WARNING: This form expires if you don't submit it within {{ env('SESSION_LIFETIME') / 60 }} hours (security reasons)
+                    <small>{{ __("WARNING: This form expires if you don't submit it within :hours hours (security reasons)", ['hours' =>  env('SESSION_LIFETIME') / 60]) }}</small>
                 </div>
             </form>
         </div>

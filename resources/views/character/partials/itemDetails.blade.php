@@ -4,12 +4,12 @@
             <ul class="list-inline">
                 @if ($item->pivot->is_offspec)
                     <li class="list-inline-item">
-                        <span class="font-weight-bold text-white" title="Offspec">OS</span>
+                        <span class="font-weight-bold text-white" title="Offspec">{{ __("OS") }}</span>
                     </li>
                 @endif
                 @if ((!isset($hideCreatedAt) || !$hideCreatedAt) && $item->pivot->created_at))
                     <li class="cursor-pointer js-timestamp-title list-inline-item" data-timestamp="{{ $item->pivot->created_at }}">
-                        added <span class="js-watchable-timestamp" data-timestamp="{{ $item->pivot->created_at }}"></span> ago
+                        added <span class="js-watchable-timestamp" data-timestamp="{{ $item->pivot->created_at }}"></span> {{ __("ago") }}
                         @if (isset($item->pivot->type) && $item->pivot->type == App\Item::TYPE_RECEIVED)
                             (backdated)
                         @endif

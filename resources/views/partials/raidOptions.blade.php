@@ -4,6 +4,6 @@
         data-name="{{ $raid->name }}"
         class="js-raid-option"
         hack="{{ $raid->id }}">
-        {{ $raid->name }} @ {{ $raid->date }} UTC
+        {{ $raid->name }} @ {{ $raid->date }} {{ __("UTC") }}
     </option>
 @endforeach

@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Loot - ' . config('app.name'))
+@section('title', __('Loot') . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,18 +9,18 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fab fa-fw fa-battle-net text-mage"></span>
-                        World of Warcraft Loot Tables
+                        {{ __("World of Warcraft Loot Tables") }}
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     <p class="text-4">
-                        Try my <a href="{{ route('home') }}">open source tool</a> if you're considering loot council. It helps with
-                        <span class="font-weight-bold">transparency</span>,
-                        <span class="font-weight-bold">recordkeeping</span>, and
-                        <span class="font-weight-bold">communication</span> challenges.
+                        {{ __("Try my") }} <a href="{{ route('home') }}">{{ __("open source tool") }}</a> {{ __("if you're considering loot council. It helps with") }}
+                        <span class="font-weight-bold">{{ __("transparency") }}</span>,
+                        <span class="font-weight-bold">{{ __("recordkeeping") }}</span>, {{ __("and") }}
+                        <span class="font-weight-bold">{{ __("communication") }}</span> {{ __("challenges") }}.
                     </p>
                     <p>
-                        If you need help or have questions, please reach out on
+                        {{ __("If you need help or have questions, please reach out on") }}
                         <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
                     </p>
                     <ol class="no-bullet no-indent striped">

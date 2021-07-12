@@ -3,19 +3,19 @@
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-gold">Classic</span> Loot Tables
+        <span class="font-weight-normal text-gold">{{ __("Classic") }}</span> {{ __("Loot Tables") }}
     </h2>
     <ul class="list-inline">
         <li class="list-inline-item">
             <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
-                Download CSV
+                {{ __("Download CSV") }}
             </a>
         </li>
         <li class="list-inline-item">
             <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
-                View CSV
+                {{ __("View CSV") }}
             </a>
         </li>
     </ul>
@@ -24,22 +24,22 @@
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-uncommon">Burning Crusade</span> Loot Tables
+        <span class="font-weight-normal text-uncommon">{{ __("Burning Crusade") }}</span> {{ __("Loot Tables") }}
     </h2>
     <p>
-       (includes Classic too)
+       {{ __("(includes Classic too)") }}
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">
             <a href="{{ route('loot.table', ['expansionSlug' => 'burning-crusade', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
-                Download CSV
+                {{ __("Download CSV") }}
             </a>
         </li>
         <li class="list-inline-item">
             <a href="{{ route('loot.table', ['expansionSlug' => 'burning-crusade', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
-                View CSV
+                {{ __("View CSV") }}
             </a>
         </li>
     </ul>
@@ -48,101 +48,101 @@
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-dungeon text-muted"></span>
-        Pretty Loot Tables
+        {{ __("Pretty Loot Tables") }}
     </h2>
     <div class="row">
         <div class="col-sm-6 p-4">
-            <h2 class="font-weight-bold text-gold">Classic Raids</h2>
+            <h2 class="font-weight-bold text-gold">{{ __("Classic Raids") }}</h2>
             <ul class="no-bullet no-indent">
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'zulgurub']) }}">
-                        Zul'Gurub
+                        {{ __("Zul'Gurub") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
-                        Ruins of Ahn'Qiraj
+                        {{ __("Ruins of Ahn'Qiraj") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'world-bosses']) }}">
-                        World Bosses
+                        {{ __("World Bosses") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'molten-core']) }}">
-                        Molten Core
+                        {{ __("Molten Core") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'onyxias-lair']) }}">
-                        Onyxia's Lair
+                        {{ __("Onyxia's Lair") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'blackwing-lair']) }}">
-                        Blackwing Lair
+                        {{ __("Blackwing Lair") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
-                        Temple of Ahn'Qiraj
+                        {{ __("Temple of Ahn'Qiraj") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 1, 'instanceSlug' => 'naxxramas']) }}">
-                        Naxxramas
+                        {{ __("Naxxramas") }}
                     </a>
                 </li>
             </ul>
         </div>
 
         <div class="col-sm-6 p-4">
-            <h2 class="font-weight-bold text-uncommon">Burning Crusade Raids</h2>
+            <h2 class="font-weight-bold text-uncommon">{{ __("Burning Crusade Raids") }}</h2>
             <ul class="no-bullet no-indent">
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'karazhan']) }}">
-                        Karazhan
+                        {{ __("Karazhan") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'gruuls-lair']) }}">
-                        Gruul's Lair
+                        {{ __("Gruul's Lair") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'magtheridons-lair']) }}">
-                        Magtheridon's Lair
+                        {{ __("Magtheridon's Lair") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'serpentshrine-cavern']) }}">
-                        Serpentshrine Cavern
+                        {{ __("Serpentshrine Cavern") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'hyjal-summit']) }}">
-                        Hyjal Summit
+                        {{ __("Hyjal Summit") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'tempest-keep']) }}">
-                        Tempest Keep
+                        {{ __("Tempest Keep") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'black-temple']) }}">
-                        Black Temple
+                        {{ __("Black Temple") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'zulaman']) }}">
-                        Zul'Aman
+                        {{ __("Zul'Aman") }}
                     </a>
                 </li>
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'sunwell-plateau']) }}">
-                        Sunwell Plateau
+                        {{ __("Sunwell Plateau") }}
                     </a>
                 </li>
             </ul>
@@ -153,10 +153,10 @@
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-database text-muted"></span>
-        <span class="font-weight-normal text-gold">Classic</span> MySQL Item Database
+        <span class="font-weight-normal text-gold">{{ __("Classic") }}</span> {{ __("MySQL Item Database") }}
     </h2>
     <p>
-        The MySQL item database used by {{ env('APP_NAME') }} for Classic WoW only.
+        {{ __("The MySQL item database used by :appName for Classic WoW only.", ['appName' => env('APP_NAME')]) }}
     </p>
     <p>
         <a href="https://github.com/thatsmybis/classic-wow-item-db/tree/master/thatsmybis" class="text-5" target="_blank">https://github.com/thatsmybis/classic-wow-item-db</a>
@@ -169,7 +169,7 @@
         <span class="font-weight-normal text-uncommon">Burning Crusade</span> MySQL Item Database
     </h2>
     <p>
-        The MySQL WoW item database used by {{ env('APP_NAME') }} for TBC (export includes Classic data too).
+        {{ __("The MySQL WoW item database used by :appName for TBC (export includes Classic data too).", ['appName' => env('APP_NAME')]) }}
     </p>
     <p>
         <a href="https://github.com/thatsmybis/burning-crusade-item-db/tree/main/thatsmybis" class="text-5" target="_blank">https://github.com/thatsmybis/burning-crusade-item-db</a>
@@ -177,12 +177,12 @@
 </li>
 
 <li>
-    <h2>Want more?</h2>
+    <h2>{{ __("Want more?") }}</h2>
 
     <p>
-        View my <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}">live data</a> for what people are wishlisting in
-        <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">TBC</a>
-        and
-        <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">Classic</a>
+        {{ __("View the") }} <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}">{{ __("live data") }}</a> {{ __("for what people are wishlisting in") }}
+        <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
+        {{ __("and") }}
+        <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
     </p>
 </li>

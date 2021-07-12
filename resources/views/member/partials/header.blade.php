@@ -10,14 +10,14 @@
                 <li class="list-inline-item">
                     <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
                         <span class="fas fa-fw fa-pencil"></span>
-                        edit
+                        {{ __("edit") }}
                     </a>
                 </li>
             @endif
             @if (isset($showLogs) && $showLogs)
                 <li class="list-inline-item">
                     <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}">
-                        <span class="fas fa-fw fa-clipboard-list-check"></span>history
+                        <span class="fas fa-fw fa-clipboard-list-check"></span>{{ __("history") }}
                     </a>
                 </li>
             @endif
@@ -28,12 +28,12 @@
             @if ($member->inactive_at)
                 <li class="list-inline-item">
                     <small>
-                        <span class="font-weight-bold text-danger">ARCHIVED</span>
+                        <span class="font-weight-bold text-danger">{{ __("ARCHIVED") }}</span>
                     </small>
                 </li>
             @endif
             <li class="list-inline-item">
-                Member
+                {{ __("Member") }}
                 @if (!$guild->is_attendance_hidden && (isset($attendancePercentage) || isset($raidCount)))
                     <span class="small">
                         @include('partials/attendanceTag', ['attendancePercentage' => (isset($attendancePercentage) ? $attendancePercentage : null), 'raidCount' => (isset($raidCount) ? $raidCount : null), 'smallRaid' => false])
@@ -43,12 +43,12 @@
             @if (isset($showEdit) && $showEdit)
                 @if ($member->is_received_unlocked)
                     <li class="list-inline-item">
-                        <span class="text-warning small">loot unlocked</span>
+                        <span class="text-warning small">{{ __("loot unlocked") }}</span>
                     </li>
                 @endif
                 @if ($member->is_wishlist_unlocked)
                     <li class="list-inline-item">
-                        <span class="text-warning small">wishlist unlocked</span>
+                        <span class="text-warning small">{{ __("wishlist unlocked") }}</span>
                     </li>
                 @endif
             @endif

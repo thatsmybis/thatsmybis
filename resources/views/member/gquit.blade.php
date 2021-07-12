@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "/gquit - " . config('app.name'))
+@section('title', __("/gquit") . " - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,7 +9,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-bold text-danger">
                         <span class="fas fa-fw fa-exclamation-triangle text-gold"></span>
-                        /gquit
+                        {{ __("/gquit") }}
                     </h1>
                 </div>
             </div>
@@ -25,16 +25,16 @@
 
             @if ($currentMember->user_id == $guild->user_id)
                 <p>
-                    You are the Guild Master. The Guild Master cannot quit the guild.
+                    {{ __("You are the Guild Master. The Guild Master cannot quit the guild.") }}
                 </p>
                 <p>
-                    However you can go into the guild settings and transfer ownership, <em>then gquit</em>.
+                    {{ __("However you can go into the guild settings and transfer ownership,") }} <em>{{ __("then gquit") }}</em>.
                 </p>
                 <p>
-                    If you don't have anyone to transfer ownership to, you could disable the guild via the guild settings.
+                    {{ __("If you don't have anyone to transfer ownership to, you could disable the guild via the guild settings.") }}
                 </p>
                 <p>
-                    If you want to disband the guild, well... that feature probably doesn't exist yet. You could reach out on our Discord if you want help.
+                    {{ __("If you want to disband the guild, well... that feature probably doesn't exist yet. You could reach out on our Discord if you want help.") }}
                 </p>
             @else
                 <form class="form-horizontal" role="form" method="POST" action="{{ route('member.submitGquit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
@@ -45,7 +45,7 @@
 
                             <ul class="no-bullet no-indent">
                                 <li class="text-danger font-weight-bold">
-                                    DANGER ZONE!
+                                    {{ __("DANGER ZONE!") }}
                                 </li>
                                 <li class="text-3">
                                     You will leave
@@ -54,13 +54,13 @@
                                     </span>
                                 </li>
                                 <li class="text-3">
-                                    You <strong>will not</strong> be able to rejoin without help
+                                    {{ __("You") }} <strong>{{ __("will not") }}</strong> {{ __("be able to rejoin without help") }}
                                 </li>
                                 <li class="">
-                                    To rejoin, an officer will need to unflag your profile as archived
+                                    {{ __("To rejoin, an officer will need to unflag your profile as archived") }}
                                 </li>
                                 <li class="">
-                                    This <strong>will not</strong> affect your Discord or ingame status with
+                                    {{ __("This") }} <strong>{{ __("will not") }}</strong> {{ __("affect your Discord or ingame status with") }}
                                     <span class="text-{{ getExpansionColor($guild->expansion_id) }} font-weight-medium">
                                         &lt;{{ $guild->name }}&gt;
                                     </span>
@@ -71,7 +71,7 @@
                     <div class="form-group">
                         <button class="btn btn-danger" onClick="return confirm('YOU CANNOT REJOIN WITHOUT AN OFFICER\'S HELP. Are you sure?');">
                             <span class="fas fa-fw fa-exclamation-triangle"></span>
-                            /gquit
+                            {{ __("/gquit") }}
                         </button>
                     </div>
                 </form>

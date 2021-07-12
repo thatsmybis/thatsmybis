@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Raids - ' . config('app.name'))
+@section('title', __('Raids') . ' - ' . config('app.name'))
 
 @php
     $now = getDateTime();
@@ -16,29 +16,29 @@
                             <h1 class="font-weight-medium mb-0">
                                 <span class="fas fa-fw fa-helmet-battle text-dk"></span>
                                 @if ($showArchived)
-                                    <span class="text-danger">Archived</span>
+                                    <span class="text-danger">{{ __("Archived") }}</span>
                                 @endif
                                 Raids
                             </h1>
                             <span class="small text-muted">
-                                times shown are local to you
+                                {{ __("times shown are local to you") }}
                             </span>
                             @if ($showArchived)
                                 &sdot;
                                 <a href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                    show unarchived raids
+                                    {{ __("show unarchived raids") }}
                                 </a>
                             @else
                                 &sdot;
                                 <a href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'show_archived' => 1]) }}" class="small">
-                                    show archived raids
+                                    {{ __("show archived raids") }}
                                 </a>
                             @endif
                         </li>
                     </ul>
                     <a class="btn btn-success" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                         <span class="fas fa-fw fa-plus"></span>
-                        Create Raid
+                        {{ __("Create Raid") }}
                     </a>
                 </div>
             </div>
@@ -48,7 +48,7 @@
                     <div class="form-group">
                         <label for="raid_group_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-helmet-battle text-muted"></span>
-                            Raid Group
+                            {{ __("Raid Group") }}
                         </label>
                         <select name="raid_group_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
@@ -70,7 +70,7 @@
                     <div class="form-group">
                         <label for="character_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-users text-muted"></span>
-                            Character
+                            {{ __("Character") }}
                         </label>
                         <select name="character_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
@@ -80,7 +80,7 @@
                                 <option value="{{ $character->id }}"
                                         data-tokens="{{ $character->id }}" class="text-{{ strtolower($character->class) }}-important"
                                         {{ Request::get('character_id') && Request::get('character_id') == $character->id ? 'selected' : ''}}>
-                                    {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? "Alt" : '' }}
+                                    {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? __("Alt") : '' }}
                                 </option>
                             @endforeach
 
@@ -91,7 +91,7 @@
                     <div class="form-group">
                         <label for="member_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-user text-muted"></span>
-                            Member
+                            {{ __("Member") }}
                         </label>
                         <select name="member_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="">
@@ -112,7 +112,7 @@
                     <div class="form-group">
                         <label for="item_instance_id" class="font-weight-bold">
                             <span class="fas fa-fw fa-dungeon text-muted"></span>
-                            Dungeon
+                            {{ __("Dungeon") }}
                         </label>
                         <select name="item_instance_id" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
                             <option value="" data-tokens="">
@@ -143,18 +143,18 @@
                                     <ul class="list-inline">
                                         @if ($raid->archived_at)
                                             <li class="list-inline-item text-danger">
-                                                ARCHIVED
+                                                {{ __("ARCHIVED") }}
                                             </li>
                                         @endif
 
                                         @include('raids/partials/listRaid', ['bold' => true, 'text' => (!$isFuture || $raid->cancelled_at ? 'muted' : 'white'), 'raidGroup' => null])
 
                                         <li class="list-inline-item text-muted">
-                                            {{ $raid->character_count }} raiders
+                                            {{ $raid->character_count }} {{ __("raiders") }}
                                         </li>
                                         @if (!$isFuture)
                                             <li class="list-inline-item text-muted">
-                                                {{ $raid->item_count }} items
+                                                {{ $raid->item_count }} {{ __("items") }}
                                             </li>
                                         @endif
                                     </ul>
@@ -186,9 +186,9 @@
                                     <ul class="list-inline">
                                         <li class="list-inline-item">
                                             <span class="{{ $isFuture ? '' : 'text-muted' }}">
-                                                {{ $isFuture ? 'in' : '' }}
+                                                {{ $isFuture ? __('in') : '' }}
                                                 <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
-                                                {{ !$isFuture ? 'ago' : '' }}
+                                                {{ !$isFuture ? __('ago') : '' }}
                                                 <span class="js-timestamp text-muted" data-timestamp="{{ $raid->date }}" data-format="@ h:mm a, ddd MMM D {{ $isFuture ? '' : 'YYYY' }}"></span>
                                             </span>
                                         </li>
@@ -198,7 +198,7 @@
                         </ol>
                     @else
                         <p class="mt-4 ml-2  text-3">
-                            No {{ $showArchived ? 'archived' : '' }} raids found
+                            {{ __("No :archived raids found", ['archived' => ($showArchived ? 'archived' : '')]) }}
                         </p>
                     @endif
                 </div>

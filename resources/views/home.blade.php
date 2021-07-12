@@ -22,29 +22,29 @@
                 <span class="font-weight-bold">{{ env('APP_NAME') }}</span>
             </h1>
             <p class="mt-1 font-weight-normal mb-5 text-3">
-                A tool for World of Warcraft
+                {{ __("A tool for World of Warcraft") }}
                 <br>
-                loot council guilds
+                {{ __("loot council guilds") }}
             </p>
 
             <p class="font-weight-normal pt-3 text-4">
-                easily keep track of your raid's
+                {{ __("easily keep track of your raid's") }}
                 <br>
-                loot distribution
+                {{ __("loot distribution") }}
             </p>
 
             <p class="text-5">
-                see what items people are wishlisting in
-                <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">TBC</a>
-                and
-                <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">Classic</a>
+                {{ __("see what items people are wishlisting in") }}
+                <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
+                {{ __("and") }}
+                <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
                 <br>
-                view our public <a href="{{ route('loot') }}">loot tables</a>
+                {{ __("view our public") }} <a href="{{ route('loot') }}">{{ __("loot tables") }}</a>
             </p>
 
             <div class="mt-5 mb-5">
                 <a class="btn btn-light" href="{{ route('discordLogin') }}" title="Sign in with Discord" rel="nofollow">
-                    <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> Sign In
+                    <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> {{ __("Sign In") }}
                 </a>
             </div>
 

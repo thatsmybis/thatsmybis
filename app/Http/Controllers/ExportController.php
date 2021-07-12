@@ -301,6 +301,15 @@ class ExportController extends Controller {
             $subdomain = 'tbc';
         }
 
+        $locale = '';
+        if (Illuminate\Support\Facades\App::getLocale() != 'en') {
+            if ($subdomain == 'www') {
+                $subdomain = '.' . Illuminate\Support\Facades\App::getLocale() . '.';
+            } else {
+                $locale = Illuminate\Support\Facades\App::getLocale() . '.';
+            }
+        }
+
         $csv = Cache::remember('lootTableExport:' . $expansionSlug, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($subdomain, $expansionId) {
                 $rows = DB::select(DB::raw(
                     "SELECT
@@ -318,7 +327,7 @@ class ExportController extends Controller {
                         END AS 'item_quality',
                         -- items.quality AS 'item_quality'
                         items.item_id AS 'item_id',
-                        CONCAT('https://{$subdomain}.wowhead.com/item=', items.item_id) AS 'url'
+                        CONCAT('https://{$locale}{$subdomain}.wowhead.com/item=', items.item_id) AS 'url'
                     FROM instances
                         JOIN item_sources      ON item_sources.instance_id = instances.id
                         JOIN item_item_sources ON item_item_sources.item_source_id = item_sources.id

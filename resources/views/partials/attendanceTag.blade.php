@@ -6,7 +6,7 @@
         @if (isset($raidShort) && $raidShort)
             +{{ $raidCount }}
         @else
-            {{ $raidCount }} raids
+            {{ $raidCount }} {{ __("raids") }}
         @endif
     </span>
 @endif

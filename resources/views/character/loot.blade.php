@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Loot for " . $character->name . " - " . config('app.name'))
+@section('title', __("Loot for") . " " . $character->name . " - " . config('app.name'))
 
 @php
     $maxDate = (new \DateTime())->modify('+1 day')->format('Y-m-d');
@@ -15,7 +15,7 @@
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
-                    @include('character/partials/header', ['headerSize' => 1, 'showEdit' => true, 'showLogs' => true, 'titleSuffix' => "'s loot"])
+                    @include('character/partials/header', ['headerSize' => 1, 'showEdit' => true, 'showLogs' => true, 'titleSuffix' => __("'s loot")])
                 </div>
             </div>
 
@@ -39,7 +39,7 @@
                         <div class="col-12 mb-2">
                             <span class="text-gold font-weight-bold">
                                 <span class="fas fa-fw fa-sort-amount-down"></span>
-                                Prios
+                                {{ __("Prios") }}
                             </span>
                         </div>
                         <div class="col-12 pb-3">
@@ -67,17 +67,17 @@
                             <label for="wishlist">
                                 <span class="font-weight-bold text-legendary">
                                     <span class="fas fa-fw fa-scroll-old"></span>
-                                    Wishlist
+                                    {{ __("Wishlist") }}
                                 </span>
                                 @if ($lockWishlist)
-                                    <small class="text-warning font-weight-normal">locked by your guild master(s)</small>
+                                    <small class="text-warning font-weight-normal">{{ __("locked by your guild master(s)") }}</small>
                                 @elseif (!$unlockWishlist && $guild->is_wishlist_locked)
-                                    <small class="text-warning font-weight-normal">locked for raiders</small> <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
+                                    <small class="text-warning font-weight-normal">{{ __("locked for raiders") }}</small> <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
                                 @else
-                                    <small class="text-muted font-weight-normal">max {{ $maxWishlistItems }}</small>
+                                    <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
                                 @endif
                                 <small class="text-muted font-weight-normal">&sdot;</small>
-                                <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">see what other people wishlisted</a>
+                                <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">{{ __("see what other people wishlisted") }}</a>
                             </label>
 
                             @if ($lockWishlist)
@@ -98,7 +98,7 @@
                             @else
                                 <div class="{{ $errors->has('wishlist.*') ? 'has-error' : '' }}">
                                     <input id="wishlist" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
-                                    <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+                                    <span class="js-loading-indicator" style="display:none;">{{ __("Searching...") }}</span>&nbsp;
 
                                     <ul class="js-sortable-lazy no-bullet no-indent mb-0 bg-light">
                                         @for ($i = 0; $i < $maxWishlistItems; $i++)
@@ -168,15 +168,15 @@
                         <label for="received">
                             <span class="font-weight-bold text-success">
                                 <span class="fas fa-fw fa-sack"></span>
-                                Loot Received
+                                {{ __("Loot Received") }}
                             </span>
 
                             @if ($lockReceived)
-                                <small class="text-warning font-weight-normal">locked by your guild master(s)</small>
+                                <small class="text-warning font-weight-normal">{{ __("locked by your guild master(s)") }}</small>
                             @elseif (!$unlockReceived && $guild->is_received_locked)
-                                <small class="text-warning font-weight-normal">locked for raiders</small> <small class="text-muted font-weight-normal">max {{ $maxReceivedItems }}</small>
+                                <small class="text-warning font-weight-normal">{{ __("locked for raiders") }}</small> <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxReceivedItems }}</small>
                             @else
-                                <small class="text-muted font-weight-normal">max {{ $maxReceivedItems }}</small>
+                                <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxReceivedItems }}</small>
                             @endif
                         </label>
 
@@ -184,7 +184,7 @@
                             <div class="checkbox">
                                 <label>
                                     <input checked type="checkbox" name="mark_as_received" value="1" class="" autocomplete="off">
-                                        <small class="text-muted">when adding items, mark prios and wishlist as received</small>
+                                        <small class="text-muted">{{ __("when adding items, mark prios and wishlist as received") }}</small>
                                 </label>
                             </div>
                         </div>
@@ -211,7 +211,7 @@
                         @else
                             <div class="{{ $errors->has('received.*') ? 'has-error' : '' }}">
                                 <input id="received" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
-                                <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+                                <span class="js-loading-indicator" style="display:none;">{{ __("Searching...") }}</span>&nbsp;
 
                                 <ul class="js-sortable-lazy no-bullet no-indent mb-0 bg-light">
                                     @for ($i = 0; $i < $maxReceivedItems; $i++)
@@ -280,17 +280,17 @@
                         <label for="recipes">
                             <span class="font-weight-bold text-rare text-rare">
                                 <span class="fas fa-fw fa-book"></span>
-                                Rare Recipes
+                                {{ __("Rare Recipes") }}
                             </span>
-                            <small class="text-muted font-weight-normal" title="Max {{ $maxRecipes }}">so your guildmates can see &sdot;</small>
+                            <small class="text-muted font-weight-normal" title="Max {{ $maxRecipes }}">{{ __("so your guildmates can see") }} &sdot;</small>
                             <a href="{{ route('guild.recipe.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">
-                                view guild recipes
+                                {{ __("view guild recipes") }}
                             </a>
                         </label>
 
                         <div class="{{ $errors->has('recipes.*') ? 'has-error' : '' }}">
                             <input id="recipes" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" class="js-item-autocomplete js-input-text form-control dark">
-                            <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
+                            <span class="js-loading-indicator" style="display:none;">{{ __("Searching...") }}</span>&nbsp;
 
                             <ul class="js-sortable no-bullet no-indent mb-0">
                                 @for ($i = 0; $i < $maxRecipes; $i++)
@@ -349,8 +349,8 @@
                         <div class="form-group">
                             <label for="public_note" class="font-weight-bold">
                                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
-                                Public Note
-                                <small class="text-muted">anyone in the guild can see this</small>
+                                {{ __("Public Note") }}
+                                <small class="text-muted">{{ __("anyone in the guild can see this") }}</small>
                             </label>
                             <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
                         </div>
@@ -361,8 +361,8 @@
                             <div class="form-group">
                                 <label for="officer_note" class="font-weight-bold">
                                     <span class="text-muted fas fa-fw fa-shield"></span>
-                                    Officer Note
-                                    <small class="text-muted">only officers can see this</small>
+                                    {{ __("Officer Note") }}
+                                    <small class="text-muted">{{ __("only officers can see this") }}</small>
                                 </label>
                                 <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
                             </div>
@@ -374,8 +374,8 @@
                             <div class="form-group">
                                 <label for="personal_note" class="font-weight-bold">
                                     <span class="text-muted fas fa-fw fa-eye-slash"></span>
-                                    Personal Note
-                                    <small class="text-muted">only you can see this</small>
+                                    {{ __("Personal Note") }}
+                                    <small class="text-muted">{{ __("only you can see this") }}</small>
                                 </label>
                                 <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
                             </div>
@@ -384,7 +384,7 @@
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
                 </div>
             </form>
         </div>

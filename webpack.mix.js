@@ -39,6 +39,7 @@ mix.babel('public/js/autocomplete.js',         'public/js/processed/autocomplete
     .babel('public/js/prio.js',                'public/js/processed/prio.js')
     .babel('public/js/roster.js',              'public/js/processed/roster.js')
     .babel('public/js/raidEdit.js',            'public/js/processed/raidEdit.js')
+    .babel('public/js/raidGroupAttendance.js', 'public/js/processed/raidGroupAttendance.js')
     .babel('public/js/raidGroupCharacters.js', 'public/js/processed/raidGroupCharacters.js')
 
     .styles(['public/css/main.css'], 'public/css/processed/main.css');

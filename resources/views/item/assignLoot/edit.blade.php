@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Update Assigned Loot - " . config('app.name'))
+@section('title', __("Update Assigned Loot") . " - " . config('app.name'))
 
 @php
     $now = getDateTime();
@@ -12,7 +12,7 @@
         <div class="col-12 pt-2 mb-2">
             <h1 class="font-weight-medium">
                 <span class="fas fa-fw fa-gift text-gold"></span>
-                Update Assigned Loot Details
+                {{ __("Update Assigned Loot Details") }}
             </h1>
         </div>
     </div>
@@ -43,7 +43,7 @@
                                 Assigned on <span class="js-timestamp" data-timestamp="{{ $batch->created_at }}" data-format="dddd MMMM Do"></span>
                                 @if ($batch->note)
                                     <br>
-                                    <span class="text-muted">Original description</span> <span class="font-italic">{{ $batch->note }}</span>
+                                    <span class="text-muted">{{ __("Original description") }}</span> <span class="font-italic">{{ $batch->note }}</span>
                                 @endif
                             </div>
                         </div>
@@ -53,7 +53,7 @@
                         <div class="col-sm-6 col-12 pt-2 mb-2">
                             <label for="date_input">
                                 <span class="text-muted fas fa-fw fa-calendar-alt"></span>
-                                Date Assigned <span class="text-muted small">optional, overwrites all old dates</span>
+                                {{ __("Date Assigned") }} <span class="text-muted small">{{ __("optional, overwrites all old dates") }}</span>
                             </label>
                             <input class="js-date" type="text" name="new_date" hidden value="{{ old('new_date') ? old('new_date') : '' }}">
                             <input min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="js-date-input form-control dark" autocomplete="off">
@@ -63,7 +63,7 @@
                     <div class="form-group">
                         <ul class="no-bullet no-indent">
                             <li class="mb-2">
-                                <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Submit</button>
+                                <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Submit") }}</button>
                             </li>
                         </ul>
                     </div>
@@ -75,27 +75,27 @@
     <div class="row mt-3">
         @if ($batch->items)
             <div class="col-12 bg-light rounded pt-2">
-                <span class="text-4">The following loot assignments will be updated to match the details you select:</span>
+                <span class="text-4">{{ __("The following loot assignments will be updated to match the details you select") }}:</span>
                 <ul class="mt-3">
                     @if ($batch->items->count())
                         @foreach($batch->items as $item)
                             <li>
                                 @include('partials/item', ['wowheadLink' => false])
                                 @if ($item->pivot->is_offspec)
-                                    OS
+                                    {{ __("OS") }}
                                 @endif
                                 @if ($item->character_name)
-                                    to
+                                    {{ __("to") }}
                                     <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $item->character_id, 'nameSlug' => $item->character_slug]) }}" class="text-{{ strtolower($item->character_class) }}">
                                         {{ $item->character_name }}
                                     </a>
-                                    {{ $item->character_is_alt ? 'alt' : '' }}
+                                    {{ $item->character_is_alt ? __('alt') : '' }}
                                 @endif
                             </li>
                         @endforeach
                     @else
                         <li>
-                            There are no items associated with this
+                            {{ __("There are no items associated with this")
                         </li>
                     @endif
                 </ul>

@@ -141,7 +141,7 @@
                     <div class="alert alert-info">
                         <ul class="no-bullet no-indent mb-0">
                             <li class="small font-weight-bold">
-                                Message of the Day
+                                {{ __("Message of the Day") }}
                             </li>
                             <li class="pre">{{ $guild->message }}</li>
                         </ul>
@@ -161,7 +161,7 @@
 
     <!-- Button that sticks to bottom right of page -->
     <a id="reportBug" href="{{ env('APP_DISCORD') }}" target="_blank" class="btn btn-sm btn-light" title="Report a bug">
-        Give Feedback <span class="text-success fal fa-fw fa-comment-dots"></span>
+        {{ __("Give Feedback") }} <span class="text-success fal fa-fw fa-comment-dots"></span>
     </a>
 
     <!-- Scripts -->
@@ -208,6 +208,39 @@
         @else
             var expansionId = 1;
             var wowheadSubdomain = "www";
+        @endif
+
+        @if (Illuminate\Support\Facades\App::getLocale() != 'en')
+            var locale = "{{ Illuminate\Support\Facades\App::getLocale() }}";
+            var wowheadLocale = locale  + ".";
+
+            // Doing this was faster than adding translations to the entirety of JS
+            var headerBoss      = "{{ __("Boss") }}";
+            var headerLoot      = "{{ __("Loot") }}";
+            var headerCharacter = "{{ __("Character") }}";
+            var headerPrios     = "{{ __("Prios") }}";
+            var headerWishlist  = "{{ __("Wishlist") }}";
+            var headerReceived  = "{{ __("Received") }}";
+            var headerRecipes   = "{{ __("Recipes") }}";
+            var headerNotes     = "{{ __("Notes") }}";
+            var headerPrioNotes = "{{ __("Prios Notes") }}";
+
+            var localeAlt = "{{ __("alt") }}";
+        @else
+            var locale = "";
+            var wowheadLocale = "";
+
+            var headerBoss      = "Boss";
+            var headerCharacter = "Character";
+            var headerPrios     = "Prios";
+            var headerPrioNotes = "Prio Notes";
+            var headerWishlist  = "Wishlist";
+            var headerLoot      = "Loot";
+            var headerReceived  = "Received";
+            var headerRecipes   = "Recipes";
+            var headerNotes     = "Notes";
+
+            var localeAlt = "alt";
         @endif
     </script>
 

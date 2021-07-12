@@ -1,13 +1,13 @@
 @extends('layouts.app')
-@section('title', "FAQ - " . config('app.name'))
+@section('title', __("FAQ") . " - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row bg-light pt-5 pb-5 mb-5 rounded">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h1>Frequently Asked Questions</h1>
+            <h1>{{ __("Frequently Asked Questions") }}</h1>
 
-            <h2>Common Problems</h2>
+            <h2>{{ __("Common Problems") }}</h2>
             <ol>
                 <li><a href="#wrong-account">I can't see my guild</a></li>
                 <li><a href="#not-seeing-guild">Why can't I see my guild?</a></li>

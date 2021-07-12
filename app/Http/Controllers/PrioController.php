@@ -525,7 +525,7 @@ class PrioController extends Controller
                                     $newValues['order'] = $order;
                                 }
 
-                                if ($isReceived && $existingPrio->pivot->is_received != $isReceived) {
+                                if ($existingPrio->pivot->is_received != $isReceived) {
                                     $changed = true;
                                     $newValues['id']          = $existingPrio->pivot->id;
                                     $newValues['is_received'] = $isReceived;
@@ -536,7 +536,7 @@ class PrioController extends Controller
                                     }
                                 }
 
-                                if ($isOffspec && $existingPrio->pivot->is_offspec != $isOffspec) {
+                                if ($existingPrio->pivot->is_offspec != $isOffspec) {
                                     $changed = true;
                                     $newValues['id']         = $existingPrio->pivot->id;
                                     $newValues['is_offspec'] = $isOffspec;

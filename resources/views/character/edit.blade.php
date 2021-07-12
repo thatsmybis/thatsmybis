@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', (!$character ? "Create" : "Edit") . " Character - " . config('app.name'))
+@section('title', (!$character ? __("Create") : __("Edit")) . " " . __("Character") . " - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -8,11 +8,11 @@
             <div class="row mb-3">
                 @if ($character)
                     <div class="col-12 pt-2 bg-lightest rounded">
-                        @include('character/partials/header', ['headerSize' => 1, 'showEdit' => false, 'showLogs' => true, 'showEditLoot' => true, 'titlePrefix' => ($character ? 'Edit ' : 'Create ')])
+                        @include('character/partials/header', ['headerSize' => 1, 'showEdit' => false, 'showLogs' => true, 'showEditLoot' => true, 'titlePrefix' => ($character ? ('Edit') . ' ' : ('Create') . ' ')])
                     </div>
                 @else
                     <div class="col-12 pt-2 mb-2">
-                        <h1 class="font-weight-medium ">Create a Character</h1>
+                        <h1 class="font-weight-medium ">{{ __("Create a Character") }}</h1>
                     </div>
                 @endif
             </div>
@@ -39,7 +39,7 @@
                                 <div class="form-group">
                                     <label for="name" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-user"></span>
-                                        Character Name
+                                        {{ __("Character Name") }}
                                     </label>
                                     <input name="name"
                                         maxlength="40"
@@ -54,8 +54,7 @@
                                 <div class="col-sm-6 col-12">
                                     <div class="form-group">
                                         <label for="member_id" class="font-weight-bold">
-
-                                            Guild Member
+                                            {{ __("Guild Member") }}
                                         </label>
                                         <div class="form-group">
                                             <select name="member_id" class="form-control dark selectpicker" data-live-search="true">
@@ -81,7 +80,7 @@
                             <div class="col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="class" class="font-weight-bold">
-                                        Class
+                                        {{ __("Class") }}
                                     </label>
                                     <div class="form-group">
                                         <select name="class" class="form-control dark">
@@ -89,8 +88,8 @@
                                                 —
                                             </option>
 
-                                            @foreach (App\Character::classes($guild->expansion_id) as $class)
-                                                <option value="{{ $class }}" class="text-{{ strtolower($class) }}-important"
+                                            @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
+                                                <option value="{{ $class }}" class="text-{{ strtolower($key) }}-important"
                                                     {{ old('class') ? (old('class') == $class ? 'selected' : '') : ($character && $character->class == $class ? 'selected' : '') }}>
                                                     {{ $class }}
                                                 </option>
@@ -103,7 +102,7 @@
                             <div class="col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="spec" class="font-weight-bold">
-                                        Spec
+                                        {{ __("Spec") }}
                                     </label>
                                     <input name="spec"
                                         maxlength="50"
@@ -119,7 +118,7 @@
                             <div class="col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="race" class="font-weight-bold">
-                                        Race
+                                        {{ __("Race") }}
                                     </label>
                                     <div class="form-group">
                                         <select name="race" class="form-control dark">
@@ -141,7 +140,7 @@
                             <div class="col-sm-3 col-6">
                                 <div class="form-group">
                                     <label for="level" class="font-weight-bold">
-                                        Level
+                                        {{ __("Level") }}
                                     </label>
                                     <input name="level"
                                         type="number"
@@ -161,7 +160,7 @@
                         <div class="form-group">
                             <label for="raid_group_id" class="font-weight-bold">
                                 <span class="fas fa-fw fa-helmet-battle text-gold"></span>
-                                Main Raid Group
+                                {{ __("Main Raid Group") }}
                             </label>
                             @if ($editRaidGroups)
                                 <div class="form-group">
@@ -181,7 +180,7 @@
                                 </div>
                             @else
                                 <div>
-                                    <span class="text-muted">locked by the man</span>
+                                    <span class="text-muted">{{ __("locked by the man") }}</span>
                                 </div>
                                 <div>
                                     @if ($character && $character->raidGroup)
@@ -201,7 +200,7 @@
                         <div class="form-group">
                             <label for="raid_groups" class="font-weight-bold">
                                 <span class="fas fa-fw fa-helmet-battle text-muted"></span>
-                                General Raid Groups
+                                {{ __("General Raid Groups") }}
                             </label>
                             <div class="form-group">
                                 @if ($editRaidGroups)
@@ -258,7 +257,7 @@
                                     </ol>
                                 @else
                                     <div>
-                                        <span class="text-muted">locked by the man</span>
+                                        <span class="text-muted">{{ __("locked by the man") }}</span>
                                     </div>
                                     <div>
                                         @if ($character && $character->secondaryRaidGroups->count())
@@ -290,7 +289,7 @@
                                 <div class="form-group">
                                     <label for="class" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-flower-daffodil"></span>
-                                        Profession 1
+                                        {{ __("Profession 1") }}
                                     </label>
                                     <div class="form-group">
                                         <select name="profession_1" class="form-control dark">
@@ -311,7 +310,7 @@
                             <div class="col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="class" class="font-weight-bold">
-                                        Profession 2
+                                        {{ __("Profession 2") }}
                                     </label>
                                     <div class="form-group">
                                         <select name="profession_2" class="form-control dark">
@@ -337,7 +336,7 @@
                                     <div class="form-group">
                                         <label for="rank" class="font-weight-bold">
                                             <span class="text-muted fas fa-fw fa-swords"></span>
-                                            PvP Rank
+                                            {{ __("PvP Rank") }}
                                         </label>
                                         <input name="rank"
                                             type="number"
@@ -353,7 +352,7 @@
                                 <div class="col-sm-3 col-6">
                                     <div class="form-group">
                                         <label for="rank_goal" class="font-weight-bold">
-                                            PvP Rank Goal
+                                            {{ __("PvP Rank Goal") }}
                                         </label>
                                         <input name="rank_goal"
                                             type="number"
@@ -374,8 +373,10 @@
                         <div class="form-group">
                             <label for="public_note" class="font-weight-bold">
                                 <span class="text-muted fas fa-fw fa-comment-alt-lines"></span>
-                                Public Note
-                                <small class="text-muted">anyone in the guild can see this</small>
+                                {{ __("Public Note") }}
+                                <small class="text-muted">
+                                    {{ __("anyone in the guild can see this") }}
+                                </small>
                             </label>
                             <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
                         </div>
@@ -386,11 +387,13 @@
                             <div class="form-group">
                                 <label for="officer_note" class="font-weight-bold">
                                     <span class="text-muted fas fa-fw fa-shield"></span>
-                                    Officer Note
-                                    <small class="text-muted">only officers can see this</small>
+                                    {{ __("Officer Note") }}
+                                    <small class="text-muted">
+                                        {{ __("only officers can see this") }}
+                                    </small>
                                 </label>
                                 @if (isStreamerMode())
-                                    Hidden in streamer mode
+                                    {{ __("Hidden in streamer mode") }}
                                 @else
                                     <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
                                 @endif
@@ -404,8 +407,10 @@
                                 <div class="form-group">
                                     <label for="personal_note" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-eye-slash"></span>
-                                        Personal Note
-                                        <small class="text-muted">only you can see this</small>
+                                        {{ __("Personal Note") }}
+                                        <small class="text-muted">
+                                            {{ __("only you can see this") }}
+                                        </small>
                                     </label>
                                     <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
                                 </div>
@@ -418,7 +423,7 @@
                         <div class="col-12">
                             <div class="form-group">
                                 <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'usernameSlug' => $character->member->slug]) }}">
-                                    Unlock member's wishlist or received loot list
+                                    {{ __("Unlock member's wishlist or received loot list") }}
                                 </a>
                             </div>
                         </div>
@@ -430,7 +435,9 @@
                                     <label>
                                         <input type="checkbox" name="inactive_at" value="1" class="" autocomplete="off"
                                             {{ old('inactive_at') && old('inactive_at') == 1 ? 'checked' : ($character->inactive_at ? 'checked' : '') }}>
-                                            Archive <small class="text-muted">no longer visible</small>
+                                            Archive <small class="text-muted">
+                                                {{ __("no longer visible") }}
+                                            </small>
                                     </label>
                                 </div>
                             </div>
@@ -441,7 +448,9 @@
                                     <label>
                                         <input type="checkbox" name="is_alt" value="1" class="" autocomplete="off"
                                             {{ old('is_alt') && old('is_alt') == 1 ? 'checked' : ($character->is_alt ? 'checked' : '') }}>
-                                            Alt Character <small class="text-muted">will be tagged as an alt</small>
+                                            Alt Character <small class="text-muted">
+                                                {{ __("will be tagged as an alt") }}
+                                            </small>
                                     </label>
                                 </div>
                             </div>
@@ -452,7 +461,9 @@
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="is_alt" value="1" class="" autocomplete="off">
-                                            Alt Character <small class="text-muted">will be tagged as an alt</small>
+                                            Alt Character <small class="text-muted">
+                                                {{ __("will be tagged as an alt") }}
+                                            </small>
                                     </label>
                                 </div>
                             </div>
@@ -460,7 +471,7 @@
                     @endif
                 </div>
                 <div class="form-group">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> Save</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
                 </div>
             </form>
         </div>

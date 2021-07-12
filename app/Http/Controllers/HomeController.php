@@ -144,4 +144,14 @@ class HomeController extends Controller
     {
         return view('terms');
     }
+
+    /**
+     * Show the page with instructions on how to provide translations.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function translations()
+    {
+        return view('translations');
+    }
 }

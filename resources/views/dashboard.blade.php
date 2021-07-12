@@ -7,9 +7,9 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-12 text-center mt-5 mb-5">
+        <div class="col-12 text-center mt-5">
             <h2 class="">
-                Welcome, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
+                {{ __("Welcome") }}, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
             </h2>
             <strong>Change log</strong> and <strong>announcements</strong> are on the
             <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">
@@ -20,11 +20,15 @@
             More support = more features
         </div>
 
-        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 text-center">
+        <div class="col-12 col-sm-6 offset-sm-3 col-md-4 offset-md-4 mt-3">
+            @include('partials/setLocale')
+        </div>
+
+        <div class="col-md-8 col-sm-10 col-12 offset-md-2 offset-sm-1 mt-3 text-center">
             @if ($user->members->count() > 0)
                 <h3 class="font-weight-normal mb-3">
                     <span class="fas fa-fw fa-users text-muted"></span>
-                    Your Guilds
+                    {{ __("Your Guilds") }}
                 </h3>
                 <ul class="no-bullet no-indent">
                     @php
@@ -60,13 +64,13 @@
                                     <li class="list-inline-item pt-0 pl-1 pb-1 pr-1">
                                         <a href="{{ route('character.showCreate', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}">
                                             <span class="fas fa-plus"></span>
-                                            create character
+                                            {{ __("create character") }}
                                         </a>
                                     </li>
                                     <li class="list-inline-item pt-0 pl-1 pb-1 pr-1">
                                         <a href="{{ route('member.showGquit', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}"
                                             class="text-danger font-weight-light">
-                                            /gquit
+                                            {{ __("/gquit") }}
                                         </a>
                                     </li>
                                 </ul>
@@ -77,10 +81,10 @@
                 @if ($disabled)
                     <ul class="no-bullet no-indent">
                         <li>
-                            <span class="text-muted">old & disabled guilds</span>
+                            <span class="text-muted">{{ __("old & disabled guilds") }}</span>
                             <br>
                             <span id="showInactiveGuilds" class="small text-muted font-italic cursor-pointer">
-                                click to show
+                                {{ __("click to show") }}
                             </span>
                         </li>
                         @foreach ($disabled as $member)
@@ -94,18 +98,18 @@
                                 <ul class="list-inline">
                                     @if ($member->guild->disabled_at)
                                         <li class="list-inline-item">
-                                            <span class="small text-muted">guild disabled</span>
+                                            <span class="small text-muted">{{ __("guild disabled") }}</span>
                                         </li>
                                     @endif
                                     @if ($member->inactive_at || $member->banned_at)
                                         <li class="list-inline-item">
-                                            <span class="small text-muted">your membership has been disabled</span>
+                                            <span class="small text-muted">{{ __("your membership has been disabled") }}</span>
                                         </li>
                                     @else
                                         <li class="list-inline-item pl-1">
                                             <a href="{{ route('member.showGquit', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}"
                                                 class="text-danger font-weight-light">
-                                                /gquit
+                                                {{ __("/gquit") }}
                                             </a>
                                         </li>
                                     @endif
@@ -116,14 +120,20 @@
                 @endif
             @else
                 <div class="mt-4 mb-4">
-                    <p class="font-weight-normal pt-3 text-4">
-                        You don't belong to any guilds yet
+                    <p class="font-weight-bold pt-3 text-4">
+                        {{ __("You've been logged in with your account on") }} <a href="https://discord.com/app" target="_blank">discord.com</a>
                     </p>
                     <p class="font-weight-normal pt-3 text-4">
-                        Make sure you're a member of your guild's Discord
+                        {{ __("You don't belong to any guilds yet") }}
+                    </p>
+                    <p class="font-weight-normal pt-3 text-4">
+                        {{ __("Make sure you're a member of your guild's Discord") }}
+                    </p>
+                    <p class="font-weight-normal pt-3 text-4">
+                        {{ __("Make sure you're on the correct") }} <a href="https://discord.com/app" target="_blank">{{ __("Discord account") }}</a>
                     </p>
                     <p class="small font-weight-normal pt-3">
-                        Something wrong with this message? Check the <a href="{{ route('faq') }}">FAQ</a> for why you might be seeing this.
+                        {{ __("Something wrong with this message? Check the") }} <a href="{{ route('faq') }}">{{ __("FAQ") }}</a> {{ __("for why you might be seeing this.") }}
                     </p>
                 </div>
             @endif
@@ -149,7 +159,7 @@
                                         <a href="{{ route('guild.home', ['guildId' => $existingGuild->id, 'guildSlug' => $existingGuild->slug]) }}"
                                             class="btn btn-secondary">
                                             <span class="fas fa-plus"></span>
-                                            Join Guild
+                                            {{ __("Join Guild") }}
                                         </a>
                                     </li>
                                 </ul>
@@ -163,10 +173,10 @@
         <div class="col-12 text-center mb-5">
             <div class="mb-5">
                 <p class="font-weight-normal pt-3 text-4">
-                    Are you a Guild Master?
+                    {{ __("Are you a Guild Master?") }}
                 </p>
                 <a class="btn btn-light" href="{{ route('guild.showRegister') }}" title="Register a Guild" rel="nofollow">
-                    <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> Register a Guild
+                    <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> {{ __("Register a Guild") }}
                 </a>
             </div>
         </div>

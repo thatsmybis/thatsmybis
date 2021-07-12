@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', "Guild Settings - " . config('app.name'))
+@section('title', __("Guild Settings") . " - " . config('app.name'))
 
 @section('content')
 <div class="container-fluid container-width-capped">
@@ -9,7 +9,7 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-users-crown text-gold"></span>
-                        Guild Settings
+                        {{ __("Guild Settings") }}
                     </h1>
                 </div>
             </div>
@@ -47,7 +47,7 @@
                                                         class="text-{{ getExpansionColor($matchingGuild->expansion_id) }}">
                                                         <span class="fab fa-fw fa- text-muted"></span>
                                                         {{ $expansion->name_long }}
-                                                        <span class="text-muted font-italic small">owned by <span class="text-discord">{{ $matchingGuild->user->discord_username }}</span></span>
+                                                        <span class="text-muted font-italic small">{{ __("owned by") }} <span class="text-discord">{{ $matchingGuild->user->discord_username }}</span></span>
                                                     </a>
                                                 @else
                                                     <span class="text-muted">
@@ -57,10 +57,10 @@
                                                 @endif
 
                                                 @if (!$expansion->is_enabled)
-                                                    <span class="text-muted font-italic small">not yet supported</span>
+                                                    <span class="text-muted font-italic small">{{ __("not yet supported") }}</span>
                                                 @elseif (!$matchingGuild)
                                                     <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}" class="font-italic small">
-                                                        add expansion
+                                                        {{ __("add expansion") }}
                                                     </a>
                                                 @endif
                                             </li>
@@ -77,7 +77,7 @@
                                 <div class="form-group">
                                     <label for="name" class="font-weight-bold">
                                         <span class="fas fa-fw fa-users text-muted"></span>
-                                        Guild Name
+                                        {{ __("Guild Name") }}
                                     </label>
                                     <input name="name" maxlength="36" type="text" class="form-control dark" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
                                 </div>
@@ -90,9 +90,9 @@
                                 <div class="form-group">
                                     <label for="discord_id" class="font-weight-normal">
                                         <span class="fas fa-fw fa-user-crown text-muted"></span>
-                                        <span class="text-muted">Guild Owner</span>
+                                        <span class="text-muted">{{ __("Guild Owner") }}</span>
                                         @if (request()->get('isGuildAdmin'))
-                                            <a href="{{ route('guild.owner', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">change</a>
+                                            <a href="{{ route('guild.owner', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">{{ __("change") }}</a>
                                         @endif
                                     </label>
                                     <div class="font-italic">
@@ -112,10 +112,10 @@
                             <div class="col-md-8 col-12">
                                 <div class="form-group">
                                     <label for="discord_id" class="font-weight-normal">
-                                        <span class="text-muted">Discord Server ID</span>
-                                        <a href="{{ route('guild.changeDiscord', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">change</a>
+                                        <span class="text-muted">{{ __("Discord Server ID") }}</span>
+                                        <a href="{{ route('guild.changeDiscord', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">{{ __("change") }}</a>
                                         <small class="text-warning font-italic">
-                                            useful for starting over
+                                            {{ __("useful for starting over") }}
                                         </small>
                                     </label>
                                     <input disabled
@@ -137,7 +137,7 @@
                                         <label>
                                             <input type="checkbox" name="disabled_at" value="1" class="" autocomplete="off"
                                                 {{ old('disabled_at') && old('disabled_at') == 1 ? 'checked' : ($guild->disabled_at ? 'checked' : '') }}>
-                                                Disable guild <span class="text-muted small">members will only be shown the guild name and MOTD - <strong>can</strong> be undone</span>
+                                                {{ __("Disable guild") }} <span class="text-muted small">{{ __("members will only be shown the guild name and MOTD") }} - <strong>{{ __("can") }}</strong> {{ __("be undone") }}</span>
                                         </label>
                                     </div>
                                 </div>
@@ -176,7 +176,7 @@
                                         <label>
                                             <input type="checkbox" name="show_message" value="1" class="" autocomplete="off"
                                                 {{ old('message') && old('message') == 1 ? 'checked' : ($guild->message ? 'checked' : '') }}>
-                                                Show Message of the Day and/or Rules
+                                                {{ __("Show Message of the Day and/or Rules") }}
                                         </label>
                                     </div>
                                 </div>
@@ -185,8 +185,8 @@
                                 <div class="form-group">
                                     <label for="message" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-megaphone"></span>
-                                        Message Of The Day
-                                        <small class="text-muted">your guildmates will see this</small>
+                                        {{ __("Message Of The Day") }}
+                                        <small class="text-muted">{{ __("your guildmates will see this") }}</small>
                                     </label>
                                     <textarea maxlength="500" data-max-length="500" name="message" rows="2" placeholder="a short message about what's happening and/or some rules" class="form-control dark">{{ old('message') ? old('message') : $guild->message }}</textarea>
                                 </div>
@@ -199,7 +199,7 @@
                     <div class="col-12 pt-2 mt-3 mb-2">
                         <h2 class="font-weight-medium">
                             <span class="fas fa-fw fa-ballot-check text-muted"></span>
-                            Settings
+                            {{ __("Settings") }}
                         </h2>
                     </div>
                 </div>
@@ -211,26 +211,35 @@
                                 <label>
                                     <input type="checkbox" name="is_received_locked" value="1" class="" autocomplete="off"
                                         {{ old('is_received_locked') && old('is_received_locked') == 1 ? 'checked' : ($guild->is_received_locked ? 'checked' : '') }}>
-                                        Lock loot received <span class="text-muted small">raid leader and above can still edit</span>
+                                        {{ __("Lock loot received") }}
+                                        <span class="text-muted small">
+                                            {{ __("raid leader and above can still edit") }}
+                                        </span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_raid_group_locked" value="1" class="" autocomplete="off"
                                         {{ old('is_raid_group_locked') && old('is_raid_group_locked') == 1 ? 'checked' : ($guild->is_raid_group_locked ? 'checked' : '') }}>
-                                        Don't let members set their raid group <span class="text-muted small">raid leader and above can still edit</span>
+                                        {{ __("Don't let members set their raid group") }}
+                                        <span class="text-muted small">
+                                            {{ __("raid leader and above can still edit") }}
+                                        </span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_attendance_hidden" value="1" class="" autocomplete="off"
                                         {{ old('is_attendance_hidden') && old('is_attendance_hidden') == 1 ? 'checked' : ($guild->is_attendance_hidden ? 'checked' : '') }}>
-                                        Don't show attendance
+                                        {{ __("Don't show attendance") }}
                                 </label>
                             </div>
                             <div class="form-group">
                                 <label for="attendance_decay_days">
-                                    Attendance decay rate <span class="small text-muted">how far back to count attendance</span>
+                                    {{ __("Attendance decay rate") }}
+                                    <span class="small text-muted">
+                                        {{ __("how far back to count attendance") }}
+                                    </span>
                                 </label>
                                 @php
                                     $rates = [
@@ -254,7 +263,7 @@
                                 @endphp
                                 <select name="attendance_decay_days" class="form-control dark">
                                     <option value="" {{ old('attendance_decay_days') && old('attendance_decay_days') == 36500 || $guild->attendance_decay_days == 36500 ? 'selected' : '' }}>
-                                        No limit
+                                        {{ __("No limit") }}
                                     </option>
                                     @foreach ($rates as $key => $label)
                                         <option value="{{ $key }}"
@@ -268,22 +277,22 @@
                         <div class="form-group">
                             <label for="tier_mode">
                                 <span class="fas fa-fw fa-trophy text-muted"></span>
-                                Tier mode
+                                {{ __("Tier mode") }}
                                 <span class="small text-muted">
-                                    rank each item in the Item Notes admin dropdown menu
+                                    {{ __("rank each item in the Item Notes admin dropdown menu") }}
                                 </span>
                             </label>
                             <select name="tier_mode" class="form-control dark">
                                 <option value="s"
                                     {{ old('tier_mode') && old('tier_mode') == 's' || $guild->tier_mode == 's' ? 'selected' : '' }}>
-                                    S-tier
+                                    {{ __("S-tier") }}
                                 </option>
                                 <option value="num"
                                     {{ old('tier_mode') && old('tier_mode') == 'num' || $guild->tier_mode == 'num' ? 'selected' : '' }}>
-                                    Numbered
+                                    {{ __("Numbered") }}
                                 </option>
                                 <option value="" {{ old('tier_mode') && old('tier_mode') == '' || $guild->tier_mode == '' ? 'selected' : '' }}>
-                                    Off
+                                    {{ __("Off") }}
                                 </option>
                             </select>
                         </div>
@@ -294,7 +303,7 @@
                     <div class="col-12 pt-2 mt-3 mb-2">
                         <h2 class="font-weight-medium">
                             <span class="fas fa-fw fa-scroll-old text-legendary"></span>
-                            Wishlists
+                            {{ __("Wishlists") }}
                         </h2>
                     </div>
                 </div>
@@ -306,28 +315,37 @@
                                 <label>
                                     <input type="checkbox" name="is_wishlist_locked" value="1" class="" autocomplete="off"
                                         {{ old('is_wishlist_locked') && old('is_wishlist_locked') == 1 ? 'checked' : ($guild->is_wishlist_locked ? 'checked' : '') }}>
-                                        Lock wishlists <span class="text-muted small">raid leader and above can still edit</span>
+                                        {{ __("Lock wishlists") }}
+                                        <span class="text-muted small">
+                                            {{ __("raid leader and above can still edit") }}
+                                        </span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
                                         {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
-                                        Limit <strong>wishlist visibility</strong> to Raid Leaders <span class="text-muted small">members can still see <em>their own</em> characters' wishlists</span>
+                                        {{ __("Limit") }} <strong>{{ __("wishlist visibility") }}</strong> {{ __("to Raid Leaders") }}
+                                        <span class="text-muted small">
+                                            {{ __("members can still see <em>their own</em> characters' wishlists") }}
+                                        </span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_wishlist_autopurged" value="1" class="" autocomplete="off"
                                         {{ old('is_wishlist_autopurged') && old('is_wishlist_autopurged') == 1 ? 'checked' : ($guild->is_wishlist_autopurged ? 'checked' : '') }}>
-                                        By default, delete items from wishlists when they are distributed
+                                        {{ __("By default, delete items from wishlists when they are distributed") }}
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="do_sort_items_by_instance" value="1" class="" autocomplete="off"
                                         {{ old('do_sort_items_by_instance') && old('do_sort_items_by_instance') == 1 ? 'checked' : ($guild->do_sort_items_by_instance ? 'checked' : '') }}>
-                                        Sort wishlists by dungeon <span class="text-muted small">default is to sort by user's priority</span>
+                                        {{ __("Sort wishlists by dungeon") }}
+                                        <span class="text-muted small">
+                                            {{ __("default is to sort by user's priority") }}
+                                        </span>
                                         <!--
                                             Q: Why is this a guild setting and not a user setting?
                                             A: So that everyone in the guild sees the same thing, avoiding inconsistencies and mistakes.
@@ -338,13 +356,16 @@
                                 <label>
                                     <input type="checkbox" name="is_wishlist_disabled" value="1" class="" autocomplete="off"
                                         {{ old('is_wishlist_disabled') && old('is_wishlist_disabled') == 1 ? 'checked' : ($guild->is_wishlist_disabled ? 'checked' : '') }}>
-                                        Disable wishlists <span class="text-muted small">if your guild doesn't use them</span>
+                                        {{ __("Disable wishlists") }}
+                                        <span class="text-muted small">
+                                            {{ __("if your guild doesn't use them") }}
+                                        </span>
                                 </label>
                             </div>
                             <div class="form-group">
                                 <label for="max_wishlist_items" class="">
-                                    Max Wishlist Items
-                                    <small class="text-muted">won't affect existing wishlists until they're resubmitted</small>
+                                    {{ __("Max Wishlist Items") }}
+                                    <small class="text-muted">{{ __("won't affect existing wishlists until they're resubmitted") }}</small>
                                 </label>
                                 <input name="max_wishlist_items" min="0" max="{{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_ITEMS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_ITEMS }}" value="{{ old('max_wishlist_items') ? old('max_wishlist_items') : $guild->max_wishlist_items }}" />
                             </div>
@@ -368,26 +389,35 @@
                                 <label>
                                     <input type="checkbox" name="is_prio_private" value="1" class="" autocomplete="off"
                                         {{ old('is_prio_private') && old('is_prio_private') == 1 ? 'checked' : ($guild->is_prio_private ? 'checked' : '') }}>
-                                        Limit <strong>prio visibility</strong> to Raid Leaders <span class="text-muted small">character prios are hidden, but prio notes on items are still visible</span>
+                                        {{ __("Limit") }} <strong>{{ __("prio visibility") }}</strong> {{ __("to Raid Leaders") }}
+                                        <span class="text-muted small">
+                                            {{ __("character prios are hidden, but prio notes on items are still visible") }}
+                                        </span>
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_prio_autopurged" value="1" class="" autocomplete="off"
                                         {{ old('is_prio_autopurged') && old('is_prio_autopurged') == 1 ? 'checked' : ($guild->is_prio_autopurged ? 'checked' : '') }}>
-                                        By default, delete items from prio lists when they are distributed
+                                        {{ __("By default, delete items from prio lists when they are distributed") }}
                                 </label>
                             </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_prio_disabled" value="1" class="" autocomplete="off"
                                         {{ old('is_prio_disabled') && old('is_prio_disabled') == 1 ? 'checked' : ($guild->is_prio_disabled ? 'checked' : '') }}>
-                                        Disable prios <span class="text-muted small">if your guild doesn't use them</span>
+                                        {{ __("Disable prios") }}
+                                        <span class="text-muted small">
+                                            {{ __("if your guild doesn't use them") }}
+                                        </span>
                                 </label>
                             </div>
                             <div class="form-group">
                                 <label for="prio_show_count" class="">
-                                    Prio ranks to show <span class="text-muted small">eg. only show top 3 prios to raiders</span>
+                                    {{ __("Prio ranks to show") }}
+                                    <span class="text-muted small">
+                                        {{ __("eg. only show top 3 prios to raiders") }}
+                                    </span>
                                 </label>
                                 <input name="prio_show_count" min="1" max="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" value="{{ old('prio_show_count') ? old('prio_show_count') : $guild->prio_show_count }}" />
                             </div>
@@ -399,12 +429,14 @@
                     <div class="col-12 pt-2 mt-3 mb-2">
                         <h2 class="font-weight-medium">
                             <span class="fas fa-fw fa-key text-success"></span>
-                            Permissions
+                            {{ __("Permissions") }}
                         </h2>
-                        <span class="text-muted">Based on user roles in your Discord server</span>
+                        <span class="text-muted">
+                            {{ __("Based on user roles in your Discord server") }}
+                        </span>
                         <div class="small text-muted mb-3">
-                            Not seeing all of your roles?
-                            <a href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}#role-whitelisting">sync roles</a>
+                            {{ __("Not seeing all of your roles?") }}
+                            <a href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}#role-whitelisting">{{ __("sync roles") }}</a>
                         </div>
                     </div>
                 </div>
@@ -415,7 +447,7 @@
                             <div class="col-12">
                                 <label for="gm_role_id" class="font-weight-bold">
                                     <span class="fas fa-fw fa-crown text-gold"></span>
-                                    Guild Master Role
+                                    {{ __("Guild Master Role") }}
                                 </label>
                             </div>
                             <div class="col-md-6 col-sm-8 col-12">
@@ -456,7 +488,7 @@
                             <div class="col-12">
                                 <label for="officer_role_id" class="font-weight-bold">
                                     <span class="fas fa-fw fa-gavel text-legendary"></span>
-                                    Officer Role
+                                    {{ __("Officer Role") }}
                                 </label>
                             </div>
                             <div class="col-md-6 col-sm-8 col-12">
@@ -497,7 +529,7 @@
                             <div class="col-12">
                                 <label for="raid_leader_role_id" class="font-weight-bold">
                                     <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                                    Raid Leader Role
+                                    {{ __("Raid Leader Role") }}
                                 </label>
                             </div>
                             <div class="col-md-6 col-sm-8 col-12">
@@ -538,13 +570,13 @@
                             <div class="col-12">
                                 <label for="member_roles" class="font-weight-bold">
                                     <span class="fas fa-fw fa-swords text-success"></span>
-                                    Members
+                                    {{ __("Members") }}
                                     <br>
                                     <small class="text-muted">
                                         <!-- I don't know if this is true...
                                         If this is empty, anyone on the Discord server can join this guild
                                         <br> -->
-                                        Discord users with <strong>any</strong> of these roles are allowed to join
+                                        {{ __("Discord users with") }} <strong>{{ __("any") }}</strong> {{ __("of these roles are allowed to join") }}
                                     </small>
                                 </label>
                             </div>
@@ -581,7 +613,7 @@
                 <div class="form-group">
                     <button class="btn btn-success">
                         <span class="fas fa-fw fa-save"></span>
-                        Save
+                        {{ __("Save") }}
                     </button>
                 </div>
             </form>

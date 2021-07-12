@@ -50,11 +50,13 @@ Route::get( '/faq',     'HomeController@faq')    ->name('faq');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 Route::get( '/donate',  'HomeController@donate') ->name('donate');
+Route::get( '/translations', 'HomeController@translations')->name('translations');
 
 Route::get( '/register-guild', 'GuildController@showRegister')->name('guild.showRegister');
 Route::post('/submit-guild',   'GuildController@register')    ->name('guild.register');
 
-Route::get('/streamer-mode', 'MemberController@toggleStreamerMode')->name('toggleStreamerMode');
+Route::get( '/streamer-mode', 'MemberController@toggleStreamerMode')->name('toggleStreamerMode');
+Route::post('/set-locale',    'MemberController@setLocale')->name('setLocale');
 
 // Route::group(['prefix' => 'item'], function () {
 //     Route::get( '/{item_id}/{slug?}', 'ItemController@show')->name('item.show');
@@ -148,6 +150,7 @@ Route::group([
         Route::get( '/',                        'RaidGroupController@raidGroups')               ->name('guild.raidGroups');
         Route::get( '/create',                  'RaidGroupController@edit')                     ->name('guild.raidGroup.create');
         Route::get( '/edit/{id?}',              'RaidGroupController@edit')                     ->where('id', '[0-9]+')->name('guild.raidGroup.edit');
+        Route::get( '/{id}/attendance',         'RaidGroupController@attendance')               ->name('guild.raidGroup.attendance');
         Route::get( '/{id}/characters/main',    'RaidGroupController@mainCharacters')           ->where('id', '[0-9]+')->name('guild.raidGroup.mainCharacters');
         Route::get( '/{id}/characters/general', 'RaidGroupController@secondaryCharacters')      ->where('id', '[0-9]+')->name('guild.raidGroup.secondaryCharacters');
         Route::post('/toggle-disable',          'RaidGroupController@toggleDisable')            ->name('guild.raidGroup.toggleDisable');
