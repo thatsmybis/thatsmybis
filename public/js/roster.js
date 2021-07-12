@@ -68,7 +68,7 @@ function createTable() {
         "data"      : characters,
         "columns"   : [
             {
-                "title"  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter}`,
+                "title"  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter} <span class="text-muted small">(${characters.length})</span>`,
                 "data"   : "character",
                 "render" : function (data, type, row) {
                     return `

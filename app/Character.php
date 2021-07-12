@@ -265,25 +265,43 @@ class Character extends Model
     // Applies the fields `raid_count` and `attendance_percentage` to the selected fields.
     // Might not work on all queries.
     static public function addAttendanceQuery($query) {
-        return $query
+        $query = $query
             ->addSelect([
                 DB::raw('COALESCE(COUNT(`raid_characters`.`id`), 0) AS `raid_count`'),
                 DB::raw('IF(COUNT(`raid_characters`.`id`), COALESCE(ROUND(SUM(`raid_characters`.`credit`) / COUNT(`raid_characters`.`id`), 3), 0), 0) AS `attendance_percentage`'),
                 // DB::raw('COALESCE(MAX(`raid_characters`.`raid_count`), 0) AS `raid_count`'),
                 // DB::raw('COALESCE(ROUND(MAX(`raid_characters`.`credit`) / MAX(`raid_characters`.`raid_count`), 3), 0) AS `attendance_percentage`'),
             ])
-            ->join('guilds', 'guilds.id', 'characters.guild_id')
-            ->leftJoin('raids', function ($join) {
+            ->join('guilds', 'guilds.id', 'characters.guild_id');
+
+        $raidGroupId = request()->get('raidGroupIdFilter');
+        if ($raidGroupId) {
+            $query = $query->leftJoin('raids', function ($join) use ($raidGroupId) {
                 $join->on('raids.guild_id', 'characters.guild_id')
-                    ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 2) . ' HOUR)')
+                    ->join('raid_raid_groups', function ($join) use ($raidGroupId) {
+                        $join->on('raid_raid_groups.raid_id', 'raids.id')
+                            ->where('raid_raid_groups.raid_group_id', $raidGroupId);
+                    })
+                    ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 1) . ' HOUR)')
                     ->whereNull('raids.cancelled_at');
-            })
+            });
+        } else {
+            $query = $query->leftJoin('raids', function ($join) {
+                $join->on('raids.guild_id', 'characters.guild_id')
+                    ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 1) . ' HOUR)')
+                    ->whereNull('raids.cancelled_at');
+            });
+        }
+
+        $query = $query
             ->leftJoin('raid_characters', function ($join) {
                 $join->on('raid_characters.raid_id', 'raids.id')
                     ->on('raid_characters.character_id', 'characters.id')
                     ->where('raid_characters.is_exempt', 0);
             })
             ->groupBy('characters.id');
+
+        return $query;
     }
 
     static public function classes($expansionId) {

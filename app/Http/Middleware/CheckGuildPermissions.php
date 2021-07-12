@@ -170,9 +170,10 @@ class CheckGuildPermissions
 
             // Store the guild and current member for later access.
             $request->attributes->add([
-                'currentMember' => $currentMember,
-                'isGuildAdmin'  => ($guild->user_id == $currentMember->user_id || $isAdmin),
-                'guild'         => $guild,
+                'currentMember'     => $currentMember,
+                'isGuildAdmin'      => ($guild->user_id == $currentMember->user_id || $isAdmin),
+                'guild'             => $guild,
+                'raidGroupIdFilter' => $currentMember ? $currentMember->raid_group_id_filter : null,
             ]);
         }
 

@@ -11,7 +11,7 @@
                         <tr>
                             <th>
                                 <span class="fas fa-fw fa-user text-muted"></span>
-                                {{ __("Member") }}
+                                {{ __("Member") }} <span class="text-muted small">({{ $guild->allMembers->whereNull('inactive_at')->whereNull('banned_at')->count() }})</span>
                             </th>
                             <th>
                                 <span class="fas fa-fw fa-users text-muted"></span>
@@ -31,7 +31,7 @@
                             <tr>
                                 <td>
                                     <span class="font-weight-bold text-danger">
-                                        {{ __("Unassigned") }}
+                                        {{ __("Unassigned") }} <span class="text-muted small">({{ $unassignedCharacters->count() }})</span>
                                     </span>
                                 </td>
                                 <td>

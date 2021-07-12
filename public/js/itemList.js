@@ -83,7 +83,7 @@ function createTable(lastSource) {
                 "className" : "text-right width-130",
             },
             {
-                "title"  : `<span class="fas fa-fw fa-sack text-success"></span> ${headerLoot}`,
+                "title"  : `<span class="fas fa-fw fa-sack text-success"></span> ${headerLoot} <span class="text-muted small">(${ items.length })</span>`,
                 "data"   : "",
                 "render" : function (data, type, row) {
                     return getItemLink(row);
