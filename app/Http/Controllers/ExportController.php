@@ -165,7 +165,7 @@ class ExportController extends Controller {
     }
 
     /**
-     * Export a guild's wishlist data for the Gargul addon
+     * Export a guild's wishlist and loot data for the Gargul addon
      *
      * @return \Illuminate\Http\Response
      */
@@ -208,26 +208,27 @@ class ExportController extends Controller {
             }
         }
 
-        return $this->getExport(json_encode($wishlistData, JSON_UNESCAPED_UNICODE), 'Gargul data', self::HTML);
+        return $this->getExport(
+            json_encode([
+                    'wishlists' => $wishlistData,
+                    'loot' => $this->gargulLootPriorityCSV($guild->id),
+                ],
+                JSON_UNESCAPED_UNICODE
+            ),
+            'Gargul data',
+            self::HTML
+        );
     }
 
     /**
      * Export a guild's loot priority data for the Gargul addon
      *
-     * @return \Illuminate\Http\Response
+     * @return string
      */
-    public function gargulLootPriorityCSV()
+    protected function gargulLootPriorityCSV($guildId)
     {
-        $guild = request()->get('guild');
-        $currentMember = request()->get('currentMember');
-        $viewPrioPermission = $currentMember->hasPermission('view.prios');
-
-        if ($guild->is_prio_private && !$viewPrioPermission) {
-            throw new \Exception('Insufficient permission to export loot data for Gargul');
-        }
-
         $items = GuildItem::whereNotNull('priority')
-            ->where('guild_id', $guild->id)
+            ->where('guild_id', $guildId)
             ->select('item_id', 'priority')
             ->get();
 
@@ -236,7 +237,7 @@ class ExportController extends Controller {
             $itemPriorityString .= "{$item->item_id} > {$item->priority}\n";
         };
 
-        return $this->getExport($itemPriorityString, 'Gargul data', self::HTML);
+        return $itemPriorityString;
     }
 
     /**
