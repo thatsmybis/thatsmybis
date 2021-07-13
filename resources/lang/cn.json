@@ -569,6 +569,6 @@
     "Officer Notes": "Officer Notes",
     "going": "going",
     "Translations": "Translations",
-    "Import wishlist and loot priority data into the Gargul addon. Select all ( ctrl+a ), copy ( ctrl+c ) and then paste ( ctrl+v ) in the correct import window (/gl wl or /gl lo). For more info check :curseforge_url on Curseforge. Happy lootin'!": "",
+    "Import wishlist and loot priority data into the Gargul addon. Select all ( ctrl+a ), copy ( ctrl+c ) and then paste ( ctrl+v ) in the import window (/gl wl). For more info check :curseforge_url on Curseforge. Happy lootin'!": "",
     "Loot Priority": ""
 }
