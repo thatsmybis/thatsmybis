@@ -507,41 +507,36 @@ class ExportController extends Controller {
             fputcsv($csv, $row);
         }
         rewind($csv);
-        $csv = stream_get_contents($csv);
 
-        return $csv;
+        return stream_get_contents($csv);
     }
 
     /**
      * Get a CSV or HTML of the export
      *
-     * @var array  $csv      The data.
+     * @var mixed  $csv      The data.
      * @var string $title
      * @var string $fileType 'csv' or 'html'
      *
-     * @return The thing to present to the user.
+     * @return mixed
      */
-    private function getExport($csv, $title, $fileType) {
-        if ($fileType == self::CSV) {
+    private function getExport($csv, string $title, string $fileType) {
+        if ($fileType === self::CSV || $fileType === self::JSON) {
             return response($csv)
                 ->withHeaders([
                     'Content-Type'        => 'text/csv',
                     'Cache-Control'       => 'no-store, no-cache',
-                    'Content-Disposition' => 'attachment; filename="' . slug($title) . '.csv"',
+                    'Content-Disposition' => sprintf('attachment; filename="%s.%s"', [
+                        slug($title),
+                        $fileType
+                    ]),
                 ]);
-        } else if ($fileType == self::JSON) {
-            return response($csv)
-                ->withHeaders([
-                    'Content-Type'        => 'text/json',
-                    'Cache-Control'       => 'no-store, no-cache',
-                    'Content-Disposition' => 'attachment; filename="' . slug($title) . '.json"',
-                ]);
-        } else {
-            return view('guild.export.generic', [
-                'data' => $csv,
-                'name' => $title,
-            ]);
         }
+
+        return view('guild.export.generic', [
+            'data' => $csv,
+            'name' => $title,
+        ]);
     }
 
     /**
