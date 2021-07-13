@@ -64,15 +64,9 @@
                             </p>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.gargul.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
+                                    <a href="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-code text-muted"></span>
-                                        {{ __("Wishlists") }} ( /gl wl )
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.gargul.priority', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
-                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
-                                        {{ __("Loot Priority") }} ( /gl lo )
+                                        {{ __("Download") }}
                                     </a>
                                 </li>
                             </ul>
