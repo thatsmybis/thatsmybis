@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use App\{Guild, Item};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -220,11 +221,11 @@ class ExportController extends Controller {
         }
 
         $locale = '';
-        if (\Illuminate\Support\Facades\App::getLocale() != 'en') {
+        if (App::getLocale() != 'en') {
             if ($subdomain == 'www') {
-                $subdomain = '.' . Illuminate\Support\Facades\App::getLocale() . '.';
+                $subdomain = '.' . App::getLocale() . '.';
             } else {
-                $locale = Illuminate\Support\Facades\App::getLocale() . '.';
+                $locale = App::getLocale() . '.';
             }
         }
 
