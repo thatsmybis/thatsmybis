@@ -2,10 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App;
 use App\{Guild, Item};
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\{App, Cache, DB};
 
 class ExportController extends Controller {
     const CSV  = 'csv';
@@ -214,18 +212,18 @@ class ExportController extends Controller {
         }
 
         $subdomain = 'www';
-        if ($expansionId == 1) {
+        if ($expansionId === 1) {
             $subdomain = 'classic';
-        } else if ($expansionId == 2) {
+        } else if ($expansionId === 2) {
             $subdomain = 'tbc';
         }
 
-        $locale = '';
-        if (App::getLocale() != 'en') {
-            if ($subdomain == 'www') {
-                $subdomain = '.' . App::getLocale() . '.';
-            } else {
-                $locale = App::getLocale() . '.';
+        $locale = App::getLocale();
+        if ($locale != 'en') {
+            $locale .= '.';
+
+            if ($subdomain === 'www') {
+                $locale = ".{$locale}";
             }
         }
 
