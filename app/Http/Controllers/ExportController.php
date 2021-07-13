@@ -527,10 +527,7 @@ class ExportController extends Controller {
                 ->withHeaders([
                     'Content-Type'        => 'text/csv',
                     'Cache-Control'       => 'no-store, no-cache',
-                    'Content-Disposition' => sprintf('attachment; filename="%s.%s"', [
-                        slug($title),
-                        $fileType
-                    ]),
+                    'Content-Disposition' => sprintf('attachment; filename="%s.%s"', slug($title), $fileType),
                 ]);
         }
 
