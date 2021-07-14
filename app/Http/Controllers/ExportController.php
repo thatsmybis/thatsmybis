@@ -220,15 +220,15 @@ class ExportController extends Controller {
         }
 
         $locale = '';
-        if (Illuminate\Support\Facades\App::getLocale() != 'en') {
+        if (\Illuminate\Support\Facades\App::getLocale() != 'en') {
             if ($subdomain == 'www') {
-                $subdomain = '.' . Illuminate\Support\Facades\App::getLocale() . '.';
+                $subdomain = '.' . \Illuminate\Support\Facades\App::getLocale() . '.';
             } else {
-                $locale = Illuminate\Support\Facades\App::getLocale() . '.';
+                $locale = \Illuminate\Support\Facades\App::getLocale() . '.';
             }
         }
 
-        $csv = Cache::remember('lootTableExport:' . $expansionSlug, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($subdomain, $expansionId) {
+        $csv = Cache::remember('lootTableExport:' . $expansionSlug, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($subdomain, $expansionId, $locale) {
                 $rows = DB::select(DB::raw(
                     "SELECT
                         instances.name AS 'instance_name',
