@@ -162,6 +162,15 @@
                 {{ __("Show all loot") }}
             </span>
         </li>
+        @if (!$guild->is_attendance_hidden)
+            <li class="list-inline-item">&sdot;</li>
+            <li class="list-inline-item">
+                <span class="js-sort-by-raids-attended text-link cursor-pointer font-weight-light" data-column="11">
+                    <span class="text-muted fal fa-fw fa-helmet-battle"></span>
+                    {{ __("Sort By Raid Count") }}
+                </span>
+            </li>
+        @endif
     </ul>
 </div>
 
