@@ -60,7 +60,8 @@ class RaidGroup extends Model
     }
 
     public function secondaryCharacters() {
-        return $this->belongsToMany(Character::class, 'character_raid_groups', 'raid_group_id', 'character_id')->orderBy('name');
+        return $this->belongsToMany(Character::class, 'character_raid_groups', 'raid_group_id', 'character_id')
+            ->orderBy('name');
     }
 
     /**
