@@ -17,7 +17,7 @@
                 <span class="text-muted fa-fw fas fa-"></span>
                 {{ __("View") }}
             </a>
-            @if (!isset($showEdit) || $showEdit)
+            @if (!isset($showAssignLoot) || $showAssignLoot)
                 <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
                     <span class="text-muted fa-fw fas fa-sack"></span>
                     {{ __("Assign Loot") }}
@@ -30,7 +30,7 @@
                 </a>
                 <a class="dropdown-item" href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
                     <span class="text-muted fa-fw fas fa-copy"></span>
-                    {{ __("copy") }}
+                    {{ __("Copy") }}
                 </a>
             @endif
             <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
