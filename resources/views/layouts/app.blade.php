@@ -283,5 +283,11 @@
 
     @yield('scripts')
 
+    @if (env('APP_ENV') === 'local')
+        <div>
+            Query count: {{ count(DB::getQueryLog()) }}
+        </div>
+    @endif
+
 </body>
 </html>
