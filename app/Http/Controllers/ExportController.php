@@ -2,7 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\{Guild, Item};
+use Exception;
+use App\{Guild, GuildItem, Item};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
 
@@ -162,6 +163,84 @@ class ExportController extends Controller {
         $csv = $this->createCsv($rows, self::ADDON_HEADERS);
 
         return $this->getExport($csv, 'TMB Helper Export', $fileType);
+    }
+
+    /**
+     * Export a guild's wishlist and loot data for the Gargul addon
+     *
+     * @return \Illuminate\Http\Response
+     * @throws Exception
+     */
+    public function gargulWishlistJson()
+    {
+        $guild = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+        $viewPrioPermission = $currentMember->hasPermission('view.prios');
+
+        if ($guild->is_prio_private && !$viewPrioPermission) {
+            throw new Exception('Insufficient permission to export loot data for Gargul');
+        }
+
+        $characters = $guild->characters()
+            ->has('outstandingItems')
+            ->with([
+                'outstandingItems' => function ($query) {
+                    return $query->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
+                }
+            ])
+            ->select('id', 'name')
+            ->get();
+
+        $wishlistData = [];
+        foreach ($characters as $character) {
+            foreach ($character->outstandingItems as $item) {
+                $itemId = $item->item->item_id;
+                $characterName = mb_strtolower($character->name);
+
+                if (!isset($wishlistData[$itemId])) {
+                    $wishlistData[$itemId] = [];
+                }
+
+                $wishlistData[$itemId][] = sprintf(
+                    '%s%s|%s|%s',
+                    $characterName,
+                    $item->is_offspec ? '(OS)' : '',
+                    $item->order,
+                    $item->type === Item::TYPE_PRIO ? 1 : 2,
+                );
+            }
+        }
+
+        return $this->getExport(
+            json_encode([
+                    'wishlists' => $wishlistData,
+                    'loot' => $this->gargulLootPriorityCSV($guild->id),
+                ],
+                JSON_UNESCAPED_UNICODE
+            ),
+            'Gargul data',
+            self::HTML
+        );
+    }
+
+    /**
+     * Export a guild's loot priority data for the Gargul addon
+     *
+     * @return string
+     */
+    protected function gargulLootPriorityCSV($guildId)
+    {
+        $items = GuildItem::whereNotNull('priority')
+            ->where('guild_id', $guildId)
+            ->select('item_id', 'priority')
+            ->get();
+
+        $itemPriorityString = "";
+        foreach ($items as $item) {
+            $itemPriorityString .= "{$item->item_id} > {$item->priority}\n";
+        };
+
+        return $itemPriorityString;
     }
 
     /**
@@ -432,55 +511,47 @@ class ExportController extends Controller {
             fputcsv($csv, $row);
         }
         rewind($csv);
-        $csv = stream_get_contents($csv);
 
-        return $csv;
+        return stream_get_contents($csv);
     }
 
     /**
-     * Get a CSV or HTML of the export
+     * Get a CSV, JSON or HTML of the export
      *
-     * @var array  $csv      The data.
-     * @var string $title
-     * @var string $fileType 'csv' or 'html'
-     *
-     * @return The thing to present to the user.
+     * @param $csv
+     * @param string $title
+     * @param string $fileType
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
-    private function getExport($csv, $title, $fileType) {
-        if ($fileType == self::CSV) {
+    private function getExport($csv, string $title, string $fileType) {
+        if ($fileType === self::CSV || $fileType === self::JSON) {
             return response($csv)
                 ->withHeaders([
-                    'Content-Type'        => 'text/csv',
+                    'Content-Type'        => "text/{$fileType}",
                     'Cache-Control'       => 'no-store, no-cache',
-                    'Content-Disposition' => 'attachment; filename="' . slug($title) . '.csv"',
+                    'Content-Disposition' => sprintf('attachment; filename="%s.%s"', slug($title), $fileType),
                 ]);
-        } else if ($fileType == self::JSON) {
-            return response($csv)
-                ->withHeaders([
-                    'Content-Type'        => 'text/json',
-                    'Cache-Control'       => 'no-store, no-cache',
-                    'Content-Disposition' => 'attachment; filename="' . slug($title) . '.json"',
-                ]);
-        } else {
-            return view('guild.export.generic', [
-                'data' => $csv,
-                'name' => $title,
-            ]);
         }
+
+        return view('guild.export.generic', [
+            'data' => $csv,
+            'name' => $title,
+        ]);
     }
 
     /**
      * Get the SQL used for the character loot exports
      *
-     * @var string    $lootType The type of loot to fetch.
-     * @var App/Guild $guild    The guild it belongs to.
-     * @var bool      $showPrios
-     * @var bool      $showWishlist
-     * @var string    $fields       The fields to SELECT. Used to override this function's default fields.
+     * @param string    $lootType The type of loot to fetch.
+     * @param Guild     $guild    The guild it belongs to.
+     * @param bool      $showPrios
+     * @param bool      $showWishlist
+     * @param string    $fields       The fields to SELECT. Used to override this function's default fields.
      *
-     * @return The thing to present to the user.
+     * @return string
      */
-    private function getLootBaseSql($lootType, $guild, $showPrios = true, $showWishlist = true, $viewPrioPermission, $fields = null) {
+    private function getLootBaseSql($lootType, $guild, $showPrios = true, $showWishlist = true, $viewPrioPermission, $fields = null): string
+    {
         $lootTypeFragment = "";
 
         if (!$showPrios) {
