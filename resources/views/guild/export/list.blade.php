@@ -16,9 +16,9 @@
                     <ol class="no-bullet no-indent striped">
                         <!-- TMB Tooltips Addon -->
                         <li class="p-3 mb-3 rounded">
-                            <h2 class="text-uncommon font-weight-bold">
+                            <h2>
                                 <span class="fab fa-fw fa-battle-net text-mage"></span>
-                                <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="text-uncommon">
+                                <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-uncommon">
                                     {{ __("TMB Tooltips Addon") }}
                                 </a>
                             </h2>
