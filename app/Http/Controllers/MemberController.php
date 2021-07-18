@@ -98,7 +98,7 @@ class MemberController extends Controller
         $user->update(['locale' => request()->input('locale')]);
 
         request()->session()->flash('status', __("Language set to :locale. To help with translations in your language, reach out on TMB's Discord server.", ['locale' => request()->input('locale')]));
-        return redirect()->back()->withInput(['b' => 1]);;
+        return redirect()->back()->withInput(['b' => 1]);
     }
 
     /**
