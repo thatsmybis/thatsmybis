@@ -156,7 +156,7 @@ class ExportController extends Controller {
             null           AS 'is_offspec',
             -- {officerNote} AS 'officer_note',
             null           AS 'received_at',
-            gi.priority    AS 'item_prio_note',
+            REPLACE(REPLACE(gi.priority, CHAR(13), ' '), CHAR(10), ' ') AS 'item_prio_note', -- remove newlines
             {$tierLabelField}";
 
         $rows = array_merge(
@@ -414,8 +414,8 @@ class ExportController extends Controller {
                     i.item_id         AS 'item_id',
                     instances.name    AS 'instance_name',
                     item_sources.name AS 'source_name',
-                    gi.note           AS 'item_note',
-                    gi.priority       AS 'item_prio_note',
+                    REPLACE(REPLACE(gi.note , CHAR(13), ' '), CHAR(10), ' ') AS 'item_note', -- remove newlines
+                    REPLACE(REPLACE(gi.priority, CHAR(13), ' '), CHAR(10), ' ') AS 'item_prio_note', -- remove newlines
                     gi.tier           AS 'tier',
                     {$tierLabelField},
                     gi.created_at     AS 'created_at',
@@ -653,8 +653,8 @@ class ExportController extends Controller {
                 -- {officerNote} AS 'officer_note',
                 null           AS 'received_at',
                 null           AS 'import_id',
-                gi.note        AS 'item_note',
-                gi.priority    AS 'item_prio_note',
+                REPLACE(REPLACE(gi.note , CHAR(13), ' '), CHAR(10), ' ') AS 'item_note', -- remove newlines
+                REPLACE(REPLACE(gi.priority, CHAR(13), ' '), CHAR(10), ' ') AS 'item_prio_note', -- remove newlines
                 gi.tier        AS 'item_tier',
                 {$tierLabelField},
                 gi.created_at  AS 'created_at',
