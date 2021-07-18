@@ -180,7 +180,9 @@ class PrioController extends Controller
 
         $items = $query->get();
 
-        $items = ItemController::mergeTokenWishlists($items, $guild);
+        if (!$guild->is_wishlist_disabled) {
+            $items = ItemController::mergeTokenWishlists($items, $guild);
+        }
 
         return view('guild.prios.assignPrios', [
             'currentMember' => $currentMember,

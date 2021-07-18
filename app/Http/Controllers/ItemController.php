@@ -467,15 +467,7 @@ class ItemController extends Controller
                         );
                 }
             } else {
-                $start = microtime(true);
-                $i = 0;
-                $time_elapsed_secs = microtime(true) - $start;
-                // dd($item->first()->relationLoaded('wishlistCharactersWithAttendance'));
-                // dd($time_elapsed_secs, $item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }));
-
                 foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }) as $childItem) {
-                    // dd($childItem->relationLoaded('wishlistCharactersWithAttendance'));
-                    $i++;
                     $items->where('id', $item->id)
                         ->first()
                         ->setRelation(
@@ -490,9 +482,6 @@ class ItemController extends Controller
                                 ->values()
                         );
                 }
-
-                $time_elapsed_secs = microtime(true) - $start;
-                dd($i, $time_elapsed_secs);
             }
         }
         return $items;

@@ -285,7 +285,7 @@
 
     @if (env('APP_ENV') === 'local')
         <div>
-            Query count: {{ count(DB::getQueryLog()) }}
+            DEBUG Query count: {{ count(DB::getQueryLog()) }}
         </div>
     @endif
 
