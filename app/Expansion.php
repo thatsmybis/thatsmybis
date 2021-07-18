@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Expansion extends Model
 {
+    public const CLASSIC = 1;
+    public const TBC = 2;
+    public const WOTLK = 3;
+
     /**
      * The attributes that are mass assignable.
      *
