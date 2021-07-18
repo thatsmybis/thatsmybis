@@ -30,7 +30,7 @@
                 </a>
                 <a class="dropdown-item" href="{{ route('guild.raids.copy', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id]) }}">
                     <span class="text-muted fa-fw fas fa-copy"></span>
-                    {{ __("Copy") }}
+                    {{ __("copy") }}
                 </a>
             @endif
             <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_id' => $raid->id]) }}">
