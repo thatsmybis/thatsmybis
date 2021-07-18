@@ -4,6 +4,7 @@ namespace App;
 
 use App\{Item, Guild, Member, Raid, RaidGroup};
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\DB;
 
 class Character extends Model
@@ -259,6 +260,16 @@ class Character extends Model
             ->withTimeStamps();
 
         return $query;
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function outstandingItems(): HasMany
+    {
+        return $this->hasMany(CharacterItem::class)
+            ->where('is_received', 0)
+            ->whereIn('type', ['wishlist', 'prio']);
     }
 
     // Takes a query for characters and applies the logic necessary to fetch attendance for those characters.
