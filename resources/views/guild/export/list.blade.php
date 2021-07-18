@@ -50,6 +50,28 @@
                                 </li>
                             </ul>
                         </li>
+
+                        <!-- Gargul -->
+                        <li class="p-3 mb-3 rounded">
+                            <h2>
+                                <span class="fas fa-fw text-legendary"><img src="{{ asset('images/gargul.png') }}" style="width: 40px; height: 40px;"></img></span>
+                                <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-epic">
+                                    Gargul
+                                </a>
+                            </h2>
+                            <p>
+                                {!! __("Import wishlist and loot priority data into the Gargul addon. Select all ( ctrl+a ), copy ( ctrl+c ) and then paste ( ctrl+v ) in the import window (/gl wl). For more info check :curseforge_url on Curseforge. Happy lootin'!", ['curseforge_url' => "<a href='https://www.curseforge.com/wow/addons/gargul' target='_blank'>Gargul</a>"]) !!}
+                            </p>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-code text-muted"></span>
+                                        {{ __("Download") }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="p-3 mb-3 rounded">
                             <p class="text-4">
                                 {{ __("Exports are") }} <span class="font-weight-bold">{{ __("CACHED") }}</span> for {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 == 1 ? '' : 's' }}.

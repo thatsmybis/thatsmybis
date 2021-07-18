@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\{Guild, Item};
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Cache;
+use Exception;
+use App\{Guild, GuildItem, Item};
+use Illuminate\Support\Facades\{DB, Cache};
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Routing\ResponseFactory;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\Response;
+use Illuminate\View\View;
 
 class ExportController extends Controller {
     const CSV  = 'csv';
@@ -97,7 +102,7 @@ class ExportController extends Controller {
     /**
      * Export a guild's loot data for consumption in the TMB Helper addon
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function exportAddonItems ($guildId, $guildSlug, $fileType)
     {
@@ -165,9 +170,87 @@ class ExportController extends Controller {
     }
 
     /**
+     * Export a guild's wishlist and loot data for the Gargul addon
+     *
+     * @return Response
+     * @throws Exception
+     */
+    public function gargulWishlistJson()
+    {
+        $guild = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+        $viewPrioPermission = $currentMember->hasPermission('view.prios');
+
+        if ($guild->is_prio_private && !$viewPrioPermission) {
+            throw new Exception('Insufficient permission to export loot data for Gargul');
+        }
+
+        $characters = $guild->characters()
+            ->has('outstandingItems')
+            ->with([
+                'outstandingItems' => function ($query) {
+                    return $query->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
+                }
+            ])
+            ->select('id', 'name')
+            ->get();
+
+        $wishlistData = [];
+        foreach ($characters as $character) {
+            foreach ($character->outstandingItems as $item) {
+                $itemId = $item->item->item_id;
+                $characterName = mb_strtolower($character->name);
+
+                if (!isset($wishlistData[$itemId])) {
+                    $wishlistData[$itemId] = [];
+                }
+
+                $wishlistData[$itemId][] = sprintf(
+                    '%s%s|%s|%s',
+                    $characterName,
+                    $item->is_offspec ? '(OS)' : '',
+                    $item->order,
+                    $item->type === Item::TYPE_PRIO ? 1 : 2,
+                );
+            }
+        }
+
+        return $this->getExport(
+            json_encode([
+                'wishlists' => $wishlistData,
+                'loot' => $this->gargulLootPriorityCSV($guild->id),
+            ],
+                JSON_UNESCAPED_UNICODE
+            ),
+            'Gargul data',
+            self::HTML
+        );
+    }
+
+    /**
+     * Export a guild's loot priority data for the Gargul addon
+     *
+     * @return string
+     */
+    protected function gargulLootPriorityCSV($guildId)
+    {
+        $items = GuildItem::whereNotNull('priority')
+            ->where('guild_id', $guildId)
+            ->select('item_id', 'priority')
+            ->get();
+
+        $itemPriorityString = "";
+        foreach ($items as $item) {
+            $itemPriorityString .= "{$item->item_id} > {$item->priority}\n";
+        };
+
+        return $itemPriorityString;
+    }
+
+    /**
      * Export a guild's loot data
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function exportCharactersWithItems($guildId, $guildSlug, $fileType)
     {
@@ -202,7 +285,7 @@ class ExportController extends Controller {
     /**
      * Export an expansion's loot tables
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function exportExpansionLoot($expansionSlug, $fileType)
     {
@@ -262,7 +345,7 @@ class ExportController extends Controller {
     /**
      * Export a guild's loot data
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function exportGuildLoot($guildId, $guildSlug, $fileType, $lootType)
     {
@@ -316,7 +399,7 @@ class ExportController extends Controller {
     /**
      * Export a guild's item notes and prio notes
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function exportItemNotes($guildId, $guildSlug, $fileType)
     {
@@ -354,7 +437,7 @@ class ExportController extends Controller {
     /**
      * Export a guild's raid groups
      *
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function exportRaidGroups($guildId, $guildSlug, $fileType, $raidGroupId = null)
     {
@@ -440,11 +523,11 @@ class ExportController extends Controller {
     /**
      * Get a CSV or HTML of the export
      *
-     * @var array  $csv      The data.
+     * @return Application|ResponseFactory|Factory|Response|View
      * @var string $title
      * @var string $fileType 'csv' or 'html'
      *
-     * @return The thing to present to the user.
+     * @var array  $csv      The data.
      */
     private function getExport($csv, $title, $fileType) {
         if ($fileType == self::CSV) {
