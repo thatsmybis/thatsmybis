@@ -69,11 +69,13 @@ function getExpansionAbbr($expansionId) {
 // Get the list of supported locales
 function getLocales() {
     return [
-        "de" => "Deutsch (partial)",
+        "da" => "Dansk (incomplete)",
+        "de" => "Deutsch",
         "en" => "English",
         "es" => "Español (item links only)",
         "fr" => "Français",
         "it" => "Italiano (item links only)",
+        "no" => "Norsk (incomplete)",
         "pt" => "Português Brasileiro (item links only)",
         "ru" => "Русский",
         "ko" => "한국어 (item links only)",

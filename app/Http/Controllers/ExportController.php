@@ -269,10 +269,10 @@ class ExportController extends Controller {
         $characters = Cache::remember('export:roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':viewPrioPermission:' . $viewPrioPermission . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden,
             env('EXPORT_CACHE_SECONDS', 120),
             function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
-            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false);
+            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false)['characters']->makeVisible('officer_note');
         });
 
-        return $this->getExport($characters['characters'], 'Character JSON', $fileType);
+        return $this->getExport($characters, 'Character JSON', $fileType);
     }
 
     /**
@@ -296,15 +296,15 @@ class ExportController extends Controller {
         }
 
         $locale = '';
-        if (Illuminate\Support\Facades\App::getLocale() != 'en') {
+        if (\Illuminate\Support\Facades\App::getLocale() != 'en') {
             if ($subdomain == 'www') {
-                $subdomain = '.' . Illuminate\Support\Facades\App::getLocale() . '.';
+                $subdomain = '.' . \Illuminate\Support\Facades\App::getLocale() . '.';
             } else {
-                $locale = Illuminate\Support\Facades\App::getLocale() . '.';
+                $locale = \Illuminate\Support\Facades\App::getLocale() . '.';
             }
         }
 
-        $csv = Cache::remember('lootTableExport:' . $expansionSlug, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($subdomain, $expansionId) {
+        $csv = Cache::remember('lootTableExport:' . $expansionSlug, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($subdomain, $expansionId, $locale) {
                 $rows = DB::select(DB::raw(
                     "SELECT
                         instances.name AS 'instance_name',

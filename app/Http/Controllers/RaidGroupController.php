@@ -246,7 +246,7 @@ class RaidGroupController extends Controller
         ]);
 
         request()->session()->flash('status', 'Successfully created Raid Group.');
-        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'b' => 1]);
     }
 
     /**
@@ -294,7 +294,7 @@ class RaidGroupController extends Controller
         ]);
 
         request()->session()->flash('status', 'Successfully ' . ($disabledAt ? 'disabled' : 'enabled') . ' ' . $raidGroup->name . '.');
-        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+        return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'b' => 1]);
     }
 
     /**
@@ -426,7 +426,10 @@ class RaidGroupController extends Controller
             }
         }
 
-        $raidGroup = $guild->raidGroups()->where('id', request()->input('raid_group_id'))->with($isSecondary ? 'secondaryCharacters' : 'characters')->firstOrFail();
+        $raidGroup = $guild->raidGroups()
+            ->where('id', request()->input('raid_group_id'))
+            ->with($isSecondary ? 'secondaryCharacters' : 'characters')
+            ->firstOrFail();
 
         if ($isSecondary) {
             $oldCount = $raidGroup->characters->count();
@@ -439,7 +442,7 @@ class RaidGroupController extends Controller
             $raidGroup->secondaryCharacters()->sync($characters);
         } else {
             // Drop the old main characters
-            $guild->characters()->where('raid_group_id', $raidGroup->id)->update(['raid_group_id' => null]);
+            $guild->allCharacters()->where('raid_group_id', $raidGroup->id)->update(['raid_group_id' => null]);
             // Add the new/updated ones
             Character::where('guild_id', $guild->id)->whereIn('id', array_keys($characters))->update(['raid_group_id' => $raidGroup->id]);
         }

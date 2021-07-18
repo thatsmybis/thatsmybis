@@ -9,11 +9,12 @@ var colRoles     = 5;
 var colNotes     = 6;
 var colClass     = 7;
 var colRaidGroup = 8;
+var colRaidsAttended = 11;
 
 var allItemsVisible = false;
 
 $(document).ready( function () {
-   table = createTable();
+   var table = createTable();
 
    $(".toggle-column").click(function(e) {
         e.preventDefault();
@@ -57,6 +58,10 @@ $(document).ready( function () {
         }
     });
 
+    $(".js-sort-by-raids-attended").click(function() {
+        table.order(colRaidsAttended, 'desc').draw();
+    });
+
     addClippedItemHandlers();
     addInstanceFilterHandlers();
     trackTimestamps();
@@ -68,7 +73,7 @@ function createTable() {
         "data"      : characters,
         "columns"   : [
             {
-                "title"  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter}`,
+                "title"  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter} <span class="text-muted small">(${characters.length})</span>`,
                 "data"   : "character",
                 "render" : function (data, type, row) {
                     return `
@@ -272,6 +277,15 @@ function createTable() {
                     return (row.discord_username ? row.discord_username : null);
                 },
                 "visible" : false,
+            },
+            {
+                "title"  : "Raids Attended",
+                "data"   : "raid_count",
+                "render" : function (data, type, row) {
+                    return (row.raid_count ? row.raid_count : null);
+                },
+                "visible"    : false,
+                "searchable" : false,
             },
         ],
         "order"  : [], // Disable initial auto-sort; relies on server-side sorting

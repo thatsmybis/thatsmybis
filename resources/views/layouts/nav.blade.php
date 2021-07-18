@@ -5,6 +5,7 @@
         $editCharacters = $currentMember->hasPermission('edit.characters');
         $editGuild      = $currentMember->hasPermission('edit.guild');
         $editItems      = $currentMember->hasPermission('edit.items');
+        $editRaidLoot   = $currentMember->hasPermission('edit.raid-loot');
         $editPrios      = !$guild->is_prio_disabled && $currentMember->hasPermission('edit.prios');
     }
 @endphp
@@ -84,10 +85,12 @@
                         {{ __("Loot") }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="lootNavDropdown">
-                        @if ($editItems)
+                        @if ($editRaidLoot)
                             <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 {{ __("Assign Loot") }}
                             </a>
+                        @endif
+                        @if ($editItems)
                             <div class="dropdown dropright">
                                 <a class="dropdown-item dropdown-toggle" href="#" id="adminItemNotes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Notes") }}
@@ -316,50 +319,63 @@
                 </li>
                 --}}
 
-                @if ($currentMember->hasPermission('edit.raid-loot'))
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), [
-                                'guild.raidGroups',
-                                'guild.raidGroup.create',
-                                'guild.raidGroup.edit',
-                                'guild.raidGroup.mainCharacters',
-                                'guild.raidGroup.secondaryCharacters',
-                                'guild.raids.edit',
-                                'guild.raids.list',
-                                'guild.raids.new',
-                                'guild.raids.show',
-                                'item.assignLoot',
-                                'item.assignLoot.list'
-                            ]) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ __("Raids") }}
-                        </a>
-                        <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), [
+                            'guild.raidGroups',
+                            'guild.raidGroup.create',
+                            'guild.raidGroup.edit',
+                            'guild.raidGroup.mainCharacters',
+                            'guild.raidGroup.secondaryCharacters',
+                            'guild.raids.edit',
+                            'guild.raids.list',
+                            'guild.raids.new',
+                            'guild.raids.show',
+                            'item.assignLoot',
+                            'item.assignLoot.list'
+                        ]) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {{ __("Raids") }}
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
+                        @if ($editRaidLoot)
                             <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 {{ __("Assign Loot") }}
                             </a>
+                        @endif
+                        @if ($viewRaids)
                             <a class="dropdown-item" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 {{ __("Create Raid") }}
                             </a>
-                            <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                {{ __("List Raids") }}
-                            </a>
-                            <a class="dropdown-item" href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                {{ __("Old Loot Assignments") }}
-                            </a>
-                            @if ($viewRaids)
-                                <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                    {{ __("Raid Groups") }}
-                                </a>
-                            @endif
-                        </div>
-                    </li>
-                @else
-                    <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.raids.list']) ? 'active' : '' }}">
-                        <a class="nav-link {{ $menuColor }}" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            {{ __("Raids") }}
+                        @endif
+                        <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            {{ __("List Raids") }}
                         </a>
-                    </li>
-                @endif
+                        <a class="dropdown-item" href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            {{ __("Old Loot Assignments") }}
+                        </a>
+                        @if ($viewRaids)
+                            <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                {{ __("Raid Groups") }}
+                            </a>
+                        @endif
+                        @if (!$guild->is_attendance_hidden && $guild->raidGroups->count())
+                            <div class="dropdown dropright">
+                                <a title="{{ __("Only show attendance for a specific raid group") }}" class="dropdown-item dropdown-toggle" href="#" id="raidGroupAttendanceFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    {{ __("Attendance Filter") }}
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="raidGroupAttendanceFilter">
+                                    @foreach ($guild->raidGroups as $raidGroup)
+                                        <form class="dropdown-item" role="form" method="POST" action="{{ route('setRaidGroupFilter', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                            {{ csrf_field() }}
+                                            <input hidden name="raid_group_id" value="{{ $raidGroup->id }}" />
+                                            <button class="link text-white">{{ $raidGroup->name }}</button>
+                                        </form>
+                                    @endforeach
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </li>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link {{ $menuColor }} {{ in_array(Route::currentRouteName(), [

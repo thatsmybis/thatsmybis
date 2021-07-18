@@ -37,7 +37,7 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/discord/callback', 'Auth\LoginController@handleDiscordCallback');
 });
 
-Route::group(['prefix' => 'loot'], function () {
+Route::group(['prefix' => 'loot', 'middleware' => ['seeUser']], function () {
     Route::get('/',                                      'LootController@show')                 ->name('loot');
     Route::get('/list/{expansionId}/{instanceSlug}',     'LootController@list')                 ->name('loot.list');
     Route::get('/table/{expansionSlug}/{type}',          'ExportController@exportExpansionLoot')->name('loot.table');
@@ -55,8 +55,8 @@ Route::get( '/translations', 'HomeController@translations')->name('translations'
 Route::get( '/register-guild', 'GuildController@showRegister')->name('guild.showRegister');
 Route::post('/submit-guild',   'GuildController@register')    ->name('guild.register');
 
-Route::get( '/streamer-mode', 'MemberController@toggleStreamerMode')->name('toggleStreamerMode');
-Route::post('/set-locale',    'MemberController@setLocale')->name('setLocale');
+Route::get( '/streamer-mode',         'MemberController@toggleStreamerMode')->name('toggleStreamerMode');
+Route::post('/set-locale',            'MemberController@setLocale')->name('setLocale');
 
 // Route::group(['prefix' => 'item'], function () {
 //     Route::get( '/{item_id}/{slug?}', 'ItemController@show')->name('item.show');
@@ -122,6 +122,7 @@ Route::group([
         Route::post('/note/update',                    'MemberController@updateNote')->name('member.updateNote');
         Route::get( '/{memberId}/{usernameSlug}',      'MemberController@show')      ->name('member.show');
         Route::get( '/{usernameSlug}',                 'MemberController@find')      ->name('member.find');
+        Route::post('/set-raid-group-filter',          'MemberController@setRaidGroupFilter')->name('setRaidGroupFilter');
     });
 
     // Route::get( '/resources',        'ContentController@index')->name('contentIndex');

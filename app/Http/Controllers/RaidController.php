@@ -145,7 +145,7 @@ class RaidController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!$currentMember->hasPermission('edit.raid-loot')) {
+        if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
@@ -287,18 +287,24 @@ class RaidController extends Controller
 
         $raids = $query->paginate(self::RESULTS_PER_PAGE);
 
+        $showAssignLoot = false;
+        if ($currentMember->hasPermission('edit.raid-loot')) {
+            $showAssignLoot = true;
+        }
+
         $showEdit = false;
         if ($currentMember->hasPermission('edit.raids')) {
             $showEdit = true;
         }
 
         return view('raids.list', [
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'instances'     => $instances,
-            'raids'         => $raids,
-            'showArchived'  => $showArchived,
-            'showEdit'      => $showEdit,
+            'currentMember'  => $currentMember,
+            'guild'          => $guild,
+            'instances'      => $instances,
+            'raids'          => $raids,
+            'showArchived'   => $showArchived,
+            'showAssignLoot' => $showAssignLoot,
+            'showEdit'       => $showEdit,
         ]);
     }
 
@@ -319,6 +325,11 @@ class RaidController extends Controller
 
         if ($raid->slug != $raidSlug) {
             return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]);
+        }
+
+        $showAssignLoot = false;
+        if ($currentMember->hasPermission('edit.raid-loot')) {
+            $showAssignLoot = true;
         }
 
         $showEditCharacter = false;
@@ -375,6 +386,7 @@ class RaidController extends Controller
             'manualItemAssignmentCount' => $manualItemAssignmentCount,
             'raid'                      => $raid,
             'remarks'                   => Raid::remarks(),
+            'showAssignLoot'            => $showAssignLoot,
             'showEditCharacter'         => $showEditCharacter,
             'showEditCharacterLoot'     => $showEditCharacterLoot,
             'showEditRaid'              => $showEditRaid,

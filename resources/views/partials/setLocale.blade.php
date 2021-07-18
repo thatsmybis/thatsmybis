@@ -9,6 +9,9 @@
                 <small class="small text-muted">{{ __("item lookups are only in English") }}</small>
             </label>
             <select name="locale" class="form-control dark" data-live-search="false" autocomplete="off">
+                <option value="">
+                    —
+                </option>
                 @foreach (getLocales() as $key => $locale)
                     <option value="{{ $key }}" data-tokens="{{ $key }}" {{ isset($user) && $user && $user->locale == $key ? 'selected' : '' }}>
                         {{ $locale }}
