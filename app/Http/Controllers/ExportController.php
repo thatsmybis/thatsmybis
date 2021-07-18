@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Exception;
 use App\{Guild, GuildItem, Item};
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Cache;
@@ -168,6 +169,7 @@ class ExportController extends Controller {
      * Export a guild's wishlist and loot data for the Gargul addon
      *
      * @return \Illuminate\Http\Response
+     * @throws Exception
      */
     public function gargulWishlistJson()
     {
@@ -176,14 +178,14 @@ class ExportController extends Controller {
         $viewPrioPermission = $currentMember->hasPermission('view.prios');
 
         if ($guild->is_prio_private && !$viewPrioPermission) {
-            throw new \Exception('Insufficient permission to export loot data for Gargul');
+            throw new Exception('Insufficient permission to export loot data for Gargul');
         }
 
         $characters = $guild->characters()
-            ->has('unReceiveditems')
+            ->has('outstandingItems')
             ->with([
-                'unReceiveditems' => function ($query) {
-                    return $query->select('character_id', 'item_id', 'order', 'is_offspec');
+                'outstandingItems' => function ($query) {
+                    return $query->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
                 }
             ])
             ->select('id', 'name')
@@ -191,7 +193,7 @@ class ExportController extends Controller {
 
         $wishlistData = [];
         foreach ($characters as $character) {
-            foreach ($character->unReceiveditems as $item) {
+            foreach ($character->outstandingItems as $item) {
                 $itemId = $item->item->item_id;
                 $characterName = mb_strtolower($character->name);
 
@@ -200,10 +202,11 @@ class ExportController extends Controller {
                 }
 
                 $wishlistData[$itemId][] = sprintf(
-                    '%s%s|%s',
+                    '%s%s|%s|%s',
                     $characterName,
                     $item->is_offspec ? '(OS)' : '',
-                    $item->order
+                    $item->order,
+                    $item->type === Item::TYPE_PRIO ? 1 : 2,
                 );
             }
         }
@@ -513,19 +516,18 @@ class ExportController extends Controller {
     }
 
     /**
-     * Get a CSV or HTML of the export
+     * Get a CSV, JSON or HTML of the export
      *
-     * @var mixed  $csv      The data.
-     * @var string $title
-     * @var string $fileType 'csv' or 'html'
-     *
-     * @return mixed
+     * @param $csv
+     * @param string $title
+     * @param string $fileType
+     * @return \Illuminate\Contracts\Foundation\Application|\Illuminate\Contracts\Routing\ResponseFactory|\Illuminate\Contracts\View\Factory|\Illuminate\Http\Response|\Illuminate\View\View
      */
     private function getExport($csv, string $title, string $fileType) {
         if ($fileType === self::CSV || $fileType === self::JSON) {
             return response($csv)
                 ->withHeaders([
-                    'Content-Type'        => 'text/csv',
+                    'Content-Type'        => "text/{$fileType}",
                     'Cache-Control'       => 'no-store, no-cache',
                     'Content-Disposition' => sprintf('attachment; filename="%s.%s"', slug($title), $fileType),
                 ]);
@@ -540,15 +542,16 @@ class ExportController extends Controller {
     /**
      * Get the SQL used for the character loot exports
      *
-     * @var string    $lootType The type of loot to fetch.
-     * @var App/Guild $guild    The guild it belongs to.
-     * @var bool      $showPrios
-     * @var bool      $showWishlist
-     * @var string    $fields       The fields to SELECT. Used to override this function's default fields.
+     * @param string    $lootType The type of loot to fetch.
+     * @param Guild     $guild    The guild it belongs to.
+     * @param bool      $showPrios
+     * @param bool      $showWishlist
+     * @param string    $fields       The fields to SELECT. Used to override this function's default fields.
      *
-     * @return The thing to present to the user.
+     * @return string
      */
-    private function getLootBaseSql($lootType, $guild, $showPrios = true, $showWishlist = true, $viewPrioPermission, $fields = null) {
+    private function getLootBaseSql($lootType, $guild, $showPrios = true, $showWishlist = true, $viewPrioPermission, $fields = null): string
+    {
         $lootTypeFragment = "";
 
         if (!$showPrios) {

@@ -264,8 +264,11 @@ class Character extends Model
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function unReceiveditems() {
-        return $this->hasMany(CharacterItem::class)->where('is_received', 0);
+    public function outstandingItems(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(CharacterItem::class)
+            ->where('is_received', 0)
+            ->whereIn('type', ['wishlist', 'prio']);
     }
 
     // Takes a query for characters and applies the logic necessary to fetch attendance for those characters.
