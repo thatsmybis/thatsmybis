@@ -364,7 +364,7 @@
                             </div>
                             <div class="form-group">
                                 <label for="current_wishlist_number" class="">
-                                    {{ __("Current Wishlist Number") }}
+                                    {{ __("Current Wishlist") }}
                                     <small class="text-muted">{{ __("which wishlist should be used throughout the site?") }}</small>
                                 </label>
                                 <input name="current_wishlist_number"
