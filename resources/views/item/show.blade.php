@@ -24,8 +24,7 @@
                                         $wowheadLocale = App::getLocale();
                                         if ($wowheadLocale === "en") {
                                             $wowheadLocale = '';
-                                        }
-                                        else {
+                                        } else {
                                             $wowheadLocale .= '.';
                                         }
                                     @endphp
