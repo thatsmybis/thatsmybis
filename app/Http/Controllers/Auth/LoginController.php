@@ -41,6 +41,13 @@ class LoginController extends Controller
      * @return Response
      */
     public function redirectToDiscord() {
+        if (app()->environment('local')
+            && env('LOGIN_USING_ID')
+        ) {
+            Auth::loginUsingId(env('LOGIN_USING_ID'));
+            return redirect()->route('home');
+        }
+
         return Socialite::driver('discord')
             // Don't require Discord to send back an email
             // https://discord.com/developers/docs/topics/oauth2#shared-resources-oauth2-scopes
