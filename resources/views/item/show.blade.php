@@ -21,10 +21,12 @@
                                             $wowheadSubdomain = 'tbc';
                                         }
 
-                                        $wowheadLocale = '';
-                                        $locale = App::getLocale();
-                                        if ($locale !== "en") {
-                                            $wowheadLocale = "{$locale}.";
+                                        $wowheadLocale = App::getLocale();
+                                        if ($wowheadLocale === "en") {
+                                            $wowheadLocale = '';
+                                        }
+                                        else {
+                                            $wowheadLocale .= '.';
                                         }
                                     @endphp
 
