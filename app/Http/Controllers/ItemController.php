@@ -415,13 +415,11 @@ class ItemController extends Controller
             $domain = 'tbc';
         }
 
-        $locale = '';
-        if (App::getLocale() != 'en') {
-            if ($domain == 'www') {
-                $domain .= '.' . App::getLocale() . '.';
-            } else {
-                $locale .= App::getLocale() . '.';
-            }
+        $locale = App::getLocale();
+        if ($locale === 'en') {
+            $locale = '';
+        } else {
+            $locale .= '.';
         }
 
         try {
