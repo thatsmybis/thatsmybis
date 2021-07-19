@@ -33,6 +33,7 @@
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $character->id }}" />
+                <input hidden name="wishlist_number" value="{{ $wishlistNumber }}" />
 
                 @if ($showPrios && !$guild->is_prio_disabled)
                     <div class="row mb-3 pt-2 bg-light rounded">
@@ -64,21 +65,44 @@
                 @if (!$guild->is_wishlist_disabled)
                     <div class="row mb-3 pt-2 bg-light rounded">
                         <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
-                            <label for="wishlist">
-                                <span class="font-weight-bold text-legendary">
-                                    <span class="fas fa-fw fa-scroll-old"></span>
-                                    {{ __("Wishlist") }}
-                                </span>
-                                @if ($lockWishlist)
-                                    <small class="text-warning font-weight-normal">{{ __("locked by your guild master(s)") }}</small>
-                                @elseif (!$unlockWishlist && $guild->is_wishlist_locked)
-                                    <small class="text-warning font-weight-normal">{{ __("locked for raiders") }}</small> <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
-                                @else
-                                    <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
-                                @endif
-                                <small class="text-muted font-weight-normal">&sdot;</small>
-                                <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">{{ __("see what other people wishlisted") }}</a>
+                            <label for="wishlist" class="sr-only">
+                                Wishlist
                             </label>
+
+                            <div class="dropdown">
+                                <a class="dropdown-toggle font-weight-bold text-legendary" id="wishlistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fas fa-fw fa-scroll-old"></span>
+                                    {{ __("Wishlist") }} {{ $wishlistNumber }}
+                                    @if ($guild->current_wishlist_number == $wishlistNumber)
+                                        <span class="text-success">{{ __('(active)') }}</span>
+                                    @else
+                                        <span class="text-danger">{{ __('(inactive)') }}</span>
+                                    @endif
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="wishlistDropdown">
+                                    @for ($i = 1; $i <= $maxWishlistLists; $i++)
+                                        <a class="dropdown-item"
+                                            href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'wishlist_number' => $i]) }}">
+                                            {{ __("Wishlist") }} {{ $i }}
+                                            @if ($guild->current_wishlist_number == $i)
+                                                <span class="text-success">{{ __('(active)') }}</span>
+                                            @else
+                                                <span class="text-danger">{{ __('(inactive)') }}</span>
+                                            @endif
+                                        </a>
+                                    @endfor
+                                </div>
+                            </div>
+
+                            @if ($lockWishlist)
+                                <small class="text-warning font-weight-normal">{{ __("locked by your guild master(s)") }}</small>
+                            @elseif (!$unlockWishlist && $guild->is_wishlist_locked)
+                                <small class="text-warning font-weight-normal">{{ __("locked for raiders") }}</small> <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
+                            @else
+                                <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
+                            @endif
+                            <small class="text-muted font-weight-normal">&sdot;</small>
+                            <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">{{ __("see what other people wishlisted") }}</a>
 
                             @if ($lockWishlist)
                                 @if ($character->wishlist->count() > 0)

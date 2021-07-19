@@ -325,6 +325,7 @@ class GuildController extends Controller
             'is_prio_autopurged'        => 'nullable|boolean',
             'is_wishlist_autopurged'    => 'nullable|boolean',
             'max_wishlist_items'        => 'nullable|integer|min:1|max:' . CharacterLootController::MAX_WISHLIST_ITEMS,
+            'current_wishlist_number'   => 'nullable|integer|min:1|max:' . CharacterLootController::MAX_WISHLIST_LISTS,
             'prio_show_count'           => 'nullable|integer|min:1|max:' . PrioController::MAX_PRIOS,
             'do_sort_items_by_instance' => 'nullable|boolean',
             'is_raid_group_locked'      => 'nullable|boolean',
@@ -342,26 +343,27 @@ class GuildController extends Controller
 
         $this->validate(request(), $validationRules);
 
-        $updateValues['name']                      = request()->input('name');
-        $updateValues['slug']                      = slug(request()->input('name'));
-        $updateValues['is_prio_private']           = request()->input('is_prio_private') == 1 ? 1 : 0;
-        $updateValues['is_prio_disabled']          = request()->input('is_prio_disabled') == 1 ? 1 : 0;
-        $updateValues['is_received_locked']        = request()->input('is_received_locked') == 1 ? 1 : 0;
-        $updateValues['is_wishlist_private']       = request()->input('is_wishlist_private') == 1 ? 1 : 0;
-        $updateValues['is_wishlist_locked']        = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
-        $updateValues['is_wishlist_disabled']      = request()->input('is_wishlist_disabled') == 1 ? 1 : 0;
-        $updateValues['is_prio_autopurged']        = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
-        $updateValues['is_wishlist_autopurged']    = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
-        $updateValues['max_wishlist_items']        = request()->input('max_wishlist_items');
-        $updateValues['prio_show_count']           = request()->input('prio_show_count');
-        $updateValues['do_sort_items_by_instance'] = request()->input('do_sort_items_by_instance') == 1 ? 1 : 0;
-        $updateValues['is_raid_group_locked']      = request()->input('is_raid_group_locked') == 1 ? 1 : 0;
-        $updateValues['is_attendance_hidden']      = request()->input('is_attendance_hidden') == 1 ? 1 : 0;
-        $updateValues['attendance_decay_days']     = request()->input('attendance_decay_days') ? request()->input('attendance_decay_days') : 36500;
-        $updateValues['tier_mode']                 = request()->input('tier_mode');
-        $updateValues['message']                   = request()->input('message');
-        $updateValues['calendar_link']             = request()->input('calendar_link');
-        $updateValues['member_role_ids']           = implode(",", array_filter(request()->input('member_roles')));
+        $updateValues['name']                         = request()->input('name');
+        $updateValues['slug']                         = slug(request()->input('name'));
+        $updateValues['is_prio_private']              = request()->input('is_prio_private') == 1 ? 1 : 0;
+        $updateValues['is_prio_disabled']             = request()->input('is_prio_disabled') == 1 ? 1 : 0;
+        $updateValues['is_received_locked']           = request()->input('is_received_locked') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_private']          = request()->input('is_wishlist_private') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_locked']           = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_disabled']         = request()->input('is_wishlist_disabled') == 1 ? 1 : 0;
+        $updateValues['is_prio_autopurged']           = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
+        $updateValues['is_wishlist_autopurged']       = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
+        $updateValues['max_wishlist_items']           = request()->input('max_wishlist_items');
+        $updateValues['current_wishlist_list_number'] = request()->input('current_wishlist_list_number');
+        $updateValues['prio_show_count']              = request()->input('prio_show_count');
+        $updateValues['do_sort_items_by_instance']    = request()->input('do_sort_items_by_instance') == 1 ? 1 : 0;
+        $updateValues['is_raid_group_locked']         = request()->input('is_raid_group_locked') == 1 ? 1 : 0;
+        $updateValues['is_attendance_hidden']         = request()->input('is_attendance_hidden') == 1 ? 1 : 0;
+        $updateValues['attendance_decay_days']        = request()->input('attendance_decay_days') ? request()->input('attendance_decay_days') : 36500;
+        $updateValues['tier_mode']                    = request()->input('tier_mode');
+        $updateValues['message']                      = request()->input('message');
+        $updateValues['calendar_link']                = request()->input('calendar_link');
+        $updateValues['member_role_ids']              = implode(",", array_filter(request()->input('member_roles')));
 
         $updateValues = $this->flushRoles($guild, $updateValues);
 

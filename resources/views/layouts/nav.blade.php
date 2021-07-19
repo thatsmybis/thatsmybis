@@ -53,7 +53,11 @@
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['character.loot']) ? 'active font-weight-bold' : '' }}" href="#" id="wishlistNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            {{ __("Wishlist") }}
+                            @if ($guild->is_wishlist_disabled)
+                                {{ __("Character") }}
+                            @else
+                                {{ __("Wishlist") }}
+                            @endif
                         </a>
                         <div class="dropdown-menu" aria-labelledby="wishlistNavDropdown">
                             @foreach ($currentMember->characters as $character)

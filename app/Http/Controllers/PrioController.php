@@ -291,7 +291,9 @@ class PrioController extends Controller
             ])
             ->get();
 
-        $items = ItemController::mergeTokenWishlists($items, $guild);
+        if (!$guild->is_wishlist_disabled) {
+            $items = ItemController::mergeTokenWishlists($items, $guild);
+        }
 
         $item = $items->first();
 
