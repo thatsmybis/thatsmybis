@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App;
 use Exception;
 use App\{Guild, GuildItem, Item};
 use Illuminate\Support\Facades\{DB, Cache};
@@ -302,13 +303,11 @@ class ExportController extends Controller {
             $subdomain = 'tbc';
         }
 
-        $locale = '';
-        if (\Illuminate\Support\Facades\App::getLocale() != 'en') {
-            if ($subdomain == 'www') {
-                $subdomain = '.' . \Illuminate\Support\Facades\App::getLocale() . '.';
-            } else {
-                $locale = \Illuminate\Support\Facades\App::getLocale() . '.';
-            }
+        $locale = App::getLocale();
+        if ($locale === 'en') {
+            $locale = '';
+        } else {
+            $locale .= '.';
         }
 
         $csv = Cache::remember('lootTableExport:' . $expansionSlug, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($subdomain, $expansionId, $locale) {
