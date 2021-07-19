@@ -22,8 +22,9 @@
                                         }
 
                                         $wowheadLocale = '';
-                                        if (Illuminate\Support\Facades\App::getLocale()) {
-                                            $wowheadLocale = Illuminate\Support\Facades\App::getLocale() . '.';
+                                        $locale = App::getLocale();
+                                        if ($locale !== "en") {
+                                            $wowheadLocale = "{$locale}.";
                                         }
                                     @endphp
 
