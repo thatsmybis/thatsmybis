@@ -215,14 +215,13 @@ class Item extends Model
 
     public function wishlistCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
-            ->where(['character_items.type' => self::TYPE_WISHLIST])
-            ->whereNull('characters.inactive_at')
             ->select([
                 'characters.*',
                 'raid_groups.name AS raid_group_name',
                 'raid_group_roles.color AS raid_group_color',
                 'added_by_members.username AS added_by_username',
             ])
+            ->join('guilds AS wishlist_guilds', 'wishlist_guilds.id', '=', 'characters.guild_id')
             ->leftJoin('raid_groups', function ($join) {
                 $join->on('raid_groups.id', 'characters.raid_group_id');
             })
@@ -232,6 +231,11 @@ class Item extends Model
             ->leftJoin('members AS added_by_members', function ($join) {
                 $join->on('added_by_members.id', 'character_items.added_by');
             })
+            ->where([
+                'character_items.type'        => self::TYPE_WISHLIST,
+                'character_items.list_number' => DB::raw('wishlist_guilds.current_wishlist_number'),
+            ])
+            ->whereNull('characters.inactive_at')
             ->withTimeStamps()
             ->withPivot([
                 'added_by',

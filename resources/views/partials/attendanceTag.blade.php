@@ -4,7 +4,7 @@
 @if (isset($raidCount))
     <span class="{{ isset($smallRaid) && $smallRaid ? 'small' : ''}} text-muted" title="{{ $raidCount }} raids attended">
         @if (isset($raidShort) && $raidShort)
-            +{{ $raidCount }}
+            {{ $raidCount }}r
         @else
             {{ $raidCount }} {{ __("raids") }}
         @endif
