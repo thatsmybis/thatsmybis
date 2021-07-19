@@ -26,13 +26,11 @@ if (isset($guild) && $guild->expansion_id) {
     }
 }
 
-$wowheadLocale = '';
-if (Illuminate\Support\Facades\App::getLocale() != 'en') {
-    if ($wowheadSubdomain == 'www') {
-        $wowheadSubdomain = '.' . Illuminate\Support\Facades\App::getLocale() . '.';
-    } else {
-        $wowheadLocale = Illuminate\Support\Facades\App::getLocale() . '.';
-    }
+$wowheadLocale = App::getLocale();
+if ($wowheadLocale === 'en') {
+    $wowheadLocale = '';
+} else {
+    $wowheadLocale .= '.';
 }
 
 if (isset($showTier) && $showTier) {
