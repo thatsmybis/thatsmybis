@@ -13,6 +13,7 @@ class CharacterLootController extends Controller
     const MAX_RECEIVED_ITEMS = 200;
     const MAX_RECIPES        = 100;
     const MAX_WISHLIST_ITEMS = 50;
+    const MAX_WISHLIST_LISTS = 10;
 
     /**
      * Create a new controller instance.
@@ -34,6 +35,12 @@ class CharacterLootController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $wishlistNumber = (int)request()->get('wishlist_number');
+
+        if (!$wishlistNumber || $wishlistNumber < 1 || $wishlistNumber > self::MAX_WISHLIST_LISTS) {
+            $wishlistNumber = $guild->current_wishlist_number;
+        }
+
         $query = Character::select('characters.*')->where(['characters.id' => $characterId, 'characters.guild_id' => $guild->id]);
         $query = Character::addAttendanceQuery($query);
         $character = $query->firstOrFail();
@@ -43,7 +50,16 @@ class CharacterLootController extends Controller
             return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
         }
 
-        $character = $character->load(['member', 'raidGroup', 'raidGroup.role', 'received', 'recipes', 'wishlist']);
+        $character = $character->load([
+            'member',
+            'raidGroup',
+            'raidGroup.role',
+            'received',
+            'recipes',
+            'wishlist' => function ($query) use ($wishlistNumber) {
+                return $query->where('character_items.list_number', $wishlistNumber);
+            },
+        ]);
         $guild->load(['raids' => function ($query) {
             return $query->limit(AssignLootController::RAID_HISTORY_LIMIT);
         }]);
@@ -102,6 +118,9 @@ class CharacterLootController extends Controller
             'maxReceivedItems' => self::MAX_RECEIVED_ITEMS,
             'maxRecipes'       => self::MAX_RECIPES,
             'maxWishlistItems' => $guild->max_wishlist_items ? $guild->max_wishlist_items : self::MAX_WISHLIST_ITEMS,
+            'maxWishlistLists' => self::MAX_WISHLIST_LISTS,
+
+            'wishlistNumber'   => $wishlistNumber,
         ]);
     }
 
@@ -115,21 +134,9 @@ class CharacterLootController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load([
-            'allCharacters' => function ($query) {
-                return $query->Where('id', request()->input('id'))
-                    ->with(['wishlist', 'recipes', 'received']);
-            },
-        ]);
-
-        $character = $guild->allCharacters->first();
-
-        if (!$character) {
-            abort(404, 'Character not found.');
-        }
-
         $validationRules =  [
             'id'                     => 'required|integer|exists:characters,id',
+            'wishlist_number'        => "required|integer|min:1|max:{self::MAX_WISHLIST_LISTS}",
             'wishlist.*.item_id'     => 'nullable|integer|exists:items,item_id',
             'wishlist.*.is_received' => 'nullable|boolean',
             'wishlist.*.is_offspec'  => 'nullable|boolean',
@@ -148,6 +155,25 @@ class CharacterLootController extends Controller
         ];
 
         $this->validate(request(), $validationRules);
+
+        $guild->load([
+            'allCharacters' => function ($query) {
+                return $query->Where('id', request()->input('id'))
+                    ->with([
+                        'wishlist' => function ($query) {
+                            return $query->where('character_items.list_number', request()->input('wishlist_number'));
+                        },
+                        'recipes',
+                        'received'
+                    ]);
+            },
+        ]);
+
+        $character = $guild->allCharacters->first();
+
+        if (!$character) {
+            abort(404, 'Character not found.');
+        }
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
@@ -189,10 +215,24 @@ class CharacterLootController extends Controller
             ]);
         }
 
-        if (!$guild->is_wishlist_disabled && (!$guild->is_wishlist_locked || $currentMember->hasPermission('loot.characters') || ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked))) {
+        if (!$guild->is_wishlist_disabled &&
+            (!$guild->is_wishlist_locked
+                || $currentMember->hasPermission('loot.characters')
+                || ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked)
+            )
+        ) {
             if (request()->input('wishlist')) {
                 $maxWishlistItems = $guild->max_wishlist_items ? $guild->max_wishlist_items : self::MAX_WISHLIST_ITEMS;
-                $this->syncItems($character->wishlist, array_slice(request()->input('wishlist'), 0, $maxWishlistItems), Item::TYPE_WISHLIST, $character, $currentMember, true, false);
+                $this->syncItems(
+                    $character->wishlist,
+                    array_slice(request()->input('wishlist'), 0, $maxWishlistItems),
+                    Item::TYPE_WISHLIST,
+                    $character,
+                    $currentMember,
+                    true,
+                    false,
+                    request()->input('wishlist_number')
+                );
             }
         }
 
@@ -200,13 +240,30 @@ class CharacterLootController extends Controller
             if (request()->input('received')) {
                 $markAsReceived = (request()->input('mark_as_received') == "1" ? true : false);
                 // Don't bother enforcing an item limit here
-                $this->syncItems($character->received, request()->input('received'), Item::TYPE_RECEIVED, $character, $currentMember, true, $markAsReceived);
+                $this->syncItems(
+                    $character->received,
+                    request()->input('received'),
+                    Item::TYPE_RECEIVED,
+                    $character,
+                    $currentMember, true,
+                    $markAsReceived,
+                    request()->input('wishlist_number')
+                );
             }
         }
 
         if (request()->input('recipes')) {
             // Don't bother enforcing an item limit here
-            $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember, false, false);
+            $this->syncItems(
+                $character->recipes,
+                request()->input('recipes'),
+                Item::TYPE_RECIPE,
+                $character,
+                $currentMember,
+                false,
+                false,
+                request()->input('wishlist_number')
+            );
         }
         return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
     }
@@ -227,11 +284,12 @@ class CharacterLootController extends Controller
      * @param App\Member    $currentMember  The member syncing these items.
      * @param boolean       $updateFlags    Should we check for and update the OS and received flag?
      * @param boolean       $markAsReceived Should we mark correlated prios/wishlists as received?
+     * @param integer       $listNumber     Should this be applied to a specific list number for this item type?
      */
-    private function syncItems($existingItems, $inputItems, $itemType, $character, $currentMember, $updateFlags, $markAsReceived) {
+    private function syncItems($existingItems, $inputItems, $itemType, $character, $currentMember, $updateFlags, $markAsReceived, $listNumber) {
         $toAdd    = [];
         $toUpdate = [];
-        $toDrop   = [];
+        $toDelete = [];
 
         $now = getDateTime();
 
@@ -308,7 +366,7 @@ class CharacterLootController extends Controller
             // We didn't find this item in the input, so we should get rid of it
             if (!$found) {
                 // We'll drop them all at once later on, rather than executing individual queries
-                $toDrop[] = $existingItem->pivot->id;
+                $toDelete[] = $existingItem->pivot->id;
                 // Also remove it from the collection... for good measure I guess.
                 $existingItems->forget($existingItemKey);
 
@@ -361,6 +419,7 @@ class CharacterLootController extends Controller
                     'character_id' => $character->id,
                     'added_by'     => $currentMember->id,
                     'received_at'  => $receivedAt,
+                    'list_number'  => $listNumber ? $listNumber : 1,
                     'raid_id'      => $raidId,
                     'type'         => $itemType,
                     'order'        => $i,
@@ -385,7 +444,7 @@ class CharacterLootController extends Controller
         }
 
         // Delete...
-        DB::table('character_items')->whereIn('id', $toDrop)->delete();
+        DB::table('character_items')->whereIn('id', $toDelete)->delete();
 
         // Update...
         // I'm sure there's some clever way to perform an UPDATE statement with CASE statements... https://stackoverflow.com/questions/3432/multiple-updates-in-mysql

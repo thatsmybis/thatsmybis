@@ -250,6 +250,7 @@ class Character extends Model
                 'added_by',
                 'type',
                 'order',
+                'list_number',
                 'is_offspec',
                 'is_received',
                 'received_at',

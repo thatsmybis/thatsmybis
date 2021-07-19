@@ -235,12 +235,15 @@ class Item extends Model
             ->withTimeStamps()
             ->withPivot([
                 'added_by',
-                'raid_group_id',
                 'type',
+                'order',
                 'is_received',
+                'list_number',
                 'is_offspec',
                 'received_at',
-                'order',
+                'raid_group_id',
+                'raid_id',
+                'created_at',
             ]);
     }
 
