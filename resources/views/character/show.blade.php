@@ -82,7 +82,7 @@
                 @if ($showWishlist)
                     <div class="col-12 mb-2">
                         @if ($showEditLoot)
-                            <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                            <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                                 <span class="text-legendary font-weight-bold">
                                     <span class="fas fa-fw fa-scroll-old"></span>
                                     {{ __("Wishlist") }}
@@ -155,7 +155,7 @@
 
                 <div class="col-12 mb-2">
                     @if ($showEditLoot)
-                        <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                        <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                             <span class="text-success font-weight-bold">
                                 <span class="fas fa-fw fa-sack"></span>
                                 {{ __("Loot Received") }}
@@ -194,7 +194,7 @@
 
                 <div class="col-12 mb-2">
                     @if ($showEditLoot)
-                        <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                        <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                             <span class="text-gold font-weight-bold">
                                 <span class="fas fa-fw fa-book"></span>
                                 {{ __("Recipes") }}

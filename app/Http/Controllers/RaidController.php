@@ -45,7 +45,7 @@ class RaidController extends Controller
 
         if (!$currentMember->hasPermission('create.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to create Raids.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules = $this->getValidationRules($guild);
@@ -147,7 +147,7 @@ class RaidController extends Controller
 
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $showOfficerNote = false;
@@ -404,7 +404,7 @@ class RaidController extends Controller
 
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit Raid Groups.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules = array_merge($this->getValidationRules($guild), [

@@ -3,12 +3,12 @@
         <ul class="list-inline">
             <li class="list-inline-item">
                 <h{{ isset($headerSize) && $headerSize ? $headerSize : '1' }} class="mb-0 font-weight-bold">
-                    {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}" class="text-white">{{ $member->username }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
+                    {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'userSlug' => $member->slug]) }}" class="text-white">{{ $member->username }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
                 </h{{ isset($headerSize) && $headerSize ? $headerSize : '1' }}>
             </li>
             @if (isset($showEdit) && $showEdit)
                 <li class="list-inline-item">
-                    <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
+                    <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'userSlug' => $member->slug]) }}">
                         <span class="fas fa-fw fa-pencil"></span>
                         {{ __("edit") }}
                     </a>

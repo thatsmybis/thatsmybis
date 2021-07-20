@@ -46,7 +46,7 @@
                                     {{ $expansions->where('id', $member->guild->expansion_id)->first()->name_short }}
                                 </span>
                                 <h2>
-                                    <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
+                                    <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'userSlug' => $member->slug]) }}">
                                         <span class="text-{{ $member->guild->disabled_at ? 'danger' : getExpansionColor($member->guild->expansion_id) }} font-weight-medium">
                                             &lt;{{ $member->guild->name }}&gt;
                                         </span>
@@ -55,7 +55,7 @@
                                 <ul class="list-inline mt-3">
                                     @foreach ($member->characters as $character)
                                         <li class="list-inline-item bg-tag rounded pt-0 pl-1 pb-1 pr-1">
-                                            <a href="{{route('character.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                            <a href="{{route('character.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}"
                                                 class="text-{{ $character->class ? strtolower($character->class) : '' }}">
                                                 {{ $character->name }}
                                             </a>
@@ -90,7 +90,7 @@
                         @foreach ($disabled as $member)
                             <li class="js-inactive-guild bg-lightest mt-3 mb-3 p-3" style="display:none;">
                                 <h3>
-                                    <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}"
+                                    <a href="{{ route('member.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'memberId' => $member->id, 'userSlug' => $member->slug]) }}"
                                         class="text-{{ $member->guild->disabled_at ? 'danger' : getExpansionColor($member->guild->expansion_id) }} font-weight-medium">
                                         &lt;{{ $member->guild->name }}&gt;
                                     </a>

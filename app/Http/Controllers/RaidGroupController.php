@@ -90,7 +90,7 @@ class RaidGroupController extends Controller
 
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -166,7 +166,7 @@ class RaidGroupController extends Controller
 
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -202,7 +202,7 @@ class RaidGroupController extends Controller
 
         if (!$currentMember->hasPermission('create.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to create Raid Groups.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load(['allRaidGroups', 'roles']);
@@ -271,7 +271,7 @@ class RaidGroupController extends Controller
 
         if (!$currentMember->hasPermission('disable.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to disable/enable Raid Groups.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules = [
@@ -309,7 +309,7 @@ class RaidGroupController extends Controller
 
         if (!$currentMember->hasPermission('view.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -335,7 +335,7 @@ class RaidGroupController extends Controller
 
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit Raid Groups.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [
@@ -402,7 +402,7 @@ class RaidGroupController extends Controller
 
         if (!$currentMember->hasPermission('edit.raids')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit Raid Groups.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [

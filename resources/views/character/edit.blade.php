@@ -422,7 +422,7 @@
                     @if ($character && $character->member)
                         <div class="col-12">
                             <div class="form-group">
-                                <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'usernameSlug' => $character->member->slug]) }}">
+                                <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'userSlug' => $character->member->slug]) }}">
                                     {{ __("Unlock member's wishlist or received loot list") }}
                                 </a>
                             </div>

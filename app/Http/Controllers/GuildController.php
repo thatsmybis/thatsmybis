@@ -36,7 +36,7 @@ class GuildController extends Controller
         $currentMember = request()->get('currentMember');
 
         request()->session()->reflash();
-        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
     }
 
     /**
@@ -196,7 +196,7 @@ class GuildController extends Controller
 
         if (!request()->get('isGuildAdmin')) {
             request()->session()->flash('status', 'You don\'t have permissions to change the guild owner. Only the current owner can do that');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load(['members']);
@@ -222,7 +222,7 @@ class GuildController extends Controller
 
         if (!request()->get('isGuildAdmin')) {
             request()->session()->flash('status', 'You don\'t have permissions to change the guild owner. Only the current owner can do that.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [
@@ -270,7 +270,7 @@ class GuildController extends Controller
 
         if (!$currentMember->hasPermission('edit.guild')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -308,7 +308,7 @@ class GuildController extends Controller
 
         if (!$currentMember->hasPermission('edit.guild')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit that guild.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load('roles');
@@ -439,7 +439,7 @@ class GuildController extends Controller
 
         if (!request()->get('isGuildAdmin')) {
             request()->session()->flash('status', 'You don\'t have permissions to unlink the guild from that Discord server. Only the current owner can do that');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guildArray = $this->getDiscordServers($user, $guild->expansion_id);
@@ -463,7 +463,7 @@ class GuildController extends Controller
 
         if (!request()->get('isGuildAdmin')) {
             request()->session()->flash('status', 'You don\'t have permissions to change the guild\'s Discord server. Only the current owner can do that.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [

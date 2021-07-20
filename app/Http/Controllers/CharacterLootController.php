@@ -40,7 +40,7 @@ class CharacterLootController extends Controller
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
-            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]);
         }
 
         $character = $character->load(['member', 'raidGroup', 'raidGroup.role', 'received', 'recipes', 'wishlist']);
@@ -151,7 +151,7 @@ class CharacterLootController extends Controller
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
-            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]);
         }
 
         $updateValues = [];
@@ -208,7 +208,7 @@ class CharacterLootController extends Controller
             // Don't bother enforcing an item limit here
             $this->syncItems($character->recipes, request()->input('recipes'), Item::TYPE_RECIPE, $character, $currentMember, false, false);
         }
-        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
+        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug, 'b' => 1]);
     }
 
     /**

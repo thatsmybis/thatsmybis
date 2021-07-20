@@ -38,7 +38,7 @@
                             </h1>
                         </li>
                         <li class="list-inline-item">
-                            <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id]) }}">
+                            <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'itemId' => $item->item_id]) }}">
                                 <span class="fas fa-fw fa-clipboard-list-check"></span>{{ __("history") }}
                             </a>
                         </li>
@@ -188,7 +188,7 @@
                                                 </span>
                                                 <div class="dropdown-menu" aria-labelledby="editPrioLink">
                                                     @foreach ($raidGroups as $raidGroup)
-                                                        <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'raidGroupId' => $raidGroup->id]) }}">
+                                                        <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'itemId' => $item->item_id, 'raidGroupId' => $raidGroup->id]) }}">
                                                             {{ $raidGroup->name }}
                                                         </a>
                                                     @endforeach
@@ -224,7 +224,7 @@
                                                 <li data-raid-group-id="{{ $character->pivot->raid_group_id }}"
                                                     class="js-item-wishlist-character font-weight-normal mb-1 {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}"
                                                     value="{{ $character->pivot->order }}">
-                                                    <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                                    <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}"
                                                         title="{{ $character->raid_group_name ? $character->raid_group_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}"
                                                         class="text-{{ $character->class ? strtolower($character->class) : ''}}-important tag d-inline">
                                                         <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_group_color ? $character->raid_group_color : '')) }}"></span>{{ $character->name }}

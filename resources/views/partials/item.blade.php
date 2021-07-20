@@ -68,14 +68,14 @@ if (isset($iconSize) && $iconSize) {
             <a href="https://{{ $wowheadLocale . $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @elseif (isset($guild) && $guild)
             @if (isset($auditLink) && $auditLink)
-                <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId]) }}"
+                <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'itemId' => $itemId]) }}"
                     target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
                     {!! $wowheadAttribs !!}
                     class="{{ isset($itemQuality) ? $itemQuality : '' }}">
                     {{ $itemName }}
                 </a>
             @else
-                <a href="{{ route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId, 'slug' => slug($itemName)]) }}"
+                <a href="{{ route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'itemId' => $itemId, 'slug' => slug($itemName)]) }}"
                     target="{{isset($targetBlank) && $targetBlank ? '_blank' : '' }}"
                     {!! $wowheadAttribs !!}
                     class="{{ isset($itemQuality) ? $itemQuality : '' }}">

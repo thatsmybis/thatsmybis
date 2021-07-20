@@ -8,7 +8,7 @@
                 {{ $member->username }}
             </a>
             <div class="dropdown-menu" aria-labelledby="member{{ $member->id }}Dropdown">
-                <a class="dropdown-item" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
+                <a class="dropdown-item" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'userSlug' => $member->slug]) }}">
                     <span class="text-muted fa-fw fas fa-"></span>
                     {{ __("Profile") }}
                 </a>
@@ -16,7 +16,7 @@
                     <span class="text-muted fa-fw fas fa-"></span>
                     {{ __("History") }}
                 </a>
-                <a class="dropdown-item" href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]) }}">
+                <a class="dropdown-item" href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'userSlug' => $member->slug]) }}">
                     <span class="text-muted fa-fw fas fa-pencil"></span>
                     {{ __("Edit") }}
                 </a>

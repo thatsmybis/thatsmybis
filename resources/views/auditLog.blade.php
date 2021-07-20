@@ -264,7 +264,7 @@
                                     <div class="d-flex flex-row">
                                         <div class="list-timestamp text-right text-muted p-2 small">
                                             @if ($log->member_id)
-                                                <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->member_slug]) }}" class="text-muted">
+                                                <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'userSlug' => $log->member_slug]) }}" class="text-muted">
                                                     <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago
                                                 </a>
                                             @else
@@ -288,7 +288,7 @@
                                                         &sdot;
                                                     </li>
                                                     <li class="list-inline-item">
-                                                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->other_member_slug]) }}" class="text-muted">
+                                                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'userSlug' => $log->other_member_slug]) }}" class="text-muted">
                                                             {{ $log->other_member_username }}
                                                         </a>
                                                     </li>
@@ -298,7 +298,7 @@
                                                         &sdot;
                                                     </li>
                                                     <li class="list-inline-item">
-                                                        <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'nameSlug' => $log->character_slug]) }}" class="text-muted">
+                                                        <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'characterSlug' => $log->character_slug]) }}" class="text-muted">
                                                             {{ $log->character_name }}
                                                         </a>
                                                     </li>

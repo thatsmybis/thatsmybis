@@ -34,7 +34,7 @@
     <ul class="list-inline mb-0 text-muted">
         @if ($content->category != 'resource')
             <li class="small list-inline-item">
-                <a href="{{ route('showMember', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $content->user->id, 'usernameSlug' => $content->user->username]) }}">{{ $content->user->username }}</a>
+                <a href="{{ route('showMember', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $content->user->id, 'userSlug' => $content->user->username]) }}">{{ $content->user->username }}</a>
             </li>
             <li class="small list-inline-item">&sdot;</li>
             <li class="small list-inline-item">

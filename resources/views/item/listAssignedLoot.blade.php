@@ -193,7 +193,7 @@
                                     <div class="d-flex flex-row">
                                         <div class="list-timestamp text-right text-muted p-2 small">
                                             @if ($batch->member_id)
-                                                <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $batch->member_id, 'usernameSlug' => $batch->member_slug]) }}" class="text-muted">
+                                                <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $batch->member_id, 'userSlug' => $batch->member_slug]) }}" class="text-muted">
                                                     <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $batch->created_at }}"></span> {{ __("ago") }}
                                                 </a>
                                             @else

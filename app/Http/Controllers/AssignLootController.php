@@ -59,7 +59,7 @@ class AssignLootController extends Controller
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -98,7 +98,7 @@ class AssignLootController extends Controller
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $batch = Batch::where([
@@ -148,7 +148,7 @@ class AssignLootController extends Controller
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
             request()->session()->flash('status', 'You don\'t have permissions to submit that.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules = array_merge($this->getValidationRules($guild), [
@@ -358,7 +358,7 @@ class AssignLootController extends Controller
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
             request()->session()->flash('status', 'You don\'t have permissions to submit that.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules = array_merge($this->getValidationRules($guild), [

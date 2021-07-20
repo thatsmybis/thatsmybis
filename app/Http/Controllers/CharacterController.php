@@ -147,7 +147,7 @@ class CharacterController extends Controller
         if (request()->input('create_more')) {
             return redirect()->route('character.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'create_more' => 1]);
         } else {
-            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]);
         }
     }
 
@@ -178,14 +178,14 @@ class CharacterController extends Controller
 
         if (!$character) {
             request()->session()->flash('status', 'Character not found.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load(['raidGroups', 'raidGroups.role']);
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
-            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]);
         }
 
         if ($currentMember->hasPermission('edit.characters')) {
@@ -219,7 +219,7 @@ class CharacterController extends Controller
             return redirect()->route('home');
         }
 
-        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guildSlug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guildSlug, 'characterId' => $character->id, 'characterSlug' => $character->slug]);
     }
 
     /**
@@ -414,7 +414,7 @@ class CharacterController extends Controller
         // Can you edit someone else's character?
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s character.');
-            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+            return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]);
         }
 
         $canEditOthers = $currentMember->hasPermission('edit.characters');
@@ -524,7 +524,7 @@ class CharacterController extends Controller
 
         request()->session()->flash('status', 'Successfully updated ' . $updateValues['name'] . ', ' . (request()->input('level') ? 'level ' . request()->input('level') : '') . ' ' . request()->input('race') . ' ' . request()->input('class'));
 
-        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
+        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]);
     }
 
     /**
@@ -595,6 +595,6 @@ class CharacterController extends Controller
 
         request()->session()->flash('status', "Successfully updated " . $character->name ."'s note.");
 
-        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
+        return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug, 'b' => 1]);
     }
 }

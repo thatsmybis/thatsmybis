@@ -9,7 +9,7 @@
                 </span>
         </a>
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
-            <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+            <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                 <span class="fas fa-fw fa-user"></span> {{ __("Profile") }}
             </a>
             @if (isset($showLogs) && $showLogs)
@@ -18,12 +18,12 @@
                 </a>
             @endif
             @if (isset($showEdit) && $showEdit)
-                <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                     <span class="fas fa-fw fa-pencil"></span> {{ __("Edit") }}
                 </a>
             @endif
             @if (isset($showEditLoot) && $showEditLoot)
-                <a class="dropdown-item" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                <a class="dropdown-item" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                     <span class="fas fa-fw fa-sack"></span> {{ __("Wishlist & Loot") }}
                 </a>
             @endif
@@ -38,19 +38,19 @@
         @endif
         <li class="list-inline-item">
             <span class="font-weight-bold h{{ isset($headerSize) && $headerSize ? $headerSize : '2' }}">
-                {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ $character->class ? strtolower($character->class) : '' }}">{{ $character->name }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
+                {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}" class="text-{{ $character->class ? strtolower($character->class) : '' }}">{{ $character->name }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
             </span>
         </li>
         @if (isset($showEdit) && $showEdit)
             <li class="list-inline-item">
-                <a href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                <a href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                     <span class="fas fa-fw fa-pencil"></span>{{ __("edit") }}
                 </a>
             </li>
         @endif
         @if (isset($showEditLoot) && $showEditLoot)
             <li class="list-inline-item">
-                <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                     <span class="fas fa-fw fa-sack"></span>{{ __("wishlist & loot") }}
                 </a>
             </li>

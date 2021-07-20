@@ -40,7 +40,7 @@ class PrioController extends Controller
             } else {
                 request()->session()->flash('status', 'You don\'t have permissions to view that page.');
             }
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -73,7 +73,7 @@ class PrioController extends Controller
             } else {
                 request()->session()->flash('status', 'You don\'t have permissions to view that page.');
             }
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load([
@@ -209,7 +209,7 @@ class PrioController extends Controller
             } else {
                 request()->session()->flash('status', 'You don\'t have permissions to view that page.');
             }
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load('characters');
@@ -297,7 +297,7 @@ class PrioController extends Controller
 
         if (!$item) {
             request()->session()->flash('status', 'Item not found. Can\'t set prios on items that don\'t drop from a boss or aren\'t in our loot tables, including token rewards.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $wishlistCharacters = null;
@@ -327,7 +327,7 @@ class PrioController extends Controller
             } else {
                 request()->session()->flash('status', 'You don\'t have permissions to view that page.');
             }
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [
@@ -400,7 +400,7 @@ class PrioController extends Controller
             } else {
                 request()->session()->flash('status', 'You don\'t have permissions to view that page.');
             }
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $validationRules =  [

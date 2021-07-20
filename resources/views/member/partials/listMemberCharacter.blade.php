@@ -19,18 +19,18 @@
             @endif
         </a>
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
-            <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+            <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                 <span class="text-muted fa-fw fas fa-user"></span>
                 {{ __("Profile") }}
             </a>
             @if (!isset($showEdit) || $showEdit)
-                <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                <a class="dropdown-item" href="{{ route('character.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                     <span class="text-muted fa-fw fas fa-pencil"></span>
                     {{ __("Edit") }}
                 </a>
             @endif
             @if (!isset($showEditLoot) || $showEditLoot)
-                <a class="dropdown-item" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                <a class="dropdown-item" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                     <span class="text-muted fa-fw fas fa-sack"></span>
                     {{ __("Wishlist & Loot") }}
                 </a>

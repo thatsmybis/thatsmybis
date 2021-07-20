@@ -18,7 +18,7 @@
                 @if (!isset($hideAddedBy) || !$hideAddedBy)
                     <li class="list-inline-item">
                         by
-                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $item->pivot->added_by, 'usernameSlug' => slug($item->added_by_username)]) }}" class="text-muted">
+                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $item->pivot->added_by, 'userSlug' => slug($item->added_by_username)]) }}" class="text-muted">
                             {{ $item->added_by_username }}
                         </a>
                         @if ((!isset($hideRaidGroup) || !$hideRaidGroup) && $item->raid_group_name)

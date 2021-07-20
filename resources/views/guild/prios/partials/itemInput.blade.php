@@ -63,7 +63,7 @@
                     <ul class="list-inline">
                         @foreach (($guild->is_attendance_hidden ? $item->wishlistCharacters : $item->wishlistCharactersWithAttendance) as $character)
                             <li class="list-inline-item">
-                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}"
                                     class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
                                     <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
                                     <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_group_color) }}"></span>-->
@@ -91,7 +91,7 @@
                     <ul class="list-inline">
                         @foreach ($item->receivedAndRecipeCharacters as $character)
                             <li class="list-inline-item">
-                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}"
                                     class="tag" target="_blank">
                                     <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
                                 </a>

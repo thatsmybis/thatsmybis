@@ -86,7 +86,7 @@
                                 @endif
                                 @if ($item->character_name)
                                     {{ __("to") }}
-                                    <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $item->character_id, 'nameSlug' => $item->character_slug]) }}" class="text-{{ strtolower($item->character_class) }}">
+                                    <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $item->character_id, 'characterSlug' => $item->character_slug]) }}" class="text-{{ strtolower($item->character_class) }}">
                                         {{ $item->character_name }}
                                     </a>
                                     {{ $item->character_is_alt ? __('alt') : '' }}

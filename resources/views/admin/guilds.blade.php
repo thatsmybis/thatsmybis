@@ -164,7 +164,7 @@
                                             </li>
                                         @endif
                                         <li>
-                                            <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $guild->member_id, 'usernameSlug' => $guild->member_username]) }}"
+                                            <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $guild->member_id, 'userSlug' => $guild->member_username]) }}"
                                                 class="text-discord">
                                                 {{ $guild->discord_username }}
                                             </a>

@@ -30,7 +30,7 @@ class RoleController extends Controller
 
         if (!$currentMember->hasPermission('view.discord-roles')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load('roles');
@@ -53,7 +53,7 @@ class RoleController extends Controller
 
         if (!$currentMember->hasPermission('sync.discord-roles')) {
             request()->session()->flash('status', 'You don\'t have permissions to sync roles.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $guild->load(['roles']);

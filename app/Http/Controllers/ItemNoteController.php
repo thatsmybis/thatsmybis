@@ -32,7 +32,7 @@ class ItemNoteController extends Controller
 
         if (!$currentMember->hasPermission('edit.items')) {
             request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]);
         }
 
         $instance = Instance::where('slug', $instanceSlug)
@@ -95,7 +95,7 @@ class ItemNoteController extends Controller
 
         if (!$currentMember->hasPermission('edit.items')) {
             request()->session()->flash('status', 'You don\'t have permissions to submit that.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->Slug]);
+            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->Slug]);
         }
 
         $validationRules =  [
@@ -223,7 +223,7 @@ class ItemNoteController extends Controller
 
         if (!$currentMember->hasPermission('edit.items')) {
             request()->session()->flash('status', 'You don\'t have permissions to edit items.');
-            return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name)]);
+            return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'itemId' => $item->item_id, 'slug' => slug($item->name)]);
         }
 
         $existingRelationship = $guild->items()->find(request()->input('id'));
@@ -266,7 +266,7 @@ class ItemNoteController extends Controller
 
         request()->session()->flash('status', "Successfully " . $noticeVerb . " " . $item->name ."'s note.");
 
-        return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name), 'b' => 1]);
+        return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'itemId' => $item->item_id, 'slug' => slug($item->name), 'b' => 1]);
     }
 
     public static function getItemAverageTiers($instance, $expansionId) {

@@ -117,7 +117,7 @@
                                     @include('partials/item', ['wowheadLink' => false])
                                     <small class="text-muted">
                                         {{ __("on") }}
-                                        <a href="{{route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $itemCharacter->id, 'nameSlug' => $itemCharacter->slug]) }}"
+                                        <a href="{{route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $itemCharacter->id, 'characterSlug' => $itemCharacter->slug]) }}"
                                             class="text-{{ $itemCharacter->class ? strtolower($itemCharacter->class) : '' }}">
                                             {{ $itemCharacter->name }}
                                         </a>

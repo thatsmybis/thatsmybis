@@ -47,7 +47,7 @@
 
                 @if ($currentMember->guild_id == $guild->id)
                     <li class="nav-item {{ in_array(Route::currentRouteName(), ['member.edit', 'member.show']) && $currentMember->id == (isset($member) ? $member->id : null) ? 'active' : '' }}">
-                        <a class="nav-link {{ $menuColor }}" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]) }}">
+                        <a class="nav-link {{ $menuColor }}" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'userSlug' => $currentMember->slug]) }}">
                             {{ __("Profile") }}
                         </a>
                     </li>
@@ -57,7 +57,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="wishlistNavDropdown">
                             @foreach ($currentMember->characters as $character)
-                                <a class="dropdown-item text-{{ strtolower($character->class) }}-important" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                                <a class="dropdown-item text-{{ strtolower($character->class) }}-important" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'characterSlug' => $character->slug]) }}">
                                     {{ $character->name }}
                                 </a>
                             @endforeach

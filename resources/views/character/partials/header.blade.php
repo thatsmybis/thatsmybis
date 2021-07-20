@@ -74,7 +74,7 @@
                 @if ($character->member_id)
                     {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
                     @if ($character->relationLoaded('member'))
-                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'usernameSlug' => $character->member->slug]) }}" class="">
+                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'userSlug' => $character->member->slug]) }}" class="">
                             {{ $character->member->username }}{{ __("'s character") }}
                         </a>
                     @endif

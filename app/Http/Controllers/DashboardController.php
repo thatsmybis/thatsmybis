@@ -102,7 +102,7 @@ class DashboardController extends Controller
             'guildId'      => $guild->id,
             'guildSlug'    => $guild->slug,
             'memberId'     => $currentMember->id,
-            'usernameSlug' => $currentMember->slug
+            'userSlug' => $currentMember->slug
         ]);
     }
 }

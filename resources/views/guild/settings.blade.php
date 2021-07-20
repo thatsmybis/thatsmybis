@@ -99,7 +99,7 @@
                                         <span class="text-discord">
                                             {{ $guild->user->discord_username }}
                                         </span>
-                                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $owner->id, 'usernameSlug' => $owner->slug]) }}" class="text-muted">
+                                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $owner->id, 'userSlug' => $owner->slug]) }}" class="text-muted">
                                             ({{ $guild->user->username }})
                                         </a>
                                     </div>
