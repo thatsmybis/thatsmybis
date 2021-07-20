@@ -123,13 +123,13 @@ function numToKs($number) {
     }
 }
 
-function slug($string) {
-    $slug = substr(Illuminate\Support\Str::slug($string, '-'), 0, 50);
-    if ($slug) {
-        return $slug;
-    } else {
-        return '-';
-    }
+/**
+ * @param string $string
+ * @return string
+ */
+function slug(string $string): string
+{
+    return substr(Str::slug($string), 0, 50) ?:  '-';
 }
 
 /**
