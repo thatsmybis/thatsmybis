@@ -124,6 +124,12 @@ class RaidController extends Controller
         DB::table('raid_raid_groups')->insert($newRows);
         $newRows = [];
 
+        // Add raid logs
+        if (request()->input('logs')) {
+            // Replace old logs with new ones
+            $this->syncLogs(request()->input('logs'), $raid->logs, $raid->id);
+        }
+
         AuditLog::create([
             'description'   => $currentMember->username . " created raid \"{$raid->name}\" with {$characterCount} character(s), {$instanceCount} dungeon(s), and {$raidGroupCount} raid group(s)",
             'member_id'     => $currentMember->id,
