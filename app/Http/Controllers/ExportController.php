@@ -182,10 +182,6 @@ class ExportController extends Controller {
         $currentMember = request()->get('currentMember');
         $viewPrioPermission = $currentMember->hasPermission('view.prios');
 
-        if ($guild->is_prio_private && !$viewPrioPermission) {
-            throw new Exception('Insufficient permission to export loot data for Gargul');
-        }
-
         $characters = $guild->characters()
             ->has('outstandingItems')
             ->with([
@@ -199,6 +195,17 @@ class ExportController extends Controller {
         $wishlistData = [];
         foreach ($characters as $character) {
             foreach ($character->outstandingItems as $item) {
+                $order = $item->order;
+
+                // If the current member is not allowed to see item character
+                // priorities then the order will be replaced with a question mark
+                if ($item->type === Item::TYPE_PRIO
+                    && $guild->is_prio_private
+                    && !$viewPrioPermission
+                ) {
+                    $order = '?';
+                }
+
                 $itemId = $item->item->item_id;
                 $characterName = mb_strtolower($character->name);
 
@@ -210,7 +217,7 @@ class ExportController extends Controller {
                     '%s%s|%s|%s',
                     $characterName,
                     $item->is_offspec ? '(OS)' : '',
-                    $item->order,
+                    $order,
                     $item->type === Item::TYPE_PRIO ? 1 : 2,
                 );
             }
