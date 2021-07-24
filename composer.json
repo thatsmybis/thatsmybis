@@ -22,6 +22,8 @@
         "socialiteproviders/discord": "^2.0"
     },
     "require-dev": {
+        "barryvdh/laravel-ide-helper": "^2.8",
+        "barryvdh/laravel-debugbar": "^3.6",
         "facade/ignition": "^2.0",
         "fzaninotto/faker": "^1.4",
         "mockery/mockery": "^1.0",

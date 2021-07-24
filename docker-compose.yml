@@ -19,6 +19,7 @@ services:
       - DB_USERNAME=my_user
       - DB_DATABASE=thatsmybis_1
       - DB_PASSWORD=my_password
+      - COMPOSER_MEMORY_LIMIT=-1
     depends_on:
       - mariadb
     ports:

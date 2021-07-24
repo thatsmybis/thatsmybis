@@ -1,12 +1,15 @@
+/docker
 /node_modules
 /public/hot
 /public/storage
 /storage/*.key
 /storage
 /vendor
+/.idea
 .env
 .env.backup
 .phpunit.result.cache
+_ide_helper.php
 Homestead.json
 Homestead.yaml
 npm-debug.log
