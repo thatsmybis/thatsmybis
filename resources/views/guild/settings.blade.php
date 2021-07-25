@@ -365,7 +365,10 @@
                             <div class="form-group">
                                 <label for="current_wishlist_number" class="">
                                     {{ __("Current Wishlist") }}
-                                    <small class="text-muted">{{ __("which wishlist should be used throughout the site?") }}</small>
+                                    <small class="text-muted">
+                                        {{ __("which wishlist should be used throughout the site?") }}
+                                        {{ __("(useful for phases)") }}
+                                    </small>
                                 </label>
                                 <input name="current_wishlist_number"
                                     min="1"
