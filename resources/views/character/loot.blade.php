@@ -66,7 +66,7 @@
                     <div class="row mb-3 pt-2 bg-light rounded">
                         <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
                             <label for="wishlist" class="sr-only">
-                                Wishlist
+                                {{ __("Wishlist") }}
                             </label>
 
                             <div class="dropdown">

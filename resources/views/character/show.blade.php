@@ -83,13 +83,13 @@
                     @php
                         $wishlists = [];
                         for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++) {
-                            if ($character->allWishlists->where('list_number', $i)->count()) {
+                            if ($i ==  $guild->current_wishlist_number || $character->allWishlists->where('list_number', $i)->count()) {
                                 $wishlists[$i] = $character->allWishlists->where('list_number', $i);
                             }
                         }
                     @endphp
 
-                    @include('character/partials/wishlist', ['isActive' => true, 'wishlistNumber' => $guild->current_wishlist_number])
+                    @include('character/partials/wishlist', ['wishlist' => $wishlists[$guild->current_wishlist_number], 'isActive' => true, 'wishlistNumber' => $guild->current_wishlist_number])
 
                     @if (count($wishlists) > 1)
                         <div class="col-12 mb-3">
@@ -101,7 +101,7 @@
                         @foreach ($wishlists as $key => $wishlist)
                             <div id="inactive-wishlists" style="display:none;">
                                 @if ($key != $guild->current_wishlist_number && count($wishlist))
-                                    @include('character/partials/wishlist', ['isActive' => false, 'wishlistNumber' => $key])
+                                    @include('character/partials/wishlist', ['wishlist' => $wishlist, 'isActive' => false, 'wishlistNumber' => $key])
                                 @endif
                             </div>
                         @endforeach

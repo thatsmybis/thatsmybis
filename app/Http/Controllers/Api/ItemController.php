@@ -5,7 +5,8 @@ use App\Item;
 use Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
-use \Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Validation\Rule;
 
 class ItemController extends \App\Http\Controllers\Controller
 {
@@ -23,6 +24,18 @@ class ItemController extends \App\Http\Controllers\Controller
         return [
             'expansion_id' => 'integer|min:1|max:99',
             'query'        => 'string|min:1|max:40',
+            'locale'       => ['nullable', 'string', Rule::in([
+                    "de",
+                    "en",
+                    "es",
+                    "fr",
+                    "it",
+                    "pt",
+                    "ru",
+                    "ko",
+                    // "cn",
+                ])
+            ],
         ];
     }
 
@@ -34,29 +47,48 @@ class ItemController extends \App\Http\Controllers\Controller
      */
     public function query($expansionId, $query)
     {
+        $locale = request()->input('locale');
+
         $validator = Validator::make([
             'expansion_id' => $expansionId,
-            'query'        => $query
+            'query'        => $query,
+            'locale'       => $locale,
         ], $this->getValidationRules());
 
         if ($validator->fails()) {
             return response()->json(['error' => 'Query did not pass validation. Query must be between 1 and 40 characters. Expansion ID must be between 1 and 99.'], 403);
         } else {
             if ($query && $query != " ") {
-                $results = Item::select(['name', 'item_id'])
+                $sqlQuery = Item::orderByDesc('weight')
+                    ->limit(15);
+
+                if ($locale) {
+                    $sqlQuery = $sqlQuery->select(['name', "name_{$locale}", 'item_id', 'quality'])
+                    ->where([
+                        ["name_{$locale}", 'like', '%' . trim($query) . '%'],
+                        ['expansion_id', $expansionId],
+                    ])
+                    ->orWhere([
+                        ['name', 'like', '%' . trim($query) . '%'],
+                        ['expansion_id', $expansionId],
+                    ])
+                    ->orderBy("name_{$locale}")
+                    ->orderBy('name');
+                } else {
+                    $sqlQuery = $sqlQuery->select(['name', 'item_id'])
                     ->where([
                         ['name', 'like', '%' . trim($query) . '%'],
                         ['expansion_id', $expansionId],
                     ])
+                    ->orderBy('name');
                     // For a more performant/powerful query...
                     // ->whereRaw(
                     //     "MATCH(`items`.`name`) AGAINST(? IN BOOLEAN MODE)",
                     //     ['+' . $query . ''] // note the prefixed or suffixed character(s) https://dev.mysql.com/doc/refman/5.5/en/fulltext-boolean.html
                     // )
-                    ->orderByDesc('weight')
-                    ->orderBy('name')
-                    ->limit(15)
-                    ->get();
+                }
+
+                $results = $sqlQuery->get();
 
                 // For testing the query time:
                 // $start = microtime(true);
@@ -65,8 +97,12 @@ class ItemController extends \App\Http\Controllers\Controller
                 // Log::debug($query . " (FULLTEXT): " . round(($end - $start) * 1000, 3) . "ms");
 
                 // We just want the names in a plain old array; not key:value.
-                $results = $results->transform(function ($item) {
-                    return ['value' => $item['item_id'], 'label' => $item['name']];
+                $results = $results->transform(function ($item) use ($locale) {
+                    if ($locale) {
+                        return ['value' => $item['item_id'], 'label' => ($item["name_{$locale}"] ? $item["name_{$locale}"] : $item['name'])];
+                    } else {
+                        return ['value' => $item['item_id'], 'label' => $item['name']];
+                    }
                 });
             } else {
                 return response()->json([], 200);

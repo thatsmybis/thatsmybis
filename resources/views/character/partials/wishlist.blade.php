@@ -18,12 +18,12 @@
     </span>
 </div>
 <div class="col-12 pb-3">
-    @if ($wishlists[$wishlistNumber]->count() > 0)
+    @if ($wishlist->count() > 0)
         <ol class="js-wishlist-sorted" style="{{ $guild->do_sort_items_by_instance ? '' : 'display:none;' }}">
             @php
                 $lastInstanceId = null;
             @endphp
-            @foreach ($wishlists[$wishlistNumber]->sortBy(function ($item) {return [$item->instance_order, $item->pivot->order]; }) as $item)
+            @foreach ($wishlist->sortBy(function ($item) {return [$item->instance_order, $item->pivot->order]; }) as $item)
                 @if ($item->instance_id != $lastInstanceId)
                     <li class="no-bullet no-indent {{ !$loop->first ? 'mt-3' : '' }}">
                         {{ $item->instance_name }}
@@ -49,7 +49,7 @@
         </ol>
 
         <ol class="js-wishlist-unsorted" style="{{ $guild->do_sort_items_by_instance ? 'display:none;' : '' }}">
-            @foreach ($wishlists[$wishlistNumber] as $item)
+            @foreach ($wishlist as $item)
                 <li value="{{ $item->pivot->order }}">
                     @include('partials/item', [
                         'wowheadLink'   => false,
