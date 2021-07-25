@@ -80,77 +80,32 @@
                 @endif
 
                 @if ($showWishlist)
-                    <div class="col-12 mb-2">
-                        @if ($showEditLoot)
-                            <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
-                                <span class="text-legendary font-weight-bold">
-                                    <span class="fas fa-fw fa-scroll-old"></span>
-                                    {{ __("Wishlist") }}
-                                </span>
-                                <span class="small align-text- fas fa-fw fa-pencil"></span>
-                            </a>
-                        @else
-                            <span class="text-legendary font-weight-bold">
-                                <span class="fas fa-fw fa-scroll-old"></span>
-                                {{ __("Wishlist") }}
+                    @php
+                        $wishlists = [];
+                        for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++) {
+                            if ($character->allWishlists->where('list_number', $i)->count()) {
+                                $wishlists[$i] = $character->allWishlists->where('list_number', $i);
+                            }
+                        }
+                    @endphp
+
+                    @include('character/partials/wishlist', ['isActive' => true, 'wishlistNumber' => $guild->current_wishlist_number])
+
+                    @if (count($wishlists) > 1)
+                        <div class="col-12 mb-3">
+                            <span id="show-inactive-wishlists" class="cursor-pointer text-muted">
+                                {{ __("show inactive wishlists") }} ({{count($wishlists) - 1 }})
                             </span>
-                        @endif
-                        <span class="js-sort-wishlists text-link">
-                            <span class="fas fa-fw fa-exchange cursor-pointer"></span>
-                        </span>
-                    </div>
-                    <div class="col-12 pb-3">
-                        @if ($character->relationLoaded('wishlist') && $character->wishlist->count() > 0)
-                            <ol class="js-wishlist-sorted" style="{{ $guild->do_sort_items_by_instance ? '' : 'display:none;' }}">
-                                @php
-                                $lastInstanceId = null;
-                                @endphp
-                                @foreach ($character->wishlist->sortBy(function ($item) {return [$item->instance_order, $item->pivot->order]; }) as $item)
-                                    @if ($item->instance_id != $lastInstanceId)
-                                        <li class="no-bullet no-indent {{ !$loop->first ? 'mt-3' : '' }}">
-                                            {{ $item->instance_name }}
-                                        </li>
-                                    @endif
+                        </div>
 
-                                    <li value="{{ $item->pivot->order }}">
-                                        @include('partials/item', [
-                                            'wowheadLink'   => false,
-                                            'itemDate'      => $item->pivot->created_at,
-                                            'itemUsername'  => $item->added_by_username,
-                                            'strikeThrough' => $item->pivot->is_received,
-                                            'showTier'      => true,
-                                            'tierMode'      => $guild->tier_mode,
-                                        ])
-                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true])
-                                    </li>
-
-                                    @php
-                                        $lastInstanceId = $item->instance_id;
-                                    @endphp
-                                @endforeach
-                            </ol>
-
-                            <ol class="js-wishlist-unsorted" style="{{ $guild->do_sort_items_by_instance ? 'display:none;' : '' }}">
-                                @foreach ($character->wishlist as $item)
-                                    <li value="{{ $item->pivot->order }}">
-                                        @include('partials/item', [
-                                            'wowheadLink'   => false,
-                                            'itemDate'      => $item->pivot->created_at,
-                                            'itemUsername'  => $item->added_by_username,
-                                            'strikeThrough' => $item->pivot->is_received,
-                                            'showTier'      => true,
-                                            'tierMode'      => $guild->tier_mode,
-                                        ])
-                                        @include('character/partials/itemDetails', ['hideCreatedAt' => true])
-                                    </li>
-                                @endforeach
-                            </ol>
-                        @else
-                            <div class="pl-4">
-                                —
+                        @foreach ($wishlists as $key => $wishlist)
+                            <div id="inactive-wishlists" style="display:none;">
+                                @if ($key != $guild->current_wishlist_number && count($wishlist))
+                                    @include('character/partials/wishlist', ['isActive' => false, 'wishlistNumber' => $key])
+                                @endif
                             </div>
-                        @endif
-                    </div>
+                        @endforeach
+                    @endif
                 @endif
 
                 <div class="col-12 mb-2">
@@ -348,6 +303,10 @@
         });
 
         warnBeforeLeaving("#noteForm");
+
+        $("#show-inactive-wishlists").click(function () {
+            $("#inactive-wishlists").toggle();
+        });
     });
 </script>
 @endsection
