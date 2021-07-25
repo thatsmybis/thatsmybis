@@ -72,14 +72,14 @@ function getLocales() {
         "da" => "Dansk (incomplete)",
         "de" => "Deutsch",
         "en" => "English",
-        "es" => "Español (item links only)",
+        "es" => "Español (items only)",
         "fr" => "Français",
-        "it" => "Italiano (item links only)",
+        "it" => "Italiano (items only)",
         "no" => "Norsk (incomplete)",
-        "pt" => "Português Brasileiro (item links only)",
+        "pt" => "Português Brasileiro (items only)",
         "ru" => "Русский",
-        "ko" => "한국어 (item links only)",
-        "cn" => "简体中文 (item links only)",
+        "ko" => "한국어 (items only)",
+        "cn" => "简体中文 (items only)",
     ];
 }
 
