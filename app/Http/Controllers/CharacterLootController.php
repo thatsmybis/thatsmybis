@@ -56,10 +56,13 @@ class CharacterLootController extends Controller
             'raidGroup.role',
             'received',
             'recipes',
-            'wishlist' => function ($query) use ($wishlistNumber) {
+            'allWishlists' => function ($query) use ($wishlistNumber) {
                 return $query->where('character_items.list_number', $wishlistNumber);
             },
         ]);
+
+        $character->setRelation('wishlist', $character->allWishlists->values());
+
         $guild->load(['raids' => function ($query) {
             return $query->limit(AssignLootController::RAID_HISTORY_LIMIT);
         }]);
@@ -160,7 +163,7 @@ class CharacterLootController extends Controller
             'allCharacters' => function ($query) {
                 return $query->Where('id', request()->input('id'))
                     ->with([
-                        'wishlist' => function ($query) {
+                        'allWishlists' => function ($query) {
                             return $query->where('character_items.list_number', request()->input('wishlist_number'));
                         },
                         'recipes',
@@ -224,7 +227,7 @@ class CharacterLootController extends Controller
             if (request()->input('wishlist')) {
                 $maxWishlistItems = $guild->max_wishlist_items ? $guild->max_wishlist_items : self::MAX_WISHLIST_ITEMS;
                 $this->syncItems(
-                    $character->wishlist,
+                    $character->allWishlists,
                     array_slice(request()->input('wishlist'), 0, $maxWishlistItems),
                     Item::TYPE_WISHLIST,
                     $character,
@@ -247,7 +250,7 @@ class CharacterLootController extends Controller
                     $character,
                     $currentMember, true,
                     $markAsReceived,
-                    request()->input('wishlist_number')
+                    1,
                 );
             }
         }
@@ -262,7 +265,7 @@ class CharacterLootController extends Controller
                 $currentMember,
                 false,
                 false,
-                request()->input('wishlist_number')
+                1,
             );
         }
         return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
