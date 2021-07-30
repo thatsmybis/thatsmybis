@@ -185,8 +185,10 @@ class ExportController extends Controller {
         $characters = $guild->characters()
             ->has('outstandingItems')
             ->with([
-                'outstandingItems' => function ($query) {
-                    return $query->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
+                'outstandingItems' => function ($query) use ($guild) {
+                    return $query
+                        ->where('list_number', $guild->current_wishlist_number)
+                        ->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
                 }
             ])
             ->select('id', 'name')
