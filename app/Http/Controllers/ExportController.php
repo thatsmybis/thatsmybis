@@ -631,7 +631,9 @@ class ExportController extends Controller {
             WHERE {$lootTypeFragment}
                 c.guild_id = {$guild->id}
                 AND i.expansion_id = {$guild->expansion_id}
+                AND (ci.type != 'wishlist' OR (ci.type = 'wishlist' AND ci.list_number = {$guild->current_wishlist_number}))
             ORDER BY ci.type, rg.name, c.name, ci.`order`;";
+
     }
 
     /**
