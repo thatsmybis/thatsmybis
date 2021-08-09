@@ -37,13 +37,25 @@ class RaidGroupController extends Controller
             $showOfficerNote = true;
         }
 
+        $type = null;
+        if (request()->input('type')) {
+            $type = request()->input('type');
+        }
+
         $guild->load([
-            'allRaidGroups' => function ($query) use ($id) {
-                return $query->where('id', $id)
-                    ->with([
-                        'characters',
-                        'role',
-                    ]);
+            'allRaidGroups' => function ($query) use ($id, &$type) {
+                $query = $query->where('id', $id)->with(['role']);
+
+                if ($type === 'secondary') {
+                    $query = $query->with('secondaryCharacters');
+                } else if ($type === 'all') {
+                    $query = $query->with(['characters', 'secondaryCharacters']);
+                } else {
+                    $type = 'main';
+                    $query = $query->with('characters');
+                }
+
+                return $query;
             },
         ]);
 
@@ -54,6 +66,19 @@ class RaidGroupController extends Controller
             return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
         }
 
+        if ($type == 'secondary') {
+            $raidGroup->setRelation('characters', $raidGroup->secondaryCharacters->values());
+        } else if ($type === 'all' && $raidGroup->relationLoaded('secondaryCharacters')) {
+            // Merge secondary characters in with main characters
+            $raidGroup->setRelation(
+                'characters',
+                $raidGroup->characters
+                    ->merge($raidGroup->secondaryCharacters)
+                    ->sortBy('name')
+                    ->values()
+            );
+        }
+
         // To get the paginator to work, raids is its own query and not a with() on the raidGroup.
         $raids = Raid::select('raids.*')
             ->join('raid_raid_groups', 'raid_raid_groups.raid_id', 'raids.id')
@@ -61,7 +86,6 @@ class RaidGroupController extends Controller
             ->whereNull('cancelled_at')
             ->whereNull('archived_at')
             ->with([
-                'characters',
                 'items',
                 'instances',
             ])
@@ -75,6 +99,7 @@ class RaidGroupController extends Controller
             'raids'           => $raids,
             'remarks'         => Raid::remarks(),
             'showOfficerNote' => $showOfficerNote,
+            'type'            => $type,
         ]);
     }
 

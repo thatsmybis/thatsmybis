@@ -43,16 +43,30 @@
         </a>
     </li>
     <li class="list-inline-item">
-        <a href="{{ route('guild.raidGroup.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-            <span class="fas fa-fw fa-user-check"></span>{{ __("attendance") }}
-        </a>
+        <div class="dropdown">
+            <a class="dropdown-toggle" id="raidGroup{{ $raidGroup->id }}AttendanceDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="fas fa-fw fa-user-check"></span>
+                {{ __("attendance") }}
+            </a>
+            <div class="dropdown-menu" aria-labelledby="raidGroup{{ $raidGroup->id }}AttendanceDropdown">
+                <a class="dropdown-item" href="{{ route('guild.raidGroup.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}" class="">
+                    {{ __("main raider") }}
+                </a>
+                <a class="dropdown-item" href="{{ route('guild.raidGroup.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id, 'type' => 'secondary']) }}" class="">
+                    {{ __("general raider") }}
+                </a>
+                <a class="dropdown-item" href="{{ route('guild.raidGroup.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id, 'type' => 'all']) }}" class="">
+                    {{ __("all raiders") }}
+                </a>
+            </div>
+        </div>
     </li>
     <li class="list-inline-item">
         <div class="dropdown">
-            <a class="dropdown-toggle" id="raidGroup{{ $raidGroup->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <a class="dropdown-toggle" id="raidGroup{{ $raidGroup->id }}ExportDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 {{ __("Export") }}
             </a>
-            <div class="dropdown-menu" aria-labelledby="raidGroup{{ $raidGroup->id }}Dropdown">
+            <div class="dropdown-menu" aria-labelledby="raidGroup{{ $raidGroup->id }}ExportDropdown">
                 <a class="dropdown-item" href="{{ route('guild.export.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'raidGroupId' => $raidGroup->id]) }}" target="_blank" class="tag">
                     <span class="fas fa-fw fa-file-csv text-muted"></span>
                     {{ __("Download CSV") }}

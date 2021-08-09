@@ -14,8 +14,28 @@
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                        <span style="{{ $raidGroup->role ? 'color:' . $raidGroup->getColor() : '' }}">{{ $raidGroup->name }}</span> {{ __("Attendance") }}
+                        <a href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" style="{{ $raidGroup->role ? 'color:' . $raidGroup->getColor() : '' }}">{{ $raidGroup->name }}</a>
+                        {{ __("Attendance") }}
                     </h1>
+                    <ul class="list-inline">
+                        <li class="list-inline-item">
+                            <a href="{{ route('guild.raidGroup.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}" class="{{ $type === 'main' ? 'font-weight-bold text-white' : '' }}">
+                                {{ __("main raider") }}
+                            </a>
+                        </li>
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="{{ route('guild.raidGroup.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id, 'type' => 'secondary']) }}" class="{{ $type === 'secondary' ? 'font-weight-bold text-white' : '' }}">
+                                {{ __("general raider") }}
+                            </a>
+                        </li>
+                        <li class="list-inline-item">&sdot;</li>
+                        <li class="list-inline-item">
+                            <a href="{{ route('guild.raidGroup.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id, 'type' => 'all']) }}" class="{{ $type === 'all' ? 'font-weight-bold text-white' : '' }}">
+                                {{ __("all raiders") }}
+                            </a>
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -40,6 +60,9 @@
                             <th>
                                 <span class="fas fa-fw fa-user text-muted"></span>
                                 {{ __("Character") }}
+                                <span class="small text-muted">
+                                    ({{ $raidGroup->characters->count() }})
+                                </span>
                             </th>
                             @if ($raids->count())
                                 @foreach ($raids as $raid)
