@@ -30,7 +30,10 @@ class CheckGuildPermissions
             $guild = Cache::remember($cacheKey, env('CACHE_GUILD_SECONDS', 5), function () use ($request) {
                 return Guild::
                     where('id', $request->route('guildId'))
-                    ->with(['raidGroups' => function ($query) { return $query->whereNull('disabled_at'); }])
+                    ->with([
+                        'allRaidGroups',
+                        'raidGroups' => function ($query) { return $query->whereNull('disabled_at'); }
+                    ])
                     ->first();
             });
 

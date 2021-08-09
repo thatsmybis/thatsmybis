@@ -108,7 +108,7 @@
                                     <button class="link">
                                         <span class="small">
                                             <span class="fa-fw fas fa-times"></span>
-                                            {{ __("Attendance filter:") }} {{ $guild->raidGroups->where('id', $currentMember->raid_group_id_filter)->first()->name }}
+                                            {{ __("Attendance filter:") }} {{ $guild->allRaidGroups->where('id', $currentMember->raid_group_id_filter)->first()->name }}
                                         </span>
                                     </button>
                                 </form>
