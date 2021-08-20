@@ -94,7 +94,10 @@ class CharacterLootController extends Controller
         $lockWishlist   = false;
         $unlockWishlist = false;
         if (!$guild->is_wishlist_disabled && ($guild->is_wishlist_locked && !$currentMember->hasPermission('loot.characters'))) {
-            if ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked) {
+            if (
+                $currentMember->id == $character->member_id
+                && ($currentMember->is_wishlist_unlocked || in_array($wishlistNumber, $guild->getWishlistLockedExceptions()))
+            ) {
                 $unlockWishlist = true;
             } else {
                 $lockWishlist = true;
@@ -222,6 +225,7 @@ class CharacterLootController extends Controller
             (!$guild->is_wishlist_locked
                 || $currentMember->hasPermission('loot.characters')
                 || ($currentMember->id == $character->member_id && $currentMember->is_wishlist_unlocked)
+                || in_array(request()->input('wishlist_number'), $guild->getWishlistLockedExceptions())
             )
         ) {
             if (request()->input('wishlist')) {

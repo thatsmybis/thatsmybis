@@ -43,6 +43,7 @@ class Guild extends Model
         'is_received_locked',
         'is_wishlist_private',
         'is_wishlist_locked',
+        'wishlist_locked_exceptions',
         'is_prio_autopurged',
         'is_wishlist_autopurged',
         'is_wishlist_disabled',
@@ -164,6 +165,10 @@ class Guild extends Model
             return [];
         }
 
+    }
+
+    public function getWishlistLockedExceptions() {
+        return explode(',', $this->wishlist_locked_exceptions);
     }
 
     /**

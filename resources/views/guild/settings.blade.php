@@ -321,6 +321,23 @@
                                         </span>
                                 </label>
                             </div>
+                            <div id="wishlistLockedExceptions" class="ml-4 mb-1" style="display:none;">
+                                <div class="mb-1 font-weight-bold">
+                                    {{ __("unlock specific wishlists") }}
+                                </div>
+                                @php
+                                    $wishlistLockedExceptions = $guild->getWishlistLockedExceptions();
+                                @endphp
+                                @for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
+                                    <div class="checkbox">
+                                        <label>
+                                            <input type="checkbox" name="wishlist_locked_exceptions[{{ $i }}]" value="1" class="" autocomplete="off"
+                                                {{ old('wishlist_locked_exceptions.' . $i) && old('wishlist_locked_exceptions.' . $i) == 1 ? 'checked' : (in_array($i, $wishlistLockedExceptions) ? 'checked' : '') }}>
+                                                {{ __("wishlist") }} {{ $i }}
+                                        </label>
+                                    </div>
+                                @endfor
+                            </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_wishlist_private" value="1" class="" autocomplete="off"
