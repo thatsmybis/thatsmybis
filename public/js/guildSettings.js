@@ -14,6 +14,14 @@ $("[name=show_message]").change(function () {
     }
 }).change();
 
+$("[name=is_wishlist_locked]").change(function () {
+    if (this.checked) {
+        $("#wishlistLockedExceptions").show();
+    } else {
+        $("#wishlistLockedExceptions").hide();
+    }
+}).change();
+
 // If the current element has a value, show it and the next element that is hidden because it is empty
 function showNext(currentElement) {
     if ($(currentElement).val() != "") {

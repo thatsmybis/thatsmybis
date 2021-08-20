@@ -63,6 +63,9 @@
                 @endif
 
                 @if (!$guild->is_wishlist_disabled)
+                    @php
+                        $wishlistLockedExceptions = $guild->getWishlistLockedExceptions();
+                    @endphp
                     <div class="row mb-3 pt-2 bg-light rounded">
                         <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
                             <label for="wishlist" class="sr-only">
@@ -89,6 +92,13 @@
                                             @else
                                                 <span class="text-danger">{{ __('(inactive)') }}</span>
                                             @endif
+                                            @if ($guild->is_wishlist_locked)
+                                                @if (in_array($i, $wishlistLockedExceptions))
+                                                    <span class="text-gold">{{ __('(unlocked)') }}</span>
+                                                @else
+                                                    <span class="text-muted">{{ __('(locked)') }}</span>
+                                                @endif
+                                            @endif
                                         </a>
                                     @endfor
                                 </div>
@@ -96,8 +106,12 @@
 
                             @if ($lockWishlist)
                                 <small class="text-warning font-weight-normal">{{ __("locked by your guild master(s)") }}</small>
+                                <small class="text-muted">{{ __('except list(s)') }} {{ str_replace(',', ', ', $guild->wishlist_locked_exceptions) }}</small>
+                                <small class="text-muted font-weight-normal">&sdot; {{ __("max") }} {{ $maxWishlistItems }}</small>
                             @elseif (!$unlockWishlist && $guild->is_wishlist_locked)
-                                <small class="text-warning font-weight-normal">{{ __("locked for raiders") }}</small> <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
+                                <small class="text-warning font-weight-normal">{{ __("locked for raiders") }}</small>
+                                <small class="text-muted">{{ __('except list(s)') }} {{ str_replace(',', ', ', $guild->wishlist_locked_exceptions) }}</small>
+                                <small class="text-muted font-weight-normal">&sdot; {{ __("max") }} {{ $maxWishlistItems }}</small>
                             @else
                                 <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
                             @endif

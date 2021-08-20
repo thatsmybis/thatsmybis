@@ -321,6 +321,7 @@ class GuildController extends Controller
             'is_received_locked'        => 'nullable|boolean',
             'is_wishlist_private'       => 'nullable|boolean',
             'is_wishlist_locked'        => 'nullable|boolean',
+            'wishlist_locked_exceptions.*' => 'nullable|boolean',
             'is_wishlist_disabled'      => 'nullable|boolean',
             'is_prio_autopurged'        => 'nullable|boolean',
             'is_wishlist_autopurged'    => 'nullable|boolean',
@@ -350,6 +351,10 @@ class GuildController extends Controller
         $updateValues['is_received_locked']        = request()->input('is_received_locked') == 1 ? 1 : 0;
         $updateValues['is_wishlist_private']       = request()->input('is_wishlist_private') == 1 ? 1 : 0;
         $updateValues['is_wishlist_locked']        = request()->input('is_wishlist_locked') == 1 ? 1 : 0;
+        $updateValues['wishlist_locked_exceptions'] =
+            $updateValues['is_wishlist_locked'] && request()->input('wishlist_locked_exceptions')
+            ? implode(",", array_keys(request()->input('wishlist_locked_exceptions')))
+            : null;
         $updateValues['is_wishlist_disabled']      = request()->input('is_wishlist_disabled') == 1 ? 1 : 0;
         $updateValues['is_prio_autopurged']        = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
         $updateValues['is_wishlist_autopurged']    = request()->input('is_wishlist_autopurged') == 1 ? 1 : 0;
@@ -392,6 +397,10 @@ class GuildController extends Controller
             $updateValues['message'] = null;
         } else if ($updateValues['message'] != $guild->message) {
             $auditMessage .= ' (MOTD updated)';
+        }
+
+        if ($updateValues['is_wishlist_locked'] && $updateValues['wishlist_locked_exceptions'] != $guild->wishlist_locked_exceptions) {
+            $auditMessage .= ' (unlocked wishlists changed to ' . str_replace(',', ', ', $updateValues['wishlist_locked_exceptions']) . ')';
         }
 
         if (array_key_exists('gm_role_id', $updateValues) && $updateValues['gm_role_id'] != $guild->gm_role_id) {
