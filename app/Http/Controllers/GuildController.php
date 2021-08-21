@@ -68,7 +68,12 @@ class GuildController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        return view('guild.export.list', ['currentMember' => $currentMember, 'guild' => $guild]);
+        return view('guild.export.list', [
+            'currentMember'     => $currentMember,
+            'guild'             => $guild,
+            'maxWishlistLists'  => CharacterLootController::MAX_WISHLIST_LISTS,
+            'wishlistNumber'    => $guild->current_wishlist_number,
+        ]);
     }
 
     /**

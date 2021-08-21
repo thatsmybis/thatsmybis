@@ -62,14 +62,41 @@
                             <p>
                                 {!! __("Import wishlist and loot priority data into the Gargul addon. Select all ( ctrl+a ), copy ( ctrl+c ) and then paste ( ctrl+v ) in the import window (/gl wl). For more info check :curseforge_url on Curseforge. Happy lootin'!", ['curseforge_url' => "<a href='https://www.curseforge.com/wow/addons/gargul' target='_blank'>Gargul</a>"]) !!}
                             </p>
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" target="_blank" class="tag">
-                                        <span class="fas fa-fw fa-file-code text-muted"></span>
-                                        {{ __("Download") }}
-                                    </a>
-                                </li>
-                            </ul>
+                            <form id="itemForm" class="form-horizontal" role="form" method="POST" action="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                {{ csrf_field() }}
+                                <ul class="list-inline">
+                                    <li class="list-inline-item">
+                                        <button class="btn btn-success" type="submit">
+                                            <span class="fas fa-file-code"></span>
+                                            {{ __("Download") }}
+                                        </button>
+                                    </li>
+                                    <li class="list-inline-item">
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle font-weight-bold text-legendary" id="wishlistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="fas fa-fw fa-scroll-old"></span>
+                                                {{ __("Wishlists") }}
+                                            </a>
+                                            <div class="dropdown-menu" aria-labelledby="wishlistDropdown">
+                                                @for ($i = 1; $i <= $maxWishlistLists; $i++)
+                                                    <a class="dropdown-item"
+                                                       href="javascript: void(0);">
+                                                        <input type="checkbox" name="gargul_wishlist[]" id="gargul_wishlist_{{ $i }}" value="{{ $i }}" {{ $guild->current_wishlist_number == $i ? 'checked="checked"' : '' }}>
+                                                        <label for="gargul_wishlist_{{ $i }}">
+                                                            {{ __("Wishlist") }} {{ $i }}
+                                                            @if ($guild->current_wishlist_number == $i)
+                                                                <span class="text-success">{{ __('(active)') }}</span>
+                                                            @else
+                                                                <span class="text-danger">{{ __('(inactive)') }}</span>
+                                                            @endif
+                                                        </label>
+                                                    </a>
+                                                @endfor
+                                            </div>
+                                        </div>
+                                    </li>
+                                </ul>
+                            </form>
                         </li>
 
                         <li class="p-3 mb-3 rounded">
