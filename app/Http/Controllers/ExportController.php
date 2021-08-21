@@ -178,16 +178,23 @@ class ExportController extends Controller {
      */
     public function gargulWishlistJson()
     {
+        $this->validate(request(), [
+            'gargul_wishlist' => 'array|max:' . CharacterLootController::MAX_WISHLIST_LISTS,
+            'gargul_wishlist.*' => 'integer|min:1|max:' . CharacterLootController::MAX_WISHLIST_LISTS,
+        ]);
+
         $guild = request()->get('guild');
         $currentMember = request()->get('currentMember');
         $viewPrioPermission = $currentMember->hasPermission('view.prios');
+        $listNumbers = request()->input('gargul_wishlist') ?: [$guild->current_wishlist_number];
 
         $characters = $guild->characters()
             ->has('outstandingItems')
             ->with([
-                'outstandingItems' => function ($query) use ($guild) {
+                'outstandingItems' => function ($query) use ($guild, $listNumbers) {
                     return $query
-                        ->where('list_number', $guild->current_wishlist_number)
+                        ->whereIn('list_number', $listNumbers)
+                        ->orWhere('type', 'prio')
                         ->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
                 }
             ])
