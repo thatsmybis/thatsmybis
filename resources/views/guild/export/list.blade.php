@@ -37,15 +37,9 @@
                             -->
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}" target="_blank" class="tag">
-                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
-                                        {{ __("Download CSV") }}
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="tag">
-                                        <span class="fas fa-fw fa-file-csv text-uncommon"></span>
-                                        <span class="text-uncommon font-weight-bold">View CSV</span>
+                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="btn btn-success">
+                                        <span class="fas fa-fw fas fa-file-code"></span>
+                                        {{ __("Download") }}
                                     </a>
                                 </li>
                             </ul>
