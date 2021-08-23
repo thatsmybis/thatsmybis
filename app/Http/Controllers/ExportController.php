@@ -185,7 +185,24 @@ class ExportController extends Controller {
 
         $guild = request()->get('guild');
         $currentMember = request()->get('currentMember');
-        $viewPrioPermission = $currentMember->hasPermission('view.prios');
+        $memberCanViewPrios = !$guild->is_prio_private || $currentMember->hasPermission('view.prios');
+        $memberCanViewWishlists = !$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists');
+
+        // The current user doesn't have any of the required permissions so we only return the item priority notes.
+        // Individual permissions are inspected separately further down.
+        if (!$memberCanViewPrios && !$memberCanViewWishlists) {
+            return $this->getExport(
+                json_encode([
+                    'wishlists' => [],
+                    'loot' => $this->gargulLootPriorityCSV($guild->id),
+                ],
+                    JSON_UNESCAPED_UNICODE
+                ),
+                'Gargul data',
+                self::HTML
+            );
+        }
+
         $listNumbers = request()->input('gargul_wishlist') ?: [$guild->current_wishlist_number];
 
         $characters = $guild->characters()
@@ -204,15 +221,12 @@ class ExportController extends Controller {
         $wishlistData = [];
         foreach ($characters as $character) {
             foreach ($character->outstandingItems as $item) {
-                $order = $item->order;
 
-                // If the current member is not allowed to see item character
-                // priorities then the order will be replaced with a question mark
-                if ($item->type === Item::TYPE_PRIO
-                    && $guild->is_prio_private
-                    && !$viewPrioPermission
+                // The current member is not allowed to see the order of this item
+                if (($item->type === Item::TYPE_PRIO && !$memberCanViewPrios)
+                    || ($item->type === Item::TYPE_WISHLIST && !$memberCanViewWishlists)
                 ) {
-                    $order = '?';
+                    continue;
                 }
 
                 $itemId = $item->item->item_id;
@@ -226,7 +240,7 @@ class ExportController extends Controller {
                     '%s%s|%s|%s',
                     $characterName,
                     $item->is_offspec ? '(OS)' : '',
-                    $order,
+                    $item->order,
                     $item->type === Item::TYPE_PRIO ? 1 : 2,
                 );
             }
