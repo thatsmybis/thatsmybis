@@ -16,27 +16,37 @@
         &sdot;
     </li>
     <li class="list-inline-item text-muted">
-        <a href="{{ route('guild.raidGroup.mainCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-            {{-- TODO: Fix plural translation --}}
+        @if (!isset($showEdit) || $showEdit)
+            <a href="{{ route('guild.raidGroup.mainCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
+                {{-- TODO: Fix plural translation --}}
+                {{ $raidGroup->characters_count }} {{ __("main raider") }}{{ $raidGroup->characters_count != 1 ? 's' : '' }}
+            </a>
+        @else
             {{ $raidGroup->characters_count }} {{ __("main raider") }}{{ $raidGroup->characters_count != 1 ? 's' : '' }}
-        </a>
+        @endif
     </li>
     <li class="list-inline-item text-muted">
         &sdot;
     </li>
     <li class="list-inline-item text-muted">
-        <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-            {{-- TODO: Fix plural translation --}}
+        @if (!isset($showEdit) || $showEdit)
+            <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
+                {{-- TODO: Fix plural translation --}}
+                {{ $raidGroup->secondary_characters_count }} {{ __("general raider") }}{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+            </a>
+        @else
             {{ $raidGroup->secondary_characters_count }} {{ __("general raider") }}{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
-        </a>
+        @endif
     </li>
 </ul>
 <ul class="list-inline">
-    <li class="list-inline-item">
-        <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-            <span class="fas fa-fw fa-pencil"></span>{{ __("edit") }}
-        </a>
-    </li>
+    @if (!isset($showEdit) || $showEdit)
+        <li class="list-inline-item">
+            <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
+                <span class="fas fa-fw fa-pencil"></span>{{ __("edit") }}
+            </a>
+        </li>
+    @endif
     <li class="list-inline-item">
         <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raid_group_id' => $raidGroup->id]) }}">
             <span class="fas fa-fw fa-clipboard-list-check"></span>{{ __("history") }}
@@ -78,17 +88,19 @@
             </div>
         </div>
     </li>
-    <li class="list-inline-item">
-        <form class="form-inline" role="form" method="POST" action="{{ route('guild.raidGroup.toggleDisable', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-            {{ csrf_field() }}
-            <input hidden name="id" value="{{ $raidGroup->id }}">
-            <input hidden type="checkbox" name="disabled_at" value="1" class="" autocomplete="off"
-                {{ $raidGroup->disabled_at ? '' : 'checked' }}>
-            <button type="submit"
-                class="btn btn-link text-{{ $raidGroup->disabled_at ? 'success' : 'danger' }} p-0 m-0 ml-3"
-                title="{{ $raidGroup->disabled_at ? 'Raid Group is shown in dropdowns again' : 'Raid Group is no longer shown in dropdowns. Characters already assigned to this raid group will remain assigned to it.' }}">
-                <span class="fas fa-fw fa-{{ $raidGroup->disabled_at ? 'trash-undo' : 'trash' }}"></span>{{ $raidGroup->disabled_at ? __('unarchive') : __('archive') }}
-            </button>
-        </form>
-    </li>
+    @if (!isset($showEdit) || $showEdit)
+        <li class="list-inline-item">
+            <form class="form-inline" role="form" method="POST" action="{{ route('guild.raidGroup.toggleDisable', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                {{ csrf_field() }}
+                <input hidden name="id" value="{{ $raidGroup->id }}">
+                <input hidden type="checkbox" name="disabled_at" value="1" class="" autocomplete="off"
+                    {{ $raidGroup->disabled_at ? '' : 'checked' }}>
+                <button type="submit"
+                    class="btn btn-link text-{{ $raidGroup->disabled_at ? 'success' : 'danger' }} p-0 m-0 ml-3"
+                    title="{{ $raidGroup->disabled_at ? 'Raid Group is shown in dropdowns again' : 'Raid Group is no longer shown in dropdowns. Characters already assigned to this raid group will remain assigned to it.' }}">
+                    <span class="fas fa-fw fa-{{ $raidGroup->disabled_at ? 'trash-undo' : 'trash' }}"></span>{{ $raidGroup->disabled_at ? __('unarchive') : __('archive') }}
+                </button>
+            </form>
+        </li>
+    @endif
 </ul>

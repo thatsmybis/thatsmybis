@@ -17,11 +17,13 @@
                         {{ __("Only a character's main raid will show up beside their name across the site.") }}
                     </span>
                 </div>
-                <div class="col-12 mt-3 mb-3">
-                    <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
-                        <span class="fas fa-fw fa-plus"></span> {{ __("Create Raid Group") }}
-                    </a>
-                </div>
+                @if ($showEdit)
+                    <div class="col-12 mt-3 mb-3">
+                        <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-success">
+                            <span class="fas fa-fw fa-plus"></span> {{ __("Create Raid Group") }}
+                        </a>
+                    </div>
+                @endif
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     @if ($guild->allRaidGroups->count() > 0)
                         <ol class="no-bullet no-indent striped">

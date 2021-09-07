@@ -332,9 +332,10 @@ class RaidGroupController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if (!$currentMember->hasPermission('view.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
-            return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
+        $showEdit = false;
+
+        if ($currentMember->hasPermission('edit.raids')) {
+            $showEdit = true;
         }
 
         $guild->load([
@@ -347,6 +348,7 @@ class RaidGroupController extends Controller
         return view('guild.raidGroups.list', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
+            'showEdit'      => $showEdit,
         ]);
     }
 
