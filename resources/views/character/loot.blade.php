@@ -218,14 +218,16 @@
                             @endif
                         </label>
 
-                        <div class="form-group mb-0">
-                            <div class="checkbox">
-                                <label>
-                                    <input checked type="checkbox" name="mark_as_received" value="1" class="" autocomplete="off">
-                                        <small class="text-muted">{{ __("when adding items, mark prios and wishlist as received") }}</small>
-                                </label>
+                        @if (!$lockReceived)
+                            <div class="form-group mb-0">
+                                <div class="checkbox">
+                                    <label>
+                                        <input checked type="checkbox" name="mark_as_received" value="1" class="" autocomplete="off">
+                                            <small class="text-muted">{{ __("when adding items, mark prios and wishlist as received") }}</small>
+                                    </label>
+                                </div>
                             </div>
-                        </div>
+                        @endif
 
                         @if ($lockReceived)
                             @if ($character->received->count() > 0)

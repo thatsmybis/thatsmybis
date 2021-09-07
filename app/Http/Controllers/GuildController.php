@@ -375,6 +375,7 @@ class GuildController extends Controller
         $updateValues['calendar_link']             = request()->input('calendar_link');
         $updateValues['member_role_ids']           = implode(",", array_filter(request()->input('member_roles')));
 
+        // Update the permissions attached to each role in the guild
         $updateValues = $this->flushRoles($guild, $updateValues);
 
         $auditMessage = '';
@@ -419,6 +420,10 @@ class GuildController extends Controller
         if (array_key_exists('raid_leader_role_id', $updateValues) && $updateValues['raid_leader_role_id'] != $guild->raid_leader_role_id) {
             $role = $guild->roles->where('discord_id', $updateValues['raid_leader_role_id'])->first();
             $auditMessage .= ' (Raid Leader role changed to ' . ($role ? $role->name : 'none') . ')';
+        }
+        if (array_key_exists('auditor_role_id', $updateValues) && $updateValues['auditor_role_id'] != $guild->auditor_role_id) {
+            $role = $guild->roles->where('discord_id', $updateValues['auditor_role_id'])->first();
+            $auditMessage .= ' (Auditor role changed to ' . ($role ? $role->name : 'none') . ')';
         }
 
         if ($updateValues['member_role_ids'] != $guild->member_role_ids) {
@@ -562,6 +567,12 @@ class GuildController extends Controller
                 $role->permissions()->detach();
             }
         }
+        if ($guild->auditor_role_id) {
+            $role = $guild->roles->where('discord_id', $guild->auditor_role_id)->first();
+            if ($role) {
+                $role->permissions()->detach();
+            }
+        }
 
         if (request()->input('gm_role_id')) {
             $role = $guild->roles->where('discord_id', request()->input('gm_role_id'))->first();
@@ -595,6 +606,17 @@ class GuildController extends Controller
             }
         } else {
             $updateValues['raid_leader_role_id'] = null;
+        }
+        // Copy of the role code seen above
+        if (request()->input('auditor_role_id')) {
+            $role = $guild->roles->where('discord_id', request()->input('auditor_role_id'))->first();
+            if ($role) {
+                $rolePermissions = $permissions->whereIn('role_note', [Permission::AUDITOR]);
+                $role->permissions()->syncWithoutDetaching($rolePermissions->keyBy('id')->keys()->toArray());
+                $updateValues['auditor_role_id'] = request()->input('auditor_role_id');
+            }
+        } else {
+            $updateValues['auditor_role_id'] = null;
         }
 
         return $updateValues;

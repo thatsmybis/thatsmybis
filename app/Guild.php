@@ -32,6 +32,7 @@ class Guild extends Model
         'gm_role_id',
         'officer_role_id',
         'raid_leader_role_id',
+        'auditor_role_id',
         'class_leader_role_id',
         'member_role_ids',
         'message',

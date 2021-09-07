@@ -607,6 +607,48 @@
                     <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
                         <div class="row">
                             <div class="col-12">
+                                <label for="auditor_role_id" class="font-weight-bold">
+                                    <span class="fas fa-fw fa-glasses text-success"></span>
+                                    {{ __("Auditor Role") }}
+                                    <span class="small text-muted font-weight-normal">{{ __("if you have wishlist/prio visibility locked") }}</span>
+                                </label>
+                            </div>
+                            <div class="col-md-6 col-sm-8 col-12">
+                                <div class="form-group">
+                                    <div class="form-group">
+                                        <select name="auditor_role_id" class="form-control dark">
+                                            <option value="" selected>
+                                                —
+                                            </option>
+
+                                            @foreach ($guild->roles as $role)
+                                                <option value="{{ $role->discord_id }}"
+                                                    style="color:{{ $role->getColor() }};"
+                                                    {{ old('auditor_role_id') && old('auditor_role_id') == $role->discord_id ? 'selected' : ($guild->auditor_role_id == $role->discord_id ? 'selected' : '') }}>
+                                                    {{ $role->name }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="small text-muted mb-3">
+                                    <ul>
+                                        @foreach ($permissions->where('role_note', 'auditor') as $permission)
+                                            <li>
+                                                {{ $permission->description }}
+                                            </li>
+                                        @endforeach
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                        <div class="row">
+                            <div class="col-12">
                                 <label for="member_roles" class="font-weight-bold">
                                     <span class="fas fa-fw fa-swords text-success"></span>
                                     {{ __("Members") }}

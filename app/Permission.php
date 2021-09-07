@@ -25,6 +25,7 @@ class Permission extends Model
     const GUILD_MASTER = 'guild_master';
     const OFFICER      = 'officer';
     const RAID_LEADER  = 'raid_leader';
+    const AUDITOR      = 'auditor';
 
     /**
      * The database table used by the model.
