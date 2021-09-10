@@ -54,11 +54,11 @@
 }
 
 body {
-    color:                 #fff !important;
-    background-color:      #161523;
-    background-image:      linear-gradient(#1c1b3a 0px, #161523 100vh);
-    background-repeat:     no-repeat;
-    min-height:            100vh;
+    color:             #fff !important;
+    background-color:  #161523;
+    background-image:  linear-gradient(#1c1b3a 0px, #161523 100vh);
+    background-repeat: no-repeat;
+    min-height:        100vh;
     font-family: "Segoe UI", Segoe, Arial, sans-serif;
 }
 
@@ -95,9 +95,9 @@ body {
 }
 
 .btn-discord {
-    width:200px;
-    background-color:#222;
-    color:#fff;
+    width: 200px;
+    background-color: #222;
+    color: #fff;
 }
 
 .h1 {

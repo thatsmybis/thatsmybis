@@ -56,7 +56,7 @@
                             <p>
                                 {!! __("Import wishlist and loot priority data into the Gargul addon. Select all ( ctrl+a ), copy ( ctrl+c ) and then paste ( ctrl+v ) in the import window (/gl wl). For more info check :curseforge_url on Curseforge. Happy lootin'!", ['curseforge_url' => "<a href='https://www.curseforge.com/wow/addons/gargul' target='_blank'>Gargul</a>"]) !!}
                             </p>
-                            <form id="itemForm" class="form-horizontal" role="form" method="POST" action="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <form class="form-horizontal" role="form" method="POST" action="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 {{ csrf_field() }}
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
