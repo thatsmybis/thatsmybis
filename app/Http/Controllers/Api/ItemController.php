@@ -33,7 +33,7 @@ class ItemController extends \App\Http\Controllers\Controller
                     "pt",
                     "ru",
                     "ko",
-                    // "cn",
+                    "cn",
                 ])
             ],
         ];
