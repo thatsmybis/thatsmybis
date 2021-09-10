@@ -190,7 +190,7 @@ class CharacterLootController extends Controller
 
         $updateValues['public_note'] = request()->input('public_note');
 
-        if ($currentMember->hasPermission('edit.officer-notes') && request()->input('officer_note')) {
+        if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
