@@ -366,7 +366,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
 
                                     <!-- Import ID -->
                                     <div class="js-import-id col-lg-3 col-sm-6 col-12" style="{{ old('item.' . $i . '.import_id') ? '' : 'display:none;' }}">
-                                        <div class="form-group mb-0 {{ $errors->has('item.' . $i . '.received_at') ? 'text-danger font-weight-bold' : '' }}">
+                                        <div class="form-group mb-0 {{ $errors->has('item.' . $i . '.import_id') ? 'text-danger font-weight-bold' : '' }}">
 
                                             <label for="item[{{ $i }}][import_id]" class="font-weight-bold">
                                                 @if ($i == 0)
