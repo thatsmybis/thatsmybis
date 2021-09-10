@@ -362,7 +362,7 @@ class AssignLootController extends Controller
         }
 
         $validationRules = array_merge($this->getValidationRules($guild), [
-            'items.*.id' => [
+            'item.*.id' => [
                 'nullable',
                 'integer',
                 Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),

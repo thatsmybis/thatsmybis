@@ -13,6 +13,10 @@ var firstError = undefined;
 var preventDuplicates = true;
 
 $(document).ready(function () {
+    $(".js-remove-item").click(function() {
+        const index = $(this).data("index");
+        clearRow(index);
+    });
     $(".js-show-next").change(function() {
         showNext(this);
     });
@@ -23,16 +27,6 @@ $(document).ready(function () {
     // Load only the visible pickers so that we don't have to initialize ALL of them on page load.
     // The rest get lazy loaded when they're shown.
     $("select[name^=item][name$=\\[character_id\\]]:visible").addClass("selectpicker").selectpicker();
-
-    // If the current element has a value, show it and the next element that is hidden because it is empty
-    function showNext(currentElement) {
-        if ($(currentElement).val() != "") {
-            $(currentElement).show();
-            let nextElement = $(currentElement).closest(".row").next(".js-hide-empty");
-            nextElement.show();
-            nextElement.find("select[name^=item][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
-        }
-    }
 
     $("[name=raid_group_id]").on('change', function () {
         if ($(this).val()) {
@@ -132,6 +126,31 @@ $(document).ready(function () {
         parseCsv(this);
     });
 });
+
+function clearRow(index) {
+    const row = $("#item" + index);
+
+    // Reset fields to empty...
+    row.find("input[name^=item][name$=\\[note\\]]").val("");
+    row.find("input[name^=item][name$=\\[officer_note\\]]").val("");
+    row.find("input[name^=item][name$=\\[import_id\\]]").val("");
+    row.find("select[name^=item][name$=\\[character_id\\]] option").prop("selected", false);
+    row.find("input[name^=item][name$=\\[is_offspec\\]]").prop("checked", false);
+    row.find(".js-item-autocomplete").val("");
+
+    // Clear hidden item checkbox values...
+    row.find("input[name^=item][name$=\\[id\\]]").val("");
+    row.find("input[name^=item][name$=\\[label\\]]").val("");
+    // Remove fancy links for items...
+    row.find(".js-input-label").empty();
+    // Now hide old items...
+    row.find(".input-item").removeClass("d-flex").hide();
+    // And show their old inputs...
+    row.find(".js-item-autocomplete").show();
+
+    // Refresh our fancypants select inputs.
+    row.find(".selectpicker").selectpicker("refresh");
+}
 
 /**
  * Parse a CSV and load it into the form.
@@ -241,10 +260,20 @@ function parseCsv($this) {
     }
 }
 
+// If the current element has a value, show it and the next element that is hidden because it is empty
+function showNext(currentElement) {
+    if ($(currentElement).val() != "") {
+        $(currentElement).show();
+        let nextElement = $(currentElement).closest(".row").next(".js-hide-empty");
+        nextElement.show();
+        nextElement.find("select[name^=item][name$=\\[character_id\\]]").addClass("selectpicker").selectpicker();
+    }
+}
+
 // Optional function that gets called on each row being parsed
 function stepCsvImport(results, parser)
 {
-    //
+    // we have nothing to do here at this time
 }
 
 // Called when the CSV import is completed.
@@ -569,7 +598,7 @@ function prepareForm() {
     // Remove fancy links for items...
     $(".js-input-label").empty();
     // Now hide old items...
-    $(".input-item").hide();
+    $(".input-item").removeClass("d-flex").hide();
     // And show their old inputs...
     $(".js-item-autocomplete").show();
 

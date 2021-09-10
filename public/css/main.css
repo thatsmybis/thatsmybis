@@ -575,6 +575,12 @@ input.slim-date {
     color: #fff;
 }
 
+.top-right {
+    position: absolute;
+    right: 15px;
+    z-index: 999;
+}
+
 .list-group-item {
     background-color: #2f2e4e;
 }
