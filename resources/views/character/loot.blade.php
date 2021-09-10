@@ -48,7 +48,14 @@
                                 <ol class="lesser-indent">
                                     @foreach ($character->prios as $item)
                                         <li value="{{ $item->pivot->order }}">
-                                            @include('partials/item', ['wowheadLink' => false, 'itemDate' => $item->pivot->created_at, 'itemUsername' => $item->added_by_username, 'strikeThrough' => $item->pivot->is_received])
+                                            @include('partials/item', [
+                                                'wowheadLink'   => false,
+                                                'itemDate'      => $item->pivot->created_at,
+                                                'itemUsername'  => $item->added_by_username,
+                                                'showTier'      => true,
+                                                'strikeThrough' => $item->pivot->is_received,
+                                                'tierMode'      => $guild->tier_mode,
+                                            ])
                                             @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                         </li>
                                     @endforeach
@@ -178,13 +185,15 @@
                                                 <div class="js-input-label">
                                                     <span class="js-item-display">
                                                         @includeWhen($itemId, 'partials/item', [
-                                                            'wowheadLink' => false,
-                                                            'targetBlank' => true,
-                                                            'itemId' => $itemId,
-                                                            'itemName' => $itemLabel,
-                                                            'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                                                            'itemUsername' => ($item ? $item->added_by_username : null),
-                                                            'strikeThrough' => ($item ? $item->pivot->is_received : null)
+                                                            'wowheadLink'   => false,
+                                                            'targetBlank'   => true,
+                                                            'itemId'        => $itemId,
+                                                            'itemName'      => $itemLabel,
+                                                            'itemDate'      => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                                            'itemUsername'  => ($item ? $item->added_by_username : null),
+                                                            'showTier'      => true,
+                                                            'strikeThrough' => ($item ? $item->pivot->is_received : null),
+                                                            'tierMode'      => $guild->tier_mode,
                                                         ])
                                                         @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                                     </span>
@@ -238,9 +247,11 @@
                                     @foreach ($character->received as $item)
                                         <li class="mb-2" value="{{ $item->pivot->order ? $item->pivot->order : '' }}">
                                             @include('partials/item', [
-                                                'wowheadLink' => false,
-                                                'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                                                'itemUsername' => $item->added_by_username
+                                                'wowheadLink'  => false,
+                                                'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                                'itemUsername' => $item->added_by_username,
+                                                'showTier'     => true,
+                                                'tierMode'     => $guild->tier_mode,
                                             ])
                                             @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                         </li>
@@ -293,13 +304,15 @@
                                             <div class="js-input-label">
                                                 <span class="js-item-display">
                                                     @includeWhen($itemId, 'partials/item', [
-                                                        'wowheadLink' => false,
-                                                        'targetBlank' => true,
-                                                        'itemId' => $itemId,
-                                                        'itemName' => $itemLabel,
-                                                        'itemDate' => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                                                        'itemUsername' => ($item ? $item->added_by_username : null),
-                                                        'strikeThrough' => ($item ? $item->pivot->is_received : null)
+                                                        'wowheadLink'   => false,
+                                                        'targetBlank'   => true,
+                                                        'itemId'        => $itemId,
+                                                        'itemName'      => $itemLabel,
+                                                        'itemDate'      => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                                        'itemUsername'  => ($item ? $item->added_by_username : null),
+                                                        'showTier'      => true,
+                                                        'strikeThrough' => ($item ? $item->pivot->is_received : null),
+                                                        'tierMode'      => $guild->tier_mode,
                                                     ])
                                                     @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                                 </span>
@@ -371,7 +384,16 @@
 
                                         <span class="js-input-label">
                                             <span class="js-item-display">
-                                                @includeWhen($itemId, 'partials/item', ['wowheadLink' => false, 'targetBlank' => true, 'itemId' => $itemId, 'itemName' => $itemLabel, 'itemDate' => ($item ? $item->pivot->created_at : null), 'itemUsername' => ($item ? $item->added_by_username : null)])
+                                                @includeWhen($itemId, 'partials/item', [
+                                                    'wowheadLink'  => false,
+                                                    'targetBlank'  => true,
+                                                    'itemId'       => $itemId,
+                                                    'itemName'     => $itemLabel,
+                                                    'itemDate'     => ($item ? $item->pivot->created_at : null),
+                                                    'itemUsername' => ($item ? $item->added_by_username : null),
+                                                    'showTier'     => true,
+                                                    'tierMode'     => $guild->tier_mode,
+                                                ])
                                                 @include('character/partials/itemDetails', ['hideCreatedAt' => true])
                                             </span>
                                         </span>
