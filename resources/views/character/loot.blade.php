@@ -91,7 +91,7 @@
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="wishlistDropdown">
                                     <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
-                                        {{ _("active/locked is controlled by GM") }}
+                                        {{ __("active/locked is controlled by GM") }}
                                     </a>
                                     @for ($i = 1; $i <= $maxWishlistLists; $i++)
                                         <a class="dropdown-item"

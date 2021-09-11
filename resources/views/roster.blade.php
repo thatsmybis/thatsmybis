@@ -16,6 +16,7 @@
 @section('scripts')
 <script>
     var characters       = {!! $characters->makeVisible('officer_note')->toJson() !!};
+    var currentWishlistNumber = {{ $guild->current_wishlist_number }};
     var guild            = {!! $guild->toJson() !!};
     var maxWishlistLists = {{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }};
     var raidGroups       = {!! $raidGroups->toJson() !!};
@@ -23,7 +24,6 @@
     var showOfficerNote  = {{ $showOfficerNote ? 'true' : 'false' }};
     var showPrios        = {{ $showPrios ? 'true' : 'false' }};
     var showWishlist     = {{ $showWishlist ? 'true' : 'false' }};
-    var currentWishlistNumber = {{ $guild->current_wishlist_number }};
 </script>
 <script src="{{ loadScript('roster.js') }}"></script>
 @endsection

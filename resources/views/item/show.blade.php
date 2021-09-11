@@ -376,13 +376,27 @@
 
 @section('scripts')
 <script>
-    var characters      = {!! $showWishlist ? ($showOfficerNote ? $wishlistCharacters->makeVisible('officer_note')->toJson() : $wishlistCharacters->toJson()) : null !!};
-    var guild           = {!! $guild->toJson() !!};
-    var raidGroups      = {!! $raidGroups->toJson() !!};
-    var showEdit        = {{ $showEdit ? 'true' : 'false' }};
-    var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
-    var showPrios       = {{ $showPrios ? 'true' : 'false' }};
-    var showWishlist    = {{ $showWishlist ? 'true' : 'false' }};
+    @php
+        $itemNames = [$item->name];
+        foreach ($item->childItems as $childItem) {
+            $itemNames[] = $childItem->name;
+        }
+        if ($item->parentItem) {
+            $itemNames[] = $item->parentItem->name;
+        }
+    @endphp
+    var characters       = {!! $showWishlist ? ($showOfficerNote ? $wishlistCharacters->makeVisible('officer_note')->toJson() : $wishlistCharacters->toJson()) : null !!};
+    var currentWishlistNumber = {{ $guild->current_wishlist_number }};
+    var guild            = {!! $guild->toJson() !!};
+    var filterWishlistsByItemName = true;
+    // When we filter wishlists to decide whether or not it contains the item on this page, filter by these names
+    var itemNames        = {!! json_encode($itemNames) !!};
+    var maxWishlistLists = {{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }};
+    var raidGroups       = {!! $raidGroups->toJson() !!};
+    var showEdit         = {{ $showEdit ? 'true' : 'false' }};
+    var showOfficerNote  = {{ $showOfficerNote ? 'true' : 'false' }};
+    var showPrios        = {{ $showPrios ? 'true' : 'false' }};
+    var showWishlist     = {{ $showWishlist ? 'true' : 'false' }};
 </script>
 <script src="{{ loadScript('roster.js') }}"></script>
 @endsection

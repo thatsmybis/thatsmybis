@@ -101,7 +101,7 @@
             </label>
             <select id="wishlist_filter" class="form-control dark">
                 @for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
-                    <option value="{{ $i }}" {{ $guild->current_wishlist_number === $i ? 'checked' : '' }}>
+                    <option value="{{ $i }}" {{ $guild->current_wishlist_number === $i ? 'selected' : '' }}>
                         {{ $i }}{{ $guild->current_wishlist_number === $i ? '*' : '' }}
                     </option>
                 @endfor

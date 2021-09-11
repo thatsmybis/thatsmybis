@@ -339,6 +339,7 @@ function createTable() {
             addTagInputHandlers();
             addWishlistSortHandlers();
             parseMarkdown();
+            trackTimestamps();
 
             // Table was redrawn and item visibility was reset;
             // We should set visibility based on the previous setting.
@@ -370,10 +371,9 @@ function createTable() {
                     select2 = null;
                 }
 
-
                 if (filterColumns.includes(index)) {
                     select1.on('change', function () {
-                        var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                        const val = $.fn.dataTable.util.escapeRegex($(this).val());
 
                         // Only IF we are using the second select
                         if (select2 && select2.val()) {
@@ -386,7 +386,7 @@ function createTable() {
 
                     if (select2) {
                         select2.on('change', function () {
-                            var val = $.fn.dataTable.util.escapeRegex($(this).val());
+                            const val = $.fn.dataTable.util.escapeRegex($(this).val());
 
                             if (select1 && select1.val()) {
                                 // Must contain both
@@ -396,6 +396,15 @@ function createTable() {
                             column.search(val ? val : '', true, false).draw();
                         }).change();
                     }
+                }
+
+                // Only show rows that have the desired item in the wishlist
+                if (typeof filterWishlistsByItemName !== 'undefined' && filterWishlistsByItemName && index == colWishlist) {
+                    $("#wishlist_filter").on('change', function () {
+                        // If we filter wishlists to decide whether or not it contains the name(s) of given item(s)
+                        const regex = "(" + itemNames.join("|") + ")";
+                        column.search(regex, true, false).draw();
+                    });
                 }
             } );
             makeWowheadLinks();

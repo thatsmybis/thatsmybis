@@ -194,7 +194,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                 @endphp
                                 <div id="item{{ $i }}" class="row striped-light pb-4 pt-4 rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ ($i > 2) && old('item.' . $i . '.id') == null && old('item.' . $i . '.character_id') == null ? 'display:none;' : '' }}">
 
-                                    <span data-index="{{ $i }}" class="js-remove-item fas fa-fw fa-times text-danger cursor-pointer top-right" title="{{ _('Clear this row') }}"></span>
+                                    <span data-index="{{ $i }}" class="js-remove-item fas fa-fw fa-times text-danger cursor-pointer top-right" title="{{ __('Clear this row') }}"></span>
 
                                     <!-- Item input -->
                                     <div class="col-lg-3 col-sm-6 col-12">

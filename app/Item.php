@@ -241,7 +241,7 @@ class Item extends Model
             })
             ->where([
                 'character_items.type'        => self::TYPE_WISHLIST,
-                'character_items.list_number' => DB::raw('wishlist_guilds.current_wishlist_number'),
+                // 'character_items.list_number' => DB::raw('wishlist_guilds.current_wishlist_number'),
             ])
             ->whereNull('characters.inactive_at')
             ->withTimeStamps()

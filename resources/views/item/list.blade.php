@@ -40,13 +40,15 @@
 
 @section('scripts')
 <script>
-    var items = {!! $items ? $items->toJson() : '{}' !!};
-    var guild = {!! $guild ? $guild->toJson() : '{}' !!};
-    var raidGroups      = {!! $raidGroups ? $raidGroups->toJson() : '{}' !!};
-    var showNotes       = {{ $showNotes ? 'true' : 'false' }};
-    var showOfficerNote = {{ $showOfficerNote ? 'true' : 'false' }};
-    var showPrios       = {{ $showPrios ? 'true' : 'false' }};
-    var showWishlist    = {{ $showWishlist ? 'true' : 'false' }};
+    var currentWishlistNumber = {{ $guild->current_wishlist_number }};
+    var guild            = {!! $guild ? $guild->toJson() : '{}' !!};
+    var items            = {!! $items ? $items->toJson() : '{}' !!};
+    var maxWishlistLists = {{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }};
+    var raidGroups       = {!! $raidGroups ? $raidGroups->toJson() : '{}' !!};
+    var showNotes        = {{ $showNotes ? 'true' : 'false' }};
+    var showOfficerNote  = {{ $showOfficerNote ? 'true' : 'false' }};
+    var showPrios        = {{ $showPrios ? 'true' : 'false' }};
+    var showWishlist     = {{ $showWishlist ? 'true' : 'false' }};
 </script>
 <script src="{{ loadScript('itemList.js') }}"></script>
 @endsection
