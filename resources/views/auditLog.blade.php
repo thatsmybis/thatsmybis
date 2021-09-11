@@ -253,6 +253,25 @@
                         </select>
                     </div>
                 </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <div class="form-group">
+                        <label for="type" class="font-weight-bold">
+                            <span class="fas fa-fw fa-scroll-old text-muted"></span>
+                            {{ __("Class") }}
+                        </label>
+                        <select name="character_class" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
+                            <option value="" data-tokens="">
+                                —
+                            </option>
+                            @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
+                                <option value="{{ $class }}" class="text-{{ strtolower($key) }}-important"
+                                    {{ Request::get('character_class') && Request::get('character_class') == $class ? 'selected' : '' }}>
+                                    {{ $class }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
             </div>
 
             <div class="row">
@@ -298,7 +317,7 @@
                                                         &sdot;
                                                     </li>
                                                     <li class="list-inline-item">
-                                                        <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'nameSlug' => $log->character_slug]) }}" class="text-muted">
+                                                        <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'nameSlug' => $log->character_slug]) }}" class="text-{{ strtolower($log->character_class) }}">
                                                             {{ $log->character_name }}
                                                         </a>
                                                     </li>
