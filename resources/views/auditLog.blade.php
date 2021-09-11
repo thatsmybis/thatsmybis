@@ -2,7 +2,7 @@
 @section('title', __("Audit Log") . ' - ' . config('app.name'))
 
 @section('content')
-<div class="container-fluid container-width-capped">
+<div class="container-fluid">
     <div class="row">
         <div class="col-12">
             <div class="row">
