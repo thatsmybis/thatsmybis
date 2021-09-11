@@ -31,7 +31,7 @@
                                     </li>
                                 @endif
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->name]) }}"
+                                    <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}"
                                         class="text-white font-weight-bold">
                                         {{ $raid->name }}
                                     </a>
