@@ -256,7 +256,7 @@
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
                         <label for="type" class="font-weight-bold">
-                            <span class="fas fa-fw fa-scroll-old text-muted"></span>
+                            <span class="fas fa-fw fa-hat-wizard text-muted"></span>
                             {{ __("Class") }}
                         </label>
                         <select name="character_class" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
