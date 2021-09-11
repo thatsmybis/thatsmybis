@@ -11,10 +11,10 @@
                         $raidCount = $characters->sum(function ($character) {
                             return $character->raid_count;
                         });
-                        $attendancePercentage = $characters->where('raid_count', '>', 0)->sum(function ($character) {
-                            return $character->attendance_percentage;
+                        $raidsAttended = $characters->where('raid_count', '>', 0)->sum(function ($character) {
+                            return $character->raid_count * $character->attendance_percentage;
                         });
-                        $attendancePercentage = $attendancePercentage ? ($attendancePercentage / $characters->where('raid_count', '>', 0)->count()) : $attendancePercentage;
+                        $attendancePercentage = $raidCount > 0 ? ($raidsAttended / $raidCount) : 100;
                     @endphp
                     @include('member/partials/header', [
                         'discordUsername' => $member->user->discord_username,
