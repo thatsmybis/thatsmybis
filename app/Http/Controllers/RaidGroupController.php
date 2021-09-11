@@ -194,16 +194,13 @@ class RaidGroupController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load([
-            'allRaidGroups' => function ($query) use ($id) {
-                return $query->where('id', $id);
-            },
-            'allRaidGroups.role']);
-
         $raidGroup = null;
 
         if ($id) {
-            $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
+            $raidGroup = RaidGroup::where([
+                'guild_id' => $guild->id,
+                'id' => $id,
+            ])->first();
 
             if (!$raidGroup) {
                 abort(404, 'Raid Group not found.');
