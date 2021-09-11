@@ -184,7 +184,7 @@ class Guild extends Model
      *
      * @return array
      */
-    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, $showInactive) {
+    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, $showInactive, $allWishlists) {
         $characterFields = [
             'characters.id',
             'characters.member_id',
@@ -264,7 +264,12 @@ class Guild extends Model
         }
 
         if ($showWishlist) {
-            $query = $query->with('wishlist');
+            if ($allWishlists) {
+                // NOTE that this will output the relation 'allWishlists' and NOT 'wishlist'
+                $query = $query->with('allWishlists');
+            } else {
+                $query = $query->with('wishlist');
+            }
         }
 
         $characters = $query->get();

@@ -44,7 +44,7 @@ class RosterController extends Controller
         }
 
         $characters = Cache::remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
-            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false);
+            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, true);
         });
 
         $showEdit = false;

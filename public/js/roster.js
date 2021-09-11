@@ -46,15 +46,11 @@ $(document).ready( function () {
     // Toggle visiblity for all of the clipped/hidden items on the page
     $(".js-show-all-clipped-items").click(function () {
         if (allItemsVisible) {
-            $(".js-clipped-item").hide();
-            $(".js-show-clipped-items").show();
-            $(".js-hide-clipped-items").hide();
             allItemsVisible = false;
+            resetItemVisibility();
         } else {
-            $(".js-clipped-item").show();
-            $(".js-show-clipped-items").hide();
-            $(".js-hide-clipped-items").hide();
             allItemsVisible = true;
+            showAllItems();
         }
     });
 
@@ -64,18 +60,19 @@ $(document).ready( function () {
 
     addClippedItemHandlers();
     addInstanceFilterHandlers();
+    addWishlistFilterHandlers();
     trackTimestamps();
 });
 
 function createTable() {
     memberTable = $("#characterTable").DataTable({
-        "autoWidth" : false,
-        "data"      : characters,
-        "columns"   : [
+        autoWidth : false,
+        data      : characters,
+        columns   : [
             {
-                "title"  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter} <span class="text-muted small">(${characters.length})</span>`,
-                "data"   : "character",
-                "render" : function (data, type, row) {
+                title  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter} <span class="text-muted small">(${characters.length})</span>`,
+                data   : "character",
+                render : function (data, type, row) {
                     return `
                     <ul class="no-bullet no-indent mb-2">
                         <li>
@@ -148,71 +145,115 @@ function createTable() {
                             ` : `` }
                     </ul>`;
                 },
-                "visible" : true,
-                "width"   : "250px",
-                "className" : "width-250",
+                visible : true,
+                width   : "250px",
+                className : "width-250",
             },
             {
-                "title"  : `<span class="text-gold fas fa-fw fa-sort-amount-down"></span> ${headerPrios}`,
-                "data"   : "prios",
-                "render" : function (data, type, row) {
-                    return data && data.length ? getItemList(data, 'prio', row.id, true) : '—';
+                title  : `<span class="text-gold fas fa-fw fa-sort-amount-down"></span> ${headerPrios}`,
+                data   : "prios",
+                render : function (data, type, row) {
+                    return data && data.length ? getItemListHtml(data, 'prio', row.id, true) : '—';
                 },
-                "orderable" : false,
-                "visible" : showPrios ? true : false,
-                "width"   : "280px",
-                "className" : "width-280",
+                orderable : false,
+                visible : showPrios ? true : false,
+                width   : "280px",
+                className : "width-280",
             },
             {
-                "title"  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> ${headerWishlist}
+                title  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> ${headerWishlist}
                     <span class="js-sort-wishlists text-link">
                         <span class="fas fa-fw fa-exchange cursor-pointer"></span>
                     </span>`,
-                "data"   : "wishlist",
-                "render" : function (data, type, row) {
+                data   : "all_wishlists",
+                render : function (data, type, row) {
+                    // This function only gets used inside this render
+                    function createWishlistHtml(data, type, row, list, wishlistNumber, showListHeader) {
+                        // Only use the currently selected wishlist
+                        data = data.filter(item => item.list_number == wishlistNumber);
+
+                        if (data.length) {
+                            // Create a copy of data, then sort it by instance_order DESC, user chosen order ASC
+                            let dataSorted = data.slice().sort((a, b) => a.instance_order - b.instance_order || a.pivot.order - b.pivot.order);
+                            list += getItemListHtml(
+                                dataSorted,
+                                'wishlist',
+                                row.id,
+                                true,
+                                true,
+                                'js-wishlist-sorted',
+                                (guild.do_sort_items_by_instance ? true : false),
+                                (showListHeader ? headerWishlist + ' ' + wishlistNumber : null)
+                            );
+                            list += getItemListHtml(
+                                data,
+                                'wishlist',
+                                row.id,
+                                true,
+                                false,
+                                'js-wishlist-unsorted',
+                                (guild.do_sort_items_by_instance ? false : true),
+                                (showListHeader ? headerWishlist + ' ' + wishlistNumber : null)
+                            );
+                        }
+
+                        return list;
+                    }
+
                     if (data && data.length) {
-                        // Create a copy of data, then sort it by instance_order DESC, user chosen order ASC
-                        let dataSorted = data.slice().sort((a, b) => a.instance_order - b.instance_order || a.pivot.order - b.pivot.order);
-                        let list = ``;
-                        list += getItemList(dataSorted, 'wishlist', row.id, true, true, 'js-wishlist-sorted', (guild.do_sort_items_by_instance ? true : false));
-                        list += getItemList(data, 'wishlist', row.id, true, false, 'js-wishlist-unsorted', (guild.do_sort_items_by_instance ? false : true));
+                        let list = '';
+                        // List number is a single number
+                        if (currentWishlistNumber) {
+                            list = createWishlistHtml(data, type, row, list, currentWishlistNumber, false);
+                        } else { // Show all wishlists
+                            // Create a new list for each wishlist number
+                            for (i = 1; i <= maxWishlistLists; i++) {
+                                list = createWishlistHtml(data, type, row, list, i, true);
+                            }
+                        }
+
+                        // Nothing in list... just show a dash.
+                        if (list == '') {
+                            list = '—';
+                        }
+
                         return list;
                     } else {
                         return '—';
                     }
                 },
-                "orderable" : false,
-                "visible" : showWishlist ? true : false,
-                "width"   : "280px",
-                "className" : "width-280",
+                orderable : false,
+                visible : showWishlist ? true : false,
+                width   : "280px",
+                className : "width-280",
             },
             {
-                "title"  : `<span class="text-success fas fa-fw fa-sack"></span> ${headerReceived}`,
-                "data"   : "received",
-                "render" : function (data, type, row) {
-                    return data && data.length ? getItemList(data, 'received', row.id) : '—';
+                title  : `<span class="text-success fas fa-fw fa-sack"></span> ${headerReceived}`,
+                data   : "received",
+                render : function (data, type, row) {
+                    return data && data.length ? getItemListHtml(data, 'received', row.id) : '—';
                 },
-                "orderable" : false,
-                "visible" : true,
-                "width"   : "280px",
-                "className" : "width-280",
+                orderable : false,
+                visible : true,
+                width   : "280px",
+                className : "width-280",
             },
             {
-                "title"  : `<span class="text-gold fas fa-fw fa-book"></span> ${headerRecipes}`,
-                "data"   : "recipes",
-                "render" : function (data, type, row) {
-                    return data && data.length ? getItemList(data, 'recipes', row.id) : '—';
+                title  : `<span class="text-gold fas fa-fw fa-book"></span> ${headerRecipes}`,
+                data   : "recipes",
+                render : function (data, type, row) {
+                    return data && data.length ? getItemListHtml(data, 'recipes', row.id) : '—';
                 },
-                "orderable" : false,
-                "visible" : false,
-                "width"   : "280px",
-                "className" : "width-280",
+                orderable : false,
+                visible : false,
+                width   : "280px",
+                className : "width-280",
             },
             {
                 /* this feature has been cut */
-                "title"  : "Roles",
-                "data"   : "user.roles",
-                "render" : function (data, type, row) {
+                title  : "Roles",
+                data   : "user.roles",
+                render : function (data, type, row) {
                     let roles = "";
                     if (data && data.length > 0) {
                         roles = '<ul class="list-inline">';
@@ -226,32 +267,32 @@ function createTable() {
                     }
                     return roles;
                 },
-                "orderable" : false,
-                "visible" : false,
+                orderable : false,
+                visible : false,
             },
             {
-                "title"  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerNotes}`,
-                "data"   : "public_note",
-                "render" : function (data, type, row) {
+                title  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerNotes}`,
+                data   : "public_note",
+                render : function (data, type, row) {
                     return getNotes(data, type, row);
                 },
-                "orderable" : false,
-                "visible" : true,
-                "width"   : "280px",
-                "className" : "width-280",
+                orderable : false,
+                visible : true,
+                width   : "280px",
+                className : "width-280",
             },
             {
-                "title"  : "Class",
-                "data"   : "class",
-                "render" : function (data, type, row) {
+                title  : "Class",
+                data   : "class",
+                render : function (data, type, row) {
                     return (row.class ? row.class : null);
                 },
-                "visible" : false,
+                visible : false,
             },
             {
-                "title"  : "Raid Group",
-                "data"   : "raid_group",
-                "render" : function (data, type, row) {
+                title  : "Raid Group",
+                data   : "raid_group",
+                render : function (data, type, row) {
                     let contents = '' + (row.raid_group_id ? row.raid_group_id : '');
                     if (row.secondary_raid_groups && row.secondary_raid_groups.length) {
                         row.secondary_raid_groups.forEach(function (raidGroup, index) {
@@ -260,72 +301,98 @@ function createTable() {
                     }
                     return contents;
                 },
-                "visible" : false,
+                visible : false,
             },
             {
-                "title"  : "Username",
-                "data"   : "username",
-                "render" : function (data, type, row) {
+                title  : "Username",
+                data   : "username",
+                render : function (data, type, row) {
                     return (row.username ? row.username : null);
                 },
-                "visible" : false,
+                visible : false,
             },
             {
-                "title"  : "Discord Username",
-                "data"   : "discord_username",
-                "render" : function (data, type, row) {
+                title  : "Discord Username",
+                data   : "discord_username",
+                render : function (data, type, row) {
                     return (row.discord_username ? row.discord_username : null);
                 },
-                "visible" : false,
+                visible : false,
             },
             {
-                "title"  : "Raids Attended",
-                "data"   : "raid_count",
-                "render" : function (data, type, row) {
+                title  : "Raids Attended",
+                data   : "raid_count",
+                render : function (data, type, row) {
                     return (row.raid_count ? row.raid_count : null);
                 },
-                "visible"    : false,
-                "searchable" : false,
+                visible    : false,
+                searchable : false,
             },
         ],
-        "order"  : [], // Disable initial auto-sort; relies on server-side sorting
-        "paging" : false,
-        "fixedHeader" : true, // Header row sticks to top of window when scrolling down
+        order  : [], // Disable initial auto-sort; relies on server-side sorting
+        paging : false,
+        fixedHeader : true, // Header row sticks to top of window when scrolling down
+        drawCallback : function () {
+            makeWowheadLinks();
+            addClippedItemHandlers();
+            addItemAutocompleteHandler();
+            addTagInputHandlers();
+            addWishlistSortHandlers();
+            parseMarkdown();
+
+            // Table was redrawn and item visibility was reset;
+            // We should set visibility based on the previous setting.
+            if (allItemsVisible) {
+                showAllItems();
+            } else {
+                resetItemVisibility();
+            }
+        },
         initComplete: function () {
-            let sortColumns = [colClass, colRaidGroup];
+            // Columns that we want to filter by.
+            const filterColumns = [colClass, colRaidGroup];
+
+            // For each column, set up a filter
             this.api().columns().every(function (index) {
                 var column = this;
 
+                // select1 is the first filter for this column
                 let select1 = null;
-                let select2 = null; // Initialize this beside select1 if we want a secondary sort
+                // select2 is the second filter for this column
+                let select2 = null; // Initialize this beside select1 if we want a secondary sort for the same column
 
+                // Based on the current column, identify the relevant filter input
                 if (index == colClass) {
                     select1 = $("#class_filter");
                     select2 = null;
-                }
-
-                if (index == colRaidGroup) {
+                } else if (index == colRaidGroup) {
                     select1 = $("#raid_group_filter");
                     select2 = null;
                 }
 
-                if (sortColumns.includes(index)) {
+
+                if (filterColumns.includes(index)) {
                     select1.on('change', function () {
                         var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
+                        // Only IF we are using the second select
                         if (select2 && select2.val()) {
                             // Must contain both
                             val = "(?=.*" + val + ")(?=.*" + $.fn.dataTable.util.escapeRegex(select2.val()) + ")";
                         }
+
                         column.search(val ? val : '', true, false).draw();
                     }).change();
 
                     if (select2) {
                         select2.on('change', function () {
                             var val = $.fn.dataTable.util.escapeRegex($(this).val());
+
                             if (select1 && select1.val()) {
                                 // Must contain both
                                 val = "(?=.*" + val + ")(?=.*" + $.fn.dataTable.util.escapeRegex(select1.val()) + ")";
                             }
+
                             column.search(val ? val : '', true, false).draw();
                         }).change();
                     }
@@ -384,12 +451,23 @@ function addInstanceFilterHandlers() {
             $(".js-hide-clipped-items").hide();
         }
     });
+}
 
+function addWishlistFilterHandlers() {
+    $("#wishlist_filter").on('change', function () {
+        currentWishlistNumber = $(this).val();
+        memberTable.rows().invalidate().draw();
+    }).change();
 }
 
 // Gets an HTML list of items with pretty wowhead formatting
-function getItemList(data, type, characterId, useOrder = false, showInstances = false, listClass = null, isVisible = true) {
+function getItemListHtml(data, type, characterId, useOrder = false, showInstances = false, listClass = null, isVisible = true, header = null) {
     let items = `<ol class="no-indent js-item-list mb-2 ${ listClass }" data-type="${ type }" data-id="${ characterId }" style="${ isVisible ? '' : 'display:none;' }">`;
+
+    if (header) {
+        items += `<li class="small text-muted no-bullet " data-type="${ type }" data-id="${ characterId }">${header}</li>`;
+    }
+
     let initialLimit = 4;
 
     let lastInstanceId = null;
@@ -450,6 +528,7 @@ function getItemList(data, type, characterId, useOrder = false, showInstances = 
                 data-type="${ type }"
                 data-id="${ characterId }"
                 data-instance-id="${ item.instance_id }"
+                data-wishlist-number="${item.list_number}"
                 value="${ useOrder ? item.pivot.order : '' }"
                 style="${ clipItem ? 'display:none;' : '' }">
                 ${ guild.tier_mode ?
@@ -489,4 +568,16 @@ function getNotes(data, type, row) {
     return (row.public_note ? `<span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(row.public_note)) }</span>` : '—')
         + (row.officer_note ? `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(row.officer_note)) }</span>` : '')
         + (secondaryRaidGroups ? `<br>${secondaryRaidGroups}` : ``);
+}
+
+function resetItemVisibility() {
+    $(".js-clipped-item").hide();
+    $(".js-show-clipped-items").show();
+    $(".js-hide-clipped-items").hide();
+}
+
+function showAllItems() {
+    $(".js-clipped-item").show();
+    $(".js-show-clipped-items").hide();
+    $(".js-hide-clipped-items").hide();
 }

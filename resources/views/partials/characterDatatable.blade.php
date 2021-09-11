@@ -1,7 +1,7 @@
 <div class="pr-2 pl-2">
     <ul class="list-inline mb-0">
         <li class="list-inline-item">
-            <label for="raid_group_filter font-weight-light">
+            <label for="raid_group_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                 {{ __("Raid Group") }}
             </label>
@@ -15,7 +15,7 @@
             </select>
         </li>
         <li class=" list-inline-item">
-            <label for="class_filter font-weight-light">
+            <label for="class_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-axe-battle"></span>
                 {{ __("Class") }}
             </label>
@@ -29,7 +29,7 @@
             </select>
         </li>
         <li class="list-inline-item">
-            <label for="instance_filter font-weight-light">
+            <label for="instance_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-sack"></span>
                 {{ __("Dungeon") }}
             </label>
@@ -94,6 +94,22 @@
                 @endif
             </select>
         </li>
+        <li class="list-inline-item">
+            <label for="wishlist_filter" class="font-weight-light">
+                <span class="text-muted fas fa-fw fa-scroll-old"></span>
+                {{ __("Wishlist") }}
+            </label>
+            <select id="wishlist_filter" class="form-control dark">
+                @for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
+                    <option value="{{ $i }}" {{ $guild->current_wishlist_number === $i ? 'checked' : '' }}>
+                        {{ $i }}{{ $guild->current_wishlist_number === $i ? '*' : '' }}
+                    </option>
+                @endfor
+                <option value="">
+                    {{ __("All") }}
+                </option>
+            </select>
+        </li>
 
         <li class="list-inline-item font-weight-light">
             <span class="text-muted fas fa-fw fa-eye-slash"></span>
@@ -155,13 +171,6 @@
                 {{ __("Notes") }}
             </span>
         </li>
-        <li class="list-inline-item">&sdot;</li>
-        <li class="list-inline-item">
-            <span class="js-show-all-clipped-items text-link cursor-pointer font-weight-light" data-column="6">
-                <span class="text-muted fal fa-fw fa-eye"></span>
-                {{ __("Show all loot") }}
-            </span>
-        </li>
         @if (!$guild->is_attendance_hidden)
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
@@ -171,6 +180,13 @@
                 </span>
             </li>
         @endif
+        <li class="list-inline-item">&sdot;</li>
+        <li class="list-inline-item">
+            <span class="js-show-all-clipped-items text-link cursor-pointer font-weight-light" data-column="6">
+                <span class="text-muted fal fa-fw fa-eye"></span>
+                {{ __("Show all loot") }}
+            </span>
+        </li>
     </ul>
 </div>
 

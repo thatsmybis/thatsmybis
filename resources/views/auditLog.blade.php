@@ -183,6 +183,25 @@
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
                         <label for="type" class="font-weight-bold">
+                            <span class="fas fa-fw fa-hat-wizard text-muted"></span>
+                            {{ __("Class") }}
+                        </label>
+                        <select name="character_class" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
+                            <option value="" data-tokens="">
+                                —
+                            </option>
+                            @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
+                                <option value="{{ $class }}" class="text-{{ strtolower($key) }}-important"
+                                    {{ Request::get('character_class') && Request::get('character_class') == $class ? 'selected' : '' }}>
+                                    {{ $class }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-3 col-6">
+                    <div class="form-group">
+                        <label for="type" class="font-weight-bold">
                             <span class="fas fa-fw fa-scroll-old text-muted"></span>
                             {{ __("Loot Type") }}
                         </label>
@@ -223,16 +242,6 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-md-3 col-6">
-                    <div class="form-group">
-                        <label for="item_id" class="font-weight-bold">
-                            <span class="fas fa-fw fa-sack text-muted"></span>
-                            {{ __("Item") }}
-                        </label>
-                        <input name="item_id" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" autocomplete="off" class="js-item-autocomplete-link js-input-text form-control dark">
-                        <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
-                    </div>
-                </div>
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
                         <label for="item_instance_id" class="font-weight-bold">
@@ -253,23 +262,14 @@
                         </select>
                     </div>
                 </div>
-                <div class="col-lg-2 col-md-3 col-6">
+                <div class="col-lg-4 col-md-6 col-12">
                     <div class="form-group">
-                        <label for="type" class="font-weight-bold">
-                            <span class="fas fa-fw fa-hat-wizard text-muted"></span>
-                            {{ __("Class") }}
+                        <label for="item_id" class="font-weight-bold">
+                            <span class="fas fa-fw fa-sack text-muted"></span>
+                            {{ __("Item") }}
                         </label>
-                        <select name="character_class" class="selectpicker form-control dark" data-live-search="true" autocomplete="off">
-                            <option value="" data-tokens="">
-                                —
-                            </option>
-                            @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
-                                <option value="{{ $class }}" class="text-{{ strtolower($key) }}-important"
-                                    {{ Request::get('character_class') && Request::get('character_class') == $class ? 'selected' : '' }}>
-                                    {{ $class }}
-                                </option>
-                            @endforeach
-                        </select>
+                        <input name="item_id" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" autocomplete="off" class="js-item-autocomplete-link js-input-text form-control dark">
+                        <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
                     </div>
                 </div>
             </div>
