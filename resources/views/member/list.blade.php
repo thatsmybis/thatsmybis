@@ -57,7 +57,7 @@
                                         $raidsAttended = $member->charactersWithAttendance->where('raid_count', '>', 0)->sum(function ($character) {
                                             return $character->raid_count * $character->attendance_percentage;
                                         });
-                                        $attendancePercentage = $raidsAttended / $raidCount;
+                                        $attendancePercentage = $raidCount > 0 ? ($raidsAttended / $raidCount) : 100;
                                     @endphp
                                     @include('member/partials/listMember', ['raidCount' => $raidCount, 'attendancePercentage' => $attendancePercentage])
                                 </td>
