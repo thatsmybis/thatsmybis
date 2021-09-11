@@ -29,14 +29,8 @@
             </div>
 
             <div class="row mb-3 pt-3 bg-light rounded">
-                <div class="col-12 mb-2">
-                    <span class="font-weight-bold">
-                        <span class="fas fa-fw fa-helmet-battle text-dk"></span>
-                        {{ __("Raid History") }}
-                    </span>
-                </div>
-
                 <div class="col-12 pb-3">
+                    <label class="sr-only">{{ __("Raid History") }}</label>
                     @if ($member->characters->count())
                         @php
                             $raids = collect();
