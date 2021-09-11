@@ -147,7 +147,6 @@ class AuditLogController extends Controller
 
         if (!empty(request()->input('character_class'))) {
             $query = $query->where('characters.class', request()->input('character_class'));
-            $resources[] = Character::where([['guild_id', $guild->id], ['class', strtolower(request()->input('character_class'))]])->with('member')->first();
         }
 
         if (!empty(request()->input('character_id'))) {
