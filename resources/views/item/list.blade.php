@@ -40,7 +40,7 @@
 
 @section('scripts')
 <script>
-    var currentWishlistNumber = {{ $guild->current_wishlist_number }};
+    var currentWishlistNumber = {{ $guild ? $guild->current_wishlist_number : 'null' }};
     var guild            = {!! $guild ? $guild->toJson() : '{}' !!};
     var items            = {!! $items ? $items->toJson() : '{}' !!};
     var maxWishlistLists = {{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }};
