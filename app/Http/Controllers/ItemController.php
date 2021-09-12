@@ -386,7 +386,7 @@ class ItemController extends Controller
                 return $query
                     ->where([
                         ['characters.guild_id', $guild->id],
-                        // ['character_items.is_received', 0],
+                        ['character_items.is_received', 0],
                     ])
                     ->groupBy(['character_items.character_id'])
                     ->with([

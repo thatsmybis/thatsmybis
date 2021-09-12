@@ -52,18 +52,19 @@ $(document).ready( function () {
         }
     }).change();
 
+    addWishlistFilterHandlers();
     trackTimestamps();
 });
 
 function createTable(lastSource) {
-    memberTable = $("#itemTable").DataTable({
-        "autoWidth" : false,
-        "data"      : items,
-        "columns"   : [
+    itemTable = $("#itemTable").DataTable({
+        autoWidth : false,
+        data      : items,
+        columns   : [
             {
-                "title"  : `<span class="fas fa-fw fa-skull-crossbones"></span> ${headerBoss}`,
-                "data"   : "",
-                "render" : function (data, type, row) {
+                title  : `<span class="fas fa-fw fa-skull-crossbones"></span> ${headerBoss}`,
+                data   : "",
+                render : function (data, type, row) {
                     if (row.source_name) {
                         thisSource = row.source_name;
                     }
@@ -78,84 +79,115 @@ function createTable(lastSource) {
                             </li>` : `` }
                     </ul>`;
                 },
-                "visible"   : true,
-                "width"     : "130px",
-                "className" : "text-right width-130",
+                visible   : true,
+                width     : "130px",
+                className : "text-right width-130",
             },
             {
-                "title"  : `<span class="fas fa-fw fa-sack text-success"></span> ${headerLoot} <span class="text-muted small">(${ items.length })</span>`,
-                "data"   : "",
-                "render" : function (data, type, row) {
+                title  : `<span class="fas fa-fw fa-sack text-success"></span> ${headerLoot} <span class="text-muted small">(${ items.length })</span>`,
+                data   : "",
+                render : function (data, type, row) {
                     return getItemLink(row);
                 },
-                "visible" : true,
-                "width"   : "330px",
-                "className" : "width-330",
+                visible : true,
+                width   : "330px",
+                className : "width-330",
             },
             {
-                "title"  : `<span class="fas fa-fw fa-sort-amount-down text-gold"></span> ${headerPrios}`,
-                "data"   : guild.is_attendance_hidden ? "priod_characters" : "priod_characters_with_attendance",
-                "render" : function (data, type, row) {
-                    return data && data.length ? getCharacterList(data, 'prio', row.item_id) : '—';
+                title  : `<span class="fas fa-fw fa-sort-amount-down text-gold"></span> ${headerPrios}`,
+                data   : guild.is_attendance_hidden ? "priod_characters" : "priod_characters_with_attendance",
+                render : function (data, type, row) {
+                    return data && data.length ? createCharacterListHtml(data, 'prio', row.item_id, null) : '—';
                 },
-                "orderable" : false,
-                "visible" : showPrios ? true : false,
-                "width"   : "300px",
-                "className" : "width-300",
+                orderable : false,
+                visible : showPrios ? true : false,
+                width   : "300px",
+                className : "width-300",
             },
             {
-                "title"  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> ${headerWishlist}`,
-                "data"   : guild.is_attendance_hidden ? "wishlist_characters" : "wishlist_characters_with_attendance",
-                "render" : function (data, type, row) {
-                    return data && data.length ? getCharacterList(data, 'wishlist', row.item_id) : '—';
+                title  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> ${headerWishlist}`,
+                data   : guild.is_attendance_hidden ? "wishlist_characters" : "wishlist_characters_with_attendance",
+                render : function (data, type, row) {
+                    if (data && data.length) {
+                        // console.log(data);
+                        let list = '';
+                        if (currentWishlistNumber) { // return only the selected wishlist
+                            const filteredData = data.filter(character => character.pivot.list_number == currentWishlistNumber);
+                            if (filteredData.length) {
+                                list = createCharacterListHtml(filteredData, 'wishlist', row.item_id, null);
+                            }
+                        } else { // return all wishlists
+                            for (i = 1; i <= maxWishlistLists; i++) {
+                                const filteredData = data.filter(character => character.pivot.list_number == i);
+                                if (filteredData.length) {
+                                    const header = headerWishlist + " " + i;
+                                    list += createCharacterListHtml(filteredData, 'wishlist', row.item_id, header);
+                                }
+                            }
+                        }
+
+                        // Nothing in list... just show a dash.
+                        if (list == '') {
+                            list = '—';
+                        }
+
+                        return list;
+                    } else {
+                        return '—';
+                    }
                 },
-                "orderable" : false,
-                "visible" : showWishlist ? true : false,
-                "width"   : "400px",
-                "className" : "width-400",
+                orderable : false,
+                visible : showWishlist ? true : false,
+                width   : "400px",
+                className : "width-400",
             },
             {
-                "title"  : `<span class="text-success fas fa-fw fa-sack"></span> ${headerReceived}`,
-                "data"   : "received_and_recipe_characters",
-                "render" : function (data, type, row) {
-                    return data && data.length ? getCharacterList(data, 'received', row.item_id) : '—';
+                title  : `<span class="text-success fas fa-fw fa-sack"></span> ${headerReceived}`,
+                data   : "received_and_recipe_characters",
+                render : function (data, type, row) {
+                    return data && data.length ? createCharacterListHtml(data, 'received', row.item_id, null) : '—';
                 },
-                "orderable" : false,
-                "visible" : true,
-                "width"   : "300px",
-                "className" : "width-300",
+                orderable : false,
+                visible : true,
+                width   : "300px",
+                className : "width-300",
             },
             {
-                "title"  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerNotes}`,
-                "data"   : "guild_note",
-                "render" : function (data, type, row) {
+                title  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerNotes}`,
+                data   : "guild_note",
+                render : function (data, type, row) {
                     return getNotes(row, data);
                 },
-                "orderable" : false,
-                "visible" : showNotes ? true : false,
-                "width"   : "200px",
-                "className" : "width-200",
+                orderable : false,
+                visible : showNotes ? true : false,
+                width   : "200px",
+                className : "width-200",
             },
             {
-                "title"  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerPrioNotes}`,
-                "data"   : "guild_priority",
-                "render" : function (data, type, row) {
+                title  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerPrioNotes}`,
+                data   : "guild_priority",
+                render : function (data, type, row) {
                     return (data ? `<span class="js-markdown-inline">${ nl2br(data) }</span>` : '—');
                 },
-                "orderable" : false,
-                "visible" : showNotes ? true : false,
-                "width"   : "200px",
-                "className" : "width-200",
+                orderable : false,
+                visible : showNotes ? true : false,
+                width   : "200px",
+                className : "width-200",
             },
         ],
-        "order"       : [], // Disable initial auto-sort; relies on server-side sorting
-        "paging"      : false,
-        "fixedHeader" : true, // Header row sticks to top of window when scrolling down
-        "initComplete": function () {
+        order       : [], // Disable initial auto-sort; relies on server-side sorting
+        paging      : false,
+        fixedHeader : true, // Header row sticks to top of window when scrolling down
+        drawCallback : function () {
+            makeWowheadLinks();
+            parseMarkdown();
+            trackTimestamps();
+        },
+        initComplete: function () {
             makeWowheadLinks();
             parseMarkdown();
         },
-        "createdRow" : function (row, data, dataIndex) {
+        createdRow : function (row, data, dataIndex) {
             // Add a top border style between different loot sources
             if (dataIndex == 0 || lastSource == null) {
                 lastSource = data.source_name;
@@ -167,12 +199,26 @@ function createTable(lastSource) {
         }
     });
 
-    return memberTable;
+    return itemTable;
+}
+
+function addWishlistFilterHandlers() {
+    $("#wishlist_filter").on('change', function () {
+        currentWishlistNumber = $(this).val();
+        itemTable.rows().invalidate().draw();
+    }).change();
 }
 
 // Gets an HTML list of characters
-function getCharacterList(data, type, itemId) {
+function createCharacterListHtml(data, type, itemId, header = null) {
     let characters = `<ul class="list-inline js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
+
+    if (header) {
+        characters += `<li class="js-item-wishlist-character no-bullet font-weight-bold text-muted small">
+            ${ header }
+        </li>`;
+    }
+
     let initialLimit = 4;
 
     let lastRaidGroupId = null;
@@ -187,7 +233,7 @@ function getCharacterList(data, type, itemId) {
                 }
             }
             characters += `
-                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small">
+                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted small">
                     ${ raidGroupName }
                 </li>
             `;
@@ -211,7 +257,7 @@ function getCharacterList(data, type, itemId) {
                 }
             }
             characters += `
-                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small">
+                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted small">
                     ${ raidGroupName }
                 </li>
             `;

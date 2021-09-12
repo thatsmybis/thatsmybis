@@ -110,7 +110,6 @@
                 </option>
             </select>
         </li>
-
         <li class="list-inline-item font-weight-light">
             <span class="text-muted fas fa-fw fa-eye-slash"></span>
             {{ __("Columns") }}

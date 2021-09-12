@@ -16,6 +16,22 @@
                 @endif
             </select>
         </li>
+        <li class="list-inline-item">
+            <label for="wishlist_filter" class="font-weight-light">
+                <span class="text-muted fas fa-fw fa-scroll-old"></span>
+                {{ __("Wishlist") }}
+            </label>
+            <select id="wishlist_filter" class="form-control dark">
+                @for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
+                    <option value="{{ $i }}" {{ $guild->current_wishlist_number === $i ? 'selected' : '' }}>
+                        {{ $i }}{{ $guild->current_wishlist_number === $i ? '*' : '' }}
+                    </option>
+                @endfor
+                <option value="">
+                    {{ __("All") }}
+                </option>
+            </select>
+        </li>
 
         <li class="list-inline-item font-weight-light">
             <span class="text-muted fas fa-fw fa-eye-slash"></span>

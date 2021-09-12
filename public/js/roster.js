@@ -65,7 +65,7 @@ $(document).ready( function () {
 });
 
 function createTable() {
-    memberTable = $("#characterTable").DataTable({
+    rosterTable = $("#characterTable").DataTable({
         autoWidth : false,
         data      : characters,
         columns   : [
@@ -414,7 +414,7 @@ function createTable() {
             parseMarkdown();
         }
     });
-    return memberTable;
+    return rosterTable;
 }
 
 function addClippedItemHandlers() {
@@ -465,7 +465,7 @@ function addInstanceFilterHandlers() {
 function addWishlistFilterHandlers() {
     $("#wishlist_filter").on('change', function () {
         currentWishlistNumber = $(this).val();
-        memberTable.rows().invalidate().draw();
+        rosterTable.rows().invalidate().draw();
     }).change();
 }
 

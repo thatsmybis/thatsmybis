@@ -387,13 +387,13 @@
                                         {{ __("(useful for phases)") }}
                                     </small>
                                 </label>
-                                <input name="current_wishlist_number"
-                                    min="1"
-                                    max="{{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }}"
-                                    type="number"
-                                    class="form-control dark"
-                                    placeholder="{{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }}"
-                                    value="{{ old('current_wishlist_number') ? old('current_wishlist_number') : $guild->current_wishlist_number }}" />
+                                <select name="current_wishlist_number" class="form-control dark">
+                                    @for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
+                                        <option value="{{ $i }}" {{ old('current_wishlist_number') && old('current_wishlist_number') == $i || $guild->current_wishlist_number == $i ? 'selected' : '' }}>
+                                            {{ $i }}{{ $guild->current_wishlist_number == $i ? '*' : '' }}
+                                        </option>
+                                    @endfor
+                                </select>
                             </div>
                             <div class="form-group">
                                 <label for="max_wishlist_items" class="">
