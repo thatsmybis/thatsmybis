@@ -42,24 +42,21 @@ class RaidGroupController extends Controller
             $type = request()->input('type');
         }
 
-        $guild->load([
-            'allRaidGroups' => function ($query) use ($id, &$type) {
-                $query = $query->where('id', $id)->with(['role']);
+        $query = RaidGroup::where([
+            'guild_id' => $guild->id,
+            'id'       => $id,
+        ])->with(['role']);
 
-                if ($type === 'secondary') {
-                    $query = $query->with('secondaryCharacters');
-                } else if ($type === 'all') {
-                    $query = $query->with(['characters', 'secondaryCharacters']);
-                } else {
-                    $type = 'main';
-                    $query = $query->with('characters');
-                }
+        if ($type === 'secondary') {
+            $query = $query->with('secondaryCharacters');
+        } else if ($type === 'all') {
+            $query = $query->with(['characters', 'secondaryCharacters']);
+        } else {
+            $type = 'main';
+            $query = $query->with('characters');
+        }
 
-                return $query;
-            },
-        ]);
-
-        $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
+        $raidGroup = $query->first();
 
         if (!$raidGroup) {
             request()->session()->flash('status', 'Raid group not found');
@@ -119,22 +116,23 @@ class RaidGroupController extends Controller
         }
 
         $guild->load([
-            'allRaidGroups' => function ($query) use ($id, $isSecondary) {
-                return $query->where('id', $id)
-                    ->with([
-                        ($isSecondary ? 'secondaryCharacters' : 'characters') => function ($query) {
-                            return $query->with(['raidGroup', 'raidGroup.role']);
-                        },
-                        'role'
-                    ])
-                    ->withCount(['characters', 'secondaryCharacters']);
-            },
             'characters',
             'characters.raidGroup',
             'characters.raidGroup.role',
         ]);
 
-        $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
+        $raidGroup = RaidGroup::where([
+            'id'       => $id,
+            'guild_id' => $guild->id,
+            ])
+            ->with([
+                ($isSecondary ? 'secondaryCharacters' : 'characters') => function ($query) {
+                    return $query->with(['raidGroup', 'raidGroup.role']);
+                },
+                'role'
+            ])
+            ->withCount(['characters', 'secondaryCharacters'])
+            ->first();
 
         if (!$raidGroup) {
             request()->session()->flash('status', 'Raid group not found');
@@ -445,8 +443,10 @@ class RaidGroupController extends Controller
             }
         }
 
-        $raidGroup = $guild->allRaidGroups()
-            ->where('id', request()->input('raid_group_id'))
+        $raidGroup = RaidGroup::where([
+                'guild_id' => $guild->id,
+                'id'       => request()->input('raid_group_id'),
+            ])
             ->with($isSecondary ? 'secondaryCharacters' : 'characters')
             ->firstOrFail();
 
