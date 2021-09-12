@@ -238,7 +238,7 @@ class RaidGroupController extends Controller
 
         $this->validate(request(), $validationRules, $validationMessages);
 
-        if ($guild->raidGroups->contains('name', request()->input('name'))) {
+        if ($guild->allRaidGroups->contains('name', request()->input('name'))) {
             abort(403, 'Name already exists.');
         }
 
@@ -279,13 +279,10 @@ class RaidGroupController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load([
-            'allRaidGroups' => function ($query) {
-                return $query->where('id', request()->input('id'));
-            }
-        ]);
-
-        $raidGroup = $guild->allRaidGroups->first();
+        $raidGroup = RaidGroup::where([
+                'guild_id' => $guild->id,
+                'id' => request()->input('id'),
+            ])->first();
 
         if (!$raidGroup) {
             abort(404, 'Raid Group not found.');
@@ -372,13 +369,11 @@ class RaidGroupController extends Controller
 
         $id = request()->input('id');
 
-        $guild->load([
-            'allRaidGroups' => function ($query) use ($id) {
-                return $query->where('id', $id);
-            },
-        ]);
+        $raidGroup = RaidGroup::where([
+                'guild_id' => $guild->id,
+                'id' => $id,
+            ])->first();
 
-        $raidGroup = $guild->allRaidGroups->where('id', $id)->first();
         if (!$raidGroup) {
             abort(404, 'Raid Group not found.');
         }
@@ -450,7 +445,7 @@ class RaidGroupController extends Controller
             }
         }
 
-        $raidGroup = $guild->raidGroups()
+        $raidGroup = $guild->allRaidGroups()
             ->where('id', request()->input('raid_group_id'))
             ->with($isSecondary ? 'secondaryCharacters' : 'characters')
             ->firstOrFail();

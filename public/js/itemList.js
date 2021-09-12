@@ -109,7 +109,6 @@ function createTable(lastSource) {
                 data   : guild.is_attendance_hidden ? "wishlist_characters" : "wishlist_characters_with_attendance",
                 render : function (data, type, row) {
                     if (data && data.length) {
-                        // console.log(data);
                         let list = '';
                         if (currentWishlistNumber) { // return only the selected wishlist
                             const filteredData = data.filter(character => character.pivot.list_number == currentWishlistNumber);
