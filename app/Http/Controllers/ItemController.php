@@ -83,10 +83,10 @@ class ItemController extends Controller
                     'items.item_id',
                     'items.name',
                     'items.quality',
-                    'item_sources.name      AS source_name',
-                    'guild_items.note       AS guild_note',
-                    'guild_items.priority   AS guild_priority',
-                    'guild_items.tier       AS guild_tier',
+                    'item_sources.name    AS source_name',
+                    'guild_items.note     AS guild_note',
+                    'guild_items.priority AS guild_priority',
+                    'guild_items.tier     AS guild_tier',
                 ])
                 ->leftJoin('item_item_sources', 'item_item_sources.item_id', '=', 'items.item_id')
                 ->leftJoin('item_sources', 'item_sources.id', '=', 'item_item_sources.item_source_id')
@@ -143,7 +143,7 @@ class ItemController extends Controller
                                     ['characters.guild_id', $guild->id],
                                     ['character_items.is_received', 0],
                                 ])
-                            ->groupBy(['character_items.character_id', 'character_items.item_id'])
+                            ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
                             ->orderBy('raid_group_name')
                             ->orderBy('character_items.order');
 
@@ -180,7 +180,15 @@ class ItemController extends Controller
 
             return $items;
         });
-
+// dd(
+//     ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance'),
+//     $items->where('item_id', 30027)->first()->relationLoaded('wishlistCharactersWithAttendance'),
+//     $items->where('item_id', 30027)->first()->wishlistCharactersWithAttendance->toArray(),
+//     $items->where('item_id', 30027)->first()->wishlistCharacters->toArray(),
+//     'sigh',
+//     Item::where(['item_id' => 30027])->with(['wishlistCharactersWithAttendance' => function ($query) use($guild) {return $query->where('characters.guild_id', $guild->id);}])->first()->wishlistCharactersWithAttendance->toArray(),
+//     Item::where(['item_id' => 30027])->with(['wishlistCharacters' => function ($query) use($guild) {return $query->where('characters.guild_id', $guild->id);}])->first()->wishlistCharacters->toArray(),
+// );
         return view('item.list', [
             'currentMember'   => $currentMember,
             'guild'           => $guild,
