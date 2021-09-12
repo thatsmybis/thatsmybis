@@ -323,7 +323,7 @@
                                     <div class="form-group mb-1 text-center">
                                         <label for="characters[{{ $i }}][is_exempt]">
                                             @if ($i == 0)
-                                                <span class="fas fa-fw fa-redo text-muted"></span>
+                                                <span class="fas fa-fw fa-times text-muted"></span>
                                                 <span class="font-weight-bold">
                                                     {{ __("Excused") }}
                                                 </span>

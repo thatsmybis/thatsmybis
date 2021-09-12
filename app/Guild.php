@@ -113,7 +113,7 @@ class Guild extends Model
     // Gets characters and their attendance stats
     // Excludes hidden and removed characters
     public function charactersWithAttendance() {
-        return Character::addAttendanceQuery($this->characters());
+        return Character::addAttendanceQuery($this->characters())->groupBy('characters.id');
     }
 
     public function content() {
@@ -245,7 +245,7 @@ class Guild extends Model
                     },
                 ]);
 
-        $query = Character::addAttendanceQuery($query);
+        $query = Character::addAttendanceQuery($query)->groupBy('characters.id');
 
         if (!$showInactive) {
             $query = $query->whereNull('characters.inactive_at');

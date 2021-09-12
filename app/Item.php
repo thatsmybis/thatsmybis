@@ -84,7 +84,7 @@ class Item extends Model
 
     public function charactersWithAttendance() {
         $query = $this->characters();
-        return Character::addAttendanceQuery($query);
+        return Character::addAttendanceQuery($query)->groupBy('characters.id');
     }
 
     public function expansion() {
@@ -143,7 +143,7 @@ class Item extends Model
 
     public function priodCharactersWithAttendance() {
         $query = $this->priodCharacters();
-        return Character::addAttendanceQuery($query);
+        return Character::addAttendanceQuery($query)->groupBy('characters.id');
     }
 
     public function receivedCharacters() {
@@ -180,7 +180,7 @@ class Item extends Model
 
     public function receivedCharactersWithAttendance() {
         $query = $this->receivedCharacters();
-        return Character::addAttendanceQuery($query);
+        return Character::addAttendanceQuery($query)->groupBy('characters.id');
     }
 
     public function receivedAndRecipeCharacters() {
@@ -218,7 +218,7 @@ class Item extends Model
 
     public function receivedAndRecipeCharactersWithAttendance() {
         $query = $this->receivedAndRecipeCharacters();
-        return Character::addAttendanceQuery($query);
+        return Character::addAttendanceQuery($query)->groupBy('characters.id');
     }
 
     public function wishlistCharacters() {

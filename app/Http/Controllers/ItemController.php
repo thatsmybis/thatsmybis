@@ -391,7 +391,7 @@ class ItemController extends Controller
     private function addWishlistQuery($query, $guild) {
         return $query->with([
             ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
-                return $query
+                $query = $query
                     ->where([
                         ['characters.guild_id', $guild->id],
                         ['character_items.is_received', 0],
@@ -404,6 +404,12 @@ class ItemController extends Controller
                         'allWishlists',
                     ])
                     ->orderBy('character_items.order');
+
+                if (!$guild->is_attendance_hidden) {
+                    $query = $query->groupBy('characters.id');
+                }
+
+                return $query;
             },
         ]);
     }

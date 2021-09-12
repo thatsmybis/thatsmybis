@@ -4,7 +4,7 @@
     if (old('name')) {
         $oldName = old('name');
     } else if (isset($raid) && $raid) {
-        $oldName = $raid->name . __('loot');
+        $oldName = $raid->name . ' ' . __('loot');
     } else if (isset($batch) && $batch && $batch->name) {
         $oldName = $batch->name;
     }
@@ -12,7 +12,8 @@
 <div class="col-12 {{ $errors->has('name') ? 'text-danger font-weight-bold' : '' }}">
     <div class="form-group">
         <label for="name" class="font-weight-bold">
-            <span class="text-muted">{{ __("optional") }}</span> {{ __("Give this assignment a name") }}
+            {{ __("Give this assignment a name") }}
+            <span class="text-muted font-weight-normal">{{ __("optional") }}</span>
         </label>
         <input name="name"
             autocomplete="off"

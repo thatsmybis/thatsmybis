@@ -51,7 +51,7 @@ class Member extends Model
 
     public function charactersWithAttendance() {
         $query = $this->characters()->select('characters.*');
-        return Character::addAttendanceQuery($query);
+        return Character::addAttendanceQuery($query)->groupBy('characters.id');
     }
 
     public function content() {

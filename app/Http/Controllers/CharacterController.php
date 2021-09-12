@@ -255,7 +255,7 @@ class CharacterController extends Controller
                 ]);
 
             if (!$guild->is_attendance_hidden) {
-                $query = Character::addAttendanceQuery($query);
+                $query = Character::addAttendanceQuery($query)->groupBy('characters.id');
             }
 
             return $query->firstOrFail();
