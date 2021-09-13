@@ -171,6 +171,10 @@ class MemberController extends Controller
             }
         }
 
+        $unassignedCharacterCount = Character::where('guild_id', $guild->id)
+            ->whereNull('member_id')
+            ->count();
+
         $showEdit = false;
         if ($member->id == $currentMember->id || $currentMember->hasPermission('edit.characters')) {
             $showEdit = true;
@@ -204,6 +208,7 @@ class MemberController extends Controller
             'user'             => $user,
             'editOfficerNotePermission' => $editOfficerNotePermission,
             'viewOfficerNotePermission' => $viewOfficerNotePermission,
+            'unassignedCharacterCount' => $unassignedCharacterCount,
         ]);
     }
 

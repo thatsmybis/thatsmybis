@@ -62,10 +62,21 @@
                     <ol class="striped no-bullet no-indent">
                         @if ($showEdit)
                             <li class="pt-3 pl-3 pb-3 pr-3 rounded">
-                                <a href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}" class="btn btn-success font-weight-medium">
-                                    <span class="fas fa-plus"></span>
-                                    {{ __("Create character") }}
-                                </a>
+                                <ul class="list-inline">
+                                    <li class="list-inline-item">
+                                        <a href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}" class="btn btn-success font-weight-medium">
+                                            <span class="fas fa-plus"></span>
+                                            {{ __("Create character") }}
+                                        </a>
+                                    </li>
+                                    @if ($unassignedCharacterCount > 0)
+                                        <li class="list-inline-item">
+                                            <a href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-link">
+                                                {{ __("View Unclaimed Characters") }} <span class="small text-muted">({{ $unassignedCharacterCount }})</span>
+                                            </a>
+                                        </li>
+                                    @endif
+                                </ul>
                             </li>
                         @endif
                         @foreach ($characters->where('inactive_at', null) as $character)

@@ -33,6 +33,10 @@
                                     <span class="font-weight-bold text-danger">
                                         {{ __("Unassigned") }} <span class="text-muted small">({{ $unassignedCharacters->count() }})</span>
                                     </span>
+                                    <br>
+                                    <span class="text-muted small">
+                                        {{ __("Contact an officer to have a character assigned to you") }}
+                                    </span>
                                 </td>
                                 <td>
                                     <ul class="list-inline">
