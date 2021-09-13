@@ -155,7 +155,7 @@ class ItemController extends Controller
                                     ->where([
                                         ['characters.guild_id', $guild->id],
                                     ])
-                                ->groupBy(['character_items.character_id', 'character_items.item_id'])
+                                ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
                                 ->orderBy('raid_group_name')
                                 ->orderBy('character_items.order');
                             },
@@ -180,15 +180,7 @@ class ItemController extends Controller
 
             return $items;
         });
-// dd(
-//     ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance'),
-//     $items->where('item_id', 30027)->first()->relationLoaded('wishlistCharactersWithAttendance'),
-//     $items->where('item_id', 30027)->first()->wishlistCharactersWithAttendance->toArray(),
-//     $items->where('item_id', 30027)->first()->wishlistCharacters->toArray(),
-//     'sigh',
-//     Item::where(['item_id' => 30027])->with(['wishlistCharactersWithAttendance' => function ($query) use($guild) {return $query->where('characters.guild_id', $guild->id);}])->first()->wishlistCharactersWithAttendance->toArray(),
-//     Item::where(['item_id' => 30027])->with(['wishlistCharacters' => function ($query) use($guild) {return $query->where('characters.guild_id', $guild->id);}])->first()->wishlistCharacters->toArray(),
-// );
+
         return view('item.list', [
             'currentMember'   => $currentMember,
             'guild'           => $guild,
@@ -459,7 +451,7 @@ class ItemController extends Controller
      * This causes tokens to show anyone who wishlisted the items they get turned in for... provided the DB has those relationships set up/inserted.
      */
     public static function mergeTokenWishlists($items, $guild) {
-        // Merge items' child items' wishlist characters into parent items' wishlist characters
+        // Combine items' child items' wishlist characters into parent items' wishlist characters
         foreach ($items->filter(function ($item, $key) { return $item->childItems->count(); }) as $item) {
             if ($guild->is_attendance_hidden) {
                 foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
@@ -470,7 +462,14 @@ class ItemController extends Controller
                             $items->where('id', $item->id)
                                 ->first()
                                 ->wishlistCharacters
-                                ->merge($childItem->wishlistCharacters)
+                                // Keys should be unique per character ID and wishlist number.
+                                ->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
+                                // Combine the two arrays based on the keys we just defined.
+                                // If a character has both a token and its child items wishlisted, merge into one.
+                                // But ONLY if they are on the same wishlist number.
+                                ->union(
+                                    $childItem->wishlistCharacters->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
+                                )
                                 ->sortBy(function($character) {
                                     // RE: -strtotime(): rofl, rofl, kekw, bur, kek, roflmao sort by newest to oldest date wishlisted.
                                     return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
@@ -480,6 +479,7 @@ class ItemController extends Controller
                 }
             } else {
                 foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }) as $childItem) {
+                    // This is function the same as the code above. This one just uses the 'WithAttendance' relationships instead.
                     $items->where('id', $item->id)
                         ->first()
                         ->setRelation(
@@ -487,7 +487,10 @@ class ItemController extends Controller
                             $items->where('id', $item->id)
                                 ->first()
                                 ->wishlistCharactersWithAttendance
-                                ->merge($childItem->wishlistCharactersWithAttendance)
+                                ->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
+                                ->union(
+                                    $childItem->wishlistCharactersWithAttendance->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
+                                )
                                 ->sortBy(function($character) {
                                     return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
                                 })
