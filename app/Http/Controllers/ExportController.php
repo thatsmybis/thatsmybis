@@ -211,7 +211,10 @@ class ExportController extends Controller {
                 'outstandingItems' => function ($query) use ($guild, $listNumbers) {
                     return $query
                         ->whereIn('list_number', $listNumbers)
-                        ->orWhere('type', 'prio')
+                        ->orWhere(function($query) {
+                            $query->where('type', 'prio')
+                                ->where('is_received', 0);
+                        })
                         ->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
                 }
             ])
