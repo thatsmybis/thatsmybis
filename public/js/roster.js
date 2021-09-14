@@ -599,8 +599,8 @@ function hideStrikethroughItems() {
 }
 
 function showStrikethroughItems() {
-    $("[data-type='prio'").children(".font-strikethrough").parent().show();
-    $("[data-type='wishlist'").children(".font-strikethrough").parent().show();
+    $("[data-type='prio']:not(.js-clipped-item)").children(".font-strikethrough").parent().show();
+    $("[data-type='wishlist']:not(.js-clipped-item)").children(".font-strikethrough").parent().show();
 }
 
 function resetItemVisibility() {
