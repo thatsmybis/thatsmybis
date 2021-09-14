@@ -27,11 +27,11 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if ($unassignedCharacters->count() > 0)
+                        @if ($unassignedCharacters->whereNull('inactive_at')->count() > 0)
                             <tr>
                                 <td>
                                     <span class="font-weight-bold text-danger">
-                                        {{ __("Unassigned") }} <span class="text-muted small">({{ $unassignedCharacters->count() }})</span>
+                                        {{ __("Unassigned") }} <span class="text-muted small">({{ $unassignedCharacters->whereNull('inactive_at')->count() }})</span>
                                     </span>
                                     <br>
                                     <span class="text-muted small">
@@ -40,7 +40,7 @@
                                 </td>
                                 <td>
                                     <ul class="list-inline">
-                                        @foreach($unassignedCharacters->sortBy('name') as $character)
+                                        @foreach($unassignedCharacters->whereNull('inactive_at')->sortBy('name') as $character)
                                             @include('member/partials/listMemberCharacter')
                                         @endforeach
                                     </ul>
@@ -131,6 +131,32 @@
                                 </td>
                             </tr>
                         @endif
+                        @if ($unassignedCharacters->whereNotNull('inactive_at')->count() > 0)
+                            <tr>
+                                <td>
+                                    <span class="font-weight-bold text-muted">
+                                        {{ __("Archived Characters") }}
+                                    </span>
+                                    <br>
+                                    <span id="showOrphanCharacters" class="small font-italic cursor-pointer">
+                                        {{ __("click to show") }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <ul id="orphanCharacters" class="list-inline" style="display:none;">
+                                        @foreach($unassignedCharacters->whereNotNull('inactive_at') as $character)
+                                            @include('member/partials/listMemberCharacter')
+                                        @endforeach
+                                    </ul>
+                                </td>
+                                <td>
+                                    —
+                                </td>
+                                <td>
+                                    —
+                                </td>
+                            </tr>
+                        @endif
                     </tbody>
                 </table>
             </div>
@@ -156,6 +182,10 @@ $(document).ready(function () {
 
     $("#showInactiveMembers").click(function () {
         $("#inactiveMembers").toggle();
+    });
+
+    $("#showOrphanCharacters").click(function () {
+        $("#orphanCharacters").toggle();
     });
 });
 </script>
