@@ -12,6 +12,7 @@ var colRaidGroup = 8;
 var colRaidsAttended = 11;
 
 var allItemsVisible = false;
+var strikethroughVisible = true;
 
 $(document).ready( function () {
    var table = createTable();
@@ -56,6 +57,16 @@ $(document).ready( function () {
 
     $(".js-sort-by-raids-attended").click(function() {
         table.order(colRaidsAttended, 'desc').draw();
+    });
+
+    $(".js-hide-strikethrough-items").click(function() {
+        if (strikethroughVisible) {
+            strikethroughVisible = false;
+            hideStrikethroughItems();
+        } else {
+            strikethroughVisible = true;
+            showStrikethroughItems();
+        }
     });
 
     addClippedItemHandlers();
@@ -424,6 +435,9 @@ function addClippedItemHandlers() {
         $(".js-clipped-item[data-id='" + id + "'][data-type='" + type + "']").show();
         $(".js-show-clipped-items[data-id='" + id + "'][data-type='" + type + "']").hide();
         $(".js-hide-clipped-items[data-id='" + id + "'][data-type='" + type + "']").show();
+        if (!strikethroughVisible) {
+            hideStrikethroughItems();
+        }
     });
     $(".js-hide-clipped-items").click(function () {
         let id = $(this).data("id");
@@ -577,6 +591,16 @@ function getNotes(data, type, row) {
     return (row.public_note ? `<span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(row.public_note)) }</span>` : '—')
         + (row.officer_note ? `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(row.officer_note)) }</span>` : '')
         + (secondaryRaidGroups ? `<br>${secondaryRaidGroups}` : ``);
+}
+
+function hideStrikethroughItems() {
+    $("[data-type='prio'").children(".font-strikethrough").parent().hide();
+    $("[data-type='wishlist'").children(".font-strikethrough").parent().hide();
+}
+
+function showStrikethroughItems() {
+    $("[data-type='prio'").children(".font-strikethrough").parent().show();
+    $("[data-type='wishlist'").children(".font-strikethrough").parent().show();
 }
 
 function resetItemVisibility() {

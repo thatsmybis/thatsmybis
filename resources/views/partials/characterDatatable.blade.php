@@ -181,6 +181,14 @@
         @endif
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
+            <span class="js-hide-strikethrough-items text-link cursor-pointer font-weight-light" data-column="6">
+                <span class="text-muted fal fa-fw fa-strikethrough"></span>
+                {{ __("Hide") }}
+                <span class="font-strikethrough">{{ __("received") }}</span>
+            </span>
+        </li>
+        <li class="list-inline-item">&sdot;</li>
+        <li class="list-inline-item">
             <span class="js-show-all-clipped-items text-link cursor-pointer font-weight-light" data-column="6">
                 <span class="text-muted fal fa-fw fa-eye"></span>
                 {{ __("Show all loot") }}
