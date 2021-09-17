@@ -99,7 +99,7 @@
                                     <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
                                         {{ __("active/locked is controlled by GM") }}
                                         <br>
-                                        @if ($character->member->is_wishlist_unlocked)
+                                        @if ($character->member && $character->member->is_wishlist_unlocked)
                                             {{ __("officers have unlocked your wishlists") }}
                                         @endif
                                     </a>
@@ -118,7 +118,7 @@
                                                 <span class="text-danger">{{ __('(inactive)') }}</span>
                                             @endif
                                             @if ($guild->is_wishlist_locked)
-                                                @if (in_array($i, $wishlistLockedExceptions) || $character->member->is_wishlist_unlocked)
+                                                @if (in_array($i, $wishlistLockedExceptions) || ($character->member && $character->member->is_wishlist_unlocked))
                                                     <span class="text-gold">{{ __('(unlocked)') }}</span>
                                                 @else
                                                     <span class="text-muted">{{ __('(locked)') }}</span>

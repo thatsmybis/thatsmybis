@@ -49,7 +49,7 @@
     var showOfficerNote  = {{ $showOfficerNote ? 'true' : 'false' }};
     var showPrios        = {{ $showPrios ? 'true' : 'false' }};
     var showWishlist     = {{ $showWishlist ? 'true' : 'false' }};
-    var wishlistNames    = {!! $guild->getWishlistNames() ? json_encode($guild->getWishlistNames()) : 'null' !!};
+    var wishlistNames    = {!! $guild ? ($guild->getWishlistNames() ? json_encode($guild->getWishlistNames()) : 'null') : 'null' !!};
 </script>
 <script src="{{ loadScript('itemList.js') }}"></script>
 @endsection
