@@ -3,14 +3,24 @@
         <a href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'wishlist_number' => $wishlistNumber]) }}">
             <span class="{{ $isActive ? 'text-legendary font-weight-bold' : 'text-danger' }}">
                 <span class="fas fa-fw fa-scroll-old"></span>
-                {{ __("Wishlist") }} {{ $wishlistNumber }} {{ $isActive ? '' : __('(inactive)') }}
+                @if ($wishlistNames && $wishlistNames[$wishlistNumber - 1])
+                    {{ $wishlistNames[$wishlistNumber - 1] }}
+                @else
+                    {{ __("Wishlist") }} {{ $wishlistNumber }}
+                @endif
+                {{ $isActive ? '' : __('(inactive)') }}
             </span>
             <span class="small align-text- fas fa-fw fa-pencil"></span>
         </a>
     @else
         <span class="{{ $isActive ? 'text-legendary font-weight-bold' : 'text-danger' }}">
             <span class="fas fa-fw fa-scroll-old"></span>
-            {{ __("Wishlist") }} {{ $wishlistNumber }} {{ $isActive ? '' : __('(inactive)') }}
+            @if ($wishlistNames && $wishlistNames[$wishlistNumber - 1])
+                {{ $wishlistNames[$wishlistNumber - 1] }}
+            @else
+                {{ __("Wishlist") }} {{ $wishlistNumber }}
+            @endif
+            {{ $isActive ? '' : __('(inactive)') }}
         </span>
     @endif
     <span class="js-sort-wishlists text-link">

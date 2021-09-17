@@ -391,13 +391,28 @@
                             </div>
                             <div class="checkbox">
                                 <label>
-                                    <input type="checkbox" name="is_wishlist_disabled" value="1" class="" autocomplete="off"
-                                        {{ old('is_wishlist_disabled') && old('is_wishlist_disabled') == 1 ? 'checked' : ($guild->is_wishlist_disabled ? 'checked' : '') }}>
-                                        {{ __("Disable wishlists") }}
-                                        <span class="text-muted small">
-                                            {{ __("if your guild doesn't use them") }}
-                                        </span>
+                                    <input type="checkbox" name="use_wishlist_names" value="1" class="" autocomplete="off"
+                                        {{ old('use_wishlist_names') && old('use_wishlist_names') ? 'checked' : ($guild->wishlist_names ? 'checked' : '') }}>
+                                        {{ __("Use custom wishlist names") }}
+                                        <span class="small text-muted">{{ __('max :number characters', ['number' => 30]) }}</span>
                                 </label>
+                            </div>
+                            <div id="wishlistNames" class="mb-1" style="display:none;">
+                                @php
+                                    $wishlistNames = $guild->getWishlistNames();
+                                @endphp
+                                <ol>
+                                    @for ($i = 0; $i < App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
+                                        <li class="mb-3">
+                                            <input name="wishlist_names[{{ $i }}]"
+                                                maxlength="30"
+                                                type="text"
+                                                class="form-control dark slim"
+                                                placeholder="{{ __('Phase :number wishlist', ['number' => $i + 1]) }}"
+                                                value="{{ old('wishlist_name.' . $i) && old('wishlist_name.' . $i) ? old('wishlist_name.' . $i) : $wishlistNames && (array_key_exists($i, $wishlistNames) ? $wishlistNames[$i] : '') }}" />
+                                        </li>
+                                    @endfor
+                                </ol>
                             </div>
                             <div class="form-group">
                                 <label for="current_wishlist_number" class="">
@@ -427,6 +442,16 @@
                                     class="form-control dark"
                                     placeholder="{{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_ITEMS }}"
                                     value="{{ old('max_wishlist_items') ? old('max_wishlist_items') : $guild->max_wishlist_items }}" />
+                            </div>
+                            <div class="checkbox">
+                                <label>
+                                    <input type="checkbox" name="is_wishlist_disabled" value="1" class="" autocomplete="off"
+                                        {{ old('is_wishlist_disabled') && old('is_wishlist_disabled') == 1 ? 'checked' : ($guild->is_wishlist_disabled ? 'checked' : '') }}>
+                                        {{ __("Disable wishlists") }}
+                                        <span class="text-muted small">
+                                            {{ __("if your guild doesn't use them") }}
+                                        </span>
+                                </label>
                             </div>
                         </div>
                     </div>
@@ -461,6 +486,15 @@
                                         {{ __("By default, delete items from prio lists when they are distributed") }}
                                 </label>
                             </div>
+                            <div class="form-group">
+                                <label for="prio_show_count" class="">
+                                    {{ __("Prio ranks to show") }}
+                                    <span class="text-muted small">
+                                        {{ __("eg. only show top 3 prios to raiders") }}
+                                    </span>
+                                </label>
+                                <input name="prio_show_count" min="1" max="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" value="{{ old('prio_show_count') ? old('prio_show_count') : $guild->prio_show_count }}" />
+                            </div>
                             <div class="checkbox">
                                 <label>
                                     <input type="checkbox" name="is_prio_disabled" value="1" class="" autocomplete="off"
@@ -470,15 +504,6 @@
                                             {{ __("if your guild doesn't use them") }}
                                         </span>
                                 </label>
-                            </div>
-                            <div class="form-group">
-                                <label for="prio_show_count" class="">
-                                    {{ __("Prio ranks to show") }}
-                                    <span class="text-muted small">
-                                        {{ __("eg. only show top 3 prios to raiders") }}
-                                    </span>
-                                </label>
-                                <input name="prio_show_count" min="1" max="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" value="{{ old('prio_show_count') ? old('prio_show_count') : $guild->prio_show_count }}" />
                             </div>
                         </div>
                     </div>

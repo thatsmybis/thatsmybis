@@ -81,9 +81,16 @@
                                 $wishlists[$i] = $character->allWishlists->where('list_number', $i);
                             }
                         }
+
+                        $wishlistNames = $guild->getWishlistNames();
                     @endphp
 
-                    @include('character/partials/wishlist', ['wishlist' => $wishlists[$guild->current_wishlist_number], 'isActive' => true, 'wishlistNumber' => $guild->current_wishlist_number])
+                    @include('character/partials/wishlist', [
+                        'wishlist' => $wishlists[$guild->current_wishlist_number],
+                        'isActive' => true,
+                        'wishlistNames' => $wishlistNames,
+                        'wishlistNumber' => $guild->current_wishlist_number,
+                    ])
 
                     @if (count($wishlists))
                         <div class="col-12 mb-3">
@@ -95,7 +102,12 @@
                         <div id="inactive-wishlists" style="display:none;">
                             @foreach ($wishlists as $key => $wishlist)
                                 @if ($key != $guild->current_wishlist_number && count($wishlist))
-                                    @include('character/partials/wishlist', ['wishlist' => $wishlist, 'isActive' => false, 'wishlistNumber' => $key])
+                                    @include('character/partials/wishlist', [
+                                        'wishlist' => $wishlist,
+                                        'isActive' => false,
+                                        'wishlistNames' => $wishlistNames,
+                                        'wishlistNumber' => $key,
+                                    ])
                                 @endif
                             @endforeach
                         </div>

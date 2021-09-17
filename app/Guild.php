@@ -44,7 +44,8 @@ class Guild extends Model
         'is_received_locked',
         'is_wishlist_private',
         'is_wishlist_locked',
-        'wishlist_locked_exceptions',
+        'wishlist_locked_exceptions', // A list of exceptions, delimited by commas.
+        'wishlist_names', // A list of names, delimited by the bar character "|".
         'is_prio_autopurged',
         'is_wishlist_autopurged',
         'is_wishlist_disabled',
@@ -170,6 +171,10 @@ class Guild extends Model
 
     public function getWishlistLockedExceptions() {
         return explode(',', $this->wishlist_locked_exceptions);
+    }
+
+    public function getWishlistNames() {
+        return $this->wishlist_names ? explode('|', $this->wishlist_names) : null;
     }
 
     /**

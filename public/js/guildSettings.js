@@ -22,6 +22,14 @@ $("[name=is_wishlist_locked]").change(function () {
     }
 }).change();
 
+$("[name=use_wishlist_names]").change(function () {
+    if (this.checked) {
+        $("#wishlistNames").show();
+    } else {
+        $("#wishlistNames").hide();
+    }
+}).change();
+
 // If the current element has a value, show it and the next element that is hidden because it is empty
 function showNext(currentElement) {
     if ($(currentElement).val() != "") {

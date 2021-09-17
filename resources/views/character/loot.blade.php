@@ -72,6 +72,7 @@
                 @if (!$guild->is_wishlist_disabled)
                     @php
                         $wishlistLockedExceptions = $guild->getWishlistLockedExceptions();
+                        $wishlistNames = $guild->getWishlistNames();
                     @endphp
                     <div class="row mb-3 pt-2 bg-light rounded">
                         <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
@@ -82,7 +83,12 @@
                             <div class="dropdown">
                                 <a class="dropdown-toggle font-weight-bold text-legendary" id="wishlistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="fas fa-fw fa-scroll-old"></span>
-                                    {{ __("Wishlist") }} {{ $wishlistNumber }}
+                                    @if ($wishlistNames && $wishlistNames[$wishlistNumber - 1])
+                                        {{ $wishlistNames[$wishlistNumber - 1] }}
+                                    @else
+                                        {{ __("Wishlist") }} {{ $wishlistNumber }}
+                                    @endif
+
                                     @if ($guild->current_wishlist_number == $wishlistNumber)
                                         <span class="text-success">{{ __('(active)') }}</span>
                                     @else
@@ -100,7 +106,12 @@
                                     @for ($i = 1; $i <= $maxWishlistLists; $i++)
                                         <a class="dropdown-item"
                                             href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'wishlist_number' => $i]) }}">
-                                            {{ __("Wishlist") }} {{ $i }}
+                                            @if ($wishlistNames && $wishlistNames[$i - 1])
+                                                {{ $wishlistNames[$i - 1] }}
+                                            @else
+                                                {{ __("Wishlist") }} {{ $i }}
+                                            @endif
+
                                             @if ($guild->current_wishlist_number == $i)
                                                 <span class="text-success">{{ __('(active)') }}</span>
                                             @else

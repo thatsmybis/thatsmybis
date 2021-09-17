@@ -319,32 +319,33 @@ class GuildController extends Controller
         $guild->load('roles');
 
         $validationRules =  [
-            'name'                      => 'string|max:36',
-            'disabled_at'               => 'nullable|boolean',
-            'is_prio_private'           => 'nullable|boolean',
-            'is_prio_disabled'          => 'nullable|boolean',
-            'is_received_locked'        => 'nullable|boolean',
-            'is_wishlist_private'       => 'nullable|boolean',
-            'is_wishlist_locked'        => 'nullable|boolean',
+            'name'                         => 'string|max:36',
+            'disabled_at'                  => 'nullable|boolean',
+            'is_prio_private'              => 'nullable|boolean',
+            'is_prio_disabled'             => 'nullable|boolean',
+            'is_received_locked'           => 'nullable|boolean',
+            'is_wishlist_private'          => 'nullable|boolean',
+            'is_wishlist_locked'           => 'nullable|boolean',
             'wishlist_locked_exceptions.*' => 'nullable|boolean',
-            'is_wishlist_disabled'      => 'nullable|boolean',
-            'is_prio_autopurged'        => 'nullable|boolean',
-            'is_wishlist_autopurged'    => 'nullable|boolean',
-            'max_wishlist_items'        => 'nullable|integer|min:1|max:' . CharacterLootController::MAX_WISHLIST_ITEMS,
-            'current_wishlist_number'   => 'nullable|integer|min:1|max:' . CharacterLootController::MAX_WISHLIST_LISTS,
-            'prio_show_count'           => 'nullable|integer|min:1|max:' . PrioController::MAX_PRIOS,
-            'do_sort_items_by_instance' => 'nullable|boolean',
-            'is_raid_group_locked'      => 'nullable|boolean',
-            'is_attendance_hidden'      => 'nullable|boolean',
-            'attendance_decay_days'     => 'nullable|integer|min:1|max:99999',
-            'tier_mode'                 => 'nullable|string|in:s,num',
-            'calendar_link'             => 'nullable|string|max:200',
-            'message'                   => 'nullable|string|max:500',
-            'show_message'              => 'nullable|boolean',
-            'gm_role_id'                => 'nullable|integer|exists:roles,discord_id',
-            'officer_role_id'           => 'nullable|integer|exists:roles,discord_id',
-            'raid_leader_role_id'       => 'nullable|integer|exists:roles,discord_id',
-            'member_roles.*'            => 'nullable|integer|exists:roles,discord_id',
+            'wishlist_names.*'             => 'nullable|string|max:30',
+            'is_wishlist_disabled'         => 'nullable|boolean',
+            'is_prio_autopurged'           => 'nullable|boolean',
+            'is_wishlist_autopurged'       => 'nullable|boolean',
+            'max_wishlist_items'           => 'nullable|integer|min:1|max:' . CharacterLootController::MAX_WISHLIST_ITEMS,
+            'current_wishlist_number'      => 'nullable|integer|min:1|max:' . CharacterLootController::MAX_WISHLIST_LISTS,
+            'prio_show_count'              => 'nullable|integer|min:1|max:' . PrioController::MAX_PRIOS,
+            'do_sort_items_by_instance'    => 'nullable|boolean',
+            'is_raid_group_locked'         => 'nullable|boolean',
+            'is_attendance_hidden'         => 'nullable|boolean',
+            'attendance_decay_days'        => 'nullable|integer|min:1|max:99999',
+            'tier_mode'                    => 'nullable|string|in:s,num',
+            'calendar_link'                => 'nullable|string|max:200',
+            'message'                      => 'nullable|string|max:500',
+            'show_message'                 => 'nullable|boolean',
+            'gm_role_id'                   => 'nullable|integer|exists:roles,discord_id',
+            'officer_role_id'              => 'nullable|integer|exists:roles,discord_id',
+            'raid_leader_role_id'          => 'nullable|integer|exists:roles,discord_id',
+            'member_roles.*'               => 'nullable|integer|exists:roles,discord_id',
         ];
 
         $this->validate(request(), $validationRules);
@@ -359,6 +360,10 @@ class GuildController extends Controller
         $updateValues['wishlist_locked_exceptions'] =
             $updateValues['is_wishlist_locked'] && request()->input('wishlist_locked_exceptions')
             ? implode(",", array_keys(request()->input('wishlist_locked_exceptions')))
+            : null;
+        $updateValues['wishlist_names'] =
+            request()->input('use_wishlist_names') && request()->input('wishlist_names') ?
+            implode("|", array_values(str_replace('|', '', request()->input('wishlist_names')))) // List delimited by commas. First, remove any existing commas.
             : null;
         $updateValues['is_wishlist_disabled']      = request()->input('is_wishlist_disabled') == 1 ? 1 : 0;
         $updateValues['is_prio_autopurged']        = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
@@ -407,6 +412,10 @@ class GuildController extends Controller
 
         if ($updateValues['is_wishlist_locked'] && $updateValues['wishlist_locked_exceptions'] != $guild->wishlist_locked_exceptions) {
             $auditMessage .= ' (unlocked wishlists changed to ' . str_replace(',', ', ', $updateValues['wishlist_locked_exceptions']) . ')';
+        }
+
+        if ($updateValues['wishlist_names'] && $updateValues['wishlist_names'] != $guild->wishlist_names) {
+            $auditMessage .= ' (wishlist names changed)';
         }
 
         if (array_key_exists('gm_role_id', $updateValues) && $updateValues['gm_role_id'] != $guild->gm_role_id) {

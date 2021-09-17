@@ -95,6 +95,9 @@
             </select>
         </li>
         <li class="list-inline-item">
+            @php
+                $wishlistNames = $guild->getWishlistNames();
+            @endphp
             <label for="wishlist_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-scroll-old"></span>
                 {{ __("Wishlist") }}
@@ -102,7 +105,11 @@
             <select id="wishlist_filter" class="form-control dark">
                 @for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
                     <option value="{{ $i }}" {{ $guild->current_wishlist_number === $i ? 'selected' : '' }}>
-                        {{ $i }}{{ $guild->current_wishlist_number === $i ? '*' : '' }}
+                        @if ($wishlistNames && $wishlistNames[$i - 1])
+                            {{ $wishlistNames[$i - 1] }}{{ $guild->current_wishlist_number === $i ? '*' : '' }}
+                        @else
+                            {{ $i }}{{ $guild->current_wishlist_number === $i ? '*' : '' }}
+                        @endif
                     </option>
                 @endfor
                 <option value="">

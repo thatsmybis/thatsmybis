@@ -183,6 +183,16 @@ function createTable() {
                         // Only use the currently selected wishlist
                         data = data.filter(item => item.list_number == wishlistNumber);
 
+                        let header = null;
+
+                        if (showListHeader) {
+                            if (wishlistNames && wishlistNames[wishlistNumber]) {
+                                header = wishlistNames[wishlistNumber];
+                            } else {
+                                header = headerWishlist + ' ' + wishlistNumber;
+                            }
+                        }
+
                         if (data.length) {
                             // Create a copy of data, then sort it by instance_order DESC, user chosen order ASC
                             let dataSorted = data.slice().sort((a, b) => a.instance_order - b.instance_order || a.pivot.order - b.pivot.order);
@@ -194,7 +204,7 @@ function createTable() {
                                 true,
                                 'js-wishlist-sorted',
                                 (guild.do_sort_items_by_instance ? true : false),
-                                (showListHeader ? headerWishlist + ' ' + wishlistNumber : null)
+                                (showListHeader ? header : null)
                             );
                             list += getItemListHtml(
                                 data,
@@ -204,7 +214,7 @@ function createTable() {
                                 false,
                                 'js-wishlist-unsorted',
                                 (guild.do_sort_items_by_instance ? false : true),
-                                (showListHeader ? headerWishlist + ' ' + wishlistNumber : null)
+                                (showListHeader ? header : null)
                             );
                         }
 

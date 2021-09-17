@@ -533,6 +533,9 @@ input.slim-date {
     padding-left: 5px;
     padding-right: 5px;
 }
+input.slim {
+    height: 1.8rem;
+}
 
 .dropdown-toggle.btn-light {
     background-color: #32305c;
