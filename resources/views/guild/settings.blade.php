@@ -403,13 +403,22 @@
                                 @endphp
                                 <ol>
                                     @for ($i = 0; $i < App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
+                                        @php
+                                            $wishlistName = '';
+
+                                            if (old('wishlist_name.' . $i) && old('wishlist_name.' . $i)) {
+                                                $wishlistName = old('wishlist_name.' . $i);
+                                            } else if ($wishlistNames && (array_key_exists($i, $wishlistNames))) {
+                                                $wishlistName = $wishlistNames[$i];
+                                            }
+                                        @endphp
                                         <li class="mb-3">
                                             <input name="wishlist_names[{{ $i }}]"
                                                 maxlength="30"
                                                 type="text"
                                                 class="form-control dark slim"
                                                 placeholder="{{ __('Phase :number wishlist', ['number' => $i + 1]) }}"
-                                                value="{{ old('wishlist_name.' . $i) && old('wishlist_name.' . $i) ? old('wishlist_name.' . $i) : $wishlistNames && (array_key_exists($i, $wishlistNames) ? $wishlistNames[$i] : '') }}" />
+                                                value="{{ $wishlistName }}" />
                                         </li>
                                     @endfor
                                 </ol>

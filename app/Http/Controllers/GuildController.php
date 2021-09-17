@@ -363,7 +363,8 @@ class GuildController extends Controller
             : null;
         $updateValues['wishlist_names'] =
             request()->input('use_wishlist_names') && request()->input('wishlist_names') ?
-            implode("|", array_values(str_replace('|', '', request()->input('wishlist_names')))) // List delimited by commas. First, remove any existing commas.
+            // List delimited by bars "|". First, remove any existing bars.
+            implode("|", array_values(str_replace('|', '', request()->input('wishlist_names'))))
             : null;
         $updateValues['is_wishlist_disabled']      = request()->input('is_wishlist_disabled') == 1 ? 1 : 0;
         $updateValues['is_prio_autopurged']        = request()->input('is_prio_autopurged') == 1 ? 1 : 0;
@@ -414,8 +415,10 @@ class GuildController extends Controller
             $auditMessage .= ' (unlocked wishlists changed to ' . str_replace(',', ', ', $updateValues['wishlist_locked_exceptions']) . ')';
         }
 
-        if ($updateValues['wishlist_names'] && $updateValues['wishlist_names'] != $guild->wishlist_names) {
+        if (($updateValues['wishlist_names'] && $updateValues['wishlist_names'] != $guild->wishlist_names)) {
             $auditMessage .= ' (wishlist names changed)';
+        } else if (!request()->input('use_wishlist_names') && $guild->wishlist_names) {
+            $auditMessage .= ' (removed wishlist names)';
         }
 
         if (array_key_exists('gm_role_id', $updateValues) && $updateValues['gm_role_id'] != $guild->gm_role_id) {

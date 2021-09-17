@@ -119,7 +119,12 @@ function createTable(lastSource) {
                             for (i = 1; i <= maxWishlistLists; i++) {
                                 const filteredData = data.filter(character => character.pivot.list_number == i);
                                 if (filteredData.length) {
-                                    const header = headerWishlist + " " + i;
+                                    let header = null;
+                                    if (wishlistNames && wishlistNames[i - 1]) {
+                                        header = wishlistNames[i - 1];
+                                    } else {
+                                        header = headerWishlist + ' ' + i;
+                                    }
                                     list += createCharacterListHtml(filteredData, 'wishlist', row.item_id, header);
                                 }
                             }

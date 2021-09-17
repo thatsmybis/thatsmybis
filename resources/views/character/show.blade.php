@@ -86,9 +86,9 @@
                     @endphp
 
                     @include('character/partials/wishlist', [
-                        'wishlist' => $wishlists[$guild->current_wishlist_number],
-                        'isActive' => true,
-                        'wishlistNames' => $wishlistNames,
+                        'wishlist'       => $wishlists[$guild->current_wishlist_number],
+                        'isActive'       => true,
+                        'wishlistNames'  => $wishlistNames,
                         'wishlistNumber' => $guild->current_wishlist_number,
                     ])
 
@@ -103,9 +103,9 @@
                             @foreach ($wishlists as $key => $wishlist)
                                 @if ($key != $guild->current_wishlist_number && count($wishlist))
                                     @include('character/partials/wishlist', [
-                                        'wishlist' => $wishlist,
-                                        'isActive' => false,
-                                        'wishlistNames' => $wishlistNames,
+                                        'wishlist'       => $wishlist,
+                                        'isActive'       => false,
+                                        'wishlistNames'  => $wishlistNames,
                                         'wishlistNumber' => $key,
                                     ])
                                 @endif
