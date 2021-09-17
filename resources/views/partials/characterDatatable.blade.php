@@ -5,7 +5,7 @@
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                 {{ __("Raid Group") }}
             </label>
-            <select id="raid_group_filter" class="form-control dark">
+            <select id="raid_group_filter" class="form-control dark selectpicker">
                 <option value="">—</option>
                 @foreach ($raidGroups->whereNull('disabled_at') as $raidGroup)
                     <option value="{{ $raidGroup->id }}" style="color:{{ $raidGroup->getColor() }};">
@@ -19,7 +19,7 @@
                 <span class="text-muted fas fa-fw fa-axe-battle"></span>
                 {{ __("Class") }}
             </label>
-            <select id="class_filter" class="form-control dark">
+            <select id="class_filter" class="form-control dark selectpicker">
                 <option value="">—</option>
                 @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
                     <option value="{{ $class }}" class="text-{{ strtolower($key) }}-important">
@@ -33,8 +33,7 @@
                 <span class="text-muted fas fa-fw fa-sack"></span>
                 {{ __("Dungeon") }}
             </label>
-            <select id="instance_filter" class="form-control dark">
-                <option value="">—</option>
+            <select id="instance_filter" multiple title="{{ __('All') }}" class="form-control dark selectpicker">
                 @if ($guild->expansion_id == 1)
                     <option value="4">
                         {{ __("Zul'Gurub") }}
@@ -102,7 +101,7 @@
                 <span class="text-muted fas fa-fw fa-scroll-old"></span>
                 {{ __("Wishlist") }}
             </label>
-            <select id="wishlist_filter" class="form-control dark">
+            <select id="wishlist_filter" class="form-control dark selectpicker">
                 @for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
                     <option value="{{ $i }}" {{ $guild->current_wishlist_number === $i ? 'selected' : '' }}>
                         @if ($wishlistNames && $wishlistNames[$i - 1])

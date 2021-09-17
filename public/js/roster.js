@@ -474,8 +474,8 @@ function addClippedItemHandlers() {
 
 function addInstanceFilterHandlers() {
     $("#instance_filter").change(function () {
-        let instanceId = $("#instance_filter").val();
-        if (instanceId) {
+        let instanceIds = $("#instance_filter").val();
+        if (instanceIds.length) {
             // Show all items, then remove the visible/hidden filters; they interfere with this filter.
             allItemsVisible = false;
             $(".js-show-all-clipped-items").click();
@@ -483,12 +483,21 @@ function addInstanceFilterHandlers() {
             $(".js-show-clipped-items").hide();
             $(".js-hide-clipped-items").hide();
 
-            // hide all other instance's items
-            $("li.js-has-instance[data-instance-id='" + instanceId + "']").show();
-            $("li.js-has-instance[data-instance-id!='" + instanceId + "']").hide();
+            // Start with all instanced items hidden
+            $("li.js-has-instance").hide();
+
+            // Create a list of the instances we want to show
+            let selectorsToShow = "";
+            instanceIds.forEach(instanceId => {
+                selectorsToShow += "li.js-has-instance[data-instance-id='" + instanceId + "'],";
+            });
+            selectorsToShow = selectorsToShow.replace(/(^,)|(,$)/g, ""); // Trim trailing commas
+
+            // Show the instances we want
+            $(selectorsToShow).show();
         } else {
-            // show all instance's items
-            $("li.js-has-instance[data-instance-id]").show();
+            // show all instanced items
+            $("li.js-has-instance").show();
 
             // Reset the visible/hidden filters to their default state.
             allItemsVisible = true;
