@@ -76,6 +76,7 @@ function getLocales() {
         "fr" => "Français",
         "it" => "Italiano (items only)",
         "no" => "Norsk (incomplete)",
+        "pl" => "Polski (no items)",
         "pt" => "Português Brasileiro (items only)",
         "ru" => "Русский",
         "ko" => "한국어 (items only)",
