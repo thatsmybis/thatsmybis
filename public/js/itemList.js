@@ -11,6 +11,8 @@ var colPriority = 6;
 // For keeping track of the loot's source
 var lastSource = null;
 
+var offspecVisible = true;
+
 $(document).ready( function () {
    table = createTable();
 
@@ -51,6 +53,16 @@ $(document).ready( function () {
             $(".js-item-wishlist-character").show();
         }
     }).change();
+
+    $(".js-hide-offspec-items").click(function() {
+        if (offspecVisible) {
+            offspecVisible = false;
+            hideOffspecItems();
+        } else {
+            offspecVisible = true;
+            showOffspecItems();
+        }
+    });
 
     addWishlistFilterHandlers();
     trackTimestamps();
@@ -269,6 +281,7 @@ function createCharacterListHtml(data, type, itemId, header = null) {
 
         characters += `
             <li data-raid-group-id="${ type == 'prio' ? character.pivot.raid_group_id : character.raid_group_id }"
+                data-offspec="${ character.pivot.is_offspec ? 1 : 0}"
                 value="${ type == 'prio' ? character.pivot.order : '' }"
                 class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0 ${ character.pivot.type != 'received' && character.pivot.received_at ? 'font-strikethrough' : '' }">
                 <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
@@ -344,4 +357,12 @@ function getItemLink(row, iconSize = null) {
             </a>
         </li>
     </ul>`;
+}
+
+function hideOffspecItems() {
+    $("[data-offspec='1']").hide();
+}
+
+function showOffspecItems() {
+    $("[data-offspec='1']").show();
 }

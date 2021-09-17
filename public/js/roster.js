@@ -13,6 +13,7 @@ var colRaidsAttended = 11;
 
 var allItemsVisible = false;
 var strikethroughVisible = true;
+var offspecVisible = true;
 
 $(document).ready( function () {
    var table = createTable();
@@ -66,6 +67,16 @@ $(document).ready( function () {
         } else {
             strikethroughVisible = true;
             showStrikethroughItems();
+        }
+    });
+
+    $(".js-hide-offspec-items").click(function() {
+        if (offspecVisible) {
+            offspecVisible = false;
+            hideOffspecItems();
+        } else {
+            offspecVisible = true;
+            showOffspecItems();
         }
     });
 
@@ -448,6 +459,9 @@ function addClippedItemHandlers() {
         if (!strikethroughVisible) {
             hideStrikethroughItems();
         }
+        if (!offspecVisible) {
+            hideOffspecItems();
+        }
     });
     $(".js-hide-clipped-items").click(function () {
         let id = $(this).data("id");
@@ -560,6 +574,7 @@ function getItemListHtml(data, type, characterId, useOrder = false, showInstance
             <li class="js-has-instance font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
                 data-type="${ type }"
                 data-id="${ characterId }"
+                data-offspec="${ item.pivot.is_offspec ? 1 : 0 }"
                 data-instance-id="${ item.instance_id }"
                 data-wishlist-number="${item.list_number}"
                 value="${ useOrder ? item.pivot.order : '' }"
@@ -603,9 +618,17 @@ function getNotes(data, type, row) {
         + (secondaryRaidGroups ? `<br>${secondaryRaidGroups}` : ``);
 }
 
+function hideOffspecItems() {
+    $("[data-offspec='1']").hide();
+}
+
+function showOffspecItems() {
+    $("[data-offspec='1']:not(.js-clipped-item)").show();
+}
+
 function hideStrikethroughItems() {
-    $("[data-type='prio'").children(".font-strikethrough").parent().hide();
-    $("[data-type='wishlist'").children(".font-strikethrough").parent().hide();
+    $("[data-type='prio']").children(".font-strikethrough").parent().hide();
+    $("[data-type='wishlist']").children(".font-strikethrough").parent().hide();
 }
 
 function showStrikethroughItems() {

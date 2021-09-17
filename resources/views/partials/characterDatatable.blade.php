@@ -196,6 +196,13 @@
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
+            <span class="js-hide-offspec-items text-link cursor-pointer font-weight-light" data-column="6">
+                <span class="text-muted fal fa-fw fa-trash"></span>
+                {{ __("Hide OS") }}
+            </span>
+        </li>
+        <li class="list-inline-item">&sdot;</li>
+        <li class="list-inline-item">
             <span class="js-show-all-clipped-items text-link cursor-pointer font-weight-light" data-column="6">
                 <span class="text-muted fal fa-fw fa-eye"></span>
                 {{ __("Show all loot") }}
