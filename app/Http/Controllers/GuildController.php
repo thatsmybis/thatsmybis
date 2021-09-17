@@ -336,7 +336,7 @@ class GuildController extends Controller
             'do_sort_items_by_instance' => 'nullable|boolean',
             'is_raid_group_locked'      => 'nullable|boolean',
             'is_attendance_hidden'      => 'nullable|boolean',
-            'attendance_decay_days'     => 'nullable|integer|min:1|max:730',
+            'attendance_decay_days'     => 'nullable|integer|min:1|max:99999',
             'tier_mode'                 => 'nullable|string|in:s,num',
             'calendar_link'             => 'nullable|string|max:200',
             'message'                   => 'nullable|string|max:500',

@@ -242,23 +242,32 @@
                                     </span>
                                 </label>
                                 @php
+                                    $found = false;
+
                                     $rates = [
-                                        31  => '1 month',
-                                        61  => '2 months',
-                                        91  => '3 months',
-                                        122 => '4 months',
-                                        152 => '5 months',
-                                        183 => '6 months',
-                                        213 => '7 months',
-                                        243 => '8 months',
-                                        274 => '9 months',
-                                        304 => '10 months',
-                                        335 => '11 months',
-                                        365 => '1 year',
-                                        456 => '1 ¼ years',
-                                        548 => '1 ½ years',
-                                        639 => '1 ¾ years',
-                                        730 => '2 years',
+                                        1   => __('1 day'),
+                                        3   => __('3 days'),
+                                        7   => __('1 week'),
+                                        14  => __('2 weeks'),
+                                        21  => __('3 weeks'),
+                                        31  => __('1 month'),
+                                        45  => __('1.5 months'),
+                                        61  => __('2 months'),
+                                        75  => __('2.5 months'),
+                                        91  => __('3 months'),
+                                        122 => __('4 months'),
+                                        152 => __('5 months'),
+                                        183 => __('6 months'),
+                                        213 => __('7 months'),
+                                        243 => __('8 months'),
+                                        274 => __('9 months'),
+                                        304 => __('10 months'),
+                                        335 => __('11 months'),
+                                        365 => __('1 year'),
+                                        456 => __('1 ¼ years'),
+                                        548 => __('1 ½ years'),
+                                        639 => __('1 ¾ years'),
+                                        730 => __('2 years'),
                                     ];
                                 @endphp
                                 <select name="attendance_decay_days" class="form-control dark">
@@ -266,11 +275,22 @@
                                         {{ __("No limit") }}
                                     </option>
                                     @foreach ($rates as $key => $label)
+                                        @php
+                                            $isOldValue = (old('attendance_decay_days') && old('attendance_decay_days') == $key) || $guild->attendance_decay_days == $key;
+                                            if ($isOldValue) {
+                                                $found = true;
+                                            }
+                                        @endphp
                                         <option value="{{ $key }}"
-                                            {{ old('attendance_decay_days') && old('attendance_decay_days') == $key || $guild->attendance_decay_days == $key ? 'selected' : '' }}>
+                                            {{ $isOldValue ? 'selected' : '' }}>
                                             {{ $label }}
                                         </option>
                                     @endforeach
+                                    @if (!$found)
+                                        <option value="{{ $guild->attendance_decay_days }}" selected>
+                                            {{ __("custom: :days days", ['days' => $guild->attendance_decay_days]) }}
+                                        </option>
+                                    @endif
                                 </select>
                             </div>
                         </div>
