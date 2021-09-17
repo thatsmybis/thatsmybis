@@ -82,6 +82,9 @@
         Here are the <a href="https://www.enable-javascript.com/" target="_blank">
         instructions how to enable JavaScript in your web browser</a>.
     </noscript>
+
+    <!-- ads. -->
+    <script data-ad-client="ca-pub-2856743447375289" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 </head>
 <body class="@yield('bodyClass')">
     @include('layouts/nav')
