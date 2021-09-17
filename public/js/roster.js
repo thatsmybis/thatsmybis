@@ -84,6 +84,9 @@ $(document).ready( function () {
     addInstanceFilterHandlers();
     addWishlistFilterHandlers();
     trackTimestamps();
+
+    // Dungeon multiselect could get stuck if clicked too soon
+    $(".selectpicker").selectpicker("refresh");
 });
 
 function createTable() {

@@ -33,7 +33,13 @@
                 <span class="text-muted fas fa-fw fa-sack"></span>
                 {{ __("Dungeon") }}
             </label>
-            <select id="instance_filter" multiple title="{{ __('All') }}" class="form-control dark selectpicker">
+            <select id="instance_filter"
+                multiple
+                class="form-control dark selectpicker"
+                data-actions-box="true"
+                data-none-selected-text="—"
+                data-deselect-all-text="{{ __('Reset') }}"
+                data-select-all-text="{{ __('All') }}">
                 @if ($guild->expansion_id == 1)
                     <option value="4">
                         {{ __("Zul'Gurub") }}
