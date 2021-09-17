@@ -116,11 +116,8 @@
                 </option>
             </select>
         </li>
-        <li class="list-inline-item font-weight-light">
-            <span class="text-muted fas fa-fw fa-eye-slash"></span>
-            {{ __("Columns") }}
-        </li>
-        <li class="list-inline-item">&sdot;</li>
+    </ul>
+    <ul class="list-inline mb-0 mt-3">
         <li class="list-inline-item">
             <span class="toggle-column-default text-link cursor-pointer">
                 {{ __("Defaults") }}
