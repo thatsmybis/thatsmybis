@@ -286,10 +286,10 @@ class ItemController extends Controller
             }
 
             if ($showWishlist) {
-                $query = $this->addWishlistQuery($query, $guild);
+                $query = $this->addWishlistQuery($query, $guild, $viewPrioPermission);
                 $query = $query->with([
-                'childItems' => function ($query) use ($guild) {
-                    return $this->addWishlistQuery($query, $guild);
+                'childItems' => function ($query) use ($guild, $viewPrioPermission) {
+                    return $this->addWishlistQuery($query, $guild, $viewPrioPermission);
                 }]);
             } else {
                 $query = $query->with(['childItems']);
@@ -382,9 +382,9 @@ class ItemController extends Controller
         ]);
     }
 
-    private function addWishlistQuery($query, $guild) {
+    private function addWishlistQuery($query, $guild, $viewPrioPermission) {
         return $query->with([
-            ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
+            ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $viewPrioPermission) {
                 $query = $query
                     ->where([
                         ['characters.guild_id', $guild->id],
@@ -392,7 +392,13 @@ class ItemController extends Controller
                     ])
                     ->groupBy(['character_items.character_id'])
                     ->with([
-                        'prios',
+                        'prios' => function ($query) use ($guild, $viewPrioPermission) {
+                            if ($guild->prio_show_count && !$viewPrioPermission) {
+                                $query = $query->where([
+                                    ['character_items.order', '<=', $guild->prio_show_count],
+                                ]);
+                            }
+                        },
                         'received',
                         'recipes',
                         'allWishlists',
