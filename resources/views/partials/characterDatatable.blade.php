@@ -118,30 +118,32 @@
         </li>
     </ul>
     <ul class="list-inline mb-0 mt-3">
+        <!-- Hidden as it doesn't take into account the rest of the filters right now
         <li class="list-inline-item">
             <span class="toggle-column-default text-link cursor-pointer">
                 {{ __("Defaults") }}
             </span>
         </li>
+        <li class="list-inline-item">&sdot;</li>
+        -->
         @if ($showPrios)
-            <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="1">
                     <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
                     {{ __("Prios") }}
                 </span>
             </li>
+            <li class="list-inline-item">&sdot;</li>
         @endif
         @if ($showWishlist)
-            <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2">
                     <span class="text-muted fal fa-fw fa-scroll-old"></span>
                     {{ __("Wishlist") }}
                 </span>
             </li>
+            <li class="list-inline-item">&sdot;</li>
         @endif
-        <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
                 <span class="text-muted fal fa-fw fa-sack"></span>
