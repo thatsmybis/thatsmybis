@@ -343,6 +343,7 @@ class CharacterLootController extends Controller
                     }
                     // Received at date changed
                     if (isset($inputItem['new_received_at'])) {
+                        $newValues['is_received'] = 1;
                         $newValues['received_at'] = Carbon::parse($inputItem['new_received_at'])->toDateTimeString();
                     }
                     // Raid changed
@@ -406,7 +407,7 @@ class CharacterLootController extends Controller
             }
 
             if (!isset($inputItem['resolved']) && $inputItem['item_id']) {
-                $isReceived = isset($inputItem['is_received']) ? 1 : 0;
+                $isReceived = isset($inputItem['is_received']) || isset($inputItem['new_received_at']) ? 1 : 0;
                 $isOffspec  = isset($inputItem['is_offspec']) ? 1 : 0;
 
                 $receivedAt = null;

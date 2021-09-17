@@ -224,7 +224,7 @@
                                                         </li>
                                             @endif
                                                 <li data-raid-group-id="{{ $character->pivot->raid_group_id }}"
-                                                    class="js-item-wishlist-character font-weight-normal mb-1 {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}"
+                                                    class="js-item-wishlist-character font-weight-normal mb-1 {{ $character->pivot->is_received || $character->pivot->received_at? 'font-strikethrough' : '' }}"
                                                     value="{{ $character->pivot->order }}">
                                                     <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                                         title="{{ $character->raid_group_name ? $character->raid_group_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}"

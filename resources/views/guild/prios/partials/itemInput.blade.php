@@ -64,7 +64,7 @@
                         @foreach (($guild->is_attendance_hidden ? $item->wishlistCharacters : $item->wishlistCharactersWithAttendance) as $character)
                             <li class="list-inline-item">
                                 <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                    class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received ? 'font-strikethrough' : '' }}" target="_blank">
+                                    class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received || $character->pivot->received_at ? 'font-strikethrough' : '' }}" target="_blank">
                                     <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
                                     <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_group_color) }}"></span>-->
                                     <span class="text-muted small font-weight-bold">{{ $character->pivot->is_offspec ? 'OS' : '' }}</span>
@@ -145,7 +145,7 @@
                         $oldInputName   = 'items.' . $item->item_id . '.characters.' . $i;
                         $character      = $item->priodCharacters->get($i) ? $item->priodCharacters->get($i) : null;
                         $characterId    = old($oldInputName . '.character_id') ? old($oldInputName . '.character_id') : ($character ? $character->id : null);
-                        $strikeThrough = !old($oldInputName) && $character && $character->pivot->is_received ? 'font-strikethrough' : null;
+                        $strikeThrough = !old($oldInputName) && $character && ($character->pivot->is_received || $character->pivot->received_at) ? 'font-strikethrough' : null;
                     @endphp
                     <li class="input-item position-relative {{ $characterId ? 'd-flex' : '' }} {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }} {{ $strikeThrough }}"
                         data-needs-template="{{ !$characterId ? '1' : '0' }}"
@@ -157,7 +157,7 @@
                             @php
                                 $characterLabel = old($oldInputName . '.label') ? old($oldInputName . '.label') : ($character ? $character->name : null);
                                 $characterOrder = old($oldInputName . '.order') ? old($oldInputName . '.order') : ($character && $character->pivot->order ? $character->pivot->order : null);
-                                $isReceived     = old($oldInputName . '.is_received') && old($oldInputName . '.is_received') == 1 ? 'checked' : ($character && $character->pivot->is_received ? 'checked' : null);
+                                $isReceived     = old($oldInputName . '.is_received') && old($oldInputName . '.is_received') == 1 ? 'checked' : ($character && ($character->pivot->is_received || $character->pivot->received_at) ? 'checked' : null);
                                 $isOffspec      = old($oldInputName . '.is_offspec') && old($oldInputName . '.is_offspec') == 1 ? 'checked' : ($character && $character->pivot->is_offspec ? 'checked' : null);
 
                                 // Let the order field auto-generate if it's not different from the index
