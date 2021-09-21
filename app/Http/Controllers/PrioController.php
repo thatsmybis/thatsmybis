@@ -36,9 +36,9 @@ class PrioController extends Controller
 
         if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
             if ($guild->is_prio_disabled) {
-                request()->session()->flash('status', 'Prios are disabled by the man.');
+                request()->session()->flash('status', __('Prios are disabled by guild leadership.'));
             } else {
-                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+                request()->session()->flash('status', __("You don't have permissions to view that page."));
             }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
@@ -69,9 +69,9 @@ class PrioController extends Controller
 
         if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
             if ($guild->is_prio_disabled) {
-                request()->session()->flash('status', 'Prios are disabled by the man.');
+                request()->session()->flash('status', __('Prios are disabled by guild leadership.'));
             } else {
-                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+                request()->session()->flash('status', __("You don't have permissions to view that page."));
             }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
@@ -207,9 +207,9 @@ class PrioController extends Controller
 
         if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
             if ($guild->is_prio_disabled) {
-                request()->session()->flash('status', 'Prios are disabled by the man.');
+                request()->session()->flash('status', __('Prios are disabled by guild leadership.')));
             } else {
-                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+                request()->session()->flash('status', __("You don't have permissions to view that page.")));
             }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
@@ -300,7 +300,7 @@ class PrioController extends Controller
         $item = $items->first();
 
         if (!$item) {
-            request()->session()->flash('status', 'Item not found. Can\'t set prios on items that don\'t drop from a boss or aren\'t in our loot tables, including token rewards.');
+            request()->session()->flash('status', __("Item not found. Can't set prios on items that don't drop from a boss or aren't in our loot tables, including token rewards.");
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -327,9 +327,9 @@ class PrioController extends Controller
 
         if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
             if ($guild->is_prio_disabled) {
-                request()->session()->flash('status', 'Prios are disabled by the man.');
+                request()->session()->flash('status', __('Prios are disabled by guild leadership.'));
             } else {
-                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+                request()->session()->flash('status', __("You don't have permissions to view that page."));
             }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
@@ -385,7 +385,8 @@ class PrioController extends Controller
 
         $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raidGroup);
 
-        request()->session()->flash('status', 'Successfully updated prios for ' . $modifiedCount . ' items in ' . $raidGroup->name . '.');
+        request()->session()->flash('status', __('Successfully updated prios for :count items in :raidGroup.', ['count' => $modifiedCount, 'raidGroup' => $raidGroup->name));
+
         return redirect()->route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'b' => 1]);
     }
 
@@ -400,9 +401,9 @@ class PrioController extends Controller
 
         if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
             if ($guild->is_prio_disabled) {
-                request()->session()->flash('status', 'Prios are disabled by the man.');
+                request()->session()->flash('status', __('Prios are disabled by guild leadership.'));
             } else {
-                request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+                request()->session()->flash('status', __("You don't have permissions to view that page."));
             }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
@@ -447,7 +448,12 @@ class PrioController extends Controller
 
         $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raidGroup);
 
-        request()->session()->flash('status', ($modifiedCount ? 'Successfully updated prios for ' : 'No changes made to prios for ') . $itemsWithExistingPrios->first()->name . ' in ' . $raidGroup->name . '.');
+        if ($modifiedCount) {
+            request()->session()->flash('status', __('Successfully updated prios for :itemName in :raidGroup.', ['itemName' => $itemsWithExistingPrios->first()->name, 'raidGroup' => $raidGroup->name]));
+        } else {
+            request()->session()->flash('status', __('No changes made to prios for :itemName in :raidGroup.', ['itemName' => $itemsWithExistingPrios->first()->name, 'raidGroup' => $raidGroup->name]));
+        }
+
         return redirect()->route('guild.item.show', [
             'guildId'   => $guild->id,
             'guildSlug' => $guild->slug,
