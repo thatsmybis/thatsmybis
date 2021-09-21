@@ -23,7 +23,7 @@ var inputTemplate =
                             type="number"
                             min="0"
                             max="{{ $maxPrios }}"
-                            class="d-inline numbered form-control dark order"
+                            class="d-inline numbered form-control dark slim-order"
                             placeholder=""
                             autocomplete="off"
                             value="" />
@@ -37,7 +37,7 @@ var inputTemplate =
                 <div class="checkbox">
                     <label class="small text-muted">
                         <input type="checkbox" name="[is_offspec]" value="1" class="" autocomplete="off">
-                            {{ __("Offspec") }}
+                            {{ __("OS") }}
                     </label>
                 </div>
             </li>
