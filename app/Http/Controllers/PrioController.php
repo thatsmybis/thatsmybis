@@ -207,9 +207,9 @@ class PrioController extends Controller
 
         if ($guild->is_prio_disabled || !$currentMember->hasPermission('edit.prios')) {
             if ($guild->is_prio_disabled) {
-                request()->session()->flash('status', __('Prios are disabled by guild leadership.')));
+                request()->session()->flash('status', __('Prios are disabled by guild leadership.'));
             } else {
-                request()->session()->flash('status', __("You don't have permissions to view that page.")));
+                request()->session()->flash('status', __("You don't have permissions to view that page."));
             }
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
@@ -300,7 +300,7 @@ class PrioController extends Controller
         $item = $items->first();
 
         if (!$item) {
-            request()->session()->flash('status', __("Item not found. Can't set prios on items that don't drop from a boss or aren't in our loot tables, including token rewards.");
+            request()->session()->flash('status', __("Item not found. Can't set prios on items that don't drop from a boss or aren't in our loot tables, including token rewards."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -321,6 +321,10 @@ class PrioController extends Controller
         ]);
     }
 
+
+    /**
+     * Submit the mass input page for prios, for a given dungeon and raid group.
+     */
     public function submitAssignPrios($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
@@ -385,7 +389,7 @@ class PrioController extends Controller
 
         $modifiedCount = $this->syncPrios($itemsWithExistingPrios, request()->input('items'), $currentMember, $guild->characters, $raidGroup);
 
-        request()->session()->flash('status', __('Successfully updated prios for :count items in :raidGroup.', ['count' => $modifiedCount, 'raidGroup' => $raidGroup->name));
+        request()->session()->flash('status', __('Successfully updated prios for :count items in :raidGroup.', ['count' => $modifiedCount, 'raidGroup' => $raidGroup->name]));
 
         return redirect()->route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug, 'b' => 1]);
     }
@@ -669,6 +673,18 @@ class PrioController extends Controller
             //     'item_id'      => $item['id'],
             // ];
         }
+
+        // DB::table('character_items')
+        //     ->upsert(
+        //         $toUpdate, // New data, includes `id` column
+        //         ['id'], // Identifying column
+        //         [ // Fields to be updated
+        //             'order',
+        //             'is_offspec',
+        //             'is_received',
+        //             'received_at',
+        //         ]
+        //     );
 
         // Insert...
         DB::table('character_items')->insert($toAdd);
