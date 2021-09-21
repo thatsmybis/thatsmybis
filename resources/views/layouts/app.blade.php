@@ -128,14 +128,6 @@
 
     <div class="text-center font-weight-bold text-warning">
         <!-- Sitewide warning message, good for downtime announcements -->
-        <ul class="no-bullet no-indent">
-            <li>
-                Poll: <a href="https://www.strawpoll.me/45652982" target="_blank">Will you play WoTLK Classic?</a>
-            </li>
-            <li class="mt-2">
-                Poll: <a href="https://www.strawpoll.me/45652983" target="_blank">Would you use this website for WoTLK Classic?</a>
-            </li>
-        </ul>
     </div>
 
     @if (session('status'))
