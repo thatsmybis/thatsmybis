@@ -2,6 +2,7 @@
 
 namespace App;
 
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 /**
  * I copied over the Permissions class from the kodeine\laravel-acl library because I wanted to
@@ -9,6 +10,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Permission extends Model
 {
+    use Cachable;
+
     /**
      * The attributes that are fillable via mass assignment.
      *

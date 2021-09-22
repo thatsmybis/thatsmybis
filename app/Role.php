@@ -3,6 +3,7 @@
 namespace App;
 
 use App\{Member};
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Kodeine\Acl\Traits\HasPermission;
 use RestCord\DiscordClient;
@@ -13,6 +14,7 @@ use RestCord\DiscordClient;
  */
 class Role extends Model
 {
+    use Cachable;
     use HasPermission;
 
     /**

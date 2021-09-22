@@ -19,7 +19,7 @@ class RosterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['allRaidGroups', 'raidGroups.role']);
+        $guild->load(['allRaidGroups', 'allRaidGroups.role']);
 
         $showOfficerNote = false;
         if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
@@ -43,7 +43,7 @@ class RosterController extends Controller
             Cache::forget($cacheKey);
         }
 
-        $characters = Cache::remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
+        $characters = Cache::tags(['roster:guild:' . $guild->id])->remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
             return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, true);
         });
 

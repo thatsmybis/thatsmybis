@@ -13,10 +13,13 @@ use App\{
     Role,
     User,
 };
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class Guild extends Model
 {
+    use Cachable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -236,7 +239,7 @@ class Guild extends Model
             ->where('characters.guild_id', $this->id)
             ->orderBy('characters.name')
             ->with([
-                'received',
+                'received', // TODO: Optimize (is slow)
                 'secondaryRaidGroups' => function ($query) {
                     return $query
                         ->select([
@@ -258,7 +261,7 @@ class Guild extends Model
 
         if ($showPrios) {
             if ($this->prio_show_count && !$viewPrioPermission) {
-                $query = $query->with(['prios' => function ($query) {
+                $query = $query->with(['prios' => function ($query) { // TODO: Optimize (is slow)
                     return $query->where([
                         ['character_items.order', '<=', $this->prio_show_count],
                     ]);
@@ -271,9 +274,9 @@ class Guild extends Model
         if ($showWishlist) {
             if ($allWishlists) {
                 // NOTE that this will output the relation 'allWishlists' and NOT 'wishlist'
-                $query = $query->with('allWishlists');
+                $query = $query->with('allWishlists'); // TODO: Optimize (is slow)
             } else {
-                $query = $query->with('wishlist');
+                $query = $query->with('wishlist'); // TODO: Optimize (is slow)
             }
         }
 

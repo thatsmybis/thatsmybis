@@ -12,6 +12,7 @@
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "fruitcake/laravel-cors": "^2.0",
+        "genealabs/laravel-model-caching": "^0.11.3",
         "guzzlehttp/guzzle": "^7.0.1",
         "kkomelin/laravel-translatable-string-exporter": "^1.12",
         "kodeine/laravel-acl": "^2.0.5",

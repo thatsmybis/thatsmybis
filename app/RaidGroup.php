@@ -3,10 +3,13 @@
 namespace App;
 
 use App\{Raid, Role};
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class RaidGroup extends Model
 {
+    use Cachable;
+
     /**
      * The attributes that are mass assignable.
      *
@@ -70,7 +73,7 @@ class RaidGroup extends Model
     public function getColor() {
         $color = null;
 
-        if ($this->role_id && $this->role->color) {
+        if ($this->role_id && $this->relationLoaded('role') && $this->role->color) {
             $color = $this->role->color;
         }
 

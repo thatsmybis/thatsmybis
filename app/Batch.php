@@ -3,10 +3,13 @@
 namespace App;
 
 use App\{Guild, Member, Raid, RaidGroup, User};
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class Batch extends Model
 {
+    use Cachable;
+
     protected $table = 'batches';
 
     /**
