@@ -217,12 +217,17 @@
                             <tr>
                                 <th>
                                     <span class="fas fa-fw fa-user text-muted"></span>
-                                    {{ __("Character") }} ({{ $raid->characters->where('pivot.is_exempt', 0)->count()}} {{ __("going") }})
+                                    {{ __("Character") }}
+                                    <span class="font-weight-normal">
+                                        ({{ $raid->characters->where('pivot.is_exempt', 0)->count()}} {{ __("going") }})
+                                    </span>
                                 </th>
                                 <th>
                                     <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
                                     {{ __("Notes") }}
-                                    ({{ $raid->characters->where('pivot.is_exempt', 1)->count()}} {{ __("excused") }})
+                                    <span class="font-weight-normal">
+                                        ({{ $raid->characters->where('pivot.is_exempt', 1)->count()}} {{ __("excused") }})
+                                    </span>
                                 </th>
                                 <th>
                                     <span class="fas fa-fw fa-sack text-success"></span>

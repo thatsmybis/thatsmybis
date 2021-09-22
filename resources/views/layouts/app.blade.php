@@ -129,7 +129,7 @@
     <div class="text-center font-weight-bold text-warning">
         <!-- Sitewide warning message, good for downtime announcements -->
         <span class="text-muted">
-            I added a lot of caching. If you notice problems, let me know on the <a href="{{ env('APP_DISCORD') }}" target="_blank">TMB Discord</a>.
+            <!--I added a lot of caching. If you notice problems, let me know on the <a href="{{ env('APP_DISCORD') }}" target="_blank">TMB Discord</a>.-->
         </span>
     </div>
 

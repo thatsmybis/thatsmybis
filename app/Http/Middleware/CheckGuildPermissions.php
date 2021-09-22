@@ -32,6 +32,7 @@ class CheckGuildPermissions
                     where('id', $request->route('guildId'))
                     ->with([
                         'allRaidGroups',
+                        'allRaidGroups.role',
                         'raidGroups' => function ($query) { return $query->whereNull('disabled_at'); }
                     ])
                     ->first();
@@ -176,6 +177,7 @@ class CheckGuildPermissions
                 'currentMember'     => $currentMember,
                 'isGuildAdmin'      => ($guild->user_id == $currentMember->user_id || $isAdmin),
                 'guild'             => $guild,
+                'guildId'           => $guild->id,
                 'raidGroupIdFilter' => $currentMember ? $currentMember->raid_group_id_filter : null,
             ]);
         }
