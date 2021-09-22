@@ -40,9 +40,13 @@
         </li>
     @endif
 
-    @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
+    @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count) || isset($character->benched_count)))
         <li class="small">
-            @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count])
+            @include('partials/attendanceTag', [
+                'attendancePercentage' => $character->attendance_percentage,
+                'benchedCount'         => $character->benched_count,
+                'raidCount'            => $character->raid_count,
+            ])
         </li>
     @endif
 

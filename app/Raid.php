@@ -13,15 +13,6 @@ class Raid extends BaseModel
     const REMARK_AWAY            = 'Gave notice';
     const REMARK_BENCHED         = 'Benched';
 
-    const REMARKS = [
-        1 => self::REMARK_LATE,
-        2 => self::REMARK_UNPREPARED,
-        3 => self::REMARK_LATE_UNPREPARED,
-        4 => self::REMARK_NO_SHOW,
-        5 => self::REMARK_AWAY,
-        6 => self::REMARK_BENCHED,
-    ];
-
     /**
      * The attributes that are mass assignable.
      *
@@ -129,6 +120,13 @@ class Raid extends BaseModel
     }
 
     static public function remarks() {
-        return self::REMARKS;
+        return [
+            1 => __('Late'),
+            2 => __('Unprepared'),
+            3 => __('Late & unprepared'),
+            4 => __('No call, no show'),
+            5 => __('Gave notice'),
+            6 => __('Benched'),
+        ];
     }
 }

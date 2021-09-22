@@ -140,10 +140,12 @@ function createTable() {
                                 ${ row.class ? row.class : '' }
                             </li>` : `` }
 
-                        ${ !guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count) ?
+                        ${ !guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count || row.benched_count) ?
                             `<li>
-                                ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<span title="attendance" class="${ getAttendanceColor(row.attendance_percentage) }">${ Math.round(row.attendance_percentage * 100) }%</span>` : '' }
-                                ${ row.raid_count ? `<span class="small text-muted">${ row.raid_count } raid${ row.raid_count > 1 ? 's' : '' }</span>` : ``}
+                                <ul class="list-inline">
+                                ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<li class="list-inline-item ${ getAttendanceColor(row.attendance_percentage) }" title="attendance">${ Math.round(row.attendance_percentage * 100) }%</li>` : '' }
+                                ${ row.raid_count ? `<li class="list-inline-item small text-muted">${ row.raid_count } raid${ row.raid_count > 1 ? 's' : '' }</li>` : ``}
+                                ${ row.benched_count ? `<li class="list-inline-item small text-muted">benched ${ row.benched_count }x</li>` : ``}
                             </li>` : `` }
 
                         ${ row.level || row.race || row.spec ? `
@@ -361,6 +363,15 @@ function createTable() {
                 data   : "raid_count",
                 render : function (data, type, row) {
                     return (row.raid_count ? row.raid_count : null);
+                },
+                visible    : false,
+                searchable : false,
+            },
+            {
+                title  : "Benched Count",
+                data   : "benched_count",
+                render : function (data, type, row) {
+                    return (row.benched_count ? row.benched_count : null);
                 },
                 visible    : false,
                 searchable : false,

@@ -177,7 +177,7 @@ class RaidController extends Controller
         }
 
         $guild->load([
-            'allCharacters',
+            'allCharactersWithAttendance',
             'characters',
             'characters.secondaryRaidGroups',
             'raidGroups',

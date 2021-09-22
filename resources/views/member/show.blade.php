@@ -8,6 +8,9 @@
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
                     @php
+                        $benchedCount = $member->charactersWithAttendance->sum(function ($character) {
+                            return $character->benched_count;
+                        });
                         $raidCount = $characters->sum(function ($character) {
                             return $character->raid_count;
                         });
@@ -17,13 +20,14 @@
                         $attendancePercentage = $raidCount > 0 ? ($raidsAttended / $raidCount) : 100;
                     @endphp
                     @include('member/partials/header', [
-                        'discordUsername' => $member->user->discord_username,
-                        'headerSize' => 1,
-                        'showEdit' => $showEdit,
-                        'titlePrefix' => null,
-                        'showLogs' => true,
+                        'discordUsername'      => $member->user->discord_username,
+                        'benchedCount'         => $benchedCount,
+                        'headerSize'           => 1,
+                        'showEdit'             => $showEdit,
+                        'titlePrefix'          => null,
+                        'showLogs'             => true,
                         'attendancePercentage' => $attendancePercentage,
-                        'raidCount' => $raidCount,
+                        'raidCount'            => $raidCount,
                     ])
                 </div>
             </div>

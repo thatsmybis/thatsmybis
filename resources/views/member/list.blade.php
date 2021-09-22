@@ -55,6 +55,9 @@
                             <tr>
                                 <td>
                                     @php
+                                        $benchedCount = $member->charactersWithAttendance->sum(function ($character) {
+                                            return $character->benched_count;
+                                        });
                                         $raidCount = $member->charactersWithAttendance->sum(function ($character) {
                                             return $character->raid_count;
                                         });

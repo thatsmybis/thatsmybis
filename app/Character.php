@@ -324,6 +324,7 @@ class Character extends BaseModel
         $query = $query
             ->addSelect([
                 DB::raw('COALESCE(COUNT(`raid_characters`.`id`), 0) AS `raid_count`'),
+                DB::raw('COALESCE(COUNT(`raid_characters_benched`.`id`), 0) AS `benched_count`'),
                 DB::raw('IF(COUNT(`raid_characters`.`id`), COALESCE(ROUND(SUM(`raid_characters`.`credit`) / COUNT(`raid_characters`.`id`), 3), 0), 0) AS `attendance_percentage`'),
                 // DB::raw('COALESCE(MAX(`raid_characters`.`raid_count`), 0) AS `raid_count`'),
                 // DB::raw('COALESCE(ROUND(MAX(`raid_characters`.`credit`) / MAX(`raid_characters`.`raid_count`), 3), 0) AS `attendance_percentage`'),
@@ -354,6 +355,11 @@ class Character extends BaseModel
                 $join->on('raid_characters.raid_id', 'raids.id')
                     ->on('raid_characters.character_id', 'characters.id')
                     ->where('raid_characters.is_exempt', 0);
+            })
+            ->leftJoin('raid_characters AS raid_characters_benched', function ($join) {
+                $join->on('raid_characters_benched.raid_id', 'raids.id')
+                    ->on('raid_characters_benched.character_id', 'characters.id')
+                    ->where('raid_characters_benched.remark_id', 6); // 6 = benched
             });
 
         return $query;
@@ -363,42 +369,42 @@ class Character extends BaseModel
         switch ($expansionId) {
             case 1: // Classic
                 return [
-                    self::CLASS_DRUID        => __(self::CLASS_DRUID),
-                    self::CLASS_HUNTER       => __(self::CLASS_HUNTER),
-                    self::CLASS_MAGE         => __(self::CLASS_MAGE),
-                    self::CLASS_PALADIN      => __(self::CLASS_PALADIN),
-                    self::CLASS_PRIEST       => __(self::CLASS_PRIEST),
-                    self::CLASS_ROGUE        => __(self::CLASS_ROGUE),
-                    self::CLASS_SHAMAN       => __(self::CLASS_SHAMAN),
-                    self::CLASS_WARLOCK      => __(self::CLASS_WARLOCK),
-                    self::CLASS_WARRIOR      => __(self::CLASS_WARRIOR),
+                    self::CLASS_DRUID        => __('Druid'),
+                    self::CLASS_HUNTER       => __('Hunter'),
+                    self::CLASS_MAGE         => __('Mage'),
+                    self::CLASS_PALADIN      => __('Paladin'),
+                    self::CLASS_PRIEST       => __('Priest'),
+                    self::CLASS_ROGUE        => __('Rogue'),
+                    self::CLASS_SHAMAN       => __('Shaman'),
+                    self::CLASS_WARLOCK      => __('Warlock'),
+                    self::CLASS_WARRIOR      => __('Warrior'),
                 ];
                 break;
             case 2: // TBC
                 return [
-                    self::CLASS_DRUID        => __(self::CLASS_DRUID),
-                    self::CLASS_HUNTER       => __(self::CLASS_HUNTER),
-                    self::CLASS_MAGE         => __(self::CLASS_MAGE),
-                    self::CLASS_PALADIN      => __(self::CLASS_PALADIN),
-                    self::CLASS_PRIEST       => __(self::CLASS_PRIEST),
-                    self::CLASS_ROGUE        => __(self::CLASS_ROGUE),
-                    self::CLASS_SHAMAN       => __(self::CLASS_SHAMAN),
-                    self::CLASS_WARLOCK      => __(self::CLASS_WARLOCK),
-                    self::CLASS_WARRIOR      => __(self::CLASS_WARRIOR),
+                    self::CLASS_DRUID        => __('Druid'),
+                    self::CLASS_HUNTER       => __('Hunter'),
+                    self::CLASS_MAGE         => __('Mage'),
+                    self::CLASS_PALADIN      => __('Paladin'),
+                    self::CLASS_PRIEST       => __('Priest'),
+                    self::CLASS_ROGUE        => __('Rogue'),
+                    self::CLASS_SHAMAN       => __('Shaman'),
+                    self::CLASS_WARLOCK      => __('Warlock'),
+                    self::CLASS_WARRIOR      => __('Warrior'),
                 ];
                 break;
             case 3: // WoTLK
                 return [
-                    self::CLASS_DEATH_KNIGHT => __(self::CLASS_DEATH_KNIGHT),
-                    self::CLASS_DRUID        => __(self::CLASS_DRUID),
-                    self::CLASS_HUNTER       => __(self::CLASS_HUNTER),
-                    self::CLASS_MAGE         => __(self::CLASS_MAGE),
-                    self::CLASS_PALADIN      => __(self::CLASS_PALADIN),
-                    self::CLASS_PRIEST       => __(self::CLASS_PRIEST),
-                    self::CLASS_ROGUE        => __(self::CLASS_ROGUE),
-                    self::CLASS_SHAMAN       => __(self::CLASS_SHAMAN),
-                    self::CLASS_WARLOCK      => __(self::CLASS_WARLOCK),
-                    self::CLASS_WARRIOR      => __(self::CLASS_WARRIOR),
+                    self::CLASS_DEATH_KNIGHT => __('Death Knight'),
+                    self::CLASS_DRUID        => __('Druid'),
+                    self::CLASS_HUNTER       => __('Hunter'),
+                    self::CLASS_MAGE         => __('Mage'),
+                    self::CLASS_PALADIN      => __('Paladin'),
+                    self::CLASS_PRIEST       => __('Priest'),
+                    self::CLASS_ROGUE        => __('Rogue'),
+                    self::CLASS_SHAMAN       => __('Shaman'),
+                    self::CLASS_WARLOCK      => __('Warlock'),
+                    self::CLASS_WARRIOR      => __('Warrior'),
                 ];
                 break;
             default:
@@ -411,44 +417,44 @@ class Character extends BaseModel
         switch ($expansionId) {
             case 1: // Classic
                 return [
-                    self::PROFESSION_ALCHEMY        => __(self::PROFESSION_ALCHEMY),
-                    self::PROFESSION_BLACKSMITHING  => __(self::PROFESSION_BLACKSMITHING),
-                    self::PROFESSION_ENCHANTING     => __(self::PROFESSION_ENCHANTING),
-                    self::PROFESSION_ENGINEERING    => __(self::PROFESSION_ENGINEERING),
-                    self::PROFESSION_HERBALISM      => __(self::PROFESSION_HERBALISM),
-                    self::PROFESSION_LEATHERWORKING => __(self::PROFESSION_LEATHERWORKING),
-                    self::PROFESSION_MINING         => __(self::PROFESSION_MINING),
-                    self::PROFESSION_SKINNING       => __(self::PROFESSION_SKINNING),
-                    self::PROFESSION_TAILORING      => __(self::PROFESSION_TAILORING),
+                    self::PROFESSION_ALCHEMY        => __('Alchemy'),
+                    self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
+                    self::PROFESSION_ENCHANTING     => __('Enchanting'),
+                    self::PROFESSION_ENGINEERING    => __('Engineering'),
+                    self::PROFESSION_HERBALISM      => __('Herbalism'),
+                    self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
+                    self::PROFESSION_MINING         => __('Mining'),
+                    self::PROFESSION_SKINNING       => __('Skinning'),
+                    self::PROFESSION_TAILORING      => __('Tailoring'),
                 ];
                 break;
             case 2: // TBC
                 return [
-                    self::PROFESSION_ALCHEMY        => __(self::PROFESSION_ALCHEMY),
-                    self::PROFESSION_BLACKSMITHING  => __(self::PROFESSION_BLACKSMITHING),
-                    self::PROFESSION_ENCHANTING     => __(self::PROFESSION_ENCHANTING),
-                    self::PROFESSION_ENGINEERING    => __(self::PROFESSION_ENGINEERING),
-                    self::PROFESSION_HERBALISM      => __(self::PROFESSION_HERBALISM),
-                    self::PROFESSION_JEWELCRAFTING  => __(self::PROFESSION_JEWELCRAFTING),
-                    self::PROFESSION_LEATHERWORKING => __(self::PROFESSION_LEATHERWORKING),
-                    self::PROFESSION_MINING         => __(self::PROFESSION_MINING),
-                    self::PROFESSION_SKINNING       => __(self::PROFESSION_SKINNING),
-                    self::PROFESSION_TAILORING      => __(self::PROFESSION_TAILORING),
+                    self::PROFESSION_ALCHEMY        => __('Alchemy'),
+                    self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
+                    self::PROFESSION_ENCHANTING     => __('Enchanting'),
+                    self::PROFESSION_ENGINEERING    => __('Engineering'),
+                    self::PROFESSION_HERBALISM      => __('Herbalism'),
+                    self::PROFESSION_JEWELCRAFTING  => __('Jewelcrafting'),
+                    self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
+                    self::PROFESSION_MINING         => __('Mining'),
+                    self::PROFESSION_SKINNING       => __('Skinning'),
+                    self::PROFESSION_TAILORING      => __('Tailoring'),
                 ];
                 break;
             case 3: // WoTLK
                 return [
-                    self::PROFESSION_ALCHEMY        => __(self::PROFESSION_ALCHEMY),
-                    self::PROFESSION_BLACKSMITHING  => __(self::PROFESSION_BLACKSMITHING),
-                    self::PROFESSION_ENCHANTING     => __(self::PROFESSION_ENCHANTING),
-                    self::PROFESSION_ENGINEERING    => __(self::PROFESSION_ENGINEERING),
-                    self::PROFESSION_HERBALISM      => __(self::PROFESSION_HERBALISM),
-                    self::PROFESSION_INSCRIPTION    => __(self::PROFESSION_INSCRIPTION),
-                    self::PROFESSION_JEWELCRAFTING  => __(self::PROFESSION_JEWELCRAFTING),
-                    self::PROFESSION_LEATHERWORKING => __(self::PROFESSION_LEATHERWORKING),
-                    self::PROFESSION_MINING         => __(self::PROFESSION_MINING),
-                    self::PROFESSION_SKINNING       => __(self::PROFESSION_SKINNING),
-                    self::PROFESSION_TAILORING      => __(self::PROFESSION_TAILORING),
+                    self::PROFESSION_ALCHEMY        => __('Alchemy'),
+                    self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
+                    self::PROFESSION_ENCHANTING     => __('Enchanting'),
+                    self::PROFESSION_ENGINEERING    => __('Engineering'),
+                    self::PROFESSION_HERBALISM      => __('Herbalism'),
+                    self::PROFESSION_INSCRIPTION    => __('Inscription'),
+                    self::PROFESSION_JEWELCRAFTING  => __('Jewelcrafting'),
+                    self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
+                    self::PROFESSION_MINING         => __('Mining'),
+                    self::PROFESSION_SKINNING       => __('Skinning'),
+                    self::PROFESSION_TAILORING      => __('Tailoring'),
                 ];
                 break;
             default:
@@ -461,42 +467,42 @@ class Character extends BaseModel
         switch ($expansionId) {
             case 1: // Classic
                 return [
-                    self::RACE_ORC       => __(self::RACE_ORC),
-                    self::RACE_TAUREN    => __(self::RACE_TAUREN),
-                    self::RACE_TROLL     => __(self::RACE_TROLL),
-                    self::RACE_UNDEAD    => __(self::RACE_UNDEAD),
-                    self::RACE_DWARF     => __(self::RACE_DWARF),
-                    self::RACE_GNOME     => __(self::RACE_GNOME),
-                    self::RACE_HUMAN     => __(self::RACE_HUMAN),
-                    self::RACE_NIGHT_ELF => __(self::RACE_NIGHT_ELF),
+                    self::RACE_ORC       => __('Orc'),
+                    self::RACE_TAUREN    => __('Tauren'),
+                    self::RACE_TROLL     => __('Troll'),
+                    self::RACE_UNDEAD    => __('Undead'),
+                    self::RACE_DWARF     => __('Dwarf'),
+                    self::RACE_GNOME     => __('Gnome'),
+                    self::RACE_HUMAN     => __('Human'),
+                    self::RACE_NIGHT_ELF => __('Night Elf'),
                 ];
                 break;
             case 2: // TBC
                 return [
-                    self::RACE_BLOOD_ELF => __(self::RACE_BLOOD_ELF),
-                    self::RACE_ORC       => __(self::RACE_ORC),
-                    self::RACE_TAUREN    => __(self::RACE_TAUREN),
-                    self::RACE_TROLL     => __(self::RACE_TROLL),
-                    self::RACE_UNDEAD    => __(self::RACE_UNDEAD),
-                    self::RACE_DRAENEI   => __(self::RACE_DRAENEI),
-                    self::RACE_DWARF     => __(self::RACE_DWARF),
-                    self::RACE_GNOME     => __(self::RACE_GNOME),
-                    self::RACE_HUMAN     => __(self::RACE_HUMAN),
-                    self::RACE_NIGHT_ELF => __(self::RACE_NIGHT_ELF),
+                    self::RACE_BLOOD_ELF => __('Blood Elf'),
+                    self::RACE_ORC       => __('Orc'),
+                    self::RACE_TAUREN    => __('Tauren'),
+                    self::RACE_TROLL     => __('Troll'),
+                    self::RACE_UNDEAD    => __('Undead'),
+                    self::RACE_DRAENEI   => __('Draenei'),
+                    self::RACE_DWARF     => __('Dwarf'),
+                    self::RACE_GNOME     => __('Gnome'),
+                    self::RACE_HUMAN     => __('Human'),
+                    self::RACE_NIGHT_ELF => __('Night Elf'),
                 ];
                 break;
             case 3: // WoTLK
                 return [
-                    self::RACE_BLOOD_ELF => __(self::RACE_BLOOD_ELF),
-                    self::RACE_ORC       => __(self::RACE_ORC),
-                    self::RACE_TAUREN    => __(self::RACE_TAUREN),
-                    self::RACE_TROLL     => __(self::RACE_TROLL),
-                    self::RACE_UNDEAD    => __(self::RACE_UNDEAD),
-                    self::RACE_DRAENEI   => __(self::RACE_DRAENEI),
-                    self::RACE_DWARF     => __(self::RACE_DWARF),
-                    self::RACE_GNOME     => __(self::RACE_GNOME),
-                    self::RACE_HUMAN     => __(self::RACE_HUMAN),
-                    self::RACE_NIGHT_ELF => __(self::RACE_NIGHT_ELF),
+                    self::RACE_BLOOD_ELF => __('Blood Elf'),
+                    self::RACE_ORC       => __('Orc'),
+                    self::RACE_TAUREN    => __('Tauren'),
+                    self::RACE_TROLL     => __('Troll'),
+                    self::RACE_UNDEAD    => __('Undead'),
+                    self::RACE_DRAENEI   => __('Draenei'),
+                    self::RACE_DWARF     => __('Dwarf'),
+                    self::RACE_GNOME     => __('Gnome'),
+                    self::RACE_HUMAN     => __('Human'),
+                    self::RACE_NIGHT_ELF => __('Night Elf'),
                 ];
                 break;
             default:

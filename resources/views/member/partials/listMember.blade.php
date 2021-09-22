@@ -30,7 +30,12 @@
     </li>
     @if (!$guild->is_attendance_hidden && (isset($raidCount) || isset($attendancePercentage)))
         <li>
-            @include('partials/attendanceTag', ['attendancePercentage' => (isset($attendancePercentage) ? $attendancePercentage : null), 'raidCount' => (isset($raidCount) ? $raidCount : null), 'smallRaid' => false])
+            @include('partials/attendanceTag', [
+                'attendancePercentage' => (isset($attendancePercentage) ? $attendancePercentage : null),
+                'benchedCount'         => (isset($benchedCount) ? $benchedCount : null),
+                'raidCount'            => (isset($raidCount) ? $raidCount : null),
+                'smallRaid'            => false
+            ])
         </li>
     @endif
     @if ($member->is_received_unlocked)

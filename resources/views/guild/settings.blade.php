@@ -269,9 +269,11 @@
                                         639 => __('1 ¾ years'),
                                         730 => __('2 years'),
                                     ];
+
+                                    $isUnlimited = old('attendance_decay_days') && old('attendance_decay_days') == 36500 || $guild->attendance_decay_days == 36500;
                                 @endphp
                                 <select name="attendance_decay_days" class="form-control dark">
-                                    <option value="" {{ old('attendance_decay_days') && old('attendance_decay_days') == 36500 || $guild->attendance_decay_days == 36500 ? 'selected' : '' }}>
+                                    <option value="" {{ $isUnlimited ? 'selected' : '' }}>
                                         {{ __("No limit") }}
                                     </option>
                                     @foreach ($rates as $key => $label)
@@ -286,7 +288,7 @@
                                             {{ $label }}
                                         </option>
                                     @endforeach
-                                    @if (!$found)
+                                    @if (!$found && !$isUnlimited)
                                         <option value="{{ $guild->attendance_decay_days }}" selected>
                                             {{ __("custom: :days days", ['days' => $guild->attendance_decay_days]) }}
                                         </option>

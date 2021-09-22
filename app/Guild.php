@@ -89,7 +89,16 @@ class Guild extends BaseModel
 
     // Includes hidden and removed characters
     public function allCharacters() {
-        return $this->hasMany(Character::class)->orderBy('name');
+        return $this
+            ->hasMany(Character::class)
+            ->select([
+                'characters.*'
+            ])
+            ->orderBy('characters.name');
+    }
+
+    public function allCharactersWithAttendance() {
+        return Character::addAttendanceQuery($this->allCharacters())->groupBy('characters.id');
     }
 
     // Includes banned and inactive members
@@ -103,7 +112,8 @@ class Guild extends BaseModel
 
     // Excludes hidden and removed characters
     public function characters() {
-        return $this->hasMany(Character::class)
+        return $this
+            ->hasMany(Character::class)
             ->select([
                 'characters.*'
             ])

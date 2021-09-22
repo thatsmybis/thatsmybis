@@ -16,7 +16,12 @@
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
     // So we're iterating over the characters only one time, saving the results, and printing them.
 
-    $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->allCharacters, 'raidGroups' => $guild->raidGroups]);
+    $characterSelectOptions = (string)View::make('partials.characterOptions', [
+        'characters'     => $guild->allCharactersWithAttendance,
+        'guild'          => $guild,
+        'raidGroups'     => $guild->raidGroups,
+        'showAttendance' => true,
+    ]);
 
     $remarkSelectOptions = (string)View::make('partials.remarkOptions');
 @endphp
@@ -121,7 +126,7 @@
                                         maxlength="75"
                                         type="text"
                                         class="form-control dark"
-                                        placeholder="eg. MC Binding Run 42"
+                                        placeholder="{{ __('eg. MC Binding Run 42') }}"
                                         value="{{ old('name') ? old('name') : ($raid ? $raid->name : '') }}" />
                                 </div>
                             </div>
@@ -202,7 +207,7 @@
                                             maxlength="250"
                                             type="text"
                                             class="form-control dark"
-                                            placeholder="a warcraftlogs.com link perhaps?"
+                                            placeholder="{{ __('a warcraftlogs.com link perhaps?') }}"
                                             value="{{ old('logs_deprecated') ? old('logs_deprecated') : ($raid ? $raid->logs_deprecated : '') }}"
                                             style="" />
                                     @else
@@ -216,7 +221,7 @@
                                                     maxlength="250"
                                                     type="text"
                                                     class="js-show-next form-control dark"
-                                                    placeholder="a warcraftlogs.com link perhaps?"
+                                                    placeholder="{{ __('a warcraftlogs.com link perhaps?') }}"
                                                     value="{{ $oldLog }}"
                                                     style="" />
                                             </div>

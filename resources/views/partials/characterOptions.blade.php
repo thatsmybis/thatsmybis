@@ -3,8 +3,27 @@
         $characterNameText = $character->name;
         $characterMetaText = (isset($showClass) && $showClass ? ($character->class ? '(' . $character->class . ')&nbsp;' : '') : '');
         $characterMetaText .= ($character->is_alt ? "Alt" : '');
+
         if (isset($raidGroups) && $raidGroups->where('id', $character->raid_group_id)->count()) {
             $characterMetaText .= '&sdot; ' . ($raidGroups->where('id', $character->raid_group_id)->first()->name);
+        }
+
+        if (
+            isset($showAttendance)
+            && $showAttendance
+            && !$guild->is_attendance_hidden
+        ) {
+            if (isset($attendancePercentage) && ((isset($raidCount) && $raidCount) || !isset($raidCount))) {
+                $characterMetaText .= ' &sdot; ' . round($attendancePercentage * 100, 2) . "%";
+            }
+
+            if (isset($character->raid_count)) {
+                $characterMetaText .= ' &sdot; ' . __(':count raids', ['count' => $character->raid_count]);
+            }
+
+            if (isset($character->benched_count) && $character->benched_count) {
+                $characterMetaText .=  ' &sdot; ' . __('benched :countx', ['count' => $character->benched_count]);
+            }
         }
     @endphp
     <option value="{{ $character->id }}"

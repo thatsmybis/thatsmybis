@@ -14,7 +14,12 @@
             @endif
             @if (!$guild->is_attendance_hidden)
                 <span class="small">
-                    @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'smallRaid' => false])
+                    @include('partials/attendanceTag', [
+                        'attendancePercentage' => $character->attendance_percentage,
+                        'benchedCount'         => $character->benched_count,
+                        'raidCount'            => $character->raid_count,
+                        'smallRaid'            => false
+                    ])
                 </span>
             @endif
         </a>
