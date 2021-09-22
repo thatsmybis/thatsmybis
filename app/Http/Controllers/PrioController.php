@@ -657,34 +657,17 @@ class PrioController extends Controller
         DB::table('character_items')->whereIn('id', $toDrop)->delete();
 
         // Update...
-        // I'm sure there's some clever way to perform an UPDATE statement with CASE statements... https://stackoverflow.com/questions/3432/multiple-updates-in-mysql
-        // Don't have time to implement that.
-        foreach ($toUpdate as $item) {
-            $item ['updated_at'] = $now;
-            DB::table('character_items')
-                ->where('id', $item['id'])
-                ->update($item);
-
-            // If we want to log EVERY prio change (this has a cascading effect when orders change and can result in thousands of audits)
-            // $audits[] = [
-            //     'description'  => $currentMember->username . ' updated prio order on a character (prio set to ' . $item['order'] . ')',
-            //     'member_id'    => $currentMember->id,
-            //     'guild_id'     => $currentMember->guild_id,
-            //     'item_id'      => $item['id'],
-            // ];
-        }
-
-        // DB::table('character_items')
-        //     ->upsert(
-        //         $toUpdate, // New data, includes `id` column
-        //         ['id'], // Identifying column
-        //         [ // Fields to be updated
-        //             'order',
-        //             'is_offspec',
-        //             'is_received',
-        //             'received_at',
-        //         ]
-        //     );
+        DB::table('character_items')
+            ->upsert(
+                $toUpdate, // New data, includes `id` column
+                ['id'], // Identifying column
+                [ // Fields to be updated
+                    'order',
+                    'is_offspec',
+                    'is_received',
+                    'received_at',
+                ]
+            );
 
         // Insert...
         DB::table('character_items')->insert($toAdd);

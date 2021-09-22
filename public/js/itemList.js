@@ -66,6 +66,9 @@ $(document).ready( function () {
 
     addWishlistFilterHandlers();
     trackTimestamps();
+
+    $(".loadingBarContainer").removeClass("d-flex").hide();
+    $("#itemDatatable").show();
 });
 
 function createTable(lastSource) {

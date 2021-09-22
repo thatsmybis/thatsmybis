@@ -87,6 +87,9 @@ $(document).ready( function () {
 
     // Dungeon multiselect could get stuck if clicked too soon
     $(".selectpicker").selectpicker("refresh");
+
+    $(".loadingBarContainer").removeClass("d-flex").hide();
+    $("#characterDatatable").show();
 });
 
 function createTable() {

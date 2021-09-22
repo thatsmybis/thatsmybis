@@ -1,4 +1,5 @@
-<div class="pr-2 pl-2">
+@include('partials/loadingBars')
+<div class="pr-2 pl-2" style="display:none;" id="itemDatatable">
     <ul class="list-inline mb-0">
         <li class="list-inline-item">
             <label for="raid_group_filter font-weight-light">
