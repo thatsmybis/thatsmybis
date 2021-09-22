@@ -42,7 +42,15 @@ class Batch extends Model
         return $this->belongsToMany(Item::class, 'character_items', 'batch_id', 'item_id')
             ->withTimeStamps()
             ->select([
-                'items.*',
+                'items.id',
+                'items.item_id',
+                'items.parent_id',
+                'items.parent_item_id',
+                'items.expansion_id',
+                'items.name',
+                'items.weight',
+                'items.quality',
+                'items.inventory_type',
                 'characters.id AS character_id',
                 'characters.name AS character_name',
                 'characters.slug AS character_slug',
