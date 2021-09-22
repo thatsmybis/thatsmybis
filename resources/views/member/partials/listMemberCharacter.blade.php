@@ -1,5 +1,5 @@
 @php
-    $raidGroup = ($character->raid_group_id ? $guild->raidGroups->where('id', $character->raid_group_id)->first() : null);
+    $raidGroup = ($character->raid_group_id ? $guild->allRaidGroups->where('id', $character->raid_group_id)->first() : null);
 @endphp
 <li class="list-inline-item text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}">
     <div class="dropdown">

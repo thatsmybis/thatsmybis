@@ -272,6 +272,7 @@ class CharacterLootController extends Controller
                 1,
             );
         }
+
         return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
     }
 
