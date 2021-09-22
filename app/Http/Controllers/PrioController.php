@@ -559,6 +559,20 @@ class PrioController extends Controller
                                 }
 
                                 if ($changed) {
+                                    // Since we are using UPSERT, these fields MUST be present. Populate them if they are missing.
+                                    if (!array_key_exists('received_at', $newValues)) {
+                                        $newValues['received_at'] = $existingPrio->pivot->received_at;
+                                    }
+                                    if (!array_key_exists('order', $newValues)) {
+                                        $newValues['order'] = $existingPrio->pivot->order;
+                                    }
+                                    if (!array_key_exists('is_received', $newValues)) {
+                                        $newValues['is_received'] = $existingPrio->pivot->is_received;
+                                    }
+                                    if (!array_key_exists('is_offspec', $newValues)) {
+                                        $newValues['is_offspec'] = $existingPrio->pivot->is_offspec;
+                                    }
+
                                     $toUpdate[] = $newValues;
                                     $toUpdateCount++;
                                 }
@@ -668,18 +682,6 @@ class PrioController extends Controller
                     'received_at',
                 ]
             );
-
-        // DB::table('character_items')
-        //     ->upsert(
-        //         $toUpdate, // New data, includes `id` column
-        //         ['id'], // Identifying column
-        //         [ // Fields to be updated
-        //             'order',
-        //             'is_offspec',
-        //             'is_received',
-        //             'received_at',
-        //         ]
-        //     );
 
         // Insert...
         CharacterItem::insert($toAdd);
