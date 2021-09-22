@@ -3,10 +3,13 @@
 namespace App;
 
 use App\{Raid};
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class Log extends Model
 {
+    use Cachable;
+
     /**
      * The attributes that are mass assignable.
      *

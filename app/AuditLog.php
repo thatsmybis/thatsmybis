@@ -3,10 +3,13 @@
 namespace App;
 
 use App\{Character, Guild, Instance, Item, ItemSource, Member, Raid, RaidGroup, Role};
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class AuditLog extends Model
 {
+    use Cachable;
+
     /**
      * The attributes that are mass assignable.
      *

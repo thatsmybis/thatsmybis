@@ -3,10 +3,13 @@
 namespace App;
 
 use App\{Batch, Character, Guild, Instance, Item, Member, RaidGroup};
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 
 class Raid extends Model
 {
+    use Cachable;
+
     const REMARK_LATE            = 'Late';
     const REMARK_UNPREPARED      = 'Unprepared';
     const REMARK_LATE_UNPREPARED = 'Late & unprepared';

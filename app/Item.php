@@ -3,11 +3,14 @@
 namespace App;
 
 use App\{Character, Expansion, Guild, ItemSource};
+use GeneaLabs\LaravelModelCaching\Traits\Cachable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Item extends Model
 {
+    use Cachable;
+
     protected $primaryKey = 'item_id';
 
     /**
