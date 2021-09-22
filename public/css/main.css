@@ -1,3 +1,40 @@
+.loadingBars {
+    display: inline-block;
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+.loadingBars div {
+    display: inline-block;
+    position: absolute;
+    left: 8px;
+    width: 16px;
+    animation: loadingBars 1.2s cubic-bezier(0, 0.5, 0.5, 1) infinite;
+}
+.loadingBars div:nth-child(1) {
+    left: 8px;
+    animation-delay: -0.24s;
+}
+.loadingBars div:nth-child(2) {
+    left: 32px;
+    animation-delay: -0.12s;
+}
+.loadingBars div:nth-child(3) {
+    left: 56px;
+    animation-delay: 0;
+}
+@keyframes loadingBars {
+    0% {
+        top: 8px;
+        height: 64px;
+    }
+    50%, 100% {
+        top: 24px;
+        height: 32px;
+    }
+}
+
+
 @font-face {
     font-family: Blizz;
     src: url("../fonts/FrizQuadrata.woff2"), url("../../fonts/FrizQuadrata.woff2");
@@ -90,6 +127,19 @@ body {
     background-color: #161523 !important;
 }
 
+.bg-expansion- {
+    background: #fff;
+}
+.bg-expansion-1 {
+    background: #ffb400;
+}
+.bg-expansion-2 {
+    background: #1eff00;
+}
+.bg-expansion-3 {
+    background: #68ccef;
+}
+
 .discord-link {
     height: 40px;
 }
@@ -130,6 +180,16 @@ body {
 }
 .text-5 {
     font-size:18px;
+}
+
+.text-expansion-1 {
+    color: #ffb400;
+}
+.text-expansion-2 {
+    color: #1eff00;
+}
+.text-expansion-3 {
+    color: #68ccef;
 }
 
 .text-death-knight {
