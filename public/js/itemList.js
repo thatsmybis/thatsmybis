@@ -13,6 +13,9 @@ var lastSource = null;
 
 var offspecVisible = true;
 
+// For making sure we don't spam request handlers to be added.
+var itemListHandlersTimeout = null;
+
 $(document).ready( function () {
    table = createTable();
 
@@ -35,11 +38,7 @@ $(document).ready( function () {
 
     // Triggered when a column is made visible
     table.on('column-visibility.dt', function (e, settings, column, state) {
-        // Refresh wowhead links to show stlying.
-        // wowhead's script previously ignored these links if they weren't visible
-        makeWowheadLinks();
-        trackTimestamps();
-        parseMarkdown();
+        callItemListHandlers();
     });
 
     // Filter out characters based on the raid group they are in
@@ -65,7 +64,11 @@ $(document).ready( function () {
     });
 
     addWishlistFilterHandlers();
-    trackTimestamps();
+
+    $(".loadingBarContainer").removeClass("d-flex").hide();
+    $("#itemDatatable").show();
+
+    callItemListHandlers();
 });
 
 function createTable(lastSource) {
@@ -195,13 +198,10 @@ function createTable(lastSource) {
         paging      : false,
         fixedHeader : true, // Header row sticks to top of window when scrolling down
         drawCallback : function () {
-            makeWowheadLinks();
-            parseMarkdown();
-            trackTimestamps();
+            callItemListHandlers();
         },
         initComplete: function () {
-            makeWowheadLinks();
-            parseMarkdown();
+            callItemListHandlers();
         },
         createdRow : function (row, data, dataIndex) {
             // Add a top border style between different loot sources
@@ -361,6 +361,18 @@ function getItemLink(row, iconSize = null) {
 
 function hideOffspecItems() {
     $("[data-offspec='1']").hide();
+}
+
+// In order to prevent these handlers from accidentally being called over and over,
+// add them on a timeout. If the timeout hasn't reached 0, and this function is called
+// again, the timer will start over and the contained scripts will never have been run.
+function callItemListHandlers() {
+    itemListHandlersTimeout ? clearTimeout(itemListHandlersTimeout) : null;
+    itemListHandlersTimeout = setTimeout(function () {
+        makeWowheadLinks();
+        parseMarkdown();
+        trackTimestamps();
+    }, 500); // 0.5s delay
 }
 
 function showOffspecItems() {

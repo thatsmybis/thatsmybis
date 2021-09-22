@@ -19,7 +19,7 @@ class RosterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['allRaidGroups', 'raidGroups.role']);
+        $guild->load(['allRaidGroups', 'allRaidGroups.role']);
 
         $showOfficerNote = false;
         if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {

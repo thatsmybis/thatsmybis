@@ -2,12 +2,11 @@
 
 namespace App;
 
-use App\{Character, Content, Guild, Role, User};
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Character, Content, Guild, Role, User};
 use \Illuminate\Support\Facades\Log;
 use Kodeine\Acl\Traits\HasRole;
 
-class Member extends Model
+class Member extends BaseModel
 {
     use HasRole {
         // Rename a function from this so that we can override it and still call it.

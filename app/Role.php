@@ -2,16 +2,16 @@
 
 namespace App;
 
-use App\{Member};
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Member};
 use Kodeine\Acl\Traits\HasPermission;
 use RestCord\DiscordClient;
+
 /**
  * I copied over the Role class from the kodeine\laravel-acl library because... reasons?
  * I did this a while back. Not sure why. But here it is!
  * Maybe it was just an easier way to inherit/modify it?
  */
-class Role extends Model
+class Role extends BaseModel
 {
     use HasPermission;
 

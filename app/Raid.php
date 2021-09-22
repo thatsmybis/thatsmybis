@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\{Batch, Character, Guild, Instance, Item, Member, RaidGroup};
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Batch, Character, Guild, Instance, Item, Member, RaidGroup};
 
-class Raid extends Model
+class Raid extends BaseModel
 {
     const REMARK_LATE            = 'Late';
     const REMARK_UNPREPARED      = 'Unprepared';
@@ -72,7 +71,15 @@ class Raid extends Model
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'raid_id', 'item_id')
             ->select([
-                'items.*',
+                'items.id',
+                'items.item_id',
+                'items.parent_id',
+                'items.parent_item_id',
+                'items.expansion_id',
+                'items.name',
+                'items.weight',
+                'items.quality',
+                'items.inventory_type',
                 'characters.id             AS character_id',
                 'characters.name           AS character_name',
                 'characters.class          AS character_class',

@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\{Raid, Role};
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Raid, Role};
 
-class RaidGroup extends Model
+class RaidGroup extends BaseModel
 {
     /**
      * The attributes that are mass assignable.
@@ -70,7 +69,7 @@ class RaidGroup extends Model
     public function getColor() {
         $color = null;
 
-        if ($this->role_id && $this->role->color) {
+        if ($this->role_id && $this->relationLoaded('role') && $this->role->color) {
             $color = $this->role->color;
         }
 

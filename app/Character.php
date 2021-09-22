@@ -2,12 +2,10 @@
 
 namespace App;
 
-use App\{Item, Guild, Member, Raid, RaidGroup};
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\{BaseModel, Item, Guild, Member, Raid, RaidGroup};
 use Illuminate\Support\Facades\DB;
 
-class Character extends Model
+class Character extends BaseModel
 {
     /**
      * The attributes that are mass assignable.
@@ -112,7 +110,19 @@ class Character extends Model
     public function recipes() {
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
-            ->select(['items.*', 'added_by_members.username AS added_by_username', 'instances.id AS instance_id'])
+            ->select([
+                'items.id',
+                'items.item_id',
+                'items.parent_id',
+                'items.parent_item_id',
+                'items.expansion_id',
+                'items.name',
+                'items.weight',
+                'items.quality',
+                'items.inventory_type',
+                'added_by_members.username AS added_by_username',
+                'instances.id AS instance_id'
+            ])
             ->leftJoin('members AS added_by_members', 'added_by_members.id', '=', 'character_items.added_by')
             ->leftJoin('item_item_sources',           'items.item_id',                    '=', 'item_item_sources.item_id')
             ->leftJoin('item_sources',                'item_item_sources.item_source_id', '=', 'item_sources.id')
@@ -137,7 +147,15 @@ class Character extends Model
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->select([
-                'items.*',
+                'items.id',
+                'items.item_id',
+                'items.parent_id',
+                'items.parent_item_id',
+                'items.expansion_id',
+                'items.name',
+                'items.weight',
+                'items.quality',
+                'items.inventory_type',
                 'added_by_members.username AS added_by_username',
                 'raid_groups.name          AS raid_group_name',
                 'raids.name                AS raid_name',
@@ -183,7 +201,15 @@ class Character extends Model
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->select([
-                'items.*',
+                'items.id',
+                'items.item_id',
+                'items.parent_id',
+                'items.parent_item_id',
+                'items.expansion_id',
+                'items.name',
+                'items.weight',
+                'items.quality',
+                'items.inventory_type',
                 'added_by_members.username AS added_by_username',
                 'instances.id              AS instance_id',
                 'guild_items.tier          AS guild_tier',
@@ -225,7 +251,15 @@ class Character extends Model
         $query = $this
             ->belongsToMany(Item::class, 'character_items', 'character_id', 'item_id')
             ->select([
-                'items.*',
+                'items.id',
+                'items.item_id',
+                'items.parent_id',
+                'items.parent_item_id',
+                'items.expansion_id',
+                'items.name',
+                'items.weight',
+                'items.quality',
+                'items.inventory_type',
                 'item_sources.id             AS item_source_id',
                 'item_sources.instance_id    AS instance_id',
                 'instances.name              AS instance_name',

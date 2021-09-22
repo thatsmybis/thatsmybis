@@ -2,11 +2,10 @@
 
 namespace App;
 
-use App\{Character, Expansion, Guild, ItemSource};
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Character, Expansion, Guild, ItemSource};
 use Illuminate\Support\Facades\DB;
 
-class Item extends Model
+class Item extends BaseModel
 {
     protected $primaryKey = 'item_id';
 

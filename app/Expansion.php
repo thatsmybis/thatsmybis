@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\{Guild};
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Guild};
 
-class Expansion extends Model
+class Expansion extends BaseModel
 {
     /**
      * The attributes that are mass assignable.

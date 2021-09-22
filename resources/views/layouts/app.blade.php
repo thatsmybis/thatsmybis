@@ -128,6 +128,9 @@
 
     <div class="text-center font-weight-bold text-warning">
         <!-- Sitewide warning message, good for downtime announcements -->
+        <span class="text-muted">
+            <!--I added a lot of caching. If you notice problems, let me know on the <a href="{{ env('APP_DISCORD') }}" target="_blank">TMB Discord</a>.-->
+        </span>
     </div>
 
     @if (session('status'))
@@ -241,6 +244,8 @@
                 var wowheadSubdomain = "classic";
             @elseif ($guild->expansion_id === 2)
                 var wowheadSubdomain = "tbc";
+            @elseif ($guild->expansion_id === 3)
+                var wowheadSubdomain = "www";
             @else
                 var wowheadSubdomain = "www";
             @endif
@@ -250,6 +255,8 @@
                 var wowheadSubdomain = "classic";
             @elseif ($expansionId == 2)
                 var wowheadSubdomain = "tbc";
+            @elseif ($expansionId == 3)
+                var wowheadSubdomain = "www";
             @else
                 var wowheadSubdomain = "www";
             @endif

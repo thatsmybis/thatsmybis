@@ -32,6 +32,7 @@ class CheckGuildPermissions
                     where('id', $request->route('guildId'))
                     ->with([
                         'allRaidGroups',
+                        'allRaidGroups.role',
                         'raidGroups' => function ($query) { return $query->whereNull('disabled_at'); }
                     ])
                     ->first();

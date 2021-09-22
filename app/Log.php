@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\{Raid};
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Raid};
 
-class Log extends Model
+class Log extends BaseModel
 {
     /**
      * The attributes that are mass assignable.

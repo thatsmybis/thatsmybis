@@ -2,10 +2,9 @@
 
 namespace App;
 
-use App\{Item, ItemSource};
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Item, ItemSource};
 
-class Instance extends Model
+class Instance extends BaseModel
 {
     /**
      * The attributes that are mass assignable.

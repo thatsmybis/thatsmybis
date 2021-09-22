@@ -2,11 +2,12 @@
 
 namespace App;
 
-use App\{Instance, Item};
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Instance, Item};
 
-class ItemSource extends Model
+class ItemSource extends BaseModel
 {
+    protected $table = 'item_sources';
+
     /**
      * The attributes that are mass assignable.
      *

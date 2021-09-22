@@ -15,6 +15,9 @@ var allItemsVisible = false;
 var strikethroughVisible = true;
 var offspecVisible = true;
 
+// For making sure we don't spam request handlers to be added.
+var rosterHandlersTimeout = null;
+
 $(document).ready( function () {
    var table = createTable();
 
@@ -39,10 +42,7 @@ $(document).ready( function () {
     table.on('column-visibility.dt', function (e, settings, column, state) {
         // Refresh wowhead links to show stlying.
         // wowhead's script previously ignored these links if they weren't visible
-        makeWowheadLinks();
-        addClippedItemHandlers();
-        trackTimestamps();
-        parseMarkdown();
+        callRosterHandlers();
     });
 
     // Toggle visiblity for all of the clipped/hidden items on the page
@@ -80,13 +80,15 @@ $(document).ready( function () {
         }
     });
 
-    addClippedItemHandlers();
-    addInstanceFilterHandlers();
-    addWishlistFilterHandlers();
-    trackTimestamps();
-
     // Dungeon multiselect could get stuck if clicked too soon
     $(".selectpicker").selectpicker("refresh");
+
+    $(".loadingBarContainer").removeClass("d-flex").hide();
+    $("#characterDatatable").show();
+
+    addInstanceFilterHandlers();
+    addWishlistFilterHandlers();
+    callRosterHandlers();
 });
 
 function createTable() {
@@ -368,21 +370,7 @@ function createTable() {
         paging : false,
         fixedHeader : true, // Header row sticks to top of window when scrolling down
         drawCallback : function () {
-            makeWowheadLinks();
-            addClippedItemHandlers();
-            addItemAutocompleteHandler();
-            addTagInputHandlers();
-            addWishlistSortHandlers();
-            parseMarkdown();
-            trackTimestamps();
-
-            // Table was redrawn and item visibility was reset;
-            // We should set visibility based on the previous setting.
-            if (allItemsVisible) {
-                showAllItems();
-            } else {
-                resetItemVisibility();
-            }
+            callRosterHandlers();
         },
         initComplete: function () {
             // Columns that we want to filter by.
@@ -441,12 +429,8 @@ function createTable() {
                         column.search(regex, true, false).draw();
                     });
                 }
-            } );
-            makeWowheadLinks();
-            addItemAutocompleteHandler();
-            addTagInputHandlers();
-            addWishlistSortHandlers();
-            parseMarkdown();
+            });
+            callRosterHandlers();
         }
     });
     return rosterTable;
@@ -652,6 +636,27 @@ function resetItemVisibility() {
     $(".js-clipped-item").hide();
     $(".js-show-clipped-items").show();
     $(".js-hide-clipped-items").hide();
+}
+
+// In order to prevent these handlers from accidentally being called over and over,
+// add them on a timeout. If the timeout hasn't reached 0, and this function is called
+// again, the timer will start over and the contained scripts will never have been run.
+function callRosterHandlers() {
+    rosterHandlersTimeout ? clearTimeout(rosterHandlersTimeout) : null;
+    rosterHandlersTimeout = setTimeout(function () {
+        makeWowheadLinks();
+        addClippedItemHandlers();
+        addWishlistSortHandlers();
+        parseMarkdown();
+        trackTimestamps();
+
+        // We should set visibility based on the previous setting.
+        if (allItemsVisible) {
+            showAllItems();
+        } else {
+            resetItemVisibility();
+        }
+    }, 500); // 0.5s delay
 }
 
 function showAllItems() {
