@@ -1,6 +1,7 @@
 <?php
 
 namespace App;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo};
 
 class CharacterItem extends BaseModel
 {

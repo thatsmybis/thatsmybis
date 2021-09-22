@@ -3,6 +3,7 @@
 namespace App;
 
 use App\{BaseModel, Raid, Role};
+use Illuminate\Database\Eloquent\Relations\{BelongsTo};
 
 class RaidGroup extends BaseModel
 {

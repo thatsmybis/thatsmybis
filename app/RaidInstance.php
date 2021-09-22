@@ -3,6 +3,7 @@
 namespace App;
 
 use App\BaseModel;
+use Illuminate\Database\Eloquent\Relations\{BelongsTo};
 
 class RaidInstance extends BaseModel
 {
