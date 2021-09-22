@@ -156,7 +156,9 @@ class ItemController extends Controller
                                 return $query
                                     ->where([
                                         ['characters.guild_id', $guild->id],
+                                        ['character_items.is_received', 0],
                                     ])
+                                ->whereNull('character_items.received_at')
                                 ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
                                 ->orderBy('raid_group_name')
                                 ->orderBy('character_items.order');
