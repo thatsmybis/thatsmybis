@@ -2,13 +2,11 @@
 
 namespace App;
 
-use App\{Instance, Item};
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Instance, Item};
 
-class ItemSource extends Model
+class ItemSource extends BaseModel
 {
-    use Cachable;
+    protected $table = 'item_sources';
 
     /**
      * The attributes that are mass assignable.

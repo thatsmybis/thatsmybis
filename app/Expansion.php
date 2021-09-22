@@ -2,14 +2,10 @@
 
 namespace App;
 
-use App\{Guild};
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Guild};
 
-class Expansion extends Model
+class Expansion extends BaseModel
 {
-    use Cachable;
-
     /**
      * The attributes that are mass assignable.
      *

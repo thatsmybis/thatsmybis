@@ -2,14 +2,10 @@
 
 namespace App;
 
-use App\{Raid, Role};
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Raid, Role};
 
-class RaidGroup extends Model
+class RaidGroup extends BaseModel
 {
-    use Cachable;
-
     /**
      * The attributes that are mass assignable.
      *

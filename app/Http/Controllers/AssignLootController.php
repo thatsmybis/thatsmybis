@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Batch, Character, Instance, Item, Member, Raid, RaidGroup};
+use App\{AuditLog, Batch, Character, CharacterItem, Instance, Item, Member, Raid, RaidGroup};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -162,7 +162,7 @@ class AssignLootController extends Controller
         $this->validate(request(), $validationRules, []);
 
         $batch = Batch::find(request()->input('id'));
-        $itemCount = DB::table('character_items')->where('batch_id', $batch->id)->count();
+        $itemCount = CharacterItem::where('batch_id', $batch->id)->count();
 
         $description = $currentMember->username . " updated details for assigned loot (containing {$itemCount} items)";
 
@@ -197,8 +197,8 @@ class AssignLootController extends Controller
         }
 
         if (count($updateValues) > 0) {
-            DB::table('character_items')
-                ->where(['batch_id' => $batch->id])
+            CharacterItem::
+                where(['batch_id' => $batch->id])
                 ->update($updateValues);
         }
 
@@ -524,7 +524,7 @@ class AssignLootController extends Controller
         });
 
         // Add the items to the character's received list
-        DB::table('character_items')->insert($newRows);
+        CharacterItem::insert($newRows);
 
         // For each item added, attempt to delete or flag a matching item from the character's wishlist and prios
         foreach ($detachRows as $detachRow) {
@@ -538,8 +538,8 @@ class AssignLootController extends Controller
             }
 
             // Find wishlist for this item
-            $wishlistRow = DB::table('character_items')
-                ->select('character_items.*')
+            $wishlistRow = CharacterItem::
+                select('character_items.*')
                 // Look for both the original item and the possible token reward for the item
                 ->join('items', function ($join) {
                     return $join->on('items.item_id', 'character_items.item_id')
@@ -555,7 +555,7 @@ class AssignLootController extends Controller
             if ($wishlistRow) {
                 if ($deleteWishlist) {
                     // Delete the one we found
-                    DB::table('character_items')->where(['id' => $wishlistRow->id])->delete();
+                    CharacterItem::where(['id' => $wishlistRow->id])->delete();
                     $audits[] = [
                         'description'   => 'System removed 1 wishlist item after character was assigned item',
                         'type'          => Item::TYPE_WISHLIST,
@@ -568,7 +568,8 @@ class AssignLootController extends Controller
                         'created_at'    => $now,
                     ];
                 } else {
-                    DB::table('character_items')->where(['id' => $wishlistRow->id])
+                    CharacterItem::
+                        where(['id' => $wishlistRow->id])
                         ->update([
                             'is_received' => 1,
                             'received_at' => $now,
@@ -599,16 +600,17 @@ class AssignLootController extends Controller
             }
 
             // Find prio for this item
-            $prioRow = DB::table('character_items')->where($whereClause)->orderBy('is_received')->orderBy('order')->first();
+            $prioRow = CharacterItem::where($whereClause)->orderBy('is_received')->orderBy('order')->first();
 
             if ($prioRow) {
                 $auditMessage = '';
                 if ($deletePrio) {
                     // Delete the one we found
-                    DB::table('character_items')->where(['id' => $prioRow->id])->delete();
+                    CharacterItem::where(['id' => $prioRow->id])->delete();
 
                     // Now correct the order on the remaning prios for that item in that raid group
-                    DB::table('character_items')->where([
+                    CharacterItem::
+                        where([
                             'item_id'       => $prioRow->item_id,
                             'raid_group_id' => $prioRow->raid_group_id,
                             'type'          => Item::TYPE_PRIO,
@@ -617,7 +619,8 @@ class AssignLootController extends Controller
                         ->update(['order' => DB::raw('`order` - 1')]);
                     $auditMessage = 'removed 1 prio';
                 } else {
-                    DB::table('character_items')->where(['id' => $prioRow->id])
+                    CharacterItem::
+                        where(['id' => $prioRow->id])
                         ->update([
                             'is_received' => 1,
                             'received_at' => $now,

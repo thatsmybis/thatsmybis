@@ -3,6 +3,7 @@
 namespace App;
 
 use App\{
+    BaseModel,
     Character,
     Content,
     Expansion,
@@ -13,13 +14,9 @@ use App\{
     Role,
     User,
 };
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
 
-class Guild extends Model
+class Guild extends BaseModel
 {
-    use Cachable;
-
     /**
      * The attributes that are mass assignable.
      *

@@ -2,10 +2,9 @@
 
 namespace App;
 
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use App\BaseModel;
 
-class GuildItem extends Model
+class GuildItem extends BaseModel
 {
     /**
      * @return BelongsTo

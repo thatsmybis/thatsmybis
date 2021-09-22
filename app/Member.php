@@ -2,22 +2,16 @@
 
 namespace App;
 
-use App\{Character, Content, Guild, Role, User};
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Character, Content, Guild, Role, User};
 use \Illuminate\Support\Facades\Log;
 use Kodeine\Acl\Traits\HasRole;
 
-class Member extends Model
+class Member extends BaseModel
 {
-    use Cachable, HasRole {
+    use HasRole {
         // Rename a function from this so that we can override it and still call it.
         // (see hasPermission())
         hasPermission as protected traitHasPermission;
-
-        // There is a naming conflict between these two traits... must tell PHP which we prefer.
-        // My pick of Cachable over HasRole here is COMPLETELY ARBITRARY just to get the error to go away. :)
-        Cachable::__call insteadof HasRole;
     }
 
     /**
