@@ -8,7 +8,10 @@ use Illuminate\Database\Eloquent\Relations\{BelongsTo, BelongsToMany, HasMany};
 
 class BaseModel extends Model
 {
-    use Cachable;
+    // TODO: Enable when caching is ready for production.
+    //       - Need to get it working with CharacterItem and other stuff.
+    //       - Need to make sure it works between guilds.
+    // use Cachable;
 
-    protected $cachePrefix = "";
+    protected $cachePrefix = '';
 }
