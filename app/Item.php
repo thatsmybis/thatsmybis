@@ -3,8 +3,6 @@
 namespace App;
 
 use App\{BaseModel, Character, Expansion, Guild, ItemSource};
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
 
 class Item extends BaseModel

@@ -177,7 +177,6 @@ class CheckGuildPermissions
                 'currentMember'     => $currentMember,
                 'isGuildAdmin'      => ($guild->user_id == $currentMember->user_id || $isAdmin),
                 'guild'             => $guild,
-                'guildId'           => $guild->id,
                 'raidGroupIdFilter' => $currentMember ? $currentMember->raid_group_id_filter : null,
             ]);
         }
