@@ -3,8 +3,6 @@
 namespace App;
 
 use App\{BaseModel, Guild, Member, Raid, RaidGroup, User};
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
 
 class Batch extends BaseModel
 {
