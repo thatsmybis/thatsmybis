@@ -2,14 +2,10 @@
 
 namespace App;
 
-use App\{Character, Guild, Instance, Item, ItemSource, Member, Raid, RaidGroup, Role};
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
+use App\{BaseModel, Character, Guild, Instance, Item, ItemSource, Member, Raid, RaidGroup, Role};
 
-class AuditLog extends Model
+class AuditLog extends BaseModel
 {
-    use Cachable;
-
     /**
      * The attributes that are mass assignable.
      *

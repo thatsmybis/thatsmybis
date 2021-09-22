@@ -2,16 +2,11 @@
 
 namespace App;
 
-use App\{Item, Guild, Member, Raid, RaidGroup};
-use GeneaLabs\LaravelModelCaching\Traits\Cachable;
-use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use App\{BaseModel, Item, Guild, Member, Raid, RaidGroup};
 use Illuminate\Support\Facades\DB;
 
-class Character extends Model
+class Character extends BaseModel
 {
-    use Cachable;
-
     /**
      * The attributes that are mass assignable.
      *

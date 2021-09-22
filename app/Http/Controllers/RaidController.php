@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Guild, Instance, Log, Raid, RaidGroup};
+use App\{AuditLog, CharacterItem, Guild, Instance, Log, Raid, RaidCharacter, RaidGroup, RaidInstance, RaidRaidGroup};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
@@ -91,7 +91,7 @@ class RaidController extends Controller
                 $characterCount++;
             }
         }
-        DB::table('raid_characters')->insert($newRows);
+        RaidCharacter::insert($newRows);
         $newRows = [];
 
         // Add instances
@@ -106,7 +106,7 @@ class RaidController extends Controller
                 $instanceCount++;
             }
         }
-        DB::table('raid_instances')->insert($newRows);
+        RaidInstance::insert($newRows);
         $newRows = [];
 
         // Add raid groups
@@ -121,7 +121,7 @@ class RaidController extends Controller
                 $raidGroupCount++;
             }
         }
-        DB::table('raid_raid_groups')->insert($newRows);
+        RaidRaidGroup::insert($newRows);
         $newRows = [];
 
         // Add raid logs
@@ -377,8 +377,8 @@ class RaidController extends Controller
         // TODO: Get this to also count items where the raid_id matches, but the batch.raid_id
         // was from a different raid. This means it was individually swapped over.
         // I couldn't get the quey to work without spending too much time, so I'm ignoring it.
-        $manualItemAssignmentCount = DB::table('character_items')
-            ->where([
+        $manualItemAssignmentCount = CharacterItem::
+            where([
                 'character_items.raid_id' => $raid->id,
                 'character_items.type' => 'received',
             ])

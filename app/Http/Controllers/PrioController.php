@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Character, Guild, Instance, Item, RaidGroup};
+use App\{AuditLog, Character, CharacterItem, Guild, Instance, Item, RaidGroup};
 use App\Http\Controllers\ItemController;
 use Auth;
 use Illuminate\Http\Request;
@@ -654,11 +654,11 @@ class PrioController extends Controller
         }
 
         // Delete...
-        DB::table('character_items')->whereIn('id', $toDrop)->delete();
+        CharacterItem::whereIn('id', $toDrop)->delete();
 
         // Update...
-        DB::table('character_items')
-            ->upsert(
+        CharacterItem::
+            upsert(
                 $toUpdate, // New data, includes `id` column
                 ['id'], // Identifying column
                 [ // Fields to be updated
@@ -670,7 +670,7 @@ class PrioController extends Controller
             );
 
         // Insert...
-        DB::table('character_items')->insert($toAdd);
+        CharacterItem::insert($toAdd);
 
         AuditLog::insert($audits);
 
