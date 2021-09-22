@@ -11,6 +11,9 @@ const TIERS = {
     6: 'F',
 };
 
+// How often to update timestamps
+var timestampCheckRate = 60000;
+
 // For keeping track of the intervals updating times
 var timestampUpdateInterval = null;
 
@@ -388,7 +391,7 @@ function slug(string) {
  *
  * @param rate How frequently the timestamps should be updated.
  */
-function trackTimestamps(rate = 15000) {
+function trackTimestamps(rate = timestampCheckRate) {
     $(".js-watchable-timestamp").each(function () {
         let isShort = $(this).data("isShort");
 
