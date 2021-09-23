@@ -8,7 +8,7 @@ $(document).ready(function() {
             const oldClassName = $("[name=spec] option:selected").data("class");
 
             // Class name changed; reset spec to unselected
-            if (oldClassName != className) {
+            if (!firstLoad && oldClassName != className) {
                 $("[name=spec]").val("");
             }
 
