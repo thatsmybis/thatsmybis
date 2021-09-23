@@ -56,7 +56,6 @@
 
             <div class="row">
 
-                {{--
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
                         <label for="min_date" class="font-weight-bold">
@@ -89,7 +88,6 @@
                             autocomplete="off">
                     </div>
                 </div>
-                --}}
 
                 <div class="col-lg-2 col-md-3 col-6">
                     <div class="form-group">
