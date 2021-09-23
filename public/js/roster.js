@@ -154,7 +154,7 @@ function createTable() {
                                     ${ row.level ? row.level : '' }
                                     <span class="font-weight-bold">
                                         ${ row.race  ? row.race : '' }
-                                        ${ row.spec  ? row.spec : '' }
+                                        ${ row.spec_label ? row.spec_label : (row.spec ? row.spec : '') }
                                     </span>
                                 </span>
                             </li>` : `` }
