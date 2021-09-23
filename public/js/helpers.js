@@ -168,6 +168,11 @@ function decToHex(number) {
     return parseInt(number).toString(16);
 }
 
+// Take a jquery element, make that element visually flash to get the user's attention
+function flashElement(element) {
+    element.fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });
+}
+
 // Based on attendance percentage, return a CSS color class
 function getAttendanceColor(percentage = 0) {
     let color = '';

@@ -193,8 +193,8 @@
                                 —
                             </option>
                             @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
-                                <option value="{{ $class }}" class="text-{{ strtolower($key) }}-important"
-                                    {{ Request::get('character_class') && Request::get('character_class') == $class ? 'selected' : '' }}>
+                                <option value="{{ $key }}" class="text-{{ strtolower($key) }}-important"
+                                    {{ Request::get('character_class') && Request::get('character_class') == $key ? 'selected' : '' }}>
                                     {{ $class }}
                                 </option>
                             @endforeach

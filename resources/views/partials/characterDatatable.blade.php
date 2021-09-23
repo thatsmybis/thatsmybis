@@ -23,7 +23,7 @@
             <select id="class_filter" class="form-control dark selectpicker">
                 <option value="">—</option>
                 @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
-                    <option value="{{ $class }}" class="text-{{ strtolower($key) }}-important">
+                    <option value="{{ $key }}" class="text-{{ strtolower($key) }}-important">
                         {{ $class }}
                     </option>
                 @endforeach

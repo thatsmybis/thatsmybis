@@ -21,7 +21,9 @@ class Character extends BaseModel
         'level',
         'race',
         'class',
+        'archetype',
         'spec',
+        'spec_label',
         'profession_1',
         'profession_2',
         'rank',
@@ -78,6 +80,44 @@ class Character extends BaseModel
     const PROFESSION_MINING         = 'Mining';
     const PROFESSION_SKINNING       = 'Skinning';
     const PROFESSION_TAILORING      = 'Tailoring';
+
+    const ARCHETYPE_DPS  = 'DPS';
+    const ARCHETYPE_HEAL = 'Heal';
+    const ARCHETYPE_TANK = 'Tank';
+
+    const SPEC_DEATH_KNIGHT_BLOOD  = 'Blood';
+    const SPEC_DEATH_KNIGHT_FROST  = 'Frost (DK)';
+    const SPEC_DEATH_KNIGHT_UNHOLY = 'Unholy';
+    const SPEC_DRUID_BALANCE       = 'Balance';
+    const SPEC_DRUID_FERAL         = 'Feral';
+    const SPEC_DRUID_RESTO         = 'Resto (Druid)';
+    const SPEC_HUNTER_BEAST        = 'Beast';
+    const SPEC_HUNTER_MARKSMAN     = 'Marksman';
+    const SPEC_HUNTER_CUNNING      = 'Cunning';
+    const SPEC_HUNTER_FEROCITY     = 'Ferocity';
+    const SPEC_HUNTER_TENACTIY     = 'Tenacity';
+    const SPEC_HUNTER_SURVIVAL     = 'Survival';
+    const SPEC_MAGE_ARCANE         = 'Arcane';
+    const SPEC_MAGE_FIRE           = 'Fire';
+    const SPEC_MAGE_FROST          = 'Frost';
+    const SPEC_PALADIN_COMBAT      = 'Retribution';
+    const SPEC_PALADIN_HOLY        = 'Holy (Pally)';
+    const SPEC_PALADIN_PROTECTION  = 'Prot (Pally)';
+    const SPEC_PRIEST_DISCIPLINE   = 'Discipline';
+    const SPEC_PRIEST_HOLY         = 'Holy (Priest)';
+    const SPEC_PRIEST_SHADOW       = 'Shadow';
+    const SPEC_ROGUE_ASSASSIN      = 'Assassination';
+    const SPEC_ROGUE_COMBAT        = 'Combat';
+    const SPEC_ROGUE_SUBTLETY      = 'Subtlety';
+    const SPEC_SHAMAN_ELEMENTAL    = 'Elemental';
+    const SPEC_SHAMAN_ENHANCE      = 'Enhancement';
+    const SPEC_SHAMAN_RESTO        = 'Resto (Shammy)';
+    const SPEC_WARLOCK_AFFLICTION  = 'Affliction';
+    const SPEC_WARLOCK_DESTRO      = 'Destruction';
+    const SPEC_WARLOCK_DEMON       = 'Demonology';
+    const SPEC_WARRIOR_ARMS        = 'Arms';
+    const SPEC_WARRIOR_FURY        = 'Fury';
+    const SPEC_WARRIOR_PROT        = 'Prot (War)';
 
     public function guild() {
         return $this->belongsTo(Guild::class);
@@ -365,35 +405,59 @@ class Character extends BaseModel
         return $query;
     }
 
-    static public function classes($expansionId) {
+    public function getDisplayArchetypeAttribute()
+    {
+        return $this->archetype ? self::archetypes()[$this->archetype] : null;
+    }
+
+    public function getDisplayClassAttribute()
+    {
+        return self::classes()[$this->class];
+    }
+
+    public function getDisplaySpecAttribute()
+    {
+        return $this->spec_label ? $this->spec_label : self::specs()[$this->spec]['name'];
+    }
+
+    static public function archetypes() {
+        return [
+            self::ARCHETYPE_DPS  => __('DPS'),
+            self::ARCHETYPE_HEAL => __('Heal'),
+            self::ARCHETYPE_TANK => __('Tank'),
+        ];
+    }
+
+
+    static public function classes($expansionId = 0) {
         switch ($expansionId) {
             case 1: // Classic
                 return [
-                    self::CLASS_DRUID        => __('Druid'),
-                    self::CLASS_HUNTER       => __('Hunter'),
-                    self::CLASS_MAGE         => __('Mage'),
-                    self::CLASS_PALADIN      => __('Paladin'),
-                    self::CLASS_PRIEST       => __('Priest'),
-                    self::CLASS_ROGUE        => __('Rogue'),
-                    self::CLASS_SHAMAN       => __('Shaman'),
-                    self::CLASS_WARLOCK      => __('Warlock'),
-                    self::CLASS_WARRIOR      => __('Warrior'),
+                    self::CLASS_DRUID   => __('Druid'),
+                    self::CLASS_HUNTER  => __('Hunter'),
+                    self::CLASS_MAGE    => __('Mage'),
+                    self::CLASS_PALADIN => __('Paladin'),
+                    self::CLASS_PRIEST  => __('Priest'),
+                    self::CLASS_ROGUE   => __('Rogue'),
+                    self::CLASS_SHAMAN  => __('Shaman'),
+                    self::CLASS_WARLOCK => __('Warlock'),
+                    self::CLASS_WARRIOR => __('Warrior'),
                 ];
                 break;
             case 2: // TBC
                 return [
-                    self::CLASS_DRUID        => __('Druid'),
-                    self::CLASS_HUNTER       => __('Hunter'),
-                    self::CLASS_MAGE         => __('Mage'),
-                    self::CLASS_PALADIN      => __('Paladin'),
-                    self::CLASS_PRIEST       => __('Priest'),
-                    self::CLASS_ROGUE        => __('Rogue'),
-                    self::CLASS_SHAMAN       => __('Shaman'),
-                    self::CLASS_WARLOCK      => __('Warlock'),
-                    self::CLASS_WARRIOR      => __('Warrior'),
+                    self::CLASS_DRUID   => __('Druid'),
+                    self::CLASS_HUNTER  => __('Hunter'),
+                    self::CLASS_MAGE    => __('Mage'),
+                    self::CLASS_PALADIN => __('Paladin'),
+                    self::CLASS_PRIEST  => __('Priest'),
+                    self::CLASS_ROGUE   => __('Rogue'),
+                    self::CLASS_SHAMAN  => __('Shaman'),
+                    self::CLASS_WARLOCK => __('Warlock'),
+                    self::CLASS_WARRIOR => __('Warrior'),
                 ];
                 break;
-            case 3: // WoTLK
+            default: // WoTLK
                 return [
                     self::CLASS_DEATH_KNIGHT => __('Death Knight'),
                     self::CLASS_DRUID        => __('Druid'),
@@ -407,13 +471,10 @@ class Character extends BaseModel
                     self::CLASS_WARRIOR      => __('Warrior'),
                 ];
                 break;
-            default:
-                return [];
-                break;
         }
     }
 
-    static public function professions($expansionId) {
+    static public function professions($expansionId = 0) {
         switch ($expansionId) {
             case 1: // Classic
                 return [
@@ -442,7 +503,7 @@ class Character extends BaseModel
                     self::PROFESSION_TAILORING      => __('Tailoring'),
                 ];
                 break;
-            case 3: // WoTLK
+            default: // WoTLK
                 return [
                     self::PROFESSION_ALCHEMY        => __('Alchemy'),
                     self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
@@ -457,13 +518,10 @@ class Character extends BaseModel
                     self::PROFESSION_TAILORING      => __('Tailoring'),
                 ];
                 break;
-            default:
-                return [];
-                break;
         }
     }
 
-    static public function races($expansionId) {
+    static public function races($expansionId = 0) {
         switch ($expansionId) {
             case 1: // Classic
                 return [
@@ -491,8 +549,8 @@ class Character extends BaseModel
                     self::RACE_NIGHT_ELF => __('Night Elf'),
                 ];
                 break;
-            case 3: // WoTLK
-                return [
+            default: // WoTLK
+                return  [
                     self::RACE_BLOOD_ELF => __('Blood Elf'),
                     self::RACE_ORC       => __('Orc'),
                     self::RACE_TAUREN    => __('Tauren'),
@@ -505,8 +563,109 @@ class Character extends BaseModel
                     self::RACE_NIGHT_ELF => __('Night Elf'),
                 ];
                 break;
-            default:
-                return [];
+        }
+    }
+
+    static public function specs($expansionId = 0) {
+        switch ($expansionId) {
+            case 1: // Classic
+                return [
+                    self::SPEC_DRUID_BALANCE      => ['name' => __('Balance'),       'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_nature_starfall.jpg'],
+                    self::SPEC_DRUID_FERAL        => ['name' => __('Feral'),         'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_racial_bearform.jpg'],
+                    self::SPEC_DRUID_RESTO        => ['name' => __('Restoration'),   'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_nature_healingtouch.jpg'],
+                    self::SPEC_HUNTER_BEAST       => ['name' => __('Beast'),         'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_hunter_beasttaming.jpg'],
+                    self::SPEC_HUNTER_MARKSMAN    => ['name' => __('Marksmanship'),  'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_marksmanship.jpg'],
+                    self::SPEC_HUNTER_SURVIVAL    => ['name' => __('Survival'),      'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_hunter_swiftstrike.jpg'],
+                    self::SPEC_MAGE_ARCANE        => ['name' => __('Arcane'),        'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_holy_magicalsentry.jpg'],
+                    self::SPEC_MAGE_FIRE          => ['name' => __('Fire'),          'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_fire_firebolt02.jpg'],
+                    self::SPEC_MAGE_FROST         => ['name' => __('Frost'),         'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_frost_frostbolt02.jpg'],
+                    self::SPEC_PALADIN_COMBAT     => ['name' => __('Retribution'),   'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_holy_auraoflight.jpg'],
+                    self::SPEC_PALADIN_HOLY       => ['name' => __('Holy'),          'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_holy_holybolt.jpg'],
+                    self::SPEC_PALADIN_PROTECTION => ['name' => __('Protection'),    'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_TANK, 'icon' => 'spell_holy_devotionaura.jpg'],
+                    self::SPEC_PRIEST_DISCIPLINE  => ['name' => __('Discipline'),    'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_holy_wordfortitude.jpg'],
+                    self::SPEC_PRIEST_HOLY        => ['name' => __('Holy'),          'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_holy_holybolt.jpg'],
+                    self::SPEC_PRIEST_SHADOW      => ['name' => __('Shadow'),        'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_shadow_shadowwordpain.jpg'],
+                    self::SPEC_ROGUE_ASSASSIN     => ['name' => __('Assassination'), 'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_rogue_eviscerate.jpg'],
+                    self::SPEC_ROGUE_COMBAT       => ['name' => __('Combat'),        'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_backstab.jpg'],
+                    self::SPEC_ROGUE_SUBTLETY     => ['name' => __('Subtlety'),      'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_stealth.jpg'],
+                    self::SPEC_SHAMAN_ELEMENTAL   => ['name' => __('Elemental'),     'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_nature_lightning.jpg'],
+                    self::SPEC_SHAMAN_ENHANCE     => ['name' => __('Enhancement'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_nature_lightningshield.jpg'],
+                    self::SPEC_SHAMAN_RESTO       => ['name' => __('Restoration'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_nature_magicimmunity.jpg'],
+                    self::SPEC_WARLOCK_AFFLICTION => ['name' => __('Affliction'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_shadow_deathcoil.jpg'],
+                    self::SPEC_WARLOCK_DESTRO     => ['name' => __('Destruction'),   'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_shadow_rainoffire.jpg'],
+                    self::SPEC_WARLOCK_DEMON      => ['name' => __('Demonology'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_shadow_metamorphosis.jpg'],
+                    self::SPEC_WARRIOR_ARMS       => ['name' => __('Arms'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_rogue_eviscerate.jpg'],
+                    self::SPEC_WARRIOR_FURY       => ['name' => __('Fury'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_warrior_innerrage.jpg'],
+                    self::SPEC_WARRIOR_PROT       => ['name' => __('Protection'),    'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_TANK, 'icon' => 'inv_shield_06.jpg'],
+                ];
+                break;
+            case 2: // TBC
+                return [
+                    self::SPEC_DRUID_BALANCE       => ['name' => __('Balance'),       'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_nature_starfall.jpg'],
+                    self::SPEC_DRUID_FERAL         => ['name' => __('Feral'),         'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_racial_bearform.jpg'],
+                    self::SPEC_DRUID_RESTO         => ['name' => __('Restoration'),   'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_nature_healingtouch.jpg'],
+                    self::SPEC_HUNTER_BEAST        => ['name' => __('Beast'),         'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_hunter_beasttaming.jpg'],
+                    self::SPEC_HUNTER_MARKSMAN     => ['name' => __('Marksmanship'),  'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_marksmanship.jpg'],
+                    self::SPEC_HUNTER_SURVIVAL     => ['name' => __('Survival'),      'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_hunter_swiftstrike.jpg'],
+                    self::SPEC_MAGE_ARCANE         => ['name' => __('Arcane'),        'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_holy_magicalsentry.jpg'],
+                    self::SPEC_MAGE_FIRE           => ['name' => __('Fire'),          'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_fire_firebolt02.jpg'],
+                    self::SPEC_MAGE_FROST          => ['name' => __('Frost'),         'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_frost_frostbolt02.jpg'],
+                    self::SPEC_PALADIN_COMBAT      => ['name' => __('Retribution'),   'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_holy_auraoflight.jpg'],
+                    self::SPEC_PALADIN_HOLY        => ['name' => __('Holy'),          'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_holy_holybolt.jpg'],
+                    self::SPEC_PALADIN_PROTECTION  => ['name' => __('Protection'),    'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_TANK, 'icon' => 'spell_holy_devotionaura.jpg'],
+                    self::SPEC_PRIEST_DISCIPLINE   => ['name' => __('Discipline'),    'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_holy_wordfortitude.jpg'],
+                    self::SPEC_PRIEST_HOLY         => ['name' => __('Holy'),          'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_holy_holybolt.jpgg'],
+                    self::SPEC_PRIEST_SHADOW       => ['name' => __('Shadow'),        'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_shadow_shadowwordpain.jpg'],
+                    self::SPEC_ROGUE_ASSASSIN      => ['name' => __('Assassination'), 'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_rogue_eviscerate.jpg'],
+                    self::SPEC_ROGUE_COMBAT        => ['name' => __('Combat'),        'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_backstab.jpg'],
+                    self::SPEC_ROGUE_SUBTLETY      => ['name' => __('Subtlety'),      'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_stealth.jpg'],
+                    self::SPEC_SHAMAN_ELEMENTAL    => ['name' => __('Elemental'),     'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_nature_lightning.jpg'],
+                    self::SPEC_SHAMAN_ENHANCE      => ['name' => __('Enhancement'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_nature_lightningshield.jpg'],
+                    self::SPEC_SHAMAN_RESTO        => ['name' => __('Restoration'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spell_nature_magicimmunity.jpg'],
+                    self::SPEC_WARLOCK_AFFLICTION  => ['name' => __('Affliction'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_shadow_deathcoil.jpg'],
+                    self::SPEC_WARLOCK_DESTRO      => ['name' => __('Destruction'),   'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_shadow_rainoffire.jpg'],
+                    self::SPEC_WARLOCK_DEMON       => ['name' => __('Demonology'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spell_shadow_metamorphosis.jpg'],
+                    self::SPEC_WARRIOR_ARMS        => ['name' => __('Arms'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_rogue_eviscerate.jpg'],
+                    self::SPEC_WARRIOR_FURY        => ['name' => __('Fury'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'ability_warrior_innerrage.jpg'],
+                    self::SPEC_WARRIOR_PROT        => ['name' => __('Protection'),    'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_TANK, 'icon' => 'inv_shield_06.jpg'],
+                ];
+                break;
+            default: // WoTLK
+                return [
+                    self::SPEC_DEATH_KNIGHT_BLOOD  => ['name' => __('Blood'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spell_deathknight_bloodpresence.jpg'],
+                    self::SPEC_DEATH_KNIGHT_FROST  => ['name' => __('Frost'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spell_deathknight_frostpresence.jpg'],
+                    self::SPEC_DEATH_KNIGHT_UNHOLY => ['name' => __('Unholy'),        'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spell_deathknight_unholypresence.jpg'],
+                    self::SPEC_DRUID_BALANCE       => ['name' => __('Balance'),       'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_nature_starfall.jpg'],
+                    self::SPEC_DRUID_FERAL         => ['name' => __('Feral'),         'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_racial_bearform.jpg'],
+                    self::SPEC_DRUID_RESTO         => ['name' => __('Restoration'),   'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spell_nature_healingtouch.jpg'],
+                    self::SPEC_HUNTER_BEAST        => ['name' => __('Beast'),         'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_hunter_beasttaming.jpg'],
+                    self::SPEC_HUNTER_MARKSMAN     => ['name' => __('Marksmanship'),  'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_marksmanship.jpg'],
+                    // self::SPEC_HUNTER_CUNNING      => ['name' => __('Cunning'),       'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_hunter_beasttaming.jpg'],
+                    // self::SPEC_HUNTER_FEROCITY     => ['name' => __('Ferocity'),      'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_hunter_beasttaming.jpg'],
+                    // self::SPEC_HUNTER_TENACTIY     => ['name' => __('Tenacity'),      'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_hunter_beasttaming.jpg'],
+                    self::SPEC_HUNTER_SURVIVAL     => ['name' => __('Survival'),      'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_hunter_swiftstrike.jpg'],
+                    self::SPEC_MAGE_ARCANE         => ['name' => __('Arcane'),        'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_holy_magicalsentry.jpg'],
+                    self::SPEC_MAGE_FIRE           => ['name' => __('Fire'),          'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_fire_firebolt02.jpg'],
+                    self::SPEC_MAGE_FROST          => ['name' => __('Frost'),         'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_frost_frostbolt02.jpg'],
+                    self::SPEC_PALADIN_COMBAT      => ['name' => __('Retribution'),   'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_holy_auraoflight.jpg'],
+                    self::SPEC_PALADIN_HOLY        => ['name' => __('Holy'),          'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spell_holy_holybolt.jpg'],
+                    self::SPEC_PALADIN_PROTECTION  => ['name' => __('Protection'),    'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_TANK,     'icon' => 'spell_holy_devotionaura.jpg'],
+                    self::SPEC_PRIEST_DISCIPLINE   => ['name' => __('Discipline'),    'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spell_holy_wordfortitude.jpg'],
+                    self::SPEC_PRIEST_HOLY         => ['name' => __('Holy'),          'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spell_holy_holybolt.jpgg'],
+                    self::SPEC_PRIEST_SHADOW       => ['name' => __('Shadow'),        'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_shadow_shadowwordpain.jpg'],
+                    self::SPEC_ROGUE_ASSASSIN      => ['name' => __('Assassination'), 'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_rogue_eviscerate.jpg'],
+                    self::SPEC_ROGUE_COMBAT        => ['name' => __('Combat'),        'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_backstab.jpg'],
+                    self::SPEC_ROGUE_SUBTLETY      => ['name' => __('Subtlety'),      'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_stealth.jpg'],
+                    self::SPEC_SHAMAN_ELEMENTAL    => ['name' => __('Elemental'),     'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_nature_lightning.jpg'],
+                    self::SPEC_SHAMAN_ENHANCE      => ['name' => __('Enhancement'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_nature_lightningshield.jpg'],
+                    self::SPEC_SHAMAN_RESTO        => ['name' => __('Restoration'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spell_nature_magicimmunity.jpg'],
+                    self::SPEC_WARLOCK_AFFLICTION  => ['name' => __('Affliction'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_shadow_deathcoil.jpg'],
+                    self::SPEC_WARLOCK_DESTRO      => ['name' => __('Destruction'),   'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_shadow_rainoffire.jpg'],
+                    self::SPEC_WARLOCK_DEMON       => ['name' => __('Demonology'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spell_shadow_metamorphosis.jpg'],
+                    self::SPEC_WARRIOR_ARMS        => ['name' => __('Arms'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_rogue_eviscerate.jpg'],
+                    self::SPEC_WARRIOR_FURY        => ['name' => __('Fury'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_warrior_innerrage.jpg'],
+                    self::SPEC_WARRIOR_PROT        => ['name' => __('Protection'),    'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_TANK,     'icon' => 'inv_shield_06.jpg'],
+                ];
                 break;
         }
     }

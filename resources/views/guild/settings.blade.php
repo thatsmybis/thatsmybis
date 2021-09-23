@@ -242,6 +242,7 @@
                                     </span>
                                 </label>
                                 @php
+                                    // Support for custom decay days
                                     $found = false;
 
                                     $rates = [

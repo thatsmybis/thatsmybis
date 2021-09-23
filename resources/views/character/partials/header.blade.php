@@ -33,8 +33,9 @@
                     </li>
                 @endif
                 <li class="list-inline-item">
-                    {{ $character->spec  ? $character->spec : '' }}
-                    {{ $character->class ? $character->class : '' }}
+                    {{ $character->archetype ? $character->display_archetype : '' }}
+                    {{ $character->spec  ? $character->display_spec : '' }}
+                    {{ $character->class ? $character->display_class : '' }}
                 </li>
             </ul>
         </li>

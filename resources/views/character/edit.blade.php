@@ -12,7 +12,10 @@
                     </div>
                 @else
                     <div class="col-12 pt-2 mb-2">
-                        <h1 class="font-weight-medium ">{{ __("Create a Character") }}</h1>
+                        <h1 class="font-weight-medium text-{{ getExpansionColor($guild->expansion_id) }}">
+                            <span class="text-muted fas fa-fw fa-user"></span>
+                            {{ __("Create a Character") }}
+                        </h1>
                     </div>
                 @endif
             </div>
@@ -33,7 +36,7 @@
                 <input hidden name="create_more" value="{{ $createMore ? 1 : 0 }}" />
 
                 <div class="row">
-                    <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                    <div class="col-12 pt-2 pb-1 mb-4 bg-light rounded">
                         <div class="row mb-4">
                             <div class="col-sm-6 col-12">
                                 <div class="form-group">
@@ -53,7 +56,8 @@
                             @if ($currentMember->hasPermission('edit.characters'))
                                 <div class="col-sm-6 col-12">
                                     <div class="form-group">
-                                        <label for="member_id" class="font-weight-bold">
+                                        <label for="member_id" class="font-weight-normal">
+                                            <span class="text-muted fas fa-fw fa-user"></span>
                                             {{ __("Guild Member") }}
                                         </label>
                                         <div class="form-group">
@@ -80,6 +84,7 @@
                             <div class="col-sm-6 col-12">
                                 <div class="form-group">
                                     <label for="class" class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-swords"></span>
                                         {{ __("Class") }}
                                     </label>
                                     <div class="form-group">
@@ -89,8 +94,8 @@
                                             </option>
 
                                             @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
-                                                <option value="{{ $class }}" class="text-{{ strtolower($key) }}-important"
-                                                    {{ old('class') ? (old('class') == $class ? 'selected' : '') : ($character && $character->class == $class ? 'selected' : '') }}>
+                                                <option value="{{ $key }}" class="text-{{ strtolower($key) }}-important"
+                                                    {{ old('class') ? (old('class') == $key ? 'selected' : '') : ($character && $character->class == $key ? 'selected' : '') }}>
                                                     {{ $class }}
                                                 </option>
                                             @endforeach
@@ -101,15 +106,82 @@
 
                             <div class="col-sm-6 col-12">
                                 <div class="form-group">
+                                    <label for="archetype" class="font-weight-bold">
+                                        {{ __("Role") }}
+                                    </label>
+                                    <div class="form-group">
+                                        <select name="archetype" class="form-control dark">
+                                            <option value="" selected>
+                                                —
+                                            </option>
+                                            @foreach (App\Character::archetypes() as $key => $archetype)
+                                                <option value="{{ $key }}" {{ (old('archetype') && old('archetype') == $key) || ($character && $character->archetype == $key) ? 'selected' : '' }}>
+                                                    {{ $archetype }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-12">
+                                <div class="form-group">
                                     <label for="spec" class="font-weight-bold">
+                                        <span class="text-muted fas fa-fw fa-hat-wizard"></span>
                                         {{ __("Spec") }}
                                     </label>
-                                    <input name="spec"
+                                    <div class="form-group">
+                                        @php
+                                            // Support for custom specs
+                                            $found = false;
+                                            $oldSpec = old('spec') ? old('spec') : ($character ? $character->spec : null);
+                                        @endphp
+                                        <select name="spec" class="form-control dark" {{ !$oldSpec ? 'disabled' : '' }}>
+                                            <option value="" selected>
+                                                —
+                                            </option>
+                                            @foreach (App\Character::specs($guild->expansion_id) as $key => $spec)
+                                                @php
+                                                    $isOldSpec = $oldSpec == $key;
+                                                    if ($isOldSpec) {
+                                                        $found = true;
+                                                    }
+                                                @endphp
+                                                <option value="{{ $key }}"
+                                                    data-class="{{ $spec['class'] }}"
+                                                    data-archetype="{{ $spec['archetype'] }}"
+                                                    data-icon="{{ $spec['icon'] }}"
+                                                    {{ $isOldSpec ? 'selected' : '' }}>
+                                                    {{ $spec['name'] }}
+                                                </option>
+                                            @endforeach
+                                            @if (!$found && $oldSpec)
+                                                <option value="{{ $oldSpec }}" selected>
+                                                    {{ $oldSpec }}
+                                                </option>
+                                            @endif
+                                        </select>
+                                        <input class="selectInput"" style="display:none;" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm-6 col-12">
+                                <div class="form-group">
+                                    <label for="spec_label" class="font-weight-normal text-muted">
+                                        {{ __("Spec Label") }}
+                                        <span class="text-muted small">{{ __("optional") }}</span>
+                                    </label>
+                                    @php
+                                        $oldSpecLabel = old('spec_label') ? old('spec_label') : ($character ? $character->spec_label : '');
+                                    @endphp
+                                    <input name="spec_label"
+                                        {{ !$oldSpecLabel && !$oldSpec ? 'disabled' : '' }}
                                         maxlength="50"
                                         type="text"
                                         class="form-control dark"
-                                        placeholder="eg. Fury Prot"
-                                        value="{{ old('spec') ? old('spec') : ($character ? $character->spec : '') }}" />
+                                        placeholder="{{ __('eg. Boomkin') }}"
+                                        value="{{ $oldSpecLabel }}" />
                                 </div>
                             </div>
                         </div>
@@ -117,7 +189,7 @@
                         <div class="row">
                             <div class="col-sm-6 col-12">
                                 <div class="form-group">
-                                    <label for="race" class="font-weight-bold">
+                                    <label for="race" class="font-weight-normal">
                                         {{ __("Race") }}
                                     </label>
                                     <div class="form-group">
@@ -126,9 +198,9 @@
                                                 —
                                             </option>
 
-                                            @foreach (App\Character::races($guild->expansion_id) as $race)
-                                                <option value="{{ $race }}"
-                                                    {{ old('race') ? (old('race') == $race ? 'selected' : '') : ($character && $character->race == $race ? 'selected' : '') }}>
+                                            @foreach (App\Character::races($guild->expansion_id) as $key => $race)
+                                                <option value="{{ $key }}"
+                                                    {{ old('race') ? (old('race') == $key ? 'selected' : '') : ($character && $character->race == $key ? 'selected' : '') }}>
                                                     {{ $race }}
                                                 </option>
                                             @endforeach
@@ -139,7 +211,7 @@
 
                             <div class="col-sm-3 col-6">
                                 <div class="form-group">
-                                    <label for="level" class="font-weight-bold">
+                                    <label for="level" class="text-muted font-weight-normal">
                                         {{ __("Level") }}
                                     </label>
                                     <input name="level"
@@ -155,7 +227,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
+                <div class="row mb-4 pb-1 pt-2 bg-light rounded">
                     <div class="col-sm-6 col-12">
                         <div class="form-group">
                             <label for="raid_group_id" class="font-weight-bold">
@@ -282,7 +354,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
+                <div class="row mb-4 pb-1 pt-2 bg-light rounded">
                     <div class="col-12">
                         <div class="row">
                             <div class="col-sm-6 col-12">
@@ -297,9 +369,9 @@
                                                 —
                                             </option>
 
-                                            @foreach (App\Character::professions($guild->expansion_id) as $profession)
-                                                <option value="{{ $profession }}"
-                                                    {{ old('profession_1') ? (old('profession_1') == $profession ? 'selected' : '') : ($character && $character->profession_1 == $profession ? 'selected' : '') }}>
+                                            @foreach (App\Character::professions($guild->expansion_id) as $key => $profession)
+                                                <option value="{{ $key }}"
+                                                    {{ old('profession_1') ? (old('profession_1') == $key ? 'selected' : '') : ($character && $character->profession_1 == $key ? 'selected' : '') }}>
                                                     {{ $profession }}
                                                 </option>
                                             @endforeach
@@ -318,9 +390,9 @@
                                                 —
                                             </option>
 
-                                            @foreach (App\Character::professions($guild->expansion_id) as $profession)
-                                                <option value="{{ $profession }}"
-                                                    {{ old('profession_2') ? (old('profession_2') == $profession ? 'selected' : '') : ($character && $character->profession_2 == $profession ? 'selected' : '') }}>
+                                            @foreach (App\Character::professions($guild->expansion_id) as $key => $profession)
+                                                <option value="{{ $key }}"
+                                                    {{ old('profession_2') ? (old('profession_2') == $key ? 'selected' : '') : ($character && $character->profession_2 == $key ? 'selected' : '') }}>
                                                     {{ $profession }}
                                                 </option>
                                             @endforeach
@@ -368,7 +440,7 @@
                     </div>
                 </div>
 
-                <div class="row mb-3 pb-1 pt-2 bg-light rounded">
+                <div class="row mb-4 pb-1 pt-2 bg-light rounded">
                     <div class="col-12">
                         <div class="form-group">
                             <label for="public_note" class="font-weight-bold">
@@ -418,7 +490,8 @@
                         @endif
                     --}}
                 </div>
-                <div class="row mb-3 pt-2 pb-1 bg-light rounded">
+
+                <div class="row mb-4 pt-2 pb-1 bg-light rounded">
                     @if ($character && $character->member)
                         <div class="col-12">
                             <div class="form-group">
@@ -470,6 +543,7 @@
                         </div>
                     @endif
                 </div>
+
                 <div class="form-group">
                     <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
                 </div>
@@ -481,6 +555,9 @@
 
 @section('scripts')
 <script>
-    $(document).ready(() => warnBeforeLeaving("#editForm"));
+    $(document).ready(function() {
+        warnBeforeLeaving("#editForm")
+    });
 </script>
+<script src="{{ loadScript('characterEdit.js') }}"></script>
 @endsection

@@ -28,11 +28,13 @@ class CharacterController extends Controller
             'member_id'     => 'nullable|integer|exists:members,id',
             'name'          => 'required|string|min:2|max:32',
             'level'         => 'nullable|integer|min:1|max:' . $guild->getMaxLevel(),
-            'race'          => ['nullable', 'string', Rule::in(Character::races($guild->expansion_id))],
-            'class'         => ['nullable', 'string', Rule::in(Character::classes($guild->expansion_id))],
-            'spec'          => 'nullable|string|max:50',
-            'profession_1'  => ['nullable', 'string', 'different:profession_2', Rule::in(Character::professions($guild->expansion_id))],
-            'profession_2'  => ['nullable', 'string', 'different:profession_1', Rule::in(Character::professions($guild->expansion_id))],
+            'race'          => ['nullable', 'string', Rule::in(array_keys(Character::races($guild->expansion_id)))],
+            'class'         => ['nullable', 'string', Rule::in(array_keys(Character::classes($guild->expansion_id)))],
+            'spec'          => ['nullable', 'string', Rule::in(array_keys(Character::specs($guild->expansion_id)))],
+            'spec_label'    => 'nullable|string|min:1|max:50',
+            'archetype'     => ['nullable', 'string', Rule::in(array_keys(Character::archetypes()))],
+            'profession_1'  => ['nullable', 'string', 'different:profession_2', Rule::in(array_keys(Character::professions($guild->expansion_id)))],
+            'profession_2'  => ['nullable', 'string', 'different:profession_1', Rule::in(array_keys(Character::professions($guild->expansion_id)))],
             'rank'          => 'nullable|integer|min:1|max:14',
             'rank_goal'     => 'nullable|integer|min:1|max:14',
             'raid_group_id' => [
@@ -110,6 +112,8 @@ class CharacterController extends Controller
         $createValues['race']          = request()->input('race');
         $createValues['class']         = request()->input('class');
         $createValues['spec']          = request()->input('spec');
+        $updateValues['spec_label']    = request()->input('spec_label');
+        $createValues['archetype']     = request()->input('archetype');
         $createValues['profession_1']  = request()->input('profession_1');
         $createValues['profession_2']  = request()->input('profession_2');
         $createValues['rank']          = request()->input('rank');
@@ -439,18 +443,20 @@ class CharacterController extends Controller
             $updateValues['officer_note'] = request()->input('officer_note');
         }
 
-        $updateValues['name']          = request()->input('name');
-        $updateValues['slug']          = slug(request()->input('name'));
-        $updateValues['level']         = request()->input('level');
-        $updateValues['race']          = request()->input('race');
-        $updateValues['class']         = request()->input('class');
-        $updateValues['spec']          = request()->input('spec');
-        $updateValues['profession_1']  = request()->input('profession_1');
-        $updateValues['profession_2']  = request()->input('profession_2');
-        $updateValues['rank']          = request()->input('rank');
-        $updateValues['rank_goal']     = request()->input('rank_goal');
-        $updateValues['public_note']   = request()->input('public_note');
-        $updateValues['is_alt']        = (request()->input('is_alt') == "1" ? true : false);
+        $updateValues['name']         = request()->input('name');
+        $updateValues['slug']         = slug(request()->input('name'));
+        $updateValues['level']        = request()->input('level');
+        $updateValues['race']         = request()->input('race');
+        $updateValues['class']        = request()->input('class');
+        $updateValues['spec']         = request()->input('spec');
+        $updateValues['spec_label']   = request()->input('spec_label');
+        $updateValues['archetype']    = request()->input('archetype');
+        $updateValues['profession_1'] = request()->input('profession_1');
+        $updateValues['profession_2'] = request()->input('profession_2');
+        $updateValues['rank']         = request()->input('rank');
+        $updateValues['rank_goal']    = request()->input('rank_goal');
+        $updateValues['public_note']  = request()->input('public_note');
+        $updateValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
 
         // Cannot make inactive if already inactive
         if (($currentMember->hasPermission('inactive.characters') || $currentMember->id == $character->member_id) &&
