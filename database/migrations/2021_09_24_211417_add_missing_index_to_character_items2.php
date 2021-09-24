@@ -13,7 +13,7 @@ class AddMissingIndexToCharacterItems2 extends Migration
      */
     public function up()
     {
-        Schema::table('character_items2', function (Blueprint $table) {
+        Schema::table('character_items', function (Blueprint $table) {
             $table->index('list_number');
         });
         Schema::table('guilds', function (Blueprint $table) {
