@@ -127,7 +127,7 @@ class LootController extends Controller
                         'items.expansion_id',
                         'instances.short_name as instance_name',
                         DB::raw("'{$class}' AS `class`"),
-                        DB::raw("count(distinct character_items.id) AS `count`")
+                        DB::raw("count(character_items.id) AS `count`")
                     ])
                     ->join('item_item_sources', function ($join) {
                         $join->on('item_item_sources.item_id', 'items.item_id');
