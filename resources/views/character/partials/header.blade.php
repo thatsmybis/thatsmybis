@@ -2,7 +2,7 @@
     <li>
         @include('character/partials/headerTitle')
     </li>
-    @if ($character->raid_group_id || $character->class || $character->is_alt || $character->spec)
+    @if ($character->raid_group_id || $character->display_class || $character->is_alt || $character->display_spec || $character->display_archetype)
         <li>
             <ul class="list-inline">
                 @if ($character->is_alt)
@@ -33,9 +33,9 @@
                     </li>
                 @endif
                 <li class="list-inline-item">
-                    {{ $character->archetype ? $character->display_archetype : '' }}
-                    {{ $character->spec  ? $character->display_spec : '' }}
-                    {{ $character->class ? $character->display_class : '' }}
+                    {{ $character->display_archetype ? $character->display_archetype : '' }}
+                    {{ $character->display_spec ? $character->display_spec : '' }}
+                    {{ $character->display_class ? $character->display_class : '' }}
                 </li>
             </ul>
         </li>

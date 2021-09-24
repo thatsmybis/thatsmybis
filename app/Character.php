@@ -417,7 +417,7 @@ class Character extends BaseModel
 
     public function getDisplaySpecAttribute()
     {
-        return $this->spec_label ? $this->spec_label : self::specs()[$this->spec]['name'];
+        return $this->spec_label ? $this->spec_label : ($this->spec ? self::specs()[$this->spec]['name'] : null);
     }
 
     static public function archetypes() {
