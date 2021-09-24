@@ -152,9 +152,9 @@ class PrioController extends Controller
                         ->where([
                             'characters.guild_id' => $guild->id,
                             'is_received'         => 0,
-                            'list_number'         => DB::raw('wishlist_guilds.current_wishlist_number'),
+                            'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                         ])
-                        ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
+                        ->whereRaw("(`characters`.`raid_group_id` = {$raidGroup->id} OR `character_raid_groups`.`raid_group_id` = {$raidGroup->id})")
                         ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
                         ->orderBy('character_items.order');
                 },
@@ -168,9 +168,9 @@ class PrioController extends Controller
                                 ->where([
                                     'characters.guild_id' => $guild->id,
                                     'is_received'         => 0,
-                                    'list_number'         => DB::raw('wishlist_guilds.current_wishlist_number'),
+                                    'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                                 ])
-                                ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
+                                ->whereRaw("(`characters`.`raid_group_id` = {$raidGroup->id} OR `character_raid_groups`.`raid_group_id` = {$raidGroup->id})")
                                 ->whereNull('characters.inactive_at')
                                 ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
                                 ->orderBy('character_items.order');

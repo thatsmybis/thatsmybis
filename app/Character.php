@@ -344,7 +344,7 @@ class Character extends BaseModel
 
     public function wishlist() {
         return $this->allWishlists()
-            ->where(['character_items.list_number' => DB::raw('wishlist_guilds.current_wishlist_number')]);
+            ->where(['character_items.list_number' => DB::raw('`wishlist_guilds`.`current_wishlist_number`')]);
     }
 
     /**
