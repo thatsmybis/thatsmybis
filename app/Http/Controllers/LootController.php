@@ -159,11 +159,6 @@ class LootController extends Controller
 
     public function showWishlistStatsInGuild($guildId, $guildSlug, $class = null) {
         $guild = request()->get('guild');
-        if (!$guild) {
-            $guild = Guild::select('expansion_id')->where('id', $guildId)->first();
-
-            return redirect()->route('loot.wishlist', ['expansionName' => getExpansionAbbr($guild->expansion_id, true), 'class' => $class]);
-        }
 
         return $this->showWishlistStats($guild->expansion_id);
     }
