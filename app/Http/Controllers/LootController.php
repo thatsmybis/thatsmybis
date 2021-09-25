@@ -160,7 +160,7 @@ class LootController extends Controller
     public function showWishlistStatsInGuild($guildId, $guildSlug, $class = null) {
         $guild = request()->get('guild');
 
-        return $this->showWishlistStats($guild->expansion_id);
+        return $this->showWishlistStats($guild->expansion_id, $class);
     }
 
 
