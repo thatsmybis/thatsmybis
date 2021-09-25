@@ -401,10 +401,44 @@ body {
     max-width: 500px;
 }
 
-.class-icon {
+/*.class-icon {
     border-radius: 50%;
     vertical-align: bottom;
     max-height: 32px;
+}*/
+
+.class-icon {
+    background-position: center;
+    background-size: cover;
+    border: 0;
+    border-radius: 4px;
+    box-shadow: 0 0 5px rgba(0,0,0,0.5);
+    box-sizing: content-box;
+    /*cursor: pointer;*/
+    /*margin: 5px 0;*/
+    /*padding: 0;*/
+}
+
+.class-icon.inline {
+    display: inline-box;
+    display: -webkit-inline-box;
+}
+
+.class-icon.medium {
+    height: 28px;
+    width: 28px;
+}
+
+.class-icon.medium.inline {
+    margin: 0 5px -4px 5px;
+}
+
+.class-icon.large {
+    height: 36px;
+    width: 36px;
+}
+
+.class-icon-large {
 }
 
 .nav-item.active {
@@ -419,6 +453,21 @@ body {
     .navbar-brand-guild {
         font-size: 1.25vmax;
     }
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #8e959b;
+}
+
+.nav-tabs .nav-link.active {
+    border-color: rgba(0,0,0,0.0);
+    color: #fff;
+    font-weight: 700;
+    background-color: rgba(0,0,0,0.0);
+}
+
+.nav-tabs .nav-link:hover {
+    color: #fff;
 }
 
 ul.no-bullet, ol.no-bullet, li.no-bullet  {

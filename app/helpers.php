@@ -1,5 +1,25 @@
 <?php
 
+/**
+ * https://stackoverflow.com/a/18781630/1196517
+ *
+ * @param array      $array
+ * @param int|string $position
+ * @param mixed      $insert
+ */
+function array_insert(&$array, $position, $insert) {
+    if (is_int($position)) {
+        array_splice($array, $position, 0, $insert);
+    } else {
+        $pos   = array_search($position, array_keys($array));
+        $array = array_merge(
+            array_slice($array, 0, $pos),
+            $insert,
+            array_slice($array, $pos)
+        );
+    }
+}
+
 // Based on attendance percentage, return a CSS color class
 function getAttendanceColor($percentage = 0) {
     $color = '';

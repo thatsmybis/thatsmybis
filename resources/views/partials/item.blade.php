@@ -20,7 +20,7 @@ if (isset($guild) && $guild->expansion_id) {
     }
 } else if (isset($item) && isset($item->expansion_id)) {
     if ($item->expansion_id === 1) {
-    $wowheadSubdomain = 'classic';
+        $wowheadSubdomain = 'classic';
     } else if ($item->expansion_id === 2) {
         $wowheadSubdomain = 'tbc';
     }

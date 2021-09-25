@@ -82,30 +82,59 @@ class LootController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showWishlistStats($expansionId = null) {
+    public function showWishlistStats($expansionName = null) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        if ($expansionId == 'classic') {
+        $currentMember->load('characters');
+
+        $expansionId = null;
+
+        if ($expansionName == 'classic' || $expansionName === 1) {
             $expansionId = 1;
-        } else if ($expansionId == 'tbc') {
+        } else if ($expansionName == 'tbc' || $expansionName === 2) {
             $expansionId = 2;
-        } else if (!$expansionId) {
+        } else if ($expansionName == 'wotlk' || $expansionName === 3) {
+            $expansionId = 3;
+        } else {
             $expansionId = 2;
         }
 
-        $wishlists = array_fill_keys(Character::classes($expansionId), null);
+        $archetypes = Character::archetypes();
+        $classes = Character::classes($expansionId);
 
-        foreach ($wishlists as $key => $value) {
-            $wishlists[$key] = self::getWishlistStats($key, $expansionId);
-        }
+        $specsWithItems = Cache::remember("wishlist_stats:expansion_id:{$expansionId}",
+            env('PUBLIC_EXPORT_CACHE_SECONDS', 86400),
+            function () use ($expansionId, $archetypes) {
+            $items = self::getWishlistStats($expansionId);
+
+            // Get specs as objects
+            $specs = collect(Character::specs($expansionId))
+                ->map(function($spec){ return (object)$spec; });
+
+            foreach ($specs as &$spec) {
+                $spec->items = $items->where('spec', $spec->name);
+
+                $spec->archetypes = collect();
+                foreach ($archetypes as $archetype) {
+                    $spec->archetypes->put(
+                        strtolower($archetype),
+                        $items->where('spec', $spec->name)->where('archetype', $archetype)->sum('wishlist_count')
+                    );
+                }
+            }
+
+            return $specs;
+        });
 
         return view('loot.wishlistStats', [
-            'wishlists'       => $wishlists,
-            'currentMember'   => $currentMember,
-            'expansionId'     => $expansionId,
-            'guild'           => $guild,
-            'maxItems'        => self::MAX_LIST_ITEMS,
+            'archetypes'     => $archetypes,
+            'classes'        => $classes,
+            'currentMember'  => $currentMember,
+            'expansionId'    => $expansionId,
+            'guild'          => $guild,
+            'maxItems'       => self::MAX_LIST_ITEMS,
+            'specsWithItems' => $specsWithItems,
         ]);
     }
 
@@ -115,53 +144,66 @@ class LootController extends Controller
     }
 
 
-    public static function getWishlistStats($class, $expansionId) {
-        $validClasses = Character::classes($expansionId);
-
-        if (in_array(strtolower($class), array_map('strtolower', $validClasses))) {
-            $items = Cache::remember("wishlist_picks:class:{$class}:expansion_id:{$expansionId}", env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($expansionId, $class) {
-                return Item::select([
-                        'items.id',
-                        'items.item_id',
-                        'items.name',
-                        'items.expansion_id',
-                        'instances.short_name as instance_name',
-                        DB::raw("'{$class}' AS `class`"),
-                        DB::raw("count(character_items.id) AS `count`")
-                    ])
-                    ->join('item_item_sources', function ($join) {
-                        $join->on('item_item_sources.item_id', 'items.item_id');
-                    })
-                    ->join('item_sources', function ($join) {
-                        $join->on('item_sources.id', 'item_item_sources.item_source_id');
-                    })
-                    ->join('instances', function ($join) {
-                        $join->on('instances.id', 'item_sources.instance_id');
-                    })
-                    ->join('character_items', function ($join) {
-                        $join->on('character_items.item_id', 'items.item_id');
-                    })
-                    ->join('characters', function ($join) {
-                        $join->on('characters.id', 'character_items.character_id');
-                    })
-                    ->join('guilds', function ($join) {
-                        $join->on('guilds.id', 'characters.guild_id');
-                    })
-                    ->where([
-                        ['character_items.type', Item::TYPE_WISHLIST],
-                        ['characters.class', $class],
-                        ['guilds.expansion_id', $expansionId],
-                        ['items.expansion_id', $expansionId],
-                    ])
-                    ->groupBy('items.item_id')
-                    ->orderBy('count', 'desc')
-                    ->limit(self::MAX_LIST_ITEMS)
-                    ->get();
-            });
-        } else {
-            $items = collect();
-        }
-
-        return $items;
+    public static function getWishlistStats($expansionId) {
+        return collect(DB::select(
+            DB::raw(
+                "SELECT
+                    `class`,
+                    `spec`,
+                    `archetype`,
+                    `name`,
+                    `quality`,
+                    {$expansionId} AS 'expansion_id',
+                    `item_id`,
+                    `wishlist_count`,
+                    `instance_short_name`
+                FROM
+                (
+                    SELECT
+                        `class`,
+                        `spec`,
+                        `archetype`,
+                        `name`,
+                        `quality`,
+                        `item_id`,
+                        `wishlist_count`,
+                        `instance_short_name`,
+                        (@rowNumber:=if(@prev = CONCAT(`class`, `spec`, `archetype`), @rowNumber +1, 1)) as rowNumber,
+                        @prev:= CONCAT(`class`, `spec`, `archetype`)
+                        FROM
+                        (
+                            SELECT
+                                c.`class`,
+                                IFNULL(c.`spec`, '') AS 'spec',
+                                IFNULL(c.`archetype`, '') AS 'archetype',
+                                i.`name` AS 'name',
+                                i.`quality` AS `quality`,
+                                i.`item_id` AS 'item_id',
+                                COUNT(ci.`id`) as 'wishlist_count',
+                                `instances`.`short_name` AS 'instance_short_name'
+                            FROM `items` i
+                            JOIN `character_items` ci ON ci.`item_id` = i.`item_id`
+                            JOIN `characters` c ON c.`id` = ci.`character_id`
+                            JOIN `guilds` g ON g.`id` = c.`guild_id`
+                            LEFT JOIN `item_item_sources` iis ON iis.`item_id` = i.`item_id`
+                            LEFT JOIN `item_sources` isource ON isource.`id` = iis.`item_source_id`
+                            LEFT JOIN `instances` ON `instances`.`id` = isource.`instance_id`
+                            WHERE
+                                g.`expansion_id` = :expansionId
+                                AND ci.`type` = :listType
+                                AND c.`class` IS NOT NULL
+                            GROUP BY i.`item_id`, c.`spec`, c.`class`, c.`archetype`
+                            ORDER BY c.`class` ASC, `spec` ASC, `archetype` ASC, `wishlist_count` DESC, `name`
+                        ) AS wishlistData
+                        JOIN (SELECT @prev:=NULL, @rowNumber :=0) as variables
+                ) AS groupedWishlists
+                WHERE rowNumber <= :maxRows"
+            ),
+            [
+                'listType'    => Item::TYPE_WISHLIST,
+                'expansionId' => $expansionId,
+                'maxRows'     => self::MAX_LIST_ITEMS
+            ]
+        ));
     }
 }
