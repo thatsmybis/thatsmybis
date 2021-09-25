@@ -86,8 +86,6 @@ class LootController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $currentMember->load('characters');
-
         $expansionId = null;
 
         if ($expansionName == 'classic' || $expansionName === 1) {
@@ -103,29 +101,31 @@ class LootController extends Controller
         $archetypes = Character::archetypes();
         $classes = Character::classes($expansionId);
 
-        $specsWithItems = Cache::remember("wishlist_stats:expansion_id:{$expansionId}",
+        $specsWithItems = Cache::remember(
+            "wishlist_stats:expansion_id:{$expansionId}",
             env('PUBLIC_EXPORT_CACHE_SECONDS', 86400),
             function () use ($expansionId, $archetypes) {
-            $items = self::getWishlistStats($expansionId);
+                $items = self::getWishlistStats($expansionId);
 
-            // Get specs as objects
-            $specs = collect(Character::specs($expansionId))
-                ->map(function($spec){ return (object)$spec; });
+                // Get specs as objects
+                $specs = collect(Character::specs($expansionId))
+                    ->map(function($spec){ return (object)$spec; });
 
-            foreach ($specs as &$spec) {
-                $spec->items = $items->where('spec', $spec->name);
+                foreach ($specs as &$spec) {
+                    $spec->items = $items->where('spec', $spec->name);
 
-                $spec->archetypes = collect();
-                foreach ($archetypes as $archetype) {
-                    $spec->archetypes->put(
-                        strtolower($archetype),
-                        $items->where('spec', $spec->name)->where('archetype', $archetype)->sum('wishlist_count')
-                    );
+                    $spec->archetypes = collect();
+                    foreach ($archetypes as $archetype) {
+                        $spec->archetypes->put(
+                            strtolower($archetype),
+                            $items->where('spec', $spec->name)->where('archetype', $archetype)->sum('wishlist_count')
+                        );
+                    }
                 }
-            }
 
-            return $specs;
-        });
+                return $specs;
+            }
+        );
 
         return view('loot.wishlistStats', [
             'archetypes'     => $archetypes,

@@ -56,7 +56,7 @@
                             @endphp
                             <div class="pt-3 pb-3 col-lg-4 col-md-6 col-12">
                                 <h3 class="text-{{ strtolower($spec->class) }} font-weight-medium">
-                                    <div class="class-icon medium inline"
+                                    <div class="spec-icon medium inline"
                                         style="background-image: url(&quot;{{ asset('images/' . $spec->icon) }}&quot;);"></div>
                                     {{ $spec->name }}
                                 </h3>

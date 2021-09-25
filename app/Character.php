@@ -90,7 +90,6 @@ class Character extends BaseModel
     const SPEC_DEATH_KNIGHT_UNHOLY = 'Unholy';
     const SPEC_DRUID_BALANCE       = 'Balance';
     const SPEC_DRUID_FERAL         = 'Feral';
-    const SPEC_DRUID_FERAL_TANK    = 'Feral Tank';
     const SPEC_DRUID_RESTO         = 'Resto (Druid)';
     const SPEC_HUNTER_BEAST        = 'Beast';
     const SPEC_HUNTER_MARKSMAN     = 'Marksman';

@@ -401,44 +401,41 @@ body {
     max-width: 500px;
 }
 
-/*.class-icon {
+.class-icon {
     border-radius: 50%;
     vertical-align: bottom;
     max-height: 32px;
-}*/
+}
 
-.class-icon {
+.spec-icon {
     background-position: center;
     background-size: cover;
     border: 0;
     border-radius: 4px;
     box-shadow: 0 0 5px rgba(0,0,0,0.5);
     box-sizing: content-box;
-    /*cursor: pointer;*/
-    /*margin: 5px 0;*/
-    /*padding: 0;*/
 }
 
-.class-icon.inline {
+.spec-icon.inline {
     display: inline-box;
     display: -webkit-inline-box;
 }
 
-.class-icon.medium {
+.spec-icon.medium {
     height: 28px;
     width: 28px;
 }
 
-.class-icon.medium.inline {
+.spec-icon.medium.inline {
     margin: 0 5px -4px 5px;
 }
 
-.class-icon.large {
+.spec-icon.large {
     height: 36px;
     width: 36px;
 }
 
-.class-icon-large {
+.spec-icon-large {
 }
 
 .nav-item.active {
@@ -455,6 +452,7 @@ body {
     }
 }
 
+/* START bootstrap override */
 .nav-tabs {
     border-bottom: 1px solid #8e959b;
 }
@@ -469,6 +467,7 @@ body {
 .nav-tabs .nav-link:hover {
     color: #fff;
 }
+/* END bootstrap override */
 
 ul.no-bullet, ol.no-bullet, li.no-bullet  {
     list-style-type: none;
