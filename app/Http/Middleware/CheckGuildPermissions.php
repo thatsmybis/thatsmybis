@@ -50,6 +50,11 @@ class CheckGuildPermissions
             $isAdmin = request()->get('isAdmin');
 
             if (!$user) {
+                // Exception for this page; redirect them to the public one
+                if (request()->route()->getName() === 'guild.loot.wishlist') {
+                    return redirect()->route('loot.wishlist', ['expansionName' => getExpansionAbbr($guild->expansion_id, true), 'class' => request()->route('class')]);
+                }
+
                 request()->session()->flash('status', 'You need to be signed in to do that.');
                 return redirect()->route('login');
             }
@@ -65,7 +70,7 @@ class CheckGuildPermissions
             }
 
             // Check if current user is on that guild's Discord
-            // Cache to results
+            // Cache the results
             $discordMember = Cache::remember($cacheKey, env('DISCORD_ROLE_CACHE_SECONDS', 30),
                 function () use ($user, $guild) {
                     try {
@@ -90,6 +95,11 @@ class CheckGuildPermissions
             // Don't do these checks if the member is trying to gquit...
             if (!request()->routeIs('member.showGquit') && !request()->routeIs('member.submitGquit')) {
                 if (!$discordMember && $user->id != $guild->user_id && !$isAdmin) { // Guild owner gets a pass
+                    // Exception for this page; redirect them to the public one
+                    if (request()->route()->getName() === 'guild.loot.wishlist') {
+                        return redirect()->route('loot.wishlist', ['expansionName' => getExpansionAbbr($guild->expansion_id, true), 'class' => request()->route('class')]);
+                    }
+
                     request()->session()->flash('status', 'That Discord server is either missing the ' . env('APP_NAME') . ' bot or we\'re unable to find you on it.');
                     return redirect()->route('home');
                 }
@@ -130,7 +140,7 @@ class CheckGuildPermissions
                 request()->session()->flash('status-danger',  'Your membership has been disabled. To reverse this, an officer would need to access your member page and re-enable it.');
                 return redirect()->route('home');
             }
-
+// dd('this far');
             if (!$currentMember) {
 
                 if ($discordMember) {
