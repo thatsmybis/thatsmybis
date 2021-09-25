@@ -73,14 +73,14 @@ function getExpansionColor($expansionId) {
     }
 }
 
-function getExpansionAbbr($expansionId) {
+function getExpansionAbbr($expansionId, $lowercase = null) {
     switch ($expansionId) {
         case 1:
-            return 'Classic';
+            return $lowercase ? 'classic' : 'Classic';
         case 2:
-            return 'TBC';
+            return $lowercase ? 'tbc' : 'TBC';
         case 3:
-            return 'WoTLK';
+            return $lowercase ? 'wotlk' : 'WoTLK';
         default:
             return '';
     }

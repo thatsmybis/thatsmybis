@@ -35,9 +35,9 @@
 
             <p class="text-5">
                 {{ __("see what items people are wishlisting in") }}
-                <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
+                <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
                 {{ __("and") }}
-                <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
+                <a href="{{ route('loot.wishlist', ['expansionName' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
                 <br>
                 {{ __("view our public") }} <a href="{{ route('loot') }}">{{ __("loot tables") }}</a>
             </p>

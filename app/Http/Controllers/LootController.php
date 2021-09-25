@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\{Character, Instance, Item};
+use App\{Character, Guild, Instance, Item};
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\Rule;
 
 class LootController extends Controller
 {
@@ -82,7 +83,7 @@ class LootController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function showWishlistStats($expansionName = null) {
+    public function showWishlistStats($expansionName = null, $class = null) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -98,14 +99,31 @@ class LootController extends Controller
             $expansionId = 2;
         }
 
-        $archetypes = Character::archetypes();
         $classes = Character::classes($expansionId);
 
+        if (!$guild && !$expansionName) {
+            return redirect()->route('loot.wishlist', ['expansionName' => 'tbc', 'class' => $class]);
+        }
+
+        if (!$class) {
+            $class = array_keys($classes)[0];
+        } else {
+            $class = ucfirst(strtolower($class));
+        }
+
+        $validationRules = [
+            ['class' => ['string', Rule::in(array_keys($classes))]],
+        ];
+
+        $this->validate(request(), $validationRules, []);
+
+        $archetypes = Character::archetypes();
+
         $specsWithItems = Cache::remember(
-            "wishlist_stats:expansion_id:{$expansionId}",
-            env('PUBLIC_EXPORT_CACHE_SECONDS', 86400),
-            function () use ($expansionId, $archetypes) {
-                $items = self::getWishlistStats($expansionId);
+            "wishlist_stats:expansion_id:{$expansionId}:class:{$class}",
+            env('PUBLIC_WISHLIST_CACHE_SECONDS', 259200),
+            function () use ($expansionId, $class, $archetypes) {
+                $items = self::getWishlistStats($expansionId, $class);
 
                 // Get specs as objects
                 $specs = collect(Character::specs($expansionId))
@@ -128,26 +146,35 @@ class LootController extends Controller
         );
 
         return view('loot.wishlistStats', [
-            'archetypes'     => $archetypes,
-            'classes'        => $classes,
-            'currentMember'  => $currentMember,
-            'expansionId'    => $expansionId,
-            'guild'          => $guild,
-            'maxItems'       => self::MAX_LIST_ITEMS,
-            'specsWithItems' => $specsWithItems,
+            'archetypes'      => $archetypes,
+            'chosenClass'     => $class,
+            'classes'         => $classes,
+            'currentMember'   => $currentMember,
+            'expansionId'     => $expansionId,
+            'guild'           => $guild,
+            'maxItems'        => self::MAX_LIST_ITEMS,
+            'specsWithItems'  => $specsWithItems,
         ]);
     }
 
-    public function showWishlistStatsInGuild($guildId, $guildSlug) {
+    public function showWishlistStatsInGuild($guildId, $guildSlug, $class = null) {
         $guild = request()->get('guild');
+
+        if (!$guild) {
+            $guild = Guild::select('expansion_id')->where('id', $guildId)->first();
+
+            return redirect()->route('loot.wishlist', ['expansionName' => getExpansionAbbr($guild->expansion_id, true), 'class' => $class]);
+        }
+
         return $this->showWishlistStats($guild->expansion_id);
     }
 
 
-    public static function getWishlistStats($expansionId) {
+    public static function getWishlistStats($expansionId, $class) {
         return collect(DB::select(
             DB::raw(
                 "SELECT
+                    -- Step 3: Only fetch the rows we desire.
                     `class`,
                     `spec`,
                     `archetype`,
@@ -159,6 +186,7 @@ class LootController extends Controller
                     `instance_short_name`
                 FROM
                 (
+                    -- Step 2: Add row numbers to the data, separated by each class, spec, and archetype.
                     SELECT
                         `class`,
                         `spec`,
@@ -172,6 +200,7 @@ class LootController extends Controller
                         @prev:= CONCAT(`class`, `spec`, `archetype`)
                         FROM
                         (
+                            -- Step 1: Fetch all of the data.
                             SELECT
                                 c.`class`,
                                 IFNULL(c.`spec`, '') AS 'spec',
@@ -191,7 +220,9 @@ class LootController extends Controller
                             WHERE
                                 g.`expansion_id` = :expansionId
                                 AND ci.`type` = :listType
-                                AND c.`class` IS NOT NULL
+                                AND c.`class` = :class
+                                -- To fetch ALL classes, change to:
+                                -- AND c.`class` IS NOT NULL
                             GROUP BY i.`item_id`, c.`spec`, c.`class`, c.`archetype`
                             ORDER BY c.`class` ASC, `spec` ASC, `archetype` ASC, `wishlist_count` DESC, `name`
                         ) AS wishlistData
@@ -200,6 +231,7 @@ class LootController extends Controller
                 WHERE rowNumber <= :maxRows"
             ),
             [
+                'class'       => $class,
                 'listType'    => Item::TYPE_WISHLIST,
                 'expansionId' => $expansionId,
                 'maxRows'     => self::MAX_LIST_ITEMS

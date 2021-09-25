@@ -180,9 +180,9 @@
     <h2>{{ __("Want more?") }}</h2>
 
     <p>
-        {{ __("View the") }} <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}">{{ __("live data") }}</a> {{ __("for what people are wishlisting in") }}
-        <a href="{{ route('loot.wishlist', ['expansionId' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
+        {{ __("View the") }} <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}">{{ __("live data") }}</a> {{ __("for what people are wishlisting in") }}
+        <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
         {{ __("and") }}
-        <a href="{{ route('loot.wishlist', ['expansionId' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
+        <a href="{{ route('loot.wishlist', ['expansionName' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
     </p>
 </li>
