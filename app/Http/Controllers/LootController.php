@@ -112,7 +112,7 @@ class LootController extends Controller
                     ->map(function($spec){ return (object)$spec; });
 
                 foreach ($specs as &$spec) {
-                    $spec->items = $items->where('spec', $spec->name);
+                    $spec->items = $items->where('spec', $spec->name)->where('class', $spec->class);
 
                     $spec->archetypes = collect();
                     foreach ($archetypes as $archetype) {
