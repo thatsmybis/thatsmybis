@@ -334,16 +334,17 @@ class MemberController extends Controller
         $currentMember = request()->get('currentMember');
 
         $guild->load([
-            'members' => function ($query) {
+            'allMembers' => function ($query) {
                 return $query->where('members.id', request()->input('id'))
                     ->orWhere('members.username', request()->input('username'));
             },
         ]);
 
-        $member = $guild->members->where('id', request()->input('id'))->first();
+        $member = $guild->allMembers->where('id', request()->input('id'))->first();
         $sameNameMember = $guild->members->where('username', request()->input('username'))->first();
 
         if (!$member) {
+            dd('test');
             abort(404, __('Guild member not found.'));
         }
 
@@ -356,7 +357,7 @@ class MemberController extends Controller
 
         $validationRules = [
             'id'                   => 'required|integer|exists:members,id',
-            'username'             => 'nullable|string|min:2|max:32',
+            'username'             => 'required|string|min:2|max:32',
             'public_note'          => 'nullable|string|max:140',
             'officer_note'         => 'nullable|string|max:140',
             'personal_note'        => 'nullable|string|max:2000',
