@@ -412,7 +412,7 @@ class Character extends BaseModel
 
     public function getDisplayClassAttribute()
     {
-        return self::classes()[$this->class];
+        return $this->class ? self::classes()[$this->class] : null;
     }
 
     public function getDisplaySpecAttribute()
