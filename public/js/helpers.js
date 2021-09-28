@@ -12,7 +12,7 @@ const TIERS = {
 };
 
 // How often to update timestamps
-var timestampCheckRate = 60000;
+var timestampCheckRate = 30000;
 
 // For keeping track of the intervals updating times
 var timestampUpdateInterval = null;
@@ -29,6 +29,9 @@ marked.setOptions({
     gfm: true,
     breaks: true
 });
+
+// Apply custom configurations to moment.js
+configureMoment();
 
 $(document).ready(function () {
     // Add support for better nav dropdowns
@@ -138,6 +141,22 @@ function addWishlistSortHandlers() {
         $(".js-wishlist-unsorted").toggle();
         $(".js-wishlist-sorted").toggle();
     });
+}
+
+// Apply any desired custom configurations to the moment.js library
+function configureMoment() {
+    // Change moment.js thresholds so that it doesn't round seconds, minutes, hours, days, or months.
+    // See: https://momentjs.com/docs/#/customization/relative-time-threshold/
+    moment.relativeTimeThreshold('ss', 60); // Show seconds if >= # seconds; otherwise 'now'
+    moment.relativeTimeThreshold('s', 60); // Show minutes if >= ## seconds
+    moment.relativeTimeThreshold('m', 60); // Show hours if >= ## minutes
+    moment.relativeTimeThreshold('h', 49); // Show days if >= ## hours
+    moment.relativeTimeThreshold('d', 90); // Show months if >= ## days
+    moment.relativeTimeThreshold('M', 25); // Show years if > ## months
+
+    // Round relative time evaluation down
+    // See: http://momentjs.com/docs/#/customization/relative-time-rounding/
+    moment.relativeTimeRounding(Math.floor);
 }
 
 function cleanUrl(sanitize, base, href) {
