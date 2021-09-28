@@ -147,11 +147,11 @@ function addWishlistSortHandlers() {
 function configureMoment() {
     // Change moment.js thresholds so that it doesn't round seconds, minutes, hours, days, or months.
     // See: https://momentjs.com/docs/#/customization/relative-time-threshold/
-    moment.relativeTimeThreshold('ss', 60); // Show seconds if >= # seconds; otherwise 'now'
+    moment.relativeTimeThreshold('ss', 40); // Show seconds if >= # seconds; otherwise 'now'
     moment.relativeTimeThreshold('s', 60); // Show minutes if >= ## seconds
     moment.relativeTimeThreshold('m', 60); // Show hours if >= ## minutes
     moment.relativeTimeThreshold('h', 49); // Show days if >= ## hours
-    moment.relativeTimeThreshold('d', 90); // Show months if >= ## days
+    moment.relativeTimeThreshold('d', 93); // Show months if >= ## days
     moment.relativeTimeThreshold('M', 25); // Show years if > ## months
 
     // Round relative time evaluation down
