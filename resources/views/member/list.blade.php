@@ -172,14 +172,17 @@
 <script>
 $(document).ready(function () {
     $("#members").DataTable({
-        "order"  : [], // Disable initial auto-sort; relies on server-side sorting
-        "paging" : false,
-        "fixedHeader" : true, // Header row sticks to top of window when scrolling down
-        "columns" : [
+        order  : [], // Disable initial auto-sort; relies on server-side sorting
+        paging : false,
+        fixedHeader : true, // Header row sticks to top of window when scrolling down
+        oLanguage: {
+            sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
+        },
+        columns : [
             null,
-            { "orderable" : false },
-            { "orderable" : false },
-            { "orderable" : false },
+            { orderable : false },
+            { orderable : false },
+            { orderable : false },
         ]
     });
 

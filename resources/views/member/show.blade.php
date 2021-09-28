@@ -263,12 +263,15 @@ $(document).ready(function () {
     warnBeforeLeaving("#noteForm");
 
     $("#raids").DataTable({
-        "order"       : [], // Disable initial auto-sort; relies on server-side sorting
-        "paging"      : true,
-        "pageLength"  : 5,
-        "fixedHeader" : false, // Header row sticks to top of window when scrolling down
-        "columns" : [
-            { "orderable" : false },
+        order       : [], // Disable initial auto-sort; relies on server-side sorting
+        paging      : true,
+        pageLength  : 5,
+        fixedHeader : false, // Header row sticks to top of window when scrolling down
+        oLanguage: {
+            sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
+        },
+        columns : [
+            { orderable : false },
         ]
     });
 

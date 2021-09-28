@@ -205,17 +205,20 @@
 <script>
 $(document).ready(function () {
     $("#raids").DataTable({
-        "order"  : [], // Disable initial auto-sort; relies on server-side sorting
-        "paging" : false,
-        "fixedHeader" : true, // Header row sticks to top of window when scrolling down
-        "columns" : [
-            { "orderable" : true, "className": "width-10pct"},
+        order  : [], // Disable initial auto-sort; relies on server-side sorting
+        paging : false,
+        fixedHeader : true, // Header row sticks to top of window when scrolling down
+        oLanguage: {
+            sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
+        },
+        columns : [
+            { orderable : true, className: "width-10pct"},
             @if ($raids->count())
                 @foreach ($raids as $raid)
-                    { "orderable" : false, "className": "width-10pct"},
+                    { orderable : false, className: "width-10pct"},
                 @endforeach
             @else
-                { "orderable" : false, "className": "width-10pct"},
+                { orderable : false, className: "width-10pct"},
             @endif
         ]
     });

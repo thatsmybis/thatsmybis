@@ -129,14 +129,17 @@
 <script>
 $(document).ready(function () {
     datatable = $("#recipes").DataTable({
-        "order"  : [], // Disable initial auto-sort; relies on server-side sorting
-        "paging" : false,
-        "fixedHeader" : true, // Header row sticks to top of window when scrolling down
-        "autoWidth" : true,
-        "columns" : [
-            { "class" : "width-200" },
-            { "class" : "width-130", "orderable" : true },
-            { "class" : "width-400", "orderable" : true },
+        order  : [], // Disable initial auto-sort; relies on server-side sorting
+        paging : false,
+        fixedHeader : true, // Header row sticks to top of window when scrolling down
+        autoWidth : true,
+        oLanguage: {
+            sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
+        },
+        columns : [
+            { class : "width-200" },
+            { class : "width-130", orderable : true },
+            { class : "width-400", orderable : true },
         ]
     });
 

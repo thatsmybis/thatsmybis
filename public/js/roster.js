@@ -95,8 +95,12 @@ function createTable() {
     rosterTable = $("#characterTable").DataTable({
         autoWidth : false,
         data      : characters,
-        search: {
-            smart: false
+        // To disable fuzzy search:
+        // search: {
+        //     smart: false
+        // },
+        oLanguage: {
+            sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
         },
         columns   : [
             {

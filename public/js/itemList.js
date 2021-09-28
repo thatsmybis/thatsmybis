@@ -75,8 +75,12 @@ function createTable(lastSource) {
     itemTable = $("#itemTable").DataTable({
         autoWidth : false,
         data      : items,
-        search: {
-            smart: false
+        // To disable fuzzy search:
+        // search: {
+        //     smart: false
+        // },
+        oLanguage: {
+            sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
         },
         columns   : [
             {

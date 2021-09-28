@@ -317,13 +317,16 @@
 <script>
     $(document).ready(function () {
         $("#characters").DataTable({
-            "order"  : [], // Disable initial auto-sort; relies on server-side sorting
-            "paging" : false,
-            "fixedHeader" : true, // Header row sticks to top of window when scrolling down
-            "columns" : [
-                { "orderable" : false, "className" : "width-130" },
-                { "orderable" : false, "className" : "width-250" },
-                { "orderable" : false, "className" : "width-200" },
+            order  : [], // Disable initial auto-sort; relies on server-side sorting
+            paging : false,
+            fixedHeader : true, // Header row sticks to top of window when scrolling down
+            oLanguage: {
+                sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
+            },
+            columns : [
+                { orderable : false, className : "width-130" },
+                { orderable : false, className : "width-250" },
+                { orderable : false, className : "width-200" },
             ]
         });
     });
