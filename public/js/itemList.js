@@ -75,6 +75,9 @@ function createTable(lastSource) {
     itemTable = $("#itemTable").DataTable({
         autoWidth : false,
         data      : items,
+        search: {
+            smart: false
+        },
         columns   : [
             {
                 title  : `<span class="fas fa-fw fa-skull-crossbones"></span> ${headerBoss}`,

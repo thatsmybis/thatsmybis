@@ -95,6 +95,9 @@ function createTable() {
     rosterTable = $("#characterTable").DataTable({
         autoWidth : false,
         data      : characters,
+        search: {
+            smart: false
+        },
         columns   : [
             {
                 title  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter} <span class="text-muted small">(${characters.length})</span>`,
