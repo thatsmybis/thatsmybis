@@ -117,7 +117,7 @@ function createTable(lastSource) {
             },
             {
                 title  : `<span class="fas fa-fw fa-sort-amount-down text-gold"></span> ${headerPrios}`,
-                data   : guild.is_attendance_hidden ? "priod_characters" : "priod_characters_with_attendance",
+                data   : "priod_characters",
                 render : function (data, type, row) {
                     return data && data.length ? createCharacterListHtml(data, 'prio', row.item_id, null) : '—';
                 },
@@ -128,7 +128,7 @@ function createTable(lastSource) {
             },
             {
                 title  : `<span class="text-legendary fas fa-fw fa-scroll-old"></span> ${headerWishlist}`,
-                data   : guild.is_attendance_hidden ? "wishlist_characters" : "wishlist_characters_with_attendance",
+                data   : "wishlist_characters",
                 render : function (data, type, row) {
                     if (data && data.length) {
                         let list = '';
@@ -246,6 +246,12 @@ function createCharacterListHtml(data, type, itemId, header = null) {
 
     let lastRaidGroupId = null;
     $.each(data, function (index, character) {
+
+        let attendanceCharacter = null;
+        if (!guild.is_attendance_hidden) {
+            attendanceCharacter = guildCharacters.find(char => char.id == character.id);
+        }
+
         if (type == 'prio' && character.pivot.raid_group_id && character.pivot.raid_group_id != lastRaidGroupId) {
             lastRaidGroupId = character.pivot.raid_group_id;
             let raidGroupName = '';
@@ -302,8 +308,10 @@ function createCharacterListHtml(data, type, itemId, header = null) {
                         ${ character.is_alt ? `
                             <span class="text-warning">${localeAlt}</span>
                         ` : '' }
-                        ${ !guild.is_attendance_hidden && (character.attendance_percentage || character.raid_count) ?
-                            `${ character.raid_count && typeof character.attendance_percentage === 'number' ? `<span title="attendance" class="smaller ${ getAttendanceColor(character.attendance_percentage) }">${ Math.round(character.attendance_percentage * 100) }%</span>` : '' }${ character.raid_count ? `<span class="smaller"> ${ character.raid_count }r</span>` : ``}
+                        ${ type !== 'received' && attendanceCharacter && (attendanceCharacter.attendance_percentage || attendanceCharacter.raid_count) ?
+                            `${ attendanceCharacter.raid_count && typeof attendanceCharacter.attendance_percentage === 'number'
+                                ? `<span title="attendance" class="smaller ${ getAttendanceColor(attendanceCharacter.attendance_percentage) }">${ Math.round(attendanceCharacter.attendance_percentage * 100) }%</span>`
+                                : '' }${ attendanceCharacter.raid_count ? `<span class="smaller"> ${ attendanceCharacter.raid_count }r</span>` : ``}
                         ` : `` }
                     </a>
                     <span class="js-watchable-timestamp js-timestamp-title smaller"

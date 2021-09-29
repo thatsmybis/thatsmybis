@@ -71,7 +71,7 @@ class ItemController extends Controller
             $showWishlist = true;
         }
 
-        $cacheKey = 'items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0) . ':attendance:' . $guild->is_attendance_hidden;
+        $cacheKey = 'items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0);
 
         if (request()->get('bustCache')) {
             Cache::forget($cacheKey);
@@ -104,7 +104,7 @@ class ItemController extends Controller
 
             if ($showPrios) {
                 $query = $query->with([
-                    ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild, $characterFields, $viewPrioPermission) {
+                    'priodCharacters' => function ($query) use ($guild, $characterFields, $viewPrioPermission) {
                         if ($guild->prio_show_count && !$viewPrioPermission) {
                             $query = $query->where([
                                 ['character_items.order', '<=', $guild->prio_show_count],
@@ -131,7 +131,7 @@ class ItemController extends Controller
 
             if ($showWishlist) {
                 $query = $query->with([
-                    ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $characterFields) {
+                    'wishlistCharacters' => function ($query) use($guild, $characterFields) {
                         return $query
                             ->addSelect($characterFields)
                             ->leftJoin('members', function ($join) {
@@ -152,7 +152,7 @@ class ItemController extends Controller
                     },
                     'childItems' => function ($query) use ($guild) {
                         return $query->with([
-                            ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild) {
+                            'wishlistCharacters' => function ($query) use($guild) {
                                 return $query
                                     ->where([
                                         ['characters.guild_id', $guild->id],
@@ -185,7 +185,17 @@ class ItemController extends Controller
             return $items;
         });
 
+        // For optimization, fetch characters with their attendance here.
+        // We will plop this in with characters in the Javascript on the client side.
+        $characters = null;
+        if (!$guild->is_attendance_hidden) {
+            $characters = $guild->charactersWithAttendance()->get();
+        } else {
+            $characters = $guild->characters()->get();
+        }
+
         return view('item.list', [
+            'characters'      => $characters,
             'currentMember'   => $currentMember,
             'guild'           => $guild,
             'instance'        => $instance,
@@ -240,7 +250,7 @@ class ItemController extends Controller
             $showWishlist = true;
         }
 
-        $cacheKey = 'item:guild:' . $guild->id . 'item:' . $id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':attendance:' . $guild->is_attendance_hidden;
+        $cacheKey = 'item:guild:' . $guild->id . 'item:' . $id . ':officer:' . ($showOfficerNote ? 1 : 0);
 
         if (request()->get('bustCache')) {
             Cache::forget($cacheKey);
@@ -273,7 +283,7 @@ class ItemController extends Controller
 
             if ($showPrios) {
                 $query = $query->with([
-                    ($guild->is_attendance_hidden ? 'priodCharacters' : 'priodCharactersWithAttendance') => function ($query) use ($guild, $viewPrioPermission) {
+                    'priodCharacters' => function ($query) use ($guild, $viewPrioPermission) {
                         if ($guild->prio_show_count && !$viewPrioPermission) {
                             $query = $query->where([
                                 ['character_items.order', '<=', $guild->prio_show_count],
@@ -290,9 +300,10 @@ class ItemController extends Controller
             if ($showWishlist) {
                 $query = $this->addWishlistQuery($query, $guild, $viewPrioPermission);
                 $query = $query->with([
-                'childItems' => function ($query) use ($guild, $viewPrioPermission) {
-                    return $this->addWishlistQuery($query, $guild, $viewPrioPermission);
-                }]);
+                    'childItems' => function ($query) use ($guild, $viewPrioPermission) {
+                        return $this->addWishlistQuery($query, $guild, $viewPrioPermission);
+                    }
+                ]);
             } else {
                 $query = $query->with(['childItems']);
             }
@@ -352,41 +363,54 @@ class ItemController extends Controller
         }
 
         $priodCharacters = null;
-        if ($guild->is_attendance_hidden && $item->relationLoaded('priodCharacters')) {
+        if ($item->relationLoaded('priodCharacters')) {
             $priodCharacters = $item->priodCharacters;
-        } else if ($item->relationLoaded('priodCharactersWithAttendance')) {
-            $priodCharacters = $item->priodCharactersWithAttendance;
         }
 
         $wishlistCharacters = null;
-        if ($guild->is_attendance_hidden && $item->relationLoaded('wishlistCharacters')) {
+        if ($item->relationLoaded('wishlistCharacters')) {
             $wishlistCharacters = $item->wishlistCharacters;
-        } else if ($item->relationLoaded('wishlistCharactersWithAttendance')) {
-            $wishlistCharacters = $item->wishlistCharactersWithAttendance;
+        }
+
+        // For optimization, fetch characters with their attendance here and then merge them into
+        // the existing characters for prios and wishlists
+        if (!$guild->is_attendance_hidden) {
+            $charactersWithAttendance = $guild->charactersWithAttendance()->get();
+
+            if ($wishlistCharacters) {
+                foreach ($wishlistCharacters as $wishlistCharacter) {
+                    $attendanceCharacter = $charactersWithAttendance->where('id', $wishlistCharacter->id)->first();
+                    if ($attendanceCharacter) {
+                        $wishlistCharacter->raid_count = $attendanceCharacter->raid_count;
+                        $wishlistCharacter->benched_count = $attendanceCharacter->benched_count;
+                        $wishlistCharacter->attendance_percentage = $attendanceCharacter->attendance_percentage;
+                    }
+                }
+            }
         }
 
         return view('item.show', [
-            'currentMember'               => $currentMember,
-            'guild'                       => $guild,
-            'item'                        => $item,
-            'notes'                       => $notes,
-            'priodCharacters'             => $priodCharacters,
-            'raidGroups'                  => $guild->raidGroups,
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'item'            => $item,
+            'notes'           => $notes,
+            'priodCharacters' => $priodCharacters,
+            'raidGroups'      => $guild->raidGroups,
             'receivedAndRecipeCharacters' => $item->receivedAndRecipeCharacters,
-            'showEdit'                    => $showEdit,
-            'showNoteEdit'                => $showNoteEdit,
-            'showOfficerNote'             => $showOfficerNote,
-            'showPrioEdit'                => $showPrioEdit,
-            'showPrios'                   => $showPrios,
-            'showWishlist'                => $showWishlist,
-            'wishlistCharacters'          => $wishlistCharacters,
-            'itemJson'                    => self::getItemWowheadJson($guild->expansion_id, $item->item_id),
+            'showEdit'           => $showEdit,
+            'showNoteEdit'       => $showNoteEdit,
+            'showOfficerNote'    => $showOfficerNote,
+            'showPrioEdit'       => $showPrioEdit,
+            'showPrios'          => $showPrios,
+            'showWishlist'       => $showWishlist,
+            'wishlistCharacters' => $wishlistCharacters,
+            'itemJson'           => self::getItemWowheadJson($guild->expansion_id, $item->item_id),
         ]);
     }
 
     private function addWishlistQuery($query, $guild, $viewPrioPermission) {
         return $query->with([
-            ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $viewPrioPermission) {
+            'wishlistCharacters' => function ($query) use($guild, $viewPrioPermission) {
                 $query = $query
                     ->where([
                         ['characters.guild_id', $guild->id],
@@ -406,10 +430,6 @@ class ItemController extends Controller
                         'allWishlists',
                     ])
                     ->orderBy('character_items.order');
-
-                if (!$guild->is_attendance_hidden) {
-                    $query = $query->groupBy('characters.id');
-                }
 
                 return $query;
             },
@@ -463,50 +483,28 @@ class ItemController extends Controller
     public static function mergeTokenWishlists($items, $guild) {
         // Combine items' child items' wishlist characters into parent items' wishlist characters
         foreach ($items->filter(function ($item, $key) { return $item->childItems->count(); }) as $item) {
-            if ($guild->is_attendance_hidden) {
-                foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
-                    $items->where('id', $item->id)
-                        ->first()
-                        ->setRelation(
-                            'wishlistCharacters',
-                            $items->where('id', $item->id)
-                                ->first()
-                                ->wishlistCharacters
-                                // Keys should be unique per character ID and wishlist number.
-                                ->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
-                                // Combine the two arrays based on the keys we just defined.
-                                // If a character has both a token and its child items wishlisted, merge into one.
-                                // But ONLY if they are on the same wishlist number.
-                                ->union(
-                                    $childItem->wishlistCharacters->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
-                                )
-                                ->sortBy(function($character) {
-                                    // RE: -strtotime(): rofl, rofl, kekw, bur, kek, roflmao sort by newest to oldest date wishlisted.
-                                    return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
-                                })
-                                ->values()
-                        );
-                }
-            } else {
-                foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharactersWithAttendance->count(); }) as $childItem) {
-                    // This is function the same as the code above. This one just uses the 'WithAttendance' relationships instead.
-                    $items->where('id', $item->id)
-                        ->first()
-                        ->setRelation(
-                            'wishlistCharactersWithAttendance',
-                            $items->where('id', $item->id)
-                                ->first()
-                                ->wishlistCharactersWithAttendance
-                                ->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
-                                ->union(
-                                    $childItem->wishlistCharactersWithAttendance->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
-                                )
-                                ->sortBy(function($character) {
-                                    return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
-                                })
-                                ->values()
-                        );
-                }
+            foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
+                $items->where('id', $item->id)
+                    ->first()
+                    ->setRelation(
+                        'wishlistCharacters',
+                        $items->where('id', $item->id)
+                            ->first()
+                            ->wishlistCharacters
+                            // Keys should be unique per character ID and wishlist number.
+                            ->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
+                            // Combine the two arrays based on the keys we just defined.
+                            // If a character has both a token and its child items wishlisted, merge into one.
+                            // But ONLY if they are on the same wishlist number.
+                            ->union(
+                                $childItem->wishlistCharacters->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
+                            )
+                            ->sortBy(function($character) {
+                                // RE: -strtotime(): rofl, rofl, kekw, bur, kek, roflmao sort by newest to oldest date wishlisted.
+                                return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
+                            })
+                            ->values()
+                    );
             }
         }
         return $items;

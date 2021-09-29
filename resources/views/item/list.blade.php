@@ -42,6 +42,8 @@
 <script>
     var currentWishlistNumber = {{ $guild ? $guild->current_wishlist_number : 'null' }};
     var guild            = {!! $guild ? $guild->toJson() : '{}' !!};
+    // Used for checking attendance
+    var guildCharacters  = {!! $characters ? $characters->toJson() : '{}' !!};
     var items            = {!! $items ? $items->toJson() : '{}' !!};
     var maxWishlistLists = {{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }};
     var raidGroups       = {!! $raidGroups ? $raidGroups->toJson() : '{}' !!};
