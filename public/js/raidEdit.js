@@ -72,6 +72,7 @@ $(document).ready(function () {
     initializing = false;
     $(".loadingBarContainer").removeClass("d-flex").hide();
     $("#editForm").show();
+    fixSliderLabels();
 });
 
 // Reset and empty the attendee list.
