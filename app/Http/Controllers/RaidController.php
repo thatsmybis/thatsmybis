@@ -177,7 +177,6 @@ class RaidController extends Controller
         }
 
         $guild->load([
-            'allCharactersWithAttendance',
             'characters',
             'characters.secondaryRaidGroups',
             'raidGroups',
@@ -213,6 +212,8 @@ class RaidController extends Controller
             });
         }
 
+        $selectableCharacters = $guild->getSelectableCharacters($raid ? $raid->characters : null);
+
         return view('raids.edit', [
             'copy'            => $copy,
             'currentMember'   => $currentMember,
@@ -223,7 +224,8 @@ class RaidController extends Controller
             'maxRaidGroups'   => self::MAX_RAID_GROUPS,
             'originalRaid'    => $originalRaid,
             'raid'            => $raid,
-            'showOfficerNote' => $showOfficerNote,
+            'selectableCharacters' => $selectableCharacters,
+            'showOfficerNote'      => $showOfficerNote,
         ]);
     }
 

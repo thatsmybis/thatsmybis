@@ -188,7 +188,7 @@ class PrioController extends Controller
         // For optimization, fetch characters with their attendance here and then merge them into
         // the existing characters for prios and wishlists
         if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getCharactersWithAttendanceCached($guild);
+            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
 
             foreach ($items as $item) {
                 if ($item->wishlistCharacters) {
@@ -326,13 +326,13 @@ class PrioController extends Controller
 
         $charactersWithAttendance = null;
         if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getCharactersWithAttendanceCached($guild);
+            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
         }
 
         // For optimization, fetch characters with their attendance here and then merge them into
         // the existing characters for prios and wishlists
         if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getCharactersWithAttendanceCached($guild);
+            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
 
             if ($wishlistCharacters) {
                 foreach ($wishlistCharacters as $wishlistCharacter) {

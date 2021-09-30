@@ -15,6 +15,7 @@ use App\{
     User,
 };
 
+use \Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
 class Guild extends BaseModel
@@ -190,7 +191,7 @@ class Guild extends BaseModel
     }
 
     // For fetching cached characters with attendance
-    public static function getCharactersWithAttendanceCached($guild) {
+    public static function getAllCharactersWithAttendanceCached($guild) {
         $cacheKey = 'guild:' . $guild->id . 'charactersWithAttendance';
 
         if (request()->get('bustCache')) {
@@ -198,7 +199,7 @@ class Guild extends BaseModel
         }
 
         return Cache::remember($cacheKey, env('CACHE_GUILD_ATTENDANCE_CHARACTERS_SECONDS', 60), function () use ($guild) {
-            return $guild->charactersWithAttendance()->get();
+            return $guild->allCharactersWithAttendance()->get();
         });
     }
 
@@ -335,6 +336,25 @@ class Guild extends BaseModel
         } else {
             return 60;
         }
+    }
+
+    /**
+     * Returns non-archived characters, plus characters passed in.
+     * Useful for existing resources that don't want to drop any archived characters already associated.
+     */
+    public function getSelectableCharacters($mandatoryCharacters) {
+        $allCharacters = Guild::getAllCharactersWithAttendanceCached($this);
+
+        $whitelistCharacterIds = null;
+
+        if ($mandatoryCharacters && $mandatoryCharacters instanceof Collection) {
+            $whitelistCharacterIds = $mandatoryCharacters->keyBy('id')->keys()->toArray();
+        }
+
+        return $allCharacters->filter(function ($character, $key) use ($whitelistCharacterIds) {
+            // Character ID exists in raid's list of characters OR character is NOT archived
+            return !$character->inactive_at || ($whitelistCharacterIds && in_array($character->id, $whitelistCharacterIds));
+        });
     }
 
     public static function tiers() {

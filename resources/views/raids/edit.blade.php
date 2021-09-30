@@ -15,7 +15,7 @@
     // So we're iterating over the characters only one time, saving the results, and printing them.
 
     $characterSelectOptions = (string)View::make('partials.characterOptions', [
-        'characters'     => $guild->allCharactersWithAttendance,
+        'characters'     => $selectableCharacters,
         'guild'          => $guild,
         'raidGroups'     => $guild->raidGroups,
         'showAttendance' => true,

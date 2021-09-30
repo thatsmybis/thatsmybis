@@ -189,7 +189,7 @@ class ItemController extends Controller
         // We will plop this in with characters in the Javascript on the client side.
         $characters = null;
         if (!$guild->is_attendance_hidden) {
-            $characters = Guild::getCharactersWithAttendanceCached($guild);
+            $characters = Guild::getAllCharactersWithAttendanceCached($guild);
         } else {
             $characters = $guild->characters()->get();
         }
@@ -375,7 +375,7 @@ class ItemController extends Controller
         // For optimization, fetch characters with their attendance here and then merge them into
         // the existing characters for prios and wishlists
         if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getCharactersWithAttendanceCached($guild);
+            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
 
             if ($wishlistCharacters) {
                 foreach ($wishlistCharacters as $wishlistCharacter) {
