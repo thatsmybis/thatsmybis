@@ -289,6 +289,14 @@
                                 </select>
                             </div>
                         @endfor
+                        <div class="form-group mb-0">
+                            <div class="checkbox">
+                                <label>
+                                    <input checked type="checkbox" name="add_raiders" value="1" class="" autocomplete="off">
+                                        <small class="text-muted">{{ __("auto-add raiders") }}</small>
+                                </label>
+                            </div>
+                        </div>
                         <div class="js-raid-group-message text-warning" style="display:none;">
                         </div>
                     </div>

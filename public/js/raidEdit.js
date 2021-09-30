@@ -18,7 +18,7 @@ $(document).ready(function () {
 
     $("[name=raid_group_id\\[\\]]").change(function () {
         if (!initializing) {
-            if ($(this).val()) {
+            if ($("[name=add_raiders]").prop("checked") && $(this).val()) {
                 fillCharactersFromRaid($(this).val());
             }
         }
