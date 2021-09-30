@@ -209,14 +209,16 @@ class ExportController extends Controller {
             ->has('outstandingItems')
             ->with([
                 'outstandingItems' => function ($query) use ($guild, $listNumbers) {
-                    return $query
-                        ->whereIn('list_number', $listNumbers)
-                        ->orWhere(function($query) {
-                            $query->where('type', 'prio')
-                                ->where('is_received', 0);
-                        })
-                        ->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
-                }
+                    return $query->where(function($query) use ($guild, $listNumbers) {
+                        return $query
+                            ->whereIn('list_number', $listNumbers)
+                            ->orWhere(function ($query) {
+                                $query->where('type', 'prio')
+                                    ->where('is_received', 0);
+                            })
+                            ->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
+                    });
+                },
             ])
             ->select('id', 'name')
             ->get();
@@ -232,7 +234,7 @@ class ExportController extends Controller {
                     continue;
                 }
 
-                $itemId = $item->item->item_id;
+                $itemId = $item->item_id;
                 $characterName = mb_strtolower($character->name);
 
                 if (!isset($wishlistData[$itemId])) {
