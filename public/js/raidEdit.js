@@ -1,7 +1,7 @@
 $(document).ready(function () {
     let initializing = true;
 
-    warnBeforeLeaving("#editForm")
+    warnBeforeLeaving("#editForm");
 
     // Always initialize to null, let the javascript convert from UTC time to local browser time,
     // then it will populate the date.
@@ -10,7 +10,7 @@ $(document).ready(function () {
         inline: true,
         step: 30,
         theme: 'dark',
-        value: moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss"),
+        value: date ? moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss") : null,
     });
 
     // Trigger a date change to make it convert to UTC and stuff.
@@ -70,6 +70,8 @@ $(document).ready(function () {
     });
 
     initializing = false;
+    $(".loadingBarContainer").removeClass("d-flex").hide();
+    $("#editForm").show();
 });
 
 // Reset and empty the attendee list.

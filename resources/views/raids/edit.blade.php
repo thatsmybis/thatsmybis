@@ -7,8 +7,6 @@
         $date = old('date');
     } else if ($raid && $raid->date) {
         $date = $raid->date;
-    } else {
-        $date = getDateTime('Y-m-d') . " 17:00:00";
     }
 
     $maxDate = (new \DateTime())->modify('+2 year')->format('Y-m-d');
@@ -85,7 +83,15 @@
                     @endforeach
                 </ul>
             @endif
-            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route(($raid && !$copy ? 'guild.raids.update' : 'guild.raids.create'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+
+            @include('partials/loadingBars')
+
+            <form id="editForm"
+                style="display:none;"
+                class="form-horizontal"
+                role="form"
+                method="POST"
+                action="{{ route(($raid && !$copy ? 'guild.raids.update' : 'guild.raids.create'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="id" value="{{ $raid ? $raid->id : '' }}" />
