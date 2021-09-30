@@ -54,7 +54,14 @@
                 </ul>
             @endif
 
-            <form id="editForm" class="form-horizontal" role="form" method="POST" action="{{ route('guild.prios.assignPrios.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
+            @include('partials/loadingBars')
+
+            <form id="editForm"
+                style="display:none;"
+                class="form-horizontal"
+                role="form"
+                method="POST"
+                action="{{ route('guild.prios.assignPrios.submit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
                 {{ csrf_field() }}
 
                 <input hidden name="raid_group_id" value="{{ $raidGroup->id }}">

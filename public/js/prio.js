@@ -11,6 +11,9 @@ $(document).ready(function () {
             },
         });
     });
+
+    $(".loadingBarContainer").removeClass("d-flex").hide();
+    $("#editForm").show();
 });
 
 // Update the placeholder values of anything with the given name.
