@@ -15,6 +15,8 @@ use App\{
     User,
 };
 
+use Illuminate\Support\Facades\Cache;
+
 class Guild extends BaseModel
 {
     /**
@@ -185,6 +187,19 @@ class Guild extends BaseModel
 
     public function getWishlistNames() {
         return $this->wishlist_names ? explode('|', $this->wishlist_names) : null;
+    }
+
+    // For fetching cached characters with attendance
+    public static function getCharactersWithAttendanceCached($guild) {
+        $cacheKey = 'guild:' . $guild->id . 'charactersWithAttendance';
+
+        if (request()->get('bustCache')) {
+            Cache::forget($cacheKey);
+        }
+
+        return Cache::remember($cacheKey, env('CACHE_GUILD_ATTENDANCE_CHARACTERS_SECONDS', 60), function () use ($guild) {
+            return $guild->charactersWithAttendance()->get();
+        });
     }
 
     /**

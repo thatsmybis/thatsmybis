@@ -6,8 +6,7 @@ use App\{AuditLog, Character, CharacterItem, Guild, Instance, Item, RaidGroup};
 use App\Http\Controllers\ItemController;
 use Auth;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{DB, Validator};
 use Illuminate\Validation\Rule;
 
 class PrioController extends Controller
@@ -144,7 +143,7 @@ class PrioController extends Controller
             ]);
         } else {
             $query = $query->with([
-                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
+                'wishlistCharacters' => function ($query) use($guild, $raidGroup) {
                     return $query
                         ->leftJoin('character_raid_groups', function ($join) {
                             $join->on('character_raid_groups.character_id', 'characters.id');
@@ -160,7 +159,7 @@ class PrioController extends Controller
                 },
                 'childItems' => function ($query) use ($guild, $raidGroup) {
                     return $query->with([
-                        ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
+                        'wishlistCharacters' => function ($query) use($guild, $raidGroup) {
                             return $query
                                 ->leftJoin('character_raid_groups', function ($join) {
                                     $join->on('character_raid_groups.character_id', 'characters.id');
@@ -184,6 +183,25 @@ class PrioController extends Controller
 
         if (!$guild->is_wishlist_disabled) {
             $items = ItemController::mergeTokenWishlists($items, $guild);
+        }
+
+        // For optimization, fetch characters with their attendance here and then merge them into
+        // the existing characters for prios and wishlists
+        if (!$guild->is_attendance_hidden) {
+            $charactersWithAttendance = Guild::getCharactersWithAttendanceCached($guild);
+
+            foreach ($items as $item) {
+                if ($item->wishlistCharacters) {
+                    foreach ($item->wishlistCharacters as $wishlistCharacter) {
+                        $attendanceCharacter = $charactersWithAttendance->where('id', $wishlistCharacter->id)->first();
+                        if ($attendanceCharacter) {
+                            $wishlistCharacter->raid_count = $attendanceCharacter->raid_count;
+                            $wishlistCharacter->benched_count = $attendanceCharacter->benched_count;
+                            $wishlistCharacter->attendance_percentage = $attendanceCharacter->attendance_percentage;
+                        }
+                    }
+                }
+            }
         }
 
         return view('guild.prios.assignPrios', [
@@ -261,7 +279,7 @@ class PrioController extends Controller
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
                         ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
-                ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
+                'wishlistCharacters' => function ($query) use($guild, $raidGroup) {
                     return $query
                         ->leftJoin('character_raid_groups', function ($join) {
                             $join->on('character_raid_groups.character_id', 'characters.id');
@@ -275,7 +293,7 @@ class PrioController extends Controller
                 },
                 'childItems' => function ($query) use ($guild, $raidGroup) {
                     return $query->with([
-                        ($guild->is_attendance_hidden ? 'wishlistCharacters' : 'wishlistCharactersWithAttendance') => function ($query) use($guild, $raidGroup) {
+                        'wishlistCharacters' => function ($query) use($guild, $raidGroup) {
                             return $query
                                 ->leftJoin('character_raid_groups', function ($join) {
                                     $join->on('character_raid_groups.character_id', 'characters.id');
@@ -304,11 +322,28 @@ class PrioController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $wishlistCharacters = null;
-        if ($guild->is_attendance_hidden && $item->relationLoaded('wishlistCharacters')) {
-            $wishlistCharacters = $item->wishlistCharacters;
-        } else if ($item->relationLoaded('wishlistCharactersWithAttendance')) {
-            $wishlistCharacters = $item->wishlistCharactersWithAttendance;
+        $wishlistCharacters = $item->wishlistCharacters;
+
+        $charactersWithAttendance = null;
+        if (!$guild->is_attendance_hidden) {
+            $charactersWithAttendance = Guild::getCharactersWithAttendanceCached($guild);
+        }
+
+        // For optimization, fetch characters with their attendance here and then merge them into
+        // the existing characters for prios and wishlists
+        if (!$guild->is_attendance_hidden) {
+            $charactersWithAttendance = Guild::getCharactersWithAttendanceCached($guild);
+
+            if ($wishlistCharacters) {
+                foreach ($wishlistCharacters as $wishlistCharacter) {
+                    $attendanceCharacter = $charactersWithAttendance->where('id', $wishlistCharacter->id)->first();
+                    if ($attendanceCharacter) {
+                        $wishlistCharacter->raid_count = $attendanceCharacter->raid_count;
+                        $wishlistCharacter->benched_count = $attendanceCharacter->benched_count;
+                        $wishlistCharacter->attendance_percentage = $attendanceCharacter->attendance_percentage;
+                    }
+                }
+            }
         }
 
         return view('guild.prios.singleInput', [

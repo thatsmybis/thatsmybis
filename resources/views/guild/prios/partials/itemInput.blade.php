@@ -57,11 +57,11 @@
                 </li>
             @endif
 
-            @if (!$guild->is_wishlist_disabled && (($guild->is_attendance_hidden && $item->wishlistCharacters->count() > 0) || (!$guild->is_attendance_hidden && $item->wishlistCharactersWithAttendance->count() > 0)))
+            @if (!$guild->is_wishlist_disabled && $item->wishlistCharacters->count() > 0)
                 <li>
                     <span class="fa-li mt-1" title="Characters who have it wishlisted"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
                     <ul class="list-inline">
-                        @foreach (($guild->is_attendance_hidden ? $item->wishlistCharacters : $item->wishlistCharactersWithAttendance) as $character)
+                        @foreach ($item->wishlistCharacters as $character)
                             <li class="list-inline-item">
                                 <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                     class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received || $character->pivot->received_at ? 'font-strikethrough' : '' }}" target="_blank">
@@ -69,15 +69,15 @@
                                     <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_group_color) }}"></span>-->
                                     <span class="text-muted small font-weight-bold">{{ $character->pivot->is_offspec ? 'OS' : '' }}</span>
                                     <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
+                                    <span class="js-watchable-timestamp smaller text-muted"
+                                        data-timestamp="{{ $character->pivot->created_at }}"
+                                        data-is-short="1">
+                                    </span>
                                     @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
                                         <span class="small">
                                             @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
                                         </span>
                                     @endif
-                                    <span class="js-watchable-timestamp smaller text-muted"
-                                        data-timestamp="{{ $character->pivot->created_at }}"
-                                        data-is-short="1">
-                                    </span>
                                 </a>
                             </li>
                         @endforeach

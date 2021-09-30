@@ -104,3 +104,4 @@
 @endsection
 
 @section('wowheadIconSize', 'medium')
+
