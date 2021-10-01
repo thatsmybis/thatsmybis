@@ -34,7 +34,7 @@
             @endif
             <li class="list-inline-item">
                 {{ __("Member") }}
-                @if ((!$guild->is_attendance_hidden && (isset($attendancePercentage)) || (isset($raidCount) || isset($benchedCount))))
+                @if (!$guild->is_attendance_hidden && (isset($attendancePercentage) || (isset($raidCount) || isset($benchedCount))))
                     <span class="small">
                         @include('partials/attendanceTag', [
                             'attendancePercentage' => (isset($attendancePercentage) ? $attendancePercentage : null),
