@@ -3,7 +3,7 @@
 namespace App;
 
 use App\{BaseModel, Item, Guild, Member, Raid, RaidGroup};
-use Illuminate\Support\Facades\{DB, Route};
+use Illuminate\Support\Facades\{DB};
 use Illuminate\Database\Eloquent\Relations\{HasMany};
 
 class Character extends BaseModel
