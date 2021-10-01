@@ -101,7 +101,7 @@ class Guild extends BaseModel
     }
 
     public function allCharactersWithAttendance() {
-        return Character::addAttendanceQuery($this->allCharacters())->groupBy('characters.id');
+        return Character::addAttendanceQuery($this->allCharacters(), $this->id);
     }
 
     // Includes banned and inactive members
@@ -127,7 +127,7 @@ class Guild extends BaseModel
     // Gets characters and their attendance stats
     // Excludes hidden and removed characters
     public function charactersWithAttendance() {
-        return Character::addAttendanceQuery($this->characters())->groupBy('characters.id');
+        return Character::addAttendanceQuery($this->characters(), $this->id);
     }
 
     public function content() {
@@ -193,6 +193,12 @@ class Guild extends BaseModel
     // For fetching cached characters with attendance
     public static function getAllCharactersWithAttendanceCached($guild) {
         $cacheKey = 'guild:' . $guild->id . 'charactersWithAttendance';
+
+        // Create a different cache key if the user is using a raid group filter for attendance
+        $raidGroupIdFilter = request()->get('raidGroupIdFilter');
+        if ($raidGroupIdFilter) {
+            $cacheKey .= ':raidGroup:' . $raidGroupIdFilter;
+        }
 
         if (request()->get('bustCache')) {
             Cache::forget($cacheKey);
@@ -278,7 +284,7 @@ class Guild extends BaseModel
                     },
                 ]);
 
-        $query = Character::addAttendanceQuery($query)->groupBy('characters.id');
+        $query = Character::addAttendanceQuery($query, $this->id);
 
         if (!$showInactive) {
             $query = $query->whereNull('characters.inactive_at');
@@ -343,7 +349,7 @@ class Guild extends BaseModel
      * Useful for existing resources that don't want to drop any archived characters already associated.
      */
     public function getSelectableCharacters($mandatoryCharacters) {
-        $allCharacters = Guild::getAllCharactersWithAttendanceCached($this);
+        $allCharacters = Character::mergeAttendance($this->allCharacters()->get(), Guild::getAllCharactersWithAttendanceCached($this));
 
         $whitelistCharacterIds = null;
 

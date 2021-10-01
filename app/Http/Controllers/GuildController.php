@@ -268,8 +268,7 @@ class GuildController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function settings($guildId, $guildSlug)
-    {
+    public function settings($guildId, $guildSlug) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 

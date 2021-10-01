@@ -3,7 +3,7 @@
 namespace App;
 
 use App\{BaseModel, Item, Guild, Member, Raid, RaidGroup};
-use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\{DB, Route};
 use Illuminate\Database\Eloquent\Relations\{HasMany};
 
 class Character extends BaseModel
@@ -357,50 +357,87 @@ class Character extends BaseModel
             ->whereIn('type', ['wishlist', 'prio']);
     }
 
-    // Takes a query for characters and applies the logic necessary to fetch attendance for those characters.
-    // Applies the fields `raid_count` and `attendance_percentage` to the selected fields.
-    // Might not work on all queries.
-    static public function addAttendanceQuery($query) {
-        $query = $query
-            ->addSelect([
-                DB::raw('COALESCE(COUNT(`raid_characters`.`id`), 0) AS `raid_count`'),
-                DB::raw('COALESCE(COUNT(`raid_characters_benched`.`id`), 0) AS `benched_count`'),
-                DB::raw('IF(COUNT(`raid_characters`.`id`), COALESCE(ROUND(SUM(`raid_characters`.`credit`) / COUNT(`raid_characters`.`id`), 3), 0), 0) AS `attendance_percentage`'),
-                // DB::raw('COALESCE(MAX(`raid_characters`.`raid_count`), 0) AS `raid_count`'),
-                // DB::raw('COALESCE(ROUND(MAX(`raid_characters`.`credit`) / MAX(`raid_characters`.`raid_count`), 3), 0) AS `attendance_percentage`'),
+    /**
+     * Takes a query for characters and applies the logic necessary to fetch attendance for those characters.
+     * Adds the fields `raid_count`, `benched_count`, and `attendance_percentage` to the selected fields.
+     * Might not work on all queries.
+     *
+     * Takes in the guild ID because I don't know how better to get it into the subqueries. You _could_ get
+     * it from the query bindings, but only IF it happens to be in there. And bindings are unreliable as their
+     * index may vary from query to query; if you use the bindings, it makes for unstable code.
+     */
+    static public function addAttendanceQuery($query, $guildId) {
+        // This stuff up here is just prep work to create subqueries to put into the main query
+        $raidGroupIdFilter = request()->get('raidGroupIdFilter');
+
+        $attendanceStats = Character::select([
+                'characters.id',
+                DB::raw("COALESCE(COUNT(`raid_characters`.`id`), 0) AS `raid_count`"),
+                DB::raw("IF(COUNT(`raid_characters`.`id`), COALESCE(ROUND(SUM(`raid_characters`.`credit`) / COUNT(`raid_characters`.`id`), 3), 0), 0) AS `attendance_percentage`"),
             ])
-            ->join('guilds', 'guilds.id', 'characters.guild_id');
+            ->join('guilds', 'guilds.id', 'characters.guild_id')
+            ->leftJoin('raids', function ($join) use ($raidGroupIdFilter) {
+                $join = $join->on('raids.guild_id', 'characters.guild_id')
+                    ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 1) . ' HOUR)')
+                    ->whereNull('raids.cancelled_at');
 
-        $raidGroupId = request()->get('raidGroupIdFilter');
-        if ($raidGroupId) {
-            $query = $query->leftJoin('raids', function ($join) use ($raidGroupId) {
-                $join->on('raids.guild_id', 'characters.guild_id')
-                    ->join('raid_raid_groups', function ($join) use ($raidGroupId) {
+                // User has a sitewide filter on the attendance stats that they want to see.
+                if ($raidGroupIdFilter) {
+                    $join = $join->join('raid_raid_groups', function ($join) use ($raidGroupIdFilter) {
                         $join->on('raid_raid_groups.raid_id', 'raids.id')
-                            ->where('raid_raid_groups.raid_group_id', $raidGroupId);
-                    })
-                    ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 1) . ' HOUR)')
-                    ->whereNull('raids.cancelled_at');
-            });
-        } else {
-            $query = $query->leftJoin('raids', function ($join) {
-                $join->on('raids.guild_id', 'characters.guild_id')
-                    ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 1) . ' HOUR)')
-                    ->whereNull('raids.cancelled_at');
-            });
-        }
-
-        $query = $query
-            ->leftJoin('raid_characters', function ($join) {
+                            ->where('raid_raid_groups.raid_group_id', $raidGroupIdFilter);
+                    });
+                }
+                return $join;
+            })
+            ->join('raid_characters', function ($join) {
                 $join->on('raid_characters.raid_id', 'raids.id')
                     ->on('raid_characters.character_id', 'characters.id')
                     ->where('raid_characters.is_exempt', 0);
             })
-            ->leftJoin('raid_characters AS raid_characters_benched', function ($join) {
-                $join->on('raid_characters_benched.raid_id', 'raids.id')
-                    ->on('raid_characters_benched.character_id', 'characters.id')
-                    ->where('raid_characters_benched.remark_id', 6); // 6 = benched
-            });
+            ->where('characters.guild_id', $guildId)
+            ->groupBy('characters.id');
+
+        $benchedStats = Character::select([
+                'characters.id',
+                DB::raw("COALESCE(COUNT(`raid_characters`.`id`), 0) AS `benched_count`"),
+            ])
+            ->join('guilds', 'guilds.id', 'characters.guild_id')
+            ->leftJoin('raids', function ($join) use ($raidGroupIdFilter) {
+                $join = $join->on('raids.guild_id', 'characters.guild_id')
+                    ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 1) . ' HOUR)')
+                    ->whereNull('raids.cancelled_at');
+
+                if ($raidGroupIdFilter) {
+                    $join = $join->join('raid_raid_groups', function ($join) use ($raidGroupIdFilter) {
+                        $join->on('raid_raid_groups.raid_id', 'raids.id')
+                            ->where('raid_raid_groups.raid_group_id', $raidGroupIdFilter);
+                    });
+                }
+                return $join;
+            })
+            ->join('raid_characters', function ($join) {
+                $join->on('raid_characters.raid_id', 'raids.id')
+                    ->on('raid_characters.character_id', 'characters.id')
+                    ->where('raid_characters.remark_id', 6); // 6 = benched
+            })
+            ->where('characters.guild_id', $guildId)
+            ->groupBy('characters.id');
+
+        // Query gets built here
+        $query = $query
+            ->addSelect([
+                DB::raw("IF(`attendance_stats`.`raid_count`, `attendance_stats`.`raid_count`, 0) AS 'raid_count'"),
+                DB::raw("IF(`benched_stats`.`benched_count`, `benched_stats`.`benched_count`, 0) AS 'benched_count'"),
+                DB::raw("IF(`attendance_stats`.`attendance_percentage`, `attendance_stats`.`attendance_percentage`, 0) AS 'attendance_percentage'"),
+            ])
+            ->leftJoinSub($attendanceStats, 'attendance_stats', function ($join) {
+                $join->on('characters.id', '=', 'attendance_stats.id');
+            })
+            ->leftJoinSub($benchedStats, 'benched_stats', function ($join) {
+                $join->on('characters.id', '=', 'benched_stats.id');
+            })
+            ->groupBy('characters.id');
 
         return $query;
     }
@@ -418,6 +455,24 @@ class Character extends BaseModel
     public function getDisplaySpecAttribute()
     {
         return $this->spec_label ? $this->spec_label : ($this->spec ? self::specs()[$this->spec]['name'] : null);
+    }
+
+    /**
+     * Takes in a collection of characters that don't have attendance, and a collection
+     * of characters that do have attendance. Merge the attendance into the former collection.
+     */
+    public static function mergeAttendance($characters, $charactersWithAttendance) {
+        if ($characters) {
+            foreach ($characters as $character) {
+                $attendanceCharacter = $charactersWithAttendance->where('id', $character->id)->first();
+                if ($attendanceCharacter) {
+                    $character->raid_count = $attendanceCharacter->raid_count;
+                    $character->benched_count = $attendanceCharacter->benched_count;
+                    $character->attendance_percentage = $attendanceCharacter->attendance_percentage;
+                }
+            }
+        }
+        return $characters;
     }
 
     static public function archetypes() {

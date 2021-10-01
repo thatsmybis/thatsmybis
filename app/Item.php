@@ -81,10 +81,6 @@ class Item extends BaseModel
             ->orderBy('characters.name');
     }
 
-    public function charactersWithAttendance() {
-        $query = $this->characters();
-        return Character::addAttendanceQuery($query)->groupBy('characters.id');
-    }
 
     public function expansion() {
         return $this->belongsTo(Expansion::class);
@@ -140,11 +136,6 @@ class Item extends BaseModel
             ->orderBy('characters.name');
     }
 
-    public function priodCharactersWithAttendance() {
-        $query = $this->priodCharacters();
-        return Character::addAttendanceQuery($query)->groupBy('characters.id');
-    }
-
     public function receivedCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->where(['character_items.type' => self::TYPE_RECEIVED])
@@ -175,11 +166,6 @@ class Item extends BaseModel
                 'received_at',
             ])
             ->orderBy('characters.name');
-    }
-
-    public function receivedCharactersWithAttendance() {
-        $query = $this->receivedCharacters();
-        return Character::addAttendanceQuery($query)->groupBy('characters.id');
     }
 
     public function receivedAndRecipeCharacters() {
@@ -213,11 +199,6 @@ class Item extends BaseModel
                 'received_at',
             ])
             ->orderBy('characters.name');
-    }
-
-    public function receivedAndRecipeCharactersWithAttendance() {
-        $query = $this->receivedAndRecipeCharacters();
-        return Character::addAttendanceQuery($query)->groupBy('characters.id');
     }
 
     public function wishlistCharacters() {
@@ -256,10 +237,5 @@ class Item extends BaseModel
                 'raid_id',
                 'created_at',
             ]);
-    }
-
-    public function wishlistCharactersWithAttendance() {
-        $query = $this->wishlistCharacters();
-        return Character::addAttendanceQuery($query);
     }
 }

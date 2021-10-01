@@ -143,18 +143,25 @@ class MemberController extends Controller
         }
 
         $member = Cache::remember($cacheKey, env('CACHE_MEMBER_SECONDS', 5), function () use ($guild, $memberId) {
-            return Member::where(['guild_id' => $guild->id, 'id' => $memberId])
+            $member = Member::where(['guild_id' => $guild->id, 'id' => $memberId])
                 ->with([
-                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance'),
-                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup',
-                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raidGroup.role',
-                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.secondaryRaidGroups',
-                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.secondaryRaidGroups.role',
-                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.raids',
-                    ($guild->is_attendance_hidden ? 'characters' : 'charactersWithAttendance') . '.recipes',
+                    'characters',
+                    'characters.raidGroup',
+                    'characters.raidGroup.role',
+                    'characters.secondaryRaidGroups',
+                    'characters.secondaryRaidGroups.role',
+                    'characters.raids',
+                    'characters.recipes',
                     'roles',
                 ])
                 ->first();
+
+            // For optimization, fetch characters with their attendance here and then merge them into
+            // the existing characters for prios and wishlists
+            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
+            $member->characters = Character::mergeAttendance($member->characters, $charactersWithAttendance);
+
+            return $member;
         });
 
         if (!$member) {
@@ -164,8 +171,9 @@ class MemberController extends Controller
 
         $user = User::where('id', $member->user_id)->first();
 
+        // Merge all recipes from all characters into one list
         $recipes = collect();
-        foreach ($member->charactersWithAttendance as $character) {
+        foreach ($member->characters as $character) {
             foreach ($character->recipes as $recipe) {
                 $recipes->add($recipe);
             }
@@ -196,7 +204,7 @@ class MemberController extends Controller
         }
 
         return view('member.show', [
-            'characters'       => ($guild->is_attendance_hidden ? $member->characters : $member->charactersWithAttendance),
+            'characters'       => $member->characters,
             'currentMember'    => $currentMember,
             'guild'            => $guild,
             'member'           => $member,
@@ -240,11 +248,17 @@ class MemberController extends Controller
 
         $guild->load([
             'allMembers',
-            'allMembers.charactersWithAttendance',
+            'allMembers.characters',
             'allMembers.roles',
             'raidGroups',
             'raidGroups.role',
         ]);
+
+        $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
+
+        foreach ($guild->allMembers as $member) {
+            $member->characters = Character::mergeAttendance($member->characters, $charactersWithAttendance);
+        }
 
         $unassignedCharacters = Character::where([
                 ['guild_id', $guild->id],

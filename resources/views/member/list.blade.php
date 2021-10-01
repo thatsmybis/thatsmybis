@@ -55,13 +55,13 @@
                             <tr>
                                 <td>
                                     @php
-                                        $benchedCount = $member->charactersWithAttendance->sum(function ($character) {
+                                        $benchedCount = $member->characters->sum(function ($character) {
                                             return $character->benched_count;
                                         });
-                                        $raidCount = $member->charactersWithAttendance->sum(function ($character) {
+                                        $raidCount = $member->characters->sum(function ($character) {
                                             return $character->raid_count;
                                         });
-                                        $raidsAttended = $member->charactersWithAttendance->where('raid_count', '>', 0)->sum(function ($character) {
+                                        $raidsAttended = $member->characters->where('raid_count', '>', 0)->sum(function ($character) {
                                             return $character->raid_count * $character->attendance_percentage;
                                         });
                                         $attendancePercentage = $raidCount > 0 ? ($raidsAttended / $raidCount) : 100;
@@ -70,7 +70,7 @@
                                 </td>
                                 <td>
                                     <ul class="list-inline">
-                                        @foreach($member->charactersWithAttendance->sortBy('name') as $character)
+                                        @foreach($member->characters->sortBy('name') as $character)
                                             @include('member/partials/listMemberCharacter')
                                         @endforeach
                                     </ul>

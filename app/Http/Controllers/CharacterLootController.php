@@ -42,7 +42,7 @@ class CharacterLootController extends Controller
         }
 
         $query = Character::select('characters.*')->where(['characters.id' => $characterId, 'characters.guild_id' => $guild->id]);
-        $query = Character::addAttendanceQuery($query)->groupBy('characters.id');
+        $query = Character::addAttendanceQuery($query, $guild->id);
         $character = $query->firstOrFail();
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {

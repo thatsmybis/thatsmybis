@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Guild, Instance, Item};
+use App\{AuditLog, Character, Guild, Instance, Item};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -187,15 +187,10 @@ class ItemController extends Controller
 
         // For optimization, fetch characters with their attendance here.
         // We will plop this in with characters in the Javascript on the client side.
-        $characters = null;
-        if (!$guild->is_attendance_hidden) {
-            $characters = Guild::getAllCharactersWithAttendanceCached($guild);
-        } else {
-            $characters = $guild->characters()->get();
-        }
+        $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
 
         return view('item.list', [
-            'characters'      => $characters,
+            'charactersWithAttendance' => $charactersWithAttendance,
             'currentMember'   => $currentMember,
             'guild'           => $guild,
             'instance'        => $instance,
@@ -376,17 +371,7 @@ class ItemController extends Controller
         // the existing characters for prios and wishlists
         if (!$guild->is_attendance_hidden) {
             $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-
-            if ($wishlistCharacters) {
-                foreach ($wishlistCharacters as $wishlistCharacter) {
-                    $attendanceCharacter = $charactersWithAttendance->where('id', $wishlistCharacter->id)->first();
-                    if ($attendanceCharacter) {
-                        $wishlistCharacter->raid_count = $attendanceCharacter->raid_count;
-                        $wishlistCharacter->benched_count = $attendanceCharacter->benched_count;
-                        $wishlistCharacter->attendance_percentage = $attendanceCharacter->attendance_percentage;
-                    }
-                }
-            }
+            $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
         }
 
         return view('item.show', [

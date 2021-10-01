@@ -8,7 +8,7 @@
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
                     @php
-                        $benchedCount = $member->charactersWithAttendance->sum(function ($character) {
+                        $benchedCount = $member->characters->sum(function ($character) {
                             return $character->benched_count;
                         });
                         $raidCount = $characters->sum(function ($character) {
@@ -38,7 +38,6 @@
                     @if ($member->characters->count())
                         @php
                             $raids = collect();
-                            $characeters = ($guild->is_attendance_hidden ? $member->characters : $member->charactersWithAttendance);
                             foreach ($characters as $character) {
                                 $raids = $raids->merge($character->raids);
                             }

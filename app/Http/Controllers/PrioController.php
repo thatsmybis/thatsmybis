@@ -189,18 +189,8 @@ class PrioController extends Controller
         // the existing characters for prios and wishlists
         if (!$guild->is_attendance_hidden) {
             $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-
             foreach ($items as $item) {
-                if ($item->wishlistCharacters) {
-                    foreach ($item->wishlistCharacters as $wishlistCharacter) {
-                        $attendanceCharacter = $charactersWithAttendance->where('id', $wishlistCharacter->id)->first();
-                        if ($attendanceCharacter) {
-                            $wishlistCharacter->raid_count = $attendanceCharacter->raid_count;
-                            $wishlistCharacter->benched_count = $attendanceCharacter->benched_count;
-                            $wishlistCharacter->attendance_percentage = $attendanceCharacter->attendance_percentage;
-                        }
-                    }
-                }
+                $item->wishlistCharacters = Character::mergeAttendance($item->wishlistCharacters, $charactersWithAttendance);
             }
         }
 
@@ -324,26 +314,11 @@ class PrioController extends Controller
 
         $wishlistCharacters = $item->wishlistCharacters;
 
-        $charactersWithAttendance = null;
-        if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-        }
-
         // For optimization, fetch characters with their attendance here and then merge them into
         // the existing characters for prios and wishlists
         if (!$guild->is_attendance_hidden) {
             $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-
-            if ($wishlistCharacters) {
-                foreach ($wishlistCharacters as $wishlistCharacter) {
-                    $attendanceCharacter = $charactersWithAttendance->where('id', $wishlistCharacter->id)->first();
-                    if ($attendanceCharacter) {
-                        $wishlistCharacter->raid_count = $attendanceCharacter->raid_count;
-                        $wishlistCharacter->benched_count = $attendanceCharacter->benched_count;
-                        $wishlistCharacter->attendance_percentage = $attendanceCharacter->attendance_percentage;
-                    }
-                }
-            }
+            $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
         }
 
         return view('guild.prios.singleInput', [
