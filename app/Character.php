@@ -213,7 +213,7 @@ class Character extends BaseModel
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->leftJoin('guild_items', function ($join) {
                 $join->on('guild_items.item_id', 'items.item_id')
-                    ->on('guild_items.guild_id', 'characters.guild_id'); // I spent too long before googling why `where()` wasn't working: https://stackoverflow.com/a/29544890/1196517
+                    ->where('guild_items.guild_id', request()->get('guild')->id);
             })
             ->where('character_items.type', Item::TYPE_RECEIVED)
             ->groupBy('character_items.id')
@@ -263,7 +263,7 @@ class Character extends BaseModel
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->leftJoin('guild_items', function ($join) {
                 $join->on('guild_items.item_id', 'items.item_id')
-                    ->on('guild_items.guild_id', 'characters.guild_id');
+                    ->where('guild_items.guild_id', request()->get('guild')->id);
             })
             ->where([
                 ['character_items.type', Item::TYPE_PRIO],
@@ -317,7 +317,7 @@ class Character extends BaseModel
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->leftJoin('guild_items', function ($join) {
                 $join->on('guild_items.item_id', 'items.item_id')
-                    ->on('guild_items.guild_id', 'characters.guild_id');
+                    ->where('guild_items.guild_id', request()->get('guild')->id);
             })
             ->where([
                 'character_items.type' => Item::TYPE_WISHLIST,
