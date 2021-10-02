@@ -10,7 +10,7 @@ $(document).ready(function () {
         inline: true,
         step: 30,
         theme: 'dark',
-        value: date ? moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss") : null,
+        value: date ? moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss") : moment().format("YYYY-MM-DD HH:mm:ss"),
     });
 
     // Trigger a date change to make it convert to UTC and stuff.
