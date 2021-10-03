@@ -47,7 +47,7 @@
                         <div id="importArea" class="col-12" style="display:none;">
                             <label for="import_textarea" class="font-weight-bold">
                                 <span class="fas fa-fw fa-align-left text-muted"></span>
-                                {{ __("Paste your") }} <abbr title="Comma Separated Value">{{ __("CSV") }}</abbr> {{ __("data") }}
+                                {{ __("Paste your") }} <abbr title="{{ __('Comma Separated Value') }}">{{ __("CSV") }}</abbr> {{ __("data") }}
                                 <span class="small text-muted">{{ __("max") }} {{ $maxItems }} {{ __("rows") }}</span>
                             </label>
                             <!-- For supporting other input methods
@@ -62,12 +62,12 @@
                                 <textarea id="importTextarea"
                                     name="import_textarea"
                                     rows="20"
-                                    placeholder="Accepts RCLootCouncil CSV data, or any CSV. First line must contain headers for the data (case sensitive).
+                                    placeholder="{{ __('Accepts RCLootCouncil CSV data, or any CSV. First line must contain headers for the data (case sensitive).') }}
 eg.
     character,date,itemID,itemName,note
     Gurgthock,2020-10-01,18821,Quick Strike Ring,That's my BIS
 
-Supported header fields: (CASE SENSITIVE)
+{{ __('Supported header fields: (CASE SENSITIVE)') }}
 ================
 player OR character (required)
 itemID OR item_id (required)
@@ -77,7 +77,7 @@ publicNote OR public_note (max 140 chars)
 (officerNote OR officer_note) + (note AND/OR votes AND/OR response) (max 140 chars)
 offspec
 
-If note, response, public note, or officer note are equal to 'OS', offspec flag will be set to true.
+{{ __('If note, response, public note, or officer note are equal to 'OS', offspec flag will be set to true.') }}
 "
                                     class="form-control dark"
                                     autocomplete="off"></textarea>
@@ -142,7 +142,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     <span class="fas fa-fw fa-calendar-alt text-muted"></span>
                                     {{ __("Set default date") }} <span class="text-muted small">{{ __("optional, overwrites all date inputs") }}</span>
                                 </label>
-                                <input name="date_default" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="defaults to today" class="form-control dark" autocomplete="off">
+                                <input name="date_default" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="{{ __('defaults to today') }}" class="form-control dark" autocomplete="off">
                             </div>
                         </div>
                     </div>
@@ -211,7 +211,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                 @endif
                                             </label>
 
-                                            <input maxlength="50" data-max-length="50" data-is-single-input="1" data-id="{{ $i }}" type="text" placeholder="item name"
+                                            <input maxlength="50" data-max-length="50" data-is-single-input="1" data-id="{{ $i }}" type="text" placeholder="{{ __('item name') }}"
                                                 class="js-item-autocomplete js-input-text js-show-next form-control dark {{ $errors->has($itemId) ? 'form-danger' : '' }}" autocomplete="off"
                                                 style="{{ old($itemId) ? 'display:none;' : '' }}">
                                             <span class="js-loading-indicator" style="display:none;">{{ __("Searching") }}...</span>&nbsp;
@@ -316,7 +316,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                     </span>
                                                 @endif
                                             </label>
-                                            <input name="item[{{ $i }}][note]" maxlength="140" data-max-length="140" type="text" placeholder="brief public note"
+                                            <input name="item[{{ $i }}][note]" maxlength="140" data-max-length="140" type="text" placeholder="{{ __('brief public note') }}"
                                                 class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.note') ? 'form-danger' : '' }}" autocomplete="off"
                                                 value="{{ old('item.' . $i . '.note') ? old('item.' . $i . '.note') : '' }}">
                                         </div>
@@ -338,7 +338,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                     </span>
                                                 @endif
                                             </label>
-                                            <input name="item[{{ $i }}][officer_note]" maxlength="140" data-max-length="140" type="text" placeholder="officer note"
+                                            <input name="item[{{ $i }}][officer_note]" maxlength="140" data-max-length="140" type="text" placeholder="{{ __('officer note') }}"
                                                 class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.officer_note') ? 'form-danger' : '' }}" autocomplete="off"
                                                 value="{{ old('item.' . $i . '.officer_note') ? old('item.' . $i . '.officer_note') : '' }}">
                                         </div>
@@ -351,7 +351,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <label for="item[{{ $i }}][received_at]" class="font-weight-bold">
                                                 @if ($i == 0)
                                                     <span class="fas fa-fw fa-calendar-alt text-muted"></span>
-                                                    <abbr title="RCLC date imports may be off by +/-24h due to timezone issues.">{{ __("Date") }}</abbr>
+                                                    <abbr title="{{ __('RCLC date imports may be off by +/-24h due to timezone issues.') }}">{{ __("Date") }}</abbr>
                                                     <span class="text-muted small">{{ __("optional") }}</span>
                                                 @else
                                                     &nbsp;
@@ -360,7 +360,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                     </span>
                                                 @endif
                                             </label>
-                                            <input name="item[{{ $i }}][received_at]" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="defaults to today"
+                                            <input name="item[{{ $i }}][received_at]" min="2004-09-22" max="{{ $maxDate }}" type="date" placeholder="{{ __('defaults to today') }}"
                                                 class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.received_at') ? 'form-danger' : '' }}" autocomplete="off"
                                                 {{ old('item.' . $i . '.received_at') ? old('item.' . $i . '.received_at') : '' }}>
                                         </div>
@@ -373,7 +373,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                             <label for="item[{{ $i }}][import_id]" class="font-weight-bold">
                                                 @if ($i == 0)
                                                     <span class="fas fa-fw fa-fingerprint text-muted"></span>
-                                                        <abbr title="We use this to prevent your guild from loading duplicates of the same import data.">{{ __("Unique Import ID") }}</abbr>
+                                                        <abbr title="{{ __('We use this to prevent your guild from loading duplicates of the same import data.') }}">{{ __("Unique Import ID") }}</abbr>
                                                     <span class="text-muted small">{{ __("optional") }}</span>
                                                 @else
                                                     &nbsp;
@@ -382,7 +382,7 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                                     </span>
                                                 @endif
                                             </label>
-                                            <input name="item[{{ $i }}][import_id]" maxlength="20" data-max-length="20" type="text" placeholder="unique ID from loot addon"
+                                            <input name="item[{{ $i }}][import_id]" maxlength="20" data-max-length="20" type="text" placeholder="{{ __('unique ID from loot addon') }}"
                                                 class="js-show-next form-control dark {{ $errors->has('item.' . $i . '.import_id') ? 'form-danger' : '' }}" autocomplete="off"
                                                 value="{{ old('item.' . $i . '.import_id') ? old('item.' . $i . '.import_id') : '' }}">
                                         </div>
@@ -404,21 +404,21 @@ If note, response, public note, or officer note are equal to 'OS', offspec flag 
                                     <label class="text-muted">
                                         <input type="checkbox" name="skip_missing_characters" value="1" class="" autocomplete="off"
                                             {{ (old('skip_missing_characters') && old('skip_missing_characters') == 1) ? 'checked' : '' }}>
-                                            {{ __("Skip items that don't have a character") }} <abbr title="useful for ignoring characters that aren't in your guild when importing data">?</abbr>
+                                            {{ __("Skip items that don't have a character") }} <abbr title="{{ __('useful for ignoring characters that aren\'t in your guild when importing data') }}">?</abbr>
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label class="text-muted">
                                         <input type="checkbox" name="delete_wishlist_items" value="1" class="" autocomplete="off"
                                             {{ (old('delete_wishlist_items') && old('delete_wishlist_items') == 1) || (!old('delete_wishlist_items') && $guild->is_wishlist_autopurged) ? 'checked' : '' }}>
-                                            {{ __("Delete assigned items from each character's wishlist") }} <abbr title="if unchecked, corresponding wishlist items will be flagged as received but still be visible">?</abbr>
+                                            {{ __("Delete assigned items from each character's wishlist") }} <abbr title="{{ __('if unchecked, corresponding wishlist items will be flagged as received but still be visible') }}">?</abbr>
                                     </label>
                                 </div>
                                 <div class="checkbox">
                                     <label class="text-muted">
                                         <input type="checkbox" name="delete_prio_items" value="1" class="" autocomplete="off"
                                             {{ (old('delete_prio_items') && old('delete_prio_items') == 1) || (!old('delete_prio_items') && $guild->is_prio_autopurged) ? 'checked' : '' }}>
-                                            {{ __("Delete assigned items from each character's prio list") }} <abbr title="if unchecked, corresponding prio will be flagged as received but still be visible">?</abbr>
+                                            {{ __("Delete assigned items from each character's prio list") }} <abbr title="{{ __('if unchecked, corresponding prio will be flagged as received but still be visible') }}">?</abbr>
                                     </label>
                                 </div>
                             </div>

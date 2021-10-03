@@ -134,7 +134,7 @@ $(document).ready(function () {
         fixedHeader : true, // Header row sticks to top of window when scrolling down
         autoWidth : true,
         oLanguage: {
-            sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
+            sSearch: "<abbr title='{{ __('Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"') }}'>{{ __('Search') }}</abbr>"
         },
         columns : [
             { class : "width-200" },

@@ -452,6 +452,16 @@ class Character extends BaseModel
         return $this->class ? self::classes()[$this->class] : null;
     }
 
+    public function getDisplayProfession1Attribute()
+    {
+        return $this->profession_1 ? self::professions()[$this->profession_1] : null;
+    }
+
+    public function getDisplayProfession2Attribute()
+    {
+        return $this->profession_2 ? self::professions()[$this->profession_2] : null;
+    }
+
     public function getDisplaySpecAttribute()
     {
         return $this->spec_label ? $this->spec_label : ($this->spec ? self::specs()[$this->spec]['name'] : null);

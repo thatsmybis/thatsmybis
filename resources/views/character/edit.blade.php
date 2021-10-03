@@ -8,7 +8,7 @@
             <div class="row mb-3">
                 @if ($character)
                     <div class="col-12 pt-2 bg-lightest rounded">
-                        @include('character/partials/header', ['headerSize' => 1, 'showEdit' => false, 'showLogs' => true, 'showEditLoot' => true, 'titlePrefix' => ($character ? ('Edit') . ' ' : ('Create') . ' ')])
+                        @include('character/partials/header', ['headerSize' => 1, 'showEdit' => false, 'showLogs' => true, 'showEditLoot' => true, 'titlePrefix' => ($character ? __('Edit') . ' ' : __('Create') . ' ')])
                     </div>
                 @else
                     <div class="col-12 pt-2 mb-2">
@@ -450,7 +450,7 @@
                                     {{ __("anyone in the guild can see this") }}
                                 </small>
                             </label>
-                            <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
+                            <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="{{ __('anyone in the guild can see this') }}" class="form-control dark">{{ old('public_note') ? old('public_note') : ($character ? $character->public_note : '') }}</textarea>
                         </div>
                     </div>
 
@@ -467,7 +467,7 @@
                                 @if (isStreamerMode())
                                     {{ __("Hidden in streamer mode") }}
                                 @else
-                                    <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
+                                    <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="{{ __('only officers can see this') }}" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($character ? $character->officer_note : '') }}</textarea>
                                 @endif
                             </div>
                         </div>
@@ -484,7 +484,7 @@
                                             {{ __("only you can see this") }}
                                         </small>
                                     </label>
-                                    <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
+                                    <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="{{ __('only you can see this') }}" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($character ? $character->personal_note : '') }}</textarea>
                                 </div>
                             </div>
                         @endif
@@ -509,7 +509,7 @@
                                     <label>
                                         <input type="checkbox" name="inactive_at" value="1" class="" autocomplete="off"
                                             {{ old('inactive_at') && old('inactive_at') == 1 ? 'checked' : ($character->inactive_at ? 'checked' : '') }}>
-                                            Archive <small class="text-muted">
+                                            {{ __("Archive") }} <small class="text-muted">
                                                 {{ __("no longer visible") }}
                                             </small>
                                     </label>
@@ -522,7 +522,7 @@
                                     <label>
                                         <input type="checkbox" name="is_alt" value="1" class="" autocomplete="off"
                                             {{ old('is_alt') && old('is_alt') == 1 ? 'checked' : ($character->is_alt ? 'checked' : '') }}>
-                                            Alt Character <small class="text-muted">
+                                            {{ __("Alt Character") }} <small class="text-muted">
                                                 {{ __("will be tagged as an alt") }}
                                             </small>
                                     </label>
@@ -535,7 +535,7 @@
                                 <div class="checkbox">
                                     <label>
                                         <input type="checkbox" name="is_alt" value="1" class="" autocomplete="off">
-                                            Alt Character <small class="text-muted">
+                                            {{ __("Alt Character") }} <small class="text-muted">
                                                 {{ __("will be tagged as an alt") }}
                                             </small>
                                     </label>

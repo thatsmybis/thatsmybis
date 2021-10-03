@@ -268,7 +268,7 @@
                             <span class="fas fa-fw fa-sack text-muted"></span>
                             {{ __("Item") }}
                         </label>
-                        <input name="item_id" maxlength="40" data-max-length="40" type="text" placeholder="type an item name" autocomplete="off" class="js-item-autocomplete-link js-input-text form-control dark">
+                        <input name="item_id" maxlength="40" data-max-length="40" type="text" placeholder="{{ __('type an item name') }}" autocomplete="off" class="js-item-autocomplete-link js-input-text form-control dark">
                         <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
                     </div>
                 </div>
@@ -284,10 +284,10 @@
                                         <div class="list-timestamp text-right text-muted p-2 small">
                                             @if ($log->member_id)
                                                 <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->member_slug]) }}" class="text-muted">
-                                                    <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago
+                                                    <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> {{ __("ago") }}
                                                 </a>
                                             @else
-                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> ago
+                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> {{ __("ago") }}
                                             @endif
                                         </div>
 
