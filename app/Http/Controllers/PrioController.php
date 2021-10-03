@@ -312,13 +312,15 @@ class PrioController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $wishlistCharacters = $item->wishlistCharacters;
+        if (!$guild->is_wishlist_disabled) {
+            $wishlistCharacters = $item->wishlistCharacters;
 
-        // For optimization, fetch characters with their attendance here and then merge them into
-        // the existing characters for prios and wishlists
-        if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-            $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
+            // For optimization, fetch characters with their attendance here and then merge them into
+            // the existing characters for prios and wishlists
+            if (!$guild->is_attendance_hidden) {
+                $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
+                $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
+            }
         }
 
         return view('guild.prios.singleInput', [

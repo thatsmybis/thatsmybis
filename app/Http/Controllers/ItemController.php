@@ -236,12 +236,12 @@ class ItemController extends Controller
 
         $viewPrioPermission = $currentMember->hasPermission('view.prios');
         $showPrios = false;
-        if (!$guild->is_prio_private || $viewPrioPermission) {
+        if (!$guild->is_prio_disabled && (!$guild->is_prio_private || $viewPrioPermission)) {
             $showPrios = true;
         }
 
         $showWishlist = false;
-        if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
+        if (!$guild->is_wishlist_disabled && (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists'))) {
             $showWishlist = true;
         }
 
@@ -363,15 +363,17 @@ class ItemController extends Controller
         }
 
         $wishlistCharacters = null;
-        if ($item->relationLoaded('wishlistCharacters')) {
-            $wishlistCharacters = $item->wishlistCharacters;
-        }
+        if ($showWishlist) {
+            if ($item->relationLoaded('wishlistCharacters')) {
+                $wishlistCharacters = $item->wishlistCharacters;
+            }
 
-        // For optimization, fetch characters with their attendance here and then merge them into
-        // the existing characters for prios and wishlists
-        if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-            $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
+            // For optimization, fetch characters with their attendance here and then merge them into
+            // the existing characters for prios and wishlists
+            if (!$guild->is_attendance_hidden && $wishlistCharacters) {
+                $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
+                $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
+            }
         }
 
         return view('item.show', [
