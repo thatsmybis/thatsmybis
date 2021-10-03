@@ -131,7 +131,7 @@
 
                                         @if ($averageTiers[$item->item_id]->average_tier)
                                             <span class="font-weight-light text-muted small">
-                                                avg.
+                                                {{ __("avg.") }}
                                                 <span class="text-tier-">
                                                     @if ($guild->tier_mode == App\Guild::TIER_MODE_S)
                                                         {{ numToSTier(number_format($averageTiers[$item->item_id]->average_tier, 1)) }}
@@ -162,7 +162,7 @@
                                             @endif
                                         </label>
 
-                                        <input name="items[{{ $loop->iteration }}][note]" maxlength="140" data-max-length="140" type="text" placeholder="add a note" class="form-control dark"
+                                        <input name="items[{{ $loop->iteration }}][note]" maxlength="140" data-max-length="140" type="text" placeholder="{{ __('add a note') }}" class="form-control dark"
                                             value="{{ old('items.' . $loop->iteration . '.note') ? old('items.' . $loop->iteration . '.note') : ($item->guild_note ? $item->guild_note : '') }}">
 
                                         @if ($errors->has('items.' . $loop->iteration . '.note'))
@@ -185,7 +185,7 @@
                                             @endif
                                         </label>
 
-                                        <input name="items[{{ $loop->iteration }}][priority]" maxlength="140" data-max-length="140" type="text" placeholder="eg. mage > warlock > boomkin" class="form-control dark"
+                                        <input name="items[{{ $loop->iteration }}][priority]" maxlength="140" data-max-length="140" type="text" placeholder="{{ __('eg. mage > warlock > boomkin') }}" class="form-control dark"
                                             value="{{ old('items.' . $loop->iteration . '.priority') ? old('items.' . $loop->iteration . '.priority') : ($item->guild_priority ? $item->guild_priority : '') }}">
 
                                         @if ($errors->has('items.' . $loop->iteration . '.priority'))

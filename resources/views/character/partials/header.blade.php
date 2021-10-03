@@ -57,7 +57,7 @@
                 <small>
                     <span class="font-weight-bold text-danger">{{ $character->inactive_at ? __('ARCHIVED') : '' }}</span>
                     {{ $character->level ? $character->level : '' }}
-                    {{ $character->race  ? $character->race : '' }}
+                    {{ $character->display_race  ? $character->display_race : '' }}
                 </small>
             </li>
         @endif
@@ -65,9 +65,9 @@
         @if ($character->rank || $character->profession_1 || $character->profession_2 || $character->is_alt)
             <li>
                 <small>
-                    {{ $character->rank         ? 'Rank ' . $character->rank . ($character->profession_1 || $character->profession_2 ? ',' : '') : '' }}
-                    {{ $character->profession_1 ? $character->profession_1 . ($character->profession_2 ? ',' : '') : '' }}
-                    {{ $character->profession_2 ? $character->profession_2 : ''}}
+                    {{ $character->rank         ? __('Rank') . ' ' . $character->rank . ($character->profession_1 || $character->profession_2 ? ',' : '') : '' }}
+                    {{ $character->display_profession_1 ? $character->display_profession_1 . ($character->profession_2 ? ',' : '') : '' }}
+                    {{ $character->display_profession_2 ? $character->display_profession_2 : ''}}
                 </small>
             </li>
         @endif
@@ -80,7 +80,7 @@
                     {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
                     @if ($character->relationLoaded('member'))
                         <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'usernameSlug' => $character->member->slug]) }}" class="">
-                            {{ $character->member->username }}{{ __("'s character") }}
+                            {{ __(":memberName's character", ["memberName" => $character->member->username]) }}
                         </a>
                     @endif
                 @else

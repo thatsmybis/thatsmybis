@@ -321,7 +321,7 @@
             paging : false,
             fixedHeader : true, // Header row sticks to top of window when scrolling down
             oLanguage: {
-                sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
+                sSearch: "<abbr title='{{ __('Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"') }}'>{{ __('Search') }}</abbr>"
             },
             columns : [
                 { orderable : false, className : "width-130" },

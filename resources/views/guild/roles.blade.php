@@ -24,7 +24,7 @@
                         <br>
                         {{ __("This will update colors, names, order, add new roles, and remove old ones.") }}
                         <br>
-                        {{ __("It") }} <strong>{{ __("will not") }}</strong> {{ __("sync the") }} <strong>{{ __("display onl") }}y</strong> {{ __("roles listed alongside offline members.") }}
+                        {!! __("It <strong>will not</strong> sync the <strong>display only</strong> roles listed alongside offline members.") !!}
                     </p>
                 </div>
 

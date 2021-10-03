@@ -52,7 +52,7 @@
                                     {{ __("anyone in the guild can see this") }}
                                 </small>
                             </label>
-                            <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($member ? $member->public_note : '') }}</textarea>
+                            <textarea maxlength="140" data-max-length="140" name="public_note" rows="2" placeholder="{{ __('anyone in the guild can see this') }}" class="form-control dark">{{ old('public_note') ? old('public_note') : ($member ? $member->public_note : '') }}</textarea>
                         </div>
                     </div>
 
@@ -70,7 +70,7 @@
                                     <br>
                                     {{ __("Hidden in streamer mode") }}
                                 @else
-                                    <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
+                                    <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="{{ __('only officers can see this') }}" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($member ? $member->officer_note : '') }}</textarea>
                                 @endif
                             </div>
                         </div>
@@ -86,7 +86,7 @@
                                         {{ __("only you can see this") }}
                                     </small>
                                 </label>
-                                <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="only you can see this" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($member ? $member->personal_note : '') }}</textarea>
+                                <textarea maxlength="2000" data-max-length="2000" name="personal_note" rows="2" placeholder="{{ __('only you can see this') }}" class="form-control dark">{{ old('personal_note') ? old('personal_note') : ($member ? $member->personal_note : '') }}</textarea>
                             </div>
                         </div>
                     --}}
@@ -103,7 +103,7 @@
                                             {{ __("Unlock received loot list") }}
                                             <small class="text-muted">
                                                 {{ __("allow member to edit their received loot") }}
-                                                <span class="font-weight-bold">overrides guild settings {{ $guild->is_received_locked ? '(' . __("locked") . ')' : '(' . __("already unlocked") . ')' }}</span>
+                                                <span class="font-weight-bold">{{ __("overrides guild settings") }} {{ $guild->is_received_locked ? '(' . __("locked") . ')' : '(' . __("already unlocked") . ')' }}</span>
                                             </small>
                                     </label>
                                 </div>
@@ -123,7 +123,7 @@
                                             {{ __("Unlock wishlists") }}
                                             <small class="text-muted">
                                                 {{ __("allow member to edit their wishlist") }}
-                                                <span class="font-weight-bold">overrides guild settings {{ $guild->is_wishlist_locked ? '(' . __("locked") . ')' : '(' . __("already unlocked") . ')' }}</span>
+                                                <span class="font-weight-bold">{{ __("overrides guild settings") }} {{ $guild->is_wishlist_locked ? '(' . __("locked") . ')' : '(' . __("already unlocked") . ')' }}</span>
                                             </small>
                                     </label>
                                 </div>
