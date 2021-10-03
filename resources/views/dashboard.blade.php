@@ -11,13 +11,14 @@
             <h2 class="">
                 {{ __("Welcome") }}, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
             </h2>
-            <strong>Change log</strong> and <strong>announcements</strong> are on the
+            {!! __("<strong>Change log</strong> and <strong>announcements</strong> are on the") !!}
             <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">
-                Discord</a>
+                {{ __("Discord") }}
+            </a>
             <br>
-            If you like the site, please <a href="{{ route('donate') }}" class="text-patreon">support it on Patreon</a> to help keep it free for everyone.
+            {!! __('Like the site? Consider <a href=":donateLink" class="text-patreon">supporting on Patreon</a> to help keep the lights on.', ['donateLink' => route('donate')]) !!}
             <br>
-            More support = more features
+            {{ __("More support = more features") }}
         </div>
 
         <div class="col-12 col-sm-6 offset-sm-3 col-md-4 offset-md-4 mt-3">

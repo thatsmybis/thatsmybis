@@ -367,7 +367,7 @@
                                         {{ old('is_wishlist_private') && old('is_wishlist_private') == 1 ? 'checked' : ($guild->is_wishlist_private ? 'checked' : '') }}>
                                         {{ __("Limit") }} <strong>{{ __("wishlist visibility") }}</strong> {{ __("to Raid Leaders") }}
                                         <span class="text-muted small">
-                                            {{ __("members can still see <em>their own</em> characters' wishlists") }}
+                                            {!! __("members can still see <em>their own</em> characters' wishlists") !!}
                                         </span>
                                 </label>
                             </div>

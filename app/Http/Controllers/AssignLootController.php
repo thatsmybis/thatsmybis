@@ -58,7 +58,7 @@ class AssignLootController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            request()->session()->flash('status', __("You don't have permissions to view that page."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -97,7 +97,7 @@ class AssignLootController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            request()->session()->flash('status', __("You don't have permissions to view that page."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -147,7 +147,7 @@ class AssignLootController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
-            request()->session()->flash('status', 'You don\'t have permissions to submit that.');
+            request()->session()->flash('status', __("You don't have permissions to submit that."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -231,7 +231,7 @@ class AssignLootController extends Controller
             'created_at'    => getDateTime(),
         ]);
 
-        request()->session()->flash('status', "Successfully updated loot assignment (containing {$itemCount} items).");
+        request()->session()->flash('status', __("Successfully updated loot assignment (containing :itemCount items).", ['itemCount' => $itemCount]));
 
         return redirect()->route('item.assignLoot.list', [
             'guildId'   => $guild->id,
@@ -357,7 +357,7 @@ class AssignLootController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raid-loot')) {
-            request()->session()->flash('status', 'You don\'t have permissions to submit that.');
+            request()->session()->flash('status', __("You don't have permissions to submit that."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -491,11 +491,11 @@ class AssignLootController extends Controller
                             'created_at'    => $now,
                         ];
                     } else {
-                        $warnings .= (isset($item['label']) ? $item['label'] : $item['id']) . ' to character ID ' . $item['character_id'] . ', ';
+                        $warnings .= __(':item to character ID :character, ', ['item' => (isset($item['label']) ? $item['label'] : $item['id']), 'character' => $item['character_id']]);
                         $failedCount++;
                     }
                 } else {
-                    $warnings .= (isset($item['label']) ? $item['label'] : $item['id']) . ' to missing character, ';
+                    $warnings .= __(':item to missing character, ', ['item' => (isset($item['label']) ? $item['label'] : $item['id'])]);
                     $failedCount++;
                 }
             }
@@ -650,7 +650,15 @@ class AssignLootController extends Controller
 
         AuditLog::insert($audits);
 
-        request()->session()->flash('status', 'Successfully added ' . $addedCount . ' items. ' . $failedCount . ' failures' . ($warnings ? ': ' . rtrim($warnings, ', ') : '.'));
+        request()->session()->flash('status',
+            __('Successfully added :addedCount items. :failedCount failures:warnings',
+                [
+                    'addedCount'  => $addedCount,
+                    'failedCount' => $failedCount,
+                    'warnings'    => ($warnings ? ': ' . rtrim($warnings, ', ') : '.'),
+                ]
+            )
+        );
 
         return redirect()->route('guild.auditLog', [
             'guildId'   => $guild->id,
