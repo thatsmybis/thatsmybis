@@ -105,8 +105,8 @@
                                 <abbr title="This applies across your entire guild. If you're the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 's' : '' }} for the data to update. Officers may get a different cache than members depending on wishlist/prio visibility.">?</abbr>
                             </p>
                             <p>
-                                Publicly sharable copy of the generic loot tables <a href="{{ route('loot') }}" target="_blank">here</a>. The format of the data being exported is subject to change. If you need access to data that isn't here, please reach out on
-                                <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
+                                {!!  __('Publicly sharable copy of the generic loot tables <a href=":lootLink" target="_blank">here</a>. The format of the data being exported is subject to change. If you need access to data that isn\'t here, please reach out on <a href=":discordLink" target="_blank" alt="Join the :appName Discord Server" title="Join the :appName Discord Server" class="">Discord</a>.',
+                                 ['lootLink' => route('loot'), 'discordLink' => env('APP_DISCORD'), 'appName' => env('APP_NAME') ]) !!}
                             </p>
                         </li>
                         <!-- Loot Received -->

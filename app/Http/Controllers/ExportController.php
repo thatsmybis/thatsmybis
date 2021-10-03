@@ -398,12 +398,12 @@ class ExportController extends Controller {
         }
 
         if ($lootType == Item::TYPE_WISHLIST && !$showWishlist) {
-            request()->session()->flash('status', 'You don\'t have permissions to view wishlists.');
+            request()->session()->flash('status', __("You don't have permissions to view wishlists."));
             return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
         }
 
         if ($lootType == Item::TYPE_PRIO && !$showPrios) {
-            request()->session()->flash('status', 'You don\'t have permissions to view prios.');
+            request()->session()->flash('status', __("You don't have permissions to view prios."));
             return redirect()->route('guild.home', ['guildId' => $guild->id, 'guildSlug' => $guildSlug]);
         }
 

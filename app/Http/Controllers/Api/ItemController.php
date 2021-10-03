@@ -56,7 +56,10 @@ class ItemController extends \App\Http\Controllers\Controller
         ], $this->getValidationRules());
 
         if ($validator->fails()) {
-            return response()->json(['error' => 'Query did not pass validation. Query must be between 1 and 40 characters. Expansion ID must be between 1 and 99.'], 403);
+            return response()->json([
+                    'error' => __('Query must be between 1 and :charLimit characters. Expansion ID must be between 1 and :expansionLimit.', ['charLimit' => 40, 'expansionLimit' => 3])
+                ],
+                403);
         } else {
             if ($query && $query != " ") {
                 $sqlQuery = Item::orderByDesc('weight')

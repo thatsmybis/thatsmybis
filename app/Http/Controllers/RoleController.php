@@ -29,7 +29,7 @@ class RoleController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('view.discord-roles')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            request()->session()->flash('status', ("You don't have permissions to view that page."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -52,7 +52,7 @@ class RoleController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('sync.discord-roles')) {
-            request()->session()->flash('status', 'You don\'t have permissions to sync roles.');
+            request()->session()->flash('status', __("You don't have permissions to sync roles."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -60,7 +60,14 @@ class RoleController extends Controller
 
         $result = Role::syncWithDiscord($guild);
 
-        request()->session()->flash('status', $result['updatedCount'] . ' roles synced. ' . $result['addedCount'] . ' roles added. ' . $result['removedCount'] . ' roles removed.');
+        request()->session()->flash('status',
+            __(":updatedCount roles synced. :addedCount roles added. :removedCount roles removed", [
+                'updatedCount' => $result['updatedCount'],
+                'addedCount'   => $result['addedCount'],
+                'removedCount' => $result['removedCount'],
+            ])
+        );
+
         return redirect()->route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 }

@@ -205,13 +205,13 @@ function timeSince ($timestamp) {
     $time = time() - $timestamp; // to get the time since that moment
     $time = ($time < 1) ? 1 : $time;
     $tokens = array (
-        31536000 => 'year',
-        2592000 => 'month',
-        604800 => 'week',
-        86400 => 'day',
-        3600 => 'hour',
-        60 => 'minute',
-        1 => 'second'
+        31536000 => __('year'),
+        2592000 => __('month'),
+        604800 => __('week'),
+        86400 => __('day'),
+        3600 => __('hour'),
+        60 => __('minute'),
+        1 => __('second')
     );
 
     foreach ($tokens as $unit => $text) {
@@ -234,13 +234,13 @@ function timeUntil ($timestamp) {
     $time = $timestamp - time(); // to get the time until that moment
     $time = ($time < 1) ? 1 : $time;
     $tokens = array (
-        31536000 => 'year',
-        2592000 => 'month',
-        604800 => 'week',
-        86400 => 'day',
-        3600 => 'hour',
-        60 => 'minute',
-        1 => 'second'
+        31536000 => __('year'),
+        2592000 => __('month'),
+        604800 => __('week'),
+        86400 => __('day'),
+        3600 => __('hour'),
+        60 => __('minute'),
+        1 => __('second')
     );
 
     foreach ($tokens as $unit => $text) {

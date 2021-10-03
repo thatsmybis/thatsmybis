@@ -31,7 +31,7 @@ class ItemNoteController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.items')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            request()->session()->flash('status', __("You don't have permissions to view that page."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -94,7 +94,7 @@ class ItemNoteController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.items')) {
-            request()->session()->flash('status', 'You don\'t have permissions to submit that.');
+            request()->session()->flash('status', __("You don't have permissions to submit that."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->Slug]);
         }
 
@@ -185,7 +185,7 @@ class ItemNoteController extends Controller
 
         AuditLog::insert($audits);
 
-        request()->session()->flash('status', 'Successfully updated notes. ' . $addedCount . ' added, ' . $updatedCount . ' updated.');
+        request()->session()->flash('status', __('Successfully updated notes. :addedCount added, :updatedCount updated.', ['addedCount' => $addedCount, 'updatedCount' => $updatedCount]));
 
         return redirect()->route('guild.item.list', [
             'guildId'      => $guild->id,
@@ -222,16 +222,16 @@ class ItemNoteController extends Controller
         $item = Item::findOrFail(request()->input('id'));
 
         if (!$currentMember->hasPermission('edit.items')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit items.');
+            request()->session()->flash('status', __("You don't have permissions to edit items."));
             return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name)]);
         }
 
         $existingRelationship = $guild->items()->find(request()->input('id'));
 
-        $noticeVerb = null;
+        $message = null;
 
         if ($existingRelationship) {
-            $noticeVerb = 'updated';
+            $message = __("Successfully updated :itemName's note.", ['itemName' => $item->name]);
 
             $guild->items()->updateExistingPivot($item->item_id, [
                 'note'       => request()->input('note'),
@@ -247,7 +247,7 @@ class ItemNoteController extends Controller
                 'item_id'     => $item->item_id,
             ]);
         } else {
-            $noticeVerb = 'created';
+            $message = __("Successfully created :itemName's note.", ['itemName' => $item->name]);
 
             $guild->items()->attach($item->item_id, [
                 'note'       => request()->input('note'),
@@ -264,7 +264,7 @@ class ItemNoteController extends Controller
             ]);
         }
 
-        request()->session()->flash('status', "Successfully " . $noticeVerb . " " . $item->name ."'s note.");
+        request()->session()->flash('status', $message);
 
         return redirect()->route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name), 'b' => 1]);
     }
