@@ -312,6 +312,8 @@ class PrioController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
+        $wishlistCharacters = null;
+
         if (!$guild->is_wishlist_disabled) {
             $wishlistCharacters = $item->wishlistCharacters;
 
