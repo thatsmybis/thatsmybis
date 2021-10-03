@@ -84,7 +84,7 @@ class Raid extends BaseModel
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->leftJoin('guild_items', function ($join) {
                 $join->on('guild_items.item_id', 'items.item_id')
-                    ->on('guild_items.guild_id', 'characters.guild_id'); // I spent too long before googling why `where()` wasn't working: https://stackoverflow.com/a/29544890/1196517
+                    ->on('guild_items.guild_id', 'characters.guild_id');
             })
             ->groupBy('character_items.id')
             // Composite order by which checks for received_at date and uses that first, and then created_at date as a fallback
