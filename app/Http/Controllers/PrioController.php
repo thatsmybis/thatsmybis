@@ -183,14 +183,14 @@ class PrioController extends Controller
 
         if (!$guild->is_wishlist_disabled) {
             $items = ItemController::mergeTokenWishlists($items, $guild);
-        }
 
-        // For optimization, fetch characters with their attendance here and then merge them into
-        // the existing characters for prios and wishlists
-        if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-            foreach ($items as $item) {
-                $item->wishlistCharacters = Character::mergeAttendance($item->wishlistCharacters, $charactersWithAttendance);
+            // For optimization, fetch characters with their attendance here and then merge them into
+            // the existing characters for prios and wishlists
+            if (!$guild->is_attendance_hidden) {
+                $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
+                foreach ($items as $item) {
+                    $item->wishlistCharacters = Character::mergeAttendance($item->wishlistCharacters, $charactersWithAttendance);
+                }
             }
         }
 
