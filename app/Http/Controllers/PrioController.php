@@ -183,14 +183,14 @@ class PrioController extends Controller
 
         if (!$guild->is_wishlist_disabled) {
             $items = ItemController::mergeTokenWishlists($items, $guild);
-        }
 
-        // For optimization, fetch characters with their attendance here and then merge them into
-        // the existing characters for prios and wishlists
-        if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-            foreach ($items as $item) {
-                $item->wishlistCharacters = Character::mergeAttendance($item->wishlistCharacters, $charactersWithAttendance);
+            // For optimization, fetch characters with their attendance here and then merge them into
+            // the existing characters for prios and wishlists
+            if (!$guild->is_attendance_hidden) {
+                $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
+                foreach ($items as $item) {
+                    $item->wishlistCharacters = Character::mergeAttendance($item->wishlistCharacters, $charactersWithAttendance);
+                }
             }
         }
 
@@ -312,13 +312,17 @@ class PrioController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $wishlistCharacters = $item->wishlistCharacters;
+        $wishlistCharacters = null;
 
-        // For optimization, fetch characters with their attendance here and then merge them into
-        // the existing characters for prios and wishlists
-        if (!$guild->is_attendance_hidden) {
-            $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-            $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
+        if (!$guild->is_wishlist_disabled) {
+            $wishlistCharacters = $item->wishlistCharacters;
+
+            // For optimization, fetch characters with their attendance here and then merge them into
+            // the existing characters for prios and wishlists
+            if (!$guild->is_attendance_hidden) {
+                $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
+                $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
+            }
         }
 
         return view('guild.prios.singleInput', [
