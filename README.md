@@ -62,6 +62,10 @@ Some pages allow for certain elements to be cache busted. To bust the cache, pas
 
 This feature isn't 100% implemented everywhere, so the cryptic name `b` has been opted for. Otherwise some users would see `bust` or `bustCache`, and expect everything to get busted all the time. They may then become confused or annoyed when it doesn't work.
 
+## Translations
+
+Translation files are exported using [kkomelin/laravel-translatable-string-exporter](https://github.com/kkomelin/laravel-translatable-string-exporter).
+
 ### phpredis Installation
 
 #### Option 1

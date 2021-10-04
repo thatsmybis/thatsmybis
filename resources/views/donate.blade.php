@@ -107,11 +107,24 @@
             ['icon' => 'crown', 'name' => 'Yjay', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Zura', 'title' => 'Parser'],
         ];
+
+        $translators = [
+            ['icon' => 'comment', 'name' => 'Ardash', 'title' => 'Russian and item names'],
+            ['icon' => 'comment', 'name' => 'Etaya', 'title' => 'German'],
+            ['icon' => 'comment', 'name' => 'Fingbel', 'title' => 'French'],
+            ['icon' => 'comment', 'name' => 'Hopop', 'title' => 'French'],
+            ['icon' => 'comment', 'name' => 'Irhala', 'title' => 'French'],
+            ['icon' => 'comment', 'name' => 'Kyraa', 'title' => 'German'],
+            ['icon' => 'comment', 'name' => 'myki', 'title' => 'French'],
+        ];
     @endphp
 
     <div class="row bg-light pt-5 pb-5 mb-5 rounded">
-        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h1>{{ __("Donors") }}</h1>
+        <div class="col-lg-4 offset-lg-2 col-md-5 offset-md-1 col-sm-6 col-12">
+            <h1>
+                <span class="fa fa-fw fas fa-heart text-danger"></span>
+                {{ __("Donors") }}
+            </h1>
             <ul class="fa-ul">
                 @foreach ($donors as $donor)
                     <li>
@@ -120,6 +133,25 @@
                         <span class="text-muted">{{ $donor['title'] }}</span>
                     </li>
                 @endforeach
+            </ul>
+        </div>
+        <div class="col-lg-4 col-md-5 col-sm-6 col-12">
+            <h1>
+                <span class="fa fa-fw fas fa-heart text-danger"></span>
+                {{ __("Translators") }}
+            </h1>
+            <ul class="fa-ul">
+                @foreach ($translators as $translator)
+                    <li>
+                        <span class="fa-li fas fa-{{ $translator['icon'] }}"></span>
+                        <span class="text-uncommon">{{ $translator['name'] }}</span>
+                        <span class="text-muted">{{ $translator['title'] }}</span>
+                    </li>
+                @endforeach
+                <li>
+                    <span class="fa-li fas fa-question"></span>
+                    <span class="text-muted">If I missed you, DM me on Discord!</span>
+                </li>
             </ul>
         </div>
     </div>
