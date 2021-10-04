@@ -5,11 +5,8 @@
 <link rel="stylesheet" type="text/css" href="{{ loadScript('floatyDots.css', 'css') }}">
 @endsection
 
-@section('css')
-
-@endsection
-
-@section('bodyClass', 'bg-gradient')
+{{-- overflow-x-hidden is for the floaty dots that can wander too far horizontally... --}}
+@section('bodyClass', 'bg-gradient overflow-x-hidden')
 
 @section('content')
 <!-- floaty dot crap in the background -->

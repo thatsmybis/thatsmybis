@@ -388,6 +388,10 @@ body {
     white-space: nowrap;
 }
 
+.overflow-x-hidden {
+    overflow-x: hidden;
+}
+
 .pre {
     white-space: pre-line;
     white-space: pre-wrap;
