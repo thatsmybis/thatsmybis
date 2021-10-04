@@ -24,16 +24,16 @@
             <p class="mt-1 font-weight-normal mb-5 text-3">
                 {{ __("A tool for World of Warcraft") }}
                 <br>
-                {{ __("loot council guilds") }}
+                {{ __("loot management") }}
             </p>
 
-            <p class="font-weight-normal pt-3 text-4">
+            <p class="font-weight-normal mb-5 pt-3 text-4">
                 {{ __("easily keep track of your raid's") }}
                 <br>
                 {{ __("loot distribution") }}
             </p>
 
-            <p class="text-5">
+            <p class="text-5 pt-3">
                 {{ __("see what items people are wishlisting in") }}
                 <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
                 {{ __("and") }}
@@ -50,14 +50,14 @@
 
             <div class="pt-5 mt-5 mb-5">
                 <p class="font-weight-bold text-4">
-                    Preview video
+                    {{ __("Preview video") }} {{ __("(outdated)") }}
                 </p>
                 <iframe style="width:100%;max-width:960px;height:540px;" src="https://www.youtube.com/embed/vOJuNdYs_2w" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
 
             <div class="pt-5 mt-5 mb-5">
                 <p class="font-weight-bold text-4">
-                    Longer preview video with most of the new features and stuff
+                    {{ __("Longer preview video with most of the new features and stuff") }} {{ __("(outdated)") }}
                 </p>
                 <iframe style="width:100%;max-width:960px;height:540px;" src="https://www.youtube.com/embed/hj_tqjxy6sY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>

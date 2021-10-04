@@ -173,6 +173,10 @@
                         <span class="text-muted">{{ $donor['title'] }}</span>
                     </li>
                 @endforeach
+                <li>
+                    <span class="fa-li fas fa-question"></span>
+                    <span class="text-muted">{{ __("If I missed you, DM me on Discord!") }}</span>
+                </li>
             </ul>
         </div>
         <div class="col-lg-4 col-md-5 col-sm-6 col-12">
@@ -190,7 +194,7 @@
                 @endforeach
                 <li>
                     <span class="fa-li fas fa-question"></span>
-                    <span class="text-muted">If I missed you, DM me on Discord!</span>
+                    <span class="text-muted">{{ __("If I missed you, DM me on Discord!") }}</span>
                 </li>
             </ul>
         </div>
