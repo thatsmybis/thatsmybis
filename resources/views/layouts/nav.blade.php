@@ -411,12 +411,9 @@
                         <a class="dropdown-item" href="{{ route('guild.exports', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             {{ __("Exports") }}
                         </a>
-                        <form role="form" method="POST" target="_blank" action="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            {{ csrf_field() }}
-                            <button class="dropdown-item text-white" type="submit">
-                                {{ __("Export Gargul") }}
-                            </button>
-                        </form>
+                        <a class="dropdown-item" href="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            {{ __("Export Gargul") }}
+                        </a>
                         <a class="dropdown-item" target="_blank" href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}">
                             {{ __("Export TMB Tooltips") }}
                         </a>
