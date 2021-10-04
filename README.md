@@ -196,6 +196,8 @@ Roles are loaded from the Discord server.
 
 ## Docker Compose Local Development Environment
 
+_Note: Docker was added by a contributor and is not maintained by the primary developer. Its config is probably out of date._
+
 The laravel development environment can be bootstrapped by utilizing the bitnami laravel docker images to stand up laravel and mariadb.
 
 Requirements: Docker Desktop

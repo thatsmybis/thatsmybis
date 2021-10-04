@@ -493,7 +493,7 @@ class Character extends BaseModel
     static public function archetypes() {
         return [
             self::ARCHETYPE_DPS  => __('DPS'),
-            self::ARCHETYPE_HEAL => __('Heal'),
+            self::ARCHETYPE_HEAL => __('Healer'),
             self::ARCHETYPE_TANK => __('Tank'),
         ];
     }
