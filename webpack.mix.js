@@ -43,7 +43,8 @@ mix .babel('public/js/assignLoot.js',          'public/js/processed/assignLoot.j
     .babel('public/js/raidGroupCharacters.js', 'public/js/processed/raidGroupCharacters.js')
     .babel('public/js/roster.js',              'public/js/processed/roster.js')
 
-    .styles(['public/css/main.css'], 'public/css/processed/main.css');
+    .styles(['public/css/main.css'], 'public/css/processed/main.css')
+    .styles(['public/css/floatyDots.css'], 'public/css/processed/floatyDots.css');
 
 if (mix.inProduction()) {
     mix.version();
