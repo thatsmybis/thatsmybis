@@ -9,16 +9,18 @@
     <div class="row">
         <div class="col-12 text-center mt-5">
             <h2 class="">
-                {{ __("Welcome") }}, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
+                {!! __('Welcome, <span class="text-discord font-weight-bold">:username</span>', ['username' => Auth::user()->discord_username]) !!}
             </h2>
             {!! __("<strong>Change log</strong> and <strong>announcements</strong> are on the") !!}
-            <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">
+            <a href="{{ env('APP_DISCORD') }}"
+                target="_blank"
+                alt="{{ __('Join the :appName Discord Server', ['appName' => env('APP_NAME')]) }}"
+                title="{{ __('Join the :appName Discord Server', ['appName' => env('APP_NAME')]) }}"
+                class="">
                 {{ __("Discord") }}
             </a>
             <br>
-            {!! __('Like the site? Consider <a href=":donateLink" class="text-patreon">supporting on Patreon</a> to help keep the lights on.', ['donateLink' => route('donate')]) !!}
-            <br>
-            {{ __("More support = more features") }}
+            {!! __('Like the site? Consider <a href=":donateLink" class="text-patreon">supporting on Patreon</a> to help make it better.', ['donateLink' => route('donate')]) !!}
         </div>
 
         <div class="col-12 col-sm-6 offset-sm-3 col-md-4 offset-md-4 mt-3">

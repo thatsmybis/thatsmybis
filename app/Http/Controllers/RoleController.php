@@ -29,7 +29,7 @@ class RoleController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('view.discord-roles')) {
-            request()->session()->flash('status', ("You don't have permissions to view that page."));
+            request()->session()->flash('status', __("You don't have permissions to view that page."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
