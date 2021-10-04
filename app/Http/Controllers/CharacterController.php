@@ -540,7 +540,7 @@ class CharacterController extends Controller
         request()->session()->flash('status',
             __('Successfully updated :name, :level:race:class',
                 [
-                    'name'  => $createValues['name'],
+                    'name'  => $updateValues['name'],
                     'level' => (request()->input('level') ? __('level :number ', ['number' => request()->input('level')]) : ''),
                     'race'  => request()->input('race') ? request()->input('race') . ' ' : '',
                     'class' => request()->input('class') ? request()->input('class') . ' ' : '',

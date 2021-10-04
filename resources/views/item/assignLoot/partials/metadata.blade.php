@@ -20,7 +20,7 @@
             maxlength="75"
             type="text"
             class="form-control dark"
-            placeholder="eg. Week 1 MC clear"
+            placeholder="{{ __('eg. Week 1 MC clear') }}"
             value="{{ $oldName }}" />
     </div>
 </div>

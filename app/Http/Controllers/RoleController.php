@@ -61,7 +61,7 @@ class RoleController extends Controller
         $result = Role::syncWithDiscord($guild);
 
         request()->session()->flash('status',
-            __(":updatedCount roles synced. :addedCount roles added. :removedCount roles removed", [
+            __(":updatedCount roles synced. :addedCount roles added. :removedCount roles removed.", [
                 'updatedCount' => $result['updatedCount'],
                 'addedCount'   => $result['addedCount'],
                 'removedCount' => $result['removedCount'],

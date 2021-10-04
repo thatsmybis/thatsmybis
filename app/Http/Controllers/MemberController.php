@@ -122,7 +122,7 @@ class MemberController extends Controller
 
         $currentMember->update(['raid_group_id_filter' => request()->input('raid_group_id')]);
 
-        request()->session()->flash('status', __("Raid Group Filter set."));
+        request()->session()->flash('status', __("Raid Group filter set."));
         return redirect()->back()->withInput(['b' => 1]);
     }
 

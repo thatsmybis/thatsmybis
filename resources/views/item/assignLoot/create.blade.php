@@ -77,7 +77,7 @@ publicNote OR public_note (max 140 chars)
 (officerNote OR officer_note) + (note AND/OR votes AND/OR response) (max 140 chars)
 offspec
 
-{{ __('If note, response, public note, or officer note are equal to 'OS', offspec flag will be set to true.') }}
+{{ __("If note, response, public note, or officer note are equal to 'OS', offspec flag will be set to true.") }}
 "
                                     class="form-control dark"
                                     autocomplete="off"></textarea>
