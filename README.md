@@ -65,6 +65,11 @@ This feature isn't 100% implemented everywhere, so the cryptic name `b` has been
 ## Translations
 
 Translation files are exported using [kkomelin/laravel-translatable-string-exporter](https://github.com/kkomelin/laravel-translatable-string-exporter).
+- Translation strings are stored in `resources/lang/`
+- The list of supported translations are in `app/helpers.php:getLocales()`
+- Use `php artisan translatable:inspect de` (replace `de` with whatever language code you want) to see what strings in the translation file still need to be translated.
+- Use `php artisan translatable:export cn,da,de,en,es,fr,it,ko,no,pl,pt,ru` to update the translation files with all of the strings that the parser can find.
+- For getting people to translate stuff, I've just been putting the translation files up in Google Sheets and giving people edit access, then importing it back into the repo (some parsing required).
 
 ### phpredis Installation
 
