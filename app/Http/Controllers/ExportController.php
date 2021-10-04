@@ -173,16 +173,18 @@ class ExportController extends Controller {
     /**
      * Export a guild's wishlist and loot data for the Gargul addon
      *
-     * @return Response
+     * @return Response|View
      * @throws Exception
      */
-    public function gargulWishlistJson()
+    public function gargul()
     {
         $this->validate(request(), [
             'gargul_wishlist' => 'array|max:' . CharacterLootController::MAX_WISHLIST_LISTS,
             'gargul_wishlist.*' => 'integer|min:1|max:' . CharacterLootController::MAX_WISHLIST_LISTS,
+            'raw' => 'boolean|nullable',
         ]);
 
+        $raw = request()->get('raw');
         $guild = request()->get('guild');
         $currentMember = request()->get('currentMember');
         $memberCanViewPrios = !$guild->is_prio_private || $currentMember->hasPermission('view.prios');
@@ -208,6 +210,9 @@ class ExportController extends Controller {
         $characters = $guild->characters()
             ->has('outstandingItems')
             ->with([
+                'raidGroup' => function ($query) {
+                    $query->select('id', 'name');
+                },
                 'outstandingItems' => function ($query) use ($guild, $listNumbers) {
                     return $query->where(function($query) use ($guild, $listNumbers) {
                         return $query
@@ -220,13 +225,13 @@ class ExportController extends Controller {
                     });
                 },
             ])
-            ->select('id', 'name')
+            ->select('id', 'raid_group_id', 'name')
             ->get();
 
         $wishlistData = [];
+        $raidGroupData = [];
         foreach ($characters as $character) {
             foreach ($character->outstandingItems as $item) {
-
                 // The current member is not allowed to see the order of this item
                 if (($item->type === Item::TYPE_PRIO && !$memberCanViewPrios)
                     || ($item->type === Item::TYPE_WISHLIST && !$memberCanViewWishlists)
@@ -242,24 +247,45 @@ class ExportController extends Controller {
                 }
 
                 $wishlistData[$itemId][] = sprintf(
-                    '%s%s|%s|%s',
+                    '%s%s|%s|%s|%s',
                     $characterName,
                     $item->is_offspec ? '(OS)' : '',
                     $item->order,
                     $item->type === Item::TYPE_PRIO ? 1 : 2,
+                    $character->raid_group_id ?: 0,
                 );
+
+                if ($character->raid_group_id) {
+                    $raidGroupData[$character->raid_group_id] = $character->raidGroup->name;
+                }
             }
         }
 
+        $payload = json_encode([
+            'wishlists' => $wishlistData,
+            'groups' => $raidGroupData,
+            'itemNotes' => $raidGroupData,
+            'loot' => $this->gargulLootPriorityCSV($guild->id),
+        ],
+            JSON_UNESCAPED_UNICODE
+        );
+
+        if (!$raw) {
+            return view('guild.export.gargul', [
+                'currentMember'   => $currentMember,
+                'guild'           => $guild,
+                'showNotes'       => true,
+                'data' => base64_encode(gzcompress($payload, 9)),
+                'name' => 'Gargul data',
+                'maxWishlistLists' => CharacterLootController::MAX_WISHLIST_LISTS,
+            ]);
+        }
+
         return $this->getExport(
-            json_encode([
-                'wishlists' => $wishlistData,
-                'loot' => $this->gargulLootPriorityCSV($guild->id),
-            ],
-                JSON_UNESCAPED_UNICODE
-            ),
+            $payload,
             'Gargul data',
-            self::HTML
+            self::HTML,
+            $raw
         );
     }
 
