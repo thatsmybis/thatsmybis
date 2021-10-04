@@ -365,6 +365,11 @@ body {
     padding: 10px;
 }
 
+.gargul-icon {
+    height: 40px;
+    width: 40px;
+}
+
 .font-weight-medium {
     font-weight: 600 !important;
 }

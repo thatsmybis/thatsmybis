@@ -441,7 +441,7 @@
             @if (isset($guild))
                 <li class="nav-item mr-3 d-patreon-block">
                     <a class="dropdown-item text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
-                    <a href="https://www.patreon.com/lemmings19" target="_blank" class="nav-link active small font-weight-bold text-patreon"
+                    <a href="{{ route('donate') }}" target="_blank" class="nav-link active small font-weight-bold text-patreon"
                         title="Toss a coin to your web dev">
                         <span class="fas fa-fw fa-sack"></span>
                         {{ __("Support TMB") }}

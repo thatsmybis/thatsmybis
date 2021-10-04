@@ -54,7 +54,7 @@
                         <!-- Gargul -->
                         <li class="p-3 mb-3 rounded">
                             <h2>
-                                <span class="fas fa-fw text-legendary"><img src="{{ asset('images/gargul.png') }}" style="width: 40px; height: 40px;"></img></span>
+                                <span class="fas fa-fw text-legendary"><img class="gargul-icon" src="{{ asset('images/gargul.png') }}"></img></span>
                                 <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-epic">
                                     Gargul
                                 </a>

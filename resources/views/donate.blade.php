@@ -3,30 +3,38 @@
 
 @section('content')
 <div class="container-fluid container-width-capped">
-    <div class="row bg-light pt-5 pb-5 mb-3 rounded">
+    <div class="row bg-light mb-3 pt-5 pb-5 rounded">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h1>{{ __("Support the developer!") }} &lt;3</h1>
+            <h1>
+                <span class="fa fa-fw fas fa-heart text-danger"></span>
+                {{ __("Support the developer!") }}
+            </h1>
 
             <p class="mt-3">
-                {!! __("Hello! My name is Lemmings19 and I am the author of this website. I've spent <a href=':link1' target='_blank'>hundreds upon hundreds</a> of hours building, maintaining, and supporting this website and its community.", ['link1' => 'https://github.com/thatsmybis/thatsmybis/graphs/contributors']) !!}
+                {!! __("Hello! My name is Lemmings19 and I am the author of this That's My BIS. I've spent <a href=':link1' target='_blank'>hundreds upon hundreds</a> of hours building, maintaining, and supporting TMB and its community.", ['link1' => 'https://github.com/thatsmybis/thatsmybis/graphs/contributors']) !!}
             </p>
             <p class="mt-3">
-                {{ __("Every dollar you donate will go back into development, and not to some CEO's yacht...") }}
+                {{ __("Everything you donate will go back into development, and not to some CEO's yacht...") }}
             </p>
             <p class="mt-3">
                 {!! __("If you want to reach out to me directly, find me on the <a href=':link1' target='_blank'>That's My BIS Discord</a>. My username is Lemmings19#1149. Sometimes, I'm even on <a href=':link2' target='_blank'>YouTube</a>.", ['link1' => env('APP_DISCORD'), 'link2' => 'https://www.youtube.com/user/Lemmings19/videos']) !!}
             </p>
             <p class="mt-3">
-                {{ __("None of this would be here without the generous donors listed below, and the kind folks who have helped contribute their time.") }} &lt;3 &lt;3 &lt;3
+                {{ __("None of this would be here without the generous donors listed below, and the kind folks who have helped contribute their time.") }} <span class="text-danger">&lt;3 &lt;3 &lt;3</span>
             </p>
-            <ul class="no-bullet mt-5">
-                <li class="mb-5">
+            <p class="mt-3">
+                {{ __("May you get all of your BIS!") }}
+                <br>
+                - Lemmings19
+            </p>
+            <ul class="list-inline mt-5">
+                <li class="list-inline-item mb-3">
                     <a class="text-4 text-patreon patreon-button p-3" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
                         <span class="fab fa-fw fa-patreon text-white"></span>
                         Patreon
                     </a>
                 </li>
-                <li>
+                <li class="list-inline-item">
                     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                         <input type="hidden" name="cmd" value="_s-xclick" />
                         <input type="hidden" name="hosted_button_id" value="DFED8CSU2JDS2" />
@@ -43,6 +51,35 @@
                     </form>
                 </li>
             </ul>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6 col-12 pl-2 pr-2">
+            <div class="bg-light rounded mb-3 pt-5 pb-5 col-12">
+                <h2 class="text-epic">
+                    <span class="fas fa-fw text-legendary"><img class="gargul-icon" src="{{ asset('images/gargul.png') }}"></img></span>
+                    <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-epic">
+                        {{ __("Gargul Addon") }}
+                    </a>
+                </h2>
+                <p class="mt-3">
+                    {!! __("<a href=':link1' target='_blank'>Gargul</a> is an addon developed with love, and independently of TMB. Its author is Zhorax#1454.", ['link1' => 'https://www.curseforge.com/wow/addons/gargul']) !!}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-12 pl-2 pr-2">
+            <div class="bg-light rounded mb-3 pt-5 pb-5 col-12">
+                <h2>
+                    <span class="fab fa-fw fa-battle-net text-mage"></span>
+                    <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-uncommon">
+                        {{ __("TMB Tooltips Addon") }}
+                    </a>
+                </h2>
+                <p class="mt-3">
+                    {!! __("<a href=':link1' target='_blank'>TMB Tooltips</a> is an addon developed with love, and independently of TMB. Its author is Strix#1000.", ['link1' => 'https://www.curseforge.com/wow/addons/tmb-helper']) !!}
+                </p>
+            </div>
         </div>
     </div>
 
@@ -109,13 +146,16 @@
         ];
 
         $translators = [
-            ['icon' => 'comment', 'name' => 'Ardash', 'title' => 'Russian and item names'],
+            ['icon' => 'comment', 'name' => 'Ardash', 'title' => 'Russian + item lookups'],
+            ['icon' => 'comment', 'name' => 'ashrasmun', 'title' => 'Polish'],
             ['icon' => 'comment', 'name' => 'Etaya', 'title' => 'German'],
             ['icon' => 'comment', 'name' => 'Fingbel', 'title' => 'French'],
             ['icon' => 'comment', 'name' => 'Hopop', 'title' => 'French'],
             ['icon' => 'comment', 'name' => 'Irhala', 'title' => 'French'],
+            ['icon' => 'comment', 'name' => 'Kayley', 'title' => 'Danish'],
             ['icon' => 'comment', 'name' => 'Kyraa', 'title' => 'German'],
             ['icon' => 'comment', 'name' => 'myki', 'title' => 'French'],
+            ['icon' => 'comment', 'name' => 'Strix', 'title' => 'Norwegian'],
         ];
     @endphp
 
