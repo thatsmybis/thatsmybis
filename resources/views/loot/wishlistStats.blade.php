@@ -19,6 +19,7 @@
                 <span class="text-{{ getExpansionColor($expansionId) }} font-weight-bold">{{ getExpansionAbbr($expansionId) }}</span> {{ __("Items") }}
             </h1>
             <span class="smaller text-muted">{{ __("Now you can be just like everyone else!") }} :D</span>
+            @include('partials/firstHitIsFree')
         </div>
     </div>
 

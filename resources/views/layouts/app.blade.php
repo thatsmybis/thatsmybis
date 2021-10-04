@@ -6,7 +6,7 @@
     <meta property="og:title" content="@yield('title', env('APP_NAME'))" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:type" content="website" />
-    <meta property="og:description" content="@yield('description', 'A tool for loot council guilds - easily keep track of your raid\'s loot distribution')" />
+    <meta property="og:description" content="@yield('description', 'A tool for World of Warcraft loot management - easily keep track of your raid\'s loot distribution')" />
     <meta property="og:determiner" content="" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="en_CA" />

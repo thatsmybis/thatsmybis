@@ -13,12 +13,7 @@
                     </h1>
                 </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
-                    <p class="text-4">
-                        {{ __("Try my") }} <a href="{{ route('home') }}">{{ __("open source tool") }}</a> {{ __("if you're considering loot council. It helps with") }}
-                        <span class="font-weight-bold">{{ __("transparency") }}</span>,
-                        <span class="font-weight-bold">{{ __("recordkeeping") }}</span>, {{ __("and") }}
-                        <span class="font-weight-bold">{{ __("communication") }}</span> {{ __("challenges") }}.
-                    </p>
+                    @include('partials/firstHitIsFree')
                     <p>
                         {{ __("If you need help or have questions, please reach out on") }}
                         <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
