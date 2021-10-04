@@ -65,7 +65,7 @@
         @if ($character->rank || $character->profession_1 || $character->profession_2 || $character->is_alt)
             <li>
                 <small>
-                    {{ $character->rank         ? __('Rank') . ' ' . $character->rank . ($character->profession_1 || $character->profession_2 ? ',' : '') : '' }}
+                    {{ $character->rank ? __('Rank') . ' ' . $character->rank . ($character->profession_1 || $character->profession_2 ? ',' : '') : '' }}
                     {{ $character->display_profession_1 ? $character->display_profession_1 . ($character->profession_2 ? ',' : '') : '' }}
                     {{ $character->display_profession_2 ? $character->display_profession_2 : ''}}
                 </small>

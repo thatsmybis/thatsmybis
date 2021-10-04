@@ -8,7 +8,6 @@ $(document).ready(function () {
     $.datetimepicker.setLocale((locale ? locale : 'en'));
     $(".js-date-input").datetimepicker({
         format: 'Y-m-d H:i:s',
-        // locale: 'ru', // (locale ? locale : 'en'),
         inline: true,
         step: 30,
         theme: 'dark',

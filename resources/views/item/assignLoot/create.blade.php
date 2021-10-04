@@ -47,7 +47,7 @@
                         <div id="importArea" class="col-12" style="display:none;">
                             <label for="import_textarea" class="font-weight-bold">
                                 <span class="fas fa-fw fa-align-left text-muted"></span>
-                                {{ __("Paste your") }} <abbr title="{{ __('Comma Separated Value') }}">{{ __("CSV") }}</abbr> {{ __("data") }}
+                                {!! __('Paste your <abbr title="Comma Separated Value">CSV</abbr> data') !!}
                                 <span class="small text-muted">{{ __("max") }} {{ $maxItems }} {{ __("rows") }}</span>
                             </label>
                             <!-- For supporting other input methods

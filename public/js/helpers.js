@@ -423,9 +423,10 @@ function trackTimestamps(rate = timestampCheckRate) {
             moment.locale(locale);
         }
 
+        // For English short-form dates
         if (isShort && (!locale || locale === 'en')) {
             moment
-            .locale((locale ? locale : 'en'), {
+            .locale('en', {
                 relativeTime: {
                     past: '%s ago',
                     s:  'just now',
