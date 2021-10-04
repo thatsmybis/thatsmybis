@@ -20,7 +20,7 @@
                 {{ __("Discord") }}
             </a>
             <br>
-            {!! __('Like the site? Consider <a href=":donateLink" class="text-patreon">contributing on Patreon</a> to help make it better.', ['donateLink' => route('donate')]) !!}
+            {!! __('Like the site? <a href=":donateLink" class="text-patreon"> Support the developer</a> directly to help make it better.', ['donateLink' => route('donate')]) !!}
         </div>
 
         <div class="col-12 col-sm-6 offset-sm-3 col-md-4 offset-md-4 mt-3">

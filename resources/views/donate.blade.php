@@ -5,9 +5,19 @@
 <div class="container-fluid container-width-capped">
     <div class="row bg-light pt-5 pb-5 mb-3 rounded">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h1>{{ __("Support the website!") }} &lt;3</h1>
-            <p class="mt-3 text-muted">
-                {{ __("None of this would be here without the generous donors listed below") }} &lt;3 &lt;3 &lt;3
+            <h1>{{ __("Support the developer!") }} &lt;3</h1>
+
+            <p class="mt-3">
+                {!! __("Hello! My name is Lemmings19 and I am the author of this website. I've spent <a href=':link1' target='_blank'>hundreds upon hundreds</a> of hours building, maintaining, and supporting this website and its community.", ['link1' => 'https://github.com/thatsmybis/thatsmybis/graphs/contributors']) !!}
+            </p>
+            <p class="mt-3">
+                {{ __("Every dollar you donate will go back into development, and not to some CEO's yacht...") }}
+            </p>
+            <p class="mt-3">
+                {!! __("If you want to reach out to me directly, find me on the <a href=':link1' target='_blank'>That's My BIS Discord</a>. My username is Lemmings19#1149. Sometimes, I'm even on <a href=':link2' target='_blank'>YouTube</a>.", ['link1' => env('APP_DISCORD'), 'link2' => 'https://www.youtube.com/user/Lemmings19/videos']) !!}
+            </p>
+            <p class="mt-3">
+                {{ __("None of this would be here without the generous donors listed below, and the kind folks who have helped contribute their time.") }} &lt;3 &lt;3 &lt;3
             </p>
             <ul class="no-bullet mt-5">
                 <li class="mb-5">
@@ -38,10 +48,13 @@
 
     @php
         $donors = [
+            ['icon' => 'crown', 'name' => 'A4uronn', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Adilar/Myras', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Aethil', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Amatyr', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'andrew_g', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Anonymous', 'title' => 'Patreon'],
-            ['icon' => 'crown', 'name' => 'A4uronn', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Arma', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'bakedbread', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Blezner', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'botnet', 'title' => 'Parser'],
@@ -50,7 +63,11 @@
             ['icon' => 'crown', 'name' => 'diadia', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'Drezdan', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'EmpKain', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Faelor', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Feora', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'Finvy', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Fragtoaster1', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Garsidian Games', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'Hadiya', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'Hello', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Jensok', 'title' => 'Raider'],
@@ -58,6 +75,8 @@
             ['icon' => 'crown', 'name' => 'Kazczyk', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Khashte', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Kral', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'kzEr', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'lawlop', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'mattyp237', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Mister Awesomesauce', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Nectu', 'title' => 'Main Tank'],
@@ -65,18 +84,23 @@
             ['icon' => 'crown', 'name' => 'Nompire', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Onehalf', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Panya', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Riotdog TV', 'title' => 'Raider'],
+            ['icon' => 'crown', 'name' => 'Rishi', 'title' => 'Parser'],
+            ['icon' => 'crown', 'name' => 'Rmalhada', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'ryooki', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'samspayde', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Sangwa', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Sarafina', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Sentence', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'SHIELD', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'Sleete', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'skoz', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Strix', 'title' => 'Black Lotus'],
             ['icon' => 'crown', 'name' => 'Sumorex', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'TideAd', 'title' => 'Parser'],
             ['icon' => 'crown', 'name' => 'Tric', 'title' => 'Main Tank'],
             ['icon' => 'crown', 'name' => 'Tron', 'title' => 'Main Tank'],
+            ['icon' => 'crown', 'name' => 'Uriah', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Vejusatko', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'Waughter', 'title' => 'Raider'],
             ['icon' => 'crown', 'name' => 'weirdGuy', 'title' => 'Parser'],
