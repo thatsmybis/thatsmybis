@@ -70,7 +70,7 @@
                                         <ul class="no-indent no-bullet">
                                             <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
                                                 <li class="">
-                                                    <span class="js-timestamp text-muted" data-timestamp="{{ $raid->date }}" data-format="MMM D 'YY"></span>
+                                                    <span class="js-timestamp text-muted small" data-timestamp="{{ $raid->date }}" data-format="MMM D 'YY"></span>
                                                 </li>
                                                 @if ($raid->instances->count())
                                                     <li class="">
@@ -156,14 +156,14 @@
                                                         @endif
                                                         @if ($raidCharacter->pivot->public_note)
                                                             <li>
-                                                                <span class="js-markdown-inline">{{ $raidCharacter->pivot->public_note }}</span>
+                                                                <span class="js-markdown-inline small">{{ $raidCharacter->pivot->public_note }}</span>
                                                             </li>
                                                         @endif
                                                         @if ($showOfficerNote && $raidCharacter->pivot->officer_note)
                                                             <li>
                                                                 <span class="font-weight-bold small font-italic text-gold">{{ __("Officer's Note") }}</span>
                                                                 <br>
-                                                                <span class="js-markdown-inline">{{ $raidCharacter->pivot->officer_note }}</span>
+                                                                <span class="js-markdown-inline small">{{ $raidCharacter->pivot->officer_note }}</span>
                                                             </li>
                                                         @endif
                                                     @endif

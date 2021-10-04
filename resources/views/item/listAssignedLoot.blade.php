@@ -202,56 +202,68 @@
                                         </div>
 
                                         <div class="p-2">
-                                            <ul class="list-inline">
-                                                <li class="list-inline-item">
-                                                    <a href="{{ route('item.assignLoot.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batchId' => $batch->id]) }}" class="text-white">
-                                                        {{ $batch->name ? $batch->name : "Batch {$batch->id}" }}
-                                                    </a>
-                                                </li>
-                                                <li class="list-inline-item text-muted">
-                                                    &sdot;
-                                                </li>
-                                                <li class="list-inline-item text-muted">
-                                                    <a href="{{ route('item.assignLoot.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batchId' => $batch->id]) }}">
-                                                        <span class="text-uncommon">{{ $batch->item_count }}</span> <span class="text-muted">{{ __("items") }}</span>
-                                                    </a>
-                                                </li>
+                                            <div>
+                                                <ul class="list-inline">
+                                                    <li class="list-inline-item">
+                                                        <a href="{{ route('item.assignLoot.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batchId' => $batch->id]) }}" class="text-white font-weight-bold">
+                                                            {{ $batch->name ? $batch->name : "Batch {$batch->id}" }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                            <div>
+                                                <ul class="list-inline mt-2">
+                                                    @if ($batch->raid_group_id)
+                                                        <li class="list-inline-item text-muted">
+                                                            <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $batch->raid_group_id]) }}" class="text-muted">
+                                                                @include('partials/raidGroup', ['raidGroupName' => $batch->raid_group_name, 'raidGroupColor' => getHexColorFromDec($batch->raid_group_color), 'text' => 'muted'])
+                                                            </a>
+                                                        </li>
+                                                        <li class="list-inline-item text-muted small">
+                                                            &sdot;
+                                                        </li>
+                                                    @endif
 
-                                                @if ($batch->raid_id)
-                                                    <li class="list-inline-item text-muted">
-                                                        &sdot;
-                                                    </li>
-                                                    <li class="list-inline-item text-muted">
-                                                        <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $batch->raid_id, 'raidSlug' => $batch->raid_slug]) }}" class="text-muted">
-                                                            {{ $batch->raid_name }}
-                                                            <span class="js-timestamp small" data-timestamp="{{ $batch->raid_date }}" data-format="MMM D"></span>
+                                                    <li class="list-inline-item text-muted small">
+                                                        <a href="{{ route('item.assignLoot.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batchId' => $batch->id]) }}">
+                                                            <span class="text-uncommon">{{ $batch->item_count }}</span> <span class="text-muted">{{ __("items") }}</span>
                                                         </a>
                                                     </li>
-                                                @endif
-                                                @if ($batch->raid_group_id)
-                                                    <li class="list-inline-item text-muted">
-                                                        &sdot;
-                                                    </li>
-                                                    <li class="list-inline-item text-muted">
-                                                        <a href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $batch->raid_group_id]) }}" class="text-muted">
-                                                            @include('partials/raidGroup', ['raidGroupName' => $batch->raid_group_name, 'raidGroupColor' => getHexColorFromDec($batch->raid_group_color)])
-                                                        </a>
-                                                    </li>
-                                                @endif
-                                                <li class="list-inline-item text-muted">
-                                                    &sdot;
-                                                </li>
-                                                <li class="list-inline-item text-muted">
-                                                    <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="">
-                                                        {{ __("history") }}
-                                                    </a>
-                                                </li>
-                                            </ul>
+
+                                                    @if ($batch->raid_id)
+                                                        <li class="list-inline-item text-muted">
+                                                            &sdot;
+                                                        </li>
+                                                        <li class="list-inline-item text-muted small">
+                                                            <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $batch->raid_id, 'raidSlug' => $batch->raid_slug]) }}" class="text-muted">
+                                                                {{ $batch->raid_name }}
+                                                                <span class="js-timestamp" data-timestamp="{{ $batch->raid_date }}" data-format="MMM D"></span>
+                                                            </a>
+                                                        </li>
+                                                    @endif
+                                                </ul>
+                                            </div>
                                             @if ($batch->note)
                                                 <div class="text-muted small">
                                                     {{ $batch->note }}
                                                 </div>
                                             @endif
+                                            <div>
+                                                <ul class="list-inline">
+                                                    </li>
+                                                    <li class="list-inline-item text-muted small">
+                                                        <a href="{{ route('item.assignLoot.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batchId' => $batch->id]) }}" class="">
+                                                            <span class="fas fa-fw fa-pencil"></span>
+                                                            {{ __("edit") }}
+                                                        </a>
+                                                    </li>
+                                                    <li class="list-inline-item text-muted small ml-3">
+                                                        <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'batch_id' => $batch->id]) }}" class="">
+                                                            {{ __("history") }}
+                                                        </a>
+                                                    </li>
+                                                </ul>
+                                            </div>
                                         </div>
                                     </div>
                                 </li>

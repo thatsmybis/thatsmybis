@@ -74,7 +74,7 @@
                                     </li>
                                     @if ($unassignedCharacterCount > 0)
                                         <li class="list-inline-item">
-                                            <a href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-link">
+                                            <a href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'unclaimed' => 1]) }}" class="btn btn-link">
                                                 {{ __("View Unclaimed Characters") }} <span class="small text-muted">({{ $unassignedCharacterCount }})</span>
                                             </a>
                                         </li>

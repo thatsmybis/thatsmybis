@@ -138,7 +138,7 @@
                             </div>
 
                             @if ($raid && !$copy)
-                                <div class="col-lg-6 col-12 {{ $errors->has('raid.is_cancelled') ? 'text-danger font-weight-bold' : '' }}">
+                                <div class="col-12 {{ $errors->has('raid.is_cancelled') ? 'text-danger font-weight-bold' : '' }}">
                                     <div class="form-group mt-2">
                                         <div class="checkbox text-warning">
                                             <label>
@@ -150,7 +150,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6 col-12 {{ $errors->has('raid.is_archived') ? 'text-danger font-weight-bold' : '' }}">
+                                <div class="col-12 {{ $errors->has('raid.is_archived') ? 'text-danger font-weight-bold' : '' }}">
                                     <div class="form-group">
                                         <div class="checkbox text-danger">
                                             <label>

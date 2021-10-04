@@ -120,7 +120,7 @@ body {
 }
 
 .bg-lightest {
-    background-color: #242344;
+    background-color: #242344 !important;
 }
 
 .bg-dark {
@@ -779,6 +779,10 @@ button.close:hover {
 /* One list has a 'save' button which bumps its margins; this makes top margins in both lists the same */
 .sortable-no-empty-header {
     min-height: 46px;
+}
+
+tr.highlight {
+    outline: thick solid #1eff00;
 }
 
 /* DATATABLES OVERRIDE */

@@ -83,7 +83,7 @@
                                                        href="javascript: void(0);">
                                                         <input type="checkbox" name="gargul_wishlist[]" id="gargul_wishlist_{{ $i }}" value="{{ $i }}" {{ $guild->current_wishlist_number == $i ? 'checked="checked"' : '' }}>
                                                         <label for="gargul_wishlist_{{ $i }}">
-                                                            {{ __("Wishlist") }} {{ $i }}
+                                                            {{ __("Wishlist :number", ['number' => $i]) }}
                                                             @if ($guild->current_wishlist_number == $i)
                                                                 <span class="text-success">{{ __("(active)") }}</span>
                                                             @else
@@ -101,12 +101,12 @@
 
                         <li class="p-3 mb-3 rounded">
                             <p class="text-4">
-                                {!! __("Exports are <span class="font-weight-bold">CACHED</span> for :count minutes.", ['count' => env('EXPORT_CACHE_SECONDS', 120) / 60]) !!}
-                                <abbr title="{{ _('This applies across your entire guild. If you\'re the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait :count minutes for the data to update. Officers may get a different cache than members depending on wishlist/prio visibility.', ['count' => env('EXPORT_CACHE_SECONDS', 120) / 60]) }}">?</abbr>
+                                {!! __('Exports are <span class="font-weight-bold">CACHED</span> for :count minutes.', ['count' => env('EXPORT_CACHE_SECONDS', 120) / 60]) !!}
+                                <abbr title="{{ __('This applies across your entire guild. If you\'re the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait :count minutes for the data to update. Officers may get a different cache than members depending on wishlist/prio visibility.', ['count' => env('EXPORT_CACHE_SECONDS', 120) / 60]) }}">?</abbr>
                             </p>
                             <p>
                                 {!!  __('Publicly sharable copy of the generic loot tables <a href=":lootLink" target="_blank">here</a>. The format of the data being exported is subject to change. If you need access to data that isn\'t here, please reach out on <a href=":discordLink" target="_blank" alt="Join the :appName Discord Server" title="Join the :appName Discord Server" class="">Discord</a>.',
-                                 ['lootLink' => route('loot'), 'discordLink' => env('APP_DISCORD'), 'appName' => env('APP_NAME') ]) !!}
+                                 ['lootLink' => route('loot'), 'discordLink' => env('APP_DISCORD'), 'appName' => env('APP_NAME')]) !!}
                             </p>
                         </li>
                         <!-- Loot Received -->
