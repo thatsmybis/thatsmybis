@@ -20,8 +20,8 @@ Route::post('login',  'Auth\LoginController@login');
 Route::get( 'logout', 'Auth\LoginController@logout');
 Route::post('logout', 'Auth\LoginController@logout')       ->name('logout');
 // Registration routes:
-Route::get( 'register',             'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register',             'Auth\RegisterController@register');
+Route::get( 'register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
 // Password Reset routes:
 // Route::get( 'password/reset',         'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 // Route::post('password/email',         'Auth\ForgotPasswordController@sendResetLinkEmail') ->name('password.email');
