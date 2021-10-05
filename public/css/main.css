@@ -882,6 +882,9 @@ div.dataTables_filter input {
 .dataTable .width-10pct {
     width: 10%;
 }
+.dataTable .width-100 {
+    width: 100px;
+}
 .dataTable .width-130 {
     width: 130px;
 }

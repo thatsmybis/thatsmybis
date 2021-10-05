@@ -28,8 +28,8 @@ Route::post('logout', 'Auth\LoginController@logout')       ->name('logout');
 Route::get( 'crawlerLogin', 'Auth\LoginController@showCrawlerLoginForm')->name('crawlerLogin');
 Route::post('crawlerLogin', 'Auth\LoginController@crawlerLogin');
 // Registration routes:
-Route::get( 'register',             'Auth\RegisterController@showRegistrationForm')->name('register');
-Route::post('register',             'Auth\RegisterController@register');
+Route::get( 'register', 'Auth\RegisterController@showRegistrationForm')->name('register');
+Route::post('register', 'Auth\RegisterController@register');
 // Password Reset routes:
 // Route::get( 'password/reset',         'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
 // Route::post('password/email',         'Auth\ForgotPasswordController@sendResetLinkEmail') ->name('password.email');
