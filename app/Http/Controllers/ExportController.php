@@ -265,27 +265,26 @@ class ExportController extends Controller {
             'wishlists' => $wishlistData,
             'groups' => $raidGroupData,
             'itemNotes' => $raidGroupData,
-            'loot' => $this->gargulLootPriorityCSV($guild->id),
+            'loot' => $this->gargulLootPriority($guild->id),
         ],
             JSON_UNESCAPED_UNICODE
         );
 
         if (!$raw) {
             return view('guild.export.gargul', [
-                'currentMember'   => $currentMember,
-                'guild'           => $guild,
-                'showNotes'       => true,
+                'currentMember' => $currentMember,
                 'data' => base64_encode(gzcompress($payload, 9)),
+                'guild' => $guild,
                 'name' => 'Gargul data',
                 'maxWishlistLists' => CharacterLootController::MAX_WISHLIST_LISTS,
+                'showNotes' => true,
             ]);
         }
 
         return $this->getExport(
             $payload,
             'Gargul data',
-            self::HTML,
-            $raw
+            self::HTML
         );
     }
 
@@ -587,7 +586,7 @@ class ExportController extends Controller {
      * @var string $title
      * @var string $fileType 'csv' or 'html'
      *
-     * @var array  $csv      The data.
+     * @var array|string  $csv      The data.
      */
     private function getExport($csv, $title, $fileType) {
         if ($fileType == self::CSV) {
