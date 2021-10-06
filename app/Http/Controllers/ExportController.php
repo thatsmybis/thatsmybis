@@ -196,7 +196,7 @@ class ExportController extends Controller {
             return $this->getExport(
                 json_encode([
                     'wishlists' => [],
-                    'loot' => $this->gargulLootPriorityCSV($guild->id),
+                    'loot' => $this->gargulLootPriority($guild->id),
                 ],
                     JSON_UNESCAPED_UNICODE
                 ),
@@ -294,7 +294,7 @@ class ExportController extends Controller {
      *
      * @return string
      */
-    protected function gargulLootPriorityCSV($guildId)
+    protected function gargulLootPriority($guildId)
     {
         $items = GuildItem::whereNotNull('priority')
             ->where('guild_id', $guildId)
