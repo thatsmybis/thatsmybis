@@ -65,6 +65,7 @@ class Kernel extends HttpKernel
 
         'checkAdmin'            => \App\Http\Middleware\CheckAdmin::class, // custom, added manually
         'checkGuildPermissions' => \App\Http\Middleware\CheckGuildPermissions::class, // custom, added manually
+        'allowCrawlerIndex'     => \App\Http\Middleware\AllowCrawlerIndex::class, // custom, added manually
         'seeUser'               => \App\Http\Middleware\SeeUser::class,               // custom, added manually
 
         'acl' => \Kodeine\Acl\Middleware\HasPermission::class, // added manually
