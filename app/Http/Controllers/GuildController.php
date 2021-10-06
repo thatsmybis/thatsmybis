@@ -51,7 +51,7 @@ class GuildController extends Controller
         $guild = Guild::select(['id', 'slug'])->where('slug', $guildSlug)->first();
 
         if (!$guild) {
-            request()->session()->flash('status', 'Could not find guild.');
+            request()->session()->flash('status', __('Could not find guild.'));
             return redirect()->route('home');
         }
 
@@ -152,7 +152,7 @@ class GuildController extends Controller
         ]);
 
         // Redirect to guild settings page; prompting the user to finish setup
-        request()->session()->flash('status', 'Successfully registered guild.');
+        request()->session()->flash('status', __('Successfully registered guild.'));
         return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
@@ -184,7 +184,7 @@ class GuildController extends Controller
         ]);
 
         // Redirect to guild settings page; prompting the user to finish setup
-        request()->session()->flash('status', 'Successfully registered guild.');
+        request()->session()->flash('status', __('Successfully registered guild.'));
         return redirect()->route('guild.settings', ['guildId' => $newGuild->id, 'guildSlug' => $guild->slug]);
     }
 
@@ -200,7 +200,7 @@ class GuildController extends Controller
         $user          = request()->get('currentUser');
 
         if (!request()->get('isGuildAdmin')) {
-            request()->session()->flash('status', 'You don\'t have permissions to change the guild owner. Only the current owner can do that');
+            request()->session()->flash('status', __("You don't have permissions to change the guild owner. Only the current owner can do that."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -226,7 +226,7 @@ class GuildController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!request()->get('isGuildAdmin')) {
-            request()->session()->flash('status', 'You don\'t have permissions to change the guild owner. Only the current owner can do that.');
+            request()->session()->flash('status', __("You don't have permissions to change the guild owner. Only the current owner can do that."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -243,7 +243,7 @@ class GuildController extends Controller
             $member = $guild->members()->where('id', request()->input('member_id'))->with('user')->firstOrFail();
 
             if ($member->user->id == $guild->user_id) {
-                $message = 'unchanged';
+                $message = __('Guild owner unchanged.');
             } else {
                 $guild->update(['user_id' => $member->user->id]);
 
@@ -253,13 +253,13 @@ class GuildController extends Controller
                     'guild_id'    => $guild->id,
                 ]);
 
-                $message = 'changed to ' . $member->username . ' (' . $member->user->discord_username . ').';
+                $message = __('Guild owner changed to :memberName.', ['memberName' => $member->username . ' (' . $member->user->discord_username . ').']);
             }
         } else {
-            $message = 'unchanged';
+            $message = __('Guild owner unchanged.');
         }
 
-        request()->session()->flash('status', 'Guild owner ' . $message . '.');
+        request()->session()->flash('status', $message);
         return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
@@ -273,7 +273,7 @@ class GuildController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.guild')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            request()->session()->flash('status', __("You don't have permissions to view that page."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -311,7 +311,7 @@ class GuildController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.guild')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit that guild.');
+            request()->session()->flash('status', __("You don't have permissions to edit that guild."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -454,7 +454,7 @@ class GuildController extends Controller
             'guild_id'    => $guild->id,
         ]);
 
-        request()->session()->flash('status', 'Guild settings updated.');
+        request()->session()->flash('status', __('Guild settings updated.'));
         return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'b' => 1]);
     }
 
@@ -470,7 +470,7 @@ class GuildController extends Controller
         $user          = request()->get('currentUser');
 
         if (!request()->get('isGuildAdmin')) {
-            request()->session()->flash('status', 'You don\'t have permissions to unlink the guild from that Discord server. Only the current owner can do that');
+            request()->session()->flash('status', __("You don't have permissions to unlink the guild from that Discord server. Only the current owner can do that"));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -494,7 +494,7 @@ class GuildController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!request()->get('isGuildAdmin')) {
-            request()->session()->flash('status', 'You don\'t have permissions to change the guild\'s Discord server. Only the current owner can do that.');
+            request()->session()->flash('status', __("You don't have permissions to change the guild's Discord server. Only the current owner can do that."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -520,7 +520,7 @@ class GuildController extends Controller
         ])->first();
 
         if ($existingGuild) {
-            request()->session()->flash('status', 'A guild is already registered on that server for that expansion.');
+            request()->session()->flash('status', __('A guild is already registered on that server for that expansion.'));
             redirect()->back();
         }
 
@@ -528,7 +528,7 @@ class GuildController extends Controller
 
         if ($discordId) {
             if ($discordId == $guild->discord_id) {
-                $message = 'unchanged';
+                $message = __('Guild Discord server unchanged.');
             } else {
                 $guild->update(['discord_id' => $discordId]);
 
@@ -538,13 +538,13 @@ class GuildController extends Controller
                     'guild_id'    => $guild->id,
                 ]);
 
-                $message = 'changed';
+                $message = __('Guild Discord server changed.');
             }
         } else {
-            $message = 'unchanged';
+            $message = __('Guild Discord server unchanged.');
         }
 
-        request()->session()->flash('status', 'Guild Discord server ' . $message . '.');
+        request()->session()->flash('status', $message);
         return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
@@ -651,7 +651,7 @@ class GuildController extends Controller
             $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$discordId, 'user.id' => (int)$user->discord_id]);
         } catch (Exception $e) {
             $error = \Illuminate\Validation\ValidationException::withMessages([
-               'permissions' => ["Unable to find you on that server, or the bot is missing. Make sure you have the correct Discord Server ID and the bot has been added."],
+               'permissions' => [__("Unable to find you on that server, or the bot is missing. Make sure you have the correct Discord Server ID and the bot has been added.")],
             ]);
             throw $error;
         }
@@ -679,7 +679,7 @@ class GuildController extends Controller
 
         if (!$hasPermissions) {
             $error = \Illuminate\Validation\ValidationException::withMessages([
-               'permissions' => ["We couldn't find admin permissions on your account for that server. Have someone with admin permissions register your guild."],
+               'permissions' => [__("We couldn't find admin permissions on your account for that server. Have someone with admin permissions register your guild.")],
             ]);
             throw $error;
         }

@@ -46,7 +46,7 @@ class CharacterLootController extends Controller
         $character = $query->firstOrFail();
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
+            request()->session()->flash('status', __("You don't have permissions to edit someone else's loot."));
             return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
         }
 
@@ -182,7 +182,7 @@ class CharacterLootController extends Controller
         }
 
         if ($character->member_id != $currentMember->id && !$currentMember->hasPermission('loot.characters')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit someone else\'s loot.');
+            request()->session()->flash('status', __("You don't have permissions to edit someone else's loot."));
             return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]);
         }
 

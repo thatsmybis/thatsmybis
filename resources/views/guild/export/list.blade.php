@@ -54,7 +54,7 @@
                         <!-- Gargul -->
                         <li class="p-3 mb-3 rounded">
                             <h2>
-                                <span class="fas fa-fw text-legendary"><img src="{{ asset('images/gargul.png') }}" style="width: 40px; height: 40px;"></img></span>
+                                <span class="fas fa-fw text-legendary"><img class="gargul-icon" src="{{ asset('images/gargul.png') }}"></img></span>
                                 <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-epic">
                                     Gargul
                                 </a>
@@ -82,11 +82,11 @@
                                                        href="javascript: void(0);">
                                                         <input type="checkbox" name="gargul_wishlist[]" id="gargul_wishlist_{{ $i }}" value="{{ $i }}" {{ $guild->current_wishlist_number == $i ? 'checked="checked"' : '' }}>
                                                         <label for="gargul_wishlist_{{ $i }}">
-                                                            {{ __("Wishlist") }} {{ $i }}
+                                                            {{ __("Wishlist :number", ['number' => $i]) }}
                                                             @if ($guild->current_wishlist_number == $i)
-                                                                <span class="text-success">{{ __('(active)') }}</span>
+                                                                <span class="text-success">{{ __("(active)") }}</span>
                                                             @else
-                                                                <span class="text-danger">{{ __('(inactive)') }}</span>
+                                                                <span class="text-danger">{{ __("(inactive)") }}</span>
                                                             @endif
                                                         </label>
                                                     </a>
@@ -100,12 +100,12 @@
 
                         <li class="p-3 mb-3 rounded">
                             <p class="text-4">
-                                {{ __("Exports are") }} <span class="font-weight-bold">{{ __("CACHED") }}</span> for {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 == 1 ? '' : 's' }}.
-                                <abbr title="This applies across your entire guild. If you're the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait {{ env('EXPORT_CACHE_SECONDS', 120) / 60 }} minute{{ env('EXPORT_CACHE_SECONDS', 120) / 60 > 1 ? 's' : '' }} for the data to update. Officers may get a different cache than members depending on wishlist/prio visibility.">?</abbr>
+                                {!! __('Exports are <span class="font-weight-bold">CACHED</span> for :count minutes.', ['count' => env('EXPORT_CACHE_SECONDS', 120) / 60]) !!}
+                                <abbr title="{{ __('This applies across your entire guild. If you\'re the one running the export for the first time, expect fresh data. If your guildmate just ran an export, you will have to wait :count minutes for the data to update. Officers may get a different cache than members depending on wishlist/prio visibility.', ['count' => env('EXPORT_CACHE_SECONDS', 120) / 60]) }}">?</abbr>
                             </p>
                             <p>
-                                Publicly sharable copy of the generic loot tables <a href="{{ route('loot') }}" target="_blank">here</a>. The format of the data being exported is subject to change. If you need access to data that isn't here, please reach out on
-                                <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">Discord</a>.
+                                {!!  __('Publicly sharable copy of the generic loot tables <a href=":lootLink" target="_blank">here</a>. The format of the data being exported is subject to change. If you need access to data that isn\'t here, please reach out on <a href=":discordLink" target="_blank" alt="Join the :appName Discord Server" title="Join the :appName Discord Server" class="">Discord</a>.',
+                                 ['lootLink' => route('loot'), 'discordLink' => env('APP_DISCORD'), 'appName' => env('APP_NAME')]) !!}
                             </p>
                         </li>
                         <!-- Loot Received -->
@@ -219,7 +219,7 @@
                                 {{ __("Guild Item Notes") }}
                             </h2>
                             <p>
-                                <strong>Guild notes</strong> and <strong>prio notes</strong> are included.
+                                {!! __("<strong>Guild notes</strong> and <strong>prio notes</strong> are included.") !!}
                             </p>
                             <p>
                                 {{ __("Fields exported:") }}
@@ -280,7 +280,7 @@
                                 {{ __("Giant JSON blob") }}
                             </h2>
                             <p>
-                                All of your guild's characters with their <strong>loot received</strong>, <strong>wishlist</strong>, <strong>prios</strong>, notes, etc. It's all of the data used to populate the Roster page.
+                                {!! __("All of your guild's characters with their <strong>loot received</strong>, <strong>wishlist</strong>, <strong>prios</strong>, notes, etc. It's all of the data used to populate the Roster page.") !!}
                             </p>
                             <p>
                                 {{ __("Format looks something like this: (provided this documentation is still up to date)") }}

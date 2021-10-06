@@ -44,7 +44,7 @@ class RaidController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('create.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to create Raids.');
+            request()->session()->flash('status', __("You don't have permissions to create Raids."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -138,7 +138,7 @@ class RaidController extends Controller
             'raid_id'       => $raid->id,
         ]);
 
-        request()->session()->flash('status', "Successfully created Raid {$raid->name}.");
+        request()->session()->flash('status', __("Successfully created Raid :raidName.", ['raidName' => $raid->name]));
         return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]);
     }
 
@@ -152,7 +152,7 @@ class RaidController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            request()->session()->flash('status', __("You don't have permissions to view that page."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -328,7 +328,7 @@ class RaidController extends Controller
         $raid = $guild->raids->find($id);
 
         if (!$raid) {
-            abort(404, 'Raid not found.');
+            abort(404, __('Raid not found.'));
         }
 
         if ($raid->slug != $raidSlug) {
@@ -411,7 +411,7 @@ class RaidController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit Raid Groups.');
+            request()->session()->flash('status', __("You don't have permissions to edit Raid Groups."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -425,7 +425,7 @@ class RaidController extends Controller
             'is_archived'  => 'nullable|boolean',
         ]);
 
-        $validationMessages = ['id' => 'Raid ID must match one of the raids in your guild.'];
+        $validationMessages = ['id' => __('Raid ID must match one of the raids in your guild.')];
 
         $this->validate(request(), $validationRules, $validationMessages);
 
@@ -486,7 +486,7 @@ class RaidController extends Controller
             'raid_id'     => $raid->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully updated ' . $raid->name . '.');
+        request()->session()->flash('status', __('Successfully updated :raidName.', ['raidName' => $raid->name]));
         return redirect()->route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]);
     }
 

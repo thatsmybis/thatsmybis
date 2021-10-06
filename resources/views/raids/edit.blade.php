@@ -138,7 +138,7 @@
                             </div>
 
                             @if ($raid && !$copy)
-                                <div class="col-lg-6 col-12 {{ $errors->has('raid.is_cancelled') ? 'text-danger font-weight-bold' : '' }}">
+                                <div class="col-12 {{ $errors->has('raid.is_cancelled') ? 'text-danger font-weight-bold' : '' }}">
                                     <div class="form-group mt-2">
                                         <div class="checkbox text-warning">
                                             <label>
@@ -150,7 +150,7 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-6 col-12 {{ $errors->has('raid.is_archived') ? 'text-danger font-weight-bold' : '' }}">
+                                <div class="col-12 {{ $errors->has('raid.is_archived') ? 'text-danger font-weight-bold' : '' }}">
                                     <div class="form-group">
                                         <div class="checkbox text-danger">
                                             <label>
@@ -172,7 +172,7 @@
                                         {{ __("Public Note") }}
                                         <small class="text-muted">{{ __("anyone in the guild can see this") }}</small>
                                     </label>
-                                    <textarea autocomplete="off"  maxlength="250" data-max-length="250" name="public_note" rows="2" placeholder="anyone in the guild can see this" class="form-control dark">{{ old('public_note') ? old('public_note') : ($raid ? $raid->public_note : '') }}</textarea>
+                                    <textarea autocomplete="off"  maxlength="250" data-max-length="250" name="public_note" rows="2" placeholder="{{ __('anyone in the guild can see this') }}" class="form-control dark">{{ old('public_note') ? old('public_note') : ($raid ? $raid->public_note : '') }}</textarea>
                                 </div>
                             </div>
 
@@ -189,7 +189,7 @@
                                             {{ __("Officer note is hidden in streamer mode") }}
                                         </div>
                                         @else
-                                            <textarea autocomplete="off" maxlength="250" data-max-length="250" name="officer_note" rows="2" placeholder="only officers can see this" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($raid ? $raid->officer_note : '') }}</textarea>
+                                            <textarea autocomplete="off" maxlength="250" data-max-length="250" name="officer_note" rows="2" placeholder="{{ __('only officers can see this') }}" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($raid ? $raid->officer_note : '') }}</textarea>
                                         @endif
                                     </div>
                                 </div>
@@ -523,7 +523,7 @@
                                                                 </span>
                                                             @endif
                                                         </label>
-                                                        <input name="characters[{{ $i }}][public_note]" maxlength="250" data-max-length="250" type="text" placeholder="brief public note"
+                                                        <input name="characters[{{ $i }}][public_note]" maxlength="250" data-max-length="250" type="text" placeholder="{{ __('brief public note') }}"
                                                             class="form-control dark {{ $errors->has('characters.' . $i . '.public_note') ? 'form-danger' : '' }}" autocomplete="off"
                                                             value="{{ old('characters.' . $i . '.public_note') ? old('characters.' . $i . '.public_note') : (!old('characters.' . $i . '.public_note') && $character ? $character->pivot->public_note : '') }}">
                                                     </div>
@@ -549,7 +549,7 @@
                                                                 {{ __("Officer note is hidden in streamer mode") }}
                                                             </div>
                                                         @endif
-                                                        <input name="characters[{{ $i }}][officer_note]" maxlength="250" data-max-length="250" type="text" placeholder="officer note"
+                                                        <input name="characters[{{ $i }}][officer_note]" maxlength="250" data-max-length="250" type="text" placeholder="{{ __('officer note') }}"
                                                             class="form-control dark {{ $errors->has('characters.' . $i . '.officer_note') ? 'form-danger' : '' }}" autocomplete="off"
                                                             style="{{ isStreamerMode() ? 'display:none;' : '' }}"
                                                             value="{{ old('characters.' . $i . '.officer_note') ? old('characters.' . $i . '.officer_note') : (!old('characters.' . $i . '.officer_note') && $character ? $character->pivot->officer_note : '') }}">

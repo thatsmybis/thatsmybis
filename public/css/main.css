@@ -120,7 +120,7 @@ body {
 }
 
 .bg-lightest {
-    background-color: #242344;
+    background-color: #242344 !important;
 }
 
 .bg-dark {
@@ -365,6 +365,11 @@ body {
     padding: 10px;
 }
 
+.gargul-icon {
+    height: 40px;
+    width: 40px;
+}
+
 .font-weight-medium {
     font-weight: 600 !important;
 }
@@ -381,6 +386,10 @@ body {
 
 .nowrap {
     white-space: nowrap;
+}
+
+.overflow-x-hidden {
+    overflow-x: hidden;
 }
 
 .pre {
@@ -779,6 +788,10 @@ button.close:hover {
 /* One list has a 'save' button which bumps its margins; this makes top margins in both lists the same */
 .sortable-no-empty-header {
     min-height: 46px;
+}
+
+tr.highlight {
+    outline: thick solid #1eff00;
 }
 
 /* DATATABLES OVERRIDE */

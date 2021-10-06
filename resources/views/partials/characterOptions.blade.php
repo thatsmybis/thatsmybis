@@ -18,7 +18,7 @@
             }
 
             if (isset($character->raid_count)) {
-                $characterMetaText .= ' &sdot; ' . __(':count raids', ['count' => $character->raid_count]);
+                $characterMetaText .= ' &sdot; ' . __(':countr', ['count' => $character->raid_count]);
             }
 
             if (isset($character->benched_count) && $character->benched_count) {

@@ -74,7 +74,7 @@
                                     </li>
                                     @if ($unassignedCharacterCount > 0)
                                         <li class="list-inline-item">
-                                            <a href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="btn btn-link">
+                                            <a href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'unclaimed' => 1]) }}" class="btn btn-link">
                                                 {{ __("View Unclaimed Characters") }} <span class="small text-muted">({{ $unassignedCharacterCount }})</span>
                                             </a>
                                         </li>
@@ -267,7 +267,7 @@ $(document).ready(function () {
         pageLength  : 5,
         fixedHeader : false, // Header row sticks to top of window when scrolling down
         oLanguage: {
-            sSearch: "<abbr title='Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"'>Search</abbr>"
+            sSearch: "<abbr title='{{ __('Fuzzy searching is ON. To search exact text, wrap your search in \"quotes\"') }}'>{{ __('Search') }}</abbr>"
         },
         columns : [
             { orderable : false },

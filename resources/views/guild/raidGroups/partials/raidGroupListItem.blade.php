@@ -18,11 +18,10 @@
     <li class="list-inline-item text-muted">
         @if (!isset($showEdit) || $showEdit)
             <a href="{{ route('guild.raidGroup.mainCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-                {{-- TODO: Fix plural translation --}}
-                {{ $raidGroup->characters_count }} {{ __("main raider") }}{{ $raidGroup->characters_count != 1 ? 's' : '' }}
+                {{ trans_choice(":count main raider|:count main raiders", $raidGroup->characters_count) }}
             </a>
         @else
-            {{ $raidGroup->characters_count }} {{ __("main raider") }}{{ $raidGroup->characters_count != 1 ? 's' : '' }}
+            {{ trans_choice(":count main raider|:count main raiders", $raidGroup->characters_count) }}
         @endif
     </li>
     <li class="list-inline-item text-muted">
@@ -31,11 +30,10 @@
     <li class="list-inline-item text-muted">
         @if (!isset($showEdit) || $showEdit)
             <a href="{{ route('guild.raidGroup.secondaryCharacters', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]) }}">
-                {{-- TODO: Fix plural translation --}}
-                {{ $raidGroup->secondary_characters_count }} {{ __("general raider") }}{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+                {{ trans_choice(":count general raider|:count general raiders", $raidGroup->secondary_characters_count) }}
             </a>
         @else
-            {{ $raidGroup->secondary_characters_count }} {{ __("general raider") }}{{ $raidGroup->secondary_characters_count != 1 ? 's' : '' }}
+            {{ trans_choice(":count general raider|:count general raiders", $raidGroup->secondary_characters_count) }}
         @endif
     </li>
 </ul>

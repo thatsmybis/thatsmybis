@@ -95,7 +95,7 @@
                         @endforeach
                     @else
                         <li>
-                            {{ __("There are no items associated with this")
+                            {{ __("There are no items associated with this") }}
                         </li>
                     @endif
                 </ul>

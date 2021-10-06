@@ -59,7 +59,7 @@ class RaidGroupController extends Controller
         $raidGroup = $query->first();
 
         if (!$raidGroup) {
-            request()->session()->flash('status', 'Raid group not found');
+            request()->session()->flash('status', __('Raid group not found'));
             return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
         }
 
@@ -111,7 +111,7 @@ class RaidGroupController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            request()->session()->flash('status', __("You don't have permissions to view that page."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -135,7 +135,7 @@ class RaidGroupController extends Controller
             ->first();
 
         if (!$raidGroup) {
-            request()->session()->flash('status', 'Raid group not found');
+            request()->session()->flash('status', __('Raid group not found'));
             return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
         }
 
@@ -188,7 +188,7 @@ class RaidGroupController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to view that page.');
+            request()->session()->flash('status', __("You don't have permissions to view that page."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -201,7 +201,7 @@ class RaidGroupController extends Controller
             ])->first();
 
             if (!$raidGroup) {
-                abort(404, 'Raid Group not found.');
+                abort(404, __('Raid Group not found.'));
             }
         }
 
@@ -221,7 +221,7 @@ class RaidGroupController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('create.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to create Raid Groups.');
+            request()->session()->flash('status', __("You don't have permissions to create Raid Groups."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -265,7 +265,7 @@ class RaidGroupController extends Controller
             'raid_group_id' => $raidGroup->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully created Raid Group.');
+        request()->session()->flash('status', __('Successfully created Raid Group.'));
         return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'b' => 1]);
     }
 
@@ -287,7 +287,7 @@ class RaidGroupController extends Controller
         }
 
         if (!$currentMember->hasPermission('disable.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to disable/enable Raid Groups.');
+            request()->session()->flash('status', __("You don't have permissions to disable/enable Raid Groups."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -310,7 +310,12 @@ class RaidGroupController extends Controller
             'raid_group_id' => $raidGroup->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully ' . ($disabledAt ? 'disabled' : 'enabled') . ' ' . $raidGroup->name . '.');
+        request()->session()->flash('status',
+            $disabledAt
+                ? __('Successfully disabled :raidGroupName.', ['raidGroupName' => $raidGroup->name])
+                : __('Successfully enabled :raidGroupName.', ['raidGroupName' => $raidGroup->name])
+        );
+
         return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'b' => 1]);
     }
 
@@ -353,7 +358,7 @@ class RaidGroupController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit Raid Groups.');
+            request()->session()->flash('status', __("You don't have permissions to edit Raid Groups."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -373,14 +378,14 @@ class RaidGroupController extends Controller
             ])->first();
 
         if (!$raidGroup) {
-            abort(404, 'Raid Group not found.');
+            abort(404, __('Raid Group not found.'));
         }
 
         $role = null;
         if (request()->input('role_id')) {
             $role = $guild->roles->where('id', request()->input('role_id'));
             if (!$role) {
-                abort(404, 'Role not found.');
+                abort(404, __('Role not found.'));
             }
         }
 
@@ -405,7 +410,7 @@ class RaidGroupController extends Controller
             'raid_group_id' => $raidGroup->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully updated ' . $raidGroup->name . '.');
+        request()->session()->flash('status', __('Successfully updated :raidGroupName.', ['raidGroupName' => $raidGroup->name]));
         return redirect()->route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
@@ -418,7 +423,7 @@ class RaidGroupController extends Controller
         $currentMember = request()->get('currentMember');
 
         if (!$currentMember->hasPermission('edit.raids')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit Raid Groups.');
+            request()->session()->flash('status', __("You don't have permissions to edit Raid Groups."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -473,7 +478,11 @@ class RaidGroupController extends Controller
             'raid_group_id' => $raidGroup->id,
         ]);
 
-        request()->session()->flash('status', 'Successfully updated ' . $raidGroup->name . '\'s ' . ($isSecondary ? 'other' : 'main') . ' characters.');
+        request()->session()->flash('status',
+            $isSecondary
+                ? __("Successfully updated :raidGroupName's general raiders.", ['raidGroupName' => $raidGroup->name])
+                : __("Successfully updated :raidGroupName's main raiders.", ['raidGroupName' => $raidGroup->name])
+        );
         return redirect()->route('guild.raidGroup.' . ($isSecondary ? 'secondaryCharacters' : 'mainCharacters'), ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'id' => $raidGroup->id]);
     }
 

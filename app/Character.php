@@ -213,7 +213,7 @@ class Character extends BaseModel
             ->leftJoin('instances',                   'item_sources.instance_id',         '=', 'instances.id')
             ->leftJoin('guild_items', function ($join) {
                 $join->on('guild_items.item_id', 'items.item_id')
-                    ->on('guild_items.guild_id', 'characters.guild_id'); // I spent too long before googling why `where()` wasn't working: https://stackoverflow.com/a/29544890/1196517
+                    ->on('guild_items.guild_id', 'characters.guild_id');
             })
             ->where('character_items.type', Item::TYPE_RECEIVED)
             ->groupBy('character_items.id')
@@ -452,6 +452,21 @@ class Character extends BaseModel
         return $this->class ? self::classes()[$this->class] : null;
     }
 
+    public function getDisplayProfession1Attribute()
+    {
+        return $this->profession_1 ? self::professions()[$this->profession_1] : null;
+    }
+
+    public function getDisplayProfession2Attribute()
+    {
+        return $this->profession_2 ? self::professions()[$this->profession_2] : null;
+    }
+
+    public function getDisplayRaceAttribute()
+    {
+        return $this->race ? self::races()[$this->race] : null;
+    }
+
     public function getDisplaySpecAttribute()
     {
         return $this->spec_label ? $this->spec_label : ($this->spec ? self::specs()[$this->spec]['name'] : null);
@@ -478,7 +493,7 @@ class Character extends BaseModel
     static public function archetypes() {
         return [
             self::ARCHETYPE_DPS  => __('DPS'),
-            self::ARCHETYPE_HEAL => __('Heal'),
+            self::ARCHETYPE_HEAL => __('Healer'),
             self::ARCHETYPE_TANK => __('Tank'),
         ];
     }

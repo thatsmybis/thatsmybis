@@ -1,7 +1,7 @@
 
 ![CircleCI Build Status](https://circleci.com/gh/thatsmybis/thatsmybis.svg?style=shield "CircleCI Build Status")
 
-# That's My BIS; a tool for managing loot council guilds in World of Warcraft Classic
+# That's My BIS; a tool for loot management in World of Warcraft Classic
 
 This project was started to give raiders a stronger voice in how loot council distributes loot, help loot council make more informed decisions, and to provide transparency in decision making back to raiders.
 
@@ -61,6 +61,15 @@ The [genealabs/laravel-model-caching](https://packagist.org/packages/genealabs/l
 Some pages allow for certain elements to be cache busted. To bust the cache, pass the `b=1` parameter in the url. The `SeeUser` middleware will check for this, and set a variable for cache busting to true. Certain controller elements will check for this variable before loading from the cache. If it's set to true, it will bust the cache on that **specific** bit that it wants to fetch before fetching it.
 
 This feature isn't 100% implemented everywhere, so the cryptic name `b` has been opted for. Otherwise some users would see `bust` or `bustCache`, and expect everything to get busted all the time. They may then become confused or annoyed when it doesn't work.
+
+## Translations
+
+Translation files are exported using [kkomelin/laravel-translatable-string-exporter](https://github.com/kkomelin/laravel-translatable-string-exporter).
+- Translation strings are stored in `resources/lang/`
+- The list of supported translations are in `app/helpers.php:getLocales()`
+- Use `php artisan translatable:inspect de` (replace `de` with whatever language code you want) to see what strings in the translation file still need to be translated.
+- Use `php artisan translatable:export cn,da,de,en,es,fr,it,ko,no,pl,pt,ru` to update the translation files with all of the strings that the parser can find.
+- For getting people to translate stuff, I've just been putting the translation files up in Google Sheets and giving people edit access, then importing it back into the repo (some parsing required).
 
 ### phpredis Installation
 
@@ -186,6 +195,8 @@ Roles are loaded from the Discord server.
 - `max_input_vars` in `php.ini` (PHP's config) has been increased from 1000 to 6000. This is to support some pages with an absurd amount of inputs. (ie. 120 items with 20 input fields each = 2400 inputs)
 
 ## Docker Compose Local Development Environment
+
+_Note: Docker was added by a contributor and is not maintained by the primary developer. Its config is probably out of date._
 
 The laravel development environment can be bootstrapped by utilizing the bitnami laravel docker images to stand up laravel and mariadb.
 

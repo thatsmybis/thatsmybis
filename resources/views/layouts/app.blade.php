@@ -6,7 +6,7 @@
     <meta property="og:title" content="@yield('title', env('APP_NAME'))" />
     <meta property="og:url" content="{{ url()->current() }}" />
     <meta property="og:type" content="website" />
-    <meta property="og:description" content="@yield('description', 'A tool for loot council guilds - easily keep track of your raid\'s loot distribution')" />
+    <meta property="og:description" content="@yield('description', 'A tool for World of Warcraft loot management - easily keep track of your raid\'s loot distribution')" />
     <meta property="og:determiner" content="" />
     <meta property="og:locale" content="en_US" />
     <meta property="og:locale:alternate" content="en_CA" />
@@ -212,6 +212,34 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha512-uto9mlQzrs59VwILcLiRYeLKPPbS/bT71da/OEBYEwcdNUk8jYIy+D176RYoop1Da+f9mvkYrmj5MCLZWEtQuA==" crossorigin="anonymous"></script>
     <!-- Date & time manipulation -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"></script>
+    <!-- Optionally, moment has ALL locales but is ~361kb instead of ~58kb. Individual locale files are ~5kb -->
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment-with-locales.min.js" integrity="sha512-LGXaggshOkD/at6PFNcp2V2unf9LzFq6LE+sChH7ceMTDP0g2kn6Vxwgg7wkPP7AAtX+lmPqPdxB47A0Nz0cMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+    @if (Illuminate\Support\Facades\App::getLocale() != 'en')
+        @if(Illuminate\Support\Facades\App::getLocale() === 'da')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/da.min.js" integrity="sha512-rybyYvSnwg3zAZ/vjTTMoh8tOK0Z6tC2XCzr9e27M0xr8WU40IGo6SOP7FXXCyWgMyd3wZ8ln2nY4ce1ysYUfw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'de')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/de.min.js" integrity="sha512-2xPqgWwEg9s0xYZzGEXtrNPzReBmd9u7ZNv2g9zcJxW7zOONVdZHhtlUC4lSJ/dG0Nf7Nh366o/yxatDTyofSA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'es')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/es.min.js" integrity="sha512-L6Trpj0Q/FiqDMOD0FQ0dCzE0qYT2TFpxkIpXRSWlyPvaLNkGEMRuXoz6MC5PrtcbXtgDLAAI4VFtPvfYZXEtg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'fr')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/fr.min.js" integrity="sha512-RAt2+PIRwJiyjWpzvvhKAG2LEdPpQhTgWfbEkFDCo8wC4rFYh5GQzJBVIFDswwaEDEYX16GEE/4fpeDNr7OIZw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'it')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/it.min.js" integrity="sha512-abyAPza1Q/3PRl2L54rOvygrx/XIkupvWrs7sNm+jD6gfNf3+MEvPJzdSG4LyYWSTA8NY7AnTCnRz5NNyvsg0w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'no')
+            <!-- No support, sorry! -->
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'pl')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pl.min.js" integrity="sha512-4Hra0ugHwC1jKVrS6cwYQu47pRQxNoZZNT/KKLraGJb4csT6rxfba0jpIxKE1O7N5ImwPKqbYv875hXN5h0tqA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'pt')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/pt.min.js" integrity="sha512-l3UpBpQozVlOQB23Ah65fE1Y4u5XMGpaITEybm4NyK06ISM5OVaUWs50wQ7h3IzbNiozaP9HkNYUIy0mGDNS7Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'ru')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/ru.min.js" integrity="sha512-+yvkALwyeQtsLyR3mImw8ie79H9GcXkknm/babRovVSTe04osQxiohc1ukHkBCIKQ9y97TAf2+17MxkIimZOdw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'ko')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/ko.min.js" integrity="sha512-3kMAxw/DoCOkS6yQGfQsRY1FWknTEzdiz8DOwWoqf+eGRN45AmjS2Lggql50nCe9Q6m5su5dDZylflBY2YjABQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @elseif(Illuminate\Support\Facades\App::getLocale() === 'cn')
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/locale/zh-cn.min.js" integrity="sha512-j83eLbbs+KVKlv8KI6i2lWPlLGY1nltBDnWXIMedQYYjhd5sfifdJB6f2Wxdli5mfrNqRbESVpqSXDHhzMREGw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        @endif
+    @endif
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables/1.10.21/js/jquery.dataTables.min.js" integrity="sha512-BkpSL20WETFylMrcirBahHfSnY++H2O1W+UnEEO4yNIl+jI2+zowyoGJpbtk6bx97fBXf++WJHSSK2MV4ghPcg==" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/datatables-fixedheader/3.1.9/dataTables.fixedHeader.min.js" integrity="sha512-gmPh+Otcht/SQFZF9IWTrVYCmIIz5ZUS3TpNdhxyRnWrQXcBK96mivWWHMg2BkL4vScTk0qbgp0uGcVY6DnLbg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <!-- Tooltip and popover positioning engine... needed for bootstrap and bootstrap-select -->

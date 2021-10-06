@@ -54,13 +54,13 @@
                                     </span>
                                 </li>
                                 <li class="text-3">
-                                    {{ __("You") }} <strong>{{ __("will not") }}</strong> {{ __("be able to rejoin without help") }}
+                                    {!! __("You <strong>will not</strong> be able to rejoin without help") !!}
                                 </li>
                                 <li class="">
                                     {{ __("To rejoin, an officer will need to unflag your profile as archived") }}
                                 </li>
                                 <li class="">
-                                    {{ __("This") }} <strong>{{ __("will not") }}</strong> {{ __("affect your Discord or ingame status with") }}
+                                    {!! __("This <strong>will not</strong> affect your Discord or ingame status with") !!}
                                     <span class="text-{{ getExpansionColor($guild->expansion_id) }} font-weight-medium">
                                         &lt;{{ $guild->name }}&gt;
                                     </span>

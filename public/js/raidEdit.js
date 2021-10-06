@@ -5,12 +5,13 @@ $(document).ready(function () {
 
     // Always initialize to null, let the javascript convert from UTC time to local browser time,
     // then it will populate the date.
+    $.datetimepicker.setLocale((locale ? locale : 'en'));
     $(".js-date-input").datetimepicker({
         format: 'Y-m-d H:i:s',
         inline: true,
         step: 30,
         theme: 'dark',
-        value: date ? moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss") : null,
+        value: date ? moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss") : moment().format("YYYY-MM-DD HH:mm:ss"),
     });
 
     // Trigger a date change to make it convert to UTC and stuff.

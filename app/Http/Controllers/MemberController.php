@@ -48,7 +48,7 @@ class MemberController extends Controller
         }
 
         if ($member->id != $currentMember->id && !$currentMember->hasPermission('edit.characters')) {
-            request()->session()->flash('status', __('You don\'t have permissions to edit someone else.'));
+            request()->session()->flash('status', __("You don't have permissions to edit someone else."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -122,7 +122,7 @@ class MemberController extends Controller
 
         $currentMember->update(['raid_group_id_filter' => request()->input('raid_group_id')]);
 
-        request()->session()->flash('status', __("Raid Group Filter set."));
+        request()->session()->flash('status', __("Raid Group filter set."));
         return redirect()->back()->withInput(['b' => 1]);
     }
 
@@ -513,7 +513,7 @@ class MemberController extends Controller
         $member = $guild->members->where('id', request()->input('id'))->first();
 
         if (!$member) {
-            request()->session()->flash('status', 'Member not found.');
+            request()->session()->flash('status', __('Member not found.'));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
@@ -522,7 +522,7 @@ class MemberController extends Controller
         if ($currentMember->hasPermission('edit.officer-notes')) {
             $updateValues['officer_note'] = request()->input('officer_note');
         } else if ($currentMember->id != $member->id && !$currentMember->hasPermission('edit.character')) {
-            request()->session()->flash('status', 'You don\'t have permissions to edit that member.');
+            request()->session()->flash('status', __("You don't have permissions to edit that member."));
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug]);
         }
 
@@ -561,7 +561,7 @@ class MemberController extends Controller
             ]);
         }
 
-        request()->session()->flash('status', __("Successfully updated") . " " . $member->username ."'s " . __("note") . ".");
+        request()->session()->flash('status', __("Successfully updated :memberName's note.", ['memberName' => $member->username]));
         return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $member->id, 'usernameSlug' => $member->slug, 'b' => 1]);
     }
 }

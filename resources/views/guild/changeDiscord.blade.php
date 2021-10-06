@@ -55,7 +55,7 @@
                                 {{ __("But you'll probably be the one to take it, so it's *probably* fine.") }}
                             </li>
                             <li class="mt-3">
-                                {{ __("This will") }} <strong>{{ __("not") }}</strong> {{ __("affect your Discord server in any way.") }}
+                                {!! __("This will <strong>not</strong> affect your Discord server in any way.") !!}
                             </li>
                             <li class="mt-3 text-uncommon">
                                 {{ __("If you came here hoping to ditch some test data, you're in the right spot!") }}

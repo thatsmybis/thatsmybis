@@ -11,9 +11,7 @@
                 {{ $instance->name }}
             </h1>
             @if (!$guild)
-                <p class="font-weight-bold text-gold">
-                    {{ __("To assign Prios and Wishlists sign in and register your guild.") }}
-                </p>
+                @include('partials/firstHitIsFree')
             @elseif ($viewPrioPermission || $viewOfficerNotesPermission)
                 <ul class="list-inline">
                     @if ($viewOfficerNotesPermission)

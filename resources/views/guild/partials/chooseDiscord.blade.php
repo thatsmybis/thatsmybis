@@ -32,7 +32,7 @@
     </span>
     <div class="" id="discord_id" style="{{ old('discord_id') ? '' : 'display:none;' }}">
         <label for="discord_id" class="font-weight-light">
-            (optional)
+            {{ __("(optional)") }}
             <span class="sr-only">
                 {{ __("paste your server's ID") }}
             </span>

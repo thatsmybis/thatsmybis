@@ -3,20 +3,38 @@
 
 @section('content')
 <div class="container-fluid container-width-capped">
-    <div class="row bg-light pt-5 pb-5 mb-3 rounded">
+    <div class="row bg-light mb-3 pt-5 pb-5 rounded">
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h1>{{ __("Support the website!") }} &lt;3</h1>
-            <p class="mt-3 text-muted">
-                {{ __("None of this would be here without the generous donors listed below") }} &lt;3 &lt;3 &lt;3
+            <h1>
+                <span class="fa fa-fw fas fa-heart text-danger"></span>
+                {{ __("Support the developer!") }}
+            </h1>
+
+            <p class="mt-3">
+                {!! __("Hello! My name is Lemmings19 and I am the author of this That's My BIS. I've spent <a href=':link1' target='_blank'>hundreds upon hundreds</a> of hours building, maintaining, and supporting TMB and its community.", ['link1' => 'https://github.com/thatsmybis/thatsmybis/graphs/contributors']) !!}
             </p>
-            <ul class="no-bullet mt-5">
-                <li class="mb-5">
+            <p class="mt-3">
+                {{ __("Everything you donate will go back into development, and not to some CEO's yacht...") }}
+            </p>
+            <p class="mt-3">
+                {!! __("If you want to reach out to me directly, find me on the <a href=':link1' target='_blank'>That's My BIS Discord</a>. My username is Lemmings19#1149. Sometimes, I'm even on <a href=':link2' target='_blank'>YouTube</a>.", ['link1' => env('APP_DISCORD'), 'link2' => 'https://www.youtube.com/user/Lemmings19/videos']) !!}
+            </p>
+            <p class="mt-3">
+                {{ __("None of this would be here without the generous donors listed below, and the kind folks who have helped contribute their time.") }} <span class="text-danger">&lt;3 &lt;3 &lt;3</span>
+            </p>
+            <p class="mt-3">
+                {{ __("May you get all of your BIS!") }}
+                <br>
+                - Lemmings19
+            </p>
+            <ul class="list-inline mt-5">
+                <li class="list-inline-item mb-3">
                     <a class="text-4 text-patreon patreon-button p-3" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
                         <span class="fab fa-fw fa-patreon text-white"></span>
                         Patreon
                     </a>
                 </li>
-                <li>
+                <li class="list-inline-item">
                     <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
                         <input type="hidden" name="cmd" value="_s-xclick" />
                         <input type="hidden" name="hosted_button_id" value="DFED8CSU2JDS2" />
@@ -36,66 +54,149 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-6 col-12 pl-2 pr-2">
+            <div class="bg-light rounded mb-3 pt-5 pb-5 col-12">
+                <h2 class="text-epic">
+                    <span class="fas fa-fw text-legendary"><img class="gargul-icon" src="{{ asset('images/gargul.png') }}"></img></span>
+                    <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-epic">
+                        {{ __("Gargul Addon") }}
+                    </a>
+                </h2>
+                <p class="mt-3">
+                    {!! __("<a href=':link1' target='_blank'>Gargul</a> is an addon developed with love, and independently of TMB. Its author is Zhorax#1454.", ['link1' => 'https://www.curseforge.com/wow/addons/gargul']) !!}
+                </p>
+            </div>
+        </div>
+        <div class="col-md-6 col-12 pl-2 pr-2">
+            <div class="bg-light rounded mb-3 pt-5 pb-5 col-12">
+                <h2>
+                    <span class="fab fa-fw fa-battle-net text-mage"></span>
+                    <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-uncommon">
+                        {{ __("TMB Tooltips Addon") }}
+                    </a>
+                </h2>
+                <p class="mt-3">
+                    {!! __("<a href=':link1' target='_blank'>TMB Tooltips</a> is an addon developed with love, and independently of TMB. Its author is Strix#1000.", ['link1' => 'https://www.curseforge.com/wow/addons/tmb-helper']) !!}
+                </p>
+            </div>
+        </div>
+    </div>
+
     @php
         $donors = [
-            ['icon' => 'crown', 'name' => 'Adilar/Myras', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'andrew_g', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Anonymous', 'title' => 'Patreon'],
-            ['icon' => 'crown', 'name' => 'A4uronn', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'bakedbread', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Blezner', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'botnet', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Busmonstret', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Calaris', 'title' => 'Main Tank'],
-            ['icon' => 'crown', 'name' => 'diadia', 'title' => 'Main Tank'],
-            ['icon' => 'crown', 'name' => 'Drezdan', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'EmpKain', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Finvy', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Hadiya', 'title' => 'Main Tank'],
-            ['icon' => 'crown', 'name' => 'Hello', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Jensok', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Junior', 'title' => 'Main Tank'],
-            ['icon' => 'crown', 'name' => 'Kazczyk', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Khashte', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Kral', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'mattyp237', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Mister Awesomesauce', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Nectu', 'title' => 'Main Tank'],
-            ['icon' => 'crown', 'name' => 'niph', 'title' => 'Paypal'],
-            ['icon' => 'crown', 'name' => 'Nompire', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Onehalf', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Panya', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'ryooki', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'samspayde', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Sangwa', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Sarafina', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Sentence', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'SHIELD', 'title' => 'Main Tank'],
-            ['icon' => 'crown', 'name' => 'skoz', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Strix', 'title' => 'Black Lotus'],
-            ['icon' => 'crown', 'name' => 'Sumorex', 'title' => 'Main Tank'],
-            ['icon' => 'crown', 'name' => 'TideAd', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Tric', 'title' => 'Main Tank'],
-            ['icon' => 'crown', 'name' => 'Tron', 'title' => 'Main Tank'],
-            ['icon' => 'crown', 'name' => 'Vejusatko', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Waughter', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'weirdGuy', 'title' => 'Parser'],
-            ['icon' => 'crown', 'name' => 'Yjay', 'title' => 'Raider'],
-            ['icon' => 'crown', 'name' => 'Zura', 'title' => 'Parser'],
+            ['name' => 'A4uronn',             'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Adilar/Myras',        'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Aethil',              'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Amatyr',              'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'andrew_g',            'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Anonymous',           'icon' => 'crown', 'title' => 'Patreon'],
+            ['name' => 'Arma',                'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'bakedbread',          'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Blezner',             'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'botnet',              'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Busmonstret',         'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Calaris',             'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'diadia',              'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Drezdan',             'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'EmpKain',             'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Faelor',              'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Feora',               'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Finvy',               'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Fragtoaster1',        'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Garsidian Games',     'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Hadiya',              'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Hello',               'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Jensok',              'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Junior',              'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Kazczyk',             'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Khashte',             'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Kral',                'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'kzEr',                'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'lawlop',              'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'mataglap',            'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'mattyp237',           'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Mister Awesomesauce', 'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Nectu',               'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'niph',                'icon' => 'crown', 'title' => 'Paypal'],
+            ['name' => 'Nompire',             'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Onehalf',             'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Panya',               'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Riotdog TV',          'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Rishi',               'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Rmalhada',            'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'ryooki',              'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'samspayde',           'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Sangwa',              'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Sarafina',            'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Sentence',            'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'SHIELD',              'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Sleete',              'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'skoz',                'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Strix',               'icon' => 'crown', 'title' => 'Black Lotus'],
+            ['name' => 'Sumorex',             'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'TideAd',              'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Tric',                'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Tron',                'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Uriah',               'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Vejusatko',           'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Waughter',            'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'weirdGuy',            'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Yjay',                'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Zura',                'icon' => 'crown', 'title' => 'Parser'],
+        ];
+
+        $translators = [
+            ['name' => 'Ardash',    'icon' => 'comment', 'title' => 'Russian + item lookups'],
+            ['name' => 'ashrasmun', 'icon' => 'comment', 'title' => 'Polish'],
+            ['name' => 'Etaya',     'icon' => 'comment', 'title' => 'German'],
+            ['name' => 'Fingbel',   'icon' => 'comment', 'title' => 'French'],
+            ['name' => 'Hopop',     'icon' => 'comment', 'title' => 'French'],
+            ['name' => 'Irhala',    'icon' => 'comment', 'title' => 'French'],
+            ['name' => 'Kayley',    'icon' => 'comment', 'title' => 'Danish'],
+            ['name' => 'Kyraa',     'icon' => 'comment', 'title' => 'German'],
+            ['name' => 'myki',      'icon' => 'comment', 'title' => 'French'],
+            ['name' => 'Strix',     'icon' => 'comment', 'title' => 'Norwegian'],
         ];
     @endphp
 
     <div class="row bg-light pt-5 pb-5 mb-5 rounded">
-        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
-            <h1>{{ __("Donors") }}</h1>
+        <div class="col-lg-4 offset-lg-2 col-md-5 offset-md-1 col-sm-6 col-12">
+            <h1>
+                <span class="fa fa-fw fas fa-heart text-danger"></span>
+                {{ __("Donors") }}
+            </h1>
             <ul class="fa-ul">
                 @foreach ($donors as $donor)
                     <li>
                         <span class="fa-li fas fa-{{ $donor['icon'] }}"></span>
                         <span class="text-uncommon">{{ $donor['name'] }}</span>
-                        <span class="text-muted">{{ $donor['title'] }}</span>
+                        <span class="text-muted">{{ $donor[                       'title'] }}</span>
                     </li>
                 @endforeach
+                <li>
+                    <span class="fa-li fas fa-question"></span>
+                    <span class="text-muted">{{ __("If I missed you, DM me on Discord!") }}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="col-lg-4 col-md-5 col-sm-6 col-12">
+            <h1>
+                <span class="fa fa-fw fas fa-heart text-danger"></span>
+                {{ __("Translators") }}
+            </h1>
+            <ul class="fa-ul">
+                @foreach ($translators as $translator)
+                    <li>
+                        <span class="fa-li fas fa-{{ $translator['icon'] }}"></span>
+                        <span class="text-uncommon">{{ $translator['name'] }}</span>
+                        <span class="text-muted">{{ $translator['title'] }}</span>
+                    </li>
+                @endforeach
+                <li>
+                    <span class="fa-li fas fa-question"></span>
+                    <span class="text-muted">{{ __("If I missed you, DM me on Discord!") }}</span>
+                </li>
             </ul>
         </div>
     </div>

@@ -419,7 +419,12 @@ function trackTimestamps(rate = timestampCheckRate) {
     $(".js-watchable-timestamp").each(function () {
         let isShort = $(this).data("isShort");
 
-        if (isShort) {
+        if (locale) {
+            moment.locale(locale);
+        }
+
+        // For English short-form dates
+        if (isShort && (!locale || locale === 'en')) {
             moment
             .locale('en', {
                 relativeTime: {

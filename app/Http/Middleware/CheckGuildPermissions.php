@@ -39,7 +39,7 @@ class CheckGuildPermissions
             });
 
             if (!$guild) {
-                abort(404, 'Guild not found.');
+                abort(404, __('Guild not found.'));
             }
 
             if ($guild->slug !== $request->route('guildSlug')) {

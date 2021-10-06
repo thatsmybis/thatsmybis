@@ -2,7 +2,7 @@
     $raidGroup = ($character->raid_group_id ? $guild->allRaidGroups->where('id', $character->raid_group_id)->first() : null);
 @endphp
 <li class="list-inline-item text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}">
-    <div class="dropdown">
+    <div class="dropdown {{ isset($tag) && $tag ? 'tag rounded' : '' }}">
         <a class="dropdown-toggle text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}" id="character{{ $character->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <span class="role-circle" style="background-color:{{ $raidGroup ? $raidGroup->getColor() : null }}"></span>
             <span class="{{ isset($bold) && $bold ? 'font-weight-bold' : '' }}">
@@ -12,17 +12,17 @@
                     {{ __("alt") }}
                 </span>
             @endif
-            @if (!$guild->is_attendance_hidden)
-                <span class="small">
-                    @include('partials/attendanceTag', [
-                        'attendancePercentage' => $character->attendance_percentage,
-                        'benchedCount'         => $character->benched_count,
-                        'raidCount'            => $character->raid_count,
-                        'smallRaid'            => false
-                    ])
-                </span>
-            @endif
         </a>
+        @if (!$guild->is_attendance_hidden)
+            <span class="small">
+                @include('partials/attendanceTag', [
+                    'attendancePercentage' => $character->attendance_percentage,
+                    'benchedCount'         => $character->benched_count,
+                    'raidCount'            => $character->raid_count,
+                    'smallRaid'            => false
+                ])
+            </span>
+        @endif
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
             <a class="dropdown-item" href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                 <span class="text-muted fa-fw fas fa-user"></span>

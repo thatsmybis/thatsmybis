@@ -9,15 +9,18 @@
     <div class="row">
         <div class="col-12 text-center mt-5">
             <h2 class="">
-                {{ __("Welcome") }}, <span class="text-discord font-weight-bold">{{ Auth::user()->discord_username }}</span>
+                {!! __('Welcome, <span class="text-discord font-weight-bold">:username</span>', ['username' => Auth::user()->discord_username]) !!}
             </h2>
-            <strong>Change log</strong> and <strong>announcements</strong> are on the
-            <a href="{{ env('APP_DISCORD') }}" target="_blank" alt="Join the {{ env('APP_NAME') }} Discord Server" title="Join the {{ env('APP_NAME') }} Discord Server" class="">
-                Discord</a>
+            {!! __("<strong>Change log</strong> and <strong>announcements</strong> are on the") !!}
+            <a href="{{ env('APP_DISCORD') }}"
+                target="_blank"
+                alt="{{ __('Join the :appName Discord Server', ['appName' => env('APP_NAME')]) }}"
+                title="{{ __('Join the :appName Discord Server', ['appName' => env('APP_NAME')]) }}"
+                class="">
+                {{ __("Discord") }}
+            </a>
             <br>
-            If you like the site, please <a href="{{ route('donate') }}" class="text-patreon">support it on Patreon</a> to help keep it free for everyone.
-            <br>
-            More support = more features
+            {!! __('Like the site? <a href=":donateLink" class="text-patreon"> Support the developer</a> directly to help make it better.', ['donateLink' => route('donate')]) !!}
         </div>
 
         <div class="col-12 col-sm-6 offset-sm-3 col-md-4 offset-md-4 mt-3">
