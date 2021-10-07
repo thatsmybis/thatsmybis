@@ -121,10 +121,6 @@ class HomeController extends Controller
                 'user'           => $user,
             ]);
         } else {
-            // Tell pages that they can be indexed
-            request()->attributes->add([
-                'allowCrawlerIndex' => true,
-            ]);
             return view('home');
         }
     }
