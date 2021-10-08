@@ -62,7 +62,7 @@
                                 <textarea id="importTextarea"
                                     name="import_textarea"
                                     rows="20"
-                                    placeholder="{{ __('Accepts RCLootCouncil CSV data, or any CSV. First line must contain headers for the data (case sensitive).') }}
+                                    placeholder="{{ __('Accepts RCLootCouncil and Gargul CSV data, or any CSV. First line must contain headers for the data (case sensitive).') }}
 eg.
     character,date,itemID,itemName,note
     Gurgthock,2020-10-01,18821,Quick Strike Ring,That's my BIS
