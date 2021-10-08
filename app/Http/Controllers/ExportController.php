@@ -190,16 +190,12 @@ class ExportController extends Controller {
         $memberCanViewPrios = !$guild->is_prio_private || $currentMember->hasPermission('view.prios');
         $memberCanViewWishlists = !$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists');
 
-        // The current user doesn't have any of the required permissions so we only return the item priority notes.
+        // The current user doesn't have any of the required permissions so we only return the item notes.
         // Individual permissions are inspected separately further down.
         if (!$memberCanViewPrios && !$memberCanViewWishlists) {
+            $payload = array_merge(['wishlists' => []], $this->gargulItemNotes($guild->id));
             return $this->getExport(
-                json_encode([
-                    'wishlists' => [],
-                    'loot' => $this->gargulLootPriority($guild->id),
-                ],
-                    JSON_UNESCAPED_UNICODE
-                ),
+                json_encode($payload, JSON_UNESCAPED_UNICODE),
                 'Gargul data',
                 self::HTML
             );
@@ -261,14 +257,11 @@ class ExportController extends Controller {
             }
         }
 
-        $payload = json_encode([
+        $payload = array_merge([
             'wishlists' => $wishlistData,
             'groups' => $raidGroupData,
-            'itemNotes' => $raidGroupData,
-            'loot' => $this->gargulLootPriority($guild->id),
-        ],
-            JSON_UNESCAPED_UNICODE
-        );
+        ], $this->gargulItemNotes($guild->id));
+        $payload = json_encode($payload, JSON_UNESCAPED_UNICODE);
 
         if (!$raw) {
             return view('guild.export.gargul', [
@@ -289,23 +282,43 @@ class ExportController extends Controller {
     }
 
     /**
-     * Export a guild's loot priority data for the Gargul addon
+     * Export a guild's loot notes for the Gargul addon
      *
-     * @return string
+     * The reason why 'loot' is a CSV instead of JSON is because Gargul already
+     * supported CSV loot priority strings before becoming compatible with TMB
+     *
+     * @param int $guildId
+     * @return array
      */
-    protected function gargulLootPriority($guildId)
+    private function gargulItemNotes(int $guildId): array
     {
-        $items = GuildItem::whereNotNull('priority')
+        $items = GuildItem::where(function ($query) {
+                $query->whereNotNull('priority')
+                    ->orWhereNotNull('note');
+            })
             ->where('guild_id', $guildId)
-            ->select('item_id', 'priority')
+            ->select('item_id', 'priority', 'note')
             ->get();
 
+        $notes = [];
         $itemPriorityString = "";
         foreach ($items as $item) {
-            $itemPriorityString .= "{$item->item_id} > {$item->priority}\n";
-        };
+            $priority = trim($item->priority);
+            $note = trim($item->note);
 
-        return $itemPriorityString;
+            if ($priority) {
+                $itemPriorityString .= "{$item->item_id} > {$priority}\n";
+            }
+
+            if ($note) {
+                $notes[$item->item_id] = $note;
+            }
+        }
+
+        return [
+            'loot' => $itemPriorityString,
+            'notes' => $notes,
+        ];
     }
 
     /**
