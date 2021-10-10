@@ -58,7 +58,7 @@
         <div class="col-md-6 col-12 pl-2 pr-2">
             <div class="bg-light rounded mb-3 pt-5 pb-5 col-12">
                 <h2 class="text-epic">
-                    <span class="fas fa-fw text-legendary"><img class="gargul-icon" src="{{ asset('images/gargul.png') }}"></img></span>
+                    <span class="fas fa-fw text-legendary"><img class="inline-image-icon" src="{{ asset('images/gargul.png') }}"></img></span>
                     <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-epic">
                         {{ __("Gargul Addon") }}
                     </a>

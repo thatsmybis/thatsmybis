@@ -321,6 +321,48 @@
                         </div>
                     </div>
                 </div>
+                @if (request()->get('isAdmin'))
+                    <div class="row">
+                        <div class="col-12 pt-2 pb-1 mb-3 bg-light rounded">
+                            <span class="text-danger">ADMIN ONLY - still in development</span>
+                            <div class="form-group">
+                                <label for="warcraftlogs" class="font-weight-bold">
+                                    <img class="inline-image-icon" src="{{ asset('images/warcraftlogs.png') }}"></img>
+                                    {{ __("Warcraft Logs") }}
+                                    <span class="small text-muted">
+                                        {{ __("choose a warcraftlogs.com account that raid leaders can fetch data from") }}
+                                    </span>
+                                </label>
+                                <div class="">
+                                    @if ($guild->warcraftlogs_token)
+                                        <ul class="no-bullet">
+                                            <li>
+                                                <a class="font-weight-bold text-white" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $warcraftlogsMember->id, 'usernameSlug' => $warcraftlogsMember->slug]) }}">
+                                                    {{ __("Linked by :name", ['name' => ($warcraftlogsMember ? $warcraftlogsMember->username : __('unknown'))]) }}
+                                                </a>
+                                            </li>
+                                            <li class="mt-2">
+                                                <label class="text-muted">
+                                                    <input type="checkbox" name="unlink_warcraftlogs" value="1" class="" autocomplete="off"
+                                                        {{ old('unlink_warcraftlogs') && old('unlink_warcraftlogs') == 1 ? 'checked' : '' }}>
+                                                        {{ __("Unlink Warcraft Logs") }}
+                                                        <span class="text-muted small">
+                                                            {{ __("no data will be lost and you can re-link") }}
+                                                        </span>
+                                                </label>
+                                            </li>
+                                        </ul>
+                                    @else
+                                        <a class="btn btn-secondary"
+                                            href="{{ route('warcraftlogsAuth', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                            {{ __("Connect to Warcraft Logs") }}
+                                        </a>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                @endif
 
                 <div class="row">
                     <div class="col-12 pt-2 mt-3 mb-2">

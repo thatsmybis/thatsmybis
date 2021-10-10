@@ -43,6 +43,9 @@ class User extends Authenticatable
         'discord_id',
         'password',
         'remember_token',
+        'discord_token',
+        'discord_refresh_token',
+        'discord_token_expiry',
     ];
 
     /**
