@@ -7,8 +7,8 @@ use App\{User};
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use Socialite;
 use RestCord\DiscordClient;
+use Socialite;
 
 class LoginController extends Controller
 {
@@ -41,9 +41,7 @@ class LoginController extends Controller
      * @return Response
      */
     public function redirectToDiscord() {
-        if (app()->environment('local')
-            && env('LOGIN_USING_ID')
-        ) {
+        if (app()->environment('local') && env('LOGIN_USING_ID')) {
             Auth::loginUsingId(env('LOGIN_USING_ID'));
             return redirect()->route('home');
         }
@@ -74,7 +72,7 @@ class LoginController extends Controller
         $id = $unauthUser->getId();
 
         if (!$id) {
-            abort(403, "Didn't receive your ID from Discord. Try again.");
+            abort(403, __("Didn't receive your ID from Discord. Try again."));
         }
 
         $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
@@ -110,7 +108,7 @@ class LoginController extends Controller
 
             return redirect()->route('home');
         } else {
-            abort(403, "Something went wrong with the data Discord sent us. Try again.");
+            abort(403, __("Something went wrong with the data Discord sent us. Try again."));
         }
     }
 

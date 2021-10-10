@@ -287,9 +287,18 @@ class GuildController extends Controller
         // Remove the @everyone role; it doesn't work
         $guild->roles->forget($guild->roles->where('name', '@everyone')->keys()->first());
 
-        $owner = $guild->allMembers()->where([
-            ['user_id', $guild->user_id],
-        ])->with('user')->first();
+        $owner = Member::where([
+                'guild_id' => $guild->id,
+                'user_id'  => $guild->user_id,
+            ])
+            ->with('user')
+            ->first();
+
+        $warcraftlogsMember = Member::where([
+                'guild_id' => $guild->id,
+                'id' => $guild->warcraftlogs_member_id,
+            ])
+            ->first();
 
         return view('guild.settings', [
             'currentMember' => $currentMember,
@@ -297,6 +306,7 @@ class GuildController extends Controller
             'guild'         => $guild,
             'owner'         => $owner,
             'permissions'   => Permission::all(),
+            'warcraftlogsMember' => $warcraftlogsMember,
         ]);
     }
 
@@ -341,6 +351,7 @@ class GuildController extends Controller
             'calendar_link'                => 'nullable|string|max:200',
             'message'                      => 'nullable|string|max:500',
             'show_message'                 => 'nullable|boolean',
+            'unlink_warcraftlogs'          => 'nullable|boolean',
             'gm_role_id'                   => 'nullable|integer|exists:roles,discord_id',
             'officer_role_id'              => 'nullable|integer|exists:roles,discord_id',
             'raid_leader_role_id'          => 'nullable|integer|exists:roles,discord_id',
@@ -401,6 +412,15 @@ class GuildController extends Controller
                     $auditMessage .= ' (enabled guild)';
                 }
             }
+        }
+
+        $unlinkWarcraftLogs = request()->input('unlink_warcraftlogs') == 1 ? 1 : 0;
+        if ($unlinkWarcraftLogs) {
+            $auditMessage .= ' (Warcraft Logs unlinked)';
+            $updateValues['warcraftlogs_token'] = null;
+            $updateValues['warcraftlogs_refresh_token'] = null;
+            $updateValues['warcraftlogs_token_expiry'] = null;
+            $updateValues['warcraftlogs_member_id'] = null;
         }
 
         if (!request()->input('show_message') && $guild->message) {

@@ -21,6 +21,7 @@ class EventServiceProvider extends ServiceProvider
         \SocialiteProviders\Manager\SocialiteWasCalled::class => [
             // add your listeners (aka providers) here
             'SocialiteProviders\\Discord\\DiscordExtendSocialite@handle',
+            'App\\Providers\\Warcraftlogs\\WarcraftlogsExtendSocialite@handle',
         ],
     ];
 

@@ -9,6 +9,7 @@
     "license": "",
     "require": {
         "php": "^7.4",
+        "composer/composer": "^2.1.9",
         "doctrine/dbal": "^2.10",
         "fideloper/proxy": "^4.0",
         "fruitcake/laravel-cors": "^2.0",
@@ -16,6 +17,7 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "kkomelin/laravel-translatable-string-exporter": "^1.14",
         "kodeine/laravel-acl": "^2.0.5",
+        "laravel/cashier": "^13.5",
         "laravel/framework": "^8.0",
         "laravel/socialite": "^5.0",
         "laravel/tinker": "^2.0",
