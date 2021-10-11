@@ -105,9 +105,10 @@ class WarcraftlogsController extends Controller
                 'guild_id'    => $guild->id,
             ]);
 
-            request()->session()->flash('status', __('Warcraft Logs linked to guild.'));
+            request()->session()->flash('status', __("Warcraft Logs linked to guild. Revisit your guild settings to input your guild's ID."));
 
-            return redirect()->route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
+            // Redirect with fragment
+            return redirect(route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) . "#warcraftlogs");
         } else {
             abort(403, __("Something went wrong with the data Warcraft Logs sent us. Try again."));
         }

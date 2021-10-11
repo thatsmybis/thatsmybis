@@ -351,6 +351,7 @@ class GuildController extends Controller
             'calendar_link'                => 'nullable|string|max:200',
             'message'                      => 'nullable|string|max:500',
             'show_message'                 => 'nullable|boolean',
+            'warcraftlogs_guild_id'        => 'nullable|integer|min:1|max:99999999',
             'unlink_warcraftlogs'          => 'nullable|boolean',
             'gm_role_id'                   => 'nullable|integer|exists:roles,discord_id',
             'officer_role_id'              => 'nullable|integer|exists:roles,discord_id',

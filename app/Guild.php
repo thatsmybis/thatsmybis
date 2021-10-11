@@ -35,6 +35,7 @@ class Guild extends BaseModel
         'warcraftlogs_refresh_token',
         'warcraftlogs_token_expiry',
         'warcraftlogs_member_id',
+        'warcraftlogs_guild_id',
         'admin_role_id',
         'gm_role_id',
         'officer_role_id',
