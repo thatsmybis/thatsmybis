@@ -213,7 +213,7 @@
                                             maxlength="250"
                                             type="text"
                                             class="form-control dark"
-                                            placeholder="{{ __('a warcraftlogs.com link perhaps?') }}"
+                                            placeholder="{{ __('eg. https://classic.warcraftlogs.com/reports/AbCdE3FgHiJkLmNo/') }}"
                                             value="{{ old('logs_deprecated') ? old('logs_deprecated') : ($raid ? $raid->logs_deprecated : '') }}"
                                             style="" />
                                     @else
@@ -227,11 +227,14 @@
                                                     maxlength="250"
                                                     type="text"
                                                     class="js-show-next form-control dark"
-                                                    placeholder="{{ __('a warcraftlogs.com link perhaps?') }}"
+                                                    placeholder="{{ __('eg. https://classic.warcraftlogs.com/reports/AbCdE3FgHiJkLmNo/') }}"
                                                     value="{{ $oldLog }}"
                                                     style="" />
                                             </div>
                                         @endfor
+                                        @if (request()->get('isAdmin'))
+                                            <span class="js-add-warcraftlogs-players btn btn-success">{{ __("Load characters from logs") }}</span>
+                                        @endif
                                     @endif
                                 </div>
                             </div>

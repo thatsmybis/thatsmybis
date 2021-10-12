@@ -354,7 +354,7 @@
                                 @if ($guild->warcraftlogs_token)
                                     <ul class="no-bullet no-indent">
                                         <li>
-                                            <a class="font-weight-bold text-white" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $warcraftlogsMember->id, 'usernameSlug' => $warcraftlogsMember->slug]) }}">
+                                            <a class="text-muted" href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $warcraftlogsMember->id, 'usernameSlug' => $warcraftlogsMember->slug]) }}">
                                                 {{ __("Account linked by :name", ['name' => ($warcraftlogsMember ? $warcraftlogsMember->username : __('unknown'))]) }}
                                             </a>
                                         </li>
