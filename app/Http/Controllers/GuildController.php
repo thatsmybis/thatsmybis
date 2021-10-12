@@ -363,6 +363,7 @@ class GuildController extends Controller
 
         $updateValues['name']                      = request()->input('name');
         $updateValues['slug']                      = slug(request()->input('name'));
+        $updateValues['warcraftlogs_guild_id']     = request()->input('warcraftlogs_guild_id');
         $updateValues['is_prio_private']           = request()->input('is_prio_private') == 1 ? 1 : 0;
         $updateValues['is_prio_disabled']          = request()->input('is_prio_disabled') == 1 ? 1 : 0;
         $updateValues['is_received_locked']        = request()->input('is_received_locked') == 1 ? 1 : 0;
@@ -422,6 +423,14 @@ class GuildController extends Controller
             $updateValues['warcraftlogs_refresh_token'] = null;
             $updateValues['warcraftlogs_token_expiry'] = null;
             $updateValues['warcraftlogs_member_id'] = null;
+        }
+
+        if (array_key_exists('warcraftlogs_guild_id', $updateValues) && $updateValues['warcraftlogs_guild_id'] != $guild->warcraftlogs_guild_id) {
+            if ($updateValues['warcraftlogs_guild_id']) {
+                $auditMessage .= " (WCL guild ID set to " . $updateValues['warcraftlogs_guild_id'] . ")";
+            } else {
+                $auditMessage .= " (WCL guild ID cleared)";
+            }
         }
 
         if (!request()->input('show_message') && $guild->message) {
