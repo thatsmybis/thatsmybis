@@ -580,7 +580,7 @@
     "Import Loot From CSV": "Импорт добычи из CSV",
     "Paste your <abbr title=\"Comma Separated Value\">CSV<\/abbr> data": "Paste your <abbr title=\"Comma Separated Value\">CSV<\/abbr> data",
     "rows": "строк",
-    "Accepts RCLootCouncil CSV data, or any CSV. First line must contain headers for the data (case sensitive).": "Accepts RCLootCouncil CSV data, or any CSV. First line must contain headers for the data (case sensitive).",
+    "Accepts RCLootCouncil and Gargul CSV data, or any CSV. First line must contain headers for the data (case sensitive).": "Accepts RCLootCouncil and Gargul CSV data, or any CSV. First line must contain headers for the data (case sensitive).",
     "Supported header fields: (CASE SENSITIVE)": "Supported header fields: (CASE SENSITIVE)",
     "If note, response, public note, or officer note are equal to 'OS": "If note, response, public note, or officer note are equal to 'OS",
     "Doesn't match your data schema? Request support for it": "Не соответствует вашей схеме данных? Запросите поддержку на",
