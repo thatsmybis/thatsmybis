@@ -114,6 +114,7 @@
             ['name' => 'Kral',                'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'kzEr',                'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'lawlop',              'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'mataglap',            'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'mattyp237',           'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Mister Awesomesauce', 'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Nectu',               'icon' => 'crown', 'title' => 'Main Tank'],

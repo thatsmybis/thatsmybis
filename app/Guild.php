@@ -244,6 +244,7 @@ class Guild extends BaseModel
             'characters.inactive_at',
             'members.username',
             'users.discord_username',
+            'users.discord_id',
             'members.is_wishlist_unlocked',
             'members.is_received_unlocked',
             'raid_groups.name AS raid_group_name',
