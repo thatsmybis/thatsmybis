@@ -12,16 +12,6 @@ use Socialite;
 
 class WarcraftlogsController extends Controller
 {
-    /*
-    |--------------------------------------------------------------------------
-    | Login Controller
-    |--------------------------------------------------------------------------
-    |
-    | This controller handles authenticating users for the application and
-    | redirecting them to your home screen. The controller uses a trait
-    | to conveniently provide its functionality to your applications.
-    |
-    */
 
     use AuthenticatesUsers;
 
@@ -36,7 +26,7 @@ class WarcraftlogsController extends Controller
     }
 
     /**
-     * Redirect the user to the Warcraftlogs authentication page.
+     * Redirect the user to the Warcraft Logs authentication page.
      *
      * @return Response
      */
@@ -52,7 +42,7 @@ class WarcraftlogsController extends Controller
     }
 
     /**
-     * Obtain the user information from Discord.
+     * Obtain the auth tokens for a user from Warcraft Logs
      *
      * @return Response
      */
