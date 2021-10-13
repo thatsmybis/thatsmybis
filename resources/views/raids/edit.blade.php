@@ -233,6 +233,7 @@
                                             </div>
                                         @endfor
                                         @if (request()->get('isAdmin'))
+                                            <span class="text-danger">ADMIN ONLY - still in development</span>
                                             <span class="js-add-warcraftlogs-players btn btn-success">{{ __("Load characters from logs") }}</span>
                                         @endif
                                     @endif
