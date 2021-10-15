@@ -19,15 +19,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -39,15 +48,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -59,15 +77,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -79,15 +106,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -99,15 +135,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -119,15 +164,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -139,15 +193,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -159,15 +222,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -179,15 +251,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -199,15 +280,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -219,15 +309,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -239,15 +338,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -259,15 +367,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -279,15 +396,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -299,15 +425,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
         <tr>
@@ -319,16 +454,24 @@
                 <span class="small text-muted">{{ $slotItems->count() }}</span>
             </td>
             <td>
-                @foreach ($slotItems as $item)
-                    {{ $item->inventory_type }}
-                    @include('partials/item', [
-                        'wowheadLink'  => false,
-                        'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
-                        'itemUsername' => $item->added_by_username,
-                        'showTier'     => true,
-                        'tierMode'     => $guild->tier_mode,
-                    ])
-                @endforeach
+                @if ($slotItems->count())
+                    <ul class="list-inline">
+                        @foreach ($slotItems as $item)
+                            <li class="list-inline-item">
+                                @include('partials/item', [
+                                    'wowheadLink'  => false,
+                                    'fontWeight'   => 'normal',
+                                    'itemDate'     => ($item ? ($item->pivot->received_at ? $item->pivot->received_at : $item->pivot->created_at) : null),
+                                    'itemUsername' => $item->added_by_username,
+                                    'showTier'     => true,
+                                    'tierMode'     => $guild->tier_mode,
+                                ])
+                            </li>
+                        @endforeach
+                    </ul>
+                @else
+                    —
+                @endif
             </td>
         </tr>
     </tbody>

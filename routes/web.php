@@ -131,7 +131,8 @@ Route::group([
     // Route::get( '/resources/{slug}', 'ContentController@show') ->name('showContent');
     // Route::get( '/posts/{slug}',     'ContentController@show') ->name('showPost');
 
-    Route::get( '/roster',          'RosterController@roster')->name('guild.roster');
+    Route::get( '/roster',       'RosterController@roster')->name('guild.roster');
+    Route::get( '/roster-stats', 'RosterController@rosterStats')->name('guild.rosterStats');
 
     Route::get( '/assign-loot',                'AssignLootController@assignLoot')      ->name('item.assignLoot');
     Route::post('/assign-loot',                'AssignLootController@submitAssignLoot')->name('item.assignLoot.submit');
