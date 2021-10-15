@@ -100,35 +100,40 @@ function createRosterStatsTable() {
         // Character name
         {
             title  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter} <span class="text-muted small">(${characters.length})</span>`,
-            data   : "character",
-            render : function (data, type, row) {
-                return `<ul class="no-bullet no-indent">
-                    <li>
-                        <div class="dropdown text-${ row.class ? row.class.toLowerCase() : '' }">
-                            <a class="dropdown-toggle font-weight-bold text-${ row.class ? row.class.toLowerCase() : '' }"
-                                id="character${ row.id }Dropdown"
-                                role="button"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                title="${ row.username ? row.username : '' }">
-                                ${ row.name }
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="character${ row.id }Dropdown">
-                                <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }">Profile</a>
-                                <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/audit-log?character_id=${ row.id }">History</a>
-                                ${ showEdit ?
-                                    `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/edit">Edit</a>
-                                    <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/loot">Wishlist & Loot</a>`
+            data   : "name",
+            render : {
+                // Underscore property gets used for the visible render of each cell
+                _: function (data, type, row) {
+                    return `<ul class="no-bullet no-indent">
+                        <li>
+                            <div class="dropdown text-${ row.class ? row.class.toLowerCase() : '' }">
+                                <a class="dropdown-toggle font-weight-bold text-${ row.class ? row.class.toLowerCase() : '' }"
+                                    id="character${ row.id }Dropdown"
+                                    role="button"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    title="${ row.username ? row.username : '' }">
+                                    ${ row.name }
+                                </a>
+                                <div class="dropdown-menu" aria-labelledby="character${ row.id }Dropdown">
+                                    <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }">Profile</a>
+                                    <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/audit-log?character_id=${ row.id }">History</a>
+                                    ${ showEdit ?
+                                        `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/edit">Edit</a>
+                                        <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/loot">Wishlist & Loot</a>`
+                                        : `` }
+                                    ${ row.member_id ?
+                                        `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.username ? row.username.toLowerCase() : 'view member' }">${ row.username ? row.username : 'view member' }</a>`
                                     : `` }
-                                ${ row.member_id ?
-                                    `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.username ? row.username.toLowerCase() : 'view member' }">${ row.username ? row.username : 'view member' }</a>`
-                                : `` }
+                                </div>
                             </div>
-                        </div>
-                        ${ getRaidGroupHtml(row.raid_group_name, row.raid_group_color) }
-                    </li>
-                </ul>`;
+                            ${ getRaidGroupHtml(row.raid_group_name, row.raid_group_color) }
+                        </li>
+                    </ul>`;
+                },
+                // Sort by the value in data; not the render
+                sort: function (data, type, row) {return data;},
             },
             visible : true,
             width   : "50px",
@@ -150,17 +155,20 @@ function createRosterStatsTable() {
         // Attendance
         {
             title  : "Att.",
-            data   : "character",
-            render : function (data, type, row) {
-                if (!guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count || row.benched_count)) {
-                    return `<ul class="list-inline small">
-                            ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<li class="list-inline-item mr-0 ${ getAttendanceColor(row.attendance_percentage) }" title="attendance">${ Math.round(row.attendance_percentage * 100) }%</li>` : '' }
-                            ${ row.raid_count ? `<li class="list-inline-item text-muted mr-0">${ row.raid_count }r</li>` : ``}
-                            ${ row.benched_count ? `<li class="list-inline-item text-muted mr-0">bench ${ row.benched_count }x</li>` : ``}
-                        </ul>`;
-                } else {
-                    return '';
-                }
+            data   : "raid_count",
+            render : {
+                _: function (data, type, row) {
+                    if (!guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count || row.benched_count)) {
+                        return `<ul class="list-inline small">
+                                ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<li class="list-inline-item mr-0 ${ getAttendanceColor(row.attendance_percentage) }" title="attendance">${ Math.round(row.attendance_percentage * 100) }%</li>` : '' }
+                                ${ row.raid_count ? `<li class="list-inline-item text-muted mr-0">${ row.raid_count }r</li>` : ``}
+                                ${ row.benched_count ? `<li class="list-inline-item text-muted mr-0">bench ${ row.benched_count }x</li>` : ``}
+                            </ul>`;
+                    } else {
+                        return '';
+                    }
+                },
+                sort: function (data, type, row) {return data;},
             },
             visible : true,
             width   : "10px",
@@ -371,6 +379,15 @@ function addInstanceFilterHandlers() {
     });
 }
 
+// Take in an array of items, return the average tier number.
+// Only count items that have tiers associated with them.
+function getAverageTier(items) {
+    const filteredItems = items.filter(item => item.guild_tier);
+    const average = filteredItems.reduce((ac, a) => a.guild_tier + ac, 0) / filteredItems.length;
+    const mockItem = {'guild_tier': average};
+    return getTierHtml(mockItem);
+}
+
 /**
  * Get the object that represents a column in Datatables.
  *
@@ -388,13 +405,16 @@ function getItemColumnBySlot(name, slots) {
         render : function (data, type, row) {
             const filteredItems = data.filter(item => slots.includes(item.inventory_type))
             if (filteredItems && filteredItems.length) {
-                return `<span class="font-weight-medium">${ filteredItems.length }</span>
-                    ${ getItemListHtml(filteredItems, 'received', row.id, false, false) }`;
+                return `<div class="ml-1">
+                        <span class="font-weight-medium">${ filteredItems.length }</span>
+                        ${ guild.tier_mode ? getAverageTier(filteredItems) : `` }
+                        ${ getItemListHtml(filteredItems, 'received', row.id, false, false) }
+                    </div>`;
             } else {
                 return `<span class="text-muted">—</span>`;
             }
         },
-        orderable : false,
+        orderable : true,
         visible    : (view === 'slots' ? true : false),
         searchable : true,
     };
@@ -416,9 +436,10 @@ function getItemListHtml(data, type, characterId, useOrder = false, isVisible = 
                 data-instance-id="${ item.instance_id }"
                 data-wishlist-number="${item.list_number}"
                 value="${ useOrder ? item.pivot.order : '' }">
-                ${ guild.tier_mode && item.guild_tier ?
-                    `<span class="text-monospace font-weight-medium text-tier-${ item.guild_tier ? item.guild_tier : '' }">${ item.guild_tier ? getItemTierLabel(item, guild.tier_mode) : '&nbsp;' }</span>`
-                : `` }
+                ${ guild.tier_mode && item.guild_tier
+                    ? getTierHtml(item)
+                    : ``
+                }
                 <a href="/${ guild.id }/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"
                     class="small ${ item.quality ? 'q' + item.quality : '' } ${ item.pivot.is_received && (item.pivot.type == 'wishlist' || item.pivot.type == 'prio') ? 'font-strikethrough' : '' }"
                     ${ wowheadData }>
@@ -453,6 +474,10 @@ function getRaidGroupHtml(name, color) {
         return '';
     }
 
+}
+
+function getTierHtml(item) {
+    return `<span class="text-monospace small font-weight-normal text-tier-${ item.guild_tier ? Math.ceil(item.guild_tier) : '' }">${ item.guild_tier ? getItemTierLabel(item, guild.tier_mode) : '&nbsp;' }</span>`;
 }
 
 function hideOffspecItems() {

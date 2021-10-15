@@ -262,7 +262,7 @@ function getColorFromDec(color) {
 function getItemTierLabel(item, tierMode) {
     if (item.guild_tier) {
         if (tierMode == TIER_MODE_S) {
-            return TIERS[item.guild_tier];
+            return numToSTier(item.guild_tier);
         } else {
             return item.guild_tier;
         }
@@ -295,6 +295,33 @@ function makeWowheadLinks() {
  */
 function nl2br(string) {
     return string ? string.replace(/\n/g,"<br>") : '';
+}
+
+/**
+ * Expects a float, returns an s-tier with the decimal of the float intact.
+ *
+ * @param $float
+ *
+ * @return array
+ */
+function numToSTier(float) {
+    if (float > 0) {
+        tiers = TIERS;
+
+        whole = Math.floor(float);
+        decimal = float - whole;
+
+        affix = '';
+        if (decimal > 0.66) {
+            affix = '++';
+        } else if (decimal > 0.33) {
+            affix = '+';
+        }
+
+        return tiers[Math.ceil(float)] + affix;
+    } else {
+        return '';
+    }
 }
 
 /**
