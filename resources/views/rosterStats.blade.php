@@ -29,3 +29,5 @@
 </script>
 <script src="{{ loadScript('rosterStats.js') }}"></script>
 @endsection
+
+@section('wowheadIconSize', 'tiny')

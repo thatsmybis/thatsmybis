@@ -36,7 +36,6 @@ class Item extends BaseModel
      * @var array
      */
     protected $hidden = [
-        'inventory_type',
         'allowable_class',
         'item_level',
         'name_cn',

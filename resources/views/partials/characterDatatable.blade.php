@@ -135,7 +135,7 @@
         -->
         @if ($showPrios)
             <li class="list-inline-item">
-                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="1">
+                <span class="toggle-column text-link text-unselectable cursor-pointer font-weight-light" data-column="1">
                     <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
                     {{ __("Prios") }}
                 </span>
@@ -144,7 +144,7 @@
         @endif
         @if ($showWishlist)
             <li class="list-inline-item">
-                <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2">
+                <span class="toggle-column text-link text-unselectable cursor-pointer font-weight-light" data-column="2">
                     <span class="text-muted fal fa-fw fa-scroll-old"></span>
                     {{ __("Wishlist") }}
                 </span>
@@ -152,7 +152,7 @@
             <li class="list-inline-item">&sdot;</li>
         @endif
         <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
+            <span class="toggle-column text-link text-unselectable cursor-pointer font-weight-light" data-column="3">
                 <span class="text-muted fal fa-fw fa-sack"></span>
                 {{ __("Received") }}
             </span>
@@ -160,7 +160,7 @@
         <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3">
+            <span class="toggle-column text-link text-unselectable cursor-pointer font-weight-light" data-column="3">
                 <span class="text-muted fas fa-fw fa-book"></span>
                 {{ __("Recipes") }}
             </span>
@@ -169,7 +169,7 @@
         <!--
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4">
+            <span class="toggle-column text-link text-unselectable cursor-pointer font-weight-light" data-column="4">
                 <span class="text-muted fab fa-fw fa-discord"></span>
                 {{ __("Roles") }}
             </span>
@@ -177,7 +177,7 @@
         -->
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="6">
+            <span class="toggle-column text-link text-unselectable cursor-pointer font-weight-light" data-column="6">
                 <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
                 {{ __("Notes") }}
             </span>
@@ -185,7 +185,7 @@
         @if (!$guild->is_attendance_hidden)
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
-                <span class="js-sort-by-raids-attended text-link cursor-pointer font-weight-light" data-column="11">
+                <span class="js-sort-by-raids-attended text-link text-unselectable cursor-pointer font-weight-light">
                     <span class="text-muted fal fa-fw fa-helmet-battle"></span>
                     {{ __("Sort By Raid Count") }}
                 </span>
@@ -193,7 +193,7 @@
         @endif
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="js-hide-strikethrough-items text-link cursor-pointer font-weight-light" data-column="6">
+            <span class="js-hide-strikethrough-items text-link text-unselectable cursor-pointer font-weight-light">
                 <span class="text-muted fal fa-fw fa-strikethrough"></span>
                 {{ __("Hide") }}
                 <span class="font-strikethrough">{{ __("received") }}</span>
@@ -201,14 +201,14 @@
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="js-hide-offspec-items text-link cursor-pointer font-weight-light" data-column="6">
+            <span class="js-hide-offspec-items text-link text-unselectable cursor-pointer font-weight-light">
                 <span class="text-muted fal fa-fw fa-trash"></span>
                 {{ __("Hide OS") }}
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
-            <span class="js-show-all-clipped-items text-link cursor-pointer font-weight-light" data-column="6">
+            <span class="js-show-all-clipped-items text-link text-unselectable cursor-pointer font-weight-light">
                 <span class="text-muted fal fa-fw fa-eye"></span>
                 {{ __("Show all loot") }}
             </span>

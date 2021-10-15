@@ -271,7 +271,7 @@ class Guild extends BaseModel
             ->where('characters.guild_id', $this->id)
             ->orderBy('characters.name')
             ->with([
-                'received', // TODO: Optimize (is slow)
+                'received',
                 'secondaryRaidGroups' => function ($query) {
                     return $query
                         ->select([
@@ -293,7 +293,7 @@ class Guild extends BaseModel
 
         if ($showPrios) {
             if ($this->prio_show_count && !$viewPrioPermission) {
-                $query = $query->with(['prios' => function ($query) { // TODO: Optimize (is slow)
+                $query = $query->with(['prios' => function ($query) {
                     return $query->where([
                         ['character_items.order', '<=', $this->prio_show_count],
                     ]);
@@ -306,9 +306,9 @@ class Guild extends BaseModel
         if ($showWishlist) {
             if ($allWishlists) {
                 // NOTE that this will output the relation 'allWishlists' and NOT 'wishlist'
-                $query = $query->with('allWishlists'); // TODO: Optimize (is slow)
+                $query = $query->with('allWishlists');
             } else {
-                $query = $query->with('wishlist'); // TODO: Optimize (is slow)
+                $query = $query->with('wishlist');
             }
         }
 
