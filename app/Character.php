@@ -47,6 +47,7 @@ class Character extends BaseModel
         'personal_note',
     ];
 
+    // Each constant must be unique among their group. They are used as keys.
     const RACE_BLOOD_ELF = 'Blood Elf';
     const RACE_ORC       = 'Orc';
     const RACE_TAUREN    = 'Tauren';
