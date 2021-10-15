@@ -503,28 +503,28 @@ class AssignLootController extends Controller
 
         // Create a batch record for this job
         // Doing this right before we do the inserts just in case something went wrong beforehand
-        // $batch = Batch::create([
-        //     'name'          => request()->input('name') ? request()->input('name') : null,
-        //     'note'          => $currentMember->username . ' assigned ' . count($newRows) . ' items' . ($raidGroup ? ' on raid group ' . $raidGroup->name : '')  . ($raid ? ' on raid ' . $raid->name : ''),
-        //     'type'          => AuditLog::TYPE_ASSIGN,
-        //     'guild_id'      => $guild->id,
-        //     'member_id'     => $currentMember->id,
-        //     'raid_group_id' => $raidGroupId,
-        //     'raid_id'       => $raidId,
-        //     'user_id'       => $currentMember->user_id,
-        // ]);
+        $batch = Batch::create([
+            'name'          => request()->input('name') ? request()->input('name') : null,
+            'note'          => $currentMember->username . ' assigned ' . count($newRows) . ' items' . ($raidGroup ? ' on raid group ' . $raidGroup->name : '')  . ($raid ? ' on raid ' . $raid->name : ''),
+            'type'          => AuditLog::TYPE_ASSIGN,
+            'guild_id'      => $guild->id,
+            'member_id'     => $currentMember->id,
+            'raid_group_id' => $raidGroupId,
+            'raid_id'       => $raidId,
+            'user_id'       => $currentMember->user_id,
+        ]);
 
-        // if (!request()->input('name')) {
-        //     $batch->update(['name' => "Batch {$batch->id}"]);
-        // }
+        if (!request()->input('name')) {
+            $batch->update(['name' => "Batch {$batch->id}"]);
+        }
 
         // Add the batch ID to the items we're going to insert
-        // array_walk($newRows, function (&$value, $key) use ($batch) {
-        //     $value['batch_id'] = $batch->id;
-        // });
+        array_walk($newRows, function (&$value, $key) use ($batch) {
+            $value['batch_id'] = $batch->id;
+        });
 
         // Add the items to the character's received list
-        // CharacterItem::insert($newRows);
+        CharacterItem::insert($newRows);
 
         // For each item added, attempt to delete or flag a matching item from the character's wishlist and prios
         foreach ($detachRows as $detachRow) {
@@ -603,55 +603,55 @@ class AssignLootController extends Controller
             }
 
             // Find prio for this item
-            // $prioRow = CharacterItem::where($whereClause)->orderBy('is_received')->orderBy('order')->first();
+            $prioRow = CharacterItem::where($whereClause)->orderBy('is_received')->orderBy('order')->first();
 
-            // if ($prioRow) {
-            //     $auditMessage = '';
-            //     if ($deletePrio) {
-            //         // Delete the one we found
-            //         CharacterItem::where(['id' => $prioRow->id])->delete();
+            if ($prioRow) {
+                $auditMessage = '';
+                if ($deletePrio) {
+                    // Delete the one we found
+                    CharacterItem::where(['id' => $prioRow->id])->delete();
 
-            //         // Now correct the order on the remaning prios for that item in that raid group
-            //         CharacterItem::
-            //             where([
-            //                 'item_id'       => $prioRow->item_id,
-            //                 'raid_group_id' => $prioRow->raid_group_id,
-            //                 'type'          => Item::TYPE_PRIO,
-            //             ])
-            //             ->where('order', '>', $prioRow->order)
-            //             ->update(['order' => DB::raw('`order` - 1')]);
-            //         $auditMessage = 'removed 1 prio';
-            //     } else {
-            //         CharacterItem::
-            //             where(['id' => $prioRow->id])
-            //             ->update([
-            //                 'is_received' => 1,
-            //                 'received_at' => $now,
+                    // Now correct the order on the remaning prios for that item in that raid group
+                    CharacterItem::
+                        where([
+                            'item_id'       => $prioRow->item_id,
+                            'raid_group_id' => $prioRow->raid_group_id,
+                            'type'          => Item::TYPE_PRIO,
+                        ])
+                        ->where('order', '>', $prioRow->order)
+                        ->update(['order' => DB::raw('`order` - 1')]);
+                    $auditMessage = 'removed 1 prio';
+                } else {
+                    CharacterItem::
+                        where(['id' => $prioRow->id])
+                        ->update([
+                            'is_received' => 1,
+                            'received_at' => $now,
 
-            //             ]);
-            //         $auditMessage = 'flagged 1 prio as received';
-            //     }
+                        ]);
+                    $auditMessage = 'flagged 1 prio as received';
+                }
 
-            //     $audits[] = [
-            //         'description'   => 'System ' . $auditMessage . ' after character was assigned item',
-            //         'type'          => Item::TYPE_PRIO,
-            //         'member_id'     => $currentMember->id,
-            //         'character_id'  => $prioRow->character_id,
-            //         'guild_id'      => $currentMember->guild_id,
-            //         'raid_group_id' => $prioRow->raid_group_id,
-            //         'raid_id'       => $raidId,
-            //         'item_id'       => $prioRow->item_id,
-            //         'created_at'    => $now,
-            //     ];
-            // }
+                $audits[] = [
+                    'description'   => 'System ' . $auditMessage . ' after character was assigned item',
+                    'type'          => Item::TYPE_PRIO,
+                    'member_id'     => $currentMember->id,
+                    'character_id'  => $prioRow->character_id,
+                    'guild_id'      => $currentMember->guild_id,
+                    'raid_group_id' => $prioRow->raid_group_id,
+                    'raid_id'       => $raidId,
+                    'item_id'       => $prioRow->item_id,
+                    'created_at'    => $now,
+                ];
+            }
         }
 
         // Add the batch ID to the audit log records
-        // array_walk($audits, function (&$value, $key) use ($batch) {
-        //     $value['batch_id'] = $batch->id;
-        // });
+        array_walk($audits, function (&$value, $key) use ($batch) {
+            $value['batch_id'] = $batch->id;
+        });
 
-        // AuditLog::insert($audits);
+        AuditLog::insert($audits);
 
         request()->session()->flash('status',
             __('Successfully added :addedCount items. :failedCount failures:warnings',
