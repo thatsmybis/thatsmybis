@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-// use App\{};
+use App\{Instance};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;

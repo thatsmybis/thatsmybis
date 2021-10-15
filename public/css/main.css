@@ -715,13 +715,19 @@ input.slim {
 .role-circle.align-fix {
     margin-bottom: -2px;
 }
-
 .role-circle-large {
     display: inline-block;
     border-radius: 50%;
     width: 16px;
     height: 16px;
     margin-right: 4px;
+}
+.role-circle-small {
+    display: inline-block;
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    margin-right: 2px;
 }
 
 .js-markdown img {
@@ -882,11 +888,82 @@ div.dataTables_filter input {
 .dataTable .width-10pct {
     width: 10%;
 }
+.dataTable .width-10 {
+    width: 10px;
+}
+.dataTable .width-10.fixed-width {
+    max-width: 10px;
+    overflow-wrap: break-word;
+}
+.dataTable .width-20 {
+    width: 20px;
+}
+.dataTable .width-20.fixed-width {
+    max-width: 20px;
+    overflow-wrap: break-word;
+}
+.dataTable .width-30 {
+    width: 30px;
+}
+.dataTable .width-30.fixed-width {
+    max-width: 30px;
+    overflow-wrap: break-word;
+}
+.dataTable .width-40 {
+    width: 40px;
+}
+.dataTable .width-40.fixed-width {
+    max-width: 40px;
+    overflow-wrap: break-word;
+}
+.dataTable .width-50 {
+    width: 50px;
+}
+.dataTable .width-50.fixed-width {
+    max-width: 50px;
+    overflow-wrap: break-word;
+}
+.dataTable .width-60 {
+    width: 60px;
+}
+.dataTable .width-60.fixed-width {
+    max-width: 60px;
+    overflow-wrap: break-word;
+}
+.dataTable .width-70 {
+    width: 70px;
+}
+.dataTable .width-70.fixed-width {
+    max-width: 70px;
+    overflow-wrap: break-word;
+}
+.dataTable .width-80 {
+    width: 80px;
+}
+.dataTable .width-80.fixed-width {
+    max-width: 80px;
+    overflow-wrap: break-word;
+}
+.dataTable .width-90 {
+    width: 90px;
+}
+.dataTable .width-90.fixed-width {
+    max-width: 90px;
+    overflow-wrap: break-word;
+}
 .dataTable .width-100 {
     width: 100px;
 }
+.dataTable .width-100.fixed-width {
+    max-width: 100px;
+    overflow-wrap: break-word;
+}
 .dataTable .width-130 {
     width: 130px;
+}
+.dataTable .width-130.fixed-width {
+    max-width: 130px;
+    overflow-wrap: break-word;
 }
 .dataTable .width-200 {
     width: 200px;

@@ -47,6 +47,20 @@ class Character extends BaseModel
         'personal_note',
     ];
 
+    /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array
+     */
+    protected $appends = [
+        'display_archetype',
+        'display_class',
+        'display_profession1',
+        'display_profession2',
+        'display_race',
+        'display_spec',
+    ];
+
     const RACE_BLOOD_ELF = 'Blood Elf';
     const RACE_ORC       = 'Orc';
     const RACE_TAUREN    = 'Tauren';

@@ -11,6 +11,36 @@ const TIERS = {
     6: 'F',
 };
 
+const SLOT_MISC      = 0; // ammo, mount, book, etc
+const SLOT_HEAD      = 1; // head
+const SLOT_NECK      = 2; // neck
+const SLOT_SHOULDERS = 3; // shoulder
+const SLOT_SHIRT     = 4; // shirt
+const SLOT_CHEST_1   = 5; // chest
+const SLOT_WAIST     = 6; // waist
+const SLOT_LEGS      = 7; // legs
+const SLOT_FEET      = 8; // feet
+const SLOT_WRIST     = 9; // wrist
+const SLOT_HANDS     = 10; // hand
+const SLOT_FINGER    = 11; // finger
+const SLOT_TRINKET   = 12; // trinket
+const SLOT_WEAPON_MAIN_HAND = 13; // weapon, 1 hander
+const SLOT_SHIELD           = 14; // shield
+const SLOT_RANGED_1         = 15; // bow
+const SLOT_BACK             = 16; // cloak
+const SLOT_WEAPON_TWO_HAND  = 17; // 2h weapon
+const SLOT_BAG              = 18; // bag, quiver/ammo pouch
+// 19; //// nothing (after my filters, I found nothing in here)
+const SLOT_CHEST_2          = 20; // cloth chest
+const SLOT_WEAPON_ONE_HAND  = 21; // more 1h weapons
+const SLOT_WEAPON_OFF_HAND  = 22; // offhand 1h weapon
+const SLOT_OFFHAND          = 23; // offhand non-weapon
+const SLOT_AMMO             = 24; // ammo
+const SLOT_THROWN           = 25; // thrown
+const SLOT_RANGED_2         = 26; // crossbow, gun, wand
+// 27; //// nothing (after my filters, I found nothing in here)
+const SLOT_RELIC            = 28; // totem/idol/libram
+
 // How often to update timestamps
 var timestampCheckRate = 30000;
 
