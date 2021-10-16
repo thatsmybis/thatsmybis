@@ -601,7 +601,6 @@ function getItemListHtml(data, type, characterId, useOrder = false, showInstance
                     class="${ item.quality ? 'q' + item.quality : '' } ${ item.pivot.is_received && (item.pivot.type == 'wishlist' || item.pivot.type == 'prio') ? 'font-strikethrough' : '' }"
                     ${ wowheadData }>
                     ${ item.name }
-
                 </a>
                 ${ item.pivot.is_offspec ? '<span title="offspec item" class="small font-weight-bold text-muted">OS</span>' : '' }
                 <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"

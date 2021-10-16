@@ -186,7 +186,7 @@
                                                 }
                                             @endphp
                                             <li class="input-item position-relative {{ $itemId ? 'd-flex' : '' }} {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
-                                                style="{{ $itemId ? '' : 'display:none;' }};">
+                                                style="{{ $itemId ? '' : 'display:none;' }}">
                                                 <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;" />
                                                 <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;" />
                                                 <input type="checkbox" checked name="wishlist[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" style="display:none;"/>
