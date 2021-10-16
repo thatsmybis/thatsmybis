@@ -481,6 +481,18 @@
     $(document).ready(function () {
         warnBeforeLeaving("#itemForm");
         addSortHandlers();
+
+        // Show/hide note input
+        $(".js-toggle-note").change(function () {
+            const index = $(this).data('index');
+            const type = $(this).data('type');
+
+            if ($(this).prop("checked")) {
+                $(".js-note[data-index=" + index + "][data-type=" + type + "]").parent().show();
+            } else {
+                $(".js-note[data-index=" + index + "][data-type=" + type + "]").parent().hide();
+            }
+        });
     });
 </script>
 @endsection

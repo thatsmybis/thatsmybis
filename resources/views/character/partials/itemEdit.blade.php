@@ -8,7 +8,7 @@
     if (isset($item) && $item) {
         $oldIsReceived = old($name . '.' . $i . '.is_received');
         $oldIsOffspec  = old($name . '.' . $i . '.is_offspec');
-        $oldNote       = old($name . '.' . $i . '.note');
+        $oldNote       = old($name . '.' . $i . '.note') ? old($name . '.' . $i . '.note') : ($item && $item->pivot->note ? $item->pivot->note : null);
         $oldReceivedAt = old($name . '.' . $i . '.new_received_at');
         $oldRaidId     = old($name . '.' . $i . '.new_raid_id');
     } else {
@@ -39,7 +39,13 @@
     <li class="list-inline-item">
         <div class="checkbox">
             <label>
-                <input type="checkbox" name="{{ $name }}[{{ $index }}][has_note]" value="1" class="" autocomplete="off"
+                <input type="checkbox"
+                    name="{{ $name }}[{{ $index }}][has_note]"
+                    value="1"
+                    class="js-toggle-note"
+                    data-index="{{ $index }}"
+                    data-type="{{ $name }}"
+                    autocomplete="off"
                     {{ $oldNote ? 'checked' : ($item && $item->pivot->note ? 'checked' : '') }}>
                     {{ __("Note") }}
             </label>
@@ -79,12 +85,14 @@
     @endif
 </ul>
 
-<div class="form-group mb-1" style="display:none;">
+<div class="form-group mb-1" style="{{ $oldNote ? '' : 'display:none;' }}">
     <label for="{{ $name }}[{{ $index }}][note]" class="sr-only font-weight-light">
         {{ __("Note") }}
     </label>
-    <input class="form-control dark slim"
-        type="text"
+    <input type="text"
+        class="js-note form-control dark slim"
+        data-index="{{ $index }}"
+        data-type="{{ $name }}"
         placeholder="{{ __('add a note') }}"
         maxlength="140"
         name="{{ $name }}[{{ $index }}][note]"
