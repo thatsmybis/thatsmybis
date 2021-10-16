@@ -63,7 +63,7 @@ class ItemNoteController extends Controller
                 ['item_sources.instance_id', $instance->id],
                 ['items.expansion_id', $guild->expansion_id],
             ])
-            ->whereNull('items.parent_id')
+            // ->whereNull('items.parent_id')
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
             // This is problematic because the notes entered may differ, but we can only take one.
             ->groupBy('items.item_id')
