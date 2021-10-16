@@ -296,7 +296,7 @@ class CharacterLootController extends Controller
      * @param string        $itemType       The type of item. (ie. received, recipe, wishlist)
      * @param App\Character $character      The character to sync the items to.
      * @param App\Member    $currentMember  The member syncing these items.
-     * @param boolean       $updateFlags    Should we check for and update the OS and received flag? Note?
+     * @param boolean       $updateFlags    Should we check for and update the OS and received flag?
      * @param boolean       $markAsReceived Should we mark correlated prios/wishlists as received?
      * @param integer       $listNumber     Should this be applied to a specific list number for this item type?
      */

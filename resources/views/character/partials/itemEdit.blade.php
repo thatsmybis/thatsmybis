@@ -46,7 +46,7 @@
                     data-index="{{ $index }}"
                     data-type="{{ $name }}"
                     autocomplete="off"
-                    {{ $oldNote ? 'checked' : ($item && $item->pivot->note ? 'checked' : '') }}>
+                    {{ $oldNote ? 'checked' : '' }}>
                     {{ __("Note") }}
             </label>
         </div>
