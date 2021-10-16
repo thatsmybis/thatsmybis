@@ -293,6 +293,7 @@ function createRosterStatsTable() {
             visible : true,
             width   : "10px",
             className : "width-10 fixed-width",
+            type: 'num',
         },
         // Raid Groups (for filtering)
         {
