@@ -601,6 +601,7 @@ function getItemListHtml(data, type, characterId, useOrder = false, showInstance
                     class="${ item.quality ? 'q' + item.quality : '' } ${ item.pivot.is_received && (item.pivot.type == 'wishlist' || item.pivot.type == 'prio') ? 'font-strikethrough' : '' }"
                     ${ wowheadData }>
                     ${ item.name }
+
                 </a>
                 ${ item.pivot.is_offspec ? '<span title="offspec item" class="small font-weight-bold text-muted">OS</span>' : '' }
                 <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
@@ -608,6 +609,7 @@ function getItemListHtml(data, type, characterId, useOrder = false, showInstance
                     data-title="added by ${ item.added_by_username } at"
                     data-is-short="1">
                 </span>
+                ${ item.pivot.note ? `<span class="smaller text-muted text-underline" title="${ item.pivot.note }">note</span>` : '' }
             </li>`;
     });
 
@@ -675,6 +677,8 @@ function callRosterHandlers() {
         } else {
             resetItemVisibility();
         }
+
+        addTooltips();
     }, 500); // 0.5s delay
 }
 

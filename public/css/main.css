@@ -166,6 +166,10 @@ body {
     font-size: 1.5rem;
 }
 
+.text-underline {
+    text-decoration: underline;
+}
+
 .text-1 {
     font-size:52px;
 }

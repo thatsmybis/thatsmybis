@@ -78,6 +78,9 @@
                                             @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
                                         </span>
                                     @endif
+                                    @if ($character->pivot->note)
+                                        <span class="smaller text-muted text-underline" title="{{ $character->pivot->note }}">note</span>
+                                    @endif
                                 </a>
                             </li>
                         @endforeach

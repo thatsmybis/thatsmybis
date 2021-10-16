@@ -319,6 +319,7 @@ function createCharacterListHtml(data, type, itemId, header = null) {
                         data-is-short="1">
                     </span>
                     <span style="display:none;">${ character.discord_username } ${ character.username }</span>
+                    ${ character.pivot.note ? `<span class="smaller text-muted text-underline" title="${ character.pivot.note }">note</span>` : '' }
                 </span>
             </li>`;
     });
@@ -389,6 +390,7 @@ function callItemListHandlers() {
         makeWowheadLinks();
         parseMarkdown();
         trackTimestamps();
+        addTooltips();
     }, 500); // 0.5s delay
 }
 

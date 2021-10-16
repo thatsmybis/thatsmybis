@@ -154,6 +154,7 @@ class Item extends BaseModel
                 'added_by',
                 'raid_group_id',
                 'type',
+                'note',
                 'is_received',
                 'is_offspec',
                 'received_at',
@@ -257,6 +258,7 @@ class Item extends BaseModel
             ->withPivot([
                 'added_by',
                 'type',
+                'note',
                 'order',
                 'is_received',
                 'list_number',
