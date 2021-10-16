@@ -300,6 +300,7 @@ function createRosterStatsTable() {
             data   : "character",
             render : function (data, type, row) {
                 if (row.raid_group_name) {
+                    let secondaryRaidGroups = '';
                     if (row.secondary_raid_groups && row.secondary_raid_groups.length) {
                         secondaryRaidGroups = `<ul class="list-inline">`;
                         row.secondary_raid_groups.forEach(function (raidGroup, index) {
