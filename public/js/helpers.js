@@ -93,6 +93,9 @@ $(document).ready(function () {
         let id = $(this).data("id");
         $(".js-content[data-id=" + id + "]").toggle();
     });
+
+    // Add mobile friendly tooltips
+    addTooltips();
 });
 
 // Take the visible date input, and convert its time to UTC, update the hidden date input.
@@ -163,6 +166,13 @@ function addSortHandlers() {
     $(".js-sortable-lazy").one("mouseenter", function() {
         $(this).sortable({handle: ".js-sort-handle"});
     });
+}
+
+// Add mobile friendly tooltips
+function addTooltips() {
+    $("span").tooltip();
+    $("abbr").tooltip();
+    $("a").tooltip();
 }
 
 // Add basic handlers to change the sorting of wishlists
