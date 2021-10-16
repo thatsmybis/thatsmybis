@@ -127,33 +127,6 @@
                 @endif
             </select>
         </li>
-        <!--
-        {{-- Removed during development because it doesn't do anything yet
-        <li class="list-inline-item">
-            @php
-                $wishlistNames = $guild->getWishlistNames();
-            @endphp
-            <label for="wishlist_filter" class="font-weight-light">
-                <span class="text-muted fas fa-fw fa-scroll-old"></span>
-                {{ __("Wishlist") }}
-            </label>
-            <select id="wishlist_filter" class="form-control dark selectpicker">
-                @for ($i = 1; $i <= App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS; $i++)
-                    <option value="{{ $i }}" {{ $guild->current_wishlist_number === $i ? 'selected' : '' }}>
-                        @if ($wishlistNames && $wishlistNames[$i - 1])
-                            {{ $wishlistNames[$i - 1] }}{{ $guild->current_wishlist_number === $i ? '*' : '' }}
-                        @else
-                            {{ $i }}{{ $guild->current_wishlist_number === $i ? '*' : '' }}
-                        @endif
-                    </option>
-                @endfor
-                <option value="">
-                    {{ __("All") }}
-                </option>
-            </select>
-        </li>
-        --}}
-        -->
     </ul>
     <ul class="list-inline mb-0 mt-3">
         <li class="list-inline-item">
