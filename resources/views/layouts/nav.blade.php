@@ -292,10 +292,21 @@
                     </div>
                 </li>
 
-                <li class="nav-item {{ in_array(Route::currentRouteName(), ['guild.roster']) ? 'active' : '' }}">
-                    <a class="nav-link {{ $menuColor }}" href="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), [
+                            'guild.roster',
+                            'guild.rosterStats',
+                        ]) ? 'active font-weight-bold' : '' }}" href="#" id="rosterNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ __("Roster") }}
                     </a>
+                    <div class="dropdown-menu" aria-labelledby="rosterNavDropdown">
+                        <a class="dropdown-item" href="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            {{ __("Loot") }}
+                        </a>
+                        <a class="dropdown-item" href="{{ route('guild.rosterStats', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            {{ __("Stats") }}
+                        </a>
+                    </div>
                 </li>
 
                 {{-- Why hello there... yes. Yes, there is a 'news' page. No, I don't quite think it's ready for the mainstream yet.
