@@ -570,61 +570,75 @@ function createInstanceColumn(name, instanceId, isVisible) {
         className : "width-50 fixed-width pt-0 pl-0 pb-0 pr-1",
         title  : name,
         data   : "name",
-        render : function (data, type, row) {
-            let html = '';
-            // Prios
-            const prioItems = row.prios ? row.prios.filter(item => item.instance_id === instanceId) : [];
-            const prioOffspecCount = prioItems.filter(item => item.is_offspec).length;
-            if (prioItems && prioItems.length) {
-                html += `<div class="js-prio-items">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item mr-1 font-weight-bold">${ prioItems.length }</li>
-                            ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(prioItems, false) }</li>` : '' }
-                            ${ prioOffspecCount ? `<li class="list-inline-item small mr-1 text-muted">${ prioOffspecCount }os</li>` : `` }
-                            ${ prioItems.length ? `<li class="list-inline-item">${ getItemListHtml(prioItems, 'prio', row.id, false, false) }</li>` : `` }
-                        </ul>
-                    </div>`;
-            } else {
-                html += `<div class="js-prio-items text-muted">—</div>`;
-            }
+        render : {
+            _: function (data, type, row) {
+                let html = '';
+                // Prios
+                const prioItems = row.prios ? row.prios.filter(item => item.instance_id === instanceId) : [];
+                const prioOffspecCount = prioItems.filter(item => item.is_offspec).length;
+                if (prioItems && prioItems.length) {
+                    html += `<div class="js-prio-items">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item mr-1 font-weight-bold">${ prioItems.length }</li>
+                                ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(prioItems, false) }</li>` : '' }
+                                ${ prioOffspecCount ? `<li class="list-inline-item small mr-1 text-muted">${ prioOffspecCount }os</li>` : `` }
+                                ${ prioItems.length ? `<li class="list-inline-item">${ getItemListHtml(prioItems, 'prio', row.id, false, false) }</li>` : `` }
+                            </ul>
+                        </div>`;
+                } else {
+                    html += `<div class="js-prio-items text-muted">—</div>`;
+                }
 
-            // Received
-            const receivedItems = row.received ? row.received.filter(item => item.instance_id === instanceId) : [];
-            const receivedOffspecCount = receivedItems.filter(item => item.is_offspec).length;
-            if (receivedItems && receivedItems.length) {
-                html += `<div class="js-received-items">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item mr-1 font-weight-bold">${ receivedItems.length }</li>
-                            ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(receivedItems, false) }</li>` : '' }
-                            ${ receivedOffspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ receivedOffspecCount }os</li>` : `` }
-                            ${ receivedItems.length ? `<li class="list-inline-item">${ getItemListHtml(receivedItems, 'received', row.id, false, false) }</li>` : `` }
-                        </ul>
-                    </div>`;
-            } else {
-                html += `<div class="js-received-items text-muted">—</div>`;
-            }
+                // Received
+                const receivedItems = row.received ? row.received.filter(item => item.instance_id === instanceId) : [];
+                const receivedOffspecCount = receivedItems.filter(item => item.is_offspec).length;
+                if (receivedItems && receivedItems.length) {
+                    html += `<div class="js-received-items">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item mr-1 font-weight-bold">${ receivedItems.length }</li>
+                                ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(receivedItems, false) }</li>` : '' }
+                                ${ receivedOffspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ receivedOffspecCount }os</li>` : `` }
+                                ${ receivedItems.length ? `<li class="list-inline-item">${ getItemListHtml(receivedItems, 'received', row.id, false, false) }</li>` : `` }
+                            </ul>
+                        </div>`;
+                } else {
+                    html += `<div class="js-received-items text-muted">—</div>`;
+                }
 
-            // Wishlist (current only)
-            const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number)) : [];
-            const wishlistOffspecCount = wishlistItems.filter(item => item.is_offspec).length;
-            if (wishlistItems && wishlistItems.length) {
-                html += `<div class="js-wishlist-items">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item mr-1 font-weight-bold">${ wishlistItems.length }</li>
-                            ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(wishlistItems, false) }</li>` : '' }
-                            ${ wishlistOffspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ wishlistOffspecCount }os</li>` : `` }
-                            ${ wishlistItems.length ? `<li class="list-inline-item">${ getItemListHtml(wishlistItems, 'prio', row.id, false, false) }</li>` : `` }
-                        </ul>
-                    </div>`;
-            } else {
-                html += `<div class="js-wishlist-items text-muted">—</div>`;
-            }
+                // Wishlist (current only)
+                const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number)) : [];
+                const wishlistOffspecCount = wishlistItems.filter(item => item.is_offspec).length;
+                if (wishlistItems && wishlistItems.length) {
+                    html += `<div class="js-wishlist-items">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item mr-1 font-weight-bold">${ wishlistItems.length }</li>
+                                ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(wishlistItems, false) }</li>` : '' }
+                                ${ wishlistOffspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ wishlistOffspecCount }os</li>` : `` }
+                                ${ wishlistItems.length ? `<li class="list-inline-item">${ getItemListHtml(wishlistItems, 'prio', row.id, false, false) }</li>` : `` }
+                            </ul>
+                        </div>`;
+                } else {
+                    html += `<div class="js-wishlist-items text-muted">—</div>`;
+                }
 
-            return html;
+                return html;
+            },
+            sort: function (data, type, row) {
+                let filteredItems = [];
+                if (view === VIEW_PRIOS) {
+                    filteredItems = row.prios ? row.prios.filter(item => item.instance_id === instanceId) : [];
+                } else if (view === VIEW_RECEIVED) {
+                    filteredItems = row.received ? row.received.filter(item => item.instance_id === instanceId) : [];
+                } else if (view === VIEW_WISHLIST) {
+                    filteredItems = row.all_wishlists ? row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number)) : [];
+                }
+                return filteredItems.length;
+            },
         },
         orderable : true,
         visible    : isVisible,
         searchable : true,
+        type: 'num',
     };
 }
 
@@ -640,57 +654,71 @@ function createInstanceTotalsColumn(isVisible) {
         className : "width-50 fixed-width pt-0 pl-0 pb-0 pr-1",
         title  : "Total",
         data   : "name",
-        render : function (data, type, row) {
-            let html = '';
-            // Prios
-            const prioItems = row.prios ? row.prios : [];
-            const prioOffspecCount = prioItems.filter(item => item.is_offspec).length;
-            if (prioItems && prioItems.length) {
-                html += `<div class="js-prio-items">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item mr-1 font-weight-bold">${ prioItems.length }</li>
-                            ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(prioItems, false) }</li>` : '' }
-                            ${ prioOffspecCount ? `<li class="list-inline-item small mr-1 text-muted">${ prioOffspecCount }os</li>` : `` }
-                        </ul>
-                    </div>`;
-            } else {
-                html += `<div class="js-prio-items text-muted">—</div>`;
-            }
+        render : {
+            _: function (data, type, row) {
+                let html = '';
+                // Prios
+                const prioItems = row.prios ? row.prios : [];
+                const prioOffspecCount = prioItems.filter(item => item.is_offspec).length;
+                if (prioItems && prioItems.length) {
+                    html += `<div class="js-prio-items">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item mr-1 font-weight-bold">${ prioItems.length }</li>
+                                ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(prioItems, false) }</li>` : '' }
+                                ${ prioOffspecCount ? `<li class="list-inline-item small mr-1 text-muted">${ prioOffspecCount }os</li>` : `` }
+                            </ul>
+                        </div>`;
+                } else {
+                    html += `<div class="js-prio-items text-muted">—</div>`;
+                }
 
-            // Received
-            const receivedItems = row.received ? row.received : [];
-            const receivedOffspecCount = receivedItems.filter(item => item.is_offspec).length;
-            if (receivedItems && receivedItems.length) {
-                html += `<div class="js-received-items">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item mr-1 font-weight-bold">${ receivedItems.length }</li>
-                            ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(receivedItems, false) }</li>` : '' }
-                            ${ receivedOffspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ receivedOffspecCount }os</li>` : `` }
-                        </ul>
-                    </div>`;
-            } else {
-                html += `<div class="js-received-items text-muted">—</div>`;
-            }
+                // Received
+                const receivedItems = row.received ? row.received : [];
+                const receivedOffspecCount = receivedItems.filter(item => item.is_offspec).length;
+                if (receivedItems && receivedItems.length) {
+                    html += `<div class="js-received-items">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item mr-1 font-weight-bold">${ receivedItems.length }</li>
+                                ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(receivedItems, false) }</li>` : '' }
+                                ${ receivedOffspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ receivedOffspecCount }os</li>` : `` }
+                            </ul>
+                        </div>`;
+                } else {
+                    html += `<div class="js-received-items text-muted">—</div>`;
+                }
 
-            // Wishlist (current only)
-            const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number) : [];
-            const wishlistOffspecCount = wishlistItems.filter(item => item.is_offspec).length;
-            if (wishlistItems && wishlistItems.length) {
-                html += `<div class="js-wishlist-items">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item mr-1 font-weight-bold">${ wishlistItems.length }</li>
-                            ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(wishlistItems, false) }</li>` : '' }
-                            ${ wishlistOffspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ wishlistOffspecCount }os</li>` : `` }
-                        </ul>
-                    </div>`;
-            } else {
-                html += `<div class="js-wishlist-items text-muted">—</div>`;
-            }
-            return html;
+                // Wishlist (current only)
+                const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number) : [];
+                const wishlistOffspecCount = wishlistItems.filter(item => item.is_offspec).length;
+                if (wishlistItems && wishlistItems.length) {
+                    html += `<div class="js-wishlist-items">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item mr-1 font-weight-bold">${ wishlistItems.length }</li>
+                                ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(wishlistItems, false) }</li>` : '' }
+                                ${ wishlistOffspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ wishlistOffspecCount }os</li>` : `` }
+                            </ul>
+                        </div>`;
+                } else {
+                    html += `<div class="js-wishlist-items text-muted">—</div>`;
+                }
+                return html;
+            },
+            sort: function (data, type, row) {
+                let filteredItems = [];
+                if (view === VIEW_PRIOS) {
+                    filteredItems = row.prios ? row.prios : [];
+                } else if (view === VIEW_RECEIVED) {
+                    filteredItems = row.received ? row.received : [];
+                } else if (view === VIEW_WISHLIST) {
+                    filteredItems = row.all_wishlists ? row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number) : [];
+                }
+                return filteredItems.length;
+            },
         },
         orderable : true,
         visible    : isVisible,
         searchable : true,
+        type: 'num',
     };
 }
 
@@ -708,25 +736,32 @@ function createItemSlotColumn(name, slots) {
         className : "width-50 fixed-width pt-0 pl-0 pb-0 pr-1",
         title  : name,
         data   : "received",
-        render : function (data, type, row) {
-            const filteredItems = (slots ? data.filter(item => slots.includes(item.inventory_type)) : data);
-            const offspecCount = filteredItems.filter(item => item.is_offspec).length;
-            if (filteredItems && filteredItems.length) {
-                return `<div class="ml-1">
-                        <ul class="list-inline mb-0">
-                            <li class="list-inline-item mr-1 font-weight-bold">${ filteredItems.length }</li>
-                            ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(filteredItems, false) }</li>` : `` }
-                            ${ offspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ offspecCount }os</li>` : `` }
-                            ${ slots && filteredItems.length ? `<li class="list-inline-item mr-1">${ getItemListHtml(filteredItems, 'received', row.id, false, false) }</li>` : '' }
-                        </ul>
-                    </div>`;
-            } else {
-                return `<span class="text-muted">—</span>`;
-            }
+        render : {
+            _: function (data, type, row) {
+                const filteredItems = (slots ? data.filter(item => slots.includes(item.inventory_type)) : data);
+                const offspecCount = filteredItems.filter(item => item.is_offspec).length;
+                if (filteredItems && filteredItems.length) {
+                    return `<div class="ml-1">
+                            <ul class="list-inline mb-0">
+                                <li class="list-inline-item mr-1 font-weight-bold">${ filteredItems.length }</li>
+                                ${ guild.tier_mode ? `<li class="list-inline-item mr-1">${ getAverageTier(filteredItems, false) }</li>` : `` }
+                                ${ offspecCount ? `<li class="list-inline-item mr-1 small text-muted">${ offspecCount }os</li>` : `` }
+                                ${ slots && filteredItems.length ? `<li class="list-inline-item mr-1">${ getItemListHtml(filteredItems, 'received', row.id, false, false) }</li>` : '' }
+                            </ul>
+                        </div>`;
+                } else {
+                    return `<span class="text-muted">—</span>`;
+                }
+            },
+            sort: function (data, type, row) {
+                 const filteredItems = (slots ? data.filter(item => slots.includes(item.inventory_type)) : data);
+                return filteredItems.length;
+            },
         },
         orderable : true,
         visible    : (view === 'slots' ? true : false),
         searchable : true,
+        type: 'num',
     };
 }
 
