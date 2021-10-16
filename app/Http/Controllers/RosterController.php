@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-// use App\{};
+use App\{Instance};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -14,8 +14,7 @@ class RosterController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function roster($guildId, $guildSlug)
-    {
+    public function roster($guildId, $guildSlug, $statsPage = false) {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -50,15 +49,37 @@ class RosterController extends Controller
             $showEdit = true;
         }
 
-        return view('roster', [
-            'characters'      => $characters['characters'],
-            'currentMember'   => $currentMember,
-            'guild'           => $guild,
-            'raidGroups'      => $guild->allRaidGroups,
-            'showEdit'        => $showEdit,
-            'showOfficerNote' => $characters['showOfficerNote'],
-            'showPrios'       => $characters['showPrios'],
-            'showWishlist'    => $characters['showWishlist'],
-        ]);
+        if ($statsPage) {
+            return view('rosterStats', [
+                'characters'      => $characters['characters'],
+                'currentMember'   => $currentMember,
+                'guild'           => $guild,
+                'raidGroups'      => $guild->allRaidGroups,
+                'showEdit'        => $showEdit,
+                'showOfficerNote' => $characters['showOfficerNote'],
+                'showPrios'       => $characters['showPrios'],
+                'showWishlist'    => $characters['showWishlist'],
+            ]);
+        } else {
+            return view('roster', [
+                'characters'      => $characters['characters'],
+                'currentMember'   => $currentMember,
+                'guild'           => $guild,
+                'raidGroups'      => $guild->allRaidGroups,
+                'showEdit'        => $showEdit,
+                'showOfficerNote' => $characters['showOfficerNote'],
+                'showPrios'       => $characters['showPrios'],
+                'showWishlist'    => $characters['showWishlist'],
+            ]);
+        }
+    }
+
+    /**
+     * Show the roster stats page.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function rosterStats($guildId, $guildSlug) {
+        return $this->roster($guildId, $guildSlug, true);
     }
 }
