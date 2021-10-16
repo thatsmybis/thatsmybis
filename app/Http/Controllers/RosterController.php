@@ -50,17 +50,10 @@ class RosterController extends Controller
         }
 
         if ($statsPage) {
-            $instances = Cache::remember('instances:expansion:' . $guild->expansion_id,
-                env('CACHE_INSTANCES_SECONDS', 600),
-                function () use ($guild) {
-                    return Instance::where('expansion_id', $guild->expansion_id)->get();
-            });
-
             return view('rosterStats', [
                 'characters'      => $characters['characters'],
                 'currentMember'   => $currentMember,
                 'guild'           => $guild,
-                'instances'       => $instances,
                 'raidGroups'      => $guild->allRaidGroups,
                 'showEdit'        => $showEdit,
                 'showOfficerNote' => $characters['showOfficerNote'],

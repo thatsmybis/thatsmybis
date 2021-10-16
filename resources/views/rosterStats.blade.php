@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title',  __("Roster") . ' - ' . config('app.name'))
+@section('title',  __("Roster Stats") . ' - ' . config('app.name'))
 
 @section('content')
 
@@ -18,7 +18,6 @@
     var characters       = {!! $characters->makeVisible('officer_note')->toJson() !!};
     var currentWishlistNumber = {{ $guild->current_wishlist_number }};
     var guild            = {!! $guild->toJson() !!};
-    var instances        = {!! $instances->toJson() !!};
     var maxWishlistLists = {{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }};
     var raidGroups       = {!! $raidGroups->toJson() !!};
     var showEdit         = {{ $showEdit ? 'true' : 'false' }};

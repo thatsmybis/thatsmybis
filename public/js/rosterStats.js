@@ -6,7 +6,7 @@ const VIEW_SLOTS    = 'slots';
 const VIEW_WISHLIST = 'wishlist';
 
 // Defaults to slots...
-var view = VIEW_SLOTS;
+var view = '';
 
 var colCharacter = 0;
 var colArchetype = 1;
@@ -73,6 +73,10 @@ var rosterHandlersTimeout = null;
 $(document).ready( function () {
     // Get the desired view from the URL on page load.
     view = window.location.hash.substring(1);
+
+    if (![VIEW_PRIOS, VIEW_RECEIVED, VIEW_SLOTS, VIEW_WISHLIST].includes(view)) {
+        view = VIEW_SLOTS;
+    }
 
     table = createRosterStatsTable();
 
