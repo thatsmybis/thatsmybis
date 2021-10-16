@@ -141,7 +141,9 @@
                                 <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
                             @endif
                             <small class="text-muted font-weight-normal">&sdot;</small>
-                            <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">{{ __("see what other people wishlisted") }}</a>
+                            <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">
+                                {{ __("see what other people wishlisted") }}
+                            </a>
 
                             @if ($lockWishlist)
                                 @if ($character->wishlist->count() > 0)
@@ -184,7 +186,7 @@
                                                 }
                                             @endphp
                                             <li class="input-item position-relative {{ $itemId ? 'd-flex' : '' }} {{ $errors->has('wishlist.' . $i . '.item_id') ? 'text-danger font-weight-bold' : '' }}"
-                                                style="{{ $itemId ? '' : 'display:none;' }}">
+                                                style="{{ $itemId ? '' : 'display:none;' }};">
                                                 <input type="checkbox" checked name="wishlist[{{ $i }}][item_id]" value="{{ $itemId }}" style="display:none;" />
                                                 <input type="checkbox" checked name="wishlist[{{ $i }}][label]" value="{{ $itemLabel }}" style="display:none;" />
                                                 <input type="checkbox" checked name="wishlist[{{ $i }}][pivot_id]" value="{{ $item ? $item->pivot->id : '' }}" style="display:none;"/>
@@ -197,7 +199,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="js-input-label">
+                                                <div class="js-input-label mr-2" style="flex-grow: 1;">
                                                     <span class="js-item-display">
                                                         @includeWhen($itemId, 'partials/item', [
                                                             'wowheadLink'   => false,
