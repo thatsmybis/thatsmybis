@@ -1,5 +1,32 @@
 @include('partials/loadingBars')
 <div class="pr-2 pl-2" style="display:none;" id="characterStatsTableFilters">
+    <ul class="list-inline mb-3 mt-3">
+        <li class="list-inline-item">
+            <span class="js-show-slot-cols js-toggle-column-set btn btn-success font-weight-bold">
+                <span class="text-epic fas fa-fw fa-tshirt"></span>
+                {{ __("Item Slots") }}
+            </span>
+        </li>
+        <li class="list-inline-item">
+            <span class="js-show-prio-cols js-toggle-column-set btn btn-success font-weight-bold">
+                <span class="text-gold fas fa-fw fa-sort-amount-down"></span>
+                {{ __("Prios") }}
+            </span>
+        </li>
+        <li class="list-inline-item">
+            <span class="js-show-received-cols js-toggle-column-set btn btn-success font-weight-bold">
+                <span class="text-white fas fa-fw fa-sack"></span>
+                {{ __("Received") }}
+            </span>
+        </li>
+        <li class="list-inline-item">
+            <span class="js-show-wishlist-cols js-toggle-column-set btn btn-success font-weight-bold">
+                <span class="text-legendary fas fa-fw fa-scroll-old"></span>
+                {{ __("Wishlist") }}
+            </span>
+        </li>
+    </ul>
+
     <ul class="list-inline mb-0">
         <li class="list-inline-item">
             <label for="raid_group_filter" class="font-weight-light">
@@ -32,7 +59,7 @@
         <li class="list-inline-item">
             <label for="instance_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-sack"></span>
-                {{ __("Dungeon") }}
+                {{ __("Item Filter") }}
             </label>
             <select id="instance_filter"
                 multiple
@@ -130,7 +157,7 @@
     </ul>
     <ul class="list-inline mb-0 mt-3">
         <li class="list-inline-item">
-            <span class="toggle-column text-link text-unselectable cursor-pointer font-weight-light" data-column="4">
+            <span class="js-toggle-column text-link text-unselectable cursor-pointer font-weight-light" data-column="4">
                 <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
                 {{ __("Notes") }}
             </span>
