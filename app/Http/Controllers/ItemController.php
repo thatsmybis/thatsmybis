@@ -98,7 +98,7 @@ class ItemController extends Controller
                     ['item_sources.instance_id', $instance->id],
                     ['items.expansion_id', $guild->expansion_id],
                 ])
-                ->whereNull('items.parent_id')
+                // ->whereNull('items.parent_id')
                 ->orderBy('item_sources.order')
                 ->orderBy('items.name');
 
