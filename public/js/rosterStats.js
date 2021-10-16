@@ -573,7 +573,7 @@ function createInstanceColumn(name, instanceId, isVisible) {
         render : function (data, type, row) {
             let html = '';
             // Prios
-            const prioItems = row.prios.filter(item => item.instance_id === instanceId);
+            const prioItems = row.prios ? row.prios.filter(item => item.instance_id === instanceId) : [];
             const prioOffspecCount = prioItems.filter(item => item.is_offspec).length;
             if (prioItems && prioItems.length) {
                 html += `<div class="js-prio-items">
@@ -589,7 +589,7 @@ function createInstanceColumn(name, instanceId, isVisible) {
             }
 
             // Received
-            const receivedItems = row.received.filter(item => item.instance_id === instanceId);
+            const receivedItems = row.received ? row.received.filter(item => item.instance_id === instanceId) : [];
             const receivedOffspecCount = receivedItems.filter(item => item.is_offspec).length;
             if (receivedItems && receivedItems.length) {
                 html += `<div class="js-received-items">
@@ -605,7 +605,7 @@ function createInstanceColumn(name, instanceId, isVisible) {
             }
 
             // Wishlist (current only)
-            const wishlistItems = row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number));
+            const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number)) : [];
             const wishlistOffspecCount = wishlistItems.filter(item => item.is_offspec).length;
             if (wishlistItems && wishlistItems.length) {
                 html += `<div class="js-wishlist-items">
@@ -643,7 +643,7 @@ function createInstanceTotalsColumn(isVisible) {
         render : function (data, type, row) {
             let html = '';
             // Prios
-            const prioItems = row.prios;
+            const prioItems = row.prios ? row.prios : [];
             const prioOffspecCount = prioItems.filter(item => item.is_offspec).length;
             if (prioItems && prioItems.length) {
                 html += `<div class="js-prio-items">
@@ -658,7 +658,7 @@ function createInstanceTotalsColumn(isVisible) {
             }
 
             // Received
-            const receivedItems = row.received;
+            const receivedItems = row.received ? row.received : [];
             const receivedOffspecCount = receivedItems.filter(item => item.is_offspec).length;
             if (receivedItems && receivedItems.length) {
                 html += `<div class="js-received-items">
@@ -673,7 +673,7 @@ function createInstanceTotalsColumn(isVisible) {
             }
 
             // Wishlist (current only)
-            const wishlistItems = row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number);
+            const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number) : [];
             const wishlistOffspecCount = wishlistItems.filter(item => item.is_offspec).length;
             if (wishlistItems && wishlistItems.length) {
                 html += `<div class="js-wishlist-items">
