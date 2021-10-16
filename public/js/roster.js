@@ -151,7 +151,7 @@ function createTable() {
                             `<li>
                                 <ul class="list-inline">
                                     ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<li class="list-inline-item ${ getAttendanceColor(row.attendance_percentage) }" title="attendance">${ Math.round(row.attendance_percentage * 100) }%</li>` : '' }
-                                    ${ row.raid_count ? `<li class="list-inline-item small text-muted">${ row.raid_count }s</li>` : ``}
+                                    ${ row.raid_count ? `<li class="list-inline-item small text-muted">${ row.raid_count }r</li>` : ``}
                                     ${ row.benched_count ? `<li class="list-inline-item small text-muted">benched ${ row.benched_count }x</li>` : ``}
                                 </ul>
                             </li>` : `` }
