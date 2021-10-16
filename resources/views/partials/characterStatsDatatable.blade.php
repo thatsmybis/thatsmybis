@@ -7,24 +7,28 @@
                 {{ __("Item Slots") }}
             </span>
         </li>
-        <li class="list-inline-item">
-            <span class="js-show-prio-cols js-toggle-column-set btn btn-success font-weight-bold">
-                <span class="text-gold fas fa-fw fa-sort-amount-down"></span>
-                {{ __("Prios") }}
-            </span>
-        </li>
+        @if (!$guild->is_prio_disabled)
+            <li class="list-inline-item">
+                <span class="js-show-prio-cols js-toggle-column-set btn btn-success font-weight-bold">
+                    <span class="text-gold fas fa-fw fa-sort-amount-down"></span>
+                    {{ __("Prios") }}
+                </span>
+            </li>
+        @endif
         <li class="list-inline-item">
             <span class="js-show-received-cols js-toggle-column-set btn btn-success font-weight-bold">
                 <span class="text-white fas fa-fw fa-sack"></span>
                 {{ __("Received") }}
             </span>
         </li>
-        <li class="list-inline-item">
-            <span class="js-show-wishlist-cols js-toggle-column-set btn btn-success font-weight-bold">
-                <span class="text-legendary fas fa-fw fa-scroll-old"></span>
-                {{ __("Wishlist") }}
-            </span>
-        </li>
+        @if (!$guild->is_wishlist_disabled)
+            <li class="list-inline-item">
+                <span class="js-show-wishlist-cols js-toggle-column-set btn btn-success font-weight-bold">
+                    <span class="text-legendary fas fa-fw fa-scroll-old"></span>
+                    {{ __("Wishlist") }}
+                </span>
+            </li>
+        @endif
     </ul>
 
     <ul class="list-inline mb-0">
