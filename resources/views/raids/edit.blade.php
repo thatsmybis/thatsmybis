@@ -213,7 +213,7 @@
                                             maxlength="250"
                                             type="text"
                                             class="form-control dark"
-                                            placeholder="{{ __('eg. https://classic.warcraftlogs.com/reports/AbCdE3FgHiJkLmNo/') }}"
+                                            placeholder="{{ __('eg. https://classic.warcraftlogs.com/reports/AbCdE3FgHiJkLmNo') }}"
                                             value="{{ old('logs_deprecated') ? old('logs_deprecated') : ($raid ? $raid->logs_deprecated : '') }}"
                                             style="" />
                                     @else
@@ -227,7 +227,7 @@
                                                     maxlength="250"
                                                     type="text"
                                                     class="js-show-next form-control dark"
-                                                    placeholder="{{ __('eg. https://classic.warcraftlogs.com/reports/AbCdE3FgHiJkLmNo/') }}"
+                                                    placeholder="{{ __('eg. https://classic.warcraftlogs.com/reports/AbCdE3FgHiJkLmNo') }}"
                                                     value="{{ $oldLog }}"
                                                     style="" />
                                             </div>
