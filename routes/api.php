@@ -22,3 +22,5 @@ Route::get('/items/query/{expansion_id}/{query}/{locale?}', 'Api\ItemController@
 Route::get('/raids/query/{guild_id}/{query}', 'Api\RaidController@query')->where('guild_id', '[0-9]+')->name('apiSearchRaids');
 
 Route::get('/batches/query/{guild_id}/{query}', 'Api\BatchController@query')->where('guild_id', '[0-9]+')->name('apiSearchBatches');
+
+Route::get('/warcraftlogs/attendees', 'Api\WarcraftlogsController@attendees')->name('apiWarcraftlogsAttendees');

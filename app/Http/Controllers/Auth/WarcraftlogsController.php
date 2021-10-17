@@ -6,6 +6,7 @@ use Auth;
 use App\{AuditLog, Guild, Member, User};
 use App\Http\Controllers\Controller;
 use Exception;
+use GuzzleHttp\Client;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use RestCord\DiscordClient;
 use Socialite;
@@ -102,5 +103,42 @@ class WarcraftlogsController extends Controller
         } else {
             abort(403, __("Something went wrong with the data Warcraft Logs sent us. Try again."));
         }
+    }
+
+    /**
+     * Check the token's expiry... if the token is expired, renew it.
+     *
+     * @param Guild $guild
+     */
+    public static function renewTokenIfNeeded($guild) {
+        if ($guild->warcraftlogs_token_expiry && $guild->warcraftlogs_token_expiry < getDateTime()) {
+            if ($guild->warcraftlogs_refresh_token) {
+                try {
+                    $client = new Client;
+                    $response = $client->post('https://www.warcraftlogs.com/oauth/token', [
+                        'form_params' => [
+                            'client_id'     => env('WARCRAFTLOGS_CLIENT_ID'),
+                            'client_secret' => env('WARCRAFTLOGS_CLIENT_SECRET'),
+                            'grant_type'    => 'refresh_token',
+                            'refresh_token' => $guild->warcraftlogs_refresh_token,
+                            'redirect_uri'  => env('WARCRAFTLOGS_REDIRECT_URI'),
+                        ],
+                    ]);
+
+                    $result = json_decode((string) $response->getBody(), true);
+
+                    $guild->update([
+                        'warcraftlogs_token'         => $result['access_token'],
+                        'warcraftlogs_refresh_token' => $result['refresh_token'],
+                        'warcraftlogs_token_expiry'  => date('Y-m-d H:i:s', time() + $result['expires_in']),
+                    ]);
+                } catch (ClientException $e) {
+                    return false;
+                }
+            } else {
+                return false;
+            }
+        }
+        return true;
     }
 }
