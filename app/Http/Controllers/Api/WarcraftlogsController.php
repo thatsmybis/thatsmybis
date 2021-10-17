@@ -6,11 +6,7 @@ use App\Http\Controllers\RaidController;
 use App\{Guild, Member};
 use Auth;
 use GuzzleHttp\Client;
-use GuzzleHttp\Exception\ClientException;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
-use Illuminate\Validation\Rule;
 
 class WarcraftlogsController extends \App\Http\Controllers\Controller
 {
