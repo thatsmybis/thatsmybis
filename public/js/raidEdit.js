@@ -1,3 +1,5 @@
+var testReports = null;
+
 $(document).ready(function () {
     let initializing = true;
 
@@ -80,56 +82,24 @@ $(document).ready(function () {
     fixSliderLabels();
 });
 
-function findExistingCharacter(characterId, except = null) {
-    if (except) {
-        return $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${characterId}"]`).not(except).first();
-    } else {
-        return $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${characterId}"]`).first();
-    }
-}
-
-// Add characters belonging to the given raid group to the character list if they're not already in it
-function fillCharactersFromRaid(raidGroupId) {
-    const mainRaidGroupCharacters = characters.filter(character => character.raid_group_id == raidGroupId);
-    const secondaryRaidGroupCharacters = characters.filter(character =>
-        character.secondary_raid_groups.filter(raidGroup => raidGroup.id == raidGroupId).length > 0
-    );
-
-    // Combine the two arrays and sort by name
-    const raidGroupCharacters = mainRaidGroupCharacters
-        .concat(secondaryRaidGroupCharacters)
-        .sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
-
-    let addedCount = 0;
-    let alreadyAddedCount = 0;
-
-    for (const character of raidGroupCharacters) {
-        const existing = findExistingCharacter(character.id);
-        if (!existing.length) {
-            let emptyCharacterSelect = $('select[name^=characters][name$=\\[character_id\\]] option:selected[value=""]').first().parent();
-            let characterOption = emptyCharacterSelect.find('option[value="' + character.id + '"i]');
-            if (characterOption.val()) {
-                characterOption.prop("selected", true).change();
-                addedCount++;
-            }
-
-            // Reset associated inputs
-            const row = emptyCharacterSelect.parent().closest(".js-row");
-            $(row).find("[name^=characters][name$=\\[is_exempt\\]]").prop("checked", false).change();
-            $(row).find("[name^=characters][name$=\\[remark_id\\]]").val("").change();
-            $(row).find("[name^=characters][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
-        } else {
-            alreadyAddedCount++;
+function addCharacter(characterId) {
+    let isAdded = false;
+    const existing = findExistingCharacter(characterId);
+    if (!existing.length) {
+        let emptyCharacterSelect = $('select[name^=characters][name$=\\[character_id\\]] option:selected[value=""]').first().parent();
+        let characterOption = emptyCharacterSelect.find('option[value="' + characterId + '"i]');
+        if (characterOption.val()) {
+            characterOption.prop("selected", true).change();
+            isAdded = true;
         }
+
+        // Reset associated inputs
+        const row = emptyCharacterSelect.parent().closest(".js-row");
+        $(row).find("[name^=characters][name$=\\[is_exempt\\]]").prop("checked", false).change();
+        $(row).find("[name^=characters][name$=\\[remark_id\\]]").val("").change();
+        $(row).find("[name^=characters][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
     }
-
-    $(".js-raid-group-message").html(`${addedCount} characters added${ alreadyAddedCount ? ` (${alreadyAddedCount} already in list)` : '' }`).show();
-    setTimeout(() => $(".js-raid-group-message").hide(), 7500);
-}
-
-// Hack to get the slider's labels to refresh: https://github.com/seiyria/bootstrap-slider/issues/396#issuecomment-310415503
-function fixSliderLabels() {
-    window.dispatchEvent(new Event('resize'));
+    return isAdded;
 }
 
 function addWarcraftlogsAttendees() {
@@ -163,23 +133,100 @@ function addWarcraftlogsAttendees() {
         dataType: "json",
         url: "/api/warcraftlogs/attendees",
         success: function (data) {
-            console.log('at success', data);
-            // TODO
-            response(data);
+            $("#warcraftlogsLoadingbar").removeClass("d-flex").hide();
             if (data.length <= 0) {
-                error(data);
+                $(".js-warcraftlogs-attendees-message").html('No attendance data found').show();
+                setTimeout(() => $(".js-warcraftlogs-attendees-message").hide(), 1000);
             } else {
-                console.log('success?', data);
+                let reportCharacters = [];
+                let foundCharacters = [];
+                let missingCharacters = [];
+                let addedCount = 0;
+                let alreadyAddedCount = 0;
+
+                // Report on the data we got back, and compile a list of the characters
+                let message = `Warcraft Logs sent the following:`;
+                for (const [key, report] of Object.entries(data)) {
+                    if (report.rankedCharacters) {
+                        reportCharacters = [...reportCharacters, ...report.rankedCharacters.map(character => character.name)];
+                    }
+                    message += `<ul class="mt-3">
+                        <li class="font-weight-bold">
+                            ${ report.title }
+                        </li>
+                        <li>
+                            ${ report.rankedCharacters ? `${ report.rankedCharacters.length } characters` : `0 characters <span class="small text-muted font-weight-normal">(blame WCL)</span>` }
+                        </li>
+                        <li class="small text-muted font-weight-normal">
+                            ${ report.code }
+                        </li>
+                        ${ report.endTime ? `<li class="small text-muted font-weight-normal">${ moment.utc(report.endTime).local().format("ddd, MMM Do YYYY @ h:mm a") }</li>` : '' }
+                        ${ report.zone && report.zone.name ? `<li class="small text-muted font-weight-normal">${ report.zone.name }</li>` : `` }
+                    </ul>`;
+                }
+
+                // Remove duplicates
+                reportCharacters = [...new Set(reportCharacters)];
+
+                // Add the characters to the raid
+                reportCharacters.sort().forEach(function (reportCharacter) {
+                    character = characters.find(character => character.slug === reportCharacter.toLowerCase());
+                    if (character) {
+                        addCharacter(character.id);
+                        addedCount++;
+                        foundCharacters = [...foundCharacters, character.name];
+                    } else {
+                        missingCharacters = [...missingCharacters, reportCharacter];
+                    }
+                });
+
+                // Report on who we added and who we couldn't add
+                message += `<ul>
+                    <li>${ addedCount } added</li>
+                    ${ reportCharacters.length && foundCharacters ? `<li class="text-white"><span class="font-weight-bold">Successful:</span> ${ foundCharacters.sort().join(', ')}</li>` : `` }
+                    ${ reportCharacters.length && missingCharacters ? `<li class="text-white"><span class="font-weight-bold">Not found:</span> ${ missingCharacters.sort().join(', ')}</li><li class="text-white">To add these characters, go create them and then reload this page</li>` : `` }
+                </ul>`;
+
+                $(".js-warcraftlogs-attendees-message").html(message).show();
             }
         },
-        error: function () {
-            $(".js-warcraftlogs-attendees-message").html('No attendance data found for that report').show();
-            setTimeout(() => $(".js-warcraftlogs-attendees-message").hide(), 7500);
-        },
-        response: function () {
-            $("#warcraftlogsLoadingbar").removeClass("d-flex").hide();
-        },
     });
+}
+
+function findExistingCharacter(characterId, except = null) {
+    if (except) {
+        return $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${characterId}"]`).not(except).first();
+    } else {
+        return $(`select[name^=characters][name$=\\[character_id\\]] option:selected[value="${characterId}"]`).first();
+    }
+}
+
+// Add characters belonging to the given raid group to the character list if they're not already in it
+function fillCharactersFromRaid(raidGroupId) {
+    const mainRaidGroupCharacters = characters.filter(character => character.raid_group_id == raidGroupId);
+    const secondaryRaidGroupCharacters = characters.filter(character =>
+        character.secondary_raid_groups.filter(raidGroup => raidGroup.id == raidGroupId).length > 0
+    );
+
+    // Combine the two arrays and sort by name
+    const raidGroupCharacters = mainRaidGroupCharacters
+        .concat(secondaryRaidGroupCharacters)
+        .sort((a,b) => (a.name > b.name) ? 1 : ((b.name > a.name) ? -1 : 0));
+
+    let addedCount = 0;
+
+    for (const character of raidGroupCharacters) {
+        addCharacter(character.id);
+        addedCount++;
+    }
+
+    $(".js-raid-group-message").html(`${addedCount} characters added`).show();
+    setTimeout(() => $(".js-raid-group-message").hide(), 7500);
+}
+
+// Hack to get the slider's labels to refresh: https://github.com/seiyria/bootstrap-slider/issues/396#issuecomment-310415503
+function fixSliderLabels() {
+    window.dispatchEvent(new Event('resize'));
 }
 
 // Reset and empty the attendee list.
