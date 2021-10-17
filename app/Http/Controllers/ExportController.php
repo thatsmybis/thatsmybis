@@ -294,17 +294,20 @@ class ExportController extends Controller {
     {
         $items = GuildItem::where(function ($query) {
                 $query->whereNotNull('priority')
-                    ->orWhereNotNull('note');
+                    ->orWhereNotNull('note')
+                    ->orWhereNotNull('tier');
             })
             ->where('guild_id', $guildId)
-            ->select('item_id', 'priority', 'note')
+            ->select('item_id', 'priority', 'note', 'tier')
             ->get();
 
         $notes = [];
+        $tiers = [];
         $itemPriorityString = "";
         foreach ($items as $item) {
             $priority = trim($item->priority);
             $note = trim($item->note);
+            $tier = Guild::TIERS[$item->tier] ?? null;
 
             if ($priority) {
                 $itemPriorityString .= "{$item->item_id} > {$priority}\n";
@@ -313,11 +316,16 @@ class ExportController extends Controller {
             if ($note) {
                 $notes[$item->item_id] = $note;
             }
+
+            if ($tier) {
+                $tiers[$item->item_id] = $tier;
+            }
         }
 
         return [
             'loot' => $itemPriorityString,
             'notes' => $notes,
+            'tiers' => $tiers,
         ];
     }
 
