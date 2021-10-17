@@ -164,6 +164,7 @@ function addWarcraftlogsAttendees() {
         url: "/api/warcraftlogs/attendees",
         success: function (data) {
             console.log('at success', data);
+            // TODO
             response(data);
             if (data.length <= 0) {
                 error(data);

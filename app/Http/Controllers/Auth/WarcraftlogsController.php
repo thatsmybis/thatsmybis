@@ -7,8 +7,8 @@ use App\{AuditLog, Guild, Member, User};
 use App\Http\Controllers\Controller;
 use Exception;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
-use RestCord\DiscordClient;
 use Socialite;
 
 class WarcraftlogsController extends Controller
