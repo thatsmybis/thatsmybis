@@ -200,7 +200,7 @@
                                 <div class="form-group">
                                     <label for="logs" class="font-weight-bold">
                                         <span class="text-muted fas fa-fw fa-link"></span>
-                                        {{ __("Link to Raid Logs") }} <span class="text-muted small">{{ __("max") }} {{ $maxInstances }}</span>
+                                        {{ __("Link to Raid Logs") }} <span class="text-muted small">{{ __("max") }} {{ $maxLogs }}</span>
                                     </label>
 
                                     @if ($raid && $raid->logs_deprecated)
@@ -217,7 +217,7 @@
                                             value="{{ old('logs_deprecated') ? old('logs_deprecated') : ($raid ? $raid->logs_deprecated : '') }}"
                                             style="" />
                                     @else
-                                        @for ($i = 0; $i < $maxInstances; $i++)
+                                        @for ($i = 0; $i < $maxLogs; $i++)
                                             @php
                                                 $oldLog = old('logs.' . $i . '.name') ? old('logs.' . $i . '.name') : ($raid && $raid->logs->slice($i, 1)->count() ? $raid->logs->slice($i, 1)->first()->name : null);
                                             @endphp
@@ -234,7 +234,10 @@
                                         @endfor
                                         @if (request()->get('isAdmin'))
                                             <span class="text-danger">ADMIN ONLY - still in development</span>
-                                            <span class="js-add-warcraftlogs-players btn btn-success">{{ __("Load characters from logs") }}</span>
+                                            <span id="addWarcraftlogsAttendees" class="btn btn-success">{{ __("Load characters from logs") }}</span>
+                                            <div class="js-warcraftlogs-attendees-message text-warning" style="display:none;">
+                                            </div>
+                                            @include('partials/loadingBars', ['loadingBarId' => ''])
                                         @endif
                                     @endif
                                 </div>
@@ -586,7 +589,8 @@
 @section('scripts')
 <script>
     var characters = {!! $showOfficerNote ? $guild->characters->makeVisible('officer_note')->toJson() : $guild->characters->toJson() !!};
-    var date = '{{ $date }}';
+    var date  = '{{ $date }}';
+    var guild = {!! $guild->toJson() !!};
 </script>
 <script src="{{ loadScript('raidEdit.js') }}"></script>
 @endsection

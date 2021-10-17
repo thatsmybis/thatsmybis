@@ -49,6 +49,10 @@ $(document).ready(function () {
         showNextCharacter(this);
     });
 
+    $("#addWarcraftlogsAttendees").click(function () {
+        addWarcraftlogsAttendees();
+    });
+
     $(".js-show-notes").click(function () {
         const index = $(this).data('index');
         $(this).hide();
@@ -75,30 +79,6 @@ $(document).ready(function () {
     $("#editForm").show();
     fixSliderLabels();
 });
-
-// Reset and empty the attendee list.
-function resetAttendees () {
-    if (confirm("Are you sure you want to empty and reset the attendee list?")) {
-        // Raid group selects
-        $('select[name^=raid_group_id]').val('').change();
-        // Char select
-        $('select[name^=characters][name$=\\[character_id\\]]').val('').change();
-        // Excused
-        $(".js-attendance-skip").prop("checked", false).change();
-        // Note / remark
-        $('select[name^=characters][name$=\\[remark_id\\]]').val('').change();
-        // Credit slider
-        $("[name^=characters][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
-        // Public note
-        $('[name^=characters][name$=\\[public_note\\]]').val('');
-        // Officer note
-        $('[name^=characters][name$=\\[officer_note\\]]').val('');
-        // Show the custom note toggle
-        $(".js-show-notes").show();
-        // Hide the custom notes
-        $(`.js-notes`).hide();
-    }
-}
 
 function findExistingCharacter(characterId, except = null) {
     if (except) {
@@ -150,6 +130,79 @@ function fillCharactersFromRaid(raidGroupId) {
 // Hack to get the slider's labels to refresh: https://github.com/seiyria/bootstrap-slider/issues/396#issuecomment-310415503
 function fixSliderLabels() {
     window.dispatchEvent(new Event('resize'));
+}
+
+function addWarcraftlogsAttendees() {
+    let logs = $("[name^=logs]:visible");
+    let validCodes = [];
+
+    // Extract report codes from the URLs
+    logs.each(function () {
+        if ($(this).val()) {
+            log = new URL($(this).val());
+            log.pathname.split('/').forEach(function (pathPart) {
+                // 16 characters looks valid enough to go from here...
+                if (pathPart.length === 16) {
+                    validCodes.push(pathPart);
+                }
+            });
+        }
+    });
+
+    $(".js-warcraftlogs-attendees-loading-spinner").show();
+    $("#warcraftlogsLoadingbar").addClass("d-flex").show();
+    setTimeout(() => $("#warcraftlogsLoadingbar").removeClass("d-flex").hide(), 7500);
+
+    // Request characters
+    $.ajax({
+        method: "get",
+        data: {
+            codes: validCodes,
+            guild_id: guild.id
+        },
+        dataType: "json",
+        url: "/api/warcraftlogs/attendees",
+        success: function (data) {
+            console.log('at success', data);
+            response(data);
+            if (data.length <= 0) {
+                error(data);
+            } else {
+                console.log('success?', data);
+            }
+        },
+        error: function () {
+            $(".js-warcraftlogs-attendees-message").html('No attendance data found for that report').show();
+            setTimeout(() => $(".js-warcraftlogs-attendees-message").hide(), 7500);
+        },
+        response: function () {
+            $("#warcraftlogsLoadingbar").removeClass("d-flex").hide();
+        },
+    });
+}
+
+// Reset and empty the attendee list.
+function resetAttendees () {
+    if (confirm("Are you sure you want to empty and reset the attendee list?")) {
+        // Raid group selects
+        $('select[name^=raid_group_id]').val('').change();
+        // Char select
+        $('select[name^=characters][name$=\\[character_id\\]]').val('').change();
+        // Excused
+        $(".js-attendance-skip").prop("checked", false).change();
+        // Note / remark
+        $('select[name^=characters][name$=\\[remark_id\\]]').val('').change();
+        // Credit slider
+        $("[name^=characters][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
+        // Public note
+        $('[name^=characters][name$=\\[public_note\\]]').val('');
+        // Officer note
+        $('[name^=characters][name$=\\[officer_note\\]]').val('');
+        // Show the custom note toggle
+        $(".js-show-notes").show();
+        // Hide the custom notes
+        $(`.js-notes`).hide();
+    }
 }
 
 // If the current element has a value, show it and the next element that is hidden because it is empty
