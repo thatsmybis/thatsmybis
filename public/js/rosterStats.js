@@ -300,7 +300,7 @@ function createRosterStatsTable() {
             title  : "Raid",
             data   : "character",
             render : function (data, type, row) {
-                if (row.raid_group_name) {
+                if (row.raid_group_name || (row.secondary_raid_groups && row.secondary_raid_groups.length)) {
                     let secondaryRaidGroups = '';
                     if (row.secondary_raid_groups && row.secondary_raid_groups.length) {
                         secondaryRaidGroups = `<ul class="list-inline">`;

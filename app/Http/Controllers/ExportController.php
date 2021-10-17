@@ -193,7 +193,7 @@ class ExportController extends Controller {
         // The current user doesn't have any of the required permissions so we only return the item notes.
         // Individual permissions are inspected separately further down.
         if (!$memberCanViewPrios && !$memberCanViewWishlists) {
-            $payload = array_merge(['wishlists' => []], $this->gargulItemNotes($guild->id));
+            $payload = array_merge(['wishlists' => []], $this->gargulItemNotes($guild));
             return $this->getExport(
                 json_encode($payload, JSON_UNESCAPED_UNICODE),
                 'Gargul data',
@@ -260,7 +260,7 @@ class ExportController extends Controller {
         $payload = array_merge([
             'wishlists' => $wishlistData,
             'groups' => $raidGroupData,
-        ], $this->gargulItemNotes($guild->id));
+        ], $this->gargulItemNotes($guild));
         $payload = json_encode($payload, JSON_UNESCAPED_UNICODE);
 
         if (!$raw) {
@@ -287,24 +287,31 @@ class ExportController extends Controller {
      * The reason why 'loot' is a CSV instead of JSON is because Gargul already
      * supported CSV loot priority strings before becoming compatible with TMB
      *
-     * @param int $guildId
+     * @param Guild $guild
      * @return array
      */
-    private function gargulItemNotes(int $guildId): array
+    private function gargulItemNotes(Guild $guild): array
     {
         $items = GuildItem::where(function ($query) {
                 $query->whereNotNull('priority')
-                    ->orWhereNotNull('note');
+                    ->orWhereNotNull('note')
+                    ->orWhereNotNull('tier');
             })
-            ->where('guild_id', $guildId)
-            ->select('item_id', 'priority', 'note')
+            ->where('guild_id', $guild->id)
+            ->select('item_id', 'priority', 'note', 'tier')
             ->get();
 
         $notes = [];
+        $tiers = [];
         $itemPriorityString = "";
         foreach ($items as $item) {
             $priority = trim($item->priority);
             $note = trim($item->note);
+            $tier = $item->tier;
+
+            if ($tier && $guild->tier_mode == 's') {
+                $tier = Guild::TIERS[$item->tier] ?? null;
+            }
 
             if ($priority) {
                 $itemPriorityString .= "{$item->item_id} > {$priority}\n";
@@ -313,11 +320,16 @@ class ExportController extends Controller {
             if ($note) {
                 $notes[$item->item_id] = $note;
             }
+
+            if ($tier) {
+                $tiers[$item->item_id] = $tier;
+            }
         }
 
         return [
             'loot' => $itemPriorityString,
             'notes' => $notes,
+            'tiers' => $tiers,
         ];
     }
 
