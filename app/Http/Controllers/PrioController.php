@@ -112,7 +112,7 @@ class PrioController extends Controller
                 ['item_sources.instance_id', $instance->id],
                 ['items.expansion_id', $guild->expansion_id],
             ])
-            ->whereNull('items.parent_id')
+            // ->whereNull('items.parent_id')
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
             // This is problematic because the notes entered may differ, but we can only take one.
             ->groupBy('items.item_id')
@@ -250,7 +250,7 @@ class PrioController extends Controller
                 ['items.item_id', $itemId],
                 ['items.expansion_id', $guild->expansion_id],
             ])
-            ->whereNull('items.parent_id')
+            // ->whereNull('items.parent_id')
             ->groupBy('items.item_id')
             ->with([
                 'priodCharacters' => function ($query) use ($raidGroup) {

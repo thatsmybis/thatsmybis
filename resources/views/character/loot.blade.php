@@ -141,7 +141,9 @@
                                 <small class="text-muted font-weight-normal">{{ __("max") }} {{ $maxWishlistItems }}</small>
                             @endif
                             <small class="text-muted font-weight-normal">&sdot;</small>
-                            <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">{{ __("see what other people wishlisted") }}</a>
+                            <a href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}" class="small font-weight-normal">
+                                {{ __("see what other people wishlisted") }}
+                            </a>
 
                             @if ($lockWishlist)
                                 @if ($character->wishlist->count() > 0)
@@ -197,7 +199,7 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="js-input-label">
+                                                <div class="js-input-label mr-2" style="flex-grow: 1;">
                                                     <span class="js-item-display">
                                                         @includeWhen($itemId, 'partials/item', [
                                                             'wowheadLink'   => false,
@@ -479,6 +481,18 @@
     $(document).ready(function () {
         warnBeforeLeaving("#itemForm");
         addSortHandlers();
+
+        // Show/hide note input
+        $(".js-toggle-note").change(function () {
+            const index = $(this).data('index');
+            const type = $(this).data('type');
+
+            if ($(this).prop("checked")) {
+                $(".js-note[data-index=" + index + "][data-type=" + type + "]").parent().show();
+            } else {
+                $(".js-note[data-index=" + index + "][data-type=" + type + "]").parent().hide();
+            }
+        });
     });
 </script>
 @endsection

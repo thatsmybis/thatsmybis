@@ -146,8 +146,10 @@ class CharacterLootController extends Controller
             'wishlist.*.item_id'     => 'nullable|integer|exists:items,item_id',
             'wishlist.*.is_received' => 'nullable|boolean',
             'wishlist.*.is_offspec'  => 'nullable|boolean',
+            'wishlist.*.note'        => 'nullable|string|max:140',
             'received.*.item_id'     => 'nullable|integer|exists:items,item_id',
             'received.*.is_offspec'  => 'nullable|boolean',
+            'received.*.note'        => 'nullable|string|max:140',
             'received.*.new_received_at' => 'nullable|date|before:tomorrow|after:2004-09-22',
             'received.*.new_raid_id'    => [
                 'nullable',
@@ -155,6 +157,7 @@ class CharacterLootController extends Controller
                 Rule::exists('raids', 'id')->where('raids.guild_id', $guild->id),
             ],
             'recipes.*.item_id'  => 'nullable|integer|exists:items,item_id',
+            'recipes.*.note'     => 'nullable|string|max:140',
             'public_note'        => 'nullable|string|max:140',
             'officer_note'       => 'nullable|string|max:140',
             'personal_note'      => 'nullable|string|max:2000',
@@ -252,7 +255,8 @@ class CharacterLootController extends Controller
                     request()->input('received'),
                     Item::TYPE_RECEIVED,
                     $character,
-                    $currentMember, true,
+                    $currentMember,
+                    true,
                     $markAsReceived,
                     1,
                 );
@@ -272,6 +276,8 @@ class CharacterLootController extends Controller
                 1,
             );
         }
+
+        request()->session()->flash('status', __("Successfully updated loot."));
 
         return redirect()->route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'b' => 1]);
     }
@@ -326,6 +332,8 @@ class CharacterLootController extends Controller
                         $inputItem['is_offspec']  = isset($inputItem['is_offspec']) ? 1 : 0;
                     }
 
+                    $inputItem['has_note'] = isset($inputItem['has_note']) ? 1 : 0;
+
                     // Order changed
                     if ($existingItem->pivot->order != $i) {
                         $newValues['order']     = $i;
@@ -357,6 +365,14 @@ class CharacterLootController extends Controller
                             $newValues['is_offspec'] = 1;
                         } else {
                             $newValues['is_offspec'] = 0;
+                        }
+                    }
+                    // Note changed
+                    if (array_key_exists('note', $inputItem)) {
+                        if ($existingItem->pivot->note != $inputItem['note']) {
+                            $newValues['note'] = $inputItem['note'];
+                        } else if (!$inputItem['has_note'] && $existingItem->pivot->note) {
+                            $newValues['note'] = null;
                         }
                     }
 
@@ -410,6 +426,7 @@ class CharacterLootController extends Controller
             if (!isset($inputItem['resolved']) && $inputItem['item_id']) {
                 $isReceived = isset($inputItem['is_received']) || isset($inputItem['new_received_at']) ? 1 : 0;
                 $isOffspec  = isset($inputItem['is_offspec']) ? 1 : 0;
+                $hasNote    = isset($inputItem['has_note']) ? 1 : 0;
 
                 $receivedAt = null;
                 if (isset($inputItem['new_received_at'])) {
@@ -419,6 +436,11 @@ class CharacterLootController extends Controller
                 $raidId = null;
                 if (isset($inputItem['new_raid_id']) && $itemType == 'received') {
                     $raidId = $inputItem['new_raid_id'];
+                }
+
+                $note = null;
+                if ($hasNote && isset($inputItem['note'])) {
+                    $note = $inputItem['note'];
                 }
 
                 $toAdd[] = [
@@ -431,6 +453,7 @@ class CharacterLootController extends Controller
                     'list_number'  => $listNumber ? $listNumber : 1,
                     'raid_id'      => $raidId,
                     'type'         => $itemType,
+                    'note'         => $note,
                     'order'        => $i,
                     'created_at'   => $now,
                     'updated_at'   => $now,
@@ -478,6 +501,10 @@ class CharacterLootController extends Controller
                 $newValues['is_offspec'] = $item['is_offspec'];
                 $auditMessage .= ($item['is_offspec'] ? 'set as OS, ' : 'set as MS, ');
             }
+            if (array_key_exists('note', $item)) {
+                $newValues['note'] = $item['note'];
+                $auditMessage .= ($item['note'] ? 'note added, ' : 'note removed, ');
+            }
             if (isset($item['order'])) {
                 $newValues['order'] = $item['order'];
                 if ($auditMessage) {
@@ -492,9 +519,7 @@ class CharacterLootController extends Controller
 
             $newValues['updated_at'] = $now;
 
-            CharacterItem::
-                where('id', $item['pivot_id'])
-                ->update($newValues);
+            CharacterItem::where('id', $item['pivot_id'])->update($newValues);
 
             // If we want to log EVERY prio change (this has a cascading effect and can result in hundreds of audits)
             // $audits[] = [

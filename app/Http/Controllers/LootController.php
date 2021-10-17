@@ -130,14 +130,14 @@ class LootController extends Controller
                 $specs = collect(Character::specs($expansionId))
                     ->map(function($spec){ return (object)$spec; });
 
-                foreach ($specs as &$spec) {
-                    $spec->items = $items->where('spec', $spec->name)->where('class', $spec->class);
+                foreach ($specs as $specKey => &$spec) {
+                    $spec->items = $items->where('spec', $specKey)->where('class', $spec->class);
 
                     $spec->archetypes = collect();
-                    foreach ($archetypes as $archetype) {
+                    foreach ($archetypes as $archetypeKey => $archetype) {
                         $spec->archetypes->put(
-                            strtolower($archetype),
-                            $items->where('spec', $spec->name)->where('archetype', $archetype)->sum('wishlist_count')
+                            strtolower($archetypeKey),
+                            $items->where('spec', $specKey)->where('archetype', $archetypeKey)->sum('wishlist_count')
                         );
                     }
                 }

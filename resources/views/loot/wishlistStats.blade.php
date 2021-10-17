@@ -77,41 +77,41 @@
                                             $showArchetype = false;
                                         @endphp
                                         <ul class="nav nav-tabs mb-3" id="{{ strtolower($spec->class) }}Tab">
-                                            @foreach ($archetypes as $archetype)
+                                            @foreach ($archetypes as $archetypeKey => $archetype)
                                                 @php
                                                     // Any given archetype for a spec surpass 10% of all specs to be counted
                                                     // OR be the predefined archetype for this spec and have at least one item.
                                                     if (
-                                                        $spec->archetypes[strtolower($archetype)] > ($archetypeSum * 0.1)
-                                                        || $spec->archetypes[strtolower($archetype)] && $spec->archetype == $archetype
+                                                        $spec->archetypes[strtolower($archetypeKey)] > ($archetypeSum * 0.1)
+                                                        || $spec->archetypes[strtolower($archetypeKey)] && $spec->archetype == $archetypeKey
                                                     ) {
                                                         $showArchetype = true;
                                                     }
                                                 @endphp
-                                                @if ($showArchetype && $spec->archetypes[strtolower($archetype)] > ($archetypeSum * 0.1))
+                                                @if ($showArchetype && $spec->archetypes[strtolower($archetypeKey)] > ($archetypeSum * 0.1))
                                                     <li class="nav-item">
-                                                        <a class="nav-link {{ $spec->archetype == $archetype ? 'active' : '' }} text-{{ strtolower($class) }}"
-                                                            id="{{ strtolower($spec->class) }}-{{ strtolower($spec->name) }}-{{ strtolower($archetype) }}-tab"
-                                                            href="#{{ strtolower($spec->class) . ucfirst(strtolower($spec->name)) . ucfirst(strtolower($archetype)) }}"
+                                                        <a class="nav-link {{ $spec->archetype == $archetypeKey ? 'active' : '' }} text-{{ strtolower($class) }}"
+                                                            id="{{ strtolower($spec->class) }}-{{ strtolower($spec->name) }}-{{ strtolower($archetypeKey) }}-tab"
+                                                            href="#{{ strtolower($spec->class) . ucfirst(strtolower($spec->name)) . ucfirst(strtolower($archetypeKey)) }}"
                                                             data-toggle="tab"
                                                             role="tab"
-                                                            aria-controls="{{ strtolower($archetype) }}"
-                                                            aria-selected="{{ $spec->archetype == $archetype ? 'true' : 'false' }}">
+                                                            aria-controls="{{ strtolower($archetypeKey) }}"
+                                                            aria-selected="{{ $spec->archetype == $archetypeKey ? 'true' : 'false' }}">
                                                             {{ $archetype }}
                                                         </a>
                                                     </li>
                                                 @endif
                                             @endforeach
                                         </ul>
-                                        <div class="tab-content" id="{{ strtolower($spec->class) . ucfirst(strtolower($archetype)) }}TabContent">
-                                            @foreach ($archetypes as $archetype)
+                                        <div class="tab-content" id="{{ strtolower($spec->class) . ucfirst(strtolower($archetypeKey)) }}TabContent">
+                                            @foreach ($archetypes as $archetypeKey => $archetype)
                                                 @if ($showArchetype)
-                                                    <div class="tab-pane fade {{ $spec->archetype == $archetype ? 'show active' : '' }}"
-                                                        id="{{ strtolower($spec->class) . ucfirst(strtolower($spec->name)) . ucfirst(strtolower($archetype)) }}"
+                                                    <div class="tab-pane fade {{ $spec->archetype == $archetypeKey ? 'show active' : '' }}"
+                                                        id="{{ strtolower($spec->class) . ucfirst(strtolower($spec->name)) . ucfirst(strtolower($archetypeKey)) }}"
                                                         role="tabpanel"
-                                                        aria-labelledby="{{ strtolower($spec->class) }}-{{ strtolower($spec->name) }}-{{ strtolower($archetype) }}-tab">
+                                                        aria-labelledby="{{ strtolower($spec->class) }}-{{ strtolower($spec->name) }}-{{ strtolower($archetypeKey) }}-tab">
                                                         <ol>
-                                                            @foreach ($spec->items->where('archetype', $archetype) as $item)
+                                                            @foreach ($spec->items->where('archetype', $archetypeKey) as $item)
                                                                 <li class="mb-2 text-tier-{{ $loop->iteration <= 5 ? '1' : ($loop->iteration <= 10 ? '2' : ($loop->iteration <= 20 ? '3' : ($loop->iteration <= 30 ? '4' : '5'))) }}">
                                                                     @include('partials/item', ['wowheadLink' => false])
                                                                     <small class="text-muted">

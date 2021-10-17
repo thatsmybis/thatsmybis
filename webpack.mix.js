@@ -42,6 +42,7 @@ mix .babel('public/js/assignLoot.js',          'public/js/processed/assignLoot.j
     .babel('public/js/raidGroupAttendance.js', 'public/js/processed/raidGroupAttendance.js')
     .babel('public/js/raidGroupCharacters.js', 'public/js/processed/raidGroupCharacters.js')
     .babel('public/js/roster.js',              'public/js/processed/roster.js')
+    .babel('public/js/rosterStats.js',         'public/js/processed/rosterStats.js')
     .babel('public/js/clickToCopy.js',         'public/js/processed/clickToCopy.js')
 
     .styles(['public/css/main.css'], 'public/css/processed/main.css')
