@@ -17,7 +17,6 @@
         "guzzlehttp/guzzle": "^7.0.1",
         "kkomelin/laravel-translatable-string-exporter": "^1.14",
         "kodeine/laravel-acl": "^2.0.5",
-        "laravel/cashier": "^13.5",
         "laravel/framework": "^8.0",
         "laravel/sanctum": "^2.11",
         "laravel/socialite": "^5.0",
