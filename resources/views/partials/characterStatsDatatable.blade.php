@@ -60,6 +60,20 @@
                 @endforeach
             </select>
         </li>
+        <li class=" list-inline-item">
+            <label for="archetype_filter" class="font-weight-light">
+                <span class="text-muted fas fa-fw fa-"></span>
+                {{ __("Role") }}
+            </label>
+            <select id="archetype_filter" class="form-control dark selectpicker">
+                <option value="">—</option>
+                @foreach (App\Character::archetypes() as $key => $role)
+                    <option value="{{ $key }}" class="text-{{ strtolower($key) }}-important">
+                        {{ $role }}
+                    </option>
+                @endforeach
+            </select>
+        </li>
         <li class="list-inline-item">
             <label for="instance_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-sack"></span>
