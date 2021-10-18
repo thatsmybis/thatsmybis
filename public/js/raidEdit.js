@@ -104,6 +104,7 @@ function addCharacter(characterId) {
 
 function addWarcraftlogsAttendees() {
     let logs = $("[name^=logs]:visible");
+
     let validCodes = [];
 
     // Extract report codes from the URLs
@@ -121,7 +122,6 @@ function addWarcraftlogsAttendees() {
 
     $(".js-warcraftlogs-attendees-loading-spinner").show();
     $("#warcraftlogsLoadingbar").addClass("d-flex").show();
-    setTimeout(() => $("#warcraftlogsLoadingbar").removeClass("d-flex").hide(), 7500);
 
     // Request characters
     $.ajax({
@@ -136,7 +136,7 @@ function addWarcraftlogsAttendees() {
             $("#warcraftlogsLoadingbar").removeClass("d-flex").hide();
             if (data.length <= 0) {
                 $(".js-warcraftlogs-attendees-message").html('No attendance data found').show();
-                setTimeout(() => $(".js-warcraftlogs-attendees-message").hide(), 1000);
+                setTimeout(() => $(".js-warcraftlogs-attendees-message").hide(), 7500);
             } else {
                 let reportCharacters = [];
                 let foundCharacters = [];
@@ -182,14 +182,16 @@ function addWarcraftlogsAttendees() {
 
                 // Report on who we added and who we couldn't add
                 message += `<ul>
-                    <li>${ addedCount } added</li>
+                    <li>${ addedCount } attendees added</li>
                     ${ reportCharacters.length && foundCharacters ? `<li class="text-white"><span class="font-weight-bold">Successful:</span> ${ foundCharacters.sort().join(', ')}</li>` : `` }
-                    ${ reportCharacters.length && missingCharacters ? `<li class="text-white"><span class="font-weight-bold">Not found:</span> ${ missingCharacters.sort().join(', ')}</li><li class="text-white">To add these characters, go create them and then reload this page</li>` : `` }
+                    ${ reportCharacters.length && missingCharacters ? `<li class="text-white"><span class="font-weight-bold">Not found:</span> ${ missingCharacters.sort().join(', ')}</li><li class="text-white">To add these characters, add them to the guild and reload this page</li>` : `` }
                 </ul>`;
 
                 $(".js-warcraftlogs-attendees-message").html(message).show();
             }
         },
+        error: function (data) {
+        }
     });
 }
 
@@ -220,7 +222,7 @@ function fillCharactersFromRaid(raidGroupId) {
         addedCount++;
     }
 
-    $(".js-raid-group-message").html(`${addedCount} characters added`).show();
+    $(".js-raid-group-message").html(`${addedCount} attendees added`).show();
     setTimeout(() => $(".js-raid-group-message").hide(), 7500);
 }
 
