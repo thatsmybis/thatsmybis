@@ -1,5 +1,3 @@
-var testReports = null;
-
 $(document).ready(function () {
     let initializing = true;
 
