@@ -137,23 +137,33 @@ function addWarcraftlogsAttendees() {
                 setTimeout(() => $(".js-warcraftlogs-attendees-message").hide(), 7500);
             } else {
                 let reportCharacters = [];
-                let foundCharacters = [];
-                let missingCharacters = [];
+                let foundCharactersHtml = [];
+                let missingCharactersHtml = [];
                 let addedCount = 0;
                 let alreadyAddedCount = 0;
 
                 // Report on the data we got back, and compile a list of the characters
-                let message = `Warcraft Logs sent the following:`;
+                let message = `Received the following from Warcraft Logs:`;
                 for (const [key, report] of Object.entries(data)) {
+                    // This log is INTENTIONAL; do not remove
+                    console.log(`Report ${ report.code }:`, report);
+
                     if (report.rankedCharacters) {
-                        reportCharacters = [...reportCharacters, ...report.rankedCharacters.map(character => character.name)];
+                        for (const [key, rankedCharacter] of Object.entries(report.rankedCharacters)) {
+                            // Duplicate prevention
+                            if (!reportCharacters.find(reportCharacter => reportCharacter[0] === rankedCharacter.name)) {
+                                // Doing it this way so that I can sort it later...
+                                // If it were a pure object, I wouldn't be able to sort it.
+                                reportCharacters.push([(rankedCharacter.name ? rankedCharacter.name : 'unknown'), rankedCharacter]);
+                            }
+                        }
                     }
                     message += `<ul class="mt-3">
                         <li class="font-weight-bold">
                             ${ report.title }
                         </li>
                         <li>
-                            ${ report.rankedCharacters ? `${ report.rankedCharacters.length } characters` : `0 characters <span class="small text-muted font-weight-normal">(blame WCL)</span>` }
+                            ${ report.rankedCharacters ? `${ report.rankedCharacters.length } characters` : `0 characters` }
                         </li>
                         ${ report.endTime ? `<li class="small text-muted font-weight-normal">${ moment.utc(report.endTime).local().format("ddd, MMM Do YYYY @ h:mm a") }</li>` : '' }
                         ${ report.zone && report.zone.name ? `<li class="small text-muted font-weight-normal">${ report.zone.name }</li>` : `` }
@@ -163,29 +173,33 @@ function addWarcraftlogsAttendees() {
                     </ul>`;
                 }
 
-                // Remove duplicates
-                reportCharacters = [...new Set(reportCharacters)];
+                // Sort by name
+                reportCharacters.sort(function (a, b) { return a[0] > b[0]; });
 
                 // Add the characters to the raid
-                reportCharacters.sort().forEach(function (reportCharacter) {
-                    character = characters.find(character => character.slug === reportCharacter.toLowerCase());
+                reportCharacters.forEach(function (reportCharacter) {
+                    // 0 is name, 1 is the actual object we got from WCL
+                    reportCharacter = reportCharacter[1];
+                    let character = characters.find(character => character.name === reportCharacter.name);
                     if (character) {
                         addCharacter(character.id);
                         addedCount++;
-                        foundCharacters = [...foundCharacters, character.name];
+                        foundCharactersHtml = [...foundCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
                     } else {
-                        missingCharacters = [...missingCharacters, reportCharacter];
+                        missingCharactersHtml = [...missingCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
                     }
+                    i++;
                 });
 
                 // Report on who we added and who we couldn't add
                 message += `<ul>
                     <li>${ addedCount } attendees added</li>
-                    ${ reportCharacters.length && foundCharacters ? `<li class="text-white"><span class="font-weight-bold">Successful:</span> ${ foundCharacters.sort().join(', ')}</li>` : `` }
-                    ${ reportCharacters.length && missingCharacters ? `<li class="text-white"><span class="font-weight-bold">Not found:</span> ${ missingCharacters.sort().join(', ')}</li><li class="text-white">To add these characters, add them to the guild and reload this page</li>` : `` }
+                    ${ foundCharactersHtml.length ? `<li class="text-white"><span class="font-weight-bold">Successful:</span> ${ foundCharactersHtml.join(', ')}</li>` : `` }
+                    ${ missingCharactersHtml.length ? `<li class="text-white"><span class="font-weight-bold">Not found:</span> ${ missingCharactersHtml.join(', ')}</li><li class="text-white">To add these characters, add them to the guild and reload this page</li>` : `` }
                 </ul>`;
 
                 $(".js-warcraftlogs-attendees-message").html(message).show();
+                addTooltips();
             }
         },
         error: function (data) {
@@ -227,6 +241,11 @@ function fillCharactersFromRaid(raidGroupId) {
 // Hack to get the slider's labels to refresh: https://github.com/seiyria/bootstrap-slider/issues/396#issuecomment-310415503
 function fixSliderLabels() {
     window.dispatchEvent(new Event('resize'));
+}
+
+// Pass in a Warcraftlogs Character, get back a pretty format for their name
+function getWarcraftlogsCharacterHtml(character) {
+    return `<span class="text-${ character.classID && WARCRAFTLOGS_CLASSES[character.classID] ? WARCRAFTLOGS_CLASSES[character.classID].slug : '' }" title="${ character.classID && WARCRAFTLOGS_CLASSES[character.classID] ? WARCRAFTLOGS_CLASSES[character.classID].name : '' }">${ character.name }</span>`;
 }
 
 // Reset and empty the attendee list.

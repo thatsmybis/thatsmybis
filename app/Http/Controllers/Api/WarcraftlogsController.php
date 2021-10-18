@@ -65,7 +65,7 @@ class WarcraftlogsController extends \App\Http\Controllers\Controller
 
         $reports = $this->getReportsWithAttendees(request()->input('codes'), $guild);
 
-        return response()->json($reports, 200);
+        return response()->json($reports, 200, ['Content-Type' => 'application/json;charset=UTF-8', 'Charset' => 'utf-8'], JSON_UNESCAPED_UNICODE);
     }
 
     /**

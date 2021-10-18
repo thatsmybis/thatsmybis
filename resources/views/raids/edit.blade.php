@@ -237,7 +237,7 @@
                                                 <span class="fas fa-fw fa-file-import"></span>
                                                 {{ __("Import Characters from Warcraft Logs") }}
                                             </span>
-                                            <div class="js-warcraftlogs-attendees-message text-warning" style="display:none;">
+                                            <div class="js-warcraftlogs-attendees-message text-warning mt-2" style="display:none;">
                                             </div>
                                             @include('partials/loadingBars', ['loadingBarId' => 'warcraftlogsLoadingbar'])
                                         @else
