@@ -71,6 +71,12 @@ Translation files are exported using [kkomelin/laravel-translatable-string-expor
 - Use `php artisan translatable:export cn,da,de,en,es,fr,it,ko,no,pl,pt,ru` to update the translation files with all of the strings that the parser can find.
 - For getting people to translate stuff, I've just been putting the translation files up in Google Sheets and giving people edit access, then importing it back into the repo (some parsing required).
 
+## Warcraft Logs
+
+Guilds may connect a Warcraft Logs account to their guild. They may also specify a Warcraft Logs Guild ID to associate with their TMB guild.
+
+Within the code in this repo "Warcraft Logs" is written as one word: `warcraftlogs`, `Warcraftlogs`, or `WARCRAFTLOGS` depending on the context.
+
 ### phpredis Installation
 
 #### Option 1

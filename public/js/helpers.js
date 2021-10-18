@@ -545,7 +545,7 @@ function trackTimestamps(rate = timestampCheckRate) {
         if (timestamp < 1000000000000) {
             timestamp = timestamp * 1000;
         }
-        let format = ($(this).data("format") ? $(this).data("format") : "dddd, MMMM Do YYYY, h:mm a");
+        let format = ($(this).data("format") ? $(this).data("format") : "ddd, MMM Do YYYY @ h:mm a");
         let since  = moment.utc(timestamp).local().format(format);
         if ($(this).is("abbr")) {
             $(this).prop("title", since);
@@ -561,7 +561,7 @@ function trackTimestamps(rate = timestampCheckRate) {
         if (timestamp < 1000000000000) {
             timestamp = timestamp * 1000;
         }
-        let time = moment.utc(timestamp).local().format("dddd, MMMM Do YYYY, h:mm a");
+        let time = moment.utc(timestamp).local().format("ddd, MMM Do YYYY @ h:mm a");
         if (title) {
             $(this).prop("title", (title + ' ' + time));
         } else {
