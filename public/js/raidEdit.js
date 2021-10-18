@@ -157,11 +157,11 @@ function addWarcraftlogsAttendees() {
                         <li>
                             ${ report.rankedCharacters ? `${ report.rankedCharacters.length } characters` : `0 characters <span class="small text-muted font-weight-normal">(blame WCL)</span>` }
                         </li>
-                        <li class="small text-muted font-weight-normal">
-                            ${ report.code }
-                        </li>
                         ${ report.endTime ? `<li class="small text-muted font-weight-normal">${ moment.utc(report.endTime).local().format("ddd, MMM Do YYYY @ h:mm a") }</li>` : '' }
                         ${ report.zone && report.zone.name ? `<li class="small text-muted font-weight-normal">${ report.zone.name }</li>` : `` }
+                        <li class="small text-muted font-weight-normal">
+                            ID ${ report.code }
+                        </li>
                     </ul>`;
                 }
 
