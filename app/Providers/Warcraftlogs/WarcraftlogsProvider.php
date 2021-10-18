@@ -59,7 +59,7 @@ class WarcraftlogsProvider extends AbstractProvider {
     protected function getUserByToken($token)
     {
         $response = $this->getHttpClient()->get(
-            'https://www.warcraftlogs.com/api/v2/user', // TODO: This might be the wrong URL
+            'https://www.warcraftlogs.com/api/v2/user',
             [
                 'headers' => [
                     'Authorization' => 'Bearer ' . $token,
