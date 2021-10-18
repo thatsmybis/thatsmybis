@@ -171,10 +171,22 @@ function addItemListSelectHandler() {
 
                 // Populate the ID
                 $nextInput.val(value);
-                $nextInput.siblings().find(".js-input-label").first().html(" " + label)
+
+                $displayLabel = $nextInput.siblings().find(".js-input-label").first();
+                if ($displayLabel.length) {
+                    $displayLabel.html(" " + label)
                     // Remove any previous colours that might have been on this
                     .removeClass(function (index, className) { return (className.match (/(^|\s)text-\S+/g) || []).join(' '); })
                     .addClass(cssClass);
+                } else {
+                    // Sometimes it's different? (go to parent)
+                    $nextInput.parent().find(".js-input-label").first().html(" " + label)
+                        // Remove any previous colours that might have been on this
+                        .removeClass(function (index, className) { return (className.match (/(^|\s)text-\S+/g) || []).join(' '); })
+                        .addClass(cssClass);
+                }
+
+
                 // Populate the label
                 $label = $nextInput.next("input").first();
                 $label.val(label);
