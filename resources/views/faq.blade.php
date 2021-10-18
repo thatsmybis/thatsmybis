@@ -186,7 +186,7 @@
             <div class="mt-5 mb-5">
                 <h2 id="privacy">What information do you collect?</h2>
                 <p>
-                    TL;DR Your Discord username, ID, avatar ID, and roles for any servers you register/join. Since this project is open source, you can review the data I collect <a href="https://github.com/thatsmybis/thatsmybis/blob/master/app/Http/Controllers/Auth/LoginController.php#L91" target="_blank">right here</a> and <a href="https://github.com/thatsmybis/thatsmybis/blob/master/app/Http/Controllers/Auth/LoginController.php#L45" target="_blank">here</a>.
+                    TL;DR Your Discord username, ID, avatar ID, and roles for any servers you register/join. Since this project's source code is public, you can review the data I collect <a href="https://github.com/thatsmybis/thatsmybis/blob/master/app/Http/Controllers/Auth/LoginController.php#L91" target="_blank">right here</a> and <a href="https://github.com/thatsmybis/thatsmybis/blob/master/app/Http/Controllers/Auth/LoginController.php#L45" target="_blank">here</a>.
                 </p>
                 <p>
                     Your username and ID are so I can verify it's you when you're logging in. Roles are so I can give you the proper permissions in your guild if you're a raider, raid leader, officer, or guild master.

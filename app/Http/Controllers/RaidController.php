@@ -11,9 +11,10 @@ use Kodeine\Acl\Models\Eloquent\Permission;
 
 class RaidController extends Controller
 {
-    const MAX_CHARACTERS = 160;
-    const MAX_INSTANCES  = 4;
-    const MAX_RAID_GROUPS = 4;
+    const MAX_CHARACTERS   = 160;
+    const MAX_INSTANCES    = 4;
+    const MAX_LOGS         = 4;
+    const MAX_RAID_GROUPS  = 4;
     const RESULTS_PER_PAGE = 20;
 
     /**
@@ -221,6 +222,7 @@ class RaidController extends Controller
             'instances'       => $instances,
             'maxCharacters'   => self::MAX_CHARACTERS,
             'maxInstances'    => self::MAX_INSTANCES,
+            'maxLogs'         => self::MAX_LOGS,
             'maxRaidGroups'   => self::MAX_RAID_GROUPS,
             'originalRaid'    => $originalRaid,
             'raid'            => $raid,

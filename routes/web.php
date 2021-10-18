@@ -43,6 +43,8 @@ Route::group(['prefix' => 'auth'], function () {
     // Discord sign-in
     Route::get('/discord',          'Auth\LoginController@redirectToDiscord')->name('discordLogin');
     Route::get('/discord/callback', 'Auth\LoginController@handleDiscordCallback');
+
+    Route::get('/warcraftlogs/callback', 'Auth\WarcraftlogsController@handleWarcraftlogsCallback');
 });
 
 Route::group(['prefix' => 'loot', 'middleware' => ['seeUser']], function () {
@@ -176,8 +178,11 @@ Route::group([
     Route::get( '/roles',     'RoleController@roles')    ->name('guild.roles');
     Route::get( '/syncRoles', 'RoleController@syncRoles')->name('guild.syncRoles');
 
-    Route::get( '/settings', 'GuildController@settings')      ->name('guild.settings');
-    Route::post('/settings', 'GuildController@submitSettings')->name('guild.submitSettings');
+    Route::group(['prefix' => 'settings'], function () {
+        Route::get( '/', 'GuildController@settings')      ->name('guild.settings');
+        Route::post('/', 'GuildController@submitSettings')->name('guild.submitSettings');
+        Route::get('/warcraftlogs', 'Auth\WarcraftlogsController@redirectToWarcraftlogs')->name('warcraftlogsAuth');
+    });
 
     Route::get( '/change-owner', 'GuildController@owner')      ->name('guild.owner');
     Route::post('/change-owner', 'GuildController@submitOwner')->name('guild.submitOwner');
