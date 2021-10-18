@@ -173,7 +173,7 @@
                     </li>
                     @if ($showPrios)
                         <li class="list-inline-item bg-lightest rounded p-3 mt-3 align-top">
-                            @if (!$item->parent_id && $item->itemSources->count())
+                            @if ($item->itemSources->count())
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <h2 class="font-weight-bold mb-3">
