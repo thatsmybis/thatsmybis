@@ -18,17 +18,7 @@ class WarcraftlogsController extends \App\Http\Controllers\Controller
     public function __construct()
     {
         $this->middleware([
-            // We need access to the session.
-            // \App\Http\Middleware\EncryptCookies::class,
-            // \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            // \Illuminate\Session\Middleware\StartSession::class,
-            // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
-            // \App\Http\Middleware\VerifyCsrfToken::class,
-
-            \App\Http\Middleware\EncryptCookies::class,
-            \Illuminate\Session\Middleware\StartSession::class,
-            // \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
-            // \Illuminate\View\Middleware\ShareErrorsFromSession::class,
+            //
         ]);
     }
 
