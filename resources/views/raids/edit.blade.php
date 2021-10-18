@@ -232,12 +232,23 @@
                                                     style="" />
                                             </div>
                                         @endfor
-                                        @if (request()->get('isAdmin'))
-                                            <span class="text-danger">ADMIN ONLY - still in development</span>
-                                            <span id="addWarcraftlogsAttendees" class="btn btn-success">{{ __("Load characters from logs") }}</span>
+                                        @if ($guild->warcraftlogs_token)
+                                            <span id="addWarcraftlogsAttendees" class="btn btn-success">
+                                                <span class="fas fa-fw fa-file-import"></span>
+                                                {{ __("Import Characters from Warcraft Logs") }}
+                                            </span>
                                             <div class="js-warcraftlogs-attendees-message text-warning" style="display:none;">
                                             </div>
-                                            @include('partials/loadingBars', ['loadingBarId' => ''])
+                                            @include('partials/loadingBars', ['loadingBarId' => 'warcraftlogsLoadingbar'])
+                                        @else
+                                            <span class="disabled btn btn-success">
+                                                <span class="fas fa-fw fa-file-import"></span>
+                                                {{ __("Import Attendees from Warcraft Logs") }}
+                                            </span>
+                                            <br>
+                                            <span class="small text-warning font-weight-normal">
+                                                {!! __('<a href=":link" target="_blank">Connect</a> a Warcraft Logs account', ['link' => route('warcraftlogsAuth', ['guildId' => $guild->id, 'guildSlug' => $guild->slug])]) !!}
+                                            </span>
                                         @endif
                                     @endif
                                 </div>
@@ -314,6 +325,7 @@
                         <ul class="list-inline">
                             <li class="list-inline-item">
                                 <h2 class="font-weight-medium ">
+                                    <span class="fas fa-fw fa-users text-muted"></span>
                                     {{ __("Attendees") }}
                                 </h2>
                             </li>
@@ -326,259 +338,262 @@
 
                 <div class="row">
                     <div class="col-12 mt-3 mb-3 bg-light rounded numbered-start">
-                        @for ($i = 0; $i < $maxCharacters; $i++)
-                            @php
-                                $characterId = 'characters.' . $i . '.id';
-                                $character = $raid && $raid->characters->slice($i, 1)->count() ? $raid->characters->slice($i, 1)->first() : null;
+                        @include('partials/loadingBars', ['loadingBarId' => 'attendeesLoadingbar'])
+                        <fieldset>
+                            @for ($i = 0; $i < $maxCharacters; $i++)
+                                @php
+                                    $characterId = 'characters.' . $i . '.id';
+                                    $character = $raid && $raid->characters->slice($i, 1)->count() ? $raid->characters->slice($i, 1)->first() : null;
 
-                                $hide = false;
+                                    $hide = false;
 
-                                if ($i > 2) {
-                                    if (old($characterId) && old($characterId) == null) {
-                                        $hide = true;
-                                    } else if (!old($characterId) && !$character) {
-                                        $hide = true;
+                                    if ($i > 2) {
+                                        if (old($characterId) && old($characterId) == null) {
+                                            $hide = true;
+                                        } else if (!old($characterId) && !$character) {
+                                            $hide = true;
+                                        }
                                     }
-                                }
-                            @endphp
+                                @endphp
 
-                            <div class="js-row row striped-light pb-0 {{ $i == 0 ? 'pt-3' : 'pt-0' }} rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $hide ? 'display:none;' : '' }}">
+                                <div class="js-row row striped-light pb-0 {{ $i == 0 ? 'pt-3' : 'pt-0' }} rounded {{ $i > 2 ? 'js-hide-empty' : '' }}" style="{{ $hide ? 'display:none;' : '' }}">
 
-                                <!-- Exempt -->
-                                <div class="col-lg-1 col-2 {{ $errors->has('characters.' . $i . '.is_exempt') ? 'text-danger font-weight-bold' : '' }}">
-                                    <div class="form-group mb-1 text-center">
-                                        <label for="characters[{{ $i }}][is_exempt]">
-                                            @if ($i == 0)
-                                                <span class="fas fa-fw fa-times text-muted"></span>
-                                                <span class="font-weight-bold">
-                                                    {{ __("Excused") }}
-                                                </span>
-                                            @else
-                                                <span class="small text-muted">
-                                                    {{ __("excused") }}
-                                                </span>
-                                            @endif
-                                        </label>
-                                        <div class="checkbox numbered text-muted">
-                                            <label title="skip this character's attendance check">
-                                                <input data-index="{{ $i }}" class="js-attendance-skip" type="checkbox" name="characters[{{ $i }}][is_exempt]" value="1" autocomplete="off"
-                                                    {{ old('characters.' . $i . '.is_exempt') && old('characters.' . $i . '.is_exempt') == 1  ? 'checked' : (!old('characters.' . $i . '.is_exempt') && $character && $character->pivot->is_exempt ? 'checked' : '') }}>
+                                    <!-- Exempt -->
+                                    <div class="col-lg-1 col-2 {{ $errors->has('characters.' . $i . '.is_exempt') ? 'text-danger font-weight-bold' : '' }}">
+                                        <div class="form-group mb-1 text-center">
+                                            <label for="characters[{{ $i }}][is_exempt]">
+                                                @if ($i == 0)
+                                                    <span class="fas fa-fw fa-times text-muted"></span>
+                                                    <span class="font-weight-bold">
+                                                        {{ __("Excused") }}
+                                                    </span>
+                                                @else
+                                                    <span class="small text-muted">
+                                                        {{ __("excused") }}
+                                                    </span>
+                                                @endif
                                             </label>
+                                            <div class="checkbox numbered text-muted">
+                                                <label title="skip this character's attendance check">
+                                                    <input data-index="{{ $i }}" class="js-attendance-skip" type="checkbox" name="characters[{{ $i }}][is_exempt]" value="1" autocomplete="off"
+                                                        {{ old('characters.' . $i . '.is_exempt') && old('characters.' . $i . '.is_exempt') == 1  ? 'checked' : (!old('characters.' . $i . '.is_exempt') && $character && $character->pivot->is_exempt ? 'checked' : '') }}>
+                                                </label>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
 
-                                <div class="col-lg-11 col-10">
-                                    <div class="row">
-                                        <!-- Character dropdown -->
-                                        <div class="col-xl-5 col-lg-5 col-sm-6 col-12">
-                                            <div class="form-group mb-1 {{ $errors->has('characters.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
+                                    <div class="col-lg-11 col-10">
+                                        <div class="row">
+                                            <!-- Character dropdown -->
+                                            <div class="col-xl-5 col-lg-5 col-sm-6 col-12">
+                                                <div class="form-group mb-1 {{ $errors->has('characters.' . $i . '.character_id') ? 'text-danger font-weight-bold' : '' }}">
 
-                                                <label for="characters[{{ $i }}][character_id]" class="font-weight-bold">
-                                                    @if ($i == 0)
-                                                        <span class="fas fa-fw fa-user text-muted"></span>
-                                                        {{ __("Character") }}
-                                                    @else
-                                                        <span class="sr-only">
+                                                    <label for="characters[{{ $i }}][character_id]" class="font-weight-bold">
+                                                        @if ($i == 0)
+                                                            <span class="fas fa-fw fa-user text-muted"></span>
                                                             {{ __("Character") }}
-                                                        </span>
-                                                    @endif
-                                                </label>
-
-                                                @php
-                                                    $oldCharacterId = old('characters.' . $i . '.character_id') ? old('characters.' . $i . '.character_id') : (!old('characters.' . $i . '.character_id') && $character ? $character->pivot->character_id : '');
-                                                    if ($oldCharacterId) {
-                                                        // Select the correct option
-                                                        $options = str_replace('hack="' . $oldCharacterId . '"', 'selected', $characterSelectOptions);
-                                                    } else {
-                                                        $options = $characterSelectOptions;
-                                                    }
-                                                 @endphp
-
-                                                <select name="characters[{{ $i }}][character_id]" class="js-show-next-character form-control dark
-                                                    {{ $errors->has('characters.' . $i . '.character_id') ? 'form-danger' : '' }}
-                                                    {{ $hide ? '' : 'selectpicker' }}"
-                                                    data-live-search="true"
-                                                    autocomplete="off">
-                                                    <option value="">
-                                                        —
-                                                    </option>
-
-                                                    {{-- See the notes at the top for why the options look like this --}}
-                                                    @if ($oldCharacterId)
-                                                         {!! $options !!}
-                                                    @else
-                                                        {!! $characterSelectOptions !!}
-                                                    @endif
-                                                </select>
-
-                                                @if ($errors->has('characters.' . $i))
-                                                    <div class="'text-danger font-weight-bold'">
-                                                        {{ $errors->first('characters.' . $i) }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <!-- Remarks dropdown -->
-                                        <div class="col-lg-4 col-sm-6 col-12">
-                                            <div class="form-group mb-1 {{ $errors->has('characters.' . $i . '.remark_id') ? 'text-danger font-weight-bold' : '' }}">
-
-                                                <div class="d-flex justify-content-between">
-                                                    <div>
-                                                        <label for="characters[{{ $i }}][remark_id]" class="font-weight-bold full-width">
-                                                            @if ($i == 0)
-                                                                <span class="fas fa-fw fa-quote-left text-muted"></span>
-                                                                {{ __("Note") }}
-                                                            @else
-                                                                <span class="sr-only">
-                                                                    {{ __("Note") }}
-                                                                </span>
-                                                            @endif
-                                                        </label>
-                                                    </div>
-                                                    <div>
-                                                        <span data-index="{{ $i }}" class="js-show-notes text-link cursor-pointer font-weight-light">+ {{ __("custom note") }}</span>
-                                                    </div>
-                                                </div>
-
-                                                <select name="characters[{{ $i }}][remark_id]" class="form-control dark {{ $errors->has('characters.' . $i . '.remark_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
-                                                    <option value="">
-                                                        —
-                                                    </option>
-
-                                                    {{-- See the notes at the top for why the options look like this --}}
-                                                    @if (old('characters.' . $i . '.remark_id') || $character)
-                                                        @php
-                                                            $oldRemark = old('characters.' . $i . '.remark_id') ? old('characters.' . $i . '.remark_id') : (!old('characters.' . $i . '.remark_id') && $character ? $character->pivot->remark_id : '');
-                                                            if ($oldRemark) {
-                                                                // Select the correct option
-                                                                $options = str_replace('hack="' . $oldRemark . '"', 'selected', $remarkSelectOptions);
-                                                            } else {
-                                                                $options = $remarkSelectOptions;
-                                                            }
-                                                         @endphp
-                                                         {!! $options !!}
-                                                    @else
-                                                        {!! $remarkSelectOptions !!}
-                                                    @endif
-                                                </select>
-
-                                                @if ($errors->has('characters.' . $i))
-                                                    <div class="'text-danger font-weight-bold'">
-                                                        {{ $errors->first('characters.' . $i) }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <!-- Credit slider -->
-                                        <div class="col-lg-3 col-sm-6 col-12">
-                                            <div class="form-group mb-1 text-center {{ $errors->has('characters.' . $i . '.credit') ? 'text-danger font-weight-bold' : '' }}">
-
-                                                <label for="characters[{{ $i }}][credit]" class="font-weight-bold">
-                                                    @if ($i == 0)
-                                                        <span class="fas fa-fw fa-user-chart text-muted"></span>
-                                                        {{ __("Attendance Credit") }}
-                                                    @else
-                                                        <span class="sr-only">
-                                                            {{ __("Attendance Credit") }}
-                                                        </span>
-                                                    @endif
-                                                </label>
-
-                                                <div data-attendance-input="{{ $i }}" class="small text-muted {{ $errors->has('characters.' . $i . '.credit') ? 'form-danger' : '' }}">
-                                                    <input type="text"
-                                                        name="characters[{{ $i }}][credit]"
-                                                        autocomplete="off"
-                                                        data-provide="slider"
-                                                        data-slider-ticks="[0.0, 0.25, 0.5, 0.75, 1.0]"
-                                                        data-slider-ticks-labels='["0%", "25%", "50%", "75%", "100%"]'
-                                                        data-slider-min="0"
-                                                        data-slider-max="1"
-                                                        data-slider-step="0.25"
-                                                        data-slider-value="{{ old('characters.' . $i . '.credit') ? old('characters.' . $i . '.credit') : (! old('characters.' . $i . '.credit') && $character ? $character->pivot->credit : 1) }}"
-                                                        data-slider-tooltip="hide" />
-                                                </div>
-                                                <div data-attendance-skip-note="{{ $i }}" class="text-warning" style="display:none;">
-                                                    {{ __("Attendance skipped - this won't count against their overall attendance") }}
-                                                </div>
-
-                                                @if ($errors->has('characters.' . $i))
-                                                    <div class="'text-danger font-weight-bold'">
-                                                        {{ $errors->first('characters.' . $i) }}
-                                                    </div>
-                                                @endif
-                                            </div>
-                                        </div>
-
-                                        <div data-index="{{ $i }}" class="js-notes col-12 mb-3"
-                                            style="{{ old('characters.' . $i . '.public_note') || old('characters.' . $i . '.officer_note') || ($character && ($character->pivot->public_note || $character->pivot->officer_note)) ? '' : 'display:none' }};">
-                                            <div class="row">
-                                                <!-- Note -->
-                                                <div class="js-note col-lg-6 col-12">
-                                                    <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.public_note') ? 'text-danger font-weight-bold' : '' }}">
-
-                                                        <label for="characters[{{ $i }}][public_note]" class="font-weight-bold">
-                                                            @if ($i == 0)
-                                                                <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
-                                                                {{ __("Custom Note") }}
-                                                            @else
-                                                                &nbsp;
-                                                                <span class="sr-only">
-                                                                    {{ __("Custom Note") }}
-                                                                </span>
-                                                            @endif
-                                                        </label>
-                                                        <input name="characters[{{ $i }}][public_note]" maxlength="250" data-max-length="250" type="text" placeholder="{{ __('brief public note') }}"
-                                                            class="form-control dark {{ $errors->has('characters.' . $i . '.public_note') ? 'form-danger' : '' }}" autocomplete="off"
-                                                            value="{{ old('characters.' . $i . '.public_note') ? old('characters.' . $i . '.public_note') : (!old('characters.' . $i . '.public_note') && $character ? $character->pivot->public_note : '') }}">
-                                                    </div>
-                                                </div>
-
-                                                <!-- Officer Note -->
-                                                <div class="js-note col-lg-6 col-12">
-                                                    <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.officer_note') ? 'text-danger font-weight-bold' : '' }}">
-
-                                                        <label for="characters[{{ $i }}][officer_note]" class="font-weight-bold">
-                                                            @if ($i == 0)
-                                                                <span class="fas fa-fw fa-shield text-muted"></span>
-                                                                {{ __("Officer Note") }}
-                                                            @else
-                                                                &nbsp;
-                                                                <span class="sr-only">
-                                                                    {{ __("Optional Officer Note") }}
-                                                                </span>
-                                                            @endif
-                                                        </label>
-                                                        @if (isStreamerMode())
-                                                            <div class="mt-2">
-                                                                {{ __("Officer note is hidden in streamer mode") }}
-                                                            </div>
+                                                        @else
+                                                            <span class="sr-only">
+                                                                {{ __("Character") }}
+                                                            </span>
                                                         @endif
-                                                        <input name="characters[{{ $i }}][officer_note]" maxlength="250" data-max-length="250" type="text" placeholder="{{ __('officer note') }}"
-                                                            class="form-control dark {{ $errors->has('characters.' . $i . '.officer_note') ? 'form-danger' : '' }}" autocomplete="off"
-                                                            style="{{ isStreamerMode() ? 'display:none;' : '' }}"
-                                                            value="{{ old('characters.' . $i . '.officer_note') ? old('characters.' . $i . '.officer_note') : (!old('characters.' . $i . '.officer_note') && $character ? $character->pivot->officer_note : '') }}">
+                                                    </label>
+
+                                                    @php
+                                                        $oldCharacterId = old('characters.' . $i . '.character_id') ? old('characters.' . $i . '.character_id') : (!old('characters.' . $i . '.character_id') && $character ? $character->pivot->character_id : '');
+                                                        if ($oldCharacterId) {
+                                                            // Select the correct option
+                                                            $options = str_replace('hack="' . $oldCharacterId . '"', 'selected', $characterSelectOptions);
+                                                        } else {
+                                                            $options = $characterSelectOptions;
+                                                        }
+                                                     @endphp
+
+                                                    <select name="characters[{{ $i }}][character_id]" class="js-show-next-character form-control dark
+                                                        {{ $errors->has('characters.' . $i . '.character_id') ? 'form-danger' : '' }}
+                                                        {{ $hide ? '' : 'selectpicker' }}"
+                                                        data-live-search="true"
+                                                        autocomplete="off">
+                                                        <option value="">
+                                                            —
+                                                        </option>
+
+                                                        {{-- See the notes at the top for why the options look like this --}}
+                                                        @if ($oldCharacterId)
+                                                             {!! $options !!}
+                                                        @else
+                                                            {!! $characterSelectOptions !!}
+                                                        @endif
+                                                    </select>
+
+                                                    @if ($errors->has('characters.' . $i))
+                                                        <div class="'text-danger font-weight-bold'">
+                                                            {{ $errors->first('characters.' . $i) }}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <!-- Remarks dropdown -->
+                                            <div class="col-lg-4 col-sm-6 col-12">
+                                                <div class="form-group mb-1 {{ $errors->has('characters.' . $i . '.remark_id') ? 'text-danger font-weight-bold' : '' }}">
+
+                                                    <div class="d-flex justify-content-between">
+                                                        <div>
+                                                            <label for="characters[{{ $i }}][remark_id]" class="font-weight-bold full-width">
+                                                                @if ($i == 0)
+                                                                    <span class="fas fa-fw fa-quote-left text-muted"></span>
+                                                                    {{ __("Note") }}
+                                                                @else
+                                                                    <span class="sr-only">
+                                                                        {{ __("Note") }}
+                                                                    </span>
+                                                                @endif
+                                                            </label>
+                                                        </div>
+                                                        <div>
+                                                            <span data-index="{{ $i }}" class="js-show-notes text-link cursor-pointer font-weight-light">+ {{ __("custom note") }}</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <select name="characters[{{ $i }}][remark_id]" class="form-control dark {{ $errors->has('characters.' . $i . '.remark_id') ? 'form-danger' : '' }}" data-live-search="true" autocomplete="off">
+                                                        <option value="">
+                                                            —
+                                                        </option>
+
+                                                        {{-- See the notes at the top for why the options look like this --}}
+                                                        @if (old('characters.' . $i . '.remark_id') || $character)
+                                                            @php
+                                                                $oldRemark = old('characters.' . $i . '.remark_id') ? old('characters.' . $i . '.remark_id') : (!old('characters.' . $i . '.remark_id') && $character ? $character->pivot->remark_id : '');
+                                                                if ($oldRemark) {
+                                                                    // Select the correct option
+                                                                    $options = str_replace('hack="' . $oldRemark . '"', 'selected', $remarkSelectOptions);
+                                                                } else {
+                                                                    $options = $remarkSelectOptions;
+                                                                }
+                                                             @endphp
+                                                             {!! $options !!}
+                                                        @else
+                                                            {!! $remarkSelectOptions !!}
+                                                        @endif
+                                                    </select>
+
+                                                    @if ($errors->has('characters.' . $i))
+                                                        <div class="'text-danger font-weight-bold'">
+                                                            {{ $errors->first('characters.' . $i) }}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <!-- Credit slider -->
+                                            <div class="col-lg-3 col-sm-6 col-12">
+                                                <div class="form-group mb-1 text-center {{ $errors->has('characters.' . $i . '.credit') ? 'text-danger font-weight-bold' : '' }}">
+
+                                                    <label for="characters[{{ $i }}][credit]" class="font-weight-bold">
+                                                        @if ($i == 0)
+                                                            <span class="fas fa-fw fa-user-chart text-muted"></span>
+                                                            {{ __("Attendance Credit") }}
+                                                        @else
+                                                            <span class="sr-only">
+                                                                {{ __("Attendance Credit") }}
+                                                            </span>
+                                                        @endif
+                                                    </label>
+
+                                                    <div data-attendance-input="{{ $i }}" class="small text-muted {{ $errors->has('characters.' . $i . '.credit') ? 'form-danger' : '' }}">
+                                                        <input type="text"
+                                                            name="characters[{{ $i }}][credit]"
+                                                            autocomplete="off"
+                                                            data-provide="slider"
+                                                            data-slider-ticks="[0.0, 0.25, 0.5, 0.75, 1.0]"
+                                                            data-slider-ticks-labels='["0%", "25%", "50%", "75%", "100%"]'
+                                                            data-slider-min="0"
+                                                            data-slider-max="1"
+                                                            data-slider-step="0.25"
+                                                            data-slider-value="{{ old('characters.' . $i . '.credit') ? old('characters.' . $i . '.credit') : (! old('characters.' . $i . '.credit') && $character ? $character->pivot->credit : 1) }}"
+                                                            data-slider-tooltip="hide" />
+                                                    </div>
+                                                    <div data-attendance-skip-note="{{ $i }}" class="text-warning" style="display:none;">
+                                                        {{ __("Attendance skipped - this won't count against their overall attendance") }}
+                                                    </div>
+
+                                                    @if ($errors->has('characters.' . $i))
+                                                        <div class="'text-danger font-weight-bold'">
+                                                            {{ $errors->first('characters.' . $i) }}
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <div data-index="{{ $i }}" class="js-notes col-12 mb-3"
+                                                style="{{ old('characters.' . $i . '.public_note') || old('characters.' . $i . '.officer_note') || ($character && ($character->pivot->public_note || $character->pivot->officer_note)) ? '' : 'display:none' }};">
+                                                <div class="row">
+                                                    <!-- Note -->
+                                                    <div class="js-note col-lg-6 col-12">
+                                                        <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.public_note') ? 'text-danger font-weight-bold' : '' }}">
+
+                                                            <label for="characters[{{ $i }}][public_note]" class="font-weight-bold">
+                                                                @if ($i == 0)
+                                                                    <span class="fas fa-fw fa-comment-alt-lines text-muted"></span>
+                                                                    {{ __("Custom Note") }}
+                                                                @else
+                                                                    &nbsp;
+                                                                    <span class="sr-only">
+                                                                        {{ __("Custom Note") }}
+                                                                    </span>
+                                                                @endif
+                                                            </label>
+                                                            <input name="characters[{{ $i }}][public_note]" maxlength="250" data-max-length="250" type="text" placeholder="{{ __('brief public note') }}"
+                                                                class="form-control dark {{ $errors->has('characters.' . $i . '.public_note') ? 'form-danger' : '' }}" autocomplete="off"
+                                                                value="{{ old('characters.' . $i . '.public_note') ? old('characters.' . $i . '.public_note') : (!old('characters.' . $i . '.public_note') && $character ? $character->pivot->public_note : '') }}">
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Officer Note -->
+                                                    <div class="js-note col-lg-6 col-12">
+                                                        <div class="form-group mb-0 {{ $errors->has('characters.' . $i . '.officer_note') ? 'text-danger font-weight-bold' : '' }}">
+
+                                                            <label for="characters[{{ $i }}][officer_note]" class="font-weight-bold">
+                                                                @if ($i == 0)
+                                                                    <span class="fas fa-fw fa-shield text-muted"></span>
+                                                                    {{ __("Officer Note") }}
+                                                                @else
+                                                                    &nbsp;
+                                                                    <span class="sr-only">
+                                                                        {{ __("Optional Officer Note") }}
+                                                                    </span>
+                                                                @endif
+                                                            </label>
+                                                            @if (isStreamerMode())
+                                                                <div class="mt-2">
+                                                                    {{ __("Officer note is hidden in streamer mode") }}
+                                                                </div>
+                                                            @endif
+                                                            <input name="characters[{{ $i }}][officer_note]" maxlength="250" data-max-length="250" type="text" placeholder="{{ __('officer note') }}"
+                                                                class="form-control dark {{ $errors->has('characters.' . $i . '.officer_note') ? 'form-danger' : '' }}" autocomplete="off"
+                                                                style="{{ isStreamerMode() ? 'display:none;' : '' }}"
+                                                                value="{{ old('characters.' . $i . '.officer_note') ? old('characters.' . $i . '.officer_note') : (!old('characters.' . $i . '.officer_note') && $character ? $character->pivot->officer_note : '') }}">
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
 
-                                        @if ($i == $maxCharacters - 1)
-                                            <div class="col-12 mt-3 text-danger font-weight-bold">
-                                                {{ __("Max characters added") }}
-                                            </div>
-                                        @endif
+                                            @if ($i == $maxCharacters - 1)
+                                                <div class="col-12 mt-3 text-danger font-weight-bold">
+                                                    {{ __("Max characters added") }}
+                                                </div>
+                                            @endif
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        @endfor
+                            @endfor
+                        </fieldset>
                     </div>
                 </div>
 
                 <div class="form-group">
-                    <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ $raid && !$copy ? __('Update') : __('Create') }}</button>
+                    <button id="submit" class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ $raid && !$copy ? __('Update') : __('Create') }}</button>
                 </div>
             </form>
         </div>
