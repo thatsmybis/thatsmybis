@@ -1,6 +1,18 @@
-$(document).ready(function() {
-    var firstLoad = true;
+var firstLoad = true;
 
+// For some reason I was having issue with [value=''] in jQuery actually getting empty inputs...
+// So I am doing this instead.
+var characterLoadIndex = 0;
+
+$(document).ready(function() {
+    $(".js-character").click(function () {
+        $(this).next(".js-character").first().show();
+    });
+    $(".js-character").change(function () {
+        if (!firstLoad) {
+            $(this).next(".js-character").first().show();
+        }
+    });
 
     // When a class is selected, enable+show relevant specs and disabled+hide irrelevant specs
     $(".js-class").change(function () {
@@ -39,5 +51,40 @@ $(document).ready(function() {
         }
     }).change();
 
+    $("#addWarcraftlogsCharacters").click(function () {
+        if (confirm("This WILL OVERWRITE any existing inputs in this form. Continue?")) {
+            $(".js-name").val("");
+            $(".js-class").val("");
+            $(".js-archetype").val("");
+            $(".js-spec-label").val("");
+            $(".js-spec").val("");
+            characterLoadIndex = 0;
+            getWarcraftlogsRankedCharacters(addCharacter, 'getNew');
+            characterLoadIndex = 0;
+        }
+    });
+
+    // If the page loads and the browser autocompletes hidden inputs... show them.
+    $('.js-name').each(function () {
+        $(this).val() ? $(this).click() : null;
+    });
+
+    addInputAntiSubmitHandler();
+
     firstLoad = false;
 });
+
+// Load character name and spec (if available) into inputs.
+// Starts at first input and increases. Will overwrite existing values.
+function addCharacter(character) {
+    if (character.name) {
+        let classSlug = ucfirst(character.classID && WARCRAFTLOGS_CLASSES[character.classID] ? WARCRAFTLOGS_CLASSES[character.classID].slug : '');
+        $('.js-name').get(characterLoadIndex).value = character.name;
+        $('.js-name').get(characterLoadIndex).click();
+        if (classSlug) {
+            $('.js-class').get(characterLoadIndex).value = classSlug;
+            $('.js-class').get(characterLoadIndex).click();
+        }
+        characterLoadIndex++;
+    }
+}

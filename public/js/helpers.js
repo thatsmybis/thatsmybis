@@ -617,6 +617,10 @@ function trackTimestamps(rate = timestampCheckRate) {
     }, rate);
 }
 
+function ucfirst(string) {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+}
+
 /**
  * Warn a user before leaving the page if the given element has changed.
  */

@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class CharacterController extends Controller
 {
     const MAX_RAID_GROUPS = 30;
-    const MAX_CREATE_CHARACTERS_AT_ONCE = 10;
+    const MAX_CREATE_CHARACTERS_AT_ONCE = 15;
 
     /**
      * Create a new controller instance.
@@ -24,6 +24,7 @@ class CharacterController extends Controller
         $this->middleware(['auth', 'seeUser']);
     }
 
+    // These are more-or-less duplicated in submitCreateMany(). That one takes an array of characters.
     private function getValidationRules($guild) {
         return [
             'member_id'     => 'nullable|integer|exists:members,id',
@@ -387,6 +388,7 @@ class CharacterController extends Controller
         }
 
         $guild->load([
+            'characters',
             'members',
             'raidGroups',
             'raidGroups.role',
@@ -399,8 +401,104 @@ class CharacterController extends Controller
             'editRaidGroups' => true,
             'guild'          => $guild,
             'maxCharacters'  => self::MAX_CREATE_CHARACTERS_AT_ONCE,
-            'maxRaidGroups'  => self::MAX_RAID_GROUPS,
+            'maxRaidGroups'  => 4, // Default is more than is needed on this page
         ]);
+    }
+
+    /**
+     * Create many a character
+     * @return
+     */
+    public function submitCreateMany($guildId, $guildSlug) {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        // Validate
+        $validationRules = [
+            'character.*.member_id'     => 'nullable|integer|exists:members,id',
+            'character.*.name'          => 'nullable|string|min:2|max:32',
+            'character.*.name'          => [
+                'required',
+                'string',
+                'min:2',
+                'max:32',
+                Rule::unique('characters')->where('guild_id', $guild->id),
+            ],
+            'character.*.level'         => 'nullable|integer|min:1|max:' . $guild->getMaxLevel(),
+            'character.*.race'          => ['nullable', 'string', Rule::in(array_keys(Character::races($guild->expansion_id)))],
+            'character.*.class'         => ['nullable', 'string', Rule::in(array_keys(Character::classes($guild->expansion_id)))],
+            'character.*.spec'          => ['nullable', 'string', Rule::in(array_keys(Character::specs($guild->expansion_id)))],
+            'character.*.spec_label'    => 'nullable|string|min:1|max:50',
+            'character.*.archetype'     => ['nullable', 'string', Rule::in(array_keys(Character::archetypes()))],
+            'character.*.profession_1'  => ['nullable', 'string', 'different:profession_2', Rule::in(array_keys(Character::professions($guild->expansion_id)))],
+            'character.*.profession_2'  => ['nullable', 'string', 'different:profession_1', Rule::in(array_keys(Character::professions($guild->expansion_id)))],
+            'character.*.rank'          => 'nullable|integer|min:1|max:14',
+            'character.*.rank_goal'     => 'nullable|integer|min:1|max:14',
+            'character.*.raid_group_id' => [
+                'nullable',
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
+            ],
+            'character.*.raid_groups.*' => [
+                'nullable',
+                'integer',
+                Rule::exists('raid_groups', 'id')->where('raid_groups.guild_id', $guild->id),
+            ],
+            'character.*.public_note'   => 'nullable|string|max:140',
+            'character.*.officer_note'  => 'nullable|string|max:140',
+            'character.*.personal_note' => 'nullable|string|max:2000',
+            'character.*.order'         => 'nullable|integer|min:0|max:50',
+            'character.*.inactive_at'   => 'nullable|boolean',
+        ];
+
+        $validationMessages = [];
+
+        $this->validate(request(), $validationRules, $validationMessages);
+
+        $characters = [];
+
+dd(request()->all(), request()->input('characters'));
+
+        // start
+
+        $createValues['name']         = request()->input('name');
+        $createValues['slug']         = slug(request()->input('name'));
+        $createValues['level']        = request()->input('level');
+        $createValues['race']         = request()->input('race');
+        $createValues['class']        = request()->input('class');
+        $createValues['spec']         = request()->input('spec');
+        $createValues['spec_label']   = request()->input('spec_label');
+        $createValues['archetype']    = request()->input('archetype');
+        $createValues['profession_1'] = request()->input('profession_1');
+        $createValues['profession_2'] = request()->input('profession_2');
+        $createValues['rank']         = request()->input('rank');
+        $createValues['rank_goal']    = request()->input('rank_goal');
+        $createValues['public_note']  = request()->input('public_note');
+        $createValues['officer_note'] = request()->input('officer_note');
+        $createValues['is_alt']       = (request()->input('is_alt') == "1" ? true : false);
+        $createValues['guild_id']     = $guild->id;
+
+        $createValues['raid_group_id'] = request()->input('raid_group_id');
+
+        // end
+
+        Character::insert($characters);
+
+        foreach ($characters as $character) {
+            AuditLog::create([
+                'description'  => $currentMember->username . ' created a character',
+                'member_id'    => $currentMember->id,
+                'guild_id'     => $guild->id,
+                'character_id' => $character->id,
+            ]);
+        }
+// TODO get raid groups for specific character
+        foreach ($characters as $character) {
+            $character->secondaryRaidGroups()->sync(array_unique(array_filter(request()->input('raid_groups'))));
+        }
+
+        request()->session()->flash('status', __('Successfully created :count characters.', ['count' => count(characters)]));
+        return redirect()->route('character.showCreateMany', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
     /**
