@@ -34,6 +34,7 @@ mix.options({
 mix .babel('public/js/assignLoot.js',          'public/js/processed/assignLoot.js')
     .babel('public/js/autocomplete.js',        'public/js/processed/autocomplete.js')
     .babel('public/js/characterEdit.js',       'public/js/processed/characterEdit.js')
+    .babel('public/js/clickToCopy.js',         'public/js/processed/clickToCopy.js')
     .babel('public/js/guildSettings.js',       'public/js/processed/guildSettings.js')
     .babel('public/js/helpers.js',             'public/js/processed/helpers.js')
     .babel('public/js/itemList.js',            'public/js/processed/itemList.js')
@@ -43,7 +44,7 @@ mix .babel('public/js/assignLoot.js',          'public/js/processed/assignLoot.j
     .babel('public/js/raidGroupCharacters.js', 'public/js/processed/raidGroupCharacters.js')
     .babel('public/js/roster.js',              'public/js/processed/roster.js')
     .babel('public/js/rosterStats.js',         'public/js/processed/rosterStats.js')
-    .babel('public/js/clickToCopy.js',         'public/js/processed/clickToCopy.js')
+    .babel('public/js/warcraftlogs.js',        'public/js/processed/warcraftlogs.js')
 
     .styles(['public/css/main.css'], 'public/css/processed/main.css')
     .styles(['public/css/floatyDots.css'], 'public/css/processed/floatyDots.css');

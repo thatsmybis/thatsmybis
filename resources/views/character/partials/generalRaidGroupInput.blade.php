@@ -10,7 +10,7 @@
 @endif
 <div class="form-group">
     @if ($editRaidGroups)
-        <select name="raid_groups" class="js-input-select form-control dark selectpicker" autocomplete="off">
+        <select name="raid_groups" class="js-input-select form-control dark selectpicker">
             <option value="" selected>
                 {{ isset($hideLabel) && $hideLabel ? $hideLabel : '—' }}
             </option>
@@ -30,7 +30,6 @@
                     style="{{ old($oldPrefix . 'raid_groups.' . $j) || ($character && $character->secondaryRaidGroups->get($j)) ? '' : 'display:none;' }}">
                     <input type="checkbox" checked
                         name="{{ isset($name) && $name ? $name : 'raid_groups' }}[{{ $j }}]"
-
                         value="{{ old($oldPrefix . 'raid_groups.' . $j) ? old($oldPrefix . 'raid_groups.' . $j) : ($character && $character->secondaryRaidGroups->get($j) ? $character->secondaryRaidGroups->get($j)->id : '') }}"
                         class="js-input-item"
                         style="display:none;">

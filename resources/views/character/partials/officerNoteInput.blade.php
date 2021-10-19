@@ -10,5 +10,5 @@
 @if (isStreamerMode())
     {{ __("Hidden in streamer mode") }}
 @else
-    <textarea maxlength="140" data-max-length="140" name="{{ isset($name) && $name ? $name : 'officer_note' }}" rows="2" placeholder="{{ isset($hideLabel) && $hideLabel ? $hideLabel : __('only officers can see this') }}" class="form-control dark">{{ $oldValue ? $oldValue : ($character ? $character->officer_note : '') }}</textarea>
+    <textarea maxlength="140" data-max-length="140" name="{{ isset($name) && $name ? $name : 'officer_note' }}" rows="1" placeholder="{{ isset($hideLabel) && $hideLabel ? $hideLabel : __('only officers can see this') }}" class="form-control dark">{{ $oldValue ? $oldValue : ($character ? $character->officer_note : '') }}</textarea>
 @endif

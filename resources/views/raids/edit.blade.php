@@ -607,5 +607,6 @@
     var date  = '{{ $date }}';
     var guild = {!! $guild->toJson() !!};
 </script>
+<script src="{{ loadScript('warcraftlogs.js') }}"></script>
 <script src="{{ loadScript('raidEdit.js') }}"></script>
 @endsection

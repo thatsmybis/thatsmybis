@@ -50,7 +50,7 @@ $(document).ready(function () {
     });
 
     $("#addWarcraftlogsAttendees").click(function () {
-        addWarcraftlogsAttendees();
+        getWarcraftlogsRankedCharacters(addCharacter, 'getExisting');
     });
 
     $(".js-show-notes").click(function () {
@@ -80,7 +80,8 @@ $(document).ready(function () {
     fixSliderLabels();
 });
 
-function addCharacter(characterId) {
+function addCharacter(character) {
+    const characterId = character.id;
     let isAdded = false;
     const existing = findExistingCharacter(characterId);
     if (!existing.length) {
@@ -98,113 +99,6 @@ function addCharacter(characterId) {
         $(row).find("[name^=characters][name$=\\[credit\\]]").bootstrapSlider('setValue', 1);
     }
     return isAdded;
-}
-
-function addWarcraftlogsAttendees() {
-    let logs = $("[name^=logs]:visible");
-
-    let validCodes = [];
-
-    // Extract report codes from the URLs
-    logs.each(function () {
-        if ($(this).val()) {
-            log = new URL($(this).val());
-            log.pathname.split('/').forEach(function (pathPart) {
-                // 16 characters looks valid enough to go from here...
-                if (pathPart.length === 16) {
-                    validCodes.push(pathPart);
-                }
-            });
-        }
-    });
-
-    $(".js-warcraftlogs-attendees-loading-spinner").show();
-    $("#warcraftlogsLoadingbar").addClass("d-flex").show();
-
-    // Request characters
-    $.ajax({
-        method: "get",
-        data: {
-            codes: validCodes,
-            guild_id: guild.id
-        },
-        dataType: "json",
-        url: "/api/warcraftlogs/attendees",
-        success: function (data) {
-            $("#warcraftlogsLoadingbar").removeClass("d-flex").hide();
-            if (data.length <= 0) {
-                $(".js-warcraftlogs-attendees-message").html('No attendance data found').show();
-                setTimeout(() => $(".js-warcraftlogs-attendees-message").hide(), 7500);
-            } else {
-                let reportCharacters = [];
-                let foundCharactersHtml = [];
-                let missingCharactersHtml = [];
-                let addedCount = 0;
-                let alreadyAddedCount = 0;
-
-                // Report on the data we got back, and compile a list of the characters
-                let message = `Received the following from Warcraft Logs:`;
-                for (const [key, report] of Object.entries(data)) {
-                    // This log is INTENTIONAL; do not remove
-                    console.log(`Report ${ report.code }:`, report);
-
-                    if (report.rankedCharacters) {
-                        for (const [key, rankedCharacter] of Object.entries(report.rankedCharacters)) {
-                            // Duplicate prevention
-                            if (!reportCharacters.find(reportCharacter => reportCharacter[0] === rankedCharacter.name)) {
-                                // Doing it this way so that I can sort it later...
-                                // If it were a pure object, I wouldn't be able to sort it.
-                                reportCharacters.push([(rankedCharacter.name ? rankedCharacter.name : 'unknown'), rankedCharacter]);
-                            }
-                        }
-                    }
-                    message += `<ul class="mt-3">
-                        <li class="font-weight-bold">
-                            ${ report.title }
-                        </li>
-                        <li>
-                            ${ report.rankedCharacters ? `${ report.rankedCharacters.length } characters` : `0 characters` }
-                        </li>
-                        ${ report.endTime ? `<li class="small text-muted font-weight-normal">${ moment.utc(report.endTime).local().format("ddd, MMM Do YYYY @ h:mm a") }</li>` : '' }
-                        ${ report.zone && report.zone.name ? `<li class="small text-muted font-weight-normal">${ report.zone.name }</li>` : `` }
-                        <li class="small text-muted font-weight-normal">
-                            ID ${ report.code }
-                        </li>
-                    </ul>`;
-                }
-
-                // Sort by name
-                reportCharacters.sort(function (a, b) { return a[0] > b[0]; });
-
-                // Add the characters to the raid
-                reportCharacters.forEach(function (reportCharacter) {
-                    // 0 is name, 1 is the actual object we got from WCL
-                    reportCharacter = reportCharacter[1];
-                    let character = characters.find(character => character.name === reportCharacter.name);
-                    if (character) {
-                        addCharacter(character.id);
-                        addedCount++;
-                        foundCharactersHtml = [...foundCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
-                    } else {
-                        missingCharactersHtml = [...missingCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
-                    }
-                    i++;
-                });
-
-                // Report on who we added and who we couldn't add
-                message += `<ul>
-                    <li>${ addedCount } attendees added</li>
-                    ${ foundCharactersHtml.length ? `<li class="text-white"><span class="font-weight-bold">Successful:</span> ${ foundCharactersHtml.join(', ')}</li>` : `` }
-                    ${ missingCharactersHtml.length ? `<li class="text-white"><span class="font-weight-bold">Not found:</span> ${ missingCharactersHtml.join(', ')}</li><li class="text-white">To add these characters, add them to the guild and reload this page</li>` : `` }
-                </ul>`;
-
-                $(".js-warcraftlogs-attendees-message").html(message).show();
-                addTooltips();
-            }
-        },
-        error: function (data) {
-        }
-    });
 }
 
 function findExistingCharacter(characterId, except = null) {
@@ -230,7 +124,7 @@ function fillCharactersFromRaid(raidGroupId) {
     let addedCount = 0;
 
     for (const character of raidGroupCharacters) {
-        addCharacter(character.id);
+        addCharacter(character);
         addedCount++;
     }
 
@@ -241,11 +135,6 @@ function fillCharactersFromRaid(raidGroupId) {
 // Hack to get the slider's labels to refresh: https://github.com/seiyria/bootstrap-slider/issues/396#issuecomment-310415503
 function fixSliderLabels() {
     window.dispatchEvent(new Event('resize'));
-}
-
-// Pass in a Warcraftlogs Character, get back a pretty format for their name
-function getWarcraftlogsCharacterHtml(character) {
-    return `<span class="text-${ character.classID && WARCRAFTLOGS_CLASSES[character.classID] ? WARCRAFTLOGS_CLASSES[character.classID].slug : '' }" title="${ character.classID && WARCRAFTLOGS_CLASSES[character.classID] ? WARCRAFTLOGS_CLASSES[character.classID].name : '' }">${ character.name }</span>`;
 }
 
 // Reset and empty the attendee list.
