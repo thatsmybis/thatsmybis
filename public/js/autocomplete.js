@@ -186,7 +186,6 @@ function addItemListSelectHandler() {
                         .addClass(cssClass);
                 }
 
-
                 // Populate the label
                 $label = $nextInput.next("input").first();
                 $label.val(label);

@@ -372,7 +372,7 @@ class CharacterController extends Controller
     }
 
     /**
-     * Show a character for editing
+     * Show a the page for creating a bunch of characters
      *
      * @return \Illuminate\Http\Response
      */
