@@ -1,38 +1,41 @@
 $(document).ready(function() {
     var firstLoad = true;
 
+
     // When a class is selected, enable+show relevant specs and disabled+hide irrelevant specs
-    $("[name=class]").change(function () {
+    $(".js-class").change(function () {
+        const index = $(this).data('index');
         const className = $(this).val();
         if (className) {
-            const oldClassName = $("[name=spec] option:selected").data("class");
+            const oldClassName = $(`.js-spec[data-index=${index}] option:selected`).data("class");
 
             // Class name changed; reset spec to unselected
             if (!firstLoad && oldClassName != className) {
-                $("[name=spec]").val("");
+                $(`.js-spec[data-index=${index}]`).val("");
             }
 
-            $("[name=spec]").prop("disabled", false);
-            $("[name=spec] option").prop("disabled", false).show();
-            $("[name=spec] option").not("[value='']").not("[data-class='" + className + "']").prop("disabled", true).hide();
+            $(`.js-spec[data-index=${index}]`).prop("disabled", false);
+            $(`.js-spec[data-index=${index}] option`).prop("disabled", false).show();
+            $(`.js-spec[data-index=${index}] option`).not("[value='']").not("[data-class='" + className + "']").prop("disabled", true).hide();
 
-            $("[name=spec_label]").prop("disabled", false);
+            $(`.js-spec-label[data-index=${index}]`).prop("disabled", false);
         } else {
-            $("[name=spec]").val("");
-            $("[name=spec]").prop("disabled", true);
-            $("[name=spec_label]").val("");
-            $("[name=spec_label]").prop("disabled", true);
+            $(`.js-spec[data-index=${index}]`).val("");
+            $(`.js-spec[data-index=${index}]`).prop("disabled", true);
+            $(`.js-spec-label[data-index=${index}]`).val("");
+            $(`.js-spec-label[data-index=${index}]`).prop("disabled", true);
         }
     }).change();
 
     // Ensure current archetype makes sense for current selection
-    $("[name=spec]").change(function () {
-        const oldArchetype = $("[name=archetype]").val();
+    $(`.js-spec`).change(function () {
+        const index = $(this).data("index");
+        const oldArchetype = $(`.js-archetype[data-index=${index}]`).val();
         const newArchetype = $(this).find(":selected").data('archetype');
 
         if (!firstLoad && newArchetype && oldArchetype != newArchetype) {
-            $("[name=archetype]").val(newArchetype);
-            flashElement($("[name=archetype]"));
+            $(`.js-archetype[data-index=${index}]`).val(newArchetype);
+            flashElement($(`.js-archetype[data-index=${index}]`));
         }
     }).change();
 

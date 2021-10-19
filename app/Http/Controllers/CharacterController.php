@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\DB;
 
 class CharacterController extends Controller
 {
-    const MAX_RAID_GROUPS    = 30;
+    const MAX_RAID_GROUPS = 30;
+    const MAX_CREATE_CHARACTERS_AT_ONCE = 10;
 
     /**
      * Create a new controller instance.
@@ -112,7 +113,7 @@ class CharacterController extends Controller
         $createValues['race']          = request()->input('race');
         $createValues['class']         = request()->input('class');
         $createValues['spec']          = request()->input('spec');
-        $updateValues['spec_label']    = request()->input('spec_label');
+        $createValues['spec_label']    = request()->input('spec_label');
         $createValues['archetype']     = request()->input('archetype');
         $createValues['profession_1']  = request()->input('profession_1');
         $createValues['profession_2']  = request()->input('profession_2');
@@ -360,13 +361,45 @@ class CharacterController extends Controller
         ]);
 
         return view('character.edit', [
-            'character'     => null,
-            'createMore'    => $createMore,
-            'currentMember' => $currentMember,
+            'character'      => null,
+            'createMore'     => $createMore,
+            'currentMember'  => $currentMember,
             'editRaidGroups' => (!$guild->is_raid_group_locked || $currentMember->hasPermission('edit.raids')),
-            'guild'         => $guild,
-            'memberId'      => $memberId,
-            'maxRaidGroups' => self::MAX_RAID_GROUPS,
+            'guild'          => $guild,
+            'memberId'       => $memberId,
+            'maxRaidGroups'  => self::MAX_RAID_GROUPS,
+        ]);
+    }
+
+    /**
+     * Show a character for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showCreateMany($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        if (!$currentMember->hasPermission('edit.characters')) {
+            request()->session()->flash('status', __("You don't have permissions to do that."));
+            return redirect()->back();
+        }
+
+        $guild->load([
+            'members',
+            'raidGroups',
+            'raidGroups.role',
+            'allRaidGroups',
+            'allRaidGroups.role',
+        ]);
+
+        return view('character.massEdit', [
+            'currentMember'  => $currentMember,
+            'editRaidGroups' => true,
+            'guild'          => $guild,
+            'maxCharacters'  => self::MAX_CREATE_CHARACTERS_AT_ONCE,
+            'maxRaidGroups'  => self::MAX_RAID_GROUPS,
         ]);
     }
 

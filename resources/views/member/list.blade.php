@@ -66,7 +66,7 @@
                                         });
                                         $attendancePercentage = $raidCount > 0 ? ($raidsAttended / $raidCount) : 100;
                                     @endphp
-                                    @include('member/partials/listMember', [ 'attendancePercentage' => $attendancePercentage, 'raidCount' => $raidCount, 'tag' => 1])
+                                    @include('member/partials/listMember', [ 'attendancePercentage' => $attendancePercentage, 'raidCount' => $raidCount, 'tag' => true, 'maxWidth' => true])
                                 </td>
                                 <td>
                                     <ul class="list-inline">
