@@ -1,4 +1,4 @@
-<ul class="no-indent no-bullet {{ isset($tag) && $tag ? 'tag rounded' : '' }}">
+<ul class="no-indent no-bullet {{ isset($tag) && $tag ? 'tag rounded' : '' }} {{ isset($maxWidth) && $maxWidth ? 'w-100' : '' }}">
     <li>
         <div class="dropdown">
             @if ($member->user_id == $guild->user_id)
