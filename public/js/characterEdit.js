@@ -79,11 +79,11 @@ $(document).ready(function() {
 function addCharacter(character) {
     if (character.name) {
         let classSlug = ucfirst(character.classID && WARCRAFTLOGS_CLASSES[character.classID] ? WARCRAFTLOGS_CLASSES[character.classID].slug : '');
-        $('.js-name').get(characterLoadIndex).value = character.name;
-        $('.js-name').get(characterLoadIndex).click();
+        $('.js-name').eq(characterLoadIndex).val(character.name);
+        $('.js-name').eq(characterLoadIndex).change();
         if (classSlug) {
-            $('.js-class').get(characterLoadIndex).value = classSlug;
-            $('.js-class').get(characterLoadIndex).click();
+            $('.js-class').eq(characterLoadIndex).val(classSlug);
+            $('.js-class').eq(characterLoadIndex).change();
         }
         characterLoadIndex++;
     }
