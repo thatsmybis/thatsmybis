@@ -10,7 +10,7 @@
 @endif
 <div class="form-group">
     @if ($editRaidGroups)
-        <select name="raid_groups" class="js-input-select form-control dark selectpicker">
+        <select name="" class="js-input-select form-control dark selectpicker">
             <option value="" selected>
                 {{ isset($hideLabel) && $hideLabel ? $hideLabel : '—' }}
             </option>

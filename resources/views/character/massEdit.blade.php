@@ -86,7 +86,7 @@
                     </div>
                 </div>
 
-                <input hidden name="id" value="{{ $character ? $character->id : '' }}" />
+                <input hidden name="characters[{{ $i }}][id]" value="{{ $character ? $character->id : '' }}" />
 
                 <div class="row mt-3 mb-3 pt-3 bg-light rounded">
                     <div class="col-md-3 col-sm-6 col-12">
@@ -171,7 +171,7 @@
                                 'character' => $character,
                                 'oldValue'  => (old('character.' . $i . '.spec_label') ? old('character.' . $i . '.spec_label') : null),
                                 'hideLabel' => __("Spec Label"),
-                                'name'      => "characters[{$i}]spec_label]",
+                                'name'      => "characters[{$i}][spec_label]",
                                 'index'     => $i,
                             ])
                         </div>
