@@ -61,23 +61,11 @@ $(document).ready( function () {
     });
 
     $(".js-hide-strikethrough-items").click(function() {
-        if (strikethroughVisible) {
-            strikethroughVisible = false;
-            hideStrikethroughItems();
-        } else {
-            strikethroughVisible = true;
-            showStrikethroughItems();
-        }
+        toggleStrikethroughItems();
     });
 
     $(".js-hide-offspec-items").click(function() {
-        if (offspecVisible) {
-            offspecVisible = false;
-            hideOffspecItems();
-        } else {
-            offspecVisible = true;
-            showOffspecItems();
-        }
+        toggleOffspecItems();
     });
 
     // Dungeon multiselect could get stuck if clicked too soon
@@ -105,82 +93,86 @@ function createTable() {
         columns   : [
             {
                 title  : `<span class="fas fa-fw fa-user"></span> ${headerCharacter} <span class="text-muted small">(${characters.length})</span>`,
-                data   : "character",
-                render : function (data, type, row) {
-                    return `
-                    <ul class="no-bullet no-indent mb-2">
-                        <li>
-                            <div class="dropdown text-${ row.class ? row.class.toLowerCase() : '' }">
-                                <a class="dropdown-toggle text-4 font-weight-bold text-${ row.class ? row.class.toLowerCase() : '' }"
-                                    id="character${ row.id }Dropdown"
-                                    role="button"
-                                    data-toggle="dropdown"
-                                    aria-haspopup="true"
-                                    aria-expanded="false"
-                                    title="${ row.username ? row.username : '' }">
-                                    ${ row.name }
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="character${ row.id }Dropdown">
-                                    <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }">Profile</a>
-                                    <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/audit-log?character_id=${ row.id }">History</a>
-                                    ${ showEdit ?
-                                        `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/edit">Edit</a>
-                                        <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/loot">Wishlist & Loot</a>`
+                data   : "name",
+                render : {
+                    _: function (data, type, row) {
+                        return `
+                        <ul class="no-bullet no-indent mb-2">
+                            <li>
+                                <div class="dropdown text-${ row.class ? row.class.toLowerCase() : '' }">
+                                    <a class="dropdown-toggle text-4 font-weight-bold text-${ row.class ? row.class.toLowerCase() : '' }"
+                                        id="character${ row.id }Dropdown"
+                                        role="button"
+                                        data-toggle="dropdown"
+                                        aria-haspopup="true"
+                                        aria-expanded="false"
+                                        title="${ row.username ? row.username : '' }">
+                                        ${ row.name }
+                                    </a>
+                                    <div class="dropdown-menu" aria-labelledby="character${ row.id }Dropdown">
+                                        <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }">Profile</a>
+                                        <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/audit-log?character_id=${ row.id }">History</a>
+                                        ${ showEdit ?
+                                            `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/edit">Edit</a>
+                                            <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/loot">Wishlist & Loot</a>`
+                                            : `` }
+                                        ${ row.member_id ?
+                                            `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.username ? row.username.toLowerCase() : 'view member' }">${ row.username ? row.username : 'view member' }</a>`
                                         : `` }
-                                    ${ row.member_id ?
-                                        `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.username ? row.username.toLowerCase() : 'view member' }">${ row.username ? row.username : 'view member' }</a>`
-                                    : `` }
+                                    </div>
                                 </div>
-                            </div>
-                        </li>
-                        ${ row.is_alt || row.raid_group_name || row.class ? `
-                            <li>
-                                ${ row.is_alt ? `
-                                    <span class="text-warning font-weight-bold">${localeAlt}</span>&nbsp;
-                                ` : '' }
-                                ${ row.raid_group_name ? `
-                                    <span class="font-weight-bold d-inline tag">
-                                        <span class="role-circle" style="background-color:${ getColorFromDec(parseInt(row.raid_group_color)) }"></span>
-                                        ${ row.raid_group_name ? row.raid_group_name : '' }
-                                    </span>&nbsp;
-                                ` : ``}
-                                ${ row.class ? row.class : '' }
-                            </li>` : `` }
+                            </li>
+                            ${ row.is_alt || row.raid_group_name || row.class ? `
+                                <li>
+                                    ${ row.is_alt ? `
+                                        <span class="text-warning font-weight-bold">${localeAlt}</span>&nbsp;
+                                    ` : '' }
+                                    ${ row.raid_group_name ? `
+                                        <span class="font-weight-bold d-inline tag">
+                                            <span class="role-circle" style="background-color:${ getColorFromDec(parseInt(row.raid_group_color)) }"></span>
+                                            ${ row.raid_group_name ? row.raid_group_name : '' }
+                                        </span>&nbsp;
+                                    ` : ``}
+                                    ${ row.class ? row.class : '' }
+                                </li>` : `` }
 
-                        ${ !guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count || row.benched_count) ?
-                            `<li>
-                                <ul class="list-inline">
-                                    ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<li class="list-inline-item ${ getAttendanceColor(row.attendance_percentage) }" title="attendance">${ Math.round(row.attendance_percentage * 100) }%</li>` : '' }
-                                    ${ row.raid_count ? `<li class="list-inline-item small text-muted">${ row.raid_count }r</li>` : ``}
-                                    ${ row.benched_count ? `<li class="list-inline-item small text-muted">benched ${ row.benched_count }x</li>` : ``}
-                                </ul>
-                            </li>` : `` }
+                            ${ !guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count || row.benched_count) ?
+                                `<li>
+                                    <ul class="list-inline">
+                                        ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<li class="list-inline-item ${ getAttendanceColor(row.attendance_percentage) }" title="attendance">${ Math.round(row.attendance_percentage * 100) }%</li>` : '' }
+                                        ${ row.raid_count ? `<li class="list-inline-item small text-muted">${ row.raid_count }r</li>` : ``}
+                                        ${ row.benched_count ? `<li class="list-inline-item small text-muted">benched ${ row.benched_count }x</li>` : ``}
+                                    </ul>
+                                </li>` : `` }
 
-                        ${ row.level || row.race || row.spec ? `
-                            <li>
-                                <span class="small text-muted">
-                                    ${ row.level ? row.level : '' }
-                                    <span class="font-weight-bold">
-                                        ${ row.race  ? row.race : '' }
-                                        ${ row.spec_label ? row.spec_label : (row.spec ? row.spec : '') }
+                            ${ row.level || row.race || row.spec ? `
+                                <li>
+                                    <span class="small text-muted">
+                                        ${ row.level ? row.level : '' }
+                                        <span class="font-weight-bold">
+                                            ${ row.race  ? row.race : '' }
+                                            ${ row.spec_label ? row.spec_label : (row.spec ? row.spec : '') }
+                                        </span>
                                     </span>
-                                </span>
-                            </li>` : `` }
+                                </li>` : `` }
 
-                        ${ row.rank || row.profession_1 || row.profession_2 ? `
-                            <li>
-                                <span class="small text-muted">
-                                    ${ row.rank         ? 'Rank ' + row.rank + (row.profession_1 || row.profession_2 ? ',' : '') : '' }
-                                    ${ row.profession_1 ? row.profession_1 + (row.profession_2 ? ',' : '') : '' }
-                                    ${ row.profession_2 ? row.profession_2 : '' }
-                                </span>
-                            </li>` : `` }
-                        ${ showEdit ?
-                            `
-                            ${ row.is_received_unlocked ? `<li class="list-inline-item small text-warning" title="To lock, edit the member that owns this character">loot unlocked</li>` : `` }
-                            ${ row.is_wishlist_unlocked ? `<li class="list-inline-item small text-warning" title="To lock, edit the member that owns this character">wishlist unlocked</li>` : `` }
-                            ` : `` }
-                    </ul>`;
+                            ${ row.rank || row.profession_1 || row.profession_2 ? `
+                                <li>
+                                    <span class="small text-muted">
+                                        ${ row.rank         ? 'Rank ' + row.rank + (row.profession_1 || row.profession_2 ? ',' : '') : '' }
+                                        ${ row.profession_1 ? row.profession_1 + (row.profession_2 ? ',' : '') : '' }
+                                        ${ row.profession_2 ? row.profession_2 : '' }
+                                    </span>
+                                </li>` : `` }
+                            ${ showEdit ?
+                                `
+                                ${ row.is_received_unlocked ? `<li class="list-inline-item small text-warning" title="To lock, edit the member that owns this character">loot unlocked</li>` : `` }
+                                ${ row.is_wishlist_unlocked ? `<li class="list-inline-item small text-warning" title="To lock, edit the member that owns this character">wishlist unlocked</li>` : `` }
+                                ` : `` }
+                        </ul>`;
+                    },
+                    // Sort by the value in data; not the render
+                    sort: function (data, type, row) {return data;},
                 },
                 visible : true,
                 width   : "250px",
@@ -436,6 +428,7 @@ function createTable() {
                             }
 
                             column.search(val ? val : '', true, false).draw();
+
                         }).change();
                     }
                 }
@@ -512,6 +505,9 @@ function addInstanceFilterHandlers() {
             $(".js-show-clipped-items").show();
             $(".js-hide-clipped-items").hide();
         }
+
+        reapplyStrikethroughItemsFilter();
+        reapplyOffspecItemsFilter();
     });
 }
 
@@ -652,6 +648,42 @@ function showStrikethroughItems() {
     $("[data-type='wishlist']:not(.js-clipped-item)").children(".font-strikethrough").parent().show();
 }
 
+function reapplyStrikethroughItemsFilter() {
+    if (strikethroughVisible) {
+        showStrikethroughItems();
+    } else {
+        hideStrikethroughItems();
+    }
+}
+function reapplyOffspecItemsFilter() {
+    if (offspecVisible) {
+        showOffspecItems();
+    } else {
+        hideOffspecItems();
+    }
+}
+
+function toggleStrikethroughItems() {
+    if (strikethroughVisible) {
+        strikethroughVisible = false;
+        hideStrikethroughItems();
+    } else {
+        strikethroughVisible = true;
+        showStrikethroughItems();
+    }
+}
+
+function toggleOffspecItems() {
+    if (offspecVisible) {
+        offspecVisible = false;
+        hideOffspecItems();
+    } else {
+        offspecVisible = true;
+        showOffspecItems();
+    }
+}
+
+
 function resetItemVisibility() {
     $(".js-clipped-item").hide();
     $(".js-show-clipped-items").show();
@@ -673,9 +705,13 @@ function callRosterHandlers() {
         // We should set visibility based on the previous setting.
         if (allItemsVisible) {
             showAllItems();
+            $("#instance_filter").change();
         } else {
             resetItemVisibility();
         }
+
+        reapplyStrikethroughItemsFilter();
+        reapplyOffspecItemsFilter();
 
         addTooltips();
     }, 500); // 0.5s delay
