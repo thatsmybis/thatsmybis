@@ -457,54 +457,45 @@ class CharacterController extends Controller
 
         $characters = [];
 
-// dd(request()->all(), request()->input('characters'));
+        foreach (request()->input('characters') as $inputCharacter) {
+            if ($inputCharacter['name']) {
+                $character = new Character;
+                $character->name         = $inputCharacter['name'];
+                $character->slug         = slug($inputCharacter['name']);
+                $character->level        = array_key_exists('level', $inputCharacter)        ? $inputCharacter['level'] : null;
+                $character->race         = array_key_exists('race', $inputCharacter)         ? $inputCharacter['race'] : null;
+                $character->class        = array_key_exists('class', $inputCharacter)        ? $inputCharacter['class'] : null;
+                $character->spec         = array_key_exists('spec', $inputCharacter)         ? $inputCharacter['spec'] : null;
+                $character->spec_label   = array_key_exists('spec_label', $inputCharacter)   ? $inputCharacter['spec_label'] : null;
+                $character->archetype    = array_key_exists('archetype', $inputCharacter)    ? $inputCharacter['archetype'] : null;
+                $character->profession_1 = array_key_exists('profession_1', $inputCharacter) ? $inputCharacter['profession_1'] : null;
+                $character->profession_2 = array_key_exists('profession_2', $inputCharacter) ? $inputCharacter['profession_2'] : null;
+                $character->rank         = array_key_exists('rank', $inputCharacter)         ? $inputCharacter['rank'] : null;
+                $character->rank_goal    = array_key_exists('rank_goal', $inputCharacter)    ? $inputCharacter['rank_goal'] : null;
+                $character->public_note  = array_key_exists('public_note', $inputCharacter)  ? $inputCharacter['public_note'] : null;
+                $character->officer_note = array_key_exists('officer_note', $inputCharacter) ? $inputCharacter['officer_note'] : null;
+                $character->is_alt       = (array_key_exists('is_alt', $inputCharacter) && $inputCharacter['is_alt'] == "1" ? true : false);
+                $character->guild_id     = $guild->id;
+                $character->raid_group_id = array_key_exists('raid_group_id', $inputCharacter) ? $inputCharacter['raid_group_id'] : null;
 
-        foreach (request()->input('characters') as $character) {
-            dd($character);
-            if ($character['name']) {
-                $input = [];
-                $input['name']         = $character['name'];
-                $input['slug']         = slug($character['name']);
-                $input['level']        = array_key_exists('level', $character)        ? $character['level'] : null;
-                $input['race']         = array_key_exists('race', $character)         ? $character['race'] : null;
-                $input['class']        = array_key_exists('class', $character)        ? $character['class'] : null;
-                $input['spec']         = array_key_exists('spec', $character)         ? $character['spec'] : null;
-                $input['spec_label']   = array_key_exists('spec_label', $character)   ? $character['spec_label'] : null;
-                $input['archetype']    = array_key_exists('archetype', $character)    ? $character['archetype'] : null;
-                $input['profession_1'] = array_key_exists('profession_1', $character) ? $character['profession_1'] : null;
-                $input['profession_2'] = array_key_exists('profession_2', $character) ? $character['profession_2'] : null;
-                $input['rank']         = array_key_exists('rank', $character)         ? $character['rank'] : null;
-                $input['rank_goal']    = array_key_exists('rank_goal', $character)    ? $character['rank_goal'] : null;
-                $input['public_note']  = array_key_exists('public_note', $character)  ? $character['public_note'] : null;
-                $input['officer_note'] = array_key_exists('officer_note', $character) ? $character['officer_note'] : null;
-                $input['is_alt']       = (array_key_exists('is_alt', $character) && $character['is_alt'] == "1" ? true : false);
-                $input['guild_id']     = $guild->id;
-                $input['raid_group_id'] = array_key_exists('raid_group_id', $character) ? $character['raid_group_id'] : null;
-                $characters[] = $input;
+                $character->save();
+
+                AuditLog::create([
+                    'description'  => $currentMember->username . ' created a character',
+                    'member_id'    => $currentMember->id,
+                    'guild_id'     => $guild->id,
+                    'character_id' => $character->id,
+                ]);
+
+                if (array_key_exists('raid_groups', $inputCharacter) && count($inputCharacter['raid_groups'])) {
+                    $character->secondaryRaidGroups()->sync(array_unique(array_filter($inputCharacter['raid_groups'])));
+                }
+
+                $characters[] = $character;
             }
         }
 
-        dd($characters);
-
-        Character::insert($characters);
-
-        foreach ($characters as $character) {
-            AuditLog::create([
-                'description'  => $currentMember->username . ' created a character',
-                'member_id'    => $currentMember->id,
-                'guild_id'     => $guild->id,
-                'character_id' => $character->id,
-            ]);
-        }
-// TODO get raid groups for specific character
-        foreach ($characters as $character) {
-            if (array_key_exists('raid_groups', $character) && count($character['raid_groups']))
-                // TODO CHANGE FROM SYNC TO CREATE, AND WITHOUT HAVING THE OBJECT
-                $character->secondaryRaidGroups()->sync(array_unique(array_filter($character['raid_groups']))));
-            }
-        }
-
-        request()->session()->flash('status', __('Successfully created :count characters.', ['count' => count(characters)]));
+        request()->session()->flash('status', __('Successfully created :count characters.', ['count' => count($characters)]));
         return redirect()->route('character.showCreateMany', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]);
     }
 
