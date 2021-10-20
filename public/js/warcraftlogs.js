@@ -94,7 +94,7 @@ function getWarcraftlogsRankedCharacters(callback, mode) {
                         }
                     } else if (mode === 'getNew') {
                         if (character) {
-                            unsuccessfulCharactersHtml = [...unsuccessfulCharactersHtml, getWarcraftlogsCharacterHtml(character)];
+                            unsuccessfulCharactersHtml = [...unsuccessfulCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
                         } else {
                             callback(reportCharacter);
                             addedCount++;
