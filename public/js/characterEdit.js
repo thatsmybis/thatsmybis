@@ -51,6 +51,26 @@ $(document).ready(function() {
         }
     }).change();
 
+
+let logs = $("[name^=logs]:visible");
+
+    let validCodes = [];
+
+    // Extract report codes from the URLs
+    logs.each(function () {
+        if ($(this).val()) {
+            log = new URL($(this).val());
+            log.pathname.split('/').forEach(function (pathPart) {
+                // 16 characters looks valid enough to go from here...
+                if (pathPart.length === 16) {
+                    validCodes.push(pathPart);
+                    return;
+                }
+            });
+        }
+    });
+
+
     $("#addWarcraftlogsCharacters").click(function () {
         if (confirm("This WILL OVERWRITE any existing inputs in this form. Continue?")) {
             $(".js-name").val("");
@@ -58,8 +78,16 @@ $(document).ready(function() {
             $(".js-archetype").val("");
             $(".js-spec-label").val("");
             $(".js-spec").val("");
+
+            let input = $("[name^=logs]:visible");
+
             characterLoadIndex = 0;
-            getWarcraftlogsRankedCharacters(addCharacter, 'getNew');
+            if (input.val().includes("warcraftlogs.com")) {
+                getWarcraftlogsRankedCharacters(addCharacter, WARCRAFTLOGS_MODE_NEW);
+            } else {
+                let characters = parseCharacterList(input.val());
+                printWarcraftlogsRankedCharacters(characters, addCharacter, WARCRAFTLOGS_MODE_NEW);
+            }
             characterLoadIndex = 0;
         }
     });
@@ -77,7 +105,7 @@ $(document).ready(function() {
 // Load character name and spec (if available) into inputs.
 // Starts at first input and increases. Will overwrite existing values.
 function addCharacter(character) {
-    if (character.name) {
+    if ($('.js-name').eq(characterLoadIndex).length && character.name) {
         let classSlug = ucfirst(character.classID && WARCRAFTLOGS_CLASSES[character.classID] ? WARCRAFTLOGS_CLASSES[character.classID].slug : '');
         $('.js-name').eq(characterLoadIndex).val(character.name);
         $('.js-name').eq(characterLoadIndex).change();
@@ -86,5 +114,31 @@ function addCharacter(character) {
             $('.js-class').eq(characterLoadIndex).change();
         }
         characterLoadIndex++;
+        return true;
+    } else {
+        return false;
     }
+}
+
+function parseCharacterList(list) {
+    let parseResults = null;
+    // Auto-detect delimiter
+    parseResults = Papa.parse(list, {delimiter: ''});
+
+    // Didn't get back a list of names... try again with a space as a delimiter
+    if (parseResults.errors && parseResults.errors.length && !(parseResults.data && parseResults.data[0].length > 1)) {
+        // Try using space as the delimiter
+        parseResults = Papa.parse(list, {delimiter: ' '});
+    }
+
+    parseResults = (parseResults.data && parseResults.data[0].length > 1) ? parseResults.data[0] : [];
+
+    let characters = [];
+
+    if (parseResults.length) {
+        parseResults.forEach(function (result) {
+            characters.push([result, {name: result, classID: null}]);
+        });
+    }
+    return characters;
 }

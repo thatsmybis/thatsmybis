@@ -50,7 +50,7 @@ $(document).ready(function () {
     });
 
     $("#addWarcraftlogsAttendees").click(function () {
-        getWarcraftlogsRankedCharacters(addCharacter, 'getExisting');
+        getWarcraftlogsRankedCharacters(addCharacter, WARCRAFTLOGS_MODE_EXISTING);
     });
 
     $(".js-show-notes").click(function () {

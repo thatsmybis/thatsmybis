@@ -1,3 +1,6 @@
+const WARCRAFTLOGS_MODE_NEW = 'getNew';
+const WARCRAFTLOGS_MODE_EXISTING = 'getExisting';
+
 /**
  * @param function callback A function to execute on each character retrieved from Warcraft Logs.
  * @param string mode ['getNew', 'getExisting'] Whether we want to get characters that already exist in the guild, or ones that do not.
@@ -40,10 +43,6 @@ function getWarcraftlogsRankedCharacters(callback, mode) {
                 setTimeout(() => $(".js-warcraftlogs-attendees-message").hide(), 7500);
             } else {
                 let reportCharacters = [];
-                let successfulCharactersHtml = [];
-                let unsuccessfulCharactersHtml = [];
-                let addedCount = 0;
-                let alreadyAddedCount = 0;
 
                 // Report on the data we got back, and compile a list of the characters
                 let message = `Received the following from Warcraft Logs:`;
@@ -76,48 +75,7 @@ function getWarcraftlogsRankedCharacters(callback, mode) {
                     </ul>`;
                 }
 
-                // Sort by name
-                reportCharacters.sort(function (a, b) { return a[0] > b[0]; });
-
-                // Add the characters to the raid
-                reportCharacters.forEach(function (reportCharacter) {
-                    // 0 is name, 1 is the actual object we got from WCL
-                    reportCharacter = reportCharacter[1];
-                    let character = characters.find(character => character.name === reportCharacter.name);
-                    if (mode === 'getExisting') {
-                        if (character) {
-                            callback(character);
-                            addedCount++;
-                            successfulCharactersHtml = [...successfulCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
-                        } else {
-                            unsuccessfulCharactersHtml = [...unsuccessfulCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
-                        }
-                    } else if (mode === 'getNew') {
-                        if (character) {
-                            unsuccessfulCharactersHtml = [...unsuccessfulCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
-                        } else {
-                            callback(reportCharacter);
-                            addedCount++;
-                            successfulCharactersHtml = [...successfulCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
-                        }
-                    }
-                    i++;
-                });
-
-                // Report on who we added and who we couldn't add
-                message += `<ul>
-                    <li>${ addedCount } added</li>
-                    ${ successfulCharactersHtml.length ? `<li class="text-white"><span class="font-weight-bold">Successful:</span> ${ successfulCharactersHtml.join(', ')}</li>` : `` }
-                    ${ unsuccessfulCharactersHtml.length
-                        ? `<li class="text-white">
-                                <span class="font-weight-bold">${ mode === 'getExisting' ? 'Not found:' : 'Already exists:' }</span> ${ unsuccessfulCharactersHtml.join(', ') }
-                            </li>
-                            ${ mode === 'getExisting' ? `<li class="text-white">To add these characters, add them to the guild and reload this page</li>` : `` }`
-                        : `` }
-                </ul>`;
-
-                $(".js-warcraftlogs-attendees-message").html(message).show();
-                addTooltips();
+                printWarcraftlogsRankedCharacters(reportCharacters, callback, mode, message);
             }
         },
         error: function (data) {
@@ -128,4 +86,67 @@ function getWarcraftlogsRankedCharacters(callback, mode) {
 // Pass in a Warcraftlogs Character, get back a pretty format for their name
 function getWarcraftlogsCharacterHtml(character) {
     return `<span class="text-${ character.classID && WARCRAFTLOGS_CLASSES[character.classID] ? WARCRAFTLOGS_CLASSES[character.classID].slug : '' }" title="${ character.classID && WARCRAFTLOGS_CLASSES[character.classID] ? WARCRAFTLOGS_CLASSES[character.classID].name : '' }">${ character.name }</span>`;
+}
+
+/**
+ *  Prints the list of rankedCharacters in a Warcraft Logs report...
+ *  Or a list of characters made to emulate it.
+ *
+ *  Relies on a `characters` array with all existing characters for the guild in order to provide duplicate checks.
+ *
+ * @param reportCharacters array[object] eg. [['xyz', {name: 'xyz', classID: 9}], ['abc', [{name: 'abc', classID: 10}]]
+ * @param function callback A function to execute on each character retrieved from Warcraft Logs.
+ * @param string mode ['getNew', 'getExisting'] Whether we want to get characters that already exist in the guild, or ones that do not.
+ * @param string message An optional prepend to the message that gets printed.
+ */
+function printWarcraftlogsRankedCharacters(reportCharacters, callback, mode, message = '') {
+    let successfulCharactersHtml = [];
+    let unsuccessfulCharactersHtml = [];
+    let addedCount = 0;
+    let alreadyAddedCount = 0;
+
+    // Sort by name
+    reportCharacters.sort(function (a, b) { return a[0] > b[0]; });
+
+    // Add the characters to the raid
+    reportCharacters.forEach(function (reportCharacter) {
+        // 0 is name, 1 is the actual object we got from WCL
+        reportCharacter = reportCharacter[1];
+        let character = characters.find(character => character.name === reportCharacter.name);
+        if (mode === 'getExisting') {
+            if (character) {
+                if (callback(character)) {
+                    addedCount++;
+                    successfulCharactersHtml = [...successfulCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
+                }
+            } else {
+                unsuccessfulCharactersHtml = [...unsuccessfulCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
+            }
+        } else if (mode === 'getNew') {
+            if (character) {
+                unsuccessfulCharactersHtml = [...unsuccessfulCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
+            } else {
+                if (callback(reportCharacter)) {
+                    addedCount++;
+                    successfulCharactersHtml = [...successfulCharactersHtml, getWarcraftlogsCharacterHtml(reportCharacter)];
+                }
+            }
+        }
+        i++;
+    });
+
+    // Report on who we added and who we couldn't add
+    message += `<ul>
+        <li>${ addedCount } added</li>
+        ${ successfulCharactersHtml.length ? `<li class="text-white"><span class="font-weight-bold">Successful:</span> ${ successfulCharactersHtml.join(', ')}</li>` : `` }
+        ${ unsuccessfulCharactersHtml.length
+            ? `<li class="text-white">
+                    <span class="font-weight-bold">${ mode === 'getExisting' ? 'Not found:' : 'Already exists:' }</span> ${ unsuccessfulCharactersHtml.join(', ') }
+                </li>
+                ${ mode === 'getExisting' ? `<li class="text-white">To add these characters, add them to the guild and reload this page</li>` : `` }`
+            : `` }
+    </ul>`;
+
+    $(".js-warcraftlogs-attendees-message").html(message).show();
+    addTooltips();
 }
