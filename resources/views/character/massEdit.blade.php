@@ -33,13 +33,14 @@
         <div class="col-md-6 col-12">
             <label class="text-muted">
                 <span class="fas fa-fw fa-paste"></span>
-                {{ __("paste a Warcraft Logs report") }}
-                <span class="small">{{ __("optional") }}</small>
+                <span class="small">{{ __("optional") }}</span> {!! __("paste a Warcraft Logs report <strong>OR</strong> a list of characters") !!}
+                <br>
+                <span class="small">{!! __("list can be separated by spaces or commas or whatever you want; but names should match ingame names EXACTLY") !!}</span>
             </label>
             <div class="form-group">
                 <input name="logs"
                     autocomplete="off"
-                    maxlength="250"
+                    maxlength="2000"
                     type="text"
                     class="form-control dark"
                     placeholder="{{ __('eg. https://classic.warcraftlogs.com/reports/AbCdE3FgHiJkLmNo') }}"
