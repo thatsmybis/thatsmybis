@@ -4,7 +4,7 @@
         {{ __("Character Name") }}
     </label>
 @endif
-<input name="{{ isset($name) && $name ? $name : 'name2' }}"
+<input name="{{ isset($name) && $name ? $name : 'name' }}"
     class="js-name form-control dark"
     maxlength="40"
     type="text"

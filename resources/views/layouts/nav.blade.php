@@ -414,7 +414,7 @@
                         </a>
 
                         @if ($editCharacters)
-                            <a class="dropdown-item" href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'create_more' => 1]) }}">
+                            <a class="dropdown-item" href="{{ route('character.showCreateMany', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 {{ __("Create Characters") }}
                             </a>
                         @endif

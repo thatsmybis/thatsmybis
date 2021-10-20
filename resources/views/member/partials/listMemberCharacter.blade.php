@@ -4,7 +4,9 @@
 <li class="list-inline-item text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}">
     <div class="dropdown {{ isset($tag) && $tag ? 'tag rounded' : '' }}">
         <a class="dropdown-toggle text-{{ $character->inactive_at ? 'muted' : strtolower($character->class) }}" id="character{{ $character->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <span class="role-circle" style="background-color:{{ $raidGroup ? $raidGroup->getColor() : null }}"></span>
+            @if ($raidGroup)
+                <span class="role-circle" style="background-color:{{ $raidGroup->getColor() }}"></span>
+            @endif
             <span class="{{ isset($bold) && $bold ? 'font-weight-bold' : '' }}">
             {{ $character->name }}
             @if ($character->is_alt)

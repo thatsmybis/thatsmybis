@@ -35,7 +35,7 @@
                 <span class="fas fa-fw fa-paste"></span>
                 <span class="small">{{ __("optional") }}</span> {!! __("paste a Warcraft Logs report <strong>OR</strong> a list of characters") !!}
                 <br>
-                <span class="small">{!! __("list can be separated by spaces or commas or whatever you want; but names should match ingame names EXACTLY") !!}</span>
+                <span class="small">{!! __("list can be separated by spaces or commas or something similar, names should match ingame names EXACTLY") !!}</span>
             </label>
             <div class="form-group">
                 <input name="logs"

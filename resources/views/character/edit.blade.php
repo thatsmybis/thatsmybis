@@ -18,6 +18,14 @@
                         </h1>
                     </div>
                 @endif
+                @if (!$character && $hasEditCharactersPermission)
+                    <div class="col-12 pt-2 mb-2">
+                        <p class="font-weight-medium">
+                            <span class="fas fa-fw fa-exclamation-triangle text-warning"></span>
+                            {!! __("You can create many characters at once <a href=':link'>here</a>", ['link' => route('character.showCreateMany', ['guildId' => $guild->id, 'guildSlug' => $guild->slug])]) !!}
+                        </p>
+                    </div>
+                @endif
             </div>
 
             @if (count($errors) > 0)
