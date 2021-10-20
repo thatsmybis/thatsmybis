@@ -340,7 +340,9 @@ class CharacterController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
+        $hasEditCharactersPermission = false;
         if ($currentMember->hasPermission('edit.characters')) {
+            $hasEditCharactersPermission = true;
             $guild->load('members');
         }
 
@@ -367,6 +369,7 @@ class CharacterController extends Controller
             'currentMember'  => $currentMember,
             'editRaidGroups' => (!$guild->is_raid_group_locked || $currentMember->hasPermission('edit.raids')),
             'guild'          => $guild,
+            'hasEditCharactersPermission' => $hasEditCharactersPermission,
             'memberId'       => $memberId,
             'maxRaidGroups'  => self::MAX_RAID_GROUPS,
         ]);
