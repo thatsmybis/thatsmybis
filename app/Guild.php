@@ -251,6 +251,7 @@ class Guild extends BaseModel
             'characters.public_note',
             'characters.inactive_at',
             'members.username',
+            'members.slug AS member_slug',
             'users.discord_username',
             'users.discord_id',
             'members.is_wishlist_unlocked',

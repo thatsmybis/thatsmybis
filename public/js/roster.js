@@ -117,7 +117,7 @@ function createTable() {
                                             <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/loot">Wishlist & Loot</a>`
                                             : `` }
                                         ${ row.member_id ?
-                                            `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.username ? row.username.toLowerCase() : 'view member' }">${ row.username ? row.username : 'view member' }</a>`
+                                            `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.member_slug ? row.member_slug.toLowerCase() : 'view member' }">${ row.username ? row.username : 'view member' }</a>`
                                         : `` }
                                     </div>
                                 </div>
