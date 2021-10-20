@@ -8,7 +8,7 @@
             <div class="row mb-3">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium text-{{ getExpansionColor($guild->expansion_id) }}">
-                        <span class="text-muted fas fa-fw fa-user"></span>
+                        <span class="text-muted fas fa-fw fa-users"></span>
                         {{ __("Create Characters") }}
                     </h1>
                     <p>
