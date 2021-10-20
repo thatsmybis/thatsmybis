@@ -476,8 +476,8 @@ function addInstanceFilterHandlers() {
         let instanceIds = $("#instance_filter").val();
         if (instanceIds.length) {
             // Show all items, then remove the visible/hidden filters; they interfere with this filter.
-            allItemsVisible = false;
-            $(".js-show-all-clipped-items").click();
+            allItemsVisible = true;
+            reapplyItemVisibility();
             $(".js-show-all-clipped-items").hide();
             $(".js-show-clipped-items").hide();
             $(".js-hide-clipped-items").hide();
@@ -499,8 +499,8 @@ function addInstanceFilterHandlers() {
             $("li.js-has-instance").show();
 
             // Reset the visible/hidden filters to their default state.
-            allItemsVisible = true;
-            $(".js-show-all-clipped-items").click();
+            allItemsVisible = false;
+            reapplyItemVisibility();
             $(".js-show-all-clipped-items").show();
             $(".js-show-clipped-items").show();
             $(".js-hide-clipped-items").hide();
@@ -632,20 +632,24 @@ function getNotes(data, type, row) {
 
 function hideOffspecItems() {
     $("[data-offspec='1']").hide();
+    $(".js-hide-offspec-items").addClass("font-weight-bold");
 }
 
 function showOffspecItems() {
     $("[data-offspec='1']:not(.js-clipped-item)").show();
+    $(".js-hide-offspec-items").removeClass("font-weight-bold");
 }
 
 function hideStrikethroughItems() {
     $("[data-type='prio']").children(".font-strikethrough").parent().hide();
     $("[data-type='wishlist']").children(".font-strikethrough").parent().hide();
+    $(".js-hide-strikethrough-items").addClass("font-weight-bold");;
 }
 
 function showStrikethroughItems() {
     $("[data-type='prio']:not(.js-clipped-item)").children(".font-strikethrough").parent().show();
     $("[data-type='wishlist']:not(.js-clipped-item)").children(".font-strikethrough").parent().show();
+    $(".js-hide-strikethrough-items").removeClass("font-weight-bold");;
 }
 
 function reapplyStrikethroughItemsFilter() {
@@ -683,6 +687,15 @@ function toggleOffspecItems() {
     }
 }
 
+// Sets items visibility to whatever the last setting was
+function reapplyItemVisibility() {
+    // We should set visibility based on the previous setting.
+    if (allItemsVisible) {
+        showAllItems();
+    } else {
+        resetItemVisibility();
+    }
+}
 
 function resetItemVisibility() {
     $(".js-clipped-item").hide();
@@ -702,16 +715,9 @@ function callRosterHandlers() {
         parseMarkdown();
         trackTimestamps();
 
-        // We should set visibility based on the previous setting.
-        if (allItemsVisible) {
-            showAllItems();
-            $("#instance_filter").change();
-        } else {
-            resetItemVisibility();
-        }
-
-        reapplyStrikethroughItemsFilter();
-        reapplyOffspecItemsFilter();
+        // Applies instance filter, reapplies filters for OS, strikethroughs, and
+        // whether or not all items should be shown.
+        $("#instance_filter").change();
 
         addTooltips();
     }, 500); // 0.5s delay
