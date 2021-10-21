@@ -177,6 +177,7 @@
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <h2 class="font-weight-bold mb-3">
+                                            <span class="fas fa-fw fa-sort-amount-down text-gold"></span>
                                             {{ __("Character Prios") }}
                                         </h2>
                                     </li>

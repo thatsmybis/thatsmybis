@@ -110,14 +110,14 @@ function createTable() {
                                         ${ row.name }
                                     </a>
                                     <div class="dropdown-menu" aria-labelledby="character${ row.id }Dropdown">
-                                        <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }">Profile</a>
-                                        <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/audit-log?character_id=${ row.id }">History</a>
+                                        <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }"><span class="fas fa-fw fa-user text-muted"></span> Profile</a>
+                                        <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/audit-log?character_id=${ row.id }"><span class="fas fa-fw fa-clipboard-list-check text-muted"></span> History</a>
                                         ${ showEdit ?
-                                            `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/edit">Edit</a>
-                                            <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/loot">Wishlist & Loot</a>`
+                                            `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/edit"><span class="fas fa-fw fa-pencil text-muted"></span> Edit</a>
+                                            <a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/c/${ row.id }/${ row.slug }/loot"><span class="fas fa-fw fa-sack text-muted"></span> Wishlist & Loot</a>`
                                             : `` }
                                         ${ row.member_id ?
-                                            `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.member_slug ? row.member_slug.toLowerCase() : 'view member' }">${ row.username ? row.username : 'view member' }</a>`
+                                            `<a class="dropdown-item" href="/${ guild.id }/${ guild.slug }/u/${ row.member_id }/${ row.member_slug ? row.member_slug.toLowerCase() : 'view member' }"><span class="fas fa-fw fa-user text-muted"></span> ${ row.username ? row.username : 'view member' }</a>`
                                         : `` }
                                     </div>
                                 </div>

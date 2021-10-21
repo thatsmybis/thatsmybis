@@ -46,7 +46,7 @@
                                         {{ $copy ? $originalRaid->name : $raid->name }}
                                     </a>
                                 @else
-                                    <span class="text-muted fas fa-fw fa-plus"></span>
+                                    <span class="text-muted fas fa-fw fa-calendar-plus"></span>
                                     {{ __("Create a Raid") }}
                                 @endif
                             </h1>

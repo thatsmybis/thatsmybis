@@ -11,7 +11,7 @@
     <div class="row">
         <div class="col-12 pt-2 mb-2">
             <h1 class="font-weight-medium">
-                <span class="fas fa-fw fa-gift text-gold"></span>
+                <span class="fas fa-fw fa-sack text-gold"></span>
                 {{ __("Update Assigned Loot Details") }}
             </h1>
         </div>

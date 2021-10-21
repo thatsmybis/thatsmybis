@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium">
-                        <span class="fas fa-fw fa-database text-muted"></span>
+                        <span class="fas fa-fw fa-file-export text-muted"></span>
                         {{ __("Choose Data to Export") }}
                     </h1>
                 </div>

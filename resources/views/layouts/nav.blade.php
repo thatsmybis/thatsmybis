@@ -71,6 +71,7 @@
                             @endif
 
                             <a class="dropdown-item text-muted" href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                <span class="fas fa-fw fa-scroll-old text-muted"></span>
                                 {{ __("Sitewide wishlists") }}
                             </a>
                         </div>
@@ -91,12 +92,14 @@
                     <div class="dropdown-menu" aria-labelledby="lootNavDropdown">
                         @if ($editRaidLoot)
                             <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                <span class="fas fa-fw fa-sack text-muted"></span>
                                 {{ __("Assign Loot") }}
                             </a>
                         @endif
                         @if ($editItems)
                             <div class="dropdown dropright">
                                 <a class="dropdown-item dropdown-toggle" href="#" id="adminItemNotes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fas fa-fw fa-sticky-note text-muted"></span>
                                     {{ __("Notes") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="adminItemNotes">
@@ -164,6 +167,7 @@
                         @if ($editPrios)
                             <div class="dropdown dropright">
                                 <a class="dropdown-item dropdown-toggle" href="#" id="adminPrioDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
                                     {{ __("Prios") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="adminPrioDropdown">
@@ -301,9 +305,11 @@
                     </a>
                     <div class="dropdown-menu" aria-labelledby="rosterNavDropdown">
                         <a class="dropdown-item" href="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            {{ __("Loot") }}
+                            <span class="fas fa-fw fa-users text-muted"></span>
+                            {{ __("Roster") }}
                         </a>
                         <a class="dropdown-item" href="{{ route('guild.rosterStats', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-user-chart text-muted"></span>
                             {{ __("Stats") }}
                         </a>
                     </div>
@@ -354,26 +360,32 @@
                     <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
                         @if ($editRaidLoot)
                             <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-sack text-muted"></span>
                                 {{ __("Assign Loot") }}
                             </a>
                         @endif
                         @if ($viewRaids)
                             <a class="dropdown-item" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-calendar-plus text-muted"></span>
                                 {{ __("Create Raid") }}
                             </a>
                         @endif
                         <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-list text-muted"></span>
                             {{ __("List Raids") }}
                         </a>
                         <a class="dropdown-item" href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-history text-muted"></span>
                             {{ __("Old Loot Assignments") }}
                         </a>
                         <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-helmet-battle text-muted"></span>
                             {{ __("Raid Groups") }}
                         </a>
                         @if (!$guild->is_attendance_hidden && $guild->raidGroups->count())
                             <div class="dropdown dropright">
                                 <a title="{{ __("Only show attendance for a specific raid group") }}" class="dropdown-item dropdown-toggle" href="#" id="raidGroupAttendanceFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="fas fa-fw fa-filter text-muted"></span>
                                     {{ __("Attendance Filter") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="raidGroupAttendanceFilter">
@@ -381,7 +393,10 @@
                                         <form class="dropdown-item" role="form" method="POST" action="{{ route('setRaidGroupFilter', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                             {{ csrf_field() }}
                                             <input hidden name="raid_group_id" value="{{ $raidGroup->id }}" />
-                                            <button class="link text-white">{{ $raidGroup->name }}</button>
+                                            <button class="link text-white">
+                                                <span class="fas fa-fw fa-helmet-battle text-muted"></span>
+                                                {{ $raidGroup->name }}
+                                            </button>
                                         </form>
                                     @endforeach
                                 </div>
@@ -405,39 +420,48 @@
                     <div class="dropdown-menu" aria-labelledby="adminNavDropdown">
                         @if ($editGuild)
                             <a class="dropdown-item" href="{{ route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                <span class="fas fa-fw fa-cog text-muted"></span>
                                 {{ __("Settings") }}
                             </a>
                         @endif
 
                         <a class="dropdown-item" href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-clipboard-list-check text-muted"></span>
                             {{ __("Audit Log") }}
                         </a>
 
                         @if ($editCharacters)
                             <a class="dropdown-item" href="{{ route('character.showCreateMany', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-user-plus text-muted"></span>
                                 {{ __("Create Characters") }}
                             </a>
                         @endif
 
                         <a class="dropdown-item" href="{{ route('guild.exports', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-file-export text-muted"></span>
                             {{ __("Exports") }}
                         </a>
                         <a class="dropdown-item" href="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa- text-muted"></span>
                             {{ __("Export Gargul") }}
                         </a>
                         <a class="dropdown-item" target="_blank" href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}">
+                            <span class="fas fa-fw fa- text-muted"></span>
                             {{ __("Export TMB Tooltips") }}
                         </a>
                         <a class="dropdown-item" href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-users text-muted"></span>
                             {{ __("Members") }}
                         </a>
 
                         <a class="dropdown-item" href="{{ route('guild.recipe.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-book text-muted"></span>
                             {{ __("Recipes") }}
                         </a>
 
                         @if ($viewRoles)
                             <a class="dropdown-item" href="{{ route('guild.roles', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fab fa-fw fa-discord text-muted"></span>
                                 {{ __("Roles") }}
                             </a>
                         @endif
