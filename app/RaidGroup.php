@@ -29,7 +29,9 @@ class RaidGroup extends BaseModel
     ];
 
     public function characters() {
-        return $this->hasMany(Character::class)->orderBy('name');
+        return $this->hasMany(Character::class)
+        ->whereNull('characters.inactive_at')
+        ->orderBy('name');
     }
 
     public function priodCharacters() {
@@ -61,6 +63,7 @@ class RaidGroup extends BaseModel
 
     public function secondaryCharacters() {
         return $this->belongsToMany(Character::class, 'character_raid_groups', 'raid_group_id', 'character_id')
+        ->whereNull('characters.inactive_at')
             ->orderBy('name');
     }
 
