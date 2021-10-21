@@ -10,6 +10,8 @@ var colNotes     = 6;
 var colClass     = 7;
 var colRaidGroup = 8;
 var colRaidsAttended = 11;
+var colBenchedCount = 12
+var colArchetype = 13;
 
 var allItemsVisible = false;
 var strikethroughVisible = true;
@@ -122,48 +124,54 @@ function createTable() {
                                     </div>
                                 </div>
                             </li>
-                            ${ row.is_alt || row.raid_group_name || row.class ? `
-                                <li>
-                                    ${ row.is_alt ? `
-                                        <span class="text-warning font-weight-bold">${localeAlt}</span>&nbsp;
-                                    ` : '' }
-                                    ${ row.raid_group_name ? `
-                                        <span class="font-weight-bold d-inline tag">
-                                            <span class="role-circle" style="background-color:${ getColorFromDec(parseInt(row.raid_group_color)) }"></span>
-                                            ${ row.raid_group_name ? row.raid_group_name : '' }
-                                        </span>&nbsp;
-                                    ` : ``}
-                                    ${ row.class ? row.class : '' }
-                                </li>` : `` }
 
-                            ${ !guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count || row.benched_count) ?
-                                `<li>
-                                    <ul class="list-inline">
-                                        ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<li class="list-inline-item ${ getAttendanceColor(row.attendance_percentage) }" title="attendance">${ Math.round(row.attendance_percentage * 100) }%</li>` : '' }
-                                        ${ row.raid_count ? `<li class="list-inline-item small text-muted">${ row.raid_count }r</li>` : ``}
-                                        ${ row.benched_count ? `<li class="list-inline-item small text-muted">benched ${ row.benched_count }x</li>` : ``}
+                            ${ row.spec || row.display_spec || row.archetype || row.race
+                                ? `<li>
+                                    <ul class="small list-inline">
+                                        <li class="list-inline-item">
+                                            <span class="${ row.archetype ?  getArchetypeIcon(row.archetype) : '' }"></span>
+                                            <!--${ row.level ? row.level : '' }-->
+                                            <span class="font-weight-normal">
+                                                ${ row.spec_label ? row.spec_label : (row.spec ? row.display_spec : '') }
+                                            </span>
+                                        </li>
+                                        ${ row.race  ? `<li class="list-inline-item text-muted">${row.display_race}</li>` : '' }
+                                        <!--${ row.class ? row.display_class : '' }-->
                                     </ul>
-                                </li>` : `` }
-
-                            ${ row.level || row.race || row.spec ? `
-                                <li>
-                                    <span class="small text-muted">
-                                        ${ row.level ? row.level : '' }
-                                        <span class="font-weight-bold">
-                                            ${ row.race  ? row.race : '' }
-                                            ${ row.spec_label ? row.spec_label : (row.spec ? row.spec : '') }
-                                        </span>
-                                    </span>
-                                </li>` : `` }
+                                </li>`
+                                : `` }
 
                             ${ row.rank || row.profession_1 || row.profession_2 ? `
                                 <li>
                                     <span class="small text-muted">
                                         ${ row.rank         ? 'Rank ' + row.rank + (row.profession_1 || row.profession_2 ? ',' : '') : '' }
-                                        ${ row.profession_1 ? row.profession_1 + (row.profession_2 ? ',' : '') : '' }
-                                        ${ row.profession_2 ? row.profession_2 : '' }
+                                        ${ row.profession_1 ? row.display_profession1 + (row.profession_2 ? ',' : '') : '' }
+                                        ${ row.profession_2 ? row.display_profession2 : '' }
                                     </span>
                                 </li>` : `` }
+
+                            ${ row.raid_group_name || row.is_alt
+                                ? `<li class="small">
+                                    <ul class="list-inline">
+                                        ${ row.raid_group_name ? `<li class="list-inline-item">
+                                            <span class="font-weight-medium d-inline">
+                                                <span class="role-circle-small" style="background-color:${ getColorFromDec(parseInt(row.raid_group_color)) }"></span>
+                                                ${ row.raid_group_name ? row.raid_group_name : '' }
+                                            </span></li>` : ``}
+                                        ${ row.is_alt ? `<li class="list-inline-item"><span class="text-warning font-weight-bold">${localeAlt}</span></li>` : '' }
+                                    </ul>`
+                                : `` }
+
+                            ${ (!guild.is_attendance_hidden && (row.attendance_percentage || row.raid_count || row.benched_count))
+                                ? `<li class="small">
+                                    <ul class="list-inline">
+                                        ${ row.raid_count && typeof row.attendance_percentage === 'number' ? `<li class="list-inline-item ${ getAttendanceColor(row.attendance_percentage) }" title="attendance">${ Math.round(row.attendance_percentage * 100) }%</li>` : '' }
+                                        ${ row.raid_count ? `<li class="list-inline-item text-muted">${ row.raid_count }r</li>` : ``}
+                                        ${ row.benched_count ? `<li class="list-inline-item text-muted">benched ${ row.benched_count }x</li>` : ``}
+                                    </ul>
+                                </li>`
+                                : `` }
+
                             ${ showEdit ?
                                 `
                                 ${ row.is_received_unlocked ? `<li class="list-inline-item small text-warning" title="To lock, edit the member that owns this character">loot unlocked</li>` : `` }
@@ -376,6 +384,18 @@ function createTable() {
                 visible    : false,
                 searchable : false,
             },
+            {
+                title  : "Role",
+                data   : "character",
+                render : function (data, type, row) {
+                    return `<span class="small text-${ row.class ? row.class.toLowerCase() : '' }">${row.display_archetype ? row.display_archetype : ''}</span>
+                        <br>
+                        <span class="small text-${ row.class ? row.class.toLowerCase() : '' }">${row.display_spec ? row.display_spec : ''}</span>`;
+                },
+                visible : false,
+                width   : "20px",
+                className : "width-20 fixed-width",
+            },
         ],
         order  : [], // Disable initial auto-sort; relies on server-side sorting
         paging : false,
@@ -385,7 +405,7 @@ function createTable() {
         },
         initComplete: function () {
             // Columns that we want to filter by.
-            const filterColumns = [colClass, colRaidGroup];
+            const filterColumns = [colArchetype, colClass, colRaidGroup];
 
             // For each column, set up a filter
             this.api().columns().every(function (index) {
@@ -397,7 +417,10 @@ function createTable() {
                 let select2 = null; // Initialize this beside select1 if we want a secondary sort for the same column
 
                 // Based on the current column, identify the relevant filter input
-                if (index == colClass) {
+                if (index == colArchetype) {
+                    select1 = $("#archetype_filter");
+                    select2 = null;
+                } else if (index == colClass) {
                     select1 = $("#class_filter");
                     select2 = null;
                 } else if (index == colRaidGroup) {

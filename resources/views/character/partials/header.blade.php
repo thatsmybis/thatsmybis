@@ -5,13 +5,11 @@
     @if ($character->raid_group_id || $character->display_class || $character->is_alt || $character->display_spec || $character->display_archetype)
         <li>
             <ul class="list-inline">
-                @if ($character->is_alt)
-                    <li class="list-inline-item font-weight-bold">
-                        <span class="tag d-inline" style="color: orange;">
-                            {{ __("Alt") }}
-                        </span>
-                    </li>
-                @endif
+                <li class="list-inline-item">
+                    {!! $character->archetype ? '<span class="' . getArchetypeIcon($character->archetype). '"></span>' : '' !!}
+                    {{ $character->display_spec ? $character->display_spec : '' }}
+                    {{ $character->display_class ? $character->display_class : '' }}
+                </li>
                 {{-- Don't let this get lazy loaded on its own; force the dev to do it intentionally to avoid poor performance --}}
                 @if ($character->relationLoaded('raidGroup') && $character->raidGroup)
                     @php
@@ -20,7 +18,7 @@
                             $raidGroupColor = $character->raidGroup->getColor();
                         }
                     @endphp
-                    <li class="list-inline-item font-weight-bold">
+                    <li class="list-inline-item font-weight-normal">
                         <span class="tag d-inline" style="border-color:{{ $raidGroupColor }};"><span class="role-circle" style="background-color:{{ $raidGroupColor }}"></span>
                             {{ $character->raidGroup->name }}
                         </span>
@@ -32,11 +30,13 @@
                         </span>
                     </li>
                 @endif
-                <li class="list-inline-item">
-                    {{ $character->display_archetype ? $character->display_archetype : '' }}
-                    {{ $character->display_spec ? $character->display_spec : '' }}
-                    {{ $character->display_class ? $character->display_class : '' }}
-                </li>
+                @if ($character->is_alt)
+                    <li class="list-inline-item font-weight-bold">
+                        <span class="tag d-inline" style="color: orange;">
+                            {{ __("Alt") }}
+                        </span>
+                    </li>
+                @endif
             </ul>
         </li>
     @endif

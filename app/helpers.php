@@ -20,6 +20,18 @@ function array_insert(&$array, $position, $insert) {
     }
 }
 
+function getArchetypeIcon($archetype) {
+    if ($archetype === App\Character::ARCHETYPE_DPS) {
+        return 'fas fa-fw fa-bow-arrow text-dps';
+    } else if ($archetype === App\Character::ARCHETYPE_HEAL) {
+        return 'fas fa-fw fa-plus-circle text-healer';
+    } else if ($archetype === App\Character::ARCHETYPE_TANK) {
+        return 'fas fa-fw fa-shield text-tank';
+    } else {
+        return 'fas fa-fw fa-map-marker-question text-muted';
+    }
+}
+
 // Based on attendance percentage, return a CSS color class
 function getAttendanceColor($percentage = 0) {
     $color = '';

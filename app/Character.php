@@ -61,6 +61,9 @@ class Character extends BaseModel
         'display_spec',
     ];
 
+    const FACTION_BEST  = 'Horde';
+    const FACTION_WORST = 'Alliance';
+
     // Each constant must be unique among their group. They are used as keys.
     const RACE_BLOOD_ELF = 'Blood Elf';
     const RACE_ORC       = 'Orc';
@@ -482,7 +485,7 @@ class Character extends BaseModel
 
     public function getDisplayRaceAttribute()
     {
-        return $this->race ? self::races()[$this->race] : null;
+        return $this->race ? self::races()[$this->race]['name'] : null;
     }
 
     public function getDisplaySpecAttribute()
@@ -494,7 +497,7 @@ class Character extends BaseModel
      * Takes in a collection of characters that don't have attendance, and a collection
      * of characters that do have attendance. Merge the attendance into the former collection.
      */
-    public static function mergeAttendance($characters, $charactersWithAttendance) {
+    static public function mergeAttendance($characters, $charactersWithAttendance) {
         if ($characters) {
             foreach ($characters as $character) {
                 $attendanceCharacter = $charactersWithAttendance->where('id', $character->id)->first();
@@ -516,6 +519,12 @@ class Character extends BaseModel
         ];
     }
 
+    static public function factions() {
+        return [
+            self::FACTION_BEST  => __('Horde'),
+            self::FACTION_WORST => __('Alliance'),
+        ];
+    }
 
     static public function classes($expansionId = 0) {
         switch ($expansionId) {
@@ -613,42 +622,42 @@ class Character extends BaseModel
         switch ($expansionId) {
             case 1: // Classic
                 return [
-                    self::RACE_ORC       => __('Orc'),
-                    self::RACE_TAUREN    => __('Tauren'),
-                    self::RACE_TROLL     => __('Troll'),
-                    self::RACE_UNDEAD    => __('Undead'),
-                    self::RACE_DWARF     => __('Dwarf'),
-                    self::RACE_GNOME     => __('Gnome'),
-                    self::RACE_HUMAN     => __('Human'),
-                    self::RACE_NIGHT_ELF => __('Night Elf'),
+                    self::RACE_ORC       => ['name' => __('Orc'),    'faction' => self::FACTION_BEST],
+                    self::RACE_TAUREN    => ['name' => __('Tauren'), 'faction' => self::FACTION_BEST],
+                    self::RACE_TROLL     => ['name' => __('Troll'),  'faction' => self::FACTION_BEST],
+                    self::RACE_UNDEAD    => ['name' => __('Undead'), 'faction' => self::FACTION_BEST],
+                    self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
+                    self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
+                    self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
+                    self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
                 ];
                 break;
             case 2: // TBC
                 return [
-                    self::RACE_BLOOD_ELF => __('Blood Elf'),
-                    self::RACE_ORC       => __('Orc'),
-                    self::RACE_TAUREN    => __('Tauren'),
-                    self::RACE_TROLL     => __('Troll'),
-                    self::RACE_UNDEAD    => __('Undead'),
-                    self::RACE_DRAENEI   => __('Draenei'),
-                    self::RACE_DWARF     => __('Dwarf'),
-                    self::RACE_GNOME     => __('Gnome'),
-                    self::RACE_HUMAN     => __('Human'),
-                    self::RACE_NIGHT_ELF => __('Night Elf'),
+                    self::RACE_BLOOD_ELF => ['name' => __('Blood Elf'), 'faction' => self::FACTION_BEST],
+                    self::RACE_ORC       => ['name' => __('Orc'),       'faction' => self::FACTION_BEST],
+                    self::RACE_TAUREN    => ['name' => __('Tauren'),    'faction' => self::FACTION_BEST],
+                    self::RACE_TROLL     => ['name' => __('Troll'),     'faction' => self::FACTION_BEST],
+                    self::RACE_UNDEAD    => ['name' => __('Undead'),    'faction' => self::FACTION_BEST],
+                    self::RACE_DRAENEI   => ['name' => __('Draenei'),   'faction' => self::FACTION_WORST],
+                    self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
+                    self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
+                    self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
+                    self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
                 ];
                 break;
             default: // WoTLK
                 return  [
-                    self::RACE_BLOOD_ELF => __('Blood Elf'),
-                    self::RACE_ORC       => __('Orc'),
-                    self::RACE_TAUREN    => __('Tauren'),
-                    self::RACE_TROLL     => __('Troll'),
-                    self::RACE_UNDEAD    => __('Undead'),
-                    self::RACE_DRAENEI   => __('Draenei'),
-                    self::RACE_DWARF     => __('Dwarf'),
-                    self::RACE_GNOME     => __('Gnome'),
-                    self::RACE_HUMAN     => __('Human'),
-                    self::RACE_NIGHT_ELF => __('Night Elf'),
+                    self::RACE_BLOOD_ELF => ['name' => __('Blood Elf'), 'faction' => self::FACTION_BEST],
+                    self::RACE_ORC       => ['name' => __('Orc'),       'faction' => self::FACTION_BEST],
+                    self::RACE_TAUREN    => ['name' => __('Tauren'),    'faction' => self::FACTION_BEST],
+                    self::RACE_TROLL     => ['name' => __('Troll'),     'faction' => self::FACTION_BEST],
+                    self::RACE_UNDEAD    => ['name' => __('Undead'),    'faction' => self::FACTION_BEST],
+                    self::RACE_DRAENEI   => ['name' => __('Draenei'),   'faction' => self::FACTION_WORST],
+                    self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
+                    self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
+                    self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
+                    self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
                 ];
                 break;
         }

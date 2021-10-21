@@ -2,7 +2,19 @@
     @php
         $characterNameText = $character->name;
         $characterMetaText = (isset($showClass) && $showClass ? ($character->class ? '(' . $character->class . ')&nbsp;' : '') : '');
-        $characterMetaText .= ($character->is_alt ? "Alt" : '');
+
+
+        if ($character->display_archetype) {
+            $characterMetaText .= '&sdot; <span class="font-weight-bold">' . $character->display_archetype . '</span>';
+        }
+
+        if ($character->spec_label || $character->display_spec) {
+            $characterMetaText .= '&sdot; ' . ($character->spec_label ? $character->spec_label : ($character->display_spec ? $character->display_spec : ''));
+        }
+
+        if ($character->is_alt) {
+            $characterMetaText .= '&sdot; ' . ($character->is_alt ? __("Alt") : '');
+        }
 
         if (isset($raidGroups) && $raidGroups->where('id', $character->raid_group_id)->count()) {
             $characterMetaText .= '&sdot; ' . ($raidGroups->where('id', $character->raid_group_id)->first()->name);

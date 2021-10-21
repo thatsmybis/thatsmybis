@@ -442,7 +442,7 @@
                             {{ __("Exports") }}
                         </a>
                         <a class="dropdown-item" href="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            <span class="fas fa-fw fa- text-muted"></span>
+                            <img class="inline-image-icon" src="{{ asset('images/gargul_monotone.png') }}"></img>
                             {{ __("Export Gargul") }}
                         </a>
                         <a class="dropdown-item" target="_blank" href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}">
@@ -472,8 +472,7 @@
         <ul class="navbar-nav">
             @if (isset($guild))
                 <li class="nav-item mr-3 d-patreon-block">
-                    <a class="dropdown-item text-4 text-patreon" href="https://www.patreon.com/lemmings19" target="_blank" title="Patreon donations">
-                    <a href="{{ route('donate') }}" target="_blank" class="nav-link active small font-weight-bold text-patreon"
+                    <a href="{{ route('donate') }}" target="_blank" class="nav-link active small font-weight-bold text-patreon mt-0"
                         title="Toss a coin to your web dev">
                         <span class="fas fa-fw fa-sack"></span>
                         {{ __("Support TMB") }}

@@ -46,7 +46,7 @@
                 @endforeach
             </select>
         </li>
-        <li class=" list-inline-item">
+        <li class="list-inline-item">
             <label for="class_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-axe-battle"></span>
                 {{ __("Class") }}
@@ -60,7 +60,7 @@
                 @endforeach
             </select>
         </li>
-        <li class=" list-inline-item">
+        <li class="list-inline-item">
             <label for="archetype_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-chess"></span>
                 {{ __("Role") }}
@@ -68,7 +68,7 @@
             <select id="archetype_filter" class="form-control dark selectpicker">
                 <option value="">—</option>
                 @foreach (App\Character::archetypes() as $key => $role)
-                    <option value="{{ $key }}" class="text-{{ strtolower($key) }}-important">
+                    <option value="{{ $key }}" class="text-{{ strtolower($key) }}-important font-weight-medium">
                         {{ $role }}
                     </option>
                 @endforeach

@@ -11,7 +11,8 @@
             {{ isset($hideLabel) && $hideLabel ? $hideLabel : '—' }}
         </option>
         @foreach (App\Character::archetypes() as $key => $archetype)
-            <option value="{{ $key }}" {{ ($oldValue && $oldValue == $key) || ($character && $character->archetype == $key) ? 'selected' : '' }}>
+            <option value="{{ $key }}" class="text-{{ strtolower($key) }}-important font-weight-medium"
+                {{ ($oldValue && $oldValue == $key) || ($character && $character->archetype == $key) ? 'selected' : '' }}>
                 {{ $archetype }}
             </option>
         @endforeach

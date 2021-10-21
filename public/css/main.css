@@ -196,6 +196,19 @@ body {
     color: #68ccef;
 }
 
+.text-horde {
+    color: #dc3545;
+}
+.text-alliance {
+    color: #007bff;
+}
+.text-horde-important {
+    color: #dc3545 !important;
+}
+.text-alliance-important {
+    color: #007bff !important;
+}
+
 .text-death-knight {
     color: #c41e3b;
 }
@@ -257,6 +270,26 @@ body {
 .text-warrior-important {
     color: #bb9b63 !important;
 }
+
+.text-dps {
+    color: #dc3545;
+}
+.text-healer {
+    color: #28a745;
+}
+.text-tank {
+    color: #007bff;
+}
+.text-dps-important {
+    color: #dc3545 !important;
+}
+.text-heal-important {
+    color: #28a745 !important;
+}
+.text-tank-important {
+    color: #007bff !important;
+}
+
 
 .text-link {
     color: #0080ff;

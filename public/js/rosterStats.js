@@ -248,8 +248,16 @@ function createRosterStatsTable() {
                                     : `` }
                                 </div>
                             </div>
-                            ${ getRaidGroupHtml(row.raid_group_name, row.raid_group_color) }
                         </li>
+                        ${ row.spec || row.display_spec || row.archetype
+                            ? `<li class="small font-weight-light">
+                                <span class="${ row.archetype ?  getArchetypeIcon(row.archetype) : '' }"></span>
+                                <span class="">
+                                    ${ row.spec_label ? row.spec_label : (row.spec ? row.display_spec : '') }
+                                </span>
+                            </li>`
+                            : `` }
+                        ${ row.raid_group_name ? `<li>${ getRaidGroupHtml(row.raid_group_name, row.raid_group_color) }</li>` : `` }
                     </ul>`;
                 },
                 // Sort by the value in data; not the render
@@ -481,11 +489,11 @@ function createRosterStatsTable() {
                 let select2 = null; // Initialize this beside select1 if we want a secondary sort for the same column
 
                 // Based on the current column, identify the relevant filter input
-                if (index == colClass) {
-                    select1 = $("#class_filter");
-                    select2 = null;
-                } else if (index == colArchetype) {
+                if (index == colArchetype) {
                     select1 = $("#archetype_filter");
+                    select2 = null;
+                } else if (index == colClass) {
+                    select1 = $("#class_filter");
                     select2 = null;
                 } else if (index == colMainRaidGroup) {
                     select1 = $("#raid_group_filter");
@@ -812,8 +820,8 @@ function getNotes(data, type, row) {
 // Just a simple pretty printout of the raid group's name and color
 function getRaidGroupHtml(name, color) {
     if (name) {
-        return `<span class="small font-weight-normal d-inline">
-            <span class="role-circle" style="background-color:${ getColorFromDec(parseInt(color)) }"></span>
+        return `<span class="small font-weight-light d-inline">
+            <span class="role-circle-small" style="background-color:${ getColorFromDec(parseInt(color)) }"></span>
                 ${ name }
             </span>`;
     } else {

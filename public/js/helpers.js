@@ -1,3 +1,7 @@
+const ARCHETYPE_DPS  = 'DPS';
+const ARCHETYPE_HEAL = 'Heal';
+const ARCHETYPE_TANK = 'Tank';
+
 // For knowing what kind of tier style to display
 const TIER_MODE_NUM = 'num';
 const TIER_MODE_S   = 's';
@@ -246,6 +250,18 @@ function decToHex(number) {
 // Take a jquery element, make that element visually flash to get the user's attention
 function flashElement(element) {
     element.fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });
+}
+
+function getArchetypeIcon(archetype) {
+    if (archetype === ARCHETYPE_DPS) {
+        return 'fas fa-fw fa-bow-arrow text-dps';
+    } else if (archetype === ARCHETYPE_HEAL) {
+        return 'fas fa-fw fa-plus-circle text-healer';
+    } else if (archetype === ARCHETYPE_TANK) {
+        return 'fas fa-fw fa-shield text-tank';
+    } else {
+        return 'fas fa-fw fa-map-marker-question text-muted';
+    }
 }
 
 // Based on attendance percentage, return a CSS color class
