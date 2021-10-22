@@ -59,6 +59,7 @@ class Character extends BaseModel
         'display_profession2',
         'display_race',
         'display_spec',
+        'sub_archetype',
     ];
 
     const FACTION_BEST  = 'Horde';
@@ -102,6 +103,9 @@ class Character extends BaseModel
     const ARCHETYPE_DPS  = 'DPS';
     const ARCHETYPE_HEAL = 'Heal';
     const ARCHETYPE_TANK = 'Tank';
+
+    const ARCHETYPE_DPS_CASTER   = 'Caster';
+    const ARCHETYPE_DPS_PHYSICAL = 'Physical';
 
     const SPEC_DEATH_KNIGHT_BLOOD  = 'Blood';
     const SPEC_DEATH_KNIGHT_FROST  = 'Frost (DK)';
@@ -463,34 +467,63 @@ class Character extends BaseModel
         return $query;
     }
 
-    public function getDisplayArchetypeAttribute()
-    {
+    public function getDisplayArchetypeAttribute() {
         return $this->archetype ? self::archetypes()[$this->archetype] : null;
     }
 
-    public function getDisplayClassAttribute()
-    {
+    public function getDisplayClassAttribute() {
         return $this->class ? self::classes()[$this->class] : null;
     }
 
-    public function getDisplayProfession1Attribute()
-    {
+    public function getDisplayProfession1Attribute() {
         return $this->profession_1 ? self::professions()[$this->profession_1] : null;
     }
 
-    public function getDisplayProfession2Attribute()
-    {
+    public function getDisplayProfession2Attribute() {
         return $this->profession_2 ? self::professions()[$this->profession_2] : null;
     }
 
-    public function getDisplayRaceAttribute()
-    {
+    public function getDisplayRaceAttribute() {
         return $this->race ? self::races()[$this->race]['name'] : null;
     }
 
-    public function getDisplaySpecAttribute()
-    {
+    public function getDisplaySpecAttribute() {
         return $this->spec_label ? $this->spec_label : ($this->spec ? self::specs()[$this->spec]['name'] : null);
+    }
+
+    // Differentiates between caster DPS and physical DPS.
+    public function getSubArchetypeAttribute() {
+        if ($this->class === self::CLASS_DEATH_KNIGHT) {
+            return self::ARCHETYPE_DPS_PHYSICAL;
+        } else if ($this->class === self::CLASS_DRUID && $this->archetype === self::ARCHETYPE_DPS && $this->spec) {
+            if ($this->spec === self::SPEC_DRUID_BALANCE) {
+                return self::ARCHETYPE_DPS_CASTER;
+            } else {
+                // If you are a DPS Druid that isn't Balance; you must be Feral.
+                return self::ARCHETYPE_DPS_PHYSICAL;
+            }
+        } else if ($this->class === self::CLASS_HUNTER) {
+            return self::ARCHETYPE_DPS_PHYSICAL;
+        } else if ($this->class === self::CLASS_MAGE) {
+            return self::ARCHETYPE_DPS_CASTER;
+        } else if ($this->class === self::CLASS_PALADIN && $this->archetype === self::ARCHETYPE_DPS) {
+            return self::ARCHETYPE_DPS_PHYSICAL;
+        } else if ($this->class === self::CLASS_PRIEST && $this->archetype === self::ARCHETYPE_DPS) {
+            return self::ARCHETYPE_DPS_CASTER;
+        } else if ($this->class === self::CLASS_ROGUE) {
+            return self::ARCHETYPE_DPS_PHYSICAL;
+        } else if ($this->class === self::CLASS_SHAMAN && $this->archetype === self::ARCHETYPE_DPS) {
+            if ($this->spec === self::SPEC_SHAMAN_ENHANCE) {
+                return self::ARCHETYPE_DPS_PHYSICAL;
+            } else {
+                // If you are a DPS Shaman that isn't Enhancement; you must be Elemental or some other kind of caster.
+                return self::ARCHETYPE_DPS_CASTER;
+            }
+        } else if ($this->class === self::CLASS_WARLOCK) {
+            return self::ARCHETYPE_DPS_CASTER;
+        } else if ($this->class === self::CLASS_WARRIOR && $this->archetype === self::ARCHETYPE_DPS) {
+            return self::ARCHETYPE_DPS_PHYSICAL;
+        }
     }
 
     /**
@@ -514,6 +547,16 @@ class Character extends BaseModel
     static public function archetypes() {
         return [
             self::ARCHETYPE_DPS  => __('DPS'),
+            self::ARCHETYPE_HEAL => __('Healer'),
+            self::ARCHETYPE_TANK => __('Tank'),
+        ];
+    }
+
+    static public function extendedArchetypes() {
+        return [
+            self::ARCHETYPE_DPS  => __('DPS'),
+            self::ARCHETYPE_DPS_CASTER => __('Caster DPS'),
+            self::ARCHETYPE_DPS_PHYSICAL => __('Physical DPS'),
             self::ARCHETYPE_HEAL => __('Healer'),
             self::ARCHETYPE_TANK => __('Tank'),
         ];

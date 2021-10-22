@@ -363,7 +363,7 @@ function createTable() {
                 data   : "discord_username",
                 render : function (data, type, row) {
                     return (row.discord_username ? row.discord_username : null);
-                },
+            },
                 visible : false,
             },
             {
@@ -388,9 +388,7 @@ function createTable() {
                 title  : "Role",
                 data   : "character",
                 render : function (data, type, row) {
-                    return `<span class="small text-${ row.class ? row.class.toLowerCase() : '' }">${row.display_archetype ? row.display_archetype : ''}</span>
-                        <br>
-                        <span class="small text-${ row.class ? row.class.toLowerCase() : '' }">${row.display_spec ? row.display_spec : ''}</span>`;
+                    return `${row.archetype ? row.archetype : ''} ${row.sub_archetype ? row.sub_archetype : ''}`;
                 },
                 visible : false,
                 width   : "20px",

@@ -271,7 +271,7 @@ body {
     color: #bb9b63 !important;
 }
 
-.text-dps {
+.text-dps, .text-caster, .text-physical {
     color: #dc3545;
 }
 .text-healer {
@@ -280,7 +280,7 @@ body {
 .text-tank {
     color: #007bff;
 }
-.text-dps-important {
+.text-dps-important, .text-caster-important, .text-physical-important {
     color: #dc3545 !important;
 }
 .text-heal-important {

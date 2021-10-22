@@ -36,7 +36,7 @@
             </label>
             <select id="archetype_filter" class="form-control dark selectpicker">
                 <option value="">—</option>
-                @foreach (App\Character::archetypes() as $key => $role)
+                @foreach (App\Character::extendedArchetypes() as $key => $role)
                     <option value="{{ $key }}" class="text-{{ strtolower($key) }}-important font-weight-medium">
                         {{ $role }}
                     </option>
