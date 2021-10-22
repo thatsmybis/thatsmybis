@@ -213,7 +213,7 @@ function createTable() {
 
                         if (showListHeader) {
                             if (wishlistNames && wishlistNames[wishlistNumber]) {
-                                header = wishlistNames[wishlistNumber];
+                                header = wishlistNames[wishlistNumber - 1];
                             } else {
                                 header = headerWishlist + ' ' + wishlistNumber;
                             }
