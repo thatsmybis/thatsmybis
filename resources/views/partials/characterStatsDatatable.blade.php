@@ -124,11 +124,11 @@
                     <option value="12">
                         {{ __("Serpentshrine Cavern") }}
                     </option>
-                    <option value="13">
-                        {{ __("Hyjal Summit") }}
-                    </option>
                     <option value="14">
                         {{ __("Tempest Keep") }}
+                    </option>
+                    <option value="13">
+                        {{ __("Hyjal Summit") }}
                     </option>
                     <option value="15">
                         {{ __("Black Temple") }}

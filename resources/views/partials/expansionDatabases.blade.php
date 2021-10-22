@@ -121,13 +121,13 @@
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'hyjal-summit']) }}">
-                        {{ __("Hyjal Summit") }}
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'tempest-keep']) }}">
+                        {{ __("Tempest Keep") }}
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'tempest-keep']) }}">
-                        {{ __("Tempest Keep") }}
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 2, 'instanceSlug' => 'hyjal-summit']) }}">
+                        {{ __("Hyjal Summit") }}
                     </a>
                 </li>
                 <li class="">
