@@ -2,6 +2,54 @@ const ARCHETYPE_DPS  = 'DPS';
 const ARCHETYPE_HEAL = 'Heal';
 const ARCHETYPE_TANK = 'Tank';
 
+const SUB_ARCHETYPE_DPS_CASTER   = 'Caster DPS';
+const SUB_ARCHETYPE_DPS_PHYSICAL = 'Physical DPS';
+
+const CLASS_DEATH_KNIGHT = 'Death Knight';
+const CLASS_DRUID        = 'Druid';
+const CLASS_HUNTER       = 'Hunter';
+const CLASS_MAGE         = 'Mage';
+const CLASS_PALADIN      = 'Paladin';
+const CLASS_PRIEST       = 'Priest';
+const CLASS_ROGUE        = 'Rogue';
+const CLASS_SHAMAN       = 'Shaman';
+const CLASS_WARLOCK      = 'Warlock';
+const CLASS_WARRIOR      = 'Warrior';
+
+const SPEC_DEATH_KNIGHT_BLOOD  = 'Blood';
+const SPEC_DEATH_KNIGHT_FROST  = 'Frost (DK)';
+const SPEC_DEATH_KNIGHT_UNHOLY = 'Unholy';
+const SPEC_DRUID_BALANCE       = 'Balance';
+const SPEC_DRUID_FERAL         = 'Feral';
+const SPEC_DRUID_RESTO         = 'Resto (Druid)';
+const SPEC_HUNTER_BEAST        = 'Beast';
+const SPEC_HUNTER_MARKSMAN     = 'Marksman';
+const SPEC_HUNTER_CUNNING      = 'Cunning';
+const SPEC_HUNTER_FEROCITY     = 'Ferocity';
+const SPEC_HUNTER_TENACTIY     = 'Tenacity';
+const SPEC_HUNTER_SURVIVAL     = 'Survival';
+const SPEC_MAGE_ARCANE         = 'Arcane';
+const SPEC_MAGE_FIRE           = 'Fire';
+const SPEC_MAGE_FROST          = 'Frost';
+const SPEC_PALADIN_COMBAT      = 'Retribution';
+const SPEC_PALADIN_HOLY        = 'Holy (Pally)';
+const SPEC_PALADIN_PROTECTION  = 'Prot (Pally)';
+const SPEC_PRIEST_DISCIPLINE   = 'Discipline';
+const SPEC_PRIEST_HOLY         = 'Holy (Priest)';
+const SPEC_PRIEST_SHADOW       = 'Shadow';
+const SPEC_ROGUE_ASSASSIN      = 'Assassination';
+const SPEC_ROGUE_COMBAT        = 'Combat';
+const SPEC_ROGUE_SUBTLETY      = 'Subtlety';
+const SPEC_SHAMAN_ELEMENTAL    = 'Elemental';
+const SPEC_SHAMAN_ENHANCE      = 'Enhancement';
+const SPEC_SHAMAN_RESTO        = 'Resto (Shammy)';
+const SPEC_WARLOCK_AFFLICTION  = 'Affliction';
+const SPEC_WARLOCK_DESTRO      = 'Destruction';
+const SPEC_WARLOCK_DEMON       = 'Demonology';
+const SPEC_WARRIOR_ARMS        = 'Arms';
+const SPEC_WARRIOR_FURY        = 'Fury';
+const SPEC_WARRIOR_PROT        = 'Prot (War)';
+
 // For knowing what kind of tier style to display
 const TIER_MODE_NUM = 'num';
 const TIER_MODE_S   = 's';
