@@ -467,8 +467,56 @@ class Character extends BaseModel
         return $query;
     }
 
+    // try to pick a defaul archetype if none is set
+    public function getArchetypeAttribute() {
+        if ($this->attributes['archetype']) {
+            return $this->attributes['archetype'];
+        }
+
+        // No archetype is set.
+        // For classes that only have one archetype, return that one archetype.
+        if ($this->class) {
+            if ($this->class === self::CLASS_DEATH_KNIGHT) {
+                return self::ARCHETYPE_DPS;
+            }
+            if ($this->class === self::CLASS_DRUID) {
+                return null;
+            }
+            if ($this->class === self::CLASS_HUNTER) {
+                return self::ARCHETYPE_DPS;
+            }
+            if ($this->class === self::CLASS_MAGE) {
+                return self::ARCHETYPE_DPS;
+            }
+            if ($this->class === self::CLASS_PALADIN) {
+                return null;
+            }
+            if ($this->class === self::CLASS_PRIEST) {
+                return null;
+            }
+            if ($this->class === self::CLASS_ROGUE) {
+                return self::ARCHETYPE_DPS;
+            }
+            if ($this->class === self::CLASS_SHAMAN) {
+                return null;
+            }
+            if ($this->class === self::CLASS_WARLOCK) {
+                return self::ARCHETYPE_DPS;
+            }
+            if ($this->class === self::CLASS_WARRIOR) {
+                return null;
+            }
+        } else {
+            return null;
+        }
+    }
+
     public function getDisplayArchetypeAttribute() {
-        return $this->archetype ? self::archetypes()[$this->archetype] : null;
+        if ($this->archetype) {
+            return self::archetypes()[$this->archetype];
+        } else {
+            return null;
+        }
     }
 
     public function getDisplayClassAttribute() {
@@ -493,36 +541,49 @@ class Character extends BaseModel
 
     // Differentiates between caster DPS and physical DPS.
     public function getSubArchetypeAttribute() {
-        if ($this->class === self::CLASS_DEATH_KNIGHT) {
-            return self::ARCHETYPE_DPS_PHYSICAL;
-        } else if ($this->class === self::CLASS_DRUID && $this->archetype === self::ARCHETYPE_DPS && $this->spec) {
-            if ($this->spec === self::SPEC_DRUID_BALANCE) {
-                return self::ARCHETYPE_DPS_CASTER;
-            } else {
-                // If you are a DPS Druid that isn't Balance; you must be Feral.
+        if ($this->class) {
+            if ($this->class === self::CLASS_DEATH_KNIGHT) {
                 return self::ARCHETYPE_DPS_PHYSICAL;
             }
-        } else if ($this->class === self::CLASS_HUNTER) {
-            return self::ARCHETYPE_DPS_PHYSICAL;
-        } else if ($this->class === self::CLASS_MAGE) {
-            return self::ARCHETYPE_DPS_CASTER;
-        } else if ($this->class === self::CLASS_PALADIN && $this->archetype === self::ARCHETYPE_DPS) {
-            return self::ARCHETYPE_DPS_PHYSICAL;
-        } else if ($this->class === self::CLASS_PRIEST && $this->archetype === self::ARCHETYPE_DPS) {
-            return self::ARCHETYPE_DPS_CASTER;
-        } else if ($this->class === self::CLASS_ROGUE) {
-            return self::ARCHETYPE_DPS_PHYSICAL;
-        } else if ($this->class === self::CLASS_SHAMAN && $this->archetype === self::ARCHETYPE_DPS) {
-            if ($this->spec === self::SPEC_SHAMAN_ENHANCE) {
+            if ($this->class === self::CLASS_DRUID && $this->archetype === self::ARCHETYPE_DPS && $this->spec) {
+                if ($this->spec === self::SPEC_DRUID_BALANCE) {
+                    return self::ARCHETYPE_DPS_CASTER;
+                } else {
+                    // If you are a DPS Druid that isn't Balance; you must be Feral.
+                    return self::ARCHETYPE_DPS_PHYSICAL;
+                }
+            }
+            if ($this->class === self::CLASS_HUNTER) {
                 return self::ARCHETYPE_DPS_PHYSICAL;
-            } else {
-                // If you are a DPS Shaman that isn't Enhancement; you must be Elemental or some other kind of caster.
+            }
+            if ($this->class === self::CLASS_MAGE) {
                 return self::ARCHETYPE_DPS_CASTER;
             }
-        } else if ($this->class === self::CLASS_WARLOCK) {
-            return self::ARCHETYPE_DPS_CASTER;
-        } else if ($this->class === self::CLASS_WARRIOR && $this->archetype === self::ARCHETYPE_DPS) {
-            return self::ARCHETYPE_DPS_PHYSICAL;
+            if ($this->class === self::CLASS_PALADIN && $this->archetype === self::ARCHETYPE_DPS) {
+                return self::ARCHETYPE_DPS_PHYSICAL;
+            }
+            if ($this->class === self::CLASS_PRIEST && $this->archetype === self::ARCHETYPE_DPS) {
+                return self::ARCHETYPE_DPS_CASTER;
+            }
+            if ($this->class === self::CLASS_ROGUE) {
+                return self::ARCHETYPE_DPS_PHYSICAL;
+            }
+            if ($this->class === self::CLASS_SHAMAN && $this->archetype === self::ARCHETYPE_DPS) {
+                if ($this->spec === self::SPEC_SHAMAN_ENHANCE) {
+                    return self::ARCHETYPE_DPS_PHYSICAL;
+                } else {
+                    // If you are a DPS Shaman that isn't Enhancement; you must be Elemental or some other kind of caster.
+                    return self::ARCHETYPE_DPS_CASTER;
+                }
+            }
+            if ($this->class === self::CLASS_WARLOCK) {
+                return self::ARCHETYPE_DPS_CASTER;
+            }
+            if ($this->class === self::CLASS_WARRIOR && $this->archetype === self::ARCHETYPE_DPS) {
+                return self::ARCHETYPE_DPS_PHYSICAL;
+            }
+        } else {
+            return null;
         }
     }
 
