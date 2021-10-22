@@ -463,8 +463,14 @@ class CharacterController extends Controller
         $characters = [];
 
         foreach (request()->input('characters') as $inputCharacter) {
+            // Case insensitive check
+            $nameIsTaken = $guild->characters
+                ->filter(function ($character) use ($inputCharacter) {
+                        return strtolower($character->name) === strtolower($inputCharacter['name']);
+                    })
+                ->count() ? true : false;
             // Laravel validation didn't check for special characters in name, so we do it here.
-            if ($inputCharacter['name'] && !$guild->characters->where('name', $inputCharacter['name'])->count()) {
+            if ($inputCharacter['name'] && !$nameIsTaken) {
                 $character = new Character;
                 $character->name          = $inputCharacter['name'];
                 $character->slug          = slug($inputCharacter['name']);

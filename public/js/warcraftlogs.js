@@ -112,7 +112,7 @@ function printWarcraftlogsRankedCharacters(reportCharacters, callback, mode, mes
     reportCharacters.forEach(function (reportCharacter) {
         // 0 is name, 1 is the actual object we got from WCL
         reportCharacter = reportCharacter[1];
-        let character = characters.find(character => character.name === reportCharacter.name);
+        let character = characters.find(character => character.name.toLowerCase() === reportCharacter.name.toLowerCase());
         if (mode === 'getExisting') {
             if (character) {
                 if (callback(character)) {
