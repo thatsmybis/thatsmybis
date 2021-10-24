@@ -93,7 +93,7 @@ class RecipeController extends Controller
             ->orderBy('items.name')
             ->groupBy('items.id')
             ->with([
-                'recipeCharacters' => function ($query) use($guild) {
+                'receivedAndRecipeCharacters' => function ($query) use($guild) {
                     return $query->select([
                             'characters.id',
                             'characters.raid_group_id',
@@ -114,6 +114,7 @@ class RecipeController extends Controller
                         })
                         ->where([
                                 ['characters.guild_id', $guild->id],
+                                ['character_items.type', Item::TYPE_RECIPE],
                             ])
                         ->groupBy(['character_items.character_id', 'character_items.item_id'])
                         ->orderBy('characters.name');

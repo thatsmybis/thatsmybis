@@ -231,39 +231,6 @@ class Item extends BaseModel
             ->orderBy('characters.name');
     }
 
-    public function recipeCharacters() {
-        return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
-            ->where('character_items.type', self::TYPE_RECIPE)
-            ->select([
-                'characters.*',
-                'raid_groups.name AS raid_group_name',
-                'raid_group_roles.color AS raid_group_color',
-                'added_by_members.username AS added_by_username',
-            ])
-            ->whereNull('characters.inactive_at')
-            ->leftJoin('raid_groups', function ($join) {
-                $join->on('raid_groups.id', 'characters.raid_group_id');
-            })
-            ->leftJoin('roles AS raid_group_roles', function ($join) {
-                $join->on('raid_group_roles.id', 'raid_groups.role_id');
-            })
-            ->leftJoin('members AS added_by_members', function ($join) {
-                $join->on('added_by_members.id', 'character_items.added_by');
-            })
-            ->withTimeStamps()
-            ->withPivot([
-                'added_by',
-                'raid_group_id',
-                'type',
-                'order',
-                'note',
-                'officer_note',
-                'is_offspec',
-                'received_at',
-            ])
-            ->orderBy('characters.name');
-    }
-
     public function wishlistCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
             ->select([
