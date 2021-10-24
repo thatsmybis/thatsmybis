@@ -233,7 +233,7 @@ class Item extends BaseModel
 
     public function recipeCharacters() {
         return $this->belongsToMany(Character::class, 'character_items', 'item_id', 'character_id')
-            ->whereIn('character_items.type', [self::TYPE_RECIPE])
+            ->where('character_items.type', self::TYPE_RECIPE)
             ->select([
                 'characters.*',
                 'raid_groups.name AS raid_group_name',
