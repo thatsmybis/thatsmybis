@@ -65,12 +65,14 @@ class RecipeController extends Controller
                 ['characters.guild_id', $guild->id],
                 ['items.expansion_id',  $guild->expansion_id],
             ])
+            ->whereNull('characters.inactive_at')
             ->whereIn('character_items.type', [Item::TYPE_RECIPE])
             // Second WHERE...
             ->orWhere([
                 ['characters.guild_id', $guild->id],
                 ['items.expansion_id',  $guild->expansion_id],
             ])
+            ->whereNull('characters.inactive_at')
             ->whereIn('character_items.type', [Item::TYPE_RECIPE])
             // Third WHERE...
             ->orWhereRaw("(`items`.`name` LIKE '%Design%'
@@ -85,6 +87,7 @@ class RecipeController extends Controller
                 ['characters.guild_id', $guild->id],
                 ['items.expansion_id',  $guild->expansion_id],
             ])
+            ->whereNull('characters.inactive_at')
             ->whereIn('character_items.type', [Item::TYPE_RECIPE, Item::TYPE_RECEIVED])
             // End the WHERE's
             ->orderBy('items.name')
