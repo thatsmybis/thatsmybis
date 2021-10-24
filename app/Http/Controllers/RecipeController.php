@@ -114,7 +114,6 @@ class RecipeController extends Controller
                         })
                         ->where([
                                 ['characters.guild_id', $guild->id],
-                                ['character_items.type', Item::TYPE_RECIPE],
                             ])
                         ->groupBy(['character_items.character_id', 'character_items.item_id'])
                         ->orderBy('characters.name');
