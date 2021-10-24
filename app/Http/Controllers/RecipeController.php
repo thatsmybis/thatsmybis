@@ -93,7 +93,7 @@ class RecipeController extends Controller
             ->orderBy('items.name')
             ->groupBy('items.id')
             ->with([
-                'receivedAndRecipeCharacters' => function ($query) use($guild) {
+                'recipeCharacters' => function ($query) use($guild) {
                     return $query->select([
                             'characters.id',
                             'characters.raid_group_id',
