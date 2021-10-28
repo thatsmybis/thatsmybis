@@ -16,7 +16,7 @@ If you have any questions, reach out on the project's Discord server: [https://d
 Stack:
 
 - Linux (server is running Ubuntu)
-- PHP (Laravel is the framework)
+- PHP 8.0 (Laravel is the framework)
 - MaraiDB (almost 1:1 identical to MySQL)
 - Nginx
 - Javascript (jQuery, DataTables library)
@@ -76,6 +76,27 @@ Translation files are exported using [kkomelin/laravel-translatable-string-expor
 Guilds may connect a Warcraft Logs account to their guild. They may also specify a Warcraft Logs Guild ID to associate with their TMB guild.
 
 Within the code in this repo "Warcraft Logs" is written as one word: `warcraftlogs`, `Warcraftlogs`, or `WARCRAFTLOGS` depending on the context.
+
+
+### PHP 7.4 > 8.0 Upgrade Notes
+
+This project was originally written in an early version of PHP 7.4. To upgrade to 8.0, I performed the following (you may need to install additional packages `php-*` and change the nginx configuration based on your environment, or if you are using Apache instead of nginx):
+```
+sudo apt update
+sudo apt upgrade
+sudo add-apt-repository ppa:ondrej/php
+sudo add-apt-repository ppa:ondrej/nginx
+sudo apt update
+sudo apt upgrade
+sudo apt install php-fpm
+sudo apt install php-mysql
+sudo apt install php-mbstring
+sudo systemctl status php8.0-fpm
+sudo a2enmod actions fcgid alias proxy_fcgi
+sudo nano /etc/nginx/sites-available/thatsmybis.local
+    > fastcgi_pass unix:/var/run/php/php9.0-fpm.sock
+sudo systemctl restart nginx
+```
 
 ### phpredis Installation
 
