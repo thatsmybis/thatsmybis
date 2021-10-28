@@ -264,6 +264,7 @@ class CharacterLootController extends Controller
         }
 
         if (request()->input('recipes')) {
+
             // Don't bother enforcing an item limit here
             $this->syncItems(
                 $character->recipes,
@@ -431,6 +432,8 @@ class CharacterLootController extends Controller
                 $receivedAt = null;
                 if (isset($inputItem['new_received_at'])) {
                     $receivedAt = Carbon::parse($inputItem['new_received_at'])->toDateTimeString();
+                } else if ($isReceived || $itemType == 'received') {
+                    $receivedAt = Carbon::now()->toDateTimeString();
                 }
 
                 $raidId = null;

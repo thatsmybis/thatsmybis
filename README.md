@@ -98,6 +98,8 @@ sudo nano /etc/nginx/sites-available/thatsmybis.local
 sudo systemctl restart nginx
 ```
 
+You may need to copy over some custom configs to php8.0-fpm (`/etc/php/8.0/fpm/php.ini`), such as `max_input_vars` as defined elsewhere in this readme.
+
 ### phpredis Installation
 
 #### Option 1
