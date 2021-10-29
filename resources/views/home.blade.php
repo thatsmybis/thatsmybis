@@ -18,8 +18,8 @@
             <h1 class="mt-5 pt-5 mb-1 text-1">
                 <span class="font-weight-bold">{{ env('APP_NAME') }}</span>
             </h1>
-            <h3 class="mb-5">
-                {!! __("<span class='text-expansion-1'>Season of Mastery</span>") !!}
+            <h3 class="mb-5 text-expansion-1">
+                {{ __("Season of Mastery</span>") }}
             </h3>
             <h2 class="mt-1 font-weight-normal mb-5 text-3">
                 {{ __("A tool for World of Warcraft") }}
