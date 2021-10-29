@@ -15,29 +15,23 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-lg-12 text-center mt-5 mb-5 pt-5">
-            <h1 class="mt-5 mb-5 pt-5 text-1">
+            <h1 class="mt-5 pt-5 mb-1 text-1">
                 <span class="font-weight-bold">{{ env('APP_NAME') }}</span>
             </h1>
-            <p class="mt-1 font-weight-normal mb-5 text-3">
+            <h3 class="mb-5">
+                {!! __("<span class='text-expansion-1'>Season of Mastery</span>") !!}
+            </h3>
+            <h2 class="mt-1 font-weight-normal mb-5 text-3">
                 {{ __("A tool for World of Warcraft") }}
                 <br>
                 {{ __("loot management") }}
-            </p>
+            </h2>
 
-            <p class="font-weight-normal mb-5 pt-3 text-4">
+            <h3 class="font-weight-normal mb-5 pt-3 text-4">
                 {{ __("easily keep track of your raid's") }}
                 <br>
                 {{ __("loot distribution") }}
-            </p>
-
-            <p class="text-5 pt-3">
-                {{ __("see what people are wishlisting in") }}
-                <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="font-weight-bold text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
-                {{ __("and") }}
-                <a href="{{ route('loot.wishlist', ['expansionName' => 'classic']) }}" class="font-weight-bold text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
-                <br>
-                {{ __("or view our public") }} <a href="{{ route('loot') }}">{{ __("loot tables") }}</a>
-            </p>
+            </h3>
 
             <div class="mt-5 mb-5">
                 <a class="btn btn-light" href="{{ route('discordLogin') }}" title="Sign in with Discord" rel="nofollow">
@@ -45,16 +39,27 @@
                 </a>
             </div>
 
+            <h4 class="text-5 pt-3">
+                {{ __("see what people are wishlisting in") }}
+                <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="font-weight-bold text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
+                {{ __("and") }}
+                <a href="{{ route('loot.wishlist', ['expansionName' => 'classic']) }}" class="font-weight-bold text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
+            </h4>
+
+            <p class="mt-3">
+                {{ __("or view our public") }} <a href="{{ route('loot') }}">{{ __("loot tables") }}</a>
+            </p>
+
             <div class="pt-5 mt-5 mb-5">
                 <p class="font-weight-bold text-4">
-                    {{ __("Preview video") }} {{ __("(outdated)") }}
+                    {{ __("Preview video") }}
                 </p>
                 <iframe style="width:100%;max-width:960px;height:540px;" src="https://www.youtube.com/embed/vOJuNdYs_2w" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
 
             <div class="pt-5 mt-5 mb-5">
                 <p class="font-weight-bold text-4">
-                    {{ __("Longer preview video with most of the new features and stuff") }} {{ __("(outdated)") }}
+                    {{ __("Longer preview video with most of the new features and stuff") }}
                 </p>
                 <iframe style="width:100%;max-width:960px;height:540px;" src="https://www.youtube.com/embed/hj_tqjxy6sY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
