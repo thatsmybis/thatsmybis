@@ -63,6 +63,10 @@
                 </p>
                 <iframe style="width:100%;max-width:960px;height:540px;" src="https://www.youtube.com/embed/hj_tqjxy6sY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
+
+            <p class="mt-3">
+                {!! __("supports Classic, Classic Fresh, Classic Season of Mastery, The Burning Crusade (TBC),<br> and eventually Wrath of the Lich King (WotLK) upon release") !!}
+            </p>
         </div>
     </div>
 </div>
