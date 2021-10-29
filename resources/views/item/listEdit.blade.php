@@ -36,6 +36,12 @@
                                 </a>
                             </li>
                         @endforeach
+                        <li class="list-inline-item mt-2 mb-2">
+                            <span id="loadAverageTiers" class="btn btn-secondary">
+                                <span class="fas fa-fw fa-trophy"></span>
+                                Load Default Tiers
+                            </span>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -111,7 +117,7 @@
                                             @endif
                                         </label>
 
-                                        <select name="items[{{ $loop->iteration }}][tier]" class="form-control dark">
+                                        <select name="items[{{ $loop->iteration }}][tier]" data-item-id="{{ $item->item_id }}" class="form-control dark">
                                             <option value="" selected>
                                             —
                                             </option>
@@ -216,7 +222,24 @@
 
 @section('scripts')
 <script>
-    $(document).ready(() => warnBeforeLeaving("#editForm"));
+    var averageTiers = {!! $averageTiers->toJson() !!};
+    $(document).ready(function () {
+        warnBeforeLeaving("#editForm");
+
+        $("#loadAverageTiers").click(function () {
+            if (confirm("{{ __("Doing this will overwrite any custom tiers for this dungeon. Continue?") }}")) {
+                $.each($("select"), function (key, value) {
+                    let itemId = $(this).data("itemId");
+                    if (itemId) {
+                        let averageTier = averageTiers[itemId].average_tier;
+                        if (averageTier) {
+                            $(this).val(Math.round(averageTier));
+                        }
+                    }
+                });
+            }
+        });
+    });
 </script>
 @endsection
 

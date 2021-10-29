@@ -59,7 +59,7 @@
                                     </form>
                                 </span>
                                 <div class="dropdown-item">
-                                    <a href="{{ route('donate') }}">
+                                    <a href="{{ route('donate') }}" class="font-weight-bold">
                                         {{ __("view donors") }}
                                     </a>
                                 </div>

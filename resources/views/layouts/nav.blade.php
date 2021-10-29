@@ -70,6 +70,11 @@
                                 <div class="dropdown-divider"></div>
                             @endif
 
+                            <a class="dropdown-item text-muted" href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $currentMember->id]) }}">
+                                <span class="fas fa-user-plus text-muted"></span>
+                                {{ __("Create character") }}
+                            </a>
+
                             <a class="dropdown-item text-muted" href="{{ route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                                 <span class="fas fa-fw fa-scroll-old text-muted"></span>
                                 {{ __("Sitewide wishlists") }}

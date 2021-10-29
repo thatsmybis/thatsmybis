@@ -68,7 +68,7 @@
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <a href="{{ route('character.showCreate', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'member_id' => $member->id]) }}" class="btn btn-success font-weight-medium">
-                                            <span class="fas fa-plus"></span>
+                                            <span class="fas fa-user-plus"></span>
                                             {{ __("Create character") }}
                                         </a>
                                     </li>

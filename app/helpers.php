@@ -186,17 +186,15 @@ function splitByLine($string) {
 function numToSTier($float) {
     if ($float > 0) {
         $tiers = App\Guild::tiers();
-
         $whole = floor($float);
         $decimal = $float - $whole;
-
         $affix = '';
-        if ($decimal > 0.66) {
-            $affix = '++';
-        } else if ($decimal > 0.33) {
+        // Comparing floats is icky: https://www.php.net/manual/en/language.types.float.php#language.types.float.comparison
+        if ($decimal >= 0.599) {
             $affix = '+';
+        } else if ($decimal >= 0.299) {
+            $affix = '++';
         }
-
         return $tiers[ceil($float)] . $affix;
     } else {
         return '';
