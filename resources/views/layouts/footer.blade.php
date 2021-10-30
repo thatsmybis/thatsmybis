@@ -66,21 +66,24 @@
                             </div>
                         </div>
                     </li>
-                    <li class="list-inline-item">
-                        <a href="{{ route('faq') }}" class="text-white">
+                    <li class="list-inline-item small">
+                        <a href="{{ route('faq') }}" class="text-muted">
                             {{ __("FAQ") }}
                         </a>
                     </li>
-                    <li class="list-inline-item">
-                        <a href="{{ route('privacy') }}" class="text-white">
+                    <li class="list-inline-item smaller">
+                        <a href="{{ route('privacy') }}" class="text-muted">
                             {{ __("privacy") }}
                         </a>
                     </li>
-                    <li class="list-inline-item">
-                        <a href="{{ env('LINK_GITHUB') }}" target="_blank" class="text-white">
+                    <li class="list-inline-item smaller">
+                        <a href="{{ env('LINK_GITHUB') }}" target="_blank" class="text-muted">
                             <span class="fab fa-github"></span>
                             {{ __("Github") }}
                         </a>
+                    </li>
+                    <li class="list-inline-item smaller">
+                        <span data-ccpa-link="1" class="text-muted"></span>
                     </li>
                 </ul>
                 <!-- who cares? <p class="text-muted small mb-4 mb-lg-0">&copy; {{ env('APP_NAME') }} 2021. All Rights Reserved.</p> -->

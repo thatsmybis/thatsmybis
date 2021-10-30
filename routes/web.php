@@ -19,6 +19,7 @@ Route::get( '/faq',     'HomeController@faq')    ->name('faq');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 Route::get( '/donate',  'HomeController@donate') ->name('donate');
+Route::get( '/ads.txt', function () {return redirect()->away(env('ADS_TXT_URL'));});
 
 // Authentication routes:
 Route::get( 'login', 'Auth\LoginController@showLoginForm')->name('login');

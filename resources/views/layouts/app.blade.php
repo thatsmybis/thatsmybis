@@ -86,9 +86,13 @@
         instructions how to enable JavaScript in your web browser</a>.
     </noscript>
 
-    <!-- ads. -->
-    <!-- original email <script data-ad-client="ca-pub-2856743447375289" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> -->
+    <!-- AdSense -->
     <script data-ad-client="ca-pub-8209165373319221" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <!-- Ads -->
+    <script>
+    window.nitroAds=window.nitroAds||{createAd:function(){window.nitroAds.queue.push(["createAd",arguments])},addUserToken:function(){window.nitroAds.queue.push(["addUserToken",arguments])},queue:[]};
+    </script>
+    <script async src="https://s.nitropay.com/ads-921.js"></script>
 </head>
 <body class="@yield('bodyClass')">
     @include('layouts/nav')
@@ -204,7 +208,7 @@
     @endif
 
     <!-- Button that sticks to bottom right of page -->
-    <a id="reportBug" href="{{ env('APP_DISCORD') }}" target="_blank" class="btn btn-sm btn-light" title="Report a bug">
+    <a id="reportBug" href="{{ env('APP_DISCORD') }}" target="_blank" class="btn btn-sm btn-light" title="{{ __('Report a bug') }}">
         {{ __("Give Feedback") }} <span class="text-success fal fa-fw fa-comment-dots"></span>
     </a>
 

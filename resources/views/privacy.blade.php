@@ -9,20 +9,22 @@
                 <span class="fas fa-fw fa-lock"></span>
                 {{ __("Privacy Policy") }}
             </h1>
-            <!--
-            <p class="text-grey">
-                Last revised August 10, 2020
-            </p>
-            -->
 
             <ul class="small text-grey">
                 <li class="no-bullet">
                     <strong>Change log:</strong>
                 </li>
                 <li>
+                    October 30, 2021 - Added "do not sell my personal information" link for California residents.
+                </li>
+                <li>
                     August 10, 2020 - Document creation date. Google Analytics requires there to be a privacy policy, so here you go.
                 </li>
             </ul>
+
+            <p>
+                <span data-ccpa-link="2"></span>
+            </p>
 
             <p>
                 This privacy policy describes the information collected by {{ env('APP_NAME') }} ("{{ env('APP_NAME') }}", "we", "us") and how we use that information.
@@ -67,6 +69,11 @@
             </p>
             <p>
                 Aggregated statistical information may be shared. For example, how many users use a given feature, how many users visit the website, etc. (nothing personally identifiable)
+            </p>
+
+            <h3>California Consumer Protection Act</h3>
+            <p>
+                When you see "do not sell my personal information" at the bottom of a website; it's for California residents. How is data "sold" under the <a href="https://docs.microsoft.com/en-us/compliance/regulatory/ccpa-faq" target="_blank">CCPA</a>? The definition of "sell" in the CCPA is incredibly broad, including "making personal information available to" a third party for monetary or other valuable consideration. For {{ env('APP_NAME') }} that means running analytics and ads.
             </p>
 
             <h3>Children under 13</h3>
