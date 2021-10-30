@@ -5,11 +5,13 @@ namespace App\Http\Controllers;
 use App\{Guild, Item, User};
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
     const GUILDS_PER_PAGE = 20;
+    const USERS_PER_PAGE  = 20;
 
     /**
      * Create a new controller instance.
@@ -120,4 +122,75 @@ class AdminController extends Controller
     // item stats (which items are the most wished for, etc.
 
     // extrapolate wishlist items by class/faction
+
+    /**
+     * Show a user for editing
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showEditUser($id)
+    {
+        $currentMember = request()->get('currentMember');
+
+        $user = User::select('*')->findOrFail($id);
+        $user->load(['members', 'members.guild']);
+
+        return view('admin.users.edit', [
+            'currentMember' => $currentMember,
+            'user'          => $user,
+        ]);
+    }
+
+    /**
+     * Show all users, paginated
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showUsers()
+    {
+        $currentMember = request()->get('currentMember');
+
+        $query = DB::table('users');
+
+        if (!empty(request()->input('discord_username'))) {
+            $query = $query->where('users.discord_username', 'like', '%' . request()->input('discord_username') . '%');
+        }
+
+        if (!empty(request()->input('order_by'))) {
+            $query = $query->orderBy(request()->input('order_by'), 'desc');
+        } else {
+            $query = $query->orderBy('users.discord_username', 'asc');
+        }
+
+        $users = $query->paginate(self::USERS_PER_PAGE);
+
+        return view('admin.users.list', [
+            'currentMember' => $currentMember,
+            'users'         => $users,
+        ]);
+    }
+
+    /**
+     * Edit a user
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function submitEditUser($id)
+    {
+        $currentMember = request()->get('currentMember');
+
+        $now = Carbon::now()->toDateTimeString();
+
+        $user = User::findOrFail(request()->input('id'));
+
+        $user->ads_disabled_at = request()->input('ads_disabled_at') ? $now : null;
+        $user->banned_at       = request()->input('banned_at') ? $now : null;
+
+        $user->save();
+
+        return view('admin.users.edit', [
+            'currentMember' => $currentMember,
+            'user'          => $user,
+        ]);
+    }
 }

@@ -29,6 +29,7 @@ class User extends Authenticatable
         'discord_token_expiry',
         'is_streamer_mode',
         'banned_at',
+        'ads_disabled_at',
         'password',
     ];
 

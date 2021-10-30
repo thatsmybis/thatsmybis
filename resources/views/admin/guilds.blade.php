@@ -10,6 +10,7 @@
                     <h1 class="font-weight-medium">
                         <span class="fas fa-fw fa-users-crown text-gold"></span>
                         Guilds
+                        @include('admin/partials/nav')
                     </h1>
                     <div class="text-5 text-danger">
                         <span class="font-weight-bold">DANGER! DO NOT</span> modify anything in guilds that you do not belong to. That isn't supported yet and will break many things.
@@ -90,7 +91,7 @@
             <div class="col-lg-2 col-md-3 col-6">
                 <div class="form-group">
                     <label for="order_by" class="font-weight-bold">
-                        <span class="fas fa-fw fa-users text-muted"></span>
+                        <span class="fas fa-fw fa-sort text-muted"></span>
                         Sort By
                     </label>
 
@@ -111,7 +112,7 @@
 
             <div class="col-12">
                 <div class="form-group">
-                    <button class="btn btn-success float-right"><span class="fas fa-fw fa-search"></span> Query</button>
+                    <button class="btn btn-success"><span class="fas fa-fw fa-search"></span> Query</button>
                 </div>
             </div>
         </div>
@@ -123,7 +124,7 @@
         </div>
         <div class="col-12 pr-0 pl-0">
             <div class="col-12 pb-3 pr-2 pl-2 rounded">
-                <table id="members" class="table table-border table-hover stripe">
+                <table id="guilds" class="table table-border table-hover stripe">
                     <thead>
                         <tr>
                             <th>
@@ -260,4 +261,22 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+$(document).ready(function () {
+    $("#guilds").DataTable({
+        order  : [], // Disable initial auto-sort; relies on server-side sorting
+        paging : false,
+        fixedHeader : true, // Header row sticks to top of window when scrolling down
+        columns : [
+            { orderable : false },
+            { orderable : false },
+            { orderable : false },
+            { orderable : false },
+        ]
+    });
+});
+</script>
 @endsection

@@ -67,10 +67,17 @@ Route::post('/set-locale',            'MemberController@setLocale')->name('setLo
 // });
 
 Route::group([
+        'prefix'     => 'admin',
         'middleware' => ['seeUser', 'checkAdmin'],
-        'prefix'     => 'admin'
     ], function () {
-    Route::get( '/guilds', 'AdminController@showGuilds')->name('admin.guilds');
+    Route::group(['prefix' => 'guilds'], function () {
+        Route::get( '/', 'AdminController@showGuilds')->name('admin.guilds');
+    });
+    Route::group(['prefix' => 'users'], function () {
+        Route::get( '/',              'AdminController@showUsers')->name('admin.users.list');
+        Route::get( '/{userId}/edit', 'AdminController@showEditUser')->name('admin.users.edit.show');
+        Route::post('/{userId}/edit', 'AdminController@submitEditUser')->name('admin.users.edit.submit');
+    });
 });
 
 Route::group([
