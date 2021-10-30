@@ -136,13 +136,12 @@
                                 Objects
                             </th>
                             <th>
-                                <span class="fas fa-fw fa-sack text-muted"></span>
-                                Loot
-
-                            </th>
-                            <th>
                                 <span class="fas fa-fw fa-list text-muted"></span>
                                 Config
+                            </th>
+                            <th>
+                                <span class="fas fa-fw fa-sack text-muted"></span>
+                                Loot
                             </th>
                         </tr>
                     </thead>
@@ -187,25 +186,6 @@
                                 </td>
                                 <td class="">
                                     <ul class="no-bullet no-indent">
-                                        <li>
-                                            {{ $guild->wishlist_item_count }} <span class="text-muted small">wishlist items</span>
-                                        </li>
-                                        <li>
-                                            {{ $guild->prio_item_count }} <span class="text-muted small">prio items</span>
-                                        </li>
-                                        <li>
-                                            {{ $guild->received_item_count }} <span class="text-muted small">received items</span>
-                                        </li>
-                                        <li>
-                                            {{ $guild->batch_item_count }} <span class="text-muted small">batch items</span>
-                                        </li>
-                                        <li>
-                                            {{ $guild->batch_count }} <span class="text-muted small">batches</span>
-                                        </li>
-                                    </ul>
-                                </td>
-                                <td class="">
-                                    <ul class="no-bullet no-indent">
                                         <li class="">
                                             {{ $guild->tier_mode ? $guild->tier_mode : 'no' }} <span class="text-muted small">tier</span>
                                         </li>
@@ -244,6 +224,27 @@
                                                 <span class="text-muted small">instance item sort</span>
                                             </li>
                                         @endif
+                                    </ul>
+                                </td>
+                                <td class="">
+                                    <ul class="no-bullet no-indent">
+                                        <!--
+                                        <li>
+                                            {{ $guild->wishlist_item_count }} <span class="text-muted small">wishlist items</span>
+                                        </li>
+                                        <li>
+                                            {{ $guild->prio_item_count }} <span class="text-muted small">prio items</span>
+                                        </li>
+                                        <li>
+                                            {{ $guild->received_item_count }} <span class="text-muted small">received items</span>
+                                        </li>
+                                        <li>
+                                            {{ $guild->batch_item_count }} <span class="text-muted small">batch items</span>
+                                        </li>
+                                        <li>
+                                            {{ $guild->batch_count }} <span class="text-muted small">batches</span>
+                                        </li>
+                                        -->
                                     </ul>
                                 </td>
                             </tr>
