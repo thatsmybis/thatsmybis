@@ -17,7 +17,7 @@ class HomeController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('auth')->except('index', 'about', 'contact', 'donate', 'faq', 'privacy', 'terms');
+        $this->middleware('auth')->except('index', 'about', 'caliPrivacy', 'contact', 'donate', 'faq', 'privacy', 'terms');
         $this->middleware('seeUser');
     }
 
@@ -29,6 +29,16 @@ class HomeController extends Controller
     public function about()
     {
         return view('about');
+    }
+
+    /**
+     * Show the Privacy Policy page for California users.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function caliPrivacy()
+    {
+        return view('caliPrivacy');
     }
 
     /**

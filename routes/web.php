@@ -17,6 +17,7 @@ Route::get( '/',    'HomeController@index')->name('home');
 // Route::get( '/contact', 'HomeController@contact')->name('contact');
 Route::get( '/faq',     'HomeController@faq')    ->name('faq');
 Route::get( '/privacy', 'HomeController@privacy')->name('privacy');
+Route::get( '/cali-privacy', 'HomeController@caliPrivacy')->name('caliPrivacy');
 Route::get( '/terms',   'HomeController@terms')  ->name('terms');
 Route::get( '/donate',  'HomeController@donate') ->name('donate');
 Route::get( '/ads.txt', function () {return redirect()->away(env('ADS_TXT_URL'));});

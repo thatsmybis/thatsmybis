@@ -71,9 +71,12 @@
                 Aggregated statistical information may be shared. For example, how many users use a given feature, how many users visit the website, etc. (nothing personally identifiable)
             </p>
 
-            <h3>California Consumer Protection Act</h3>
+            <h3>Additional Disclosures for California Residents</h3>
             <p>
-                When you see "do not sell my personal information" at the bottom of a website; it's for California residents. How is data "sold" under the <a href="https://docs.microsoft.com/en-us/compliance/regulatory/ccpa-faq" target="_blank">CCPA</a>? The definition of "sell" in the CCPA is incredibly broad, including "making personal information available to" a third party for monetary or other valuable consideration. For {{ env('APP_NAME') }} that means running analytics and ads.
+                <a href="{{ route('caliPrivacy') }}">Additional Disclosures for California Residents</a>
+            </p>
+            <p>
+                When you see "do not sell my personal information" at the bottom of a website; it's for California residents. How is data "sold" under the <a href="https://docs.microsoft.com/en-us/compliance/regulatory/ccpa-faq" target="_blank">CCPA</a>? The definition of "sell" in the CCPA is incredibly broad, including "making personal information available to" a third party for monetary or other valuable consideration. For {{ env('APP_NAME') }} that primarily means running analytics and ads, in addition to everything covered under <a href="{{ route('caliPrivacy') }}">Additional Disclosures for California Residents</a>.
             </p>
 
             <h3>Children under 13</h3>
