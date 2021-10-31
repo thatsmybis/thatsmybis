@@ -207,6 +207,15 @@
         @include('layouts/footer')
     @endif
 
+    @if(request()->get('isAdmin'))
+        <!-- NitroPay GDPR preferences -->
+        <div id="consent-box" style="display:none;">
+            <button onclick="window.__cmp('showModal');">
+                Update cookie preferences
+            </button>
+        </div>
+    @endif
+
     <!-- Button that sticks to bottom right of page -->
     <a id="reportBug" href="{{ env('APP_DISCORD') }}" target="_blank" class="btn btn-sm btn-light" title="{{ __('Report a bug') }}">
         {{ __("Give Feedback") }} <span class="text-success fal fa-fw fa-comment-dots"></span>
@@ -334,6 +343,23 @@
 
     <script src="{{ loadScript('helpers.js') }}"></script>
     <script src="{{ loadScript('autocomplete.js') }}"></script>
+
+    <!-- NitroPay GDPR preferences https://docs.nitropay.com/en/articles/3623674-creating-a-link-to-open-gdpr-preferences -->
+    <script>
+      if (window["nitroAds"] && window["nitroAds"].loaded) {
+        document.getElementById("consent-box").style.display = window["__tcfapi"]
+          ? ""
+          : "none";
+      } else {
+        document.addEventListener(
+          "nitroAds.loaded",
+          () =>
+            (document.getElementById("consent-box").style.display = window["__tcfapi"]
+              ? ""
+              : "none")
+        );
+      }
+    </script>
 
     @yield('scripts')
 </body>

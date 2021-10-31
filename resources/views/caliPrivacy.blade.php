@@ -14,6 +14,10 @@
                 These additional disclosures apply only to California residents. The California Consumer Privacy Act of 2018 ("CCPA") provides additional rights to know, delete and opt-out, and requires businesses collecting or disclosing personal information to provide notices and means to exercise rights. For our full Privacy Policy, please visit our <a href="{{ route('privacy') }}">privacy policy</a>.
             </p>
 
+            <p>
+                <span data-ccpa-link="2"></span>
+            </p>
+
             <h3>1.1 Notice of Collection.</h3>
 
             <p>

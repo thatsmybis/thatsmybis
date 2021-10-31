@@ -23,10 +23,6 @@
             </ul>
 
             <p>
-                <span data-ccpa-link="2"></span>
-            </p>
-
-            <p>
                 This privacy policy describes the information collected by {{ env('APP_NAME') }} ("{{ env('APP_NAME') }}", "we", "us") and how we use that information.
             </p>
 
@@ -71,14 +67,6 @@
                 Aggregated statistical information may be shared. For example, how many users use a given feature, how many users visit the website, etc. (nothing personally identifiable)
             </p>
 
-            <h3>Additional Disclosures for California Residents</h3>
-            <p>
-                <a href="{{ route('caliPrivacy') }}">Additional Disclosures for California Residents</a>
-            </p>
-            <p>
-                When you see "do not sell my personal information" at the bottom of a website; it's for California residents. How is data "sold" under the <a href="https://docs.microsoft.com/en-us/compliance/regulatory/ccpa-faq" target="_blank">CCPA</a>? The definition of "sell" in the CCPA is incredibly broad, including "making personal information available to" a third party for monetary or other valuable consideration. For {{ env('APP_NAME') }} that primarily means running analytics and ads, in addition to everything covered under <a href="{{ route('caliPrivacy') }}">Additional Disclosures for California Residents</a>.
-            </p>
-
             <h3>Children under 13</h3>
             <p>
                 {{ env('APP_NAME') }} is not intended or directed at people under the age of 13. Therefore, people under the age of 13 may not create an account or otherwise access our services. We do not knowingly collect personal information from people under the age of 13.
@@ -86,7 +74,7 @@
 
             <h3>Analytics</h3>
             <p>
-                We collect anonymous usage information using <a href="https://www.google.com/policies/privacy/partners/" target="_blank">Google Analytics</a>.
+                We collect anonymous usage information using <a href="https://www.google.com/policies/privacy/partners/" target="_blank" rel="nofollow">Google Analytics</a>.
             </p>
             <!--
             <p>
@@ -97,6 +85,26 @@
             <h3>Information you provide about yourself while using our services</h3>
             <p>
                 If you post information on a public section of your profile or guild, we have no control over who sees it, uses it, or collects it. As such, we encourage you to exercise discretion and caution with your personal information.
+            </p>
+
+            <h3>Third Party Ads</h3>
+            <p>
+                We use NitroPay to serve ads. Information about your personal information related to NitroPay, including the cookies, device-specific information, location information and other information stored on, accessed on, or collected from your device in connection with NitroPay, as well as information about your options for cookie management related to NitroPay can be found in NitroPay's <a href="https://www.nitropay.com/privacy" rel="nofollow">Privacy Policy</a>.
+            </p>
+
+            <p>
+                <a href="http://www.networkadvertising.org/managing/opt_out.asp" target="_blank" rel="nofollow">NAI consumer opt-out</a>
+            </p>
+
+            <h3>Additional Disclosures for California Residents</h3>
+            <p>
+                <span data-ccpa-link="2"></span>
+            </p>
+            <p>
+                See Additional Disclosures for California Residents <a href="{{ route('caliPrivacy') }}">here</a>.
+            </p>
+            <p>
+                When you see "do not sell my personal information" at the bottom of a website; it's for California residents. How is data "sold" under the <a href="https://docs.microsoft.com/en-us/compliance/regulatory/ccpa-faq" target="_blank" rel="nofollow">CCPA</a>? The definition of "sell" in the CCPA is incredibly broad, including "making personal information available to" a third party for monetary or other valuable consideration. For {{ env('APP_NAME') }} that primarily means running analytics and ads, in addition to anything covered under <a href="{{ route('caliPrivacy') }}" rel="nofollow">Additional Disclosures for California Residents</a>.
             </p>
 
             <h3>Changes to this Privacy Policy</h3>
