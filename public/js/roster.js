@@ -102,6 +102,35 @@ function createTable() {
                         <ul class="no-bullet no-indent mb-2">
                             <li>
                                 <div class="dropdown text-${ row.class ? row.class.toLowerCase() : '' }">
+                                    ${
+                                        row.roster_note_order || row.roster_note_list_number || row.roster_note_is_offspec || row.roster_note_date || row.roster_note
+                                            ? `<ul class="list-inline tag bg-dark text-muted">
+                                                ${ row.roster_note_order
+                                                    ? `<li class="list-inline-item font-weight-bold text-legendary">#${ row.roster_note_order }</li>`
+                                                    : ``
+                                                }
+                                                ${ row.roster_note_list_number
+                                                    ? `<li class="list-inline-item small"><span class="">Wishlist </span> ${ row.roster_note_list_number }</li>`
+                                                    : ``
+                                                }
+                                                ${ row.roster_note_is_offspec
+                                                    ? `<li class="list-inline-item small">OS</li>`
+                                                    : ``
+                                                }
+                                                ${ row.roster_note_date
+                                                    ? `<li class="list-inline-item smaller"><span class="js-watchable-timestamp js-timestamp-title"
+                                                            data-timestamp="${ row.roster_note_date }"
+                                                            data-title="added at"
+                                                            data-is-short="1">
+                                                        </span></li>`
+                                                    : `` }
+                                                ${ row.roster_note
+                                                    ? `<li class="small"><span class="font-weight-bold">Note:</span> ${ row.roster_note }</li>`
+                                                    : ``
+                                                }
+                                                </ul>`
+                                            : ``
+                                    }
                                     <a class="dropdown-toggle text-4 font-weight-bold text-${ row.class ? row.class.toLowerCase() : '' }"
                                         id="character${ row.id }Dropdown"
                                         role="button"

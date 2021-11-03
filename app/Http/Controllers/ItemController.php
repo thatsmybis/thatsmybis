@@ -331,15 +331,15 @@ class ItemController extends Controller
         }
 
         $notes = [];
-        $notes['note']       = null;
-        $notes['priority']   = null;
-        $notes['tier']       = null;
+        $notes['note']     = null;
+        $notes['priority'] = null;
+        $notes['tier']     = null;
 
         // If this guild has notes for this item, prep them for ease of access in the view
         if ($item->guilds->count() > 0) {
-            $notes['note']       = $item->guilds->first()->note;
-            $notes['priority']   = $item->guilds->first()->priority;
-            $notes['tier']       = $item->guilds->first()->tier;
+            $notes['note']     = $item->guilds->first()->note;
+            $notes['priority'] = $item->guilds->first()->priority;
+            $notes['tier']     = $item->guilds->first()->tier;
         }
 
         $showEdit = false;
@@ -374,6 +374,15 @@ class ItemController extends Controller
                 $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
                 $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
             }
+        }
+
+        foreach ($wishlistCharacters as $character) {
+            $wish = $character->allWishlists->where('item_id', $item->item_id)->first()->pivot;
+            $character->roster_note_list_number = $wish->list_number;
+            $character->roster_note_order       = $wish->order;
+            $character->roster_note_is_offspec  = $wish->is_offspec;
+            $character->roster_note             = $wish->note;
+            $character->roster_note_date        = $wish->created_at;
         }
 
         return view('item.show', [
