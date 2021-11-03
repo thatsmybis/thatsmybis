@@ -376,15 +376,17 @@ class ItemController extends Controller
             }
         }
 
-        foreach ($wishlistCharacters as $character) {
-            $wish = $character->allWishlists->where('item_id', $item->item_id)->first();
-            if ($wish) {
-                $wish = $wish->pivot;
-                $character->roster_note_list_number = $wish->list_number;
-                $character->roster_note_order       = $wish->order;
-                $character->roster_note_is_offspec  = $wish->is_offspec;
-                $character->roster_note             = $wish->note;
-                $character->roster_note_date        = $wish->created_at;
+        if ($wishlistCharacters) {
+            foreach ($wishlistCharacters as $character) {
+                $wish = $character->allWishlists->where('item_id', $item->item_id)->first();
+                if ($wish) {
+                    $wish = $wish->pivot;
+                    $character->roster_note_list_number = $wish->list_number;
+                    $character->roster_note_order       = $wish->order;
+                    $character->roster_note_is_offspec  = $wish->is_offspec;
+                    $character->roster_note             = $wish->note;
+                    $character->roster_note_date        = $wish->created_at;
+                }
             }
         }
 
