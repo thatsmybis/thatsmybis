@@ -65,7 +65,7 @@ class RaidController extends Controller
         $createValues['slug']         = slug(request()->input('name'));
         $createValues['guild_id']     = $guild->id;
         $createValues['member_id']    = $currentMember->id;
-        $createValues['ignore_attendance'] = null;
+        $createValues['ignore_attendance'] = (request()->input('ignore_attendance') == "1" ? true : false);;
         $createValues['cancelled_at'] = null;
         $createValues['archived_at']  = null;
 
@@ -193,7 +193,7 @@ class RaidController extends Controller
             $originalRaid = clone $raid;
             $raid->id     = null;
             $raid->name   = $raid->name . ' Copy';
-            $raid->ignore_attendance = null;
+            $raid->ignore_attendance = 0;
             $raid->cancelled_at    = null;
             $raid->archived_at     = null;
             $raid->logs_deprecated = null;
@@ -447,7 +447,7 @@ class RaidController extends Controller
         $updateValues['logs_deprecated'] = request()->input('logs_deprecated');
 
         $updateValues['slug']         = slug(request()->input('name'));
-        $updateValues['ignore_attendance'] = request()->input('ignore_attendance') && request()->input('ignore_attendance') == 1 ? ($raid->ignore_attendance ? $raid->ignore_attendance : getDateTime()) : null;
+        $updateValues['ignore_attendance'] = request()->input('ignore_attendance') && request()->input('ignore_attendance') == 1 ? ($raid->ignore_attendance ? $raid->ignore_attendance : 1) : 0;
         $updateValues['cancelled_at'] = request()->input('is_cancelled') && request()->input('is_cancelled') == 1 ? ($raid->cancelled_at ? $raid->cancelled_at : getDateTime()) : null;
         $updateValues['archived_at'] = request()->input('is_archived') && request()->input('is_archived') == 1 ? ($raid->is_archived ? $raid->is_archived : getDateTime()) : null;
 
