@@ -66,6 +66,9 @@
                                     <span class="js-timestamp" data-timestamp="{{ $raid->date }}" data-format="@ h:mm a, ddd MMM D {{ $isFuture ? '' : 'YYYY' }}"></span>
                                     <span class="small text-muted">{{ __("in your timezone") }}</span>
                                 </li>
+                                @if ($raid->ignore_attendance)
+                                    <span class="text-warning">{{ __("attendance ignored") }}</span>
+                                @endif
                                 @if ($raid->instances->count())
                                     <li class="mt-2">
                                         <ul class="list-inline">

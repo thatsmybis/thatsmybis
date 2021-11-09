@@ -404,6 +404,7 @@ class Character extends BaseModel
             ->leftJoin('raids', function ($join) use ($raidGroupIdFilter) {
                 $join = $join->on('raids.guild_id', 'characters.guild_id')
                     ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 1) . ' HOUR)')
+                    ->where('raids.ignore_attendance', 0)
                     ->whereNull('raids.cancelled_at');
 
                 // User has a sitewide filter on the attendance stats that they want to see.
@@ -431,6 +432,7 @@ class Character extends BaseModel
             ->leftJoin('raids', function ($join) use ($raidGroupIdFilter) {
                 $join = $join->on('raids.guild_id', 'characters.guild_id')
                     ->whereRaw('`raids`.`date` BETWEEN (NOW() - INTERVAL `guilds`.`attendance_decay_days` DAY) AND (NOW() - INTERVAL ' . env('ATTENDANCE_DELAY_HOURS', 1) . ' HOUR)')
+                    ->where('raids.ignore_attendance', 0)
                     ->whereNull('raids.cancelled_at');
 
                 if ($raidGroupIdFilter) {

@@ -137,6 +137,18 @@
                                 </div>
                             </div>
 
+                            <div class="col-12 {{ $errors->has('raid.ignore_attendance') ? 'text-danger font-weight-bold' : '' }}">
+                                <div class="form-group mt-2">
+                                    <div class="checkbox text-warning">
+                                        <label>
+                                            <input type="checkbox" name="ignore_attendance" value="1" class="" autocomplete="off"
+                                                {{ old('ignore_attendance') && old('ignore_attendance') == 1 ? 'checked' : ($raid && $raid->ignore_attendance ? 'checked' : '') }}>
+                                                {{ __("Ignore attendance") }} <small class="text-muted">{{ __("attendance will not count") }}</small>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
                             @if ($raid && !$copy)
                                 <div class="col-12 {{ $errors->has('raid.is_cancelled') ? 'text-danger font-weight-bold' : '' }}">
                                     <div class="form-group mt-2">

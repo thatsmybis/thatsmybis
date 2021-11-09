@@ -11,6 +11,11 @@
                     {{ __("cancelled") }}
                 </span>
             @endif
+            @if ($raid->ignore_attendance)
+                <span class="font-weight-normal text-warning">
+                    {{ __("attendance ignored") }}
+                </span>
+            @endif
         </a>
         <div class="dropdown-menu" aria-labelledby="raid{{ $raid->id }}Dropdown">
             <a class="dropdown-item" href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}">
@@ -37,6 +42,11 @@
                 <span class="text-muted fa-fw fas fa-clipboard-list-check"></span>
                 {{ __("History") }}
             </a>
+            @if ($raid->ignore_attendance)
+                <span class="dropdown-item disabled font-weight-bold text-warning">
+                    {{ __("attendance ignored") }}
+                </span>
+            @endif
             @if ($raid->archived_at)
                 <span class="dropdown-item disabled font-weight-bold text-danger">
                     {{ __("ARCHIVED") }}

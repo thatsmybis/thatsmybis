@@ -24,6 +24,7 @@ class Raid extends BaseModel
         'guild_id',
         'member_id',
         'date',
+        'ignore_attendance',
         'cancelled_at',
         'archived_at',
         'public_note',

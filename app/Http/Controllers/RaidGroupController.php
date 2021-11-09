@@ -80,6 +80,7 @@ class RaidGroupController extends Controller
         $raids = Raid::select('raids.*')
             ->join('raid_raid_groups', 'raid_raid_groups.raid_id', 'raids.id')
             ->where('raid_raid_groups.raid_group_id', $id)
+            ->whereNull('ignore_attendance')
             ->whereNull('cancelled_at')
             ->whereNull('archived_at')
             ->with([

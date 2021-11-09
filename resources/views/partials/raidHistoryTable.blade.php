@@ -21,25 +21,46 @@
                         <div class="col-lg-6 col-12">
                             <ul class="list-inline mb-0">
                                 @if ($raid->pivot->is_exempt)
-                                    <li class="list-inline-item {{ $withinLimit ? 'text-warning' : 'text-muted' }}">
+                                    <li class="list-inline-item mr-0 {{ $withinLimit ? 'text-warning' : 'text-muted' }}">
                                         {{ __("Excused") }}
                                     </li>
                                 @elseif (!$isFuture)
-                                    <li class="list-inline-item {{ $withinLimit ? getAttendanceColor($raid->pivot->credit) : 'text-muted' }}"
+                                    <li class="list-inline-item mr-0 {{ $withinLimit ? getAttendanceColor($raid->pivot->credit) : 'text-muted' }}"
                                         title="{{ !$withinLimit ? "outside of guild's counted attendance" : '' }}">
                                         {{ $raid->pivot->credit * 100 }}% {{ __("credit") }}
                                     </li>
                                 @endif
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}"
-                                        class="text-white font-weight-bold">
-                                        {{ $raid->name }}
-                                    </a>
-                                    <span class="small">
-                                        {{ $isFuture ? __('in') : '' }}
-                                        <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
-                                        {{ !$isFuture ? __('ago') : '' }}
-                                    </span>
+                                    <ul class="list-inline mb-0">
+                                        <li class="list-inline-item mr-0">
+                                            <a href="{{ route('guild.raids.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'raidId' => $raid->id, 'raidSlug' => $raid->slug]) }}"
+                                                class="text-white font-weight-bold">
+                                                {{ $raid->name }}
+                                            </a>
+                                        </li>
+                                        <li class="list-inline-item mr-0">
+                                            <span class="small">
+                                                {{ $isFuture ? __('in') : '' }}
+                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
+                                                {{ !$isFuture ? __('ago') : '' }}
+                                            </span>
+                                        </li>
+                                        @if ($raid->cancelled_at)
+                                            <li class="list-inline-item mr-0 small text-danger">
+                                                {{ __('cancelled') }}
+                                            </li>
+                                        @endif
+                                        @if ($raid->archived_at)
+                                            <li class="list-inline-item mr-0 small text-warning">
+                                                {{ __('archived') }}
+                                            </li>
+                                        @endif
+                                        @if ($raid->ignore_attendance)
+                                            <li class="list-inline-item mr-0 small text-warning">
+                                                {{ __('attendance ignored') }}
+                                            </li>
+                                        @endif
+                                    </ul>
                                 </li>
                             </ul>
                         </div>

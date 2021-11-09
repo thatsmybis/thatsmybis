@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Admin Users - ' . config('app.name'))
+@section('title', $user->discord_username . ' - ' . config('app.name'))
 
 @section('content')
 <div class="container-fluid">
