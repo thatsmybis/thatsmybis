@@ -1,3 +1,10 @@
+@php
+    $showAds = true;
+    if (request()->get('hideAds')) {
+        $showAds = false;
+    }
+@endphp
+
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}" prefix="og: http://ogp.me/ns#">
 <head>
@@ -199,21 +206,27 @@
         </div>
     @endif
 
+    @if ($showAds)
+        <div class="d-poster-970 mb-4" id="top-large-leaderboard-poster"></div>
+        <div class="d-poster-728 mb-4" id="top-leaderboard-poster"></div>
+        <div class="d-poster-320 mb-4" id="top-mobile-banner-poster"></div>
+    @endif
 
     @yield('content')
+
+    @if ($showAds)
+        <div class="d-poster-970" id="bottom-large-billboard-poster"></div>
+        <div class="d-poster-728" id="bottom-leaderboard-poster"></div>
+        <div class="d-poster-320" id="bottom-mobile-banner-poster"></div>
+    @endif
 
     @if (!isset($noFooter))
         @yield('footer')
         @include('layouts/footer')
     @endif
 
-    @if(request()->get('isAdmin'))
-        <!-- NitroPay GDPR preferences -->
-        <div id="consent-box" style="display:none;">
-            <button onclick="window.__cmp('showModal');">
-                Update cookie preferences
-            </button>
-        </div>
+    @if ($showAds)
+        <div id="video-poster"></div>
     @endif
 
     <!-- Button that sticks to bottom right of page -->
@@ -344,21 +357,130 @@
     <script src="{{ loadScript('helpers.js') }}"></script>
     <script src="{{ loadScript('autocomplete.js') }}"></script>
 
-    <!-- NitroPay GDPR preferences https://docs.nitropay.com/en/articles/3623674-creating-a-link-to-open-gdpr-preferences -->
     <script>
-      if (window["nitroAds"] && window["nitroAds"].loaded) {
-        document.getElementById("consent-box").style.display = window["__tcfapi"]
-          ? ""
-          : "none";
-      } else {
-        document.addEventListener(
-          "nitroAds.loaded",
-          () =>
-            (document.getElementById("consent-box").style.display = window["__tcfapi"]
-              ? ""
-              : "none")
-        );
-      }
+        <!-- NitroPay GDPR preferences https://docs.nitropay.com/en/articles/3623674-creating-a-link-to-open-gdpr-preferences -->
+        if (document.getElementById("consent-box")) {
+            if (window["nitroAds"] && window["nitroAds"].loaded) {
+                document.getElementById("consent-box").style.display = (window["__tcfapi"] ? "" : "none");
+            } else {
+                document.addEventListener(
+                    "nitroAds.loaded",
+                    () => document.getElementById("consent-box").style.display = (window["__tcfapi"] ? "" : "none")
+                );
+            }
+        }
+        window['nitroAds'].createAd('video-poster', {
+            "demo": {{ env('EXAMPLE_ADS', 'false') }},
+            "format": "video-ac"
+        });
+        window['nitroAds'].createAd('top-large-leaderboard-poster', {
+            "demo": {{ env('EXAMPLE_ADS', 'false') }},
+            "refreshLimit": 10,
+            "refreshTime": 30,
+            "renderVisibleOnly": true,
+            "refreshVisibleOnly": true,
+            "sizes": [
+                [
+                    "970",
+                    "90"
+                ]
+            ],
+            "report": {
+                "enabled": true,
+                "wording": "Report Ad",
+                "position": "bottom-right"
+            }
+        });
+        window['nitroAds'].createAd('bottom-large-billboard-poster', {
+            "demo": {{ env('EXAMPLE_ADS', 'false') }},
+            "refreshLimit": 10,
+            "refreshTime": 30,
+            "renderVisibleOnly": true,
+            "refreshVisibleOnly": true,
+            "sizes": [
+                [
+                    "970",
+                    "250"
+                ]
+            ],
+            "report": {
+                "enabled": true,
+                "wording": "Report Ad",
+                "position": "bottom-right"
+            }
+        });
+        window['nitroAds'].createAd('top-leaderboard-poster', {
+            "demo": {{ env('EXAMPLE_ADS', 'false') }},
+            "refreshLimit": 10,
+            "refreshTime": 30,
+            "renderVisibleOnly": true,
+            "refreshVisibleOnly": true,
+            "sizes": [
+                [
+                    "728",
+                    "90"
+                ]
+            ],
+            "report": {
+                "enabled": true,
+                "wording": "Report Ad",
+                "position": "bottom-right"
+            }
+        });
+        window['nitroAds'].createAd('bottom-leaderboard-poster', {
+            "demo": {{ env('EXAMPLE_ADS', 'false') }},
+            "refreshLimit": 10,
+            "refreshTime": 30,
+            "renderVisibleOnly": true,
+            "refreshVisibleOnly": true,
+            "sizes": [
+                [
+                    "728",
+                    "90"
+                ]
+            ],
+            "report": {
+                "enabled": true,
+                "wording": "Report Ad",
+                "position": "bottom-right"
+            }
+        });
+        window['nitroAds'].createAd('top-mobile-banner-poster', {
+            "demo": {{ env('EXAMPLE_ADS', 'false') }},
+            "refreshLimit": 10,
+            "refreshTime": 30,
+            "renderVisibleOnly": true,
+            "refreshVisibleOnly": true,
+            "sizes": [
+                [
+                    "320",
+                    "50"
+                ]
+            ],
+            "report": {
+                "enabled": true,
+                "wording": "Report Ad",
+                "position": "bottom-right"
+            }
+        });
+        window['nitroAds'].createAd('bottom-mobile-banner-poster', {
+            "demo": {{ env('EXAMPLE_ADS', 'false') }},
+            "refreshLimit": 10,
+            "refreshTime": 30,
+            "renderVisibleOnly": true,
+            "refreshVisibleOnly": true,
+            "sizes": [
+                [
+                    "320",
+                    "50"
+                ]
+            ],
+            "report": {
+                "enabled": true,
+                "wording": "Report Ad",
+                "position": "bottom-right"
+            }
+        });
     </script>
 
     @yield('scripts')

@@ -771,6 +771,10 @@ input.slim {
     max-width: 100%;
 }
 
+.max-100 {
+    max-width: 100%;
+}
+
 .input-item {
     color: #dbdbdb;
     padding: 1px 4px 5px 3px;
@@ -1178,3 +1182,31 @@ div.dataTables_filter input {
     /* add padding to account for vertical scrollbar */
     /*padding-right: 20px;*/
 }
+
+/* BEGIN ADS */
+@media (max-width: 992px) {
+    .d-poster-970 {
+        display: none !important;
+    }
+}
+@media (min-width: 728) and (max-width: 991px) {
+    .d-poster-728 {
+        display: none !important;
+    }
+}
+@media (min-width: 600) and (max-width: 727px) {
+    .d-poster-600 {
+        display: none !important;
+    }
+}
+@media (min-width: 320) and (max-width: 599) {
+    .d-poster-320 {
+        display: none !important;
+    }
+}
+@media (min-width: 300) and (max-width: 599) {
+    .d-poster-300 {
+        display: none !important;
+    }
+}
+/* END ADS */

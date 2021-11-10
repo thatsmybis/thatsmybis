@@ -11,6 +11,15 @@
             <h2 class="">
                 {!! __('Welcome, <span class="text-discord font-weight-bold">:username</span>', ['username' => Auth::user()->discord_username]) !!}
             </h2>
+            @if (Auth::user()->ads_disabled_at)
+                <p class="text-uncommon text-4 text-center">
+                    {{ __('Ads are disabled for your account. Thank you for supporting!') }}
+                </p>
+            @else
+                <p>
+                    {!! __('Like the site? <a href=":donateLink" class="text-patreon"> Support the developer</a> directly to help make it better.', ['donateLink' => route('donate')]) !!}
+                </p>
+            @endif
             {!! __("<strong>Change log</strong> and <strong>announcements</strong> are on the") !!}
             <a href="{{ env('APP_DISCORD') }}"
                 target="_blank"
@@ -19,8 +28,6 @@
                 class="">
                 {{ __("Discord") }}
             </a>
-            <br>
-            {!! __('Like the site? <a href=":donateLink" class="text-patreon"> Support the developer</a> directly to help make it better.', ['donateLink' => route('donate')]) !!}
         </div>
 
         <div class="col-12 col-sm-6 offset-sm-3 col-md-4 offset-md-4 mt-3">

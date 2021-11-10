@@ -83,6 +83,14 @@
                         </a>
                     </li>
                     <li class="list-inline-item smaller">
+                        <!-- NitroPay GDPR preferences -->
+                        <div id="consent-box" style="display:none;">
+                            <span class="text-muted cursor-pointer" onclick="window.__cmp('showModal');">
+                                Update cookie preferences
+                            </span>
+                        </div>
+                    </li>
+                    <li class="list-inline-item smaller">
                         <span data-ccpa-link="1" class="text-muted"></span>
                     </li>
                 </ul>
