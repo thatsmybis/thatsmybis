@@ -1,5 +1,5 @@
 @php
-    $showAds = true;
+    $showAds = false;
     if (request()->get('hideAds')) {
         $showAds = false;
     }

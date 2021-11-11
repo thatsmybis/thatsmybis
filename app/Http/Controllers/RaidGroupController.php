@@ -79,8 +79,10 @@ class RaidGroupController extends Controller
         // To get the paginator to work, raids is its own query and not a with() on the raidGroup.
         $raids = Raid::select('raids.*')
             ->join('raid_raid_groups', 'raid_raid_groups.raid_id', 'raids.id')
-            ->where('raid_raid_groups.raid_group_id', $id)
-            ->whereNull('ignore_attendance')
+            ->where([
+                'raid_raid_groups.raid_group_id' => $id,
+                'ignore_attendance' => 0,
+            ])
             ->whereNull('cancelled_at')
             ->whereNull('archived_at')
             ->with([
