@@ -475,7 +475,7 @@
             @endif
         </ul>
         <ul class="navbar-nav">
-            @if (isset($guild))
+            @if (isset($guild) && $showAds)
                 <li class="nav-item mr-3 d-patreon-block">
                     <a href="{{ route('donate') }}" target="_blank" class="nav-link active small font-weight-bold text-patreon mt-0"
                         title="Toss a coin to your web dev">
