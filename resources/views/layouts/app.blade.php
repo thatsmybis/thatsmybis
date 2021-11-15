@@ -1,6 +1,17 @@
 @php
-    $showAds = false;
-    if (request()->get('hideAds')) {
+    $showAds = true;
+    if (request()->get('hideAds')
+        || in_array(Route::currentRouteName(), [
+            'home',
+            'faq',
+            'privacy',
+            'caliPrivacy',
+            'terms',
+            'donate',
+            'login',
+            'register',
+        ])
+    ) {
         $showAds = false;
     }
 @endphp

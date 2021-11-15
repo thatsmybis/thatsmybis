@@ -1184,29 +1184,28 @@ div.dataTables_filter input {
 }
 
 /* BEGIN ADS */
-@media (max-width: 992px) {
+.d-poster-970 {
+    display: none;
+}
+@media (min-width: 992px) {
     .d-poster-970 {
-        display: none !important;
+        display: block !important;
     }
 }
-@media (min-width: 728) and (max-width: 991px) {
+.d-poster-728 {
+    display: none;
+}
+@media (min-width: 747px) and (max-width: 991px) {
     .d-poster-728 {
-        display: none !important;
+        display: block !important;
     }
 }
-@media (min-width: 600) and (max-width: 727px) {
-    .d-poster-600 {
-        display: none !important;
-    }
+.d-poster-320 {
+    display: none;
 }
-@media (min-width: 320) and (max-width: 599) {
+@media (min-width: 320px) and (max-width: 746px) {
     .d-poster-320 {
-        display: none !important;
-    }
-}
-@media (min-width: 300) and (max-width: 599) {
-    .d-poster-300 {
-        display: none !important;
+        display: block !important;
     }
 }
 /* END ADS */

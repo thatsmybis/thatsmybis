@@ -4,6 +4,21 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row bg-light mb-3 pt-5 pb-5 rounded">
+        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12 mb-4">
+            <h1 class="text-warning">
+                <span class="fa fa-fw fas fa-exclamation-triangle"></span>
+                {{ __("To disable ads, support on Patreon!") }}
+            </h1>
+            <p class="mt-3">
+                {!! __("Subscribe on <a href=':link1' target='_blank'>Patreon</a> and I will disable ads for your account for the duration of your subscription. You will also be supporting the site.", ['link1' => 'https://www.patreon.com/lemmings19']) !!}
+            </p>
+            <p class="mt-3">
+                {!! __("<strong>It may take up to 48 hours before ads are turned off.</strong> I currently need to manually check subscriptions to update this.") !!}
+            </p>
+            <p class="mt-3">
+                {!! __("Donate on PayPal (and include your Discord username) and I will disable ads on your account based on the donation. You <strong>must</strong> include your Discord username in the donation message for ads to be turned off.") !!}
+            </p>
+        </div>
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <h1>
                 <span class="fa fa-fw fas fa-heart text-danger"></span>
