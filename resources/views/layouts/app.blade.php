@@ -400,7 +400,8 @@
                 "enabled": true,
                 "wording": "Report Ad",
                 "position": "bottom-right"
-            }
+            },
+            "mediaQuery": "(min-width: 1000px) and (max-width: 99999px)"
         });
         window['nitroAds'].createAd('bottom-large-billboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
@@ -418,7 +419,8 @@
                 "enabled": true,
                 "wording": "Report Ad",
                 "position": "bottom-right"
-            }
+            },
+            "mediaQuery": "(min-width: 1000px) and (max-width: 99999px)"
         });
         window['nitroAds'].createAd('top-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
@@ -436,7 +438,8 @@
                 "enabled": true,
                 "wording": "Report Ad",
                 "position": "bottom-right"
-            }
+            },
+            "mediaQuery": "(min-width: 768px) and (max-width: 999px)"
         });
         window['nitroAds'].createAd('bottom-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
@@ -454,7 +457,8 @@
                 "enabled": true,
                 "wording": "Report Ad",
                 "position": "bottom-right"
-            }
+            },
+            "mediaQuery": "(min-width: 768px) and (max-width: 999px)"
         });
         window['nitroAds'].createAd('top-mobile-banner-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
@@ -472,7 +476,8 @@
                 "enabled": true,
                 "wording": "Report Ad",
                 "position": "bottom-right"
-            }
+            },
+            "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
         });
         window['nitroAds'].createAd('bottom-mobile-banner-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
@@ -490,7 +495,8 @@
                 "enabled": true,
                 "wording": "Report Ad",
                 "position": "bottom-right"
-            }
+            },
+            "mediaQuery": "(min-width: 320px) and (max-width: 767px)"
         });
     </script>
 

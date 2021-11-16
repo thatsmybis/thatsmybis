@@ -1195,7 +1195,7 @@ div.dataTables_filter input {
 .d-poster-728 {
     display: none;
 }
-@media (min-width: 747px) and (max-width: 991px) {
+@media (min-width: 747px) { /* and (max-width: 991px) */
     .d-poster-728 {
         display: block !important;
     }
@@ -1203,7 +1203,7 @@ div.dataTables_filter input {
 .d-poster-320 {
     display: none;
 }
-@media (min-width: 320px) and (max-width: 746px) {
+@media (min-width: 320px) { /* and (max-width: 746px) */
     .d-poster-320 {
         display: block !important;
     }
