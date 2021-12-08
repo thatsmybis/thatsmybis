@@ -105,13 +105,7 @@ class ItemController extends Controller
             if ($showPrios) {
                 $query = $query->with([
                     'priodCharacters' => function ($query) use ($guild, $characterFields, $viewPrioPermission) {
-                        if ($guild->prio_show_count && !$viewPrioPermission) {
-                            $query = $query->where([
-                                ['character_items.order', '<=', $guild->prio_show_count],
-                            ]);
-                        }
-
-                        $query = $query
+                        return $query
                             ->addSelect($characterFields)
                             ->leftJoin('members', function ($join) {
                                 $join->on('members.id', 'characters.member_id');
@@ -177,6 +171,13 @@ class ItemController extends Controller
                 ]);
 
             $items = $query->get();
+
+            if ($guild->prio_show_count && !$viewPrioPermission) {
+                $items->map(function($item) use ($guild) {
+                    $item->setRelation('priodCharacters', $item->priodCharacters->take($guild->prio_show_count));
+                    return $item;
+                });
+            }
 
             if ($showWishlist) {
                 $items = $this->mergeTokenWishlists($items, $guild);
@@ -279,12 +280,6 @@ class ItemController extends Controller
             if ($showPrios) {
                 $query = $query->with([
                     'priodCharacters' => function ($query) use ($guild, $viewPrioPermission) {
-                        if ($guild->prio_show_count && !$viewPrioPermission) {
-                            $query = $query->where([
-                                ['character_items.order', '<=', $guild->prio_show_count],
-                            ]);
-                        }
-
                         return $query
                             ->where(['characters.guild_id' => $guild->id])
                             ->groupBy(['character_items.character_id', 'character_items.raid_group_id']);
@@ -311,6 +306,13 @@ class ItemController extends Controller
             ]);
 
             $items = $query->get();
+
+            if ($showPrios && $guild->prio_show_count && !$viewPrioPermission) {
+                $items->map(function($item) use ($guild) {
+                    $item->setRelation('priodCharacters', $item->priodCharacters->take($guild->prio_show_count));
+                    return $item;
+                });
+            }
 
             if ($showWishlist) {
                 $items = $this->mergeTokenWishlists($items, $guild);

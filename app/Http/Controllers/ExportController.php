@@ -655,6 +655,7 @@ class ExportController extends Controller {
         }
 
         if ($guild->prio_show_count && !$viewPrioPermission) {
+            // NOTE: This does not respect the prio LIMIT and instead only shows the top two regardless of what is received.
             $lootTypeFragment .= " ((type = 'prio' AND ci.`order` <= {$guild->prio_show_count}) OR (type != 'prio')) AND";
         }
 
