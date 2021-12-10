@@ -248,7 +248,7 @@
                         @if ($guild->expansion_id === 1)
                             <!-- Rank -->
                             <div class="form-group">
-                                @include('character/partials/rankInput', [
+                                @include('character/partials/pvpRankInput', [
                                     'character' => $character,
                                     'oldValue'  => (old('character.' . $i . '.rank') ? old('character.' . $i . '.rank') : null),
                                     'hideLabel' => __("PvP Rank"),
@@ -272,7 +272,7 @@
                         @if ($guild->expansion_id === 1)
                             <!-- Rank Goal -->
                             <div class="form-group">
-                                @include('character/partials/rankGoalInput', [
+                                @include('character/partials/pvpRankGoalInput', [
                                     'character' => $character,
                                     'oldValue'  => (old('character.' . $i . '.rank_goal') ? old('character.' . $i . '.rank_goal') : null),
                                     'hideLabel' => __("PvP Rank Goal"),
