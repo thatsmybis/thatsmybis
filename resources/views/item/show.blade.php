@@ -378,7 +378,12 @@
 @section('scripts')
 <script>
     @php
-        $itemNames = [$item->name];
+        // Warglaives have a custom display string added...
+        $itemName = $item->name;
+        $itemName = str_replace(' (offhand)', '', $itemName);
+        $itemName = str_replace(' (mainhand)', '', $itemName);
+
+        $itemNames = [$itemName];
         foreach ($item->childItems as $childItem) {
             $itemNames[] = $childItem->name;
         }
