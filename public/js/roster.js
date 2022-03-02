@@ -76,6 +76,13 @@ $(document).ready( function () {
     $(".loadingBarContainer").removeClass("d-flex").hide();
     $("#characterDatatable").show();
 
+    $("#raid_group_filter").change(function () {
+        setCookie('raidGroupFilter', $("#raid_group_filter").val());
+    });
+
+    // Update filter to whatever raid grou was last selected.
+    $("#raid_group_filter").val(getCookie('raidGroupFilter')).change();
+
     addInstanceFilterHandlers();
     addWishlistFilterHandlers();
     callRosterHandlers();

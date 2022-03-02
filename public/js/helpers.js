@@ -295,6 +295,11 @@ function decToHex(number) {
     return parseInt(number).toString(16);
 }
 
+// Delete a cookie from the browser document
+function deleteCookie (name, path) {
+    setCookie(name, '', -1, path);
+}
+
 // Take a jquery element, make that element visually flash to get the user's attention
 function flashElement(element) {
     element.fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });
@@ -346,6 +351,14 @@ function getColorFromDec(color) {
         color = 'FFF';
     }
     return '#' + color;
+}
+
+// Get a cookie from the browser document
+function getCookie (name) {
+    return document.cookie.split('; ').reduce((r, v) => {
+        const parts = v.split('=')
+        return parts[0] === name ? decodeURIComponent(parts[1]) : r
+    }, '');
 }
 
 // Based on the guild's tier mode setting, return a tier label
@@ -530,6 +543,12 @@ function rgbToHex (rgb) {
     }
     return hex;
 };
+
+// Set a cookie in the browser document
+function setCookie (name, value, days = 7, path = '/') {
+    const expires = new Date(Date.now() + days * 864e5).toUTCString();
+    document.cookie = name + '=' + encodeURIComponent(value) + '; expires=' + expires + '; path=' + path;
+}
 
 // Turn a url into a slug url!
 function slug(string) {
