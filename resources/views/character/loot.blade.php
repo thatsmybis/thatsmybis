@@ -74,6 +74,13 @@
                         $wishlistLockedExceptions = $guild->getWishlistLockedExceptions();
                         $wishlistNames = $guild->getWishlistNames();
                     @endphp
+
+                    @if ($character->wishlist->count() > 6)
+                        <div class="form-group">
+                            <button class="btn btn-primary"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
+                        </div>
+                    @endif
+
                     <div class="row mb-3 pt-2 bg-light rounded">
                         <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
                             <label for="wishlist" class="sr-only">
@@ -230,6 +237,12 @@
                     </div>
                 @endif
 
+                @if ($character->received->count() > 6)
+                    <div class="form-group">
+                        <button class="btn btn-primary"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
+                    </div>
+                @endif
+
                 <div class="row mb-3 pt-2 bg-light rounded">
                     <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
                         <label for="received">
@@ -347,6 +360,12 @@
                         @endif
                     </div>
                 </div>
+
+                @if ($character->recipes->count() > 6)
+                    <div class="form-group">
+                        <button class="btn btn-primary"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
+                    </div>
+                @endif
 
                 <div class="row mb-3 pt-2 bg-light rounded">
                     <div class="form-group mb-2 col-md-8 col-sm-10 col-12">
