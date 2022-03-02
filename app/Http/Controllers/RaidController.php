@@ -270,6 +270,13 @@ class RaidController extends Controller
             $query = $query->whereNull('raids.archived_at');
         }
 
+        if (!empty(request()->input('min_date'))) {
+            $query = $query->where('raids.date', '>',  request()->input('min_date'));
+        }
+        if (!empty(request()->input('max_date'))) {
+            $query = $query->where('raids.date', '<',  request()->input('max_date'));
+        }
+
         if (!empty(request()->input('character_id'))) {
             $query = $query->leftJoin('raid_characters AS raid_characters2', 'raid_characters2.raid_id', '=', 'raids.id')
                 ->where('raid_characters2.character_id', request()->input('character_id'));
