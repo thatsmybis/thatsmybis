@@ -10,7 +10,7 @@
     }
 @endphp
 
-<nav class="navbar navbar-expand-md navbar-dark sticky-top bg-navbar">
+<nav class="navbar navbar-expand-md navbar-dark">
     <span class="{{ isset($guild) ? 'navbar-brand-guild' : 'navbar-brand' }}" href="{{ route('home') }}">
         <span class="font-weight-bold">
             @php

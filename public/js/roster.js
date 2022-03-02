@@ -433,7 +433,9 @@ function createTable() {
         ],
         order  : [], // Disable initial auto-sort; relies on server-side sorting
         paging : false,
-        fixedHeader : true, // Header row sticks to top of window when scrolling down
+        fixedHeader : {  // Header row sticks to top of window when scrolling down
+            headerOffset: 0,
+        },
         drawCallback : function () {
             callRosterHandlers();
         },
