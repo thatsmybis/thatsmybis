@@ -44,7 +44,7 @@
         data-name="{{ $character->name }}"
         data-class="text-{{ strtolower($character->class) }}"
         class="js-character-option text-{{ strtolower($character->class) }}-important"
-        data-content="<span class='font-weight-medium text-{{ strtolower($character->class) }}-important'>{{ $characterNameText }}</span> <span class='small text-muted'>{!! $characterMetaText !!}</span>"
+        data-content="<span class='font-weight-medium text-{{ strtolower($character->class) }}-important'>{{ $characterNameText }}</span> <span class='small text-muted'>{{ $characterMetaText }}</span>"
         hack="{{ $character->id }}">
         {{ $characterNameText }} {!! $characterMetaText !!}
     </option>
