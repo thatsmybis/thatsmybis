@@ -506,6 +506,7 @@
                                                         @if ($i == 0)
                                                             <span class="fas fa-fw fa-user-chart text-muted"></span>
                                                             {{ __("Attendance Credit") }}
+                                                            <span id="editAttendance" class="fas fa-fw fa-pencil text-link cursor-pointer"></span>
                                                         @else
                                                             <span class="sr-only">
                                                                 {{ __("Attendance Credit") }}
@@ -618,6 +619,12 @@
     var characters = {!! $showOfficerNote ? $guild->characters->makeVisible('officer_note')->toJson() : $guild->characters->toJson() !!};
     var date  = '{{ $date }}';
     var guild = {!! $guild->toJson() !!};
+
+    $(document).ready(function () {
+        $("#editAttendance").click(function () {
+            $("input[name^=characters][name$=\\[credit\\]]").toggle();
+        });
+    });
 </script>
 <script src="{{ loadScript('warcraftlogs.js') }}"></script>
 <script src="{{ loadScript('raidEdit.js') }}"></script>
