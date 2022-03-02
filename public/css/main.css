@@ -127,6 +127,10 @@ body {
     background-color: #161523 !important;
 }
 
+.bg-navbar {
+    background-color: #1b1a37;
+}
+
 .bg-expansion- {
     background: #fff;
 }
