@@ -111,7 +111,7 @@ function createTable() {
                                 <div class="dropdown text-${ row.class ? row.class.toLowerCase() : '' }">
                                     ${
                                         row.roster_note_order || row.roster_note_list_number || row.roster_note_is_offspec || row.roster_note_date || row.roster_note
-                                            ? `<ul class="list-inline tag bg-dark text-muted">
+                                            ? `<ul class="list-inline tag tag-wrap bg-dark text-muted">
                                                 ${ row.roster_note_order
                                                     ? `<li class="list-inline-item font-weight-bold text-legendary">#${ row.roster_note_order }</li>`
                                                     : ``

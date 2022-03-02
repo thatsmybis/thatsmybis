@@ -726,6 +726,10 @@ input.slim {
     border-radius: 14px;
     background-color: #2f2e4e;
 }
+.tag.tag-wrap {
+    width: inherit;
+    white-space: inherit;
+}
 
 .bg-tag {
     background-color: #252344;
