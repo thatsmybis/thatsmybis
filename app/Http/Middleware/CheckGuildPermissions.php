@@ -137,7 +137,7 @@ class CheckGuildPermissions
             $currentMember = Member::where(['guild_id' => $guild->id, 'user_id' => Auth::id()])->with(['characters', 'roles'])->first();
 
             if ($currentMember && ($currentMember->banned_at || $currentMember->inactive_at) && !$isAdmin) {
-                request()->session()->flash('status-danger',  __('Your membership has been disabled. To reverse this, an officer would need to access your member page and re-enable it.'));
+                request()->session()->flash('status-danger',  __('Your membership has been disabled. To reverse this, an officer would need to access your member page and re-enable it.') . ' ' . __('They can do this in Guild -> Members -> Archived Characters (bottom left of page) -> Edit your profile -> Uncheck box to archive character'));
                 return redirect()->route('home');
             }
 
