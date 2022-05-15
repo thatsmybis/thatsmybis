@@ -173,8 +173,8 @@ class ItemController extends Controller
             $items = $query->get();
 
             if ($guild->prio_show_count && !$viewPrioPermission) {
-                $items->map(function($item) use ($guild) {
-                    $item->setRelation('priodCharacters', $item->priodCharacters->take($guild->prio_show_count));
+                $items->map(function ($item) use ($guild) {
+                    $item = $this->filterItemPriodCharactersByGuildLimit($item, $guild);
                     return $item;
                 });
             }
@@ -308,8 +308,8 @@ class ItemController extends Controller
             $items = $query->get();
 
             if ($showPrios && $guild->prio_show_count && !$viewPrioPermission) {
-                $items->map(function($item) use ($guild) {
-                    $item->setRelation('priodCharacters', $item->priodCharacters->take($guild->prio_show_count));
+                $items->map(function ($item) use ($guild) {
+                    $item = $this->filterItemPriodCharactersByGuildLimit($item, $guild);
                     return $item;
                 });
             }
@@ -511,5 +511,43 @@ class ItemController extends Controller
             }
         }
         return $items;
+    }
+
+    /**
+     * Based on the number of prios to show in the guild settings; filter related
+     * prio'd characters to not exceed that limit; per raid group.
+     *
+     * @return Item $item The item with a filtered priod character list.
+     */
+    private function filterItemPriodCharactersByGuildLimit(Item $item, Guild $guild): Item
+    {
+        if ($item->priodCharacters->count() > 0) {
+            // Return $guild->prio_show_count items per raid group
+            $prioCountPerRaidGroup = [];
+            $prioCountPerRaidGroup[0] = 0;
+            foreach ($guild->raidGroups as $raidGroup) {
+                $prioCountPerRaidGroup[$raidGroup->id] = 0;
+            }
+
+            $filteredPriodCharacters = $item->priodCharacters->filter(
+                function ($priodCharacter) use ($guild, &$prioCountPerRaidGroup) {
+                    $count = null;
+                    if ($priodCharacter->pivot->raid_group_id) {
+                        $prioCountPerRaidGroup[$priodCharacter->pivot->raid_group_id] = $prioCountPerRaidGroup[$priodCharacter->pivot->raid_group_id] + 1;
+                        $count = $prioCountPerRaidGroup[$priodCharacter->pivot->raid_group_id];
+                    } else {
+                        $prioCountPerRaidGroup[0] = $prioCountPerRaidGroup[0] + 1;
+                        $count = $prioCountPerRaidGroup[0];
+                    }
+                    if ($count <= $guild->prio_show_count) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                });
+
+            $item->setRelation('priodCharacters', $filteredPriodCharacters->values());
+        }
+        return $item;
     }
 }
