@@ -532,7 +532,7 @@ class ItemController extends Controller
             $filteredPriodCharacters = $item->priodCharacters->filter(
                 function ($priodCharacter) use ($guild, &$prioCountPerRaidGroup) {
                     $count = null;
-                    if ($priodCharacter->pivot->raid_group_id) {
+                    if ($priodCharacter->pivot->raid_group_id && array_key_exists($priodCharacter->pivot->raid_group_id, $prioCountPerRaidGroup)) {
                         $prioCountPerRaidGroup[$priodCharacter->pivot->raid_group_id] = $prioCountPerRaidGroup[$priodCharacter->pivot->raid_group_id] + 1;
                         $count = $prioCountPerRaidGroup[$priodCharacter->pivot->raid_group_id];
                     } else {
