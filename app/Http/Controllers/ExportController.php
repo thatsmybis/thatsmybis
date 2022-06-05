@@ -379,6 +379,8 @@ class ExportController extends Controller {
             $expansionId = 1;
         } else if ($expansionSlug == 'burning-crusade') {
             $expansionId = 2;
+        } else {
+            abort(404, __('Expansion not found'));
         }
 
         $subdomain = 'www';

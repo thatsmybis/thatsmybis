@@ -323,6 +323,10 @@ class ItemController extends Controller
             return $items->first();
         });
 
+        if (!$item) {
+            abort(404, __('Item not found.'));
+        }
+
         $itemSlug = slug($item->name);
 
         if ($slug && $slug != $itemSlug) {

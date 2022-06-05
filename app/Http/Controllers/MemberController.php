@@ -156,6 +156,10 @@ class MemberController extends Controller
                 ])
                 ->first();
 
+            if (!$member) {
+                abort(404, __('Member not found'));
+            }
+
             // For optimization, fetch characters with their attendance here and then merge them into
             // the existing characters for prios and wishlists
             $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
