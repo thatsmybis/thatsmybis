@@ -429,6 +429,7 @@ class AssignLootController extends Controller
 
         $deleteWishlist = request()->input('delete_wishlist_items') ? true : false;
         $deletePrio     = request()->input('delete_prio_items') ? true : false;
+
         $raidGroupId    = $raidGroup ? $raidGroup->id : null;
         $raidId         = $raid ? $raid->id : null;
 
@@ -612,14 +613,15 @@ class AssignLootController extends Controller
                     CharacterItem::where(['id' => $prioRow->id])->delete();
 
                     // Now correct the order on the remaning prios for that item in that raid group
-                    CharacterItem::
-                        where([
-                            'item_id'       => $prioRow->item_id,
-                            'raid_group_id' => $prioRow->raid_group_id,
-                            'type'          => Item::TYPE_PRIO,
-                        ])
-                        ->where('order', '>', $prioRow->order)
-                        ->update(['order' => DB::raw('`order` - 1')]);
+                    // (Commented out because we don't always want this to happen; what if there are still people assigned to this item at this order?)
+                    // CharacterItem::
+                    //     where([
+                    //         'item_id'       => $prioRow->item_id,
+                    //         'raid_group_id' => $prioRow->raid_group_id,
+                    //         'type'          => Item::TYPE_PRIO,
+                    //     ])
+                    //     ->where('order', '>', $prioRow->order)
+                    //     ->update(['order' => DB::raw('`order` - 1')]);
                     $auditMessage = 'removed 1 prio';
                 } else {
                     CharacterItem::
