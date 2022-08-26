@@ -446,7 +446,12 @@ function loadItemToForm(item, i) {
 
     // Convert item ID to the ID that we use
     if (itemId && itemId == 32386) { // 32385 = Magtheridon's Head, Alliance version
-        itemId = 32385; // Head of Nefarian, Horde version
+        itemId = 32385; // Magtheridon's Head, Horde version
+    }
+
+    // Convert item ID to the ID that we use
+    if (itemId && itemId == 43959) { // 43959 = Reins of the Grand Black War Mammoth, Alliance version
+        itemId = 44083; // Reins of the Grand Black War Mammoth, Horde version
     }
 
     if (item['item']) { // RCLC value

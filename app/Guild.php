@@ -31,6 +31,7 @@ class Guild extends BaseModel
         'user_id',
         'discord_id',
         'expansion_id',
+        'faction',
         'warcraftlogs_token',
         'warcraftlogs_refresh_token',
         'warcraftlogs_token_expiry',

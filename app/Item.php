@@ -16,6 +16,7 @@ class Item extends BaseModel
      */
     protected $fillable = [
         'expansion_id',
+        'faction',
         'parent_id',
         'parent_item_id',
         'name',
