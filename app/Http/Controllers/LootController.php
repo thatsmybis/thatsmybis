@@ -109,7 +109,7 @@ class LootController extends Controller
         if (!$class) {
             $class = array_keys($classes)[0];
         } else {
-            $class = ucfirst(strtolower($class));
+            $class = ucwords(strtolower(str_replace('-', ' ', $class)));
         }
 
         $validationRules = [

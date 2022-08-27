@@ -143,6 +143,79 @@
                     <option value="18">
                         {{ __("World Bosses") }}
                     </option>
+                @elseif ($guild->expansion_id == 3)
+                    <option value="19">
+                        {{ __("Naxxramas N10") }}
+                    </option>
+                    <option value="20">
+                        {{ __("Naxxramas N25") }}
+                    </option>
+                    <option value="21">
+                        {{ __("Eye of Eternity N10") }}
+                    </option>
+                    <option value="22">
+                        {{ __("Eye of Eternity N25") }}
+                    </option>
+                    <option value="23">
+                        {{ __("Obsidian Sanctum N10") }}
+                    </option>
+                    <option value="24">
+                        {{ __("Obsidian Sanctum N25") }}
+                    </option>
+                    <option value="25">
+                        {{ __("Vault of Archavon N10") }}
+                    </option>
+                    <option value="26">
+                        {{ __("Vault of Archavon N25") }}
+                    </option>
+                    <option value="27">
+                        {{ __("Ulduar N10") }}
+                    </option>
+                    <option value="28">
+                        {{ __("Ulduar N25") }}
+                    </option>
+                    <option value="29">
+                        {{ __("Trial of the Crusader N10") }}
+                    </option>
+                    <option value="30">
+                        {{ __("Trial of the Crusader N25") }}
+                    </option>
+                    <option value="31">
+                        {{ __("Trial of the Crusader H10") }}
+                    </option>
+                    <option value="32">
+                        {{ __("Trial of the Crusader H25") }}
+                    </option>
+                    <option value="33">
+                        {{ __("Onyxia's Lair N10") }}
+                    </option>
+                    <option value="34">
+                        {{ __("Onyxia's Lair N25") }}
+                    </option>
+                    <option value="35">
+                        {{ __("Icecrown Citadel N10") }}
+                    </option>
+                    <option value="36">
+                        {{ __("Icecrown Citadel N25") }}
+                    </option>
+                    <option value="37">
+                        {{ __("Icecrown Citadel H10") }}
+                    </option>
+                    <option value="38">
+                        {{ __("Icecrown Citadel H25") }}
+                    </option>
+                    <option value="39">
+                        {{ __("Ruby Sanctum N10") }}
+                    </option>
+                    <option value="40">
+                        {{ __("Ruby Sanctum N25") }}
+                    </option>
+                    <option value="41">
+                        {{ __("Ruby Sanctum H10") }}
+                    </option>
+                    <option value="42">
+                        {{ __("Ruby Sanctum H25") }}
+                    </option>
                 @endif
             </select>
         </li>

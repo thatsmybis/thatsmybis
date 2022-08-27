@@ -147,6 +147,131 @@
                 </li>
             </ul>
         </div>
+        <div class="col-sm-6 p-4">
+            <h2 class="font-weight-bold text-mage">{{ __("Wrath of The Lich King Raids") }}</h2>
+            <ul class="no-bullet no-indent">
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'naxxramas-n10']) }}">
+                        {{ __("Naxxramas N10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'naxxramas-n25']) }}">
+                        {{ __("Naxxramas N25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'eye-of-eternity-n10']) }}">
+                        {{ __("Eye of Eternity N10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'eye-of-eternity-n25']) }}">
+                        {{ __("Eye of Eternity N25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'obsidian-sanctum-n10']) }}">
+                        {{ __("Obsidian Sanctum N10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'obsidian-sanctum-n25']) }}">
+                        {{ __("Obsidian Sanctum N25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'vault-of-archavon-n10']) }}">
+                        {{ __("Vault of Archavon N10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'vault-of-archavon-n25']) }}">
+                        {{ __("Vault of Archavon N25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'ulduar-n10']) }}">
+                        {{ __("Ulduar N10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'ulduar-n25']) }}">
+                        {{ __("Ulduar N25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'trial-of-the-crusader-n10']) }}">
+                        {{ __("Trial of the Crusader N10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'trial-of-the-crusader-25']) }}">
+                        {{ __("Trial of the Crusader N25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'trial-of-the-crusader-h10']) }}">
+                        {{ __("Trial of the Crusader H10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'trial-of-the-crusader-h25']) }}">
+                        {{ __("Trial of the Crusader H25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'onyxias-lair-n10']) }}">
+                        {{ __("Onyxia's Lair N10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'onyxias-lair-n25']) }}">
+                        {{ __("Onyxia's Lair N25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'icecrown-citadel-n10']) }}">
+                        {{ __("Icecrown Citadel N10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'icecrown-citadel-n25']) }}">
+                        {{ __("Icecrown Citadel N25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'icecrown-citadel-h10']) }}">
+                        {{ __("Icecrown Citadel H10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'icecrown-citadel-h25']) }}">
+                        {{ __("Icecrown Citadel H25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'ruby-sanctum-n10']) }}">
+                        {{ __("Ruby Sanctum N10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'ruby-sanctum-n25']) }}">
+                        {{ __("Ruby Sanctum N25") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'ruby-sanctum-h10']) }}">
+                        {{ __("Ruby Sanctum H10") }}
+                    </a>
+                </li>
+                <li>
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 3, 'instanceSlug' => 'ruby-sanctum-h25']) }}">
+                        {{ __("Ruby Sanctum H25") }}
+                    </a>
+                </li>
+            </ul>
+        </div>
     </div>
 </li>
 <!-- Classic Item Database -->
@@ -159,20 +284,33 @@
         {{ __("The MySQL item database used by :appName for Classic WoW only.", ['appName' => env('APP_NAME')]) }}
     </p>
     <p>
-        <a href="https://github.com/thatsmybis/classic-wow-item-db/tree/master/thatsmybis" class="text-5" target="_blank">https://github.com/thatsmybis/classic-wow-item-db</a>
+        <a href="https://github.com/thatsmybis/classic-wow-item-db/" class="text-5" target="_blank">https://github.com/thatsmybis/classic-wow-item-db</a>
     </p>
 </li>
 <!-- TBC Item Database -->
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-database text-muted"></span>
-        <span class="font-weight-normal text-uncommon">Burning Crusade</span> MySQL Item Database
+        <span class="font-weight-normal text-uncommon">{{ __("Burning Crusade") }}</span> {{ __("MySQL Item Database") }}
     </h2>
     <p>
         {{ __("The MySQL WoW item database used by :appName for TBC (export includes Classic data too).", ['appName' => env('APP_NAME')]) }}
     </p>
     <p>
-        <a href="https://github.com/thatsmybis/burning-crusade-item-db/tree/main/thatsmybis" class="text-5" target="_blank">https://github.com/thatsmybis/burning-crusade-item-db</a>
+        <a href="https://github.com/thatsmybis/burning-crusade-item-db/" class="text-5" target="_blank">https://github.com/thatsmybis/burning-crusade-item-db</a>
+    </p>
+</li>
+<!-- WoTLK Item Database -->
+<li class="p-3 mb-3 rounded">
+    <h2>
+        <span class="fas fa-fw fa-database text-muted"></span>
+        <span class="font-weight-normal text-mage">{{ __("Wrath of the Lich King") }}</span> {{ __("MySQL Item Database") }}
+    </h2>
+    <p>
+        {{ __("The MySQL WoW item database used by :appName for WoTLK (export includes Classic and TBC data too).", ['appName' => env('APP_NAME')]) }}
+    </p>
+    <p>
+        <a href="https://github.com/thatsmybis/wotlk-item-db/" class="text-5" target="_blank">https://github.com/thatsmybis/wotlk-item-db</a>
     </p>
 </li>
 
@@ -181,6 +319,7 @@
 
     <p>
         {{ __("View the") }} <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}">{{ __("live data") }}</a> {{ __("for what people are wishlisting in") }}
+        <a href="{{ route('loot.wishlist', ['expansionName' => 'wotlk']) }}" class="text-{{ getExpansionColor(3) }}">{{ __("WoTLK") }}</a>,
         <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
         {{ __("and") }}
         <a href="{{ route('loot.wishlist', ['expansionName' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>

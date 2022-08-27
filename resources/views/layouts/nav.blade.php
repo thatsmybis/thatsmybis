@@ -232,6 +232,79 @@
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'bc-world-bosses']) }}">
                                             {{ __("World Bosses") }}
                                         </a>
+                                    @elseif ($guild->expansion_id == 3)
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas-n10']) }}">
+                                            {{ __("Naxxramas N10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas-n25']) }}">
+                                            {{ __("Naxxramas N25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'eye-of-eternity-n10']) }}">
+                                            {{ __("Eye of Eternity N10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'eye-of-eternity-n25']) }}">
+                                            {{ __("Eye of Eternity N25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'obsidian-sanctum-n10']) }}">
+                                            {{ __("Obsidian Sanctum N10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'obsidian-sanctum-n25']) }}">
+                                            {{ __("Obsidian Sanctum N25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'vault-of-archavon-n10']) }}">
+                                            {{ __("Vault of Archavon N10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'vault-of-archavon-n25']) }}">
+                                            {{ __("Vault of Archavon N25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ulduar-n10']) }}">
+                                            {{ __("Ulduar N10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ulduar-n25']) }}">
+                                            {{ __("Ulduar N25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'trial-of-the-crusader-n10']) }}">
+                                            {{ __("Trial of the Crusader N10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'trial-of-the-crusader-25']) }}">
+                                            {{ __("Trial of the Crusader N25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'trial-of-the-crusader-h10']) }}">
+                                            {{ __("Trial of the Crusader H10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'trial-of-the-crusader-h25']) }}">
+                                            {{ __("Trial of the Crusader H25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair-n10']) }}">
+                                            {{ __("Onyxia's Lair N10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair-n25']) }}">
+                                            {{ __("Onyxia's Lair N25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'icecrown-citadel-n10']) }}">
+                                            {{ __("Icecrown Citadel N10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'icecrown-citadel-n25']) }}">
+                                            {{ __("Icecrown Citadel N25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'icecrown-citadel-h10']) }}">
+                                            {{ __("Icecrown Citadel H10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'icecrown-citadel-h25']) }}">
+                                            {{ __("Icecrown Citadel H25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-n10']) }}">
+                                            {{ __("Ruby Sanctum N10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-n25']) }}">
+                                            {{ __("Ruby Sanctum N25") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-h10']) }}">
+                                            {{ __("Ruby Sanctum H10") }}
+                                        <a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-h25']) }}">
+                                            {{ __("Ruby Sanctum H25") }}
+                                        <a>
                                     @endif
                                 </div>
                             </div>
@@ -297,6 +370,79 @@
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'bc-world-bosses']) }}">
                                 {{ __("World Bosses") }}
                             </a>
+                        @elseif ($guild->expansion_id == 3)
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas-n10']) }}">
+                                {{ __("Naxxramas N10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'naxxramas-n25']) }}">
+                                {{ __("Naxxramas N25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'eye-of-eternity-n10']) }}">
+                                {{ __("Eye of Eternity N10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'eye-of-eternity-n25']) }}">
+                                {{ __("Eye of Eternity N25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'obsidian-sanctum-n10']) }}">
+                                {{ __("Obsidian Sanctum N10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'obsidian-sanctum-n25']) }}">
+                                {{ __("Obsidian Sanctum N25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'vault-of-archavon-n10']) }}">
+                                {{ __("Vault of Archavon N10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'vault-of-archavon-n25']) }}">
+                                {{ __("Vault of Archavon N25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ulduar-n10']) }}">
+                                {{ __("Ulduar N10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ulduar-n25']) }}">
+                                {{ __("Ulduar N25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'trial-of-the-crusader-n10']) }}">
+                                {{ __("Trial of the Crusader N10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'trial-of-the-crusader-25']) }}">
+                                {{ __("Trial of the Crusader N25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'trial-of-the-crusader-h10']) }}">
+                                {{ __("Trial of the Crusader H10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'trial-of-the-crusader-h25']) }}">
+                                {{ __("Trial of the Crusader H25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair-n10']) }}">
+                                {{ __("Onyxia's Lair N10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'onyxias-lair-n25']) }}">
+                                {{ __("Onyxia's Lair N25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'icecrown-citadel-n10']) }}">
+                                {{ __("Icecrown Citadel N10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'icecrown-citadel-n25']) }}">
+                                {{ __("Icecrown Citadel N25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'icecrown-citadel-h10']) }}">
+                                {{ __("Icecrown Citadel H10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'icecrown-citadel-h25']) }}">
+                                {{ __("Icecrown Citadel H25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-n10']) }}">
+                                {{ __("Ruby Sanctum N10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-n25']) }}">
+                                {{ __("Ruby Sanctum N25") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-h10']) }}">
+                                {{ __("Ruby Sanctum H10") }}
+                            <a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-h25']) }}">
+                                {{ __("Ruby Sanctum H25") }}
+                            <a>
                         @endif
                     </div>
                 </li>

@@ -13,6 +13,10 @@
                 <li class="list-inline-item font-weight-{{ $expansionId == 2 ? 'bold' : 'light' }}">
                     <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>
                 </li>
+                <li class="list-inline-item">&sdot;</li>
+                <li class="list-inline-item font-weight-{{ $expansionId == 3 ? 'bold' : 'light' }}">
+                    <a href="{{ route('loot.wishlist', ['expansionName' => 'wotlk']) }}" class="text-{{ getExpansionColor(3) }}">{{ __("WoTLK") }}</a>
+                </li>
             </ul>
             <h1>
                 <span class="font-weight-bold">{{ __("Top") }} {{ $maxItems }}</span> {{ __("Wishlisted") }}
@@ -34,10 +38,10 @@
                     @endif
                     <li class="list-inline-item mt-2 mb-2 {{ $class == $chosenClass ? 'font-weight-bold' : 'font-weight-normal' }}">
                         <a href="{{
-                            $guild ? route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'class' => strtolower($class)])
-                                : route('loot.wishlist', ['expansionName' => getExpansionAbbr($expansionId, true), 'class' => strtolower($class)])
+                            $guild ? route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'class' => slug(strtolower($class))])
+                                : route('loot.wishlist', ['expansionName' => getExpansionAbbr($expansionId, true), 'class' => slug(strtolower($class))])
                             }}"
-                            class="text-{{ strtolower($class) }}">
+                            class="text-{{ slug(strtolower($class)) }}">
                             {{ $class }}
                         </a>
                         {{-- if showing ALL classes on one page
@@ -154,10 +158,10 @@
                     @endif
                     <li class="list-inline-item mt-2 mb-2 {{ $class == $chosenClass ? 'font-weight-bold' : 'font-weight-normal' }}">
                         <a href="{{
-                            $guild ? route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'class' => strtolower($class)])
-                                : route('loot.wishlist', ['expansionName' => getExpansionAbbr($expansionId, true), 'class' => strtolower($class)])
+                            $guild ? route('guild.loot.wishlist', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'class' => slug(strtolower($class))])
+                                : route('loot.wishlist', ['expansionName' => getExpansionAbbr($expansionId, true), 'class' => slug(strtolower($class))])
                             }}"
-                            class="text-{{ strtolower($class) }}">
+                            class="text-{{ slug(strtolower($class)) }}">
                             {{ $class }}
                         </a>
                         {{-- if showing ALL classes on one page
