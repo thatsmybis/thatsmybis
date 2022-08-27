@@ -8,6 +8,7 @@ use Auth;
 use Exception;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 use RestCord\DiscordClient;
 
 class GuildController extends Controller
@@ -329,6 +330,7 @@ class GuildController extends Controller
 
         $validationRules =  [
             'name'                         => 'string|max:36',
+            'faction'                      => ['required', Rule::in(array_keys(Guild::factions()))],
             'disabled_at'                  => 'nullable|boolean',
             'is_prio_private'              => 'nullable|boolean',
             'is_prio_disabled'             => 'nullable|boolean',
@@ -362,6 +364,7 @@ class GuildController extends Controller
         $this->validate(request(), $validationRules);
 
         $updateValues['name']                      = request()->input('name');
+        $updateValues['faction']                   = slug(request()->input('faction'));
         $updateValues['slug']                      = slug(request()->input('name'));
         $updateValues['warcraftlogs_guild_id']     = request()->input('warcraftlogs_guild_id');
         $updateValues['is_prio_private']           = request()->input('is_prio_private') == 1 ? 1 : 0;

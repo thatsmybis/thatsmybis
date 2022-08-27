@@ -72,6 +72,7 @@
                     </div>
                     <div class="col-12 pt-2 pb-0 mb-3 bg-light rounded">
 
+                        <!-- Guild Name -->
                         <div class="row">
                             <div class="col-md-8 col-12">
                                 <div class="form-group">
@@ -80,6 +81,28 @@
                                         {{ __("Guild Name") }}
                                     </label>
                                     <input name="name" maxlength="36" type="text" class="form-control dark" placeholder="must be unique" value="{{ old('name') ? old('name') : $guild->name }}" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Guild Faction -->
+                        <div class="row">
+                            <div class="col-md-3 col-sm-4 col-6">
+                                <div class="form-group">
+                                    <label class="sr-only" for="faction">
+                                        {{ __("Faction") }}
+                                    </label>
+                                    <select name="faction" class="form-control dark">
+                                        <option value="" {{ old('faction') && old('faction') == '' || $guild->faction == '' ? 'selected' : '' }} class="text-muted">
+                                            {{ __("Choose faction") }}
+                                        </option>
+                                        <option value="h" {{ old('faction') && old('faction') == 'h' || $guild->faction == 'h' ? 'selected' : '' }} class="text-horde">
+                                            {{ __("Horde") }}
+                                        </option>
+                                        <option value="a" {{ old('faction') && old('faction') == 'a' || $guild->faction == 'a' ? 'selected' : '' }} class="text-alliance">
+                                            {{ __("Alliance") }}
+                                        </option>
+                                    </select>
                                 </div>
                             </div>
                         </div>

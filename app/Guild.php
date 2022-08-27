@@ -99,6 +99,9 @@ class Guild extends BaseModel
         6 => 'F',
     ];
 
+    const FACTION_BEST  = 'h';
+    const FACTION_WORST = 'a';
+
     // Includes hidden and removed characters
     public function allCharacters() {
         return $this
@@ -180,6 +183,15 @@ class Guild extends BaseModel
 
     public function user() {
         return $this->belongsTo(User::class);
+    }
+
+    /* Various functions */
+
+    static public function factions() {
+        return [
+            self::FACTION_BEST  => self::FACTION_BEST,
+            self::FACTION_WORST => self::FACTION_WORST,
+        ];
     }
 
     public function getMemberRoleIds() {

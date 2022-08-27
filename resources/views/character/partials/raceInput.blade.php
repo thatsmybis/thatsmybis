@@ -10,7 +10,7 @@
         </option>
 
         @foreach (App\Character::races($guild->expansion_id) as $key => $race)
-            <option value="{{ $key }}" class="text-{{ strtolower($race['faction']) }}-important font-weight-medium"
+            <option value="{{ $key }}" class="text-{{ slug($race['faction']) }}-important font-weight-medium"
                 {{ $oldValue ? ($oldValue == $key ? 'selected' : '') : ($character && $character->race == $key ? 'selected' : '') }}>
                 {{ $race['name'] }}
             </option>
