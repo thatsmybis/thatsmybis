@@ -66,7 +66,7 @@
                                     @foreach ($member->characters as $character)
                                         <li class="list-inline-item bg-tag rounded pt-0 pl-1 pb-1 pr-1">
                                             <a href="{{route('character.show', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                                class="text-{{ $character->class ? strtolower($character->class) : '' }}">
+                                                class="text-{{ $character->class ? slug($character->class) : '' }}">
                                                 {{ $character->name }}
                                             </a>
                                         </li>

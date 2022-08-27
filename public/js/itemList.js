@@ -304,7 +304,7 @@ function createCharacterListHtml(data, type, itemId, header = null) {
                         <span class="">${ type !== 'received' && character.pivot.order ? character.pivot.order : '' }</span>
                         <span class="small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
                         <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_group_color) }"></span>
-                        <span class="text-${ character.class ? character.class.toLowerCase() : '' }-important">${ character.name }</span>
+                        <span class="text-${ character.class ? slug(character.class) : '' }-important">${ character.name }</span>
                         ${ character.is_alt ? `
                             <span class="text-warning">${localeAlt}</span>
                         ` : '' }

@@ -5,7 +5,7 @@
                     <img src="{{ asset('images/' . $character->class . '.jpg') }}" class="class-icon" />
             @endif
                 <span class="font-weight-bold h{{ isset($headerSize) && $headerSize ? $headerSize : '2' }}">
-                    {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<span class="text-{{ $character->class ? strtolower($character->class) : '' }}">{{ $character->name }}</span>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
+                    {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<span class="text-{{ $character->class ? slug($character->class) : '' }}">{{ $character->name }}</span>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
                 </span>
         </a>
         <div class="dropdown-menu" aria-labelledby="character{{ $character->id }}Dropdown">
@@ -38,7 +38,8 @@
         @endif
         <li class="list-inline-item">
             <span class="font-weight-bold h{{ isset($headerSize) && $headerSize ? $headerSize : '2' }}">
-                {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ $character->class ? strtolower($character->class) : '' }}">{{ $character->name }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
+                {{ isset($titlePrefix) && $titlePrefix ? $titlePrefix : '' }}<a href="{{route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                    class="text-{{ $character->class ? slug($character->class) : '' }}">{{ $character->name }}</a>{{ isset($titleSuffix) && $titleSuffix ? $titleSuffix : '' }}
             </span>
         </li>
         @if (isset($showEdit) && $showEdit)

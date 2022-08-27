@@ -61,7 +61,7 @@
                         </a>
                         <div class="dropdown-menu" aria-labelledby="wishlistNavDropdown">
                             @foreach ($currentMember->characters as $character)
-                                <a class="dropdown-item text-{{ strtolower($character->class) }}-important" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
+                                <a class="dropdown-item text-{{ slug($character->class) }}-important" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                                     {{ $character->name }}
                                 </a>
                             @endforeach

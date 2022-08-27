@@ -42,9 +42,9 @@
         data-tokens="{{ $character->id }}"
         data-raid-group-id="{{ $character->raid_group_id }}"
         data-name="{{ $character->name }}"
-        data-class="text-{{ strtolower($character->class) }}"
-        class="js-character-option text-{{ strtolower($character->class) }}-important"
-        data-content="<span class='font-weight-medium text-{{ strtolower($character->class) }}-important'>{{ $characterNameText }}</span> <span class='small text-muted'>{{ $characterMetaText }}</span>"
+        data-class="text-{{ slug($character->class) }}"
+        class="js-character-option text-{{ slug($character->class) }}-important"
+        data-content="<span class='font-weight-medium text-{{ slug($character->class) }}-important'>{{ $characterNameText }}</span> <span class='small text-muted'>{{ $characterMetaText }}</span>"
         hack="{{ $character->id }}">
         {{ $characterNameText }} {!! $characterMetaText !!}
     </option>

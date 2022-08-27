@@ -6,7 +6,7 @@
                 <span class="fas fa-fw fa-grip-vertical text-muted"></span>
             </div>
         </div>
-        <div class=" w-100 font-weight-medium {{ $errors->has('characters.' . $loop->index) ? 'text-danger font-weight-bold' : 'text-' . strtolower($character->class) }}">
+        <div class=" w-100 font-weight-medium {{ $errors->has('characters.' . $loop->index) ? 'text-danger font-weight-bold' : 'text-' . slug($character->class) }}">
             <div class="mt-1">
                 {{ $character->name }}
                 @php

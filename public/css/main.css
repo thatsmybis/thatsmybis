@@ -247,8 +247,14 @@ body {
     color: #bb9b63;
 }
 
+.text-death-knight-important {
+    color: #c41e3b !important;
+}
 .text-druid-important {
     color: #ff8000 !important;
+}
+.text-dk-important {
+    color: #c41e3b !important;
 }
 .text-hunter-important {
     color: #9dd367 !important;

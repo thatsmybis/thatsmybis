@@ -64,11 +64,11 @@
                         @foreach ($item->wishlistCharacters as $character)
                             <li class="list-inline-item">
                                 <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                    class="tag text-{{ strtolower($character->class) }} {{ $character->pivot->is_received || $character->pivot->received_at ? 'font-strikethrough' : '' }}" target="_blank">
+                                    class="tag text-{{ slug($character->class) }} {{ $character->pivot->is_received || $character->pivot->received_at ? 'font-strikethrough' : '' }}" target="_blank">
                                     <span class="text-muted">{{ $character->pivot->order ? $character->pivot->order : '' }}</span>
                                     <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_group_color) }}"></span>-->
                                     <span class="text-muted small font-weight-bold">{{ $character->pivot->is_offspec ? 'OS' : '' }}</span>
-                                    <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
+                                    <span class="text-{{ slug($character->class) }}">{{ $character->name }}</span>
                                     <span class="js-watchable-timestamp smaller text-muted"
                                         data-timestamp="{{ $character->pivot->created_at }}"
                                         data-is-short="1">
@@ -96,7 +96,7 @@
                             <li class="list-inline-item">
                                 <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                     class="tag" target="_blank">
-                                    <span class="text-{{ strtolower($character->class) }}">{{ $character->name }}</span>
+                                    <span class="text-{{ slug($character->class) }}">{{ $character->name }}</span>
                                 </a>
                             </li>
                         @endforeach
@@ -200,7 +200,7 @@
                                         </div>
                                     </li>
                                     <li class="list-inline-item">
-                                        <span class="js-input-label text-{{ $character ? strtolower($character->class) : '' }} font-weight-medium">
+                                        <span class="js-input-label text-{{ $character ? slug($character->class) : '' }} font-weight-medium">
                                             {!! $characterLabel !!}
                                         </span>
                                     </li>

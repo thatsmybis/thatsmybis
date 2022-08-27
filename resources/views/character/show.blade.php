@@ -23,6 +23,7 @@
                     @if ($character->raids->count())
                         @include('partials/raidHistoryTable', ['raids' => $character->raids, 'showOfficerNote' => ($viewOfficerNotePermission && !isStreamerMode())])
                     @else
+                        <strong>{{ __("Raid History") }}:</strong>
                         {{ __("None yet") }}
                     @endif
                 </div>

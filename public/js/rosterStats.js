@@ -226,8 +226,8 @@ function createRosterStatsTable() {
                 _: function (data, type, row) {
                     return `<ul class="no-bullet no-indent">
                         <li>
-                            <div class="dropdown text-${ row.class ? row.class.toLowerCase() : '' }">
-                                <a class="dropdown-toggle font-weight-bold text-${ row.class ? row.class.toLowerCase() : '' }"
+                            <div class="dropdown text-${ row.class ? slug(row.class) : '' }">
+                                <a class="dropdown-toggle font-weight-bold text-${ row.class ? slug(row.class) : '' }"
                                     id="character${ row.id }Dropdown"
                                     role="button"
                                     data-toggle="dropdown"

@@ -229,7 +229,7 @@
                                                     value="{{ $character->pivot->order }}">
                                                     <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                                         title="{{ $character->raid_group_name ? $character->raid_group_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}"
-                                                        class="text-{{ $character->class ? strtolower($character->class) : ''}}-important tag d-inline">
+                                                        class="text-{{ $character->class ? slug($character->class) : ''}}-important tag d-inline">
                                                         <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_group_color ? $character->raid_group_color : '')) }}"></span>{{ $character->name }}
                                                         @if ($character->is_alt)
                                                             <span class="text-gold">{{ __("alt") }}</span>

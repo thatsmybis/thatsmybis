@@ -13,7 +13,7 @@
         </option>
 
         @foreach (App\Character::classes($guild->expansion_id) as $key => $class)
-            <option value="{{ $key }}" class="text-{{ strtolower($key) }}-important font-weight-medium"
+            <option value="{{ $key }}" class="text-{{ slug($key) }}-important font-weight-medium"
                 {{ $oldValue ? ($oldValue == $key ? 'selected' : '') : ($character && $character->class == $key ? 'selected' : '') }}>
                 {{ $class }}
             </option>

@@ -108,7 +108,7 @@ function createTable() {
                         return `
                         <ul class="no-bullet no-indent mb-2">
                             <li>
-                                <div class="dropdown text-${ row.class ? row.class.toLowerCase() : '' }">
+                                <div class="dropdown text-${ row.class ? slug(row.class) : '' }">
                                     ${
                                         row.roster_note_order || row.roster_note_list_number || row.roster_note_is_offspec || row.roster_note_date || row.roster_note
                                             ? `<ul class="list-inline tag tag-wrap bg-dark text-muted">
@@ -138,7 +138,7 @@ function createTable() {
                                                 </ul>`
                                             : ``
                                     }
-                                    <a class="dropdown-toggle text-4 font-weight-bold text-${ row.class ? row.class.toLowerCase() : '' }"
+                                    <a class="dropdown-toggle text-4 font-weight-bold text-${ row.class ? slug(row.class) : '' }"
                                         id="character${ row.id }Dropdown"
                                         role="button"
                                         data-toggle="dropdown"

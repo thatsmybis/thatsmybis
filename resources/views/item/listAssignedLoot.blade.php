@@ -101,7 +101,7 @@
                             </option>
                             @foreach ($guild->characters as $character)
                                 <option value="{{ $character->id }}"
-                                        data-tokens="{{ $character->id }}" class="text-{{ strtolower($character->class) }}-important"
+                                        data-tokens="{{ $character->id }}" class="text-{{ slug($character->class) }}-important"
                                         {{ Request::get('character_id') && Request::get('character_id') == $character->id ? 'selected' : ''}}>
                                     {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? __("Alt") : '' }}
                                 </option>
