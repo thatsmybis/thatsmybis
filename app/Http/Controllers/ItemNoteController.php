@@ -39,7 +39,7 @@ class ItemNoteController extends Controller
             ->with('itemSources')
             ->firstOrFail();
 
-        $items = Item::select([
+        $query = Item::select([
                 'items.id',
                 'items.item_id',
                 'items.name',
@@ -69,8 +69,12 @@ class ItemNoteController extends Controller
             ->groupBy('items.item_id')
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
-            ->with('childItems')
-            ->get();
+            ->ofFaction($guild->faction)
+            ->with('childItems', function ($query) use ($guild) {
+                $query->ofFaction($guild->faction);
+            });
+
+        $items = $query->get();
 
         $averageTiers = $this->getItemAverageTiers($instance, $guild->expansion_id);
 

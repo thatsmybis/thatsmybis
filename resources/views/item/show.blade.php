@@ -272,6 +272,7 @@
                                 <li class="">
                                     <h2 class="font-weight-bold mb-3">
                                         {{ __("Related") }}
+                                        <span class="font-weight-normal smaller text-muted">{{ $item->childItems->count() }}</span>
                                     </h2>
                                 </li>
                                 @if ($item->parentItem)

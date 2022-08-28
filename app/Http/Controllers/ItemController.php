@@ -100,7 +100,8 @@ class ItemController extends Controller
                 ])
                 // ->whereNull('items.parent_id')
                 ->orderBy('item_sources.order')
-                ->orderBy('items.name');
+                ->orderBy('items.name')
+                ->ofFaction($guild->faction);
 
             if ($showPrios) {
                 $query = $query->with([
@@ -146,23 +147,27 @@ class ItemController extends Controller
 
                     },
                     'childItems' => function ($query) use ($guild) {
-                        return $query->with([
-                            'wishlistCharacters' => function ($query) use($guild) {
-                                return $query
-                                    ->where([
-                                        ['characters.guild_id', $guild->id],
-                                        ['character_items.is_received', 0],
-                                    ])
-                                ->whereNull('character_items.received_at')
-                                ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
-                                ->orderBy('raid_group_name')
-                                ->orderBy('character_items.order');
-                            },
-                        ]);
+                        return $query
+                            ->ofFaction($guild->faction)
+                            ->with([
+                                'wishlistCharacters' => function ($query) use($guild) {
+                                    return $query
+                                        ->where([
+                                            ['characters.guild_id', $guild->id],
+                                            ['character_items.is_received', 0],
+                                        ])
+                                    ->whereNull('character_items.received_at')
+                                    ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
+                                    ->orderBy('raid_group_name')
+                                    ->orderBy('character_items.order');
+                                },
+                            ]);
                     }
                 ]);
             } else {
-                $query = $query->with(['childItems']);
+                $query = $query->with('childItems', function ($query) use ($guild) {
+                    return $query->ofFaction($guild->faction);
+                });
             }
 
             $query = $query->with([
@@ -293,7 +298,8 @@ class ItemController extends Controller
                 $query = $this->addWishlistQuery($query, $guild, $viewPrioPermission);
                 $query = $query->with([
                     'childItems' => function ($query) use ($guild, $viewPrioPermission) {
-                        return $this->addWishlistQuery($query, $guild, $viewPrioPermission);
+                        $query = $this->addWishlistQuery($query, $guild, $viewPrioPermission);
+                        return $query->ofFaction($guild->faction);
                     }
                 ]);
             } else {

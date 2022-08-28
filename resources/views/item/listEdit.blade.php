@@ -90,9 +90,9 @@
                                             ])
                                     </div>
                                     @if ($item->childItems->count())
-                                        <ul class="ml-3 small list-inline">
-                                            @foreach ($item->childItems as $childItem)
-                                                <li class="list-inline-item">
+                                        <ul class="ml-1 small list-inline">
+                                            @foreach ($item->childItems as $index => $childItem)
+                                                <li class="list-inline-item {{ $index > 10 ? 'd-none' : '' }}">
                                                     @include('partials/item', [
                                                         'item' => $childItem,
                                                         'iconSize' => 'small',
@@ -101,6 +101,13 @@
                                                     ])
                                                 </li>
                                             @endforeach
+                                            @if ($item->childItems->count() > 10)
+                                                <li>
+                                                    <a href="{{ route('guild.item.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'slug' => slug($item->name)]) }}" target="_blank">
+                                                        {{ $item->childItems->count() - 10 }} more…
+                                                    </a>
+                                                </li>
+                                            @endif
                                         </ul>
                                     @endif
                                 </div>

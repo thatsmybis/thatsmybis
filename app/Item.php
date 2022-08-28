@@ -270,4 +270,21 @@ class Item extends BaseModel
                 'created_at',
             ]);
     }
+
+    /**
+     * Scope a query to only include items of a given faction.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @param  string $faction (see factions as defined in Guild)
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeOfFaction($query, $faction)
+    {
+        if ($faction) {
+            return $query->where('faction', $faction)
+                ->orWhereNull('faction');
+        } else {
+            return $query;
+        }
+    }
 }
