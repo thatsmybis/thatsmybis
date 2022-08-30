@@ -13,9 +13,8 @@
 
         @foreach ($guilds as $guild)
             <option value="{{ $guild['id'] }}"
-                {{ $guild['registered'] ? 'disabled' : '' }}
                 {{ old('discord_id_select') ? (old('discord_id_select') == $guild['id'] ? 'selected' : '') : '' }}>
-                {{ $guild['registered'] ? '(already registered)' : '' }}
+                {{ $guild['registered'] ? __('(already registered)') : '' }}
                 {{ $guild['name'] }}
             </option>
         @endforeach

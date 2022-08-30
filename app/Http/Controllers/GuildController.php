@@ -122,8 +122,8 @@ class GuildController extends Controller
     {
         $validationRules =  [
             'name'              => 'string|max:36',
-            'discord_id_select' => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id',
-            'discord_id'        => 'nullable|string|max:255|unique:guilds,discord_id|required_without:discord_id_select',
+            'discord_id_select' => 'nullable|string|max:255|required_without:discord_id', // unique:guilds,discord_id
+            'discord_id'        => 'nullable|string|max:255|required_without:discord_id_select', // unique:guilds,discord_id
             'expansion_id'      => 'integer|exists:expansions,id',
             'bot_added'         => 'numeric|gte:1',
         ];
@@ -718,8 +718,9 @@ class GuildController extends Controller
         }
 
         // Create the guild
-        $guild = Guild::firstOrCreate(['discord_id' => $discordId, 'expansion_id' => $expansionId],
-            [
+        $guild = Guild::create([
+                'discord_id'   => $discordId,
+                'expansion_id' => $expansionId,
                 'name'    => $guildName,
                 'slug'    => slug($guildName),
                 'user_id' => $user->id,

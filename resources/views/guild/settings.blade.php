@@ -29,44 +29,42 @@
                     <div class="col-12 pt-2 pb-0 mb-3 bg-light rounded">
                         <!-- Expansion -->
                         <div class="row">
-                            <div class="col-md-8 col-12">
-                                <div class="form-group">
-                                    <ul class="no-bullet no-indent">
-                                        @foreach ($expansions as $expansion)
-                                            @php
-                                                $matchingGuild = $guild->guilds->where('expansion_id', $expansion->id)->first();
-                                            @endphp
-                                            <li>
-                                                @if ($expansion->id == $guild->expansion_id)
-                                                    <span class="text-{{ getExpansionColor($guild->expansion_id) }} font-weight-bold">
-                                                        <span class="fab fa-fw fa-battle-net text-muted"></span>
-                                                        {{ $expansion->name_long }}
-                                                    </span>
-                                                @elseif ($matchingGuild)
-                                                    <a href="{{ route('guild.settings', ['guildId' => $matchingGuild->id, 'guildSlug' => $matchingGuild->slug]) }}"
-                                                        class="text-{{ getExpansionColor($matchingGuild->expansion_id) }}">
-                                                        <span class="fab fa-fw fa- text-muted"></span>
-                                                        {{ $expansion->name_long }}
-                                                        <span class="text-muted font-italic small">{{ __("owned by") }} <span class="text-discord">{{ $matchingGuild->user->discord_username }}</span></span>
-                                                    </a>
-                                                @else
-                                                    <span class="text-muted">
-                                                        <span class="fab fa-fw fa- text-muted"></span>
-                                                        {{ $expansion->name_long }}
-                                                    </span>
-                                                @endif
+                            <div class="col-12">
+                                <small class="text-muted">Guilds registered to this Discord server</small>
+                                <ul class="no-bullet no-indent">
+                                    @foreach ($expansions as $expansion)
+                                        @php
+                                            $matchingGuilds = $guild->guilds->where('expansion_id', $expansion->id);
+                                        @endphp
+                                        <li>
+                                            <ul class="list-inline">
+                                                @foreach ($matchingGuilds as $matchingGuild)
+                                                    <li class="list-inline-item">
+                                                        @if ($matchingGuild)
+                                                            <a href="{{ route('guild.settings', ['guildId' => $matchingGuild->id, 'guildSlug' => $matchingGuild->slug]) }}"
+                                                                class="text-{{ getExpansionColor($matchingGuild->expansion_id) }} {{ $matchingGuild->id == $guild->id ? 'font-weight-bold' : '' }}">
+                                                                {{ $matchingGuild->name }}
+                                                                <span class="text-muted font-italic small">({{ $expansion->name_short }}) {{ __("owned by") }} <span class="text-discord">{{ $matchingGuild->user->discord_username }}</span></span>
+                                                            </a>
+                                                        @else
+                                                            <span class="text-muted">
+                                                                {{ $expansion->name_long }}
+                                                            </span>
+                                                        @endif
 
-                                                @if (!$expansion->is_enabled)
-                                                    <span class="text-muted font-italic small">{{ __("not yet supported") }}</span>
-                                                @elseif (!$matchingGuild)
-                                                    <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}" class="font-italic small">
-                                                        {{ __("add expansion") }}
-                                                    </a>
-                                                @endif
-                                            </li>
-                                        @endforeach
-                                    </ul>
-                                </div>
+                                                        @if (!$expansion->is_enabled)
+                                                            <span class="text-muted font-italic small">{{ __("not yet supported") }}</span>
+                                                        @elseif (!$matchingGuild)
+                                                            <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}" class="font-italic small">
+                                                                {{ __("add expansion") }}
+                                                            </a>
+                                                        @endif
+                                                    </li>
+                                                @endforeach
+                                            </ul>
+                                        </li>
+                                    @endforeach
+                                </ul>
                             </div>
                         </div>
                     </div>
@@ -111,7 +109,7 @@
                         <div class="row">
                             <div class="col-md-8 col-12">
                                 <div class="form-group">
-                                    <label for="discord_id" class="font-weight-normal">
+                                    <label for="" class="font-weight-normal">
                                         <span class="fas fa-fw fa-user-crown text-muted"></span>
                                         <span class="text-muted">{{ __("Guild Owner") }}</span>
                                         @if (request()->get('isGuildAdmin'))
