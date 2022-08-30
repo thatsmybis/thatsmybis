@@ -38,29 +38,28 @@
                                         @endphp
                                         <li>
                                             <ul class="list-inline">
-                                                @foreach ($matchingGuilds as $matchingGuild)
-                                                    <li class="list-inline-item">
-                                                        @if ($matchingGuild)
+                                                @if ($matchingGuilds->count())
+                                                    @foreach ($matchingGuilds as $matchingGuild)
+                                                        <li class="list-inline-item">
                                                             <a href="{{ route('guild.settings', ['guildId' => $matchingGuild->id, 'guildSlug' => $matchingGuild->slug]) }}"
                                                                 class="text-{{ getExpansionColor($matchingGuild->expansion_id) }} {{ $matchingGuild->id == $guild->id ? 'font-weight-bold' : '' }}">
                                                                 {{ $matchingGuild->name }}
                                                                 <span class="text-muted font-italic small">({{ $expansion->name_short }}) {{ __("owned by") }} <span class="text-discord">{{ $matchingGuild->user->discord_username }}</span></span>
                                                             </a>
-                                                        @else
-                                                            <span class="text-muted">
-                                                                {{ $expansion->name_long }}
-                                                            </span>
-                                                        @endif
-
-                                                        @if (!$expansion->is_enabled)
-                                                            <span class="text-muted font-italic small">{{ __("not yet supported") }}</span>
-                                                        @elseif (!$matchingGuild)
-                                                            <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}" class="font-italic small">
-                                                                {{ __("add expansion") }}
-                                                            </a>
-                                                        @endif
-                                                    </li>
-                                                @endforeach
+                                                        </li>
+                                                    @endforeach
+                                                @else
+                                                    <span class="text-muted">
+                                                        {{ $expansion->name_long }}
+                                                    </span>
+                                                    @if ($expansion->is_enabled)
+                                                        <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}" class="font-italic small">
+                                                            {{ __("add expansion") }}
+                                                        </a>
+                                                    @else
+                                                        <span class="text-muted font-italic small">{{ __("not yet supported") }}</span>
+                                                    @endif
+                                                @endif
                                             </ul>
                                         </li>
                                     @endforeach
