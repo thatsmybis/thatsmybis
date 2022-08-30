@@ -132,6 +132,7 @@
             ['name' => 'Hadiya',              'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Hello',               'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'ITank',               'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Jetor',               'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Jensok',              'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Junior',              'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Kazczyk',             'icon' => 'crown', 'title' => 'Parser'],
