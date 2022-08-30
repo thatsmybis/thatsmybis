@@ -31,6 +31,7 @@
                 <li><a href="#name-origin">Where'd you get your name?</a></li>
                 <li><a href="#feature-request">Can you add feature XYZ?</a></li>
                 <li><a href="#how-to-help">I'd like to help out</a></li>
+                <li><a href="#urgent">I have a very urgent problem</a></li>
             </ol>
 
             <hr class="light">
@@ -232,14 +233,30 @@
             <div class="mt-5 mb-5">
                 <h2 id="feature-request">Can you add feature XYZ?</h2>
                 <p>
-                    Maybe. Let me know <a href="{{ env('APP_DISCORD') }}" target="_blank">on my Discord</a> what you'd like to see, and I'll see if I can add it. Almost all <a href="https://github.com/thatsmybis/thatsmybis/projects/1" target="_blank">features added</a> post-launch have come from user requests.
+                    Maybe. Post what you want <a href="{{ env('APP_DISCORD') }}" target="_blank">on my Discord</a>, and I'll see if I can add it. Almost all <a href="https://github.com/thatsmybis/thatsmybis/projects/1" target="_blank">features added</a> post-launch have come from user requests.
+                </p>
+                <p>
+                    I <strong>do not</strong> always check Discord messages regularly. I can be a recluse sometimes.
                 </p>
             </div>
             <hr class="light">
             <div class="mt-5 mb-5">
                 <h2 id="how-to-help">I'd like to help out</h2>
                 <p>
-                    Reach out to me <a href="{{ env('APP_DISCORD') }}" target="_blank">on my Discord</a> and I'll see if we can work together. Or, jump straight into the <a href="https://github.com/thatsmybis/thatsmybis" target="_blank">source code</a>.
+                    Reach out to me via email (<a href="mailto:lemmings19@gmail.com" target="_blank">lemmings19@gmail.com</a>). Source code is <a href="https://github.com/thatsmybis/thatsmybis" target="_blank">here</a>.
+                </p>
+                <p>
+                    I typically <strong>do not</strong> check github notifications regularly.
+                </p>
+            </div>
+            <hr class="light">
+            <div class="mt-5 mb-5">
+                <h2 id="urgent">I have a very urgent problem</h2>
+                <p>
+                    Reach out to me via email (<a href="mailto:lemmings19@gmail.com" target="_blank">lemmings19@gmail.com</a>). I'm not always on Discord, but I get email notifications on my phone.
+                </p>
+                <p>
+                    If you subscribe on Pateron, you can also reach out on Patreon.
                 </p>
             </div>
         </div>

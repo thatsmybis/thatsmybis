@@ -17,7 +17,7 @@
                 </p>
             @else
                 <p>
-                    {!! __('Like the site? <a href=":donateLink" class="text-patreon"> Support the developer</a> directly to help make it better.', ['donateLink' => route('donate')]) !!}
+                    {!! __('TMB is made by a solo dev<br>Donations help cover costs <a href=":donateLink" class="text-patreon">Donate on Patreon</a><br>or consider disabling adblock. Thanks! <3', ['donateLink' => route('donate')]) !!}
                 </p>
             @endif
             {!! __("<strong>Change log</strong> and <strong>announcements</strong> are on the") !!}
