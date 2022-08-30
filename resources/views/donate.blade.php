@@ -4,21 +4,6 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row bg-light mb-3 pt-5 pb-5 rounded">
-        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12 mb-4">
-            <h1 class="text-warning">
-                <span class="fa fa-fw fas fa-exclamation-triangle"></span>
-                {{ __("To disable ads, support on Patreon!") }}
-            </h1>
-            <p class="mt-3">
-                {!! __("Subscribe on <a href=':link1' target='_blank'>Patreon</a> and I will disable ads for your account for the duration of your subscription. You will also be supporting the site.", ['link1' => 'https://www.patreon.com/lemmings19']) !!}
-            </p>
-            <p class="mt-3">
-                {!! __("<strong>It may take up to 48 hours before ads are turned off.</strong> I currently need to manually check subscriptions to update this.") !!}
-            </p>
-            <p class="mt-3">
-                {!! __("Donate on PayPal (and include your Discord username) and I will disable ads on your account based on the donation. You <strong>must</strong> include your Discord username in the donation message for ads to be turned off.") !!}
-            </p>
-        </div>
         <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
             <h1>
                 <span class="fa fa-fw fas fa-heart text-danger"></span>
@@ -32,7 +17,7 @@
                 {{ __("Everything you donate will go back into development, and not to some CEO's yacht...") }}
             </p>
             <p class="mt-3">
-                {!! __("If you want to reach out to me directly, find me on the <a href=':link1' target='_blank'>That's My BIS Discord</a>. My username is Lemmings19#1149. Sometimes, I'm even on <a href=':link2' target='_blank'>YouTube</a>.", ['link1' => env('APP_DISCORD'), 'link2' => 'https://www.youtube.com/user/Lemmings19/videos']) !!}
+                {!! __("If you want to reach out to me directly, email is best (<a href=':email1' target='_blank'>:email1</a>). Sometimes I am on the <a href=':link1' target='_blank'>That's My BIS Discord</a>. My username is Lemmings19#1149.", ['link1' => env('APP_DISCORD'), 'email1' => 'lemmings19@gmail.com']) !!}
             </p>
             <p class="mt-3">
                 {{ __("None of this would be here without the generous donors listed below, and the kind folks who have helped contribute their time.") }} <span class="text-danger">&lt;3 &lt;3 &lt;3</span>
@@ -66,6 +51,21 @@
                     </form>
                 </li>
             </ul>
+        </div>
+        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12 mb-4">
+            <h1 class="text-warning">
+                <span class="fa fa-fw fas fa-exclamation-triangle"></span>
+                {{ __("To disable ads, support on Patreon!") }}
+            </h1>
+            <p class="mt-3">
+                {!! __("Subscribe on <a href=':link1' target='_blank'>Patreon</a> and I will disable ads for your account for the duration of your subscription. You will also be supporting the site.", ['link1' => 'https://www.patreon.com/lemmings19']) !!}
+            </p>
+            <p class="mt-3">
+                {!! __("<strong>It may take up to 48 hours before ads are turned off.</strong> I currently need to manually check subscriptions to update this.") !!}
+            </p>
+            <p class="mt-3">
+                {!! __("Donate on PayPal (and include your Discord username) and I will disable ads on your account based on the donation. You <strong>must</strong> include your Discord username in the donation message for ads to be turned off.") !!}
+            </p>
         </div>
     </div>
 
@@ -106,32 +106,45 @@
             ['name' => 'Amatyr',              'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'andrew_g',            'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Anonymous',           'icon' => 'crown', 'title' => 'Patreon'],
+            ['name' => 'Anthony'              'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Arcadia'              'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Arma',                'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'bakedbread',          'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Bianca'               'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Blezner',             'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'botnet',              'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Braeo'                'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'BurnHavoc'            'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Busmonstret',         'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Calaris',             'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Craig'                'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'diadia',              'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Drezdan',             'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'EmpKain',             'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Euredraith'           'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Faelor',              'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Feora',               'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Finvy',               'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Fragtoaster1',        'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Freddykr'             'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Garsidian Games',     'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'GrumpyOwl'            'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Hadiya',              'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Hello',               'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'ITank',               'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Jensok',              'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Junior',              'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Kazczyk',             'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Keckterz'             'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Khashte',             'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Kirk'                 'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Kral',                'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Kroxz',               'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'kzEr',                'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'lawlop',              'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'LeviosaMimosa'        'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Mapletree',           'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Mashgar'              'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'mataglap',            'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'mattyp237',           'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Mister Awesomesauce', 'icon' => 'crown', 'title' => 'Raider'],
@@ -140,6 +153,7 @@
             ['name' => 'Nompire',             'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Onehalf',             'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Panya',               'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Paul'                 'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Riotdog TV',          'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Rishi',               'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Rmalhada',            'icon' => 'crown', 'title' => 'Parser'],
@@ -147,15 +161,18 @@
             ['name' => 'samspayde',           'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Sangwa',              'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Sarafina',            'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'SatanHimself'         'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Sentence',            'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'SHIELD',              'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Sleete',              'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'skoz',                'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Sleete',              'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Slish'                'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Strix',               'icon' => 'crown', 'title' => 'Black Lotus'],
             ['name' => 'Strken',              'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Sumorex',             'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'TideAd',              'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Tric',                'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Triper'               'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Tron',                'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Uriah',               'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Vejusatko',           'icon' => 'crown', 'title' => 'Raider'],

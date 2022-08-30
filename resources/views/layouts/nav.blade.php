@@ -769,8 +769,8 @@
                 <li class="nav-item mr-3 d-patreon-block">
                     <a href="{{ route('donate') }}" target="_blank" class="nav-link active small font-weight-bold text-patreon mt-0"
                         title="Toss a coin to your web dev">
-                        <span class="fas fa-fw fa-"></span>
-                        {{ __("Disable Ads") }}
+                        <span class="fas fa-fw fa-sack"></span>
+                        {{ __("Donate") }}
                     </a>
                 </li>
             @endif
