@@ -44,6 +44,32 @@
         </li>
     </ul>
 </li>
+<!-- WoTLK Loot Tables -->
+<li class="p-3 mb-3 rounded">
+    <h2>
+        <span class="fas fa-fw fa-sack text-muted"></span>
+        <span class="font-weight-normal text-mage">{{ __("Wrath of The Lich King") }}</span> {{ __("Loot Tables") }}
+    </h2>
+    <p class="text-warning">
+       UNDER CONSTRUCTION
+    </p>
+    <!--
+    <ul class="list-inline">
+        <li class="list-inline-item">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'wotlk', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
+                <span class="fas fa-fw fa-file-csv text-muted"></span>
+                {{ __("Download CSV") }}
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'wotlk', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
+                <span class="fas fa-fw fa-file-csv text-muted"></span>
+                {{ __("View CSV") }}
+            </a>
+        </li>
+    </ul>
+    -->
+</li>
 <!-- Burning Crusade Loot Tables -->
 <li class="p-3 mb-3 rounded">
     <h2>
