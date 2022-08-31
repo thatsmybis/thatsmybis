@@ -330,7 +330,7 @@ class GuildController extends Controller
 
         $validationRules =  [
             'name'                         => 'string|max:36',
-            'faction'                      => ['required', Rule::in(array_keys(Guild::factions()))],
+            'faction'                      => ['required', Rule::in(array_keys(Guild::getFactions()))],
             'disabled_at'                  => 'nullable|boolean',
             'is_prio_private'              => 'nullable|boolean',
             'is_prio_disabled'             => 'nullable|boolean',

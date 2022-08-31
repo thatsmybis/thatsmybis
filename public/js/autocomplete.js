@@ -17,7 +17,7 @@ function addItemAutocompleteHandler() {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
                     dataType: "json",
-                    url: "/api/items/query/" + expansionId + "/" + request.term + "?locale=" + (locale ? locale : ''),
+                    url: "/api/items/query/" + faction + "/" + expansionId + "/" + request.term + "?locale=" + (locale ? locale : ''),
                     success: function (data) {
                         response(data);
                         if (data.length <= 0) {

@@ -187,7 +187,7 @@ class Guild extends BaseModel
 
     /* Various functions */
 
-    static public function factions() {
+    static public function getFactions() {
         return [
             self::FACTION_BEST  => self::FACTION_BEST,
             self::FACTION_WORST => self::FACTION_WORST,

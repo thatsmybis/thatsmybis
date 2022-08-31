@@ -23,6 +23,7 @@ class Item extends BaseModel
         'source',
         'profession',
         'quality',
+        'is_heroic',
         'display_id',
         'inventory_type',
         'allowable_class',

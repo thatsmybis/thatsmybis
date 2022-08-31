@@ -331,6 +331,12 @@
             var wowheadSubdomain = "www";
         @endif
 
+        @if (isset($guild) && $guild->faction)
+            var faction = "{{ $guild->faction }}";
+        @else
+            var faction = null;
+        @endif
+
         @if (Illuminate\Support\Facades\App::getLocale() != 'en')
             var locale = "{{ Illuminate\Support\Facades\App::getLocale() }}";
             var wowheadLocale = locale  + ".";

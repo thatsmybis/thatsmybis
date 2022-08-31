@@ -1,7 +1,7 @@
 <?php
 namespace App\Http\Controllers\Api;
 
-use App\Item;
+use App\{Character, Guild, Item};
 use Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -23,6 +23,7 @@ class ItemController extends \App\Http\Controllers\Controller
     private function getValidationRules() {
         return [
             'expansion_id' => 'integer|min:1|max:99',
+            'faction'      => ['nullable', 'string', Rule::in(array_keys(Guild::getFactions()))],
             'query'        => 'string|min:1|max:40',
             'locale'       => ['nullable', 'string', Rule::in([
                     "de",
@@ -42,14 +43,17 @@ class ItemController extends \App\Http\Controllers\Controller
     /**
      * Lookup items similar to a given query.
      *
+     * @param $faction string 'a' or 'f'; see Guild for reference
+     * @param $expansionId integer
      * @param $query The name to search for.
      * @return \Illuminate\Http\Response
      */
-    public function query($expansionId, $query)
+    public function query($faction, $expansionId, $query)
     {
         $locale = request()->input('locale');
 
         $validator = Validator::make([
+            'faction'      => $faction,
             'expansion_id' => $expansionId,
             'query'        => $query,
             'locale'       => $locale,
@@ -57,7 +61,7 @@ class ItemController extends \App\Http\Controllers\Controller
 
         if ($validator->fails()) {
             return response()->json([
-                    'error' => __('Query must be between 1 and :charLimit characters. Expansion ID must be between 1 and :expansionLimit.', ['charLimit' => 40, 'expansionLimit' => 3])
+                    'error' => __("Query must be between 1 and :charLimit characters. Expansion ID must be between 1 and :expansionLimit. Faction must be 'a' or 'h'.", ['charLimit' => 40, 'expansionLimit' => 3])
                 ],
                 403);
         } else {
@@ -65,8 +69,10 @@ class ItemController extends \App\Http\Controllers\Controller
                 $sqlQuery = Item::orderByDesc('weight')
                     ->limit(15);
 
+                $selectFields = ['name', 'item_id', 'quality', 'faction', 'is_heroic'];
+
                 if ($locale) {
-                    $sqlQuery = $sqlQuery->select(['name', "name_{$locale}", 'item_id', 'quality'])
+                    $sqlQuery = $sqlQuery->select(array_push($selectFields, "name_{$locale}"))
                     ->where([
                         ["name_{$locale}", 'like', '%' . trim($query) . '%'],
                         ['expansion_id', $expansionId],
@@ -78,7 +84,7 @@ class ItemController extends \App\Http\Controllers\Controller
                     ->orderBy("name_{$locale}")
                     ->orderBy('name');
                 } else {
-                    $sqlQuery = $sqlQuery->select(['name', 'item_id'])
+                    $sqlQuery = $sqlQuery->select($selectFields)
                     ->where([
                         ['name', 'like', '%' . trim($query) . '%'],
                         ['expansion_id', $expansionId],
@@ -91,6 +97,11 @@ class ItemController extends \App\Http\Controllers\Controller
                     // )
                 }
 
+                if ($faction) {
+                    $sqlQuery->ofFaction($faction);
+
+                }
+
                 $results = $sqlQuery->get();
 
                 // For testing the query time:
@@ -101,11 +112,27 @@ class ItemController extends \App\Http\Controllers\Controller
 
                 // We just want the names in a plain old array; not key:value.
                 $results = $results->transform(function ($item) use ($locale) {
+                    $resultItem = ['value' => $item['item_id']];
+
+                    $label = null;
                     if ($locale) {
-                        return ['value' => $item['item_id'], 'label' => ($item["name_{$locale}"] ? $item["name_{$locale}"] : $item['name'])];
+                        $label = ($item["name_{$locale}"] ? $item["name_{$locale}"] : $item->name);
                     } else {
-                        return ['value' => $item['item_id'], 'label' => $item['name']];
+                        $label = $item->name;
                     }
+                    if ($item->is_heroic) {
+                        $label = $label . ' (heroic)';
+                    }
+                    if ($item->faction) {
+                        if ($item->faction == Guild::FACTION_BEST) {
+                            $label = $label . ' (' . Character::FACTION_BEST . ')';
+                        } else if ($item->faction == Guild::FACTION_WORST) {
+                            $label = $label . ' (' . Character::FACTION_WORST . ')';
+                        }
+                    }
+
+                    $resultItem['label'] = $label;
+                    return $resultItem;
                 });
             } else {
                 return response()->json([], 200);
