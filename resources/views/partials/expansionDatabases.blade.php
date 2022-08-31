@@ -51,9 +51,8 @@
         <span class="font-weight-normal text-mage">{{ __("Wrath of The Lich King") }}</span> {{ __("Loot Tables") }}
     </h2>
     <p class="text-warning">
-       UNDER CONSTRUCTION
+       wowhead links are currently invalid for WoTLK. Loot tables are also not guaranteed 100%; but are a best estimate. Will fix soon.
     </p>
-    <!--
     <ul class="list-inline">
         <li class="list-inline-item">
             <a href="{{ route('loot.table', ['expansionSlug' => 'wotlk', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
@@ -68,7 +67,6 @@
             </a>
         </li>
     </ul>
-    -->
 </li>
 <!-- Burning Crusade Loot Tables -->
 <li class="p-3 mb-3 rounded">

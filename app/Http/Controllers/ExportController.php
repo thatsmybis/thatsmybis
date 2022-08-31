@@ -379,6 +379,8 @@ class ExportController extends Controller {
             $expansionId = 1;
         } else if ($expansionSlug == 'burning-crusade') {
             $expansionId = 2;
+        } else if ($expansionSlug == 'wotlk') {
+            $expansionId = 3;
         } else {
             abort(404, __('Expansion not found'));
         }
@@ -388,6 +390,8 @@ class ExportController extends Controller {
             $subdomain = 'classic';
         } else if ($expansionId == 2) {
             $subdomain = 'tbc';
+        } else if ($expansionId == 3) {
+            $subdomain = 'wotlk';
         }
 
         $locale = App::getLocale();
