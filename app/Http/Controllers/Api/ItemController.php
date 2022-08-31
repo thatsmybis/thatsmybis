@@ -43,13 +43,13 @@ class ItemController extends \App\Http\Controllers\Controller
     /**
      * Lookup items similar to a given query.
      *
-     * @param $faction string 'a' or 'f'; see Guild for reference
      * @param $expansionId integer
      * @param $query The name to search for.
      * @return \Illuminate\Http\Response
      */
-    public function query($faction, $expansionId, $query)
+    public function query($expansionId, $query)
     {
+        $faction = request()->input('faction');
         $locale = request()->input('locale');
 
         $validator = Validator::make([
