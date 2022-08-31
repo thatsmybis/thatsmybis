@@ -59,6 +59,8 @@ class ItemController extends \App\Http\Controllers\Controller
             'locale'       => $locale,
         ], $this->getValidationRules());
 
+        $expansionId = (int) $expansionId;
+
         if ($validator->fails()) {
             return response()->json([
                     'error' => __("Query must be between 1 and :charLimit characters. Expansion ID must be between 1 and :expansionLimit. Faction must be 'a' or 'h'.", ['charLimit' => 40, 'expansionLimit' => 3])
@@ -69,7 +71,7 @@ class ItemController extends \App\Http\Controllers\Controller
                 $sqlQuery = Item::orderByDesc('weight')
                     ->limit(15);
 
-                $selectFields = ['name', 'item_id', 'quality', 'faction', 'is_heroic'];
+                $selectFields = ['name', 'item_id', 'quality', 'item_level', 'faction', 'is_heroic'];
 
                 if ($locale) {
                     $sqlQuery = $sqlQuery->select(array_push($selectFields, "name_{$locale}"))
@@ -111,7 +113,7 @@ class ItemController extends \App\Http\Controllers\Controller
                 // Log::debug($query . " (FULLTEXT): " . round(($end - $start) * 1000, 3) . "ms");
 
                 // We just want the names in a plain old array; not key:value.
-                $results = $results->transform(function ($item) use ($locale) {
+                $results = $results->transform(function ($item) use ($expansionId, $locale) {
                     $resultItem = ['value' => $item['item_id']];
 
                     $label = null;
@@ -120,15 +122,23 @@ class ItemController extends \App\Http\Controllers\Controller
                     } else {
                         $label = $item->name;
                     }
+
+                    if ($item->quality) {
+                        $label = '<span class="q' . $item->quality . '">' . $label . '</span>';
+                    }
+
                     if ($item->is_heroic) {
-                        $label = $label . ' (heroic)';
+                        $label = $label . ' <span class="smaller text-success">Heroic</span>';
                     }
                     if ($item->faction) {
                         if ($item->faction == Guild::FACTION_BEST) {
-                            $label = $label . ' (' . Character::FACTION_BEST . ')';
+                            $label = $label . ' <span class="smaller text-horde">' . Character::FACTION_BEST . '</span>';
                         } else if ($item->faction == Guild::FACTION_WORST) {
-                            $label = $label . ' (' . Character::FACTION_WORST . ')';
+                            $label = $label . ' <span class="smaller text-alliance">' . Character::FACTION_WORST . '</span>';
                         }
+                    }
+                    if ($expansionId == 3 && $item->item_level) {
+                        $label = $label . ' <span class="smaller text-muted">ilvl ' . $item->item_level . '</span>';
                     }
 
                     $resultItem['label'] = $label;

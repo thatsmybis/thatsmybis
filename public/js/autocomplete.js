@@ -54,7 +54,12 @@ function addItemAutocompleteHandler() {
             },
             minLength: 1,
             delay: 400
-        });
+        }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            return $("<li></li>")
+                .data("item.autocomplete", item)
+                .append(`<span>${item.label}</span>`)
+                .appendTo(ul);
+        };
     });
 }
 

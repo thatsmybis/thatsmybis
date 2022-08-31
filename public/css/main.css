@@ -1196,6 +1196,28 @@ div.dataTables_filter input {
     /* add padding to account for vertical scrollbar */
     /*padding-right: 20px;*/
 }
+.ui-menu {
+    border: 1px solid #6865b9 !important;
+    border-radius: 3px;
+}
+.ui-menu, .ui-menu .ui-menu-item-wrapper {
+    color: #fff;
+    background-color: #32305c;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+.ui-menu-item {
+    padding-top: 4px;
+    padding-bottom: 4px;
+}
+.ui-menu .ui-menu-item-wrapper:hover, .ui-menu .ui-menu-item-wrapper.ui-state-active {
+    background-color: ##32305c;
+    border-top: none;
+    border-bottom: none;
+    border-right: none;
+    border-left: 1px solid #6865b9 !important;
+    font-weight: 600;
+}
 
 /* BEGIN ADS */
 .d-poster-970 {
