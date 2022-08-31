@@ -1202,7 +1202,7 @@ div.dataTables_filter input {
 }
 .ui-menu, .ui-menu .ui-menu-item-wrapper {
     color: #fff;
-    background-color: #32305c;
+    background-color: #201f3c;
     padding-top: 5px;
     padding-bottom: 5px;
 }
@@ -1211,7 +1211,7 @@ div.dataTables_filter input {
     padding-bottom: 4px;
 }
 .ui-menu .ui-menu-item-wrapper:hover, .ui-menu .ui-menu-item-wrapper.ui-state-active {
-    background-color: ##32305c;
+    background-color: #201f3c;
     border-top: none;
     border-bottom: none;
     border-right: none;
