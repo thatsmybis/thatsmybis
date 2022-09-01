@@ -1218,6 +1218,9 @@ div.dataTables_filter input {
     border-left: 1px solid #6865b9 !important;
     font-weight: 600;
 }
+.ui-menu .ui-menu-item-wrapper:hover span, .ui-menu .ui-menu-item-wrapper.ui-state-active span {
+    font-weight: 600 !important;
+}
 
 /* BEGIN ADS */
 .d-poster-970 {

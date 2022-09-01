@@ -128,6 +128,7 @@ class ItemController extends \App\Http\Controllers\Controller
                         // 'iconSize' => 'tiny',
                         'wowheadLocale' => $locale,
                         'displayOnly' => true,
+                        'fontWeight' => 'normal',
                     ]);
 
                     if ($item->is_heroic) {
@@ -140,7 +141,7 @@ class ItemController extends \App\Http\Controllers\Controller
                             $label = $label . ' <span class="smaller text-alliance">' . Character::FACTION_WORST . '</span>';
                         }
                     }
-                    if ($expansionId == 3 && $item->item_level) {
+                    if ($item->item_level) {
                         $label = $label . ' <span class="smaller text-muted">ilvl ' . $item->item_level . '</span>';
                     }
 

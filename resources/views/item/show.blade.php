@@ -29,10 +29,18 @@
                                         } else {
                                             $wowheadLocale .= '.';
                                         }
+
+                                        $wowheadUrl = '';
+
+                                        if ($guild->expansion_id === 3) {
+                                            $wowheadUrl = 'https://' . $wowheadLocale . 'wowhead.com/' . $wowheadSubdomain . '/%69tem=' . $item->item_id;
+                                        } else {
+                                            // %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want
+                                            $wowheadUrl = 'https://' . $wowheadLocale . $wowheadSubdomain . '.wowhead.com/%69tem=' . $item->item_id;
+                                        }
                                     @endphp
 
-                                    {{-- %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want --}}
-                                    <a class="q{!! $itemJson->quality !!}" href="https://{{ $wowheadLocale . $wowheadSubdomain }}.wowhead.com/%69tem={{ $item->item_id}}" target="_blank">
+                                    <a class="q{!! $itemJson->quality !!}" href="{{ $wowheadUrl }}" target="_blank">
                                         <span class="iconlarge">
                                             <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
                                     </a>

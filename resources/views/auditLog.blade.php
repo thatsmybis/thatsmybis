@@ -317,7 +317,7 @@
                                                         &sdot;
                                                     </li>
                                                     <li class="list-inline-item">
-                                                        <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'nameSlug' => $log->character_slug]) }}" class="text-{{ strtolower($log->character_class) }}">
+                                                        <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $log->character_id, 'nameSlug' => $log->character_slug]) }}" class="text-{{ slug($log->character_class) }}">
                                                             {{ $log->character_name }}
                                                         </a>
                                                     </li>

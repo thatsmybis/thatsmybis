@@ -12,22 +12,21 @@ if (isset($item)) {
 
 $wowheadSubdomain = 'www';
 
+// Long name to avoid conflicts with whatever view is using this template
+$itemExpansionId = null;
+
 if (isset($guild) && $guild->expansion_id) {
-    if ($guild->expansion_id === 1) {
-        $wowheadSubdomain = 'classic';
-    } else if ($guild->expansion_id === 2) {
-        $wowheadSubdomain = 'tbc';
-    } else if ($guild->expansion_id === 3) {
-        $wowheadSubdomain = 'wotlk';
-    }
+    $itemExpansionId = $guild->expansion_id;
 } else if (isset($item) && isset($item->expansion_id)) {
-    if ($item->expansion_id === 1) {
-        $wowheadSubdomain = 'classic';
-    } else if ($item->expansion_id === 2) {
-        $wowheadSubdomain = 'tbc';
-    } else if ($item->expansion_id === 3) {
-        $wowheadSubdomain = 'wotlk';
-    }
+    $itemExpansionId = $item->expansion_id;
+}
+
+if ($itemExpansionId === 1) {
+    $wowheadSubdomain = 'classic';
+} else if ($itemExpansionId === 2) {
+    $wowheadSubdomain = 'tbc';
+} else if ($itemExpansionId === 3) {
+    $wowheadSubdomain = 'wotlk';
 }
 
 if (!isset($wowheadLocale)) {
@@ -55,9 +54,16 @@ if (isset($showTier) && $showTier) {
     }
 }
 
-$wowheadAttribs =
-      'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain. '" '
-    . 'data-wowhead-link="https://' . $wowheadLocale . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
+$wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain. '" ';
+$wowheadUrl = null;
+
+if ($itemExpansionId === 3) {
+    $wowheadUrl = 'https://' . $wowheadLocale . 'wowhead.com/' . $wowheadSubdomain . '/item=' . $itemId;
+    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
+} else {
+    $wowheadUrl = 'https://' . $wowheadLocale . $wowheadSubdomain . '.wowhead.com/item=' . $itemId;
+    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
+}
 
 // Options: tiny, small, medium, large
 if (isset($iconSize) && $iconSize) {
@@ -71,7 +77,7 @@ if (isset($iconSize) && $iconSize) {
     @endif
     <span class="{{ isset($strikeThrough) && $strikeThrough ? 'font-strikethrough' : '' }}">
         @if (isset($wowheadLink) && $wowheadLink)
-            <a href="https://{{ $wowheadLocale . $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
+            <a href="{{ $wowheadUrl }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @elseif (isset($guild) && $guild)
             @if (isset($auditLink) && $auditLink)
                 <a href="{{ route('guild.auditLog', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $itemId]) }}"
@@ -91,7 +97,7 @@ if (isset($iconSize) && $iconSize) {
         @elseif (isset($displayOnly) && $displayOnly)
             <a {!! $wowheadAttribs !!} class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @else
-            <a href="https://{{ $wowheadLocale . $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
+            <a href="{{ $wowheadUrl }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @endif
     </span>
 </span>
