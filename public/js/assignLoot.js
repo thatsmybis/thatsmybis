@@ -313,13 +313,13 @@ function completeCsvImport(results)
         for (let i = 0; i < results.data.length; i++) {
             let item = results.data[i];
             // Skip over requests to disenchant an item
-            let disenchantFlags = ['de', 'disenchant'];
+            let disenchantFlags = ['de', 'disenchant', 'vendor', 'vendored'];
             if (i >= maxItems) {
                 skippedCount++;
                 overLimitCount++;
                 continue;
             } else if (item['response'] != undefined && disenchantFlags.includes(item['response'].toLowerCase())) {
-                console.log(`Skipping row ${ (i + 1) }: Disenchant ${ item.item ? item.item : (item.item_id ? item.item_id : '') }`);
+                console.log(`Skipping row ${ (i + 1) }: Disenchant/vendored ${ item.item ? item.item : (item.item_id ? item.item_id : '') }`);
                 skippedCount++;
                 disenchantCount++;
                 continue;
