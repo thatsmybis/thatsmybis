@@ -311,7 +311,7 @@
             @elseif ($guild->expansion_id === 2)
                 var wowheadSubdomain = "tbc";
             @elseif ($guild->expansion_id === 3)
-                var wowheadSubdomain = "www";
+                var wowheadSubdomain = "wotlk";
             @else
                 var wowheadSubdomain = "www";
             @endif
@@ -322,7 +322,7 @@
             @elseif ($expansionId == 2)
                 var wowheadSubdomain = "tbc";
             @elseif ($expansionId == 3)
-                var wowheadSubdomain = "www";
+                var wowheadSubdomain = "wotlk";
             @else
                 var wowheadSubdomain = "www";
             @endif

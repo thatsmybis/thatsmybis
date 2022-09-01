@@ -17,12 +17,16 @@ if (isset($guild) && $guild->expansion_id) {
         $wowheadSubdomain = 'classic';
     } else if ($guild->expansion_id === 2) {
         $wowheadSubdomain = 'tbc';
+    } else if ($guild->expansion_id === 3) {
+        $wowheadSubdomain = 'wotlk';
     }
 } else if (isset($item) && isset($item->expansion_id)) {
     if ($item->expansion_id === 1) {
         $wowheadSubdomain = 'classic';
     } else if ($item->expansion_id === 2) {
         $wowheadSubdomain = 'tbc';
+    } else if ($item->expansion_id === 3) {
+        $wowheadSubdomain = 'wotlk';
     }
 }
 

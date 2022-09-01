@@ -19,6 +19,8 @@
                                             $wowheadSubdomain = 'classic';
                                         } elseif ($guild->expansion_id === 2) {
                                             $wowheadSubdomain = 'tbc';
+                                        } elseif ($guild->expansion_id === 3) {
+                                            $wowheadSubdomain = 'wotlk';
                                         }
 
                                         $wowheadLocale = App::getLocale();

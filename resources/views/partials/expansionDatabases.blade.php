@@ -51,9 +51,6 @@
         <span class="font-weight-normal text-mage">{{ __("Wrath of The Lich King") }}</span> {{ __("Loot Tables") }}
     </h2>
     <p class="text-warning">
-       Wowhead links are currently invalid for WoTLK.
-    </p>
-    <p class="text-warning">
         Loot tables are also not guaranteed 100%; but are a best estimate.
     </p>
     <ul class="list-inline">
