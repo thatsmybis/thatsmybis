@@ -3,7 +3,7 @@ namespace App\Http\Controllers\Api;
 
 use App\{Character, Guild, Item};
 use Auth;
-use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\{App, Validator, View};
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Validation\Rule;
@@ -71,10 +71,11 @@ class ItemController extends \App\Http\Controllers\Controller
                 $sqlQuery = Item::orderByDesc('weight')
                     ->limit(15);
 
-                $selectFields = ['name', 'item_id', 'quality', 'item_level', 'faction', 'is_heroic'];
+                $selectFields = ['name', 'item_id', 'quality', 'item_level', 'faction', 'is_heroic', 'expansion_id'];
 
                 if ($locale) {
-                    $sqlQuery = $sqlQuery->select(array_push($selectFields, "name_{$locale}"))
+                    array_push($selectFields, "name_{$locale}");
+                    $sqlQuery = $sqlQuery->select(array_values($selectFields))
                     ->where([
                         ["name_{$locale}", 'like', '%' . trim($query) . '%'],
                         ['expansion_id', $expansionId],
@@ -101,7 +102,6 @@ class ItemController extends \App\Http\Controllers\Controller
 
                 if ($faction) {
                     $sqlQuery->ofFaction($faction);
-
                 }
 
                 $results = $sqlQuery->get();
@@ -116,16 +116,19 @@ class ItemController extends \App\Http\Controllers\Controller
                 $results = $results->transform(function ($item) use ($expansionId, $locale) {
                     $resultItem = ['value' => $item['item_id']];
 
-                    $label = null;
+                    $label = '';
+
                     if ($locale) {
-                        $label = ($item["name_{$locale}"] ? $item["name_{$locale}"] : $item->name);
-                    } else {
-                        $label = $item->name;
+                        $item->name = ($item["name_{$locale}"] ? $item["name_{$locale}"] : $item->name);
                     }
 
-                    if ($item->quality) {
-                        $label = '<span class="q' . $item->quality . '">' . $label . '</span>';
-                    }
+                    // Create a wowhead link
+                    $label = (string)View::make('partials.item', [
+                        'item'     => $item,
+                        // 'iconSize' => 'tiny',
+                        'wowheadLocale' => $locale,
+                        'displayOnly' => true,
+                    ]);
 
                     if ($item->is_heroic) {
                         $label = $label . ' <span class="smaller text-success">Heroic</span>';
@@ -141,7 +144,7 @@ class ItemController extends \App\Http\Controllers\Controller
                         $label = $label . ' <span class="smaller text-muted">ilvl ' . $item->item_level . '</span>';
                     }
 
-                    $resultItem['label'] = $label;
+                    $resultItem['label'] = '<span>' . $label . '</span>';
                     return $resultItem;
                 });
             } else {

@@ -300,6 +300,13 @@ function deleteCookie (name, path) {
     setCookie(name, '', -1, path);
 }
 
+// Pass a string of HTML, get the inner contents out of it.
+function extractHtmlContent(htmlString) {
+    var span = document.createElement('span');
+    span.innerHTML = htmlString;
+    return span.textContent || span.innerText;
+}
+
 // Take a jquery element, make that element visually flash to get the user's attention
 function flashElement(element) {
     element.fadeTo(100, 0.3, function() { $(this).fadeTo(500, 1.0); });

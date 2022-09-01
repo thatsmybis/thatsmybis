@@ -44,7 +44,7 @@ function addItemAutocompleteHandler() {
 
                     // Only allow numbers (an item ID must be found)
                     if (Number.isInteger(value)) {
-                        addTag(this, value, label);
+                        addTag(this, value, extractHtmlContent(label));
                         makeWowheadLinks();
                     }
 
@@ -55,6 +55,7 @@ function addItemAutocompleteHandler() {
             minLength: 1,
             delay: 400
         }).data("ui-autocomplete")._renderItem = function(ul, item) {
+            console.log(item.label);
             return $("<li></li>")
                 .data("item.autocomplete", item)
                 .append(`<span>${item.label}</span>`)

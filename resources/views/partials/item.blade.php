@@ -30,7 +30,10 @@ if (isset($guild) && $guild->expansion_id) {
     }
 }
 
-$wowheadLocale = App::getLocale();
+if (!isset($wowheadLocale)) {
+    $wowheadLocale = App::getLocale();
+}
+
 if ($wowheadLocale === 'en') {
     $wowheadLocale = '';
 } else {
@@ -56,6 +59,7 @@ $wowheadAttribs =
       'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain. '" '
     . 'data-wowhead-link="https://' . $wowheadLocale . $wowheadSubdomain . '.wowhead.com/item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
 
+// Options: tiny, small, medium, large
 if (isset($iconSize) && $iconSize) {
     $wowheadAttribs .= ' data-wh-icon-size="' . $iconSize . '"';
 }
@@ -84,6 +88,8 @@ if (isset($iconSize) && $iconSize) {
                     {{ $itemName }}
                 </a>
             @endif
+        @elseif (isset($displayOnly) && $displayOnly)
+            <a {!! $wowheadAttribs !!} class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @else
             <a href="https://{{ $wowheadLocale . $wowheadSubdomain }}.wowhead.com/item={{ $itemId }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @endif
