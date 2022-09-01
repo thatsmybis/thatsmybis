@@ -214,13 +214,13 @@ body {
 }
 
 .text-death-knight {
-    color: #c41e3b;
+    color: #ee2145;
 }
 .text-druid {
     color: #ff8000;
 }
 .text-dk {
-    color: #c41e3b;
+    color: #ee2145;
 }
 .text-hunter {
     color: #9dd367;
@@ -248,7 +248,7 @@ body {
 }
 
 .text-death-knight-important {
-    color: #c41e3b !important;
+    color: #ee2145 !important;
 }
 .text-druid-important {
     color: #ff8000 !important;
@@ -1198,7 +1198,7 @@ div.dataTables_filter input {
 }
 .ui-menu {
     border: 1px solid #6865b9 !important;
-    border-radius: 3px;
+    border-radius: 5px;
 }
 .ui-menu, .ui-menu .ui-menu-item-wrapper {
     color: #fff;
