@@ -27,6 +27,20 @@
                     @endif
                 </ul>
             @endif
+            @if ($instance->itemSources)
+                <ul class="list-inline">
+                    @foreach ($instance->itemSources as $itemSource)
+                        @if (!$loop->first)
+                            <li class="list-inline-item">
+                                &sdot;
+                            </li>
+                        @endif
+                        <li class="list-inline-item">
+                            <a href="#{{ $itemSource->slug }}">{{ $itemSource->name }}</a>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
         </div>
         <div class="col-12 pr-0 pl-0">
             @include('partials/itemDatatable')

@@ -33,7 +33,7 @@ class ItemController extends Controller
 
         $guild->load(['raidGroups']);
 
-        $instance = Instance::where('slug', $instanceSlug)->firstOrFail();
+        $instance = Instance::where('slug', $instanceSlug)->with('itemSources')->firstOrFail();
 
         $characterFields = [
             'characters.id',
@@ -84,6 +84,7 @@ class ItemController extends Controller
                     'items.name',
                     'items.quality',
                     'item_sources.name    AS source_name',
+                    'item_sources.slug    AS source_slug',
                     'guild_items.note     AS guild_note',
                     'guild_items.priority AS guild_priority',
                     'guild_items.tier     AS guild_tier',

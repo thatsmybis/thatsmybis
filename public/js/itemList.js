@@ -71,7 +71,7 @@ $(document).ready( function () {
     callItemListHandlers();
 });
 
-function createTable(lastSource) {
+function createTable() {
     itemTable = $("#itemTable").DataTable({
         autoWidth : false,
         data      : items,
@@ -87,10 +87,6 @@ function createTable(lastSource) {
                 title  : `<span class="fas fa-fw fa-skull-crossbones"></span> ${headerBoss}`,
                 data   : "",
                 render : function (data, type, row) {
-                    if (row.source_name) {
-                        thisSource = row.source_name;
-                    }
-
                     return `
                     <ul class="no-bullet no-indent mb-0">
                         ${ row.source_name ? `
@@ -217,6 +213,7 @@ function createTable(lastSource) {
             }
             if (data.source_name != lastSource) {
                 $(row).addClass("top-border");
+                $(row).attr('id', data.source_slug);
                 lastSource = data.source_name;
             }
         }
