@@ -60,7 +60,7 @@
                                                             class="btn btn-info pt-0 pb-0 pl-1 pr-1"
                                                         >
                                                             <span class="small">
-                                                                {{ __("New Guild") }}
+                                                                {{ __("New :expansionName Guild", ['expansionName' => $expansion->name_short]) }}
                                                             </span>
                                                         </a>
                                                     @else
