@@ -56,8 +56,12 @@
                                                         </span>
                                                     @endif
                                                     @if ($expansion->is_enabled)
-                                                        <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}" class="font-italic small">
-                                                            {{ __("Register Guild") }}
+                                                        <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}"
+                                                            class="btn btn-info pt-0 pb-0 pl-1 pr-1"
+                                                        >
+                                                            <span class="small">
+                                                                {{ __("New Guild") }}
+                                                            </span>
                                                         </a>
                                                     @else
                                                         <span class="text-muted font-italic small">{{ __("not yet supported") }}</span>
