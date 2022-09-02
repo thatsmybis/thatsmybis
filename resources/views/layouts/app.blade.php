@@ -156,6 +156,12 @@
         </span>
     </div>
 
+    <div class="text-center font-weight-normal text-mage">
+        To use WoTLK, register your Guild from the <a href="{{ route('home') }}">Dashboard</a> or <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a>.
+        <span class="text-muted">
+        </span>
+    </div>
+
     @if (session('status'))
         <div class="container-fluid container-width-capped">
             <div class="row">

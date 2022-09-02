@@ -28,6 +28,9 @@
                         {{ __("Here's how this works:") }}
                     </h2>
                     <ol class="text-5">
+                        <li class="text-warning">
+                            {{ __("You must have admin access on your guild Discord.") }}
+                        </li>
                         <li>
                             {{ __("We'll give your guild a totally new space for") }} {{ $expansion->name_short }}.
                         </li>
