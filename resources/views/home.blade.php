@@ -66,7 +66,7 @@
             </div>
 
             <p class="mt-3">
-                {!! __("supports Classic, Classic Fresh, Classic Season of Mastery, Classic Plus, Classic+,<br> The Burning Crusade (TBC), and eventually Wrath of the Lich King (WotLK) upon release") !!}
+                {!! __("supports Classic, Classic Fresh, Classic Season of Mastery, Classic Plus, Classic+,<br> The Burning Crusade (TBC), and Wrath of the Lich King (WotLK)") !!}
             </p>
         </div>
     </div>
