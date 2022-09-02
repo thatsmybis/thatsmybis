@@ -212,7 +212,7 @@ function createTable() {
                 lastSource = data.source_name;
             }
             if (data.source_name != lastSource) {
-                $(row).addClass("top-border");
+                $(row).addClass("top-border padded-anchor");
                 $(row).attr('id', data.source_slug);
                 lastSource = data.source_name;
             }

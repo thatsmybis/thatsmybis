@@ -170,6 +170,10 @@ body {
     font-size: 1.5rem;
 }
 
+.padded-anchor {
+    scroll-margin-top: 50px;
+}
+
 .text-underline {
     text-decoration: underline;
 }
