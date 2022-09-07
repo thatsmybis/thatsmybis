@@ -275,6 +275,14 @@
             </div>
 
             <div class="row">
+                @if ($logs->count())
+                    <div class="col-12 mb-3">
+                        <span id="download_csv" class="btn btn-success">
+                            <span class="fas fa-fw fa-file-export"></span>
+                            {{ __('Download') }}
+                        </span>
+                    </div>
+                @endif
                 <div class="col-12">
                     <ol class="no-bullet no-indent striped">
                         @if ($logs->count())
@@ -410,6 +418,13 @@
 
     $("select").change(function () {
         updateUrl($(this).prop("name"), $(this).val());
+    });
+
+    $("#download_csv").click(function () {
+        let url = new URL(location);
+        url.searchParams.set('export', 1);
+        url.searchParams.set('rows', 200);
+        window.open(url, '_blank').focus();
     });
 
     // Updates the URL with the given parameter and value, then reloads the page

@@ -594,7 +594,7 @@ class ExportController extends Controller {
      *
      * @return string A CSV of the header and rows that were passed in.
      */
-    private function createCsv($rows, $headers) {
+    public static function createCsv($rows, $headers) {
         // output up to 5MB is kept in memory, if it becomes bigger it will automatically be written to a temporary file
         $csv = fopen('php://temp/maxmemory:'. (5*1024*1024), 'r+');
 
@@ -619,7 +619,7 @@ class ExportController extends Controller {
      *
      * @var array|string  $csv      The data.
      */
-    private function getExport($csv, $title, $fileType) {
+    public static function getExport($csv, $title, $fileType) {
         if ($fileType == self::CSV) {
             return response($csv)
                 ->withHeaders([

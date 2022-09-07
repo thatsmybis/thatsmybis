@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\{AuditLog, Batch, Character, Guild, Instance, Item, ItemSource, Member, Raid, RaidGroup, Role};
+use App\Http\Controllers\ExportController;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
 
 class AuditLogController extends Controller
 {
-    const RESULTS_PER_PAGE = 50;
+    const DEFAULT_RESULTS_PER_PAGE = 50;
+    const MAX_RESULTS_PER_PAGE = 200;
 
     /**
      * Create a new controller instance.
@@ -23,6 +25,9 @@ class AuditLogController extends Controller
 
     /**
      * Show the index page.
+     *
+     * Passing the parameter 'index' in the URL params will produce a CSV of the results.
+     * Passing 'rows' will specify the number of rows to fetch.
      *
      * @return \Illuminate\Http\Response
      */
@@ -187,9 +192,63 @@ class AuditLogController extends Controller
             }
         }
 
+        $resultsPerPage = self::DEFAULT_RESULTS_PER_PAGE;
+        if (request()->input('rows')) {
+            // use the user input, but limit it between 1 and MAX_RESULTS_PER_PAGE
+            $resultsPerPage = max(1, min(self::MAX_RESULTS_PER_PAGE, (int)request()->input('rows')));
+        }
+
         $logs = $query->where(['audit_logs.guild_id' => $guild->id])
             ->orderBy('audit_logs.created_at', 'desc')
-            ->paginate(self::RESULTS_PER_PAGE);
+            ->paginate($resultsPerPage);
+
+        if (request()->input('export')) {
+            $simpleFormatLogs = [];
+            $i = 0;
+            foreach ($logs->items() as $auditLogItem) {
+                $simpleFormatLogs[$i] = (object)$auditLogItem->toArray();
+                $i++;
+            }
+
+            $headers = [
+                "id",
+                "description",
+                "type",
+                "character_id",
+                "guild_id",
+                "batch_id",
+                "instance_id",
+                "item_id",
+                "item_source_id",
+                "member_id",
+                "other_member_id",
+                "raid_id",
+                "raid_group_id",
+                "role_id",
+                "created_at",
+                "updated_at",
+                "batch_name",
+                "character_name",
+                "character_slug",
+                "character_class",
+                "instance_name",
+                "instance_slug",
+                "item_name",
+                "item_source_name",
+                "member_username",
+                "member_slug",
+                "other_member_username",
+                "other_member_slug",
+                "raid_name",
+                "raid_slug",
+                "raid_date",
+                "raid_group_name",
+                "role_name",
+            ];
+
+            $csv = ExportController::createCsv($simpleFormatLogs, $headers);
+            return ExportController::GetExport($csv, $guild->name . ' Audit Logs @' . time(), ExportController::CSV);
+        }
 
         return view('auditLog', [
             'currentMember' => $currentMember,
