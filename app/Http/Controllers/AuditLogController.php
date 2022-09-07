@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\Cache;
 class AuditLogController extends Controller
 {
     const DEFAULT_RESULTS_PER_PAGE = 50;
-    const MAX_RESULTS_PER_PAGE = 200;
+    const MAX_RESULTS_PER_PAGE = 500;
 
     /**
      * Create a new controller instance.
