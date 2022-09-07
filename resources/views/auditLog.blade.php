@@ -423,7 +423,7 @@
     $("#download_csv").click(function () {
         let url = new URL(location);
         url.searchParams.set('export', 1);
-        url.searchParams.set('rows', 200);
+        url.searchParams.set('rows', 500);
         window.open(url, '_blank').focus();
     });
 
