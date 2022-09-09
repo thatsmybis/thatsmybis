@@ -156,10 +156,15 @@
         </span>
     </div>
 
-    <div class="text-center font-weight-normal text-mage">
+    <div class="text-center font-weight-normal text-mage mb-2">
         To use WoTLK, register your Guild from the <a href="{{ route('home') }}">Dashboard</a> or <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a>.
         <span class="text-muted">
         </span>
+    </div>
+    <div class="text-center font-weight-light small text-muted text-mage mb-2">
+        Heart of Magic is not in the loot tables because "<a href="https://www.wowhead.com/%69tem=44650/heart-of-magic#comments" target="_blank">Everyone on the quest can loot their own Heart of Magic</a>"
+        <br>
+        If this proves false, I will add it in.
     </div>
 
     @if (session('status'))
