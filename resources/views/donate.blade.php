@@ -131,9 +131,11 @@
             ['name' => 'GrumpyOwl',           'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Hadiya',              'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Hello',               'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'InY0f4c3#3214',       'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'ITank',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Jetor',               'icon' => 'crown', 'title' => 'Parser'],
+            ['name' => 'Jahare#3676',         'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Jensok',              'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Jetor',               'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Junior',              'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Kazczyk',             'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Keckterz',            'icon' => 'crown', 'title' => 'Raider'],
@@ -171,12 +173,14 @@
             ['name' => 'Strix',               'icon' => 'crown', 'title' => 'Black Lotus'],
             ['name' => 'Strken',              'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Sumorex',             'icon' => 'crown', 'title' => 'Main Tank'],
+            ['name' => 'Theseus#0373',        'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'TideAd',              'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Tric',                'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Triper',              'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Tron',                'icon' => 'crown', 'title' => 'Main Tank'],
             ['name' => 'Uriah',               'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'Vejusatko',           'icon' => 'crown', 'title' => 'Raider'],
+            ['name' => 'Vexxe#4040',          'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Waughter',            'icon' => 'crown', 'title' => 'Raider'],
             ['name' => 'weirdGuy',            'icon' => 'crown', 'title' => 'Parser'],
             ['name' => 'Yjay',                'icon' => 'crown', 'title' => 'Raider'],
@@ -208,12 +212,12 @@
                     <li>
                         <span class="fa-li fas fa-{{ $donor['icon'] }}"></span>
                         <span class="text-uncommon">{{ $donor['name'] }}</span>
-                        <span class="text-muted">{{ $donor[                       'title'] }}</span>
+                        <span class="text-muted">{{ $donor['title'] }}</span>
                     </li>
                 @endforeach
                 <li>
                     <span class="fa-li fas fa-question"></span>
-                    <span class="text-muted">{{ __("If I missed you, DM me on Discord!") }}</span>
+                    {!! __("If I missed you, email me!") !!} <a href="mailto:lemmings19@gmail.com" target="_blank">lemmings19@gmail.com</a>
                 </li>
             </ul>
         </div>
@@ -232,7 +236,7 @@
                 @endforeach
                 <li>
                     <span class="fa-li fas fa-question"></span>
-                    <span class="text-muted">{{ __("If I missed you, DM me on Discord!") }}</span>
+                    {!! __("If I missed you, email me!") !!} <a href="mailto:lemmings19@gmail.com" target="_blank">lemmings19@gmail.com</a>
                 </li>
             </ul>
         </div>
