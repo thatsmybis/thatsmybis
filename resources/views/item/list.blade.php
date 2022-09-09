@@ -36,7 +36,7 @@
                             </li>
                         @endif
                         <li class="list-inline-item">
-                            <a href="#{{ $itemSource->slug }}">{{ $itemSource->name }}</a>
+                            <a href="#{{ trim($itemSource->slug) }}">{{ $itemSource->name }}</a>
                         </li>
                     @endforeach
                 </ul>

@@ -213,7 +213,7 @@ function createTable() {
             }
             if (data.source_name != lastSource) {
                 $(row).addClass("top-border padded-anchor");
-                $(row).attr('id', data.source_slug);
+                $(row).attr('id', data.source_slug ? data.source_slug.trim() : null);
                 lastSource = data.source_name;
             }
         }
