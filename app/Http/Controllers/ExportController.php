@@ -402,6 +402,12 @@ class ExportController extends Controller {
         }
 
         $csv = Cache::remember('lootTableExport:' . $expansionSlug, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($subdomain, $expansionId, $locale) {
+                if ($expansionId === 3) {
+                    $wowheadLink = "https://{$locale}wowhead.com/{$subdomain}/item=";
+                } else {
+                    $wowheadLink = "https://{$locale}{$subdomain}.wowhead.com/item=";
+                }
+
                 $rows = DB::select(DB::raw(
                     "SELECT
                         instances.name AS 'instance_name',
@@ -418,7 +424,7 @@ class ExportController extends Controller {
                         END AS 'item_quality',
                         -- items.quality AS 'item_quality'
                         items.item_id AS 'item_id',
-                        CONCAT('https://{$locale}{$subdomain}.wowhead.com/item=', items.item_id) AS 'url'
+                        CONCAT('{$wowheadLink}', items.item_id) AS 'url'
                     FROM instances
                         JOIN item_sources      ON item_sources.instance_id = instances.id
                         JOIN item_item_sources ON item_item_sources.item_source_id = item_sources.id
