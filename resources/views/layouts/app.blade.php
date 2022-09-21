@@ -252,6 +252,9 @@
     @endif
 
     <!-- Button that sticks to bottom right of page -->
+    <span id="toTopOfPage" style="display:none;" class="btn btn-sm btn-light" title="{{ __('Go to top of page') }}">
+        {{ __("Top") }} <span class="text-success fal fa-fw fa-arrow-up"></span>
+    </span>
     <a id="reportBug" href="{{ env('APP_DISCORD') }}" target="_blank" class="btn btn-sm btn-light" title="{{ __('Report a bug') }}">
         {{ __("Give Feedback") }} <span class="text-success fal fa-fw fa-comment-dots"></span>
     </a>
@@ -380,6 +383,20 @@
 
             var localeAlt = "alt";
         @endif
+
+        $(document).ready(function () {
+            $(document).scroll(function() {
+                const y = $(this).scrollTop();
+                if (y > 2000) {
+                    $("#toTopOfPage").fadeIn();
+                } else {
+                    $("#toTopOfPage").fadeOut();
+                }
+            });
+            $("#toTopOfPage").click(function () {
+                scroll(0,0);
+            });
+        });
     </script>
 
     <script src="{{ loadScript('helpers.js') }}"></script>

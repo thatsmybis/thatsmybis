@@ -845,6 +845,12 @@ button.close:hover {
     right: 10px;
     z-index: 99;
 }
+#toTopOfPage {
+    position: fixed;
+    bottom: 50px;
+    right: 10px;
+    z-index: 99;
+}
 
 /* Sortable list that can be emptied */
 .sortable-no-empty {
