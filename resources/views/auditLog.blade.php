@@ -268,7 +268,7 @@
                             <span class="fas fa-fw fa-sack text-muted"></span>
                             {{ __("Item") }}
                         </label>
-                        <input name="item_id" maxlength="40" data-max-length="40" type="text" placeholder="{{ __('type an item name') }}" autocomplete="off" class="js-item-autocomplete-link js-input-text form-control dark">
+                        <input name="item_id" maxlength="40" data-max-length="40" type="text" placeholder="{{ __('type an item name') }}" autocomplete="off" class="js-item-autocomplete js-input-text form-control dark">
                         <span class="js-loading-indicator" style="display:none;">Searching...</span>&nbsp;
                     </div>
                 </div>
@@ -412,6 +412,9 @@
 <script>
     var guild = {!! $guild->toJson() !!};
 
+    // THIS IS A HACK: See autocomplete.js
+    var updateUrlOnItemAutocompleteSelect = true;
+
     $("input[type='date']").change(function () {
         updateUrl($(this).prop("name"), $(this).val());
     });
@@ -434,52 +437,5 @@
         url.searchParams.delete('page');
         location = url;
     }
-
-    $(".js-item-autocomplete-link").each(function () {
-        var self = this; // Allows callback functions to access `this`
-        $(this).autocomplete({
-            source: function (request, response) {
-                $.ajax({
-                    method: "get",
-                    dataType: "json",
-                    url: "/api/items/query/" + guild.expansion_id + "/" + request.term,
-                    success: function (data) {
-                        response(data);
-                        if (data.length <= 0) {
-                            $(self).nextAll(".js-status-indicator").show();
-                            $(self).nextAll(".js-status-indicator").html("<span class=\"bg-danger\">&nbsp;" + request.term + " not found&nbsp;</span>");
-                        }
-                    },
-                    error: function () {
-                    }
-                });
-            },
-            search: function () {
-                $(this).nextAll(".js-status-indicator").hide();
-                $(this).nextAll(".js-status-indicator").empty();
-                $(this).nextAll(".js-loading-indicator").show();
-            },
-            response: function () {
-                $(this).nextAll(".js-loading-indicator").hide();
-            },
-            select: function (event, ui) {
-                if (ui.item.value) {
-                    // Put the value into a tag below the input
-                    value = ui.item.value;
-                    label = ui.item.label;
-
-                    // Only allow numbers (an item ID must be found)
-                    if (Number.isInteger(value)) {
-                        updateUrl('item_id', value);
-                    }
-
-                    // prevent autocomplete from autofilling this.val()
-                    return false;
-                }
-            },
-            minLength: 1,
-            delay: 400
-        });
-    });
 </script>
 @endsection

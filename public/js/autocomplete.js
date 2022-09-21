@@ -6,6 +6,7 @@ $(document).ready(function () {
 });
 
 // Adds autocomplete for items!
+// NOTE: updateUrlOnItemAutocompleteSelect can be declared as a var in order to get a hacky-as workaround working. I wanted to run a different function. See auditLot.blade
 function addItemAutocompleteHandler() {
     $(".js-item-autocomplete").each(function () {
         var self = this; // Allows callback functions to access `this`
@@ -44,8 +45,13 @@ function addItemAutocompleteHandler() {
 
                     // Only allow numbers (an item ID must be found)
                     if (Number.isInteger(value)) {
-                        addTag(this, value, extractHtmlContent(label));
-                        makeWowheadLinks();
+                        // updateUrlOnItemAutocompleteSelect IS A HACK
+                        if (typeof updateUrlOnItemAutocompleteSelect !== 'undefined' && updateUrlOnItemAutocompleteSelect) {
+                            updateUrl('item_id', value);
+                        } else {
+                            addTag(this, value, extractHtmlContent(label));
+                            makeWowheadLinks();
+                        }
                     }
 
                     // prevent autocomplete from autofilling this.val()
@@ -55,7 +61,6 @@ function addItemAutocompleteHandler() {
             minLength: 1,
             delay: 400
         }).data("ui-autocomplete")._renderItem = function(ul, item) {
-            console.log(item.label);
             return $("<li></li>")
                 .data("item.autocomplete", item)
                 .append(`<span>${item.label}</span>`)
