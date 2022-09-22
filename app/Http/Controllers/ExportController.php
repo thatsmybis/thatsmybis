@@ -365,7 +365,7 @@ class ExportController extends Controller {
         $characters = Cache::remember('export:roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':viewPrioPermission:' . $viewPrioPermission . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden,
             env('EXPORT_CACHE_SECONDS', 120),
             function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
-            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $showOfficerNote, $viewPrioPermission, false, false)['characters']->makeVisible('officer_note');
+            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, false)['characters']->makeVisible('officer_note');
         });
 
         return $this->getExport($characters, 'Character JSON', $fileType);
@@ -513,7 +513,7 @@ class ExportController extends Controller {
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $csv = Cache::remember("export:notes:guild:{$guild->id}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild) {
+        $csv = Cache::remember("export:notes:guild:{$guild->id}:file:{$fileType}", env('EXPORT_CACHE_SECONDS', 120), function () use ($guild, $currentMember) {
             $showOfficerNote = false;
             if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
                 $showOfficerNote = true;
