@@ -38,7 +38,7 @@
                             {{ __("Prios") }}
                         </span>
                         <span id="hide-prio-os" class="text-unselectable text-link cursor-pointer small" title="{{ __('hide OS items') }}">
-                            <span class="fas fa-fw fa-filter"></span>
+                            <span class="fas fa-fw fa-eye-slash"></span>
                         </span>
                     </div>
                     <div class="col-12 pb-3">
