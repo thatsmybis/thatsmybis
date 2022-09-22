@@ -72,7 +72,7 @@
                                             $raidCharacter = $characters->where('id', $raid->pivot->character_id)->first();
                                         @endphp
                                         @if ($raidCharacter)
-                                            <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->name]) }}"
+                                            <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $raidCharacter->id, 'nameSlug' => $raidCharacter->name]) }}"
                                                 class="font-weight-bold text-{{ strtolower($raidCharacter->class) }}">
                                                 {{ $raidCharacter->name }}
                                             </a>
