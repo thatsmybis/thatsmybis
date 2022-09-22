@@ -23,7 +23,7 @@
             {{ $isActive ? '' : __('(inactive)') }}
         </span>
     @endif
-    <span class="js-sort-wishlists text-link">
+    <span class="js-sort-wishlists text-link" title="{{ __('Sort by dungeon') }}">
         <span class="fas fa-fw fa-exchange cursor-pointer"></span>
     </span>
 </div>

@@ -37,6 +37,9 @@
                             <span class="fas fa-fw fa-sort-amount-down"></span>
                             {{ __("Prios") }}
                         </span>
+                        <span id="hide-prio-os" class="text-unselectable text-link cursor-pointer small" title="{{ __('hide OS items') }}">
+                            <span class="fas fa-fw fa-filter"></span>
+                        </span>
                     </div>
                     <div class="col-12 pb-3">
                         @if ($character->relationLoaded('prios') && $character->prios->count() > 0)
@@ -53,7 +56,7 @@
                                             {{ $guild->allRaidGroups->find($item->pivot->raid_group_id)->name }}
                                         </li>
                                     @endif
-                                    <li value="{{ $item->pivot->order }}">
+                                    <li value="{{ $item->pivot->order }}" class="{{ $item->pivot->is_offspec ? 'js-prio-os' : '' }}">
                                         @include('partials/item', [
                                             'wowheadLink'   => false,
                                             'itemDate'      => $item->pivot->created_at,
@@ -340,6 +343,10 @@
 
         $("#show-inactive-wishlists").click(function () {
             $("#inactive-wishlists").toggle();
+        });
+
+        $("#hide-prio-os").click(function () {
+            $(".js-prio-os").toggle();
         });
     });
 </script>
