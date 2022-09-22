@@ -157,7 +157,7 @@
     </div>
 
     <div class="text-center font-weight-bold text-warning">
-        What addon(s) do you use for loot management?
+        Loot council: What addon(s) do you use for loot management?
         <a href="https://forms.gle/1U8cP7QWgZp4G3wKA" target="_blank">
             survey here
         </a>
