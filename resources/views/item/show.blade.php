@@ -152,6 +152,31 @@
                                     </div>
                                 @endif
 
+                                @if ($showOfficerNote)
+                                    <div class="col-12">
+                                        <span class="text-muted font-weight-bold">
+                                            <span class="fas fa-fw fa-comment-alt-lines"></span>
+                                            {{ __("Guild Officer Note") }}
+                                        </span>
+                                    </div>
+                                    <div class="col-12 mb-3 pl-4">
+                                        {{ $notes['officer_note'] ? $notes['officer_note'] : '—' }}
+                                        @if ($showNoteEdit)
+                                            <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
+                                        @endif
+                                    </div>
+                                    @if ($showNoteEdit)
+                                        <div class="js-note-input col-12 mb-3 pl-4" style="display:none;">
+                                            <div class="form-group">
+                                                <label for="officer_note" class="sr-only">
+                                                    {{ __("Officer Note") }}
+                                                </label>
+                                                <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="add a note" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($item ? $notes['officer_note'] : '') }}</textarea>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
+
                                 <div class="col-12">
                                     <span class="text-muted font-weight-bold">
                                         <span class="fas fa-fw fa-sort-amount-down"></span>
