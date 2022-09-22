@@ -80,11 +80,11 @@ class ItemNoteController extends Controller
         $averageTiers = $this->getItemAverageTiers($instance, $guild->expansion_id);
 
         return view('item.listEdit', [
-            'averageTiers'  => $averageTiers,
-            'currentMember' => $currentMember,
-            'guild'         => $guild,
-            'instance'      => $instance,
-            'items'         => $items,
+            'averageTiers'    => $averageTiers,
+            'currentMember'   => $currentMember,
+            'guild'           => $guild,
+            'instance'        => $instance,
+            'items'           => $items,
             'isStreamerMode'  => isStreamerMode(),
         ]);
     }
@@ -110,10 +110,10 @@ class ItemNoteController extends Controller
                 'integer',
                 Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
             ],
-            'items.*.note'     => 'nullable|string|max:140',
-            'items.*.priority' => 'nullable|string|max:140',
+            'items.*.note'         => 'nullable|string|max:140',
+            'items.*.priority'     => 'nullable|string|max:140',
             'items.*.officer_note' => 'nullable|string|max:140',
-            'items.*.tier'     => ['nullable', 'integer', Rule::in(array_keys(Guild::tiers()))],
+            'items.*.tier'         => ['nullable', 'integer', Rule::in(array_keys(Guild::tiers()))],
         ];
 
         $this->validate(request(), $validationRules);

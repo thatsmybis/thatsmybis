@@ -178,7 +178,7 @@ function createTable() {
                 title  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerNotes}`,
                 data   : "guild_note",
                 render : function (data, type, row) {
-                    return getNotes(row, data, row);
+                    return getNotes(row, data);
                 },
                 orderable : false,
                 visible : showNotes ? true : false,
@@ -325,7 +325,7 @@ function createCharacterListHtml(data, type, itemId, header = null) {
     return characters;
 }
 
-function getNotes(row, note, row) {
+function getNotes(row, note) {
     let childItems = null;
     // Uncomment to show child items
     // if (row.child_items.length) {
