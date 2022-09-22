@@ -44,6 +44,12 @@
                     </li>
                     <li class="list-inline-item">&sdot;</li>
                     <li class="list-inline-item">
+                        <span data-value="glyph" class="js-quick-filter text-link cursor-pointer">
+                            {{ __("Glyph") }}
+                        </span>
+                    </li>
+                    <li class="list-inline-item">&sdot;</li>
+                    <li class="list-inline-item">
                         <span data-value="pattern" class="js-quick-filter text-link cursor-pointer">
                             {{ __("Pattern") }}
                         </span>
