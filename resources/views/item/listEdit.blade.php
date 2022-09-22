@@ -79,7 +79,7 @@
 
                                 <div class="col-lg-{{ $guild->tier_mode ? '3' : '4' }} col-12">
                                     <div class="d-inline-grid align-middle text-5 mb-2">
-                                        <label for="items[{{ $loop->iteration }}][name]" class="font-weight-bold d-none d-sm-block">
+                                        <label for="items[{{ $loop->iteration }}][name]" class="font-weight-bold  {{ !$loop->first ? 'd-none' : 'd-none d-sm-block' }}">
                                             <span class="sr-only">
                                                 {{ __("Item Name") }}
                                             </span>
@@ -115,7 +115,7 @@
                                 <div class="col-lg-1 col-12 {{ $errors->has('items.' . $loop->iteration . '.tier') ? 'bg-danger rounded font-weight-bold' : '' }}" style="{{ $guild->tier_mode ? '' : 'display:none;' }}">
                                     <div class="form-group">
 
-                                        <label for="items[{{ $loop->iteration }}][tier]" class="font-weight-bold">
+                                        <label for="items[{{ $loop->iteration }}][tier]" class="font-weight-bold  {{ !$loop->first ? 'd-none' : '' }}">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-trophy text-muted"></span>
                                                 {{ __("Tier") }}
@@ -163,10 +163,9 @@
                                     </div>
                                 </div>
 
-                                <div class="col-lg-4 col-12 {{ $errors->has('items.' . $loop->iteration . '.note') || $errors->has('items.' . $loop->iteration . '.id') ? 'bg-danger rounded font-weight-bold' : '' }}">
-                                    <div class="form-group">
-
-                                        <label for="items[{{ $loop->iteration }}][note]" class="font-weight-bold">
+                                <div class="col-lg-4 col-12">
+                                    <div class="form-group {{ $errors->has('items.' . $loop->iteration . '.note') || $errors->has('items.' . $loop->iteration . '.id') ? 'bg-danger rounded font-weight-bold' : '' }}">
+                                        <label for="items[{{ $loop->iteration }}][note]" class="font-weight-bold  {{ !$loop->first ? 'd-none' : '' }}">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-sticky-note text-muted"></span>
                                                 {{ __("Note") }}
@@ -184,12 +183,40 @@
                                             </div>
                                         @endif
                                     </div>
+                                    <div class="form-group {{ $errors->has('items.' . $loop->iteration . '.officer_note') ? 'bg-danger rounded font-weight-bold' : '' }}">
+                                        <label for="officer_note" class="font-weight-bold {{ !$loop->first ? 'd-none' : '' }}">
+                                            @if ($loop->first)
+                                                <span class="fas fa-fw fa-shield text-muted"></span>
+                                                {{ __("Officer Note") }}
+                                            @else
+                                                <span class="sr-only">{{ __("Officer Note") }}</span>
+                                            @endif
+                                        </label>
+
+                                        <input name="items[{{ $loop->iteration }}][officer_note]"
+                                            maxlength="140"
+                                            data-max-length="140"
+                                            type="text"
+                                            placeholder="{{ __('add an officer note') }}"
+                                            class="form-control dark {{ $isStreamerMode ? 'd-none' : '' }}"
+                                            value="{{ old('items.' . $loop->iteration . '.officer_note') ? old('items.' . $loop->iteration . '.officer_note') : ($item->guild_officer_note ? $item->guild_officer_note : '') }}">
+
+                                        @if ($isStreamerMode)
+                                            <span class="text-muted small">{{ __("officer note hidden in streamer mode") }}</span>
+                                        @endif
+
+                                        @if ($errors->has('items.' . $loop->iteration . '.officer_note'))
+                                            <div class="'text-danger font-weight-bold'">
+                                                {{ $errors->first('items.' . $loop->iteration . '.officer_note') }}
+                                            </div>
+                                        @endif
+                                    </div>
                                 </div>
 
                                 <div class="col-lg-4 col-12 {{ $errors->has('items.' . $loop->iteration . '.priority') ? 'bg-danger rounded font-weight-bold' : '' }}">
                                     <div class="form-group">
 
-                                        <label for="priority" class="font-weight-bold">
+                                        <label for="priority" class="font-weight-bold  {{ !$loop->first ? 'd-none' : '' }}">
                                             @if ($loop->first)
                                                 <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
                                                 {{ __("Priority") }}

@@ -178,7 +178,7 @@ function createTable() {
                 title  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerNotes}`,
                 data   : "guild_note",
                 render : function (data, type, row) {
-                    return getNotes(row, data);
+                    return getNotes(row, data, row);
                 },
                 orderable : false,
                 visible : showNotes ? true : false,
@@ -325,7 +325,7 @@ function createCharacterListHtml(data, type, itemId, header = null) {
     return characters;
 }
 
-function getNotes(row, note) {
+function getNotes(row, note, row) {
     let childItems = null;
     // Uncomment to show child items
     // if (row.child_items.length) {
@@ -336,8 +336,15 @@ function getNotes(row, note) {
     //     });
     //     childItems += '</ul>';
     // }
-    if (note || childItems) {
-        note = `<span class="js-markdown-inline">${ note ? DOMPurify.sanitize(nl2br(note)) : '' }</span>${ childItems ? childItems : '' }`;
+    let officerNote = 'guild_officer_note' in row ? row.guild_officer_note : null;
+    // console.log(row.guildofficer_note, officerNote);
+    if (note || officerNote || childItems) {
+        note =
+            `<span class="js-markdown-inline">${ note ? DOMPurify.sanitize(nl2br(note)) : '' }</span>
+            ${ officerNote ?
+            `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(officerNote)) }</span>`
+            : ''}
+            ${ childItems ? childItems : '' }`;
     } else {
         note = '—';
     }
