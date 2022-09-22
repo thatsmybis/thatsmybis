@@ -680,7 +680,7 @@ class ExportController extends Controller {
      * @var bool      $showPrios
      * @var bool      $showWishlist
      * @var bool      $showOfficerNote Should officer notes on items be shown?
-     * @var bool      $viewPrioPermission = false
+     * @var bool      $viewPrioPermission
      * @var string    $fields       The fields to SELECT. Used to override this function's default fields.
      *
      * @return The thing to present to the user.
