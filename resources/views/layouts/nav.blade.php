@@ -10,7 +10,7 @@
     }
 @endphp
 
-<nav class="navbar navbar-expand-md navbar-dark">
+<nav class="navbar navbar-expand-md navbar-dark sticky-top bg-navbar-blur">
     <span class="{{ isset($guild) ? 'navbar-brand-guild' : 'navbar-brand' }}" href="{{ route('home') }}">
         <span class="font-weight-bold">
             @php
@@ -52,7 +52,7 @@
                         </a>
                     </li>
                     <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['character.loot']) ? 'active font-weight-bold' : '' }}" href="#" id="wishlistNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['character.loot']) ? 'active font-weight-bold' : '' }}" href="javascript:void(0)" id="wishlistNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             @if ($guild->is_wishlist_disabled)
                                 {{ __("Character") }}
                             @else
@@ -91,7 +91,7 @@
                 @endif
 
                 <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.item.list', 'guild.item.list.edit', 'guild.prios.chooseRaidGroup']) ? 'active font-weight-bold' : '' }}" href="#" id="lootNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), ['guild.item.list', 'guild.item.list.edit', 'guild.prios.chooseRaidGroup']) ? 'active font-weight-bold' : '' }}" href="javascript:void(0)" id="lootNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ __("Loot") }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="lootNavDropdown">
@@ -103,7 +103,7 @@
                         @endif
                         @if ($editItems)
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="adminItemNotes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="adminItemNotes" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="fas fa-fw fa-sticky-note text-muted"></span>
                                     {{ __("Notes") }}
                                 </a>
@@ -244,7 +244,7 @@
 
                         @if ($editPrios)
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="adminPrioDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="adminPrioDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="fas fa-fw fa-sort-amount-down text-muted"></span>
                                     {{ __("Prios") }}
                                 </a>
@@ -445,7 +445,7 @@
                             </a>
                         @elseif ($guild->expansion_id == 3)
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="naxx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="naxx" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Naxxramas") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="naxx">
@@ -459,7 +459,7 @@
                             </div>
 
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="eoe" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="eoe" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Eye of Eternity") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="eoe">
@@ -473,7 +473,7 @@
                             </div>
 
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="os" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="os" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Obsidian Sanctum") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="os">
@@ -487,7 +487,7 @@
                             </div>
 
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="voa" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="voa" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Vault of Archavon") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="voa">
@@ -501,7 +501,7 @@
                             </div>
 
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="uld" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="uld" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Ulduar") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="uld">
@@ -515,7 +515,7 @@
                             </div>
 
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="totc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="totc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Trial of the Crusader") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="totc">
@@ -535,7 +535,7 @@
                             </div>
 
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="ony" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="ony" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Onyxia's Lair") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="ony">
@@ -549,7 +549,7 @@
                             </div>
 
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="icc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="icc" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Icecrown Citadel") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="icc">
@@ -569,7 +569,7 @@
                             </div>
 
                             <div class="dropdown dropright">
-                                <a class="dropdown-item dropdown-toggle" href="#" id="rs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="rs" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     {{ __("Ruby Sanctum") }}
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="rs">
@@ -595,7 +595,7 @@
                     <a class="nav-link dropdown-toggle {{ $menuColor }} {{ in_array(Route::currentRouteName(), [
                             'guild.roster',
                             'guild.rosterStats',
-                        ]) ? 'active font-weight-bold' : '' }}" href="#" id="rosterNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ]) ? 'active font-weight-bold' : '' }}" href="javascript:void(0)" id="rosterNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ __("Roster") }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="rosterNavDropdown">
@@ -649,7 +649,7 @@
                             'guild.raids.show',
                             'item.assignLoot',
                             'item.assignLoot.list'
-                        ]) ? 'active font-weight-bold' : '' }}" href="#" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        ]) ? 'active font-weight-bold' : '' }}" href="javascript:void(0)" id="raidNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ __("Raids") }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
@@ -679,7 +679,7 @@
                         </a>
                         @if (!$guild->is_attendance_hidden && $guild->raidGroups->count())
                             <div class="dropdown dropright">
-                                <a title="{{ __("Only show attendance for a specific raid group") }}" class="dropdown-item dropdown-toggle" href="#" id="raidGroupAttendanceFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <a title="{{ __("Only show attendance for a specific raid group") }}" class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="raidGroupAttendanceFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                     <span class="fas fa-fw fa-filter text-muted"></span>
                                     {{ __("Attendance Filter") }}
                                 </a>
@@ -709,7 +709,7 @@
                             'guild.recipe.list',
                             'guild.roles',
                         ]) ? 'active font-weight-bold' : '' }}
-                        dropdown-toggle" href="#" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        dropdown-toggle" href="javascript:void(0)" id="adminNavDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         {{ __("Guild") }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="adminNavDropdown">

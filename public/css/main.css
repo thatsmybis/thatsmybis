@@ -131,6 +131,12 @@ body {
     background-color: #1b1a37;
 }
 
+.bg-navbar-blur {
+    background-color: rgba(28, 27, 58, 0.5);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+}
+
 .bg-expansion- {
     background: #fff;
 }
