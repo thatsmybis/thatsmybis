@@ -132,9 +132,8 @@ body {
 }
 
 .bg-navbar-blur {
-    background-color: rgba(28, 27, 58, 0.5);
-    -webkit-backdrop-filter: blur(3px);
-    backdrop-filter: blur(3px);
+    background-color: #1c1b3a;
+    /*background-color: rgba(28, 27, 58, 0.5);*/
 }
 
 .bg-expansion- {
@@ -502,6 +501,10 @@ body {
 }
 
 .spec-icon-large {
+}
+
+.navbar {
+    padding: 0.2rem 1rem;
 }
 
 .nav-item.active {
@@ -879,20 +882,20 @@ tr.highlight {
 }
 /* Datatables FixedHeader CSS */
 table.fixedHeader-floating {
-  position: fixed !important;
-  background-color: #19182f;
+    position: fixed !important;
+    background-color: #19182f;
 }
 table.fixedHeader-floating.no-footer {
-  border-bottom-width: 0;
+    border-bottom-width: 0;
 }
 table.fixedHeader-locked {
-  position: absolute !important;
-  background-color: #19182f;
+    position: absolute !important;
+    background-color: #19182f;
 }
 @media print {
-  table.fixedHeader-floating {
-    display: none;
-  }
+    table.fixedHeader-floating {
+        display: none;
+    }
 }
 
 /* get rid of the default solid border that clutters things */
