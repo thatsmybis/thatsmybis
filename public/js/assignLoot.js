@@ -345,7 +345,7 @@ function completeCsvImport(results)
         statusMessages += `<li class="text-success">${ addedCount } item${ addedCount > 1 ? 's' : '' } loaded into form</li>`;
     }
 
-    if (skippedCount || disenchantCount || overLimitCount) {
+    if (skippedCount) {
         statusMessages += `<li class="text-warning">Skipped ${ skippedCount } item${ skippedCount > 1 ? 's' : '' } ${ disenchantCount ? "(" + disenchantCount + " items disenchanted)" : "" } ${ overLimitCount ? "(" + overLimitCount + " items over the limit of " + maxItems + ")" : ""}</li>`;
     }
 

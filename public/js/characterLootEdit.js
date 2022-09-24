@@ -133,7 +133,7 @@ function parseUpgradesImport($this) {
     if (skippedItems.length) {
         let length = skippedItems.length;
         skippedItems = skippedItems.join(", ");
-        statusMessages += `<li class="text-danger">${ length } character${ length > 1 ? 's' : '' } skipped (no room): ${ skippedItems }</li>`;
+        statusMessages += `<li class="text-danger">${ length } item${ length > 1 ? 's' : '' } skipped (no room): ${ skippedItems }</li>`;
     }
 
     // statusMessages += `<li class="text-muted">More details in console (usually F12)</li>`;
@@ -174,14 +174,12 @@ function disableForm() {
 }
 
 /**
- * Takes in an item object with variable fields. Parses through it to gets the fields we want.
- * Loads those fields into the form.
- * RCLootCouncil addon formatting docs: https://github.com/evil-morfar/RCLootCouncil2/wiki/CSV-Import
- * (some of these variables are based on the RCLC fields)
+ * Takes in an object that has a `name` and `id` property.
+ * Loads that into the next available wishlist input.
  *
- * @param item Array|Object An array/object containing keys for the object's properties.
+ * @param item Object
  *
- * @return item Array|Object The same item that was passed in.
+ * @return void
  */
 function loadItemToForm(item) {
     const wishlistInput = $("#wishlist");
