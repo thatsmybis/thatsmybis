@@ -34,6 +34,7 @@ mix.options({
 mix .babel('public/js/assignLoot.js',          'public/js/processed/assignLoot.js')
     .babel('public/js/autocomplete.js',        'public/js/processed/autocomplete.js')
     .babel('public/js/characterEdit.js',       'public/js/processed/characterEdit.js')
+    .babel('public/js/characterLootEdit.js',   'public/js/processed/characterLootEdit.js')
     .babel('public/js/clickToCopy.js',         'public/js/processed/clickToCopy.js')
     .babel('public/js/guildSettings.js',       'public/js/processed/guildSettings.js')
     .babel('public/js/helpers.js',             'public/js/processed/helpers.js')

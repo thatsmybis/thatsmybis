@@ -178,7 +178,7 @@ function parseCsv($this) {
     disenchantCount   = 0;
     overLimitCount    = 0;
     offspecCount      = 0;
-    missingCharacterCount = 0
+    missingCharacterCount = 0;
     missingCharacters     = [];
 
     var config = {
@@ -345,7 +345,7 @@ function completeCsvImport(results)
         statusMessages += `<li class="text-success">${ addedCount } item${ addedCount > 1 ? 's' : '' } loaded into form</li>`;
     }
 
-    if (skippedCount) {
+    if (skippedCount || disenchantCount || overLimitCount) {
         statusMessages += `<li class="text-warning">Skipped ${ skippedCount } item${ skippedCount > 1 ? 's' : '' } ${ disenchantCount ? "(" + disenchantCount + " items disenchanted)" : "" } ${ overLimitCount ? "(" + overLimitCount + " items over the limit of " + maxItems + ")" : ""}</li>`;
     }
 
@@ -363,8 +363,6 @@ function completeCsvImport(results)
     if (statusMessages) {
         $("#status-message").html(`<ul>${statusMessages}</ul>`).show();
     }
-
-
 
     // icky hack
     setTimeout(function(){enableForm();}, 100);
