@@ -221,7 +221,7 @@
                                     <div>
                                         <span id="clearWishlist" class="pl-2 small text-link cursor-pointer">
                                             <span class="fas fa-fw fa-trash"></span>
-                                            Clear wishlist
+                                            {{ __("Clear wishlist") }}
                                         </span>
                                     </div>
                                 </div>
