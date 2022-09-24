@@ -163,56 +163,66 @@
                                 </div>
                                 <!-- UPGRADES IMPORT END -->
 
-                                <label for="wishlist" class="sr-only">
-                                    {{ __("Wishlist") }}
-                                </label>
-
-                                <div class="dropdown">
-                                    <a class="dropdown-toggle font-weight-bold text-legendary" id="wishlistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <span class="fas fa-fw fa-scroll-old"></span>
-                                        @if ($wishlistNames && $wishlistNames[$wishlistNumber - 1])
-                                            {{ $wishlistNames[$wishlistNumber - 1] }}
-                                        @else
-                                            {{ __("Wishlist") }} {{ $wishlistNumber }}
-                                        @endif
-
-                                        @if ($guild->current_wishlist_number == $wishlistNumber)
-                                            <span class="text-success">{{ __('(active)') }}</span>
-                                        @else
-                                            <span class="text-danger">{{ __('(inactive)') }}</span>
-                                        @endif
-                                    </a>
-                                    <div class="dropdown-menu" aria-labelledby="wishlistDropdown">
-                                        <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
-                                            {{ __("active/locked is controlled by GM") }}
-                                            <br>
-                                            @if ($character->member && $character->member->is_wishlist_unlocked)
-                                                {{ __("officers have unlocked your wishlists") }}
-                                            @endif
-                                        </a>
-                                        @for ($i = 1; $i <= $maxWishlistLists; $i++)
-                                            <a class="dropdown-item"
-                                                href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'wishlist_number' => $i]) }}">
-                                                @if ($wishlistNames && $wishlistNames[$i - 1])
-                                                    {{ $wishlistNames[$i - 1] }}
+                                <div class="d-flex justify-content-between">
+                                    <div>
+                                        <label for="wishlist" class="sr-only">
+                                            {{ __("Wishlist") }}
+                                        </label>
+                                        <div class="dropdown">
+                                            <a class="dropdown-toggle font-weight-bold text-legendary" id="wishlistDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="fas fa-fw fa-scroll-old"></span>
+                                                @if ($wishlistNames && $wishlistNames[$wishlistNumber - 1])
+                                                    {{ $wishlistNames[$wishlistNumber - 1] }}
                                                 @else
-                                                    {{ __("Wishlist") }} {{ $i }}
+                                                    {{ __("Wishlist") }} {{ $wishlistNumber }}
                                                 @endif
 
-                                                @if ($guild->current_wishlist_number == $i)
+                                                @if ($guild->current_wishlist_number == $wishlistNumber)
                                                     <span class="text-success">{{ __('(active)') }}</span>
                                                 @else
                                                     <span class="text-danger">{{ __('(inactive)') }}</span>
                                                 @endif
-                                                @if ($guild->is_wishlist_locked)
-                                                    @if (in_array($i, $wishlistLockedExceptions) || ($character->member && $character->member->is_wishlist_unlocked))
-                                                        <span class="text-gold">{{ __('(unlocked)') }}</span>
-                                                    @else
-                                                        <span class="text-muted">{{ __('(locked)') }}</span>
-                                                    @endif
-                                                @endif
                                             </a>
-                                        @endfor
+                                            <div class="dropdown-menu" aria-labelledby="wishlistDropdown">
+                                                <a class="dropdown-item disabled" href="#" tabindex="-1" aria-disabled="true">
+                                                    {{ __("active/locked is controlled by GM") }}
+                                                    <br>
+                                                    @if ($character->member && $character->member->is_wishlist_unlocked)
+                                                        {{ __("officers have unlocked your wishlists") }}
+                                                    @endif
+                                                </a>
+                                                @for ($i = 1; $i <= $maxWishlistLists; $i++)
+                                                    <a class="dropdown-item"
+                                                        href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug, 'wishlist_number' => $i]) }}">
+                                                        @if ($wishlistNames && $wishlistNames[$i - 1])
+                                                            {{ $wishlistNames[$i - 1] }}
+                                                        @else
+                                                            {{ __("Wishlist") }} {{ $i }}
+                                                        @endif
+
+                                                        @if ($guild->current_wishlist_number == $i)
+                                                            <span class="text-success">{{ __('(active)') }}</span>
+                                                        @else
+                                                            <span class="text-danger">{{ __('(inactive)') }}</span>
+                                                        @endif
+                                                        @if ($guild->is_wishlist_locked)
+                                                            @if (in_array($i, $wishlistLockedExceptions) || ($character->member && $character->member->is_wishlist_unlocked))
+                                                                <span class="text-gold">{{ __('(unlocked)') }}</span>
+                                                            @else
+                                                                <span class="text-muted">{{ __('(locked)') }}</span>
+                                                            @endif
+                                                        @endif
+                                                    </a>
+                                                @endfor
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <span id="clearWishlist" class="pl-2 small text-link cursor-pointer">
+                                            <span class="fas fa-fw fa-trash"></span>
+                                            Clear wishlist
+                                        </span>
                                     </div>
                                 </div>
 
@@ -252,7 +262,7 @@
                                         <input id="wishlist" maxlength="40" data-max-length="40" type="text" placeholder="{{ __('type an item name') }}" class="js-item-autocomplete js-input-text form-control dark">
                                         <span class="js-loading-indicator" style="display:none;">{{ __("Searching...") }}</span>&nbsp;
 
-                                        <ul class="js-sortable-lazy no-bullet no-indent mb-0 bg-light">
+                                        <ul id="wishlistItems" class="js-sortable-lazy no-bullet no-indent mb-0 bg-light">
                                             @for ($i = 0; $i < $maxWishlistItems; $i++)
                                                 @php
                                                     $item      = null;
