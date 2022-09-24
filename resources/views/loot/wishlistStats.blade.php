@@ -123,7 +123,7 @@
                                                                             {{ $item->wishlist_count > 0 ? numToKs($item->wishlist_count) : '' }}
                                                                         </span>
                                                                         <em>
-                                                                            <span title="{{ $item->instance_name }}">
+                                                                            <span title="{{ $item->instance_name ? $item->instance_name : null }}">
                                                                                 {{ $item->instance_short_name }}
                                                                             </span>
                                                                         </em>
