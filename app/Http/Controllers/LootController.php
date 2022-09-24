@@ -178,6 +178,7 @@ class LootController extends Controller
                     {$expansionId} AS 'expansion_id',
                     `item_id`,
                     `wishlist_count`,
+                    `instance_name`,
                     `instance_short_name`
                 FROM
                 (
@@ -190,6 +191,7 @@ class LootController extends Controller
                         `quality`,
                         `item_id`,
                         `wishlist_count`,
+                        `instance_name`,
                         `instance_short_name`,
                         (@rowNumber:=if(@prev = CONCAT(`class`, `spec`, `archetype`), @rowNumber +1, 1)) as rowNumber,
                         @prev:= CONCAT(`class`, `spec`, `archetype`)
@@ -204,6 +206,7 @@ class LootController extends Controller
                                 i.`quality` AS `quality`,
                                 i.`item_id` AS 'item_id',
                                 COUNT(ci.`id`) as 'wishlist_count',
+                                `instances`.`name` AS 'instance_name',
                                 `instances`.`short_name` AS 'instance_short_name'
                             FROM `items` i
                             JOIN `character_items` ci ON ci.`item_id` = i.`item_id`
