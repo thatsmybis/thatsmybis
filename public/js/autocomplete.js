@@ -290,9 +290,9 @@ function addItemRemoveHandler() {
 /**
  * Take the given value and plop it into the next available input, provided it's in a list.
  *
- * @var $this         object The object that you want to add the tag after.
- * @var value         string The tag to add.
- * @var label         string The visible name of the tag to add.
+ * @var $this object The object/input that you want the tag to be added to. (gets added to the list that should exist after this object/input)
+ * @var value string The tag to add.
+ * @var label string The visible name of the tag to add.
  *
  * @return            bool   True on success.
  */
