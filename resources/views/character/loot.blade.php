@@ -29,7 +29,15 @@
                 </ul>
             @endif
 
-            <form id="itemForm" class="form-horizontal" role="form" method="POST" action="{{ route('character.updateLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+            @include('partials/loadingBars')
+
+            <form
+                id="itemForm"
+                style="display:none;"
+                class="form-horizontal"
+                role="form"
+                method="POST"
+                action="{{ route('character.updateLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                 <fieldset>
                     {{ csrf_field() }}
 

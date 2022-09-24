@@ -9,6 +9,8 @@ var errorCount = 0;
 var firstError = undefined;
 
 $(document).ready(function () {
+    let initializing = true;
+
     warnBeforeLeaving("#itemForm");
     addSortHandlers();
 
@@ -40,6 +42,10 @@ $(document).ready(function () {
             $(".js-note[data-index=" + index + "][data-type=" + type + "]").parent().hide();
         }
     });
+
+    initializing = false;
+    $(".loadingBarContainer").removeClass("d-flex").hide();
+    $("#itemForm").show();
 });
 
 function parseUpgradesImport($this) {
