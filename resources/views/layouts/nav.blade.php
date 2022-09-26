@@ -6,6 +6,7 @@
         $editGuild      = $currentMember->hasPermission('edit.guild');
         $editItems      = $currentMember->hasPermission('edit.items');
         $editRaidLoot   = $currentMember->hasPermission('edit.raid-loot');
+        $editRaidGroups = $currentMember->hasPermission('edit.raids');
         $editPrios      = !$guild->is_prio_disabled && $currentMember->hasPermission('edit.prios');
     }
 @endphp
@@ -677,6 +678,12 @@
                             <span class="fas fa-fw fa-helmet-battle text-muted"></span>
                             {{ __("Raid Groups") }}
                         </a>
+                        @if ($editRaidGroups)
+                            <a class="dropdown-item" href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-plus text-muted"></span>
+                                {{ __("Create Raid Group") }}
+                            </a>
+                        @endif
                         @if (!$guild->is_attendance_hidden && $guild->raidGroups->count())
                             <div class="dropdown dropright">
                                 <a title="{{ __("Only show attendance for a specific raid group") }}" class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="raidGroupAttendanceFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

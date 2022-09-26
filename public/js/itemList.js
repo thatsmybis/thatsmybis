@@ -343,8 +343,9 @@ function getNotes(row, note) {
     if (note || officerNote || childItems) {
         note =
             `<span class="js-markdown-inline">${ note ? DOMPurify.sanitize(nl2br(note)) : '' }</span>
+            ${ officerNote && note ? `<br>` : `` }
             ${ officerNote ?
-            `<br><small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(officerNote)) }</span>`
+            `<small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(officerNote)) }</span>`
             : ''}
             ${ childItems ? childItems : '' }`;
     } else {

@@ -102,7 +102,7 @@
                                         @elseif ($guild->expansion_id === 2)
                                             {{ __("Import wishlist from seventyugprades.com") }}
                                         @elseif ($guild->expansion_id === 3)
-                                            {{ __("Import wishlist from eightyugprades.com") }}
+                                            {{ __("Import wishlist from eightyupgrades.com") }}
                                         @endif
                                     </span>
                                 </div>
