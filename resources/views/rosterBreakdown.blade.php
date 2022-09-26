@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title',  __("Roster Breakdown") . ' - ' . config('app.name'))
+@section('title',  __("Class Breakdown") . ' - ' . config('app.name'))
 
 @section('content')
 
@@ -8,7 +8,7 @@
         <div class="col-12 text-center pr-0 pl-0">
             <h1 class="font-weight-medium mb-0 font-blizz">
                 <span class="fas fa-fw fa-users-class text-success"></span>
-                {{ __("Roster Breakdown") }}
+                {{ __("Class Breakdown") }}
             </h1>
         </div>
 
