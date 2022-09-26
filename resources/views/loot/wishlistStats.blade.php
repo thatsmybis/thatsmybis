@@ -57,7 +57,7 @@
 
     <div class="row">
         @foreach ($classes as $class)
-            {{-- To show all classes, remove this check and the class check in the query. --}}
+            {{-- To show all classes at once, remove this check and the class check in the query. --}}
             @if ($class == $chosenClass)
                 <div class="col-12 p-0">
                     <div class="mb-3 mr-3 ml-3 pt-3 pr-3 pl-3 bg-light rounded">

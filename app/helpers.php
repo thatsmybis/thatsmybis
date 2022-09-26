@@ -20,13 +20,13 @@ function array_insert(&$array, $position, $insert) {
     }
 }
 
-function getArchetypeIcon($archetype) {
+function getArchetypeIcon($archetype, $color = null) {
     if ($archetype === App\Character::ARCHETYPE_DPS) {
-        return 'fas fa-fw fa-bow-arrow text-dps';
+        return 'fas fa-fw fa-bow-arrow ' . ($color ? 'text-' . $color : 'text-dps');
     } else if ($archetype === App\Character::ARCHETYPE_HEAL) {
-        return 'fas fa-fw fa-plus-circle text-healer';
+        return 'fas fa-fw fa-plus-circle ' . ($color ? 'text-' . $color : 'text-healer');
     } else if ($archetype === App\Character::ARCHETYPE_TANK) {
-        return 'fas fa-fw fa-shield text-tank';
+        return 'fas fa-fw fa-shield ' . ($color ? 'text-' . $color : 'text-tank');
     } else {
         return 'fas fa-fw fa-map-marker-question text-muted';
     }

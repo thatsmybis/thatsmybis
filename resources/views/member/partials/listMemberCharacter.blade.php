@@ -1,19 +1,21 @@
 @php
     $raidGroup = ($character->raid_group_id ? $guild->allRaidGroups->where('id', $character->raid_group_id)->first() : null);
 @endphp
-<li class="list-inline-item text-{{ $character->inactive_at ? 'muted' : slug($character->class) }}">
+<li class="list-inline-item text-{{ $character->inactive_at ? 'muted' : slug($character->class) }}" data-raid-group-ids="{{ isset($raidGroupIds) ? $raidGroupIds : null }}">
     <div class="dropdown {{ isset($tag) && $tag ? 'tag rounded' : '' }}">
         <a class="dropdown-toggle text-{{ $character->inactive_at ? 'muted' : slug($character->class) }}" id="character{{ $character->id }}Dropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             @if ($raidGroup)
                 <span class="role-circle" style="background-color:{{ $raidGroup->getColor() }}"></span>
             @endif
             <span class="{{ isset($bold) && $bold ? 'font-weight-bold' : '' }}">
-            {{ $character->name }}
-            @if ($character->is_alt)
-                <span class="small text-muted">
-                    {{ __("alt") }}
-                </span>
-            @endif
+                {{ $character->name }}
+                {!! $character->archetype ? '<span class="smaller ' . getArchetypeIcon($character->archetype, 'muted'). '"></span>' : '' !!}
+                @if ($character->is_alt)
+                    <span class="small text-muted">
+                        {{ __("alt") }}
+                    </span>
+                @endif
+            </span>
         </a>
         @if (!$guild->is_attendance_hidden)
             <span class="small">

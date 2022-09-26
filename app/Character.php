@@ -805,6 +805,9 @@ class Character extends BaseModel
                 break;
             case 2: // TBC
                 return [
+                    self::SPEC_DEATH_KNIGHT_BLOOD  => ['name' => __('Blood'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_blood.jpg'],
+                    self::SPEC_DEATH_KNIGHT_FROST  => ['name' => __('Frost'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_frost_dk.jpg'],
+                    self::SPEC_DEATH_KNIGHT_UNHOLY => ['name' => __('Unholy'),        'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_unholy.jpg'],
                     self::SPEC_DRUID_BALANCE       => ['name' => __('Balance'),       'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_balance.jpg'],
                     self::SPEC_DRUID_FERAL         => ['name' => __('Feral'),         'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_feral.jpg'],
                     self::SPEC_DRUID_RESTO         => ['name' => __('Restoration'),   'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spec_restoration_druid.jpg'],
