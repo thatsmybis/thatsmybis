@@ -156,12 +156,25 @@
         </span>
     </div>
 
-    <div class="text-center font-weight-bold text-warning">
-        Loot council: What addon(s) do you use for loot management?
-        <a href="https://forms.gle/1U8cP7QWgZp4G3wKA" target="_blank">
-            survey here
-        </a>
-    </div>
+    @if (isset($guild))
+        <div id="addonPrompt" class="text-center font-weight-medium text-success" style="display:none;">
+            Choose an addon to use with TMB: <span id="closeAddonPrompt" class="cursor-pointer small text-muted fa-fw fas fa-times"></span>
+            <ul class="no-bullet no-indent">
+                <li>
+                    <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-legendary">Gargul <span class="small text-muted">86% recommended</span></a>
+                </li>
+                <li>
+                    <a href="https://www.curseforge.com/wow/addons/rclootcouncil-classic" target="_blank" class="text-legendary">RCLC <span class="small text-muted">64% recommended</span></a>
+                </li>
+                <li>
+                    <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-legendary">TMB Tooltips <span class="small text-muted">Gargul also does this</span></a>
+                </li>
+                <li>
+                    <a href="https://docs.google.com/forms/d/1lyTQ1qtTcXbCWY3cLt_zww_D9TtkhJYEmWhAW4sauIo/viewanalytics" target="_blank" class="small text-muted">poll results</a>
+                </li>
+            </ul>
+        </div>
+    @endif
 
     @if (isset($guild) && $guild->expansion_id != 3)
         <div class="text-center font-weight-normal text-muted mb-2">
@@ -407,7 +420,19 @@
             $("#toTopOfPage").click(function () {
                 scroll(0,0);
             });
+
+            if (!getCookie("closedAddonPrompt")) {
+                $("#addonPrompt").show();
+            }
+
+            $("#closeAddonPrompt").click(function () {
+                $("#addonPrompt").hide();
+                setCookie("closedAddonPrompt", true, 30, 'd');
+            });
         });
+        function restoreAddonPrompt() {
+            deleteCookie("closedAddonPrompt", "");
+        }
     </script>
 
     <script src="{{ loadScript('helpers.js') }}"></script>
