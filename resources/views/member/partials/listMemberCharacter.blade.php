@@ -9,7 +9,7 @@
             @endif
             <span class="{{ isset($bold) && $bold ? 'font-weight-bold' : '' }}">
                 {{ $character->name }}
-                {!! $character->archetype ? '<span class="smaller ' . getArchetypeIcon($character->archetype, 'muted'). '"></span>' : '' !!}
+                {!! property_exists($character, 'archetype') && $character->archetype ? '<span class="smaller ' . getArchetypeIcon($character->archetype, 'muted'). '"></span>' : '' !!}
                 @if ($character->is_alt)
                     <span class="small text-muted">
                         {{ __("alt") }}
