@@ -69,7 +69,7 @@ eg.
 
 {{ __('Supported header fields: (CASE SENSITIVE)') }}
 ================
-player OR character (required)
+player OR character OR name (required)
 itemID OR item_id (required)
 item OR itemName OR item_name
 date OR dateTime OR date_time

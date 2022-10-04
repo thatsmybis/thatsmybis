@@ -406,6 +406,8 @@ function loadItemToForm(item, i) {
         characterName = item['player'].split("-")[0].trim(); // Split the character name and server name up, get just the character name.
     } else if (item['character']) {
         characterName = item['character'].trim();
+    } else if (item['name']) { // softres.it Notifier Weakaura
+        characterName = item['name'].trim();
     }
 
     if (item['id']) { // RCLC value
