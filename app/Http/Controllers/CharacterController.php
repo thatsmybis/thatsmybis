@@ -474,6 +474,7 @@ class CharacterController extends Controller
                 $character = new Character;
                 $character->name          = $inputCharacter['name'];
                 $character->slug          = slug($inputCharacter['name']);
+                $character->member_id     = array_key_exists('member_id', $inputCharacter)    ? $inputCharacter['member_id'] : null;
                 $character->level         = array_key_exists('level', $inputCharacter)        ? $inputCharacter['level'] : null;
                 $character->race          = array_key_exists('race', $inputCharacter)         ? $inputCharacter['race'] : null;
                 $character->class         = array_key_exists('class', $inputCharacter)        ? $inputCharacter['class'] : null;
