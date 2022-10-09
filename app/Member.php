@@ -44,6 +44,10 @@ class Member extends BaseModel
         'personal_note',
     ];
 
+    public function activeCharacters() {
+        return $this->characters()->active();
+    }
+
     public function characters() {
         return $this->hasMany(Character::class)->orderBy('characters.name');
     }

@@ -383,6 +383,17 @@ class Character extends BaseModel
     }
 
     /**
+     * Scope a query to only include active cahracters
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder $query
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeActive($query)
+    {
+        return $query->whereNull('inactive_at');
+    }
+
+    /**
      * Takes a query for characters and applies the logic necessary to fetch attendance for those characters.
      * Adds the fields `raid_count`, `benched_count`, and `attendance_percentage` to the selected fields.
      * Might not work on all queries.

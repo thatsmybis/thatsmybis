@@ -61,13 +61,13 @@
                             @endif
                         </a>
                         <div class="dropdown-menu" aria-labelledby="wishlistNavDropdown">
-                            @foreach ($currentMember->characters as $character)
+                            @foreach ($currentMember->characters->whereNull('inactive_at') as $character)
                                 <a class="dropdown-item text-{{ slug($character->class) }}-important" href="{{ route('character.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}">
                                     {{ $character->name }}
                                 </a>
                             @endforeach
 
-                            @if ($currentMember->characters->count())
+                            @if ($currentMember->characters->whereNull('inactive_at')->count())
                                 <div class="dropdown-divider"></div>
                             @endif
 
