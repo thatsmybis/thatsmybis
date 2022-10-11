@@ -339,7 +339,7 @@
     <!-- Wowhead tooltips and stuff -->
     <script>var whTooltips = {colorLinks: true, iconizeLinks: true, renameLinks: true, dropChance: true, iconSize: '@yield('wowheadIconSize', 'small')', hide: { maxstack: true, ilvl: false, sellprice: true }};</script>
     <script src="https://wow.zamimg.com/widgets/power.js"></script>
-    <style>/* override some wowhead item quality colors to be higher contrast */.q3 {color: #057ffa !important;} .q4 {color: #ab4aed !important;}</style>
+    <style>/* override some wowhead item quality colors to be higher contrast */.q3 {color: #057ffa !important;} .q4 {color: #b562ee !important;}</style>
 
     <script>
         @if (isset($guild) && $guild->expansion_id)
