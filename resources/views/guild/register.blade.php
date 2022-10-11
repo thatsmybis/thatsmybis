@@ -54,7 +54,7 @@
                         {{ __("Expansion") }}
                     </label>
                     <select name="expansion_id" class="form-control">
-                        @foreach ($expansions as $expansion)
+                        @foreach ($expansions->sortByDesc('id') as $expansion)
                             <option value="{{ $expansion->id }}"
                                 {{ old('expansion_id') && old('expansion_id') == $expansion->id ? 'selected' : '' }}
                                 {{ !$expansion->is_enabled ? 'disabled' : '' }}>
