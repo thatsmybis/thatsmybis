@@ -82,7 +82,7 @@ let logs = $("[name^=logs]:visible");
 
             characterLoadIndex = 0;
             if (input.val().includes("warcraftlogs.com")) {
-                if (guild && guild.warcraftlogs_token) {
+                if (hasLinkedWarcraftLogs) {
                     getWarcraftlogsRankedCharacters(addCharacter, WARCRAFTLOGS_MODE_NEW);
                 } else {
                     $(".js-warcraftlogs-attendees-message").html(`<span class="font-weight-bold text-warning">Connect your Warcraft Logs account in guild settings to import</span>`).show();

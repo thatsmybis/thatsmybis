@@ -27,6 +27,8 @@ function getWarcraftlogsRankedCharacters(callback, mode) {
     $(".js-warcraftlogs-attendees-loading-spinner").show();
     $("#warcraftlogsLoadingbar").addClass("d-flex").show();
 
+    let success = false;
+
     // Request characters
     $.ajax({
         method: "get",
@@ -47,38 +49,48 @@ function getWarcraftlogsRankedCharacters(callback, mode) {
                 // Report on the data we got back, and compile a list of the characters
                 let message = `Received the following from Warcraft Logs:`;
                 for (const [key, report] of Object.entries(data)) {
-                    // This log is INTENTIONAL; do not remove
-                    console.log(`Report ${ report.code }:`, report);
+                    if (report) {
+                        // This log is INTENTIONAL; do not remove
+                        console.log(`Report ${ report.code }:`, report);
 
-                    if (report.rankedCharacters) {
-                        for (const [key, rankedCharacter] of Object.entries(report.rankedCharacters)) {
-                            // Duplicate prevention
-                            if (!reportCharacters.find(reportCharacter => reportCharacter[0] === rankedCharacter.name)) {
-                                // Doing it this way so that I can sort it later...
-                                // If it were a pure object, I wouldn't be able to sort it.
-                                reportCharacters.push([(rankedCharacter.name ? rankedCharacter.name : 'unknown'), rankedCharacter]);
+                        if (report.rankedCharacters) {
+                            for (const [key, rankedCharacter] of Object.entries(report.rankedCharacters)) {
+                                // Duplicate prevention
+                                if (!reportCharacters.find(reportCharacter => reportCharacter[0] === rankedCharacter.name)) {
+                                    // Doing it this way so that I can sort it later...
+                                    // If it were a pure object, I wouldn't be able to sort it.
+                                    reportCharacters.push([(rankedCharacter.name ? rankedCharacter.name : 'unknown'), rankedCharacter]);
+                                }
                             }
                         }
+                        message += `<ul class="mt-3">
+                            <li class="font-weight-bold">
+                                ${ report.title }
+                            </li>
+                            <li>
+                                ${ report.rankedCharacters ? `${ report.rankedCharacters.length } characters` : `0 characters` }
+                            </li>
+                            ${ report.endTime ? `<li class="small text-muted font-weight-normal">${ moment.utc(report.endTime).local().format("ddd, MMM Do YYYY @ h:mm a") }</li>` : '' }
+                            ${ report.zone && report.zone.name ? `<li class="small text-muted font-weight-normal">${ report.zone.name }</li>` : `` }
+                            <li class="small text-muted font-weight-normal">
+                                ID ${ report.code }
+                            </li>
+                        </ul>`;
+                    } else {
+                        console.log(`No report found`);
+                        message += `<ul class="mt-3">
+                            <li class="font-weight-bold text-danger">
+                                No report found. Did you connect your Warcraftlogs account in guild settings?
+                            </li>
+                        </ul>`;
                     }
-                    message += `<ul class="mt-3">
-                        <li class="font-weight-bold">
-                            ${ report.title }
-                        </li>
-                        <li>
-                            ${ report.rankedCharacters ? `${ report.rankedCharacters.length } characters` : `0 characters` }
-                        </li>
-                        ${ report.endTime ? `<li class="small text-muted font-weight-normal">${ moment.utc(report.endTime).local().format("ddd, MMM Do YYYY @ h:mm a") }</li>` : '' }
-                        ${ report.zone && report.zone.name ? `<li class="small text-muted font-weight-normal">${ report.zone.name }</li>` : `` }
-                        <li class="small text-muted font-weight-normal">
-                            ID ${ report.code }
-                        </li>
-                    </ul>`;
                 }
 
                 printWarcraftlogsRankedCharacters(reportCharacters, callback, mode, message);
             }
         },
         error: function (data) {
+            console.log('error');
         }
     });
 }

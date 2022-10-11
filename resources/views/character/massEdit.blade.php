@@ -302,6 +302,7 @@
 <script>
     var characters = {!! $guild->characters->toJson() !!};
     var guild = {!! $guild->toJson() !!};
+    var hasLinkedWarcraftLogs = {{ $guild->warcraftlogs_token ? 'true' : 'false' }};
     $(document).ready(function() {
         warnBeforeLeaving("#editForm")
     });
