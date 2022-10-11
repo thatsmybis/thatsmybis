@@ -105,7 +105,7 @@ class WarcraftlogsController extends \App\Http\Controllers\Controller
 
             $result = json_decode((string) $response->getBody(), true);
 
-            if ($result && array_key_exists($result['data']) && count($result['data'])) {
+            if ($result && array_key_exists('data', $result) && count($result['data'])) {
                 $reports[$code] = $result['data']['reportData']['report'];
             } else {
                 $reports[$code] = null;
