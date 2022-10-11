@@ -70,7 +70,6 @@ let logs = $("[name^=logs]:visible");
         }
     });
 
-
     $("#addWarcraftlogsCharacters").click(function () {
         if (confirm("This WILL OVERWRITE any existing inputs in this form. Continue?")) {
             $(".js-name").val("");

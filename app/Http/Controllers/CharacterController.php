@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\DB;
 class CharacterController extends Controller
 {
     const MAX_RAID_GROUPS = 30;
-    const MAX_CREATE_CHARACTERS_AT_ONCE = 15;
+    const MAX_CREATE_CHARACTERS_AT_ONCE = 20;
 
     /**
      * Create a new controller instance.

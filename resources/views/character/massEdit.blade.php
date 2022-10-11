@@ -1,4 +1,4 @@
-@extends('layouts.app')
+    @extends('layouts.app')
 @section('title', __("Create Characters") . " - " . config('app.name'))
 
 @section('content')
@@ -11,7 +11,7 @@
                         <span class="text-muted fas fa-fw fa-user-plus"></span>
                         {{ __("Create Characters") }}
                     </h1>
-                    <p>
+                    <p class="font-weight-bold">
                         {{ __("Maximum :count characters at once. You can paste the same log between multiple submissions.", ['count' => $maxCharacters]) }}
                     </p>
                 </div>
@@ -46,24 +46,20 @@
                     placeholder="{{ __('eg. https://classic.warcraftlogs.com/reports/AbCdE3FgHiJkLmNo') }}"
                     style="" />
             </div>
-            @if ($guild->warcraftlogs_token)
-                <span id="addWarcraftlogsCharacters" class="btn btn-success">
-                    <span class="fas fa-fw fa-file-import"></span>
-                    {{ __("Load Characters") }}
-                </span>
-                <div class="js-warcraftlogs-attendees-message text-warning mt-2" style="display:none;">
-                </div>
-                @include('partials/loadingBars', ['hide' => true, 'loadingBarId' => 'warcraftlogsLoadingbar'])
-            @else
-                <span class="disabled btn btn-success">
-                    <span class="fas fa-fw fa-file-import"></span>
-                    {{ __("Import Attendees from Warcraft Logs") }}
-                </span>
+
+            <span id="addWarcraftlogsCharacters" class="btn btn-success">
+                <span class="fas fa-fw fa-file-import"></span>
+                {{ __("Load Characters") }}
+            </span>
+            @if (!$guild->warcraftlogs_token)
                 <br>
                 <span class="small text-warning font-weight-normal">
                     {!! __('<a href=":link" target="_blank">Connect</a> a Warcraft Logs account', ['link' => route('warcraftlogsAuth', ['guildId' => $guild->id, 'guildSlug' => $guild->slug])]) !!}
                 </span>
             @endif
+            <div class="js-warcraftlogs-attendees-message text-warning mt-2" style="display:none;">
+            </div>
+            @include('partials/loadingBars', ['hide' => true, 'loadingBarId' => 'warcraftlogsLoadingbar'])
         </div>
     </div>
 
