@@ -98,9 +98,9 @@
                                     <span id="toggleImport" class="js-toggle-import btn btn-primary mt-2 mb-3">
                                         <span class="fas fa-fw fa-file-import"></span>
                                         @if ($guild->expansion_id === 1)
-                                            {{ __("Import wishlist from sixtyugprades.com") }}
+                                            {{ __("Import wishlist from sixtyupgrades.com") }}
                                         @elseif ($guild->expansion_id === 2)
-                                            {{ __("Import wishlist from seventyugprades.com") }}
+                                            {{ __("Import wishlist from seventyupgrades.com") }}
                                         @elseif ($guild->expansion_id === 3)
                                             {{ __("Import wishlist from eightyupgrades.com") }}
                                         @endif
