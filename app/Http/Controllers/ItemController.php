@@ -508,14 +508,12 @@ class ItemController extends Controller
      */
     public static function mergeTokenWishlists($items, $guild) {
         // Combine items' child items' wishlist characters into parent items' wishlist characters
-        foreach ($items->filter(function ($item, $key) { return $item->childItems->count(); }) as $item) {
-            foreach ($item->childItems->filter(function ($childItem, $key) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
-                $items->where('id', $item->id)
-                    ->first()
+        foreach ($items->filter(function ($item) { return $item->childItems->count(); }) as $itemKey => $item) {
+            foreach ($item->childItems->filter(function ($childItem) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
+                $items[$itemKey]
                     ->setRelation(
                         'wishlistCharacters',
-                        $items->where('id', $item->id)
-                            ->first()
+                        $items[$itemKey]
                             ->wishlistCharacters
                             // Keys should be unique per character ID and wishlist number.
                             ->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
