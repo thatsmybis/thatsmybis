@@ -294,7 +294,7 @@ function addItemRemoveHandler() {
  * @var value string The tag to add.
  * @var label string The visible name of the tag to add.
  *
- * @return            bool   True on success.
+ * @return bool True on success.
  */
 function addTag($this, value, label) {
     if ($this && value) {
@@ -319,8 +319,18 @@ function addTag($this, value, label) {
             addItemRemoveHandler();
 
             let link = "";
+
+            let wowheadUrl = "";
+            // WoTLK uses a different URL structure
+            if (wowheadSubdomain === 'wotlk') {
+                wowheadUrl = `https://${ wowheadLocale }.wowhead.com/${ wowheadSubdomain }/item=${ value }`;
+            } else {
+                wowheadUrl = `https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ value }`;
+            }
+
+
             if (guild) {
-                let wowheadData = `data-wowhead-link="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ value }"
+                let wowheadData = `data-wowhead-link="${ wowheadUrl }"
                         data-wowhead="item=${ value }?domain=${ wowheadLocale + wowheadSubdomain }"`;
 
                 link = ` <a href="/${ guild.id }/${ guild.slug }/i/${ value }/${ slug(label) }"
@@ -330,7 +340,7 @@ function addTag($this, value, label) {
                     ${ label }
                 </a>`;
             } else {
-                link = `<a href="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ value }" target="_blank" class="font-weight-medium">${ label }</a>`;
+                link = `<a href="${ wowheadUrl }" target="_blank" class="font-weight-medium">${ label }</a>`;
             }
 
             let inputLabel  = $nextInput.siblings(".js-input-label");
