@@ -81,7 +81,9 @@ function sortItems() {
 
     // Sort based on user pins
     $("#pinnableList").children(".js-pin-sortable").sort(function (a, b) {
-        return parseInt(a.getAttribute('data-user-order')) > parseInt(b.getAttribute('data-user-order'));
+        const aOrder = parseInt(a.getAttribute('data-user-order'));
+        const bOrder = parseInt(b.getAttribute('data-user-order'));
+        return (aOrder > bOrder) ? 1 : -1;
     }).appendTo($("#pinnableList"));
 
 
