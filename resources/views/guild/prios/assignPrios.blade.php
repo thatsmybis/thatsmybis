@@ -87,7 +87,7 @@
                                 @endphp
                             @endif
 
-                            @include('guild.prios.partials.itemInput')
+                            @include('guild.prios.partials.itemInput', ['showPin' => true])
 
                             @php
                                 $oldSourceName = $item->source_name;

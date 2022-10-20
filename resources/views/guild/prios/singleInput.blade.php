@@ -52,7 +52,7 @@
                 <input hidden name="item_id" value="{{ $item->item_id }}">
 
                 @foreach ([$item] as $item)
-                    @include('guild.prios.partials.itemInput')
+                    @include('guild.prios.partials.itemInput', ['showPin' => false])
                 @endforeach
 
                 <div class="form-group mt-3">

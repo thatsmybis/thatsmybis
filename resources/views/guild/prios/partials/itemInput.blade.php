@@ -10,9 +10,11 @@
                         {{ __("Item Name") }}
                     </span>
                 </label>
-                <div class="text-4 text-muted cursor-pointer text-unselectable">
-                    <span class="js-pin-item fal fa-thumbtack" title="{{ __('Pin to top (only for this browser)') }}" data-item-id="{{ $item->item_id }}"></span>
-                </div>
+                @if (isset($showPin) && $showPin)
+                    <div class="text-4 text-muted cursor-pointer text-unselectable">
+                        <span class="js-pin-item fal fa-thumbtack" title="{{ __('Pin to top (only for this browser)') }}" data-item-id="{{ $item->item_id }}"></span>
+                    </div>
+                @endif
                 @include('partials/item', [
                     'wowheadLink' => false,
                     'targetBlank' => true,
