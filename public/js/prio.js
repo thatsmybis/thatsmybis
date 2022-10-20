@@ -36,6 +36,7 @@ $(document).ready(function () {
         sortItems();
     });
 
+    // If the user has pinned items in the cookies, apply their ordering
     sortItems();
 
     $(".loadingBarContainer").removeClass("d-flex").hide();
@@ -52,7 +53,7 @@ function makeIconSolid(icon) {
     icon.addClass("fas");
 }
 
-// Sort the items based on the pins stored in cookies
+// Sort the items based on the pins stored in cookies; if any
 function sortItems() {
     let pinnedItems = [];
     const pinnedItemsCookie = Cookies.get(PINNED_ITEMS);
@@ -80,7 +81,7 @@ function sortItems() {
 
     // Sort based on user pins
     $("#pinnableList").children(".js-pin-sortable").sort(function (a, b) {
-        return a.getAttribute('data-user-order') > b.getAttribute('data-user-order');
+        return parseInt(a.getAttribute('data-user-order')) > parseInt(b.getAttribute('data-user-order'));
     }).appendTo($("#pinnableList"));
 
 
