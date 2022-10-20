@@ -5,6 +5,9 @@
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
     // So we're iterating over the characters only one time, saving the results, and printing them.
     $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->characters]);
+
+    // used to keep track of the order of the list when the user pins items with javascript
+    $headerCount = 0;
 @endphp
 
 @section('content')
@@ -68,17 +71,20 @@
                 <input hidden name="instance_id" value="{{ $instance->id }}">
 
                 <div class="row">
-                    <div class="col-12 mt-3 mb-3 bg-light rounded">
+                    <div id="pinnableList" class="col-12 mt-3 mb-3 bg-light rounded">
                         @php
                             $oldSourceName = null;
                         @endphp
                         @foreach ($items as $item)
                             @if ($item->source_name != $oldSourceName)
-                                <div class="row pb-3 pt-4 rounded top-divider">
+                                <div class="js-pin-sortable row pb-3 pt-4 rounded top-divider" data-original-order="{{ $loop->index + $headerCount }}" data-user-order="">
                                     <h2 class="ml-3 font-weight-medium font-blizz" id="{{ slug($item->source_name) }}">
                                         {{ $item->source_name }}
                                     </h2>
                                 </div>
+                                @php
+                                    $headerCount++;
+                                @endphp
                             @endif
 
                             @include('guild.prios.partials.itemInput')

@@ -1,20 +1,25 @@
-<div class="row striped-light pb-2 pt-3 rounded">
+<div class="js-pin-sortable row striped-light pb-2 pt-3 rounded" data-item-id="{{ $item->item_id }}" data-original-order="{{ $loop->index + $headerCount }}" data-user-order="{{ $loop->index + $headerCount }}">
 
     <input hidden name="items[{{ $item->item_id }}][item_id]" value="{{ $item->item_id }}">
 
     <div class="col-lg-4 col-12">
         <div class="d-inline-grid align-middle text-5 mb-2">
-            <label for="items[{{ $item->item_id }}][name]" class="font-weight-bold d-none d-sm-block">
-                <span class="sr-only">
-                    {{ __("Item Name") }}
-                </span>
-            </label>
-            @include('partials/item', [
-                'wowheadLink' => false,
-                'targetBlank' => true,
-                'showTier'    => true,
-                'tierMode'    => $guild->tier_mode,
-                ])
+            <div class="d-flex">
+                <label for="items[{{ $item->item_id }}][name]" class="font-weight-bold d-none d-sm-block">
+                    <span class="sr-only">
+                        {{ __("Item Name") }}
+                    </span>
+                </label>
+                <div class="text-4 text-muted cursor-pointer text-unselectable">
+                    <span class="js-pin-item fal fa-thumbtack" title="{{ __('Pin to top (only for this browser)') }}" data-item-id="{{ $item->item_id }}"></span>
+                </div>
+                @include('partials/item', [
+                    'wowheadLink' => false,
+                    'targetBlank' => true,
+                    'showTier'    => true,
+                    'tierMode'    => $guild->tier_mode,
+                    ])
+            </div>
         </div>
         @if ($item->childItems->count())
             <ul class="ml-3 small list-inline">
@@ -183,7 +188,7 @@
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <div class="form-inline">
-                                            <div class="form-group">
+                                            <div class="form-group" title="{{ __('Rank') }}">
                                                 <label class="sr-only" for="items[{{ $item->item_id }}][characters][{{ $i }}][order]">
                                                     {{ __("Rank") }}
                                                 </label>
