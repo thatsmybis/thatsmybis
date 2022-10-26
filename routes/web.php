@@ -46,6 +46,8 @@ Route::group(['prefix' => 'auth'], function () {
     Route::get('/discord',          'Auth\LoginController@redirectToDiscord')->name('discordLogin');
     Route::get('/discord/callback', 'Auth\LoginController@handleDiscordCallback');
 
+    // Route::get('/warcraft/callback', 'Auth\WarcraftController@handleWarcraftCallback');
+
     Route::get('/warcraftlogs/callback', 'Auth\WarcraftlogsController@handleWarcraftlogsCallback');
 });
 
@@ -80,6 +82,7 @@ Route::group([
         Route::get( '/{userId}/edit', 'AdminController@showEditUser')->name('admin.users.edit.show');
         Route::post('/{userId}/edit', 'AdminController@submitEditUser')->name('admin.users.edit.submit');
     });
+    Route::get( '/translate-items', 'AdminController@showTranslateItems')->name('admin.translateItems');
 });
 
 Route::group([

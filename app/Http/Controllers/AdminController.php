@@ -171,6 +171,37 @@ class AdminController extends Controller
     }
 
     /**
+     * List items, get the translations from wowhead
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function showTranslateItems()
+    {
+        $expansion = request()->input('expansion') ? request()->input('expansion') : 'classic';
+        $lang = request()->input('lang') ? request()->input('lang') : 'en';
+        $maxId = request()->input('maxId') ? request()->input('maxId') : 100;
+        $minId = request()->input('minId') ? request()->input('minId') : 1;
+
+        $expansionId = 1;
+        if ($expansion === 'wotlk') {
+            $expansionId = 3;
+        } else if ($expansion === 'tbc') {
+            $expansionId = 2;
+        }
+
+        $items = Item::where([['item_id', '>=', $minId], ['item_id', '<=', $maxId], ['expansion_id', $expansionId]])->get();
+
+        return view('admin.translateItems', [
+            'expansion' => $expansion,
+            'expansionId' => $expansionId,
+            'items'     => $items,
+            'lang'      => $lang,
+            'maxId'     => $maxId,
+            'minId'     => $minId,
+        ]);
+    }
+
+    /**
      * Edit a user
      *
      * @return \Illuminate\Http\Response
