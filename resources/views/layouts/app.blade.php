@@ -183,6 +183,14 @@
             </span>
         </div>
     @endif
+
+    @if (isset($guild) && in_array(Illuminate\Support\Facades\App::getLocale(), ['de', 'es', 'fr', 'pt', 'ru', 'ko', 'cn']))
+        <div class="text-center font-weight-normal text-muted mb-2">
+            You can now lookup items using your language. <span class="small">previously only English</span>
+        </div>
+    @endif
+
+
     <div class="text-center font-weight-light small text-muted text-mage mb-2">
         <!--
         Heart of Magic is not in the loot tables because "<a href="https://www.wowhead.com/%69tem=44650/heart-of-magic#comments" target="_blank">Everyone on the quest can loot their own Heart of Magic</a>"
