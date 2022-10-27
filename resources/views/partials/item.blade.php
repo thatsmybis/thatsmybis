@@ -33,8 +33,11 @@ if (!isset($wowheadLocale)) {
     $wowheadLocale = App::getLocale();
 }
 
+$wowheadLocalNoDot = $wowheadLocale;
+
 if ($wowheadLocale === 'en') {
     $wowheadLocale = '';
+    $wowheadLocalNoDot = '';
 } else {
     $wowheadLocale .= '.';
 }
@@ -58,7 +61,7 @@ $wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocale 
 $wowheadUrl = null;
 
 if ($itemExpansionId === 3) {
-    $wowheadUrl = 'https://' . $wowheadLocale . 'wowhead.com/' . $wowheadSubdomain . '/item=' . $itemId;
+    $wowheadUrl = 'https://' . $wowheadLocale . 'wowhead.com/' . $wowheadSubdomain . '/' . ($wowheadLocalNoDot ? $wowheadLocalNoDot . '/' : null) . 'item=' . $itemId;
     $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
 } else {
     $wowheadUrl = 'https://' . $wowheadLocale . $wowheadSubdomain . '.wowhead.com/item=' . $itemId;

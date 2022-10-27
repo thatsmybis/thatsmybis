@@ -189,7 +189,7 @@ class AdminController extends Controller
             $expansionId = 2;
         }
 
-        $items = Item::where([['item_id', '>=', $minId], ['item_id', '<=', $maxId], ['expansion_id', $expansionId]])->get();
+        $items = Item::where([['item_id', '>=', $minId], ['item_id', '<=', $maxId], ['expansion_id', $expansionId]])->orderBy('item_id')->get();
 
         return view('admin.translateItems', [
             'expansion' => $expansion,
