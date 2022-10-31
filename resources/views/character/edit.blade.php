@@ -194,8 +194,7 @@
                             <div class="form-group">
                                 <span class="fas fa-fw fa-scroll-old text-muted"></span><span class="fas fa-fw fa-lock-open text-muted"></span>
                                 <a href="{{ route('member.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $character->member->id, 'usernameSlug' => $character->member->slug]) }}">
-                                    {{ __("Unlock member's wishlist or received loot list") }}
-                                    <!-- TODO: Swap over to once translations are added: {{ __("Click here to unlock member's wishlist or received loot list") }} -->
+                                    {{ __("Unlock Wishlist / Received Loot") }}
                                 </a>
                             </div>
                         </div>
