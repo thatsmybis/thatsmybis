@@ -1245,7 +1245,7 @@ div.dataTables_filter input {
 .d-poster-970 {
     display: none;
 }
-@media (min-width: 992px) {
+@media (min-width: 999px) {
     .d-poster-970 {
         display: block !important;
     }
@@ -1253,7 +1253,7 @@ div.dataTables_filter input {
 .d-poster-728 {
     display: none;
 }
-@media (min-width: 747px) { /* and (max-width: 991px) */
+@media (min-width: 747px) and (max-width: 999px) {
     .d-poster-728 {
         display: block !important;
     }
@@ -1261,9 +1261,10 @@ div.dataTables_filter input {
 .d-poster-320 {
     display: none;
 }
-@media (min-width: 320px) { /* and (max-width: 746px) */
+@media (max-width: 746px) { /* and (max-width: 746px) */
     .d-poster-320 {
         display: block !important;
+        width: 100%;
     }
 }
 /* END ADS */
