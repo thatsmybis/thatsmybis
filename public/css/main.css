@@ -112,7 +112,7 @@ body {
 }
 
 .container-width-capped {
-    max-width: 1200px;
+    max-width: 1400px;
 }
 
 .bg-light {
@@ -1261,10 +1261,14 @@ div.dataTables_filter input {
 .d-poster-320 {
     display: none;
 }
-@media (max-width: 746px) { /* and (max-width: 746px) */
+@media (max-width: 746px) {
     .d-poster-320 {
         display: block !important;
-        width: 100%;
     }
+}
+.poster-sticky {
+    position: -webkit-sticky; /* Safari */
+    position: sticky;
+    top: 60px;
 }
 /* END ADS */

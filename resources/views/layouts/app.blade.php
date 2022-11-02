@@ -264,11 +264,15 @@
         <div class="d-poster-970 mb-4" id="top-large-leaderboard-poster"></div>
         <div class="d-poster-728 mb-4" id="top-leaderboard-poster"></div>
         <div class="d-poster-320 mb-4" id="top-mobile-banner-poster"></div>
+        <!-- If these are sticky ads, JS will load these even though thyey are commented out. -->
+        <!-- <div class="" id=""></div> -->
     @endif
 
     @yield('content')
 
     @if ($showAds)
+        <!-- If these are sticky ads, JS will load these even though thyey are commented out. -->
+        <!-- <div class="" id=""></div> -->
         <div class="d-poster-970" id="bottom-large-billboard-poster"></div>
         <div class="d-poster-728" id="bottom-leaderboard-poster"></div>
         <div class="d-poster-320" id="bottom-mobile-banner-poster"></div>
@@ -467,7 +471,7 @@
         window['nitroAds'].createAd('top-large-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
             "refreshLimit": 10,
-            "refreshTime": 30,
+            "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "sizes": [
@@ -486,7 +490,7 @@
         window['nitroAds'].createAd('bottom-large-billboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
             "refreshLimit": 10,
-            "refreshTime": 30,
+            "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "sizes": [
@@ -505,7 +509,7 @@
         window['nitroAds'].createAd('top-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
             "refreshLimit": 10,
-            "refreshTime": 30,
+            "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "sizes": [
@@ -524,7 +528,7 @@
         window['nitroAds'].createAd('bottom-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
             "refreshLimit": 10,
-            "refreshTime": 30,
+            "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "sizes": [
@@ -543,7 +547,7 @@
         window['nitroAds'].createAd('top-mobile-banner-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
             "refreshLimit": 10,
-            "refreshTime": 30,
+            "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "sizes": [
@@ -562,7 +566,7 @@
         window['nitroAds'].createAd('bottom-mobile-banner-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
             "refreshLimit": 10,
-            "refreshTime": 30,
+            "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
             "sizes": [
@@ -578,6 +582,45 @@
             },
             // "mediaQuery": "(max-width: 767px)"
         });
+        window['nitroAds'].createAd('left-banner', {
+            "demo": {{ env('EXAMPLE_ADS', 'false') }},
+            "refreshLimit": 10,
+            "refreshTime": 60,
+            "renderVisibleOnly": false,
+            "refreshVisibleOnly": true,
+            "sizes": [
+                [
+                    "160",
+                    "600"
+                ]
+            ],
+            "report": {
+                "enabled": true,
+                "icon": true,
+                "wording": "Report Ad",
+                "position": "bottom-right"
+            }
+        });
+        window['nitroAds'].createAd('right-banner', {
+            "demo": {{ env('EXAMPLE_ADS', 'false') }},
+            "refreshLimit": 10,
+            "refreshTime": 60,
+            "renderVisibleOnly": false,
+            "refreshVisibleOnly": true,
+            "sizes": [
+                [
+                    "160",
+                    "600"
+                ]
+            ],
+            "report": {
+                "enabled": true,
+                "icon": true,
+                "wording": "Report Ad",
+                "position": "bottom-right"
+            }
+        });
+
     </script>
 
     @yield('scripts')
