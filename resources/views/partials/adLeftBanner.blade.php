@@ -1,2 +1,4 @@
-<div id="left-banner" class="poster-sticky"></div>
+@if (false)
+    <div id="left-banner" class="poster-sticky"></div>
+@endif
 
