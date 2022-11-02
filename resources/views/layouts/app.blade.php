@@ -1,21 +1,3 @@
-@php
-    $showAds = true;
-    if (request()->get('hideAds')
-        || in_array(Route::currentRouteName(), [
-            'home',
-            'faq',
-            'privacy',
-            'caliPrivacy',
-            'terms',
-            'donate',
-            'login',
-            'register',
-        ])
-    ) {
-        $showAds = false;
-    }
-@endphp
-
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}" prefix="og: http://ogp.me/ns#">
 <head>
@@ -260,7 +242,7 @@
         </div>
     @endif
 
-    @if ($showAds)
+    @if (!request()->get('hideAds'))
         <div class="d-poster-970 mb-4" id="top-large-leaderboard-poster"></div>
         <div class="d-poster-728 mb-4" id="top-leaderboard-poster"></div>
         <div class="d-poster-320 mb-4" id="top-mobile-banner-poster"></div>
@@ -270,7 +252,7 @@
 
     @yield('content')
 
-    @if ($showAds)
+    @if (!request()->get('hideAds'))
         <!-- If these are sticky ads, JS will load these even though thyey are commented out. -->
         <!-- <div class="" id=""></div> -->
         <div class="d-poster-970" id="bottom-large-billboard-poster"></div>
@@ -283,7 +265,7 @@
         @include('layouts/footer')
     @endif
 
-    @if ($showAds)
+    @if (!request()->get('hideAds'))
         <div id="video-poster"></div>
     @endif
 

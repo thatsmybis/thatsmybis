@@ -7,7 +7,7 @@ use App\Role;
 use App\Notification;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
-use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\{App, Route};
 
 class SeeUser
 {
@@ -72,6 +72,21 @@ class SeeUser
                 $bustCache = true;
             }
 
+            $adFreePage = false;
+            if (in_array(Route::currentRouteName(), [
+                    'home',
+                    'faq',
+                    'privacy',
+                    'caliPrivacy',
+                    'terms',
+                    'donate',
+                    'login',
+                    'register',
+                ])
+            ) {
+                $adFreePage = true;
+            }
+
             // For translations
             App::setLocale($user->locale);
 
@@ -79,7 +94,7 @@ class SeeUser
             $request->attributes->add([
                 'bustCache'      => $bustCache,
                 'currentUser'    => $user,
-                'hideAds'        => $user->ads_disabled_at ? true : false,
+                'hideAds'        => ($adFreePage || ($user->ads_disabled_at ? true : false)),
                 'isAdmin'        => $user->is_admin,
                 'isStreamerMode' => $user->is_streamer_mode
             ]);
