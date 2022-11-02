@@ -658,36 +658,30 @@
                         {{ __("Raids") }}
                     </a>
                     <div class="dropdown-menu" aria-labelledby="raidNavDropdown">
-                        @if ($editRaidLoot)
-                            <a class="dropdown-item" href="{{ route('item.assignLoot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            <span class="fas fa-fw fa-sack text-muted"></span>
-                                {{ __("Assign Loot") }}
-                            </a>
-                        @endif
+                        <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-list text-muted"></span>
+                            {{ __("List Raids") }}
+                        </a>
+                        <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-helmet-battle text-muted"></span>
+                            {{ __("Raid Groups") }}
+                        </a>
                         @if ($viewRaids)
                             <a class="dropdown-item" href="{{ route('guild.raids.create', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             <span class="fas fa-fw fa-calendar-plus text-muted"></span>
                                 {{ __("Create Raid") }}
                             </a>
                         @endif
-                        <a class="dropdown-item" href="{{ route('guild.raids.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            <span class="fas fa-fw fa-list text-muted"></span>
-                            {{ __("List Raids") }}
-                        </a>
-                        <a class="dropdown-item" href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            <span class="fas fa-fw fa-history text-muted"></span>
-                            {{ __("Old Loot Assignments") }}
-                        </a>
-                        <a class="dropdown-item" href="{{ route('guild.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                            <span class="fas fa-fw fa-helmet-battle text-muted"></span>
-                            {{ __("Raid Groups") }}
-                        </a>
                         @if ($editRaidGroups)
                             <a class="dropdown-item" href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             <span class="fas fa-fw fa-plus text-muted"></span>
                                 {{ __("Create Raid Group") }}
                             </a>
                         @endif
+                        <a class="dropdown-item" href="{{ route('item.assignLoot.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                            <span class="fas fa-fw fa-history text-muted"></span>
+                            {{ __("Old Loot Assignments") }}
+                        </a>
                         @if (!$guild->is_attendance_hidden && $guild->raidGroups->count())
                             <div class="dropdown dropright">
                                 <a title="{{ __("Only show attendance for a specific raid group") }}" class="dropdown-item dropdown-toggle" href="javascript:void(0)" id="raidGroupAttendanceFilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
