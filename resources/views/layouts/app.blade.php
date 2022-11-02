@@ -602,7 +602,65 @@
                 "position": "bottom-right"
             }
         });
-
+        @for ($ads = 1; $ads <= 4; $ads++)
+            window['nitroAds'].createAd('inner-list-leaderboard-{{ $ads }}', {
+                "demo": {{ env('EXAMPLE_ADS', 'false') }},
+                "refreshLimit": 10,
+                "refreshTime": 60,
+                "renderVisibleOnly": false,
+                "refreshVisibleOnly": true,
+                "sizes": [
+                    [
+                        "728",
+                        "90"
+                    ]
+                ],
+                "report": {
+                    "enabled": true,
+                    "icon": true,
+                    "wording": "Report Ad",
+                    "position": "bottom-right"
+                }
+            });
+            window['nitroAds'].createAd('inner-list-large-leaderboard-{{ $ads }}', {
+                "demo": {{ env('EXAMPLE_ADS', 'false') }},
+                "refreshLimit": 10,
+                "refreshTime": 60,
+                "renderVisibleOnly": false,
+                "refreshVisibleOnly": true,
+                "sizes": [
+                    [
+                        "970",
+                        "90"
+                    ]
+                ],
+                "report": {
+                    "enabled": true,
+                    "icon": true,
+                    "wording": "Report Ad",
+                    "position": "bottom-right"
+                }
+            });
+            window['nitroAds'].createAd('inner-list-mobile-banner-{{ $ads }}', {
+                "demo": {{ env('EXAMPLE_ADS', 'false') }},
+                "refreshLimit": 10,
+                "refreshTime": 60,
+                "renderVisibleOnly": false,
+                "refreshVisibleOnly": true,
+                "sizes": [
+                    [
+                        "320",
+                        "50"
+                    ]
+                ],
+                "report": {
+                    "enabled": true,
+                    "icon": true,
+                    "wording": "Report Ad",
+                    "position": "bottom-right"
+                }
+            });
+        @endfor
     </script>
 
     @yield('scripts')

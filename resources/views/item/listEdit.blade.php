@@ -10,8 +10,7 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-12">
-
+        <div class="col-12 col-xl-10">
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium font-blizz">
@@ -63,13 +62,50 @@
                     <div class="col-12 mt-3 mb-3 bg-light rounded">
                         @php
                             $oldSourceName = null;
+                            $headerCount = 0;
                         @endphp
                         @foreach ($items as $item)
                             @if ($item->source_name != $oldSourceName)
+                                @php
+                                    $headerCount++;
+                                @endphp
+                                @if (!request()->get('hideAds'))
+                                    @if ($headerCount === 3)
+                                        <div class="row pb-3 pt-2">
+                                            <div class="col-12">
+                                                <div id="inner-list-leaderboard-1" class="d-xl-none d-lg-block d-none"></div>
+                                                <div id="inner-list-mobile-banner-1" class="d-lg-none d-block"></div>
+                                            </div>
+                                        </div>
+                                    @elseif ($headerCount === 6)
+                                        <div class="row pb-3 pt-2">
+                                            <div class="col-12">
+                                                <div id="inner-list-leaderboard-2" class="d-xl-none d-lg-block d-none"></div>
+                                                <div id="inner-list-mobile-banner-2" class="d-lg-none d-block"></div>
+                                            </div>
+                                        </div>
+                                    @elseif ($headerCount === 9)
+                                        <div class="row pb-3 pt-2">
+                                            <div class="col-12">
+                                                <div id="inner-list-leaderboard-3" class="d-xl-none d-lg-block d-none"></div>
+                                                <div id="inner-list-mobile-banner-3" class="d-lg-none d-block"></div>
+                                            </div>
+                                        </div>
+                                    @elseif ($headerCount === 12)
+                                        <div class="row pb-3 pt-2">
+                                            <div class="col-12">
+                                                <div id="inner-list-leaderboard-4" class="d-xl-none d-lg-block d-none"></div>
+                                                <div id="inner-list-mobile-banner-4" class="d-lg-none d-block"></div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @endif
                                 <div class="row pb-3 pt-4 rounded top-divider">
-                                    <h2 class="ml-3 font-weight-medium font-blizz" id="{{ slug($item->source_name) }}">
-                                        {{ $item->source_name }}
-                                    </h2>
+                                    <div class="col-12">
+                                        <h2 class="font-weight-medium font-blizz" id="{{ slug($item->source_name) }}">
+                                            {{ $item->source_name }}
+                                        </h2>
+                                    </div>
                                 </div>
                             @endif
 
@@ -249,6 +285,9 @@
                     <small>{{ __("WARNING: This form expires if you don't submit it within :hours hours (security reasons)", ['hours' =>  env('SESSION_LIFETIME') / 60]) }}</small>
                 </div>
             </form>
+        </div>
+        <div class="d-none col-xl-2 d-xl-block m-0 p-0">
+            @include('partials/adLeftBanner')
         </div>
     </div>
 </div>

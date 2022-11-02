@@ -4,7 +4,10 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-xl-8 offset-xl-2 col-md-10 offset-md-1 col-12">
+        <div class="col-lg-2 d-lg-block d-none m-0 p-0">
+            @include('partials/adLeftBanner')
+        </div>
+        <div class="col-xl-8 offset-lg-0 col-md-10 offset-md-1 col-12">
             <div class="row mb-3">
                 @if ($character)
                     <div class="col-12 pt-2 bg-lightest rounded">
@@ -224,6 +227,9 @@
                     <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
                 </div>
             </form>
+        </div>
+        <div class="col-xl-2 d-lg-block d-none m-0 p-0">
+            @include('partials/adRightBanner')
         </div>
     </div>
 </div>

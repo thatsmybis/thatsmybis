@@ -8,7 +8,7 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-12">
+        <div class="col-12 col-lg-10">
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <ul class="list-inline">
@@ -240,6 +240,9 @@
                     {{ $raids->appends(request()->input())->links() }}
                 </div>
             </div>
+        </div>
+        <div class="d-none col-lg-2 d-lg-block m-0 p-0">
+            @include('partials/adRightBanner')
         </div>
     </div>
 </div>

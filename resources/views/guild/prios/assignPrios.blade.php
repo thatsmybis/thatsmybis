@@ -13,8 +13,7 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-12">
-
+        <div class="col-12 col-xl-10">
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium font-blizz">
@@ -77,10 +76,43 @@
                         @endphp
                         @foreach ($items as $item)
                             @if ($item->source_name != $oldSourceName)
-                                <div class="js-pin-sortable row pb-3 pt-4 rounded top-divider" data-original-order="{{ $loop->index + $headerCount }}" data-user-order="">
-                                    <h2 class="ml-3 font-weight-medium font-blizz" id="{{ slug($item->source_name) }}">
-                                        {{ $item->source_name }}
-                                    </h2>
+                                <div class="js-pin-sortable pb-3 pt-4 rounded top-divider" data-original-order="{{ $loop->index + $headerCount }}" data-user-order="">
+                                    @if (!request()->get('hideAds'))
+                                        @if ($headerCount === 3)
+                                            <div class="pb-3 pt-2">
+                                                <div class="col-12">
+                                                    <div id="inner-list-leaderboard-1" class="d-xl-none d-lg-block d-none"></div>
+                                                    <div id="inner-list-mobile-banner-1" class="d-lg-none d-block"></div>
+                                                </div>
+                                            </div>
+                                        @elseif ($headerCount === 6)
+                                            <div class="pb-3 pt-2">
+                                                <div class="col-12">
+                                                    <div id="inner-list-leaderboard-2" class="d-xl-none d-lg-block d-none"></div>
+                                                    <div id="inner-list-mobile-banner-2" class="d-lg-none d-block"></div>
+                                                </div>
+                                            </div>
+                                        @elseif ($headerCount === 9)
+                                            <div class="pb-3 pt-2">
+                                                <div class="col-12">
+                                                    <div id="inner-list-leaderboard-3" class="d-xl-none d-lg-block d-none"></div>
+                                                    <div id="inner-list-mobile-banner-3" class="d-lg-none d-block"></div>
+                                                </div>
+                                            </div>
+                                        @elseif ($headerCount === 12)
+                                            <div class="pb-3 pt-2">
+                                                <div class="col-12">
+                                                    <div id="inner-list-leaderboard-4" class="d-xl-none d-lg-block d-none"></div>
+                                                    <div id="inner-list-mobile-banner-4" class="d-lg-none d-block"></div>
+                                                </div>
+                                            </div>
+                                        @endif
+                                    @endif
+                                    <div>
+                                        <h2 class="ml-3 font-weight-medium font-blizz" id="{{ slug($item->source_name) }}">
+                                            {{ $item->source_name }}
+                                        </h2>
+                                    </div>
                                 </div>
                                 @php
                                     $headerCount++;
@@ -104,6 +136,9 @@
                     </small>
                 </div>
             </form>
+        </div>
+        <div class="d-none col-xl-2 d-xl-block m-0 p-0">
+            @include('partials/adLeftBanner')
         </div>
     </div>
 </div>

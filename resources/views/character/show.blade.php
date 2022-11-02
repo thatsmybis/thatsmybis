@@ -7,7 +7,7 @@
         <div class="col-lg-2 d-lg-block d-none m-0 p-0">
             @include('partials/adLeftBanner')
         </div>
-        <div class="col-xl-8 offset-lg-0 col-md-10 offset-md-1 col-12">
+        <div class="col-xl-8 col-lg-10 col-12">
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
                     @include('character/partials/header', [
