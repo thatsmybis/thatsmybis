@@ -228,6 +228,25 @@
             </div>
         </div>
     @endif
+
+    @if (!request()->get('hideAds'))
+        <div id="{{ $rand }}" class="container-fluid mb-3 " style="display:none;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="ml-3 mr-3 p-3 bg-light rounded" style="max-width: 800px;">
+                        You appear to be using an ad blocker.
+                        <br>
+                        How will I ever afford a yacht if you continue to use an ad blocker?
+                        <br>
+                        Please consider supporting on <a href="https://www.patreon.com/lemmings19" target="_blank">Patreon</a> or disabling your ad blocker on this website, so I can maybe afford something expensive one day.
+                        <br>
+                        <span class="smaller text-muted">If you support on Patreon please link your Discord account!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
     @if (isset($guild) && $guild->message)
         <div class="container-fluid container-width-capped">
             <div class="row">
@@ -249,21 +268,6 @@
         <div class="d-poster-970 mb-4" id="top-large-leaderboard-poster"></div>
         <div class="d-poster-728 mb-4" id="top-leaderboard-poster"></div>
         <div class="d-poster-320 mb-4" id="top-mobile-banner-poster"></div>
-        <div id="{{ $rand }}" class="container-fluid mb-3 " style="display:none;">
-            <div class="row">
-                <div class="col-12">
-                    <div class="ml-3 mr-3 p-3 bg-light rounded" style="max-width: 800px;">
-                        You appear to be using an ad blocker.
-                        <br>
-                        How will I ever afford a yacht if you continue to use an ad blocker?
-                        <br>
-                        Please consider supporting on <a href="https://www.patreon.com/lemmings19" target="_blank">Patreon</a> or disabling your ad blocker on this website, so I can maybe afford something expensive one day.
-                        <br>
-                        <span class="smaller text-muted">If you support on Patreon please link your Discord account!</span>
-                    </div>
-                </div>
-            </div>
-        </div>
     @endif
 
     @yield('content')
