@@ -69,37 +69,6 @@
                                 @php
                                     $headerCount++;
                                 @endphp
-                                @if (!request()->get('hideAds'))
-                                    @if ($headerCount === 3)
-                                        <div class="row pb-3 pt-2">
-                                            <div class="col-12">
-                                                <div id="inner-list-leaderboard-1" class="d-xl-none d-lg-block d-none"></div>
-                                                <div id="inner-list-mobile-banner-1" class="d-lg-none d-block"></div>
-                                            </div>
-                                        </div>
-                                    @elseif ($headerCount === 6)
-                                        <div class="row pb-3 pt-2">
-                                            <div class="col-12">
-                                                <div id="inner-list-leaderboard-2" class="d-xl-none d-lg-block d-none"></div>
-                                                <div id="inner-list-mobile-banner-2" class="d-lg-none d-block"></div>
-                                            </div>
-                                        </div>
-                                    @elseif ($headerCount === 9)
-                                        <div class="row pb-3 pt-2">
-                                            <div class="col-12">
-                                                <div id="inner-list-leaderboard-3" class="d-xl-none d-lg-block d-none"></div>
-                                                <div id="inner-list-mobile-banner-3" class="d-lg-none d-block"></div>
-                                            </div>
-                                        </div>
-                                    @elseif ($headerCount === 12)
-                                        <div class="row pb-3 pt-2">
-                                            <div class="col-12">
-                                                <div id="inner-list-leaderboard-4" class="d-xl-none d-lg-block d-none"></div>
-                                                <div id="inner-list-mobile-banner-4" class="d-lg-none d-block"></div>
-                                            </div>
-                                        </div>
-                                    @endif
-                                @endif
                                 <div class="row pb-3 pt-4 rounded top-divider">
                                     <div class="col-12">
                                         <h2 class="font-weight-medium font-blizz" id="{{ slug($item->source_name) }}">
