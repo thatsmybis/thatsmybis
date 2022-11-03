@@ -98,6 +98,24 @@ class SeeUser
                 'isAdmin'        => $user->is_admin,
                 'isStreamerMode' => $user->is_streamer_mode
             ]);
+        } else {
+            $adFreePage = false;
+            if (in_array(Route::currentRouteName(), [
+                    'home',
+                    'faq',
+                    'privacy',
+                    'caliPrivacy',
+                    'terms',
+                    'donate',
+                    'login',
+                    'register',
+                ])
+            ) {
+                $adFreePage = true;
+            }
+            $request->attributes->add([
+                'hideAds' => ($adFreePage || env('DISABLE_ADS')),
+            ]);
         }
 
         return $next($request);
