@@ -13,7 +13,7 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-12 col-xl-10">
+        <div class="col-12 {{ request()->get('hideAds') ? '' : 'col-xl-10' }}">
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
                     <h1 class="font-weight-medium font-blizz">
@@ -106,9 +106,11 @@
                 </div>
             </form>
         </div>
-        <div class="d-none col-xl-2 d-xl-block m-0 p-0">
-            @include('partials/adLeftBanner')
-        </div>
+        @if (!request()->get('hideAds'))
+            <div class="d-none col-xl-2 d-xl-block m-0 p-0">
+                @include('partials/adRightBanner')
+            </div>
+        @endif
     </div>
 </div>
 @endsection

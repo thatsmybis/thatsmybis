@@ -1,3 +1,6 @@
+@php
+    $rand = mt_rand();
+@endphp
 <!DOCTYPE html>
 <html lang="{{ config('app.locale') }}" prefix="og: http://ogp.me/ns#">
 <head>
@@ -246,15 +249,26 @@
         <div class="d-poster-970 mb-4" id="top-large-leaderboard-poster"></div>
         <div class="d-poster-728 mb-4" id="top-leaderboard-poster"></div>
         <div class="d-poster-320 mb-4" id="top-mobile-banner-poster"></div>
-        <!-- If these are sticky ads, JS will load these even though thyey are commented out. -->
-        <!-- <div class="" id=""></div> -->
+        <div id="{{ $rand }}" class="container-fluid mb-3 " style="display:none;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="ml-3 mr-3 p-3 bg-light rounded" style="max-width: 800px;">
+                        You appear to be using an ad blocker.
+                        <br>
+                        How will I ever afford a yacht if you continue to use an ad blocker?
+                        <br>
+                        Please consider supporting on <a href="https://www.patreon.com/lemmings19" target="_blank">Patreon</a> or disabling your ad blocker on this website, so I can maybe afford something expensive one day.
+                        <br>
+                        <span class="smaller text-muted">If you support on Patreon please link your Discord account!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     @endif
 
     @yield('content')
 
     @if (!request()->get('hideAds'))
-        <!-- If these are sticky ads, JS will load these even though thyey are commented out. -->
-        <!-- <div class="" id=""></div> -->
         <div class="d-poster-970" id="bottom-large-billboard-poster"></div>
         <div class="d-poster-728" id="bottom-leaderboard-poster"></div>
         <div class="d-poster-320" id="bottom-mobile-banner-poster"></div>
@@ -601,6 +615,53 @@
                 "wording": "Report Ad",
                 "position": "bottom-right"
             }
+        });
+    </script>
+    <script type="text/javascript">
+        // Adblock detection
+        document.addEventListener('blockerEvent', (event) => {
+            // The user is blocking ads
+            $("#{{ $rand }}").slideDown(250);
+        });
+
+        function dispatchBlockerEvent() {
+            if (document.dispatchEvent && window.CustomEvent) {
+                document.dispatchEvent(new CustomEvent('blockerEvent'));
+            }
+        }
+
+        // Try to load a nitropay ad
+        var npDetect = new (function () {
+            this.blocking = false;
+            var errcnt = 0;
+            function testImg() {
+                var i = new Image();
+                i.onerror = () => {
+                    errcnt++;
+                    if (errcnt < 3) {
+                        setTimeout(testImg, 250);
+                    } else {
+                        npDetect.blocking = true;
+                        dispatchBlockerEvent();
+                    }
+                };
+                i.onload = () => {
+                    npDetect.blocking = false;
+                };
+
+                i.src = 'https://s.nitropay.com/1.gif?' + Math.random() + '&adslot=';
+            }
+            testImg();
+        })();
+
+        window.addEventListener("load", () => {
+            setTimeout(function() {
+                const ad = document.querySelector('ins.adsbygoogle');
+                if (!ad) {
+                    // Ads blocked
+                    dispatchBlockerEvent();
+                }
+            }, 3000);
         });
     </script>
 

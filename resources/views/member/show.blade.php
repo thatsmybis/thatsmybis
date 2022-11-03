@@ -4,10 +4,12 @@
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row">
-        <div class="col-lg-2 d-lg-block d-none m-0 p-0">
-            @include('partials/adLeftBanner')
-        </div>
-        <div class="col-xl-8 col-lg-10 col-12">
+        @if (!request()->get('hideAds'))
+            <div class="col-lg-2 d-lg-block d-none m-0 p-0">
+                @include('partials/adLeftBanner')
+            </div>
+        @endif
+        <div class="col-12 {{ request()->get('hideAds') ? 'col-xl-8 offset-xl-2 col-lg-10 offset-lg-1' : 'col-xl-8 col-lg-10 offset-lg-0' }}">
             <div class="row mb-3">
                 <div class="col-12 pt-2 bg-lightest rounded">
                     @php
@@ -257,9 +259,11 @@
                 </div>
             @endif
         </div>
-        <div class="col-xl-2 d-xl-block d-none m-0 p-0">
-            @include('partials/adRightBanner')
-        </div>
+        @if (!request()->get('hideAds'))
+            <div class="col-xl-2 d-lg-block d-none m-0 p-0">
+                @include('partials/adRightBanner')
+            </div>
+        @endif
     </div>
 </div>
 @endsection
