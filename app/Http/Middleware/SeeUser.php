@@ -94,7 +94,7 @@ class SeeUser
             $request->attributes->add([
                 'bustCache'      => $bustCache,
                 'currentUser'    => $user,
-                'hideAds'        => ($adFreePage || ($user->ads_disabled_at ? true : false)),
+                'hideAds'        => ($adFreePage || ($user->ads_disabled_at ? true : false) || env('DISABLE_ADS')),
                 'isAdmin'        => $user->is_admin,
                 'isStreamerMode' => $user->is_streamer_mode
             ]);
