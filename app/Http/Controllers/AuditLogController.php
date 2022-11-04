@@ -47,7 +47,7 @@ class AuditLogController extends Controller
         $resources = [];
 
         $showPrios = false;
-        if (!$guild->is_prio_private || $currentMember->hasPermission('view.prios')) {
+        if ((!$guild->is_prio_private && !$guild->prio_show_count) || $currentMember->hasPermission('view.prios')) {
             $showPrios = true;
         }
 

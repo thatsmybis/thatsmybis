@@ -581,7 +581,7 @@
                                 <label for="prio_show_count" class="">
                                     {{ __("Prio ranks to show") }}
                                     <span class="text-muted small">
-                                        {{ __("eg. only show top 3 prios to raiders") }}
+                                        {{ __("eg. only show top 3 prios to raiders") }} {{ __("(hides prios from raiders in audit log)") }}
                                     </span>
                                 </label>
                                 <input name="prio_show_count" min="1" max="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" type="number" class="form-control dark" placeholder="{{ App\Http\Controllers\PrioController::MAX_PRIOS }}" value="{{ old('prio_show_count') ? old('prio_show_count') : $guild->prio_show_count }}" />
