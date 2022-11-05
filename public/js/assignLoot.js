@@ -508,7 +508,9 @@ function loadItemToForm(item, i) {
     if ((item['offspec'] && item['offspec'] == 1)) {
         offspec = 1;
     } else if (item['offspec'] == undefined || (item['offspec'] !== 0 && item['offspec'].toLowerCase() !== 'false' && item['offspec'].toLowerCase() !== 'no')) {
-        if (item['note'] && (offspecFlags.includes(item['note'].toLowerCase()) || (publicNote && publicNote.toLowerCase().includes('offspec')) || (officerNote && officerNote.toLowerCase().includes('offspec')))) {
+        if ((publicNote && publicNote.toLowerCase().includes('offspec')) || (officerNote && officerNote.toLowerCase().includes('offspec'))) {
+            offspec = 1;
+        } else if (item['note'] && offspecFlags.includes(item['note'].toLowerCase())) {
             offspec = 1;
         } else if (item['response'] && offspecFlags.includes(item['response'].toLowerCase())) {
             offspec = 1;
