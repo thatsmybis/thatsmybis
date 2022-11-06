@@ -606,7 +606,7 @@
                         </a>
                         <a class="dropdown-item" href="{{ route('guild.rosterStats', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             <span class="fas fa-fw fa-user-chart text-muted"></span>
-                            {{ __("Stats") }}
+                            {{ __("Item Distribution") }}
                         </a>
                         <a class="dropdown-item" href="{{ route('guild.rosterBreakdown', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             <span class="fas fa-fw fa-users-class text-muted"></span>

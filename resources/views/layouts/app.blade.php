@@ -238,7 +238,7 @@
                         <br>
                         How will I ever afford a yacht if you continue to use an ad blocker?
                         <br>
-                        Please consider supporting on <a href="https://www.patreon.com/lemmings19" target="_blank">Patreon</a> or disabling your ad blocker on this website, so I can maybe afford something expensive one day.
+                        Please consider supporting on <a href="https://www.patreon.com/lemmings19" target="_blank">Patreon</a> or disabling your ad blocker on this website. &lt;3
                         <br>
                         <span class="smaller text-muted">If you support on Patreon please link your Discord account!</span>
                     </div>

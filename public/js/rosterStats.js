@@ -57,11 +57,6 @@ var colInstance22    = 49;
 var colInstance23    = 50;
 var colInstance24    = 51;
 var colInstance25    = 52;
-var colInstance26    = 53;
-var colInstance27    = 54;
-var colInstance28    = 55;
-var colInstance29    = 56;
-var colInstance30    = 57;
 
 var allItemsVisible = false;
 var offspecVisible = true;
@@ -449,31 +444,33 @@ function createRosterStatsTable() {
             createInstanceColumn("Other",        null, isVisible)
         );
     } else if (guild && guild.expansion_id === 3) { // WoTLK
-        createInstanceColumn("Naxx N10", 19, isVisible),
-        createInstanceColumn("Naxx N25", 20, isVisible),
-        createInstanceColumn("EoE N10",  21, isVisible),
-        createInstanceColumn("EoE N25",  22, isVisible),
-        createInstanceColumn("OS N10",   23, isVisible),
-        createInstanceColumn("OS N25",   24, isVisible),
-        createInstanceColumn("Arch N10", 25, isVisible),
-        createInstanceColumn("Arch N25", 26, isVisible),
-        createInstanceColumn("Uld N10",  27, isVisible),
-        createInstanceColumn("Uld N25",  28, isVisible),
-        createInstanceColumn("TotC N10", 29, isVisible),
-        createInstanceColumn("TotC N25", 30, isVisible),
-        createInstanceColumn("TotC H10", 31, isVisible),
-        createInstanceColumn("TotC H25", 32, isVisible),
-        createInstanceColumn("Ony N10",  33, isVisible),
-        createInstanceColumn("Ony N25",  34, isVisible),
-        createInstanceColumn("ICC N10",  35, isVisible),
-        createInstanceColumn("ICC N25",  36, isVisible),
-        createInstanceColumn("ICC H10",  37, isVisible),
-        createInstanceColumn("ICC H25",  38, isVisible),
-        createInstanceColumn("RS N10",   39, isVisible),
-        createInstanceColumn("RS N25",   40, isVisible),
-        createInstanceColumn("RS H10",   41, isVisible),
-        createInstanceColumn("RS H25",   42, isVisible),
-        createInstanceColumn("Other",    null, isVisible)
+        rosterStatsTableColumns.push(
+            createInstanceColumn("Naxx N10", 19, isVisible),
+            createInstanceColumn("Naxx N25", 20, isVisible),
+            createInstanceColumn("EoE N10",  21, isVisible),
+            createInstanceColumn("EoE N25",  22, isVisible),
+            createInstanceColumn("OS N10",   23, isVisible),
+            createInstanceColumn("OS N25",   24, isVisible),
+            createInstanceColumn("Arch N10", 25, isVisible),
+            createInstanceColumn("Arch N25", 26, isVisible),
+            createInstanceColumn("Uld N10",  27, isVisible),
+            createInstanceColumn("Uld N25",  28, isVisible),
+            createInstanceColumn("TotC N10", 29, isVisible),
+            createInstanceColumn("TotC N25", 30, isVisible),
+            createInstanceColumn("TotC H10", 31, isVisible),
+            createInstanceColumn("TotC H25", 32, isVisible),
+            createInstanceColumn("Ony N10",  33, isVisible),
+            createInstanceColumn("Ony N25",  34, isVisible),
+            createInstanceColumn("ICC N10",  35, isVisible),
+            createInstanceColumn("ICC N25",  36, isVisible),
+            createInstanceColumn("ICC H10",  37, isVisible),
+            createInstanceColumn("ICC H25",  38, isVisible),
+            createInstanceColumn("RS N10",   39, isVisible),
+            createInstanceColumn("RS N25",   40, isVisible),
+            createInstanceColumn("RS H10",   41, isVisible),
+            createInstanceColumn("RS H25",   42, isVisible),
+            createInstanceColumn("Other",    null, isVisible)
+        );
     }
 
     rosterStatsTable = $("#characterStatsTable").DataTable({
@@ -915,7 +912,34 @@ function toggleInstanceCols(isVisible) {
                 colInstance11,
             ]).visible(isVisible);
     } else if (guild.expansion_id === 3) { // WoTLK
-        // TODO closer to WoTLK release
+        table.columns([
+                colInstanceTotal,
+                colInstance1,
+                colInstance2,
+                colInstance3,
+                colInstance4,
+                colInstance5,
+                colInstance6,
+                colInstance7,
+                colInstance8,
+                colInstance9,
+                colInstance10,
+                colInstance11,
+                colInstance12,
+                colInstance13,
+                colInstance14,
+                colInstance15,
+                colInstance16,
+                colInstance17,
+                colInstance18,
+                colInstance19,
+                colInstance20,
+                colInstance21,
+                colInstance22,
+                colInstance23,
+                colInstance24,
+                colInstance25,
+            ]).visible(isVisible);
     }
 }
 

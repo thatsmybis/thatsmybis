@@ -78,7 +78,7 @@
             <label for="instance_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-sack"></span>
                 {{ __("Item Filter") }}
-                <abbr title="{{ __(' currently only works when you have loot revealed (click "Show all loot")') }}">?</abbr>
+                <abbr class="small text-muted" title="{{ __(' currently only works when you have loot revealed (click "Show all loot")') }}">(WIP)</abbr>
             </label>
             <select id="instance_filter"
                 multiple
