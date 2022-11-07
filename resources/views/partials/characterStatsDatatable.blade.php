@@ -77,7 +77,7 @@
         <li id="instance_filter_container" class="list-inline-item">
             <label for="instance_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-sack"></span>
-                {{ __("Item Filter") }}
+                {{ __("Dungeon Filter") }}
                 <abbr class="small text-muted" title="{{ __(' currently only works when you have loot revealed (click "Show all loot")') }}">{{ __("WIP") }}</abbr>
             </label>
             <select id="instance_filter"
