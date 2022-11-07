@@ -82,14 +82,17 @@ $(document).ready( function () {
         $(".js-show-prio-cols").addClass("disabled");
         $(".js-received-items").hide();
         $(".js-wishlist-items").hide();
+        $("#instance_filter_container").hide();
     } else if (view == VIEW_RECEIVED) {
         $(".js-show-received-cols").addClass("disabled");
         $(".js-prio-items").hide();
         $(".js-wishlist-items").hide();
+        $("#instance_filter_container").hide();
     } else if (view == VIEW_WISHLIST) {
         $(".js-show-wishlist-cols").addClass("disabled");
         $(".js-prio-items").hide();
         $(".js-received-items").hide();
+        $("#instance_filter_container").hide();
     }
 
     $(".js-toggle-column").click(function(e) {
@@ -109,6 +112,8 @@ $(document).ready( function () {
         toggleInstanceCols(true);
         toggleSlotCols(false);
 
+        $("#instance_filter_container").hide();
+
         $(".js-prio-items").show();
         $(".js-received-items").hide();
         $(".js-wishlist-items").hide();
@@ -125,6 +130,8 @@ $(document).ready( function () {
         toggleInstanceCols(true);
         toggleSlotCols(false);
 
+        $("#instance_filter_container").hide();
+
         $(".js-prio-items").hide();
         $(".js-received-items").show();
         $(".js-wishlist-items").hide();
@@ -137,6 +144,8 @@ $(document).ready( function () {
 
         $(".js-toggle-column-set").removeClass("disabled");
         $(this).addClass('disabled');
+
+        $("#instance_filter_container").show();
 
         toggleInstanceCols(false);
         toggleSlotCols(true);
@@ -152,6 +161,8 @@ $(document).ready( function () {
 
         toggleInstanceCols(true);
         toggleSlotCols(false);
+
+        $("#instance_filter_container").hide();
 
         $(".js-prio-items").hide();
         $(".js-received-items").hide();
