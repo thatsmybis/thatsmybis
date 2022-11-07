@@ -1058,6 +1058,14 @@ div.dataTables_filter input {
     width: 400px;
 }
 
+/* optional borders for columns */
+.dataTable.col-borders td {
+    border-left: 1px solid #242344;
+}
+.dataTable.th-bottom-border th {
+    border-bottom: 1px solid #242344;
+}
+
 /* END DATATABLES OVERRIDE */
 
 /* Bootstrap-Slider override */

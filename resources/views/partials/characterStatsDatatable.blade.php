@@ -253,6 +253,6 @@
 </div>
 
 <div class="col-12 pb-3 pr-2 pl-2 rounded">
-    <table id="characterStatsTable" class="table table-border table-hover stripe">
+    <table id="characterStatsTable" class="table table-border table-hover stripe col-borders th-bottom-border">
     </table>
 </div>
