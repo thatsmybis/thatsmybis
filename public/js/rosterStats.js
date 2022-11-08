@@ -79,26 +79,6 @@ $(document).ready( function () {
 
     initializeTable();
 
-    // On first load, set the button for the current view to disabled
-    if (view == VIEW_SLOTS) {
-        $(".js-show-slot-cols").addClass("disabled");
-    } else if (view == VIEW_PRIOS) {
-        $(".js-show-prio-cols").addClass("disabled");
-        $(".js-received-items").hide();
-        $(".js-wishlist-items").hide();
-        $("#loot_type_container").hide();
-    } else if (view == VIEW_RECEIVED) {
-        $(".js-show-received-cols").addClass("disabled");
-        $(".js-prio-items").hide();
-        $(".js-wishlist-items").hide();
-        $("#loot_type_container").hide();
-    } else if (view == VIEW_WISHLIST) {
-        $(".js-show-wishlist-cols").addClass("disabled");
-        $(".js-prio-items").hide();
-        $(".js-received-items").hide();
-        $("#loot_type_container").hide();
-    }
-
     $(".js-toggle-column").click(function(e) {
         e.preventDefault();
         let column = table.column($(this).attr("data-column"));
@@ -234,6 +214,29 @@ function initializeTable() {
     }
 
     table = createRosterStatsTable();
+
+    showOrHideSomeStuffBasedOnView();
+}
+
+function showOrHideSomeStuffBasedOnView() {
+    if (view == VIEW_SLOTS) {
+        $(".js-show-slot-cols").addClass("disabled");
+    } else if (view == VIEW_PRIOS) {
+        $(".js-show-prio-cols").addClass("disabled");
+        $(".js-received-items").hide();
+        $(".js-wishlist-items").hide();
+        $("#loot_type_container").hide();
+    } else if (view == VIEW_RECEIVED) {
+        $(".js-show-received-cols").addClass("disabled");
+        $(".js-prio-items").hide();
+        $(".js-wishlist-items").hide();
+        $("#loot_type_container").hide();
+    } else if (view == VIEW_WISHLIST) {
+        $(".js-show-wishlist-cols").addClass("disabled");
+        $(".js-prio-items").hide();
+        $(".js-received-items").hide();
+        $("#loot_type_container").hide();
+    }
 }
 
 function createRosterStatsTable() {
@@ -418,23 +421,23 @@ function createRosterStatsTable() {
 
     // Add the columns for each item slot
     rosterStatsTableColumns.push(
-        createItemSlotColumn("Total",         null, isVisible),
-        createItemSlotColumn("Head",          [SLOT_HEAD], isVisible),
-        createItemSlotColumn("Neck",          [SLOT_NECK], isVisible),
-        createItemSlotColumn("Shoulders",     [SLOT_SHOULDERS], isVisible),
-        createItemSlotColumn("Back",          [SLOT_BACK], isVisible),
+        createItemSlotColumn("Total",         null,                         isVisible),
+        createItemSlotColumn("Head",          [SLOT_HEAD],                  isVisible),
+        createItemSlotColumn("Neck",          [SLOT_NECK],                  isVisible),
+        createItemSlotColumn("Shoulders",     [SLOT_SHOULDERS],             isVisible),
+        createItemSlotColumn("Back",          [SLOT_BACK],                  isVisible),
         createItemSlotColumn("Chest",         [SLOT_CHEST_1, SLOT_CHEST_2], isVisible),
-        createItemSlotColumn("Wrist",         [SLOT_WRIST], isVisible),
-        createItemSlotColumn("Waist",         [SLOT_WAIST], isVisible),
-        createItemSlotColumn("Hands",         [SLOT_HANDS], isVisible),
-        createItemSlotColumn("Legs",          [SLOT_LEGS], isVisible),
-        createItemSlotColumn("Feet",          [SLOT_FEET], isVisible),
-        createItemSlotColumn("Finger",        [SLOT_FINGER], isVisible),
-        createItemSlotColumn("Trinket",       [SLOT_TRINKET], isVisible),
+        createItemSlotColumn("Wrist",         [SLOT_WRIST],                 isVisible),
+        createItemSlotColumn("Waist",         [SLOT_WAIST],                 isVisible),
+        createItemSlotColumn("Hands",         [SLOT_HANDS],                 isVisible),
+        createItemSlotColumn("Legs",          [SLOT_LEGS],                  isVisible),
+        createItemSlotColumn("Feet",          [SLOT_FEET],                  isVisible),
+        createItemSlotColumn("Finger",        [SLOT_FINGER],                isVisible),
+        createItemSlotColumn("Trinket",       [SLOT_TRINKET],               isVisible),
         createItemSlotColumn("Weapon",        [SLOT_WEAPON_MAIN_HAND, SLOT_WEAPON_TWO_HAND, SLOT_WEAPON_ONE_HAND, SLOT_WEAPON_OFF_HAND], isVisible),
-        createItemSlotColumn("Offhand",       [SLOT_SHIELD, SLOT_OFFHAND], isVisible),
+        createItemSlotColumn("Offhand",       [SLOT_SHIELD, SLOT_OFFHAND],                             isVisible),
         createItemSlotColumn("Ranged /Relic", [SLOT_RANGED_1, SLOT_RANGED_2, SLOT_THROWN, SLOT_RELIC], isVisible),
-        createItemSlotColumn("Misc",          [SLOT_MISC, SLOT_SHIRT, SLOT_BAG, SLOT_AMMO], isVisible)
+        createItemSlotColumn("Misc",          [SLOT_MISC, SLOT_SHIRT, SLOT_BAG, SLOT_AMMO],            isVisible)
     );
 
     if ([VIEW_PRIOS, VIEW_RECEIVED, VIEW_WISHLIST].includes(view)) {
@@ -456,7 +459,7 @@ function createRosterStatsTable() {
         rosterStatsTableColumns.push(createInstanceColumn("AQ40",         6, (isVisible && (instanceIdsToShow.includes(6) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("Naxx",         7, (isVisible && (instanceIdsToShow.includes(7) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("World Bosses", 8, (isVisible && (instanceIdsToShow.includes(8) || instanceIdsToShow.length === 0))));
-        rosterStatsTableColumns.push(createInstanceColumn("Other", null, isVisible));
+        rosterStatsTableColumns.push(createInstanceColumn("Other", null, (instanceIdsToShow.length === 0)));
     } else if (guild && guild.expansion_id === 2) { // TBC
         rosterStatsTableColumns.push(createInstanceColumn("Kara",         9,  (isVisible && (instanceIdsToShow.includes(9) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("Gruul",        10, (isVisible && (instanceIdsToShow.includes(10) || instanceIdsToShow.length === 0))));
@@ -468,7 +471,7 @@ function createRosterStatsTable() {
         rosterStatsTableColumns.push(createInstanceColumn("ZA",           16, (isVisible && (instanceIdsToShow.includes(16) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("Sunwell",      17, (isVisible && (instanceIdsToShow.includes(17) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("World Bosses", 18, (isVisible && (instanceIdsToShow.includes(18) || instanceIdsToShow.length === 0))));
-        rosterStatsTableColumns.push(createInstanceColumn("Other", null, isVisible));
+        rosterStatsTableColumns.push(createInstanceColumn("Other", null, (instanceIdsToShow.length === 0)));
     } else if (guild && guild.expansion_id === 3) { // WoTLK
         rosterStatsTableColumns.push(createInstanceColumn("Naxx N10", 19, (isVisible && (instanceIdsToShow.includes(19) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("Naxx N25", 20, (isVisible && (instanceIdsToShow.includes(20) || instanceIdsToShow.length === 0))));
@@ -494,7 +497,7 @@ function createRosterStatsTable() {
         rosterStatsTableColumns.push(createInstanceColumn("RS N25",   40, (isVisible && (instanceIdsToShow.includes(40) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("RS H10",   41, (isVisible && (instanceIdsToShow.includes(41) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("RS H25",   42, (isVisible && (instanceIdsToShow.includes(42) || instanceIdsToShow.length === 0))));
-        rosterStatsTableColumns.push(createInstanceColumn("Other", null, isVisible));
+        rosterStatsTableColumns.push(createInstanceColumn("Other", null, (instanceIdsToShow.length === 0)));
     }
 
     rosterStatsTable = $("#characterStatsTable").DataTable({
@@ -700,8 +703,26 @@ function createInstanceTotalsColumn(isVisible) {
         render : {
             _: function (data, type, row) {
                 let html = '';
+
+                // Clone arrays, or make empty ones. slice() is used to clone rather than copy by reference.
+                let prioItems = row.prios ? row.prios.slice() : [];
+                let receivedItems = row.received ? row.received.slice() : [];
+                let wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number) : [];
+
+                // Filter out items not belonging in the selected instance(s)
+                if (instanceIdsToShow.length > 0) {
+                    if (prioItems.length > 0) {
+                        prioItems = prioItems.filter(item => instanceIdsToShow.includes(item.instance_id));
+                    }
+                    if (receivedItems.length > 0) {
+                        receivedItems = receivedItems.filter(item => instanceIdsToShow.includes(item.instance_id));
+                    }
+                    if (wishlistItems.length > 0) {
+                        wishlistItems = wishlistItems.filter(item => instanceIdsToShow.includes(item.instance_id));
+                    }
+                }
+
                 // Prios
-                const prioItems = row.prios ? row.prios : [];
                 const prioOffspecCount = prioItems.filter(item => item.is_offspec).length;
                 if (prioItems && prioItems.length) {
                     html += `<div class="js-prio-items">
@@ -716,7 +737,6 @@ function createInstanceTotalsColumn(isVisible) {
                 }
 
                 // Received
-                const receivedItems = row.received ? row.received : [];
                 const receivedOffspecCount = receivedItems.filter(item => item.is_offspec).length;
                 if (receivedItems && receivedItems.length) {
                     html += `<div class="js-received-items">
@@ -731,7 +751,6 @@ function createInstanceTotalsColumn(isVisible) {
                 }
 
                 // Wishlist (current only)
-                const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number) : [];
                 const wishlistOffspecCount = wishlistItems.filter(item => item.is_offspec).length;
                 if (wishlistItems && wishlistItems.length) {
                     html += `<div class="js-wishlist-items">
@@ -943,31 +962,31 @@ function toggleInstanceCols(isVisible) {
         table.columns(columnsToToggle).visible(isVisible);
     } else if (guild.expansion_id === 3) { // WoTLK
         const columnsToToggle = [colInstanceTotal];
-        if (instanceIdsToShow.includes(colInstance1) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance1);
-        if (instanceIdsToShow.includes(colInstance2) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance2);
-        if (instanceIdsToShow.includes(colInstance3) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance3);
-        if (instanceIdsToShow.includes(colInstance4) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance4);
-        if (instanceIdsToShow.includes(colInstance5) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance5);
-        if (instanceIdsToShow.includes(colInstance6) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance6);
-        if (instanceIdsToShow.includes(colInstance7) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance7);
-        if (instanceIdsToShow.includes(colInstance8) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance8);
-        if (instanceIdsToShow.includes(colInstance9) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance9);
-        if (instanceIdsToShow.includes(colInstance10) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance10);
-        if (instanceIdsToShow.includes(colInstance11) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance11);
-        if (instanceIdsToShow.includes(colInstance12) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance12);
-        if (instanceIdsToShow.includes(colInstance13) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance13);
-        if (instanceIdsToShow.includes(colInstance14) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance14);
-        if (instanceIdsToShow.includes(colInstance15) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance15);
-        if (instanceIdsToShow.includes(colInstance16) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance16);
-        if (instanceIdsToShow.includes(colInstance17) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance17);
-        if (instanceIdsToShow.includes(colInstance18) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance18);
-        if (instanceIdsToShow.includes(colInstance19) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance19);
-        if (instanceIdsToShow.includes(colInstance20) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance20);
-        if (instanceIdsToShow.includes(colInstance21) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance21);
-        if (instanceIdsToShow.includes(colInstance22) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance22);
-        if (instanceIdsToShow.includes(colInstance23) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance23);
-        if (instanceIdsToShow.includes(colInstance24) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance24);
-        if (instanceIdsToShow.includes(colInstance25) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance25);
+
+        if (instanceIdsToShow.includes(19) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance1);
+        if (instanceIdsToShow.includes(20) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance2);
+        if (instanceIdsToShow.includes(21) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance3);
+        if (instanceIdsToShow.includes(22) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance4);
+        if (instanceIdsToShow.includes(23) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance5);
+        if (instanceIdsToShow.includes(24) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance6);
+        if (instanceIdsToShow.includes(25) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance7);
+        if (instanceIdsToShow.includes(26) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance8);
+        if (instanceIdsToShow.includes(27) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance9);
+        if (instanceIdsToShow.includes(28) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance10);
+        if (instanceIdsToShow.includes(29) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance11);
+        if (instanceIdsToShow.includes(30) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance12);
+        if (instanceIdsToShow.includes(31) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance13);
+        if (instanceIdsToShow.includes(32) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance14);
+        if (instanceIdsToShow.includes(33) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance15);
+        if (instanceIdsToShow.includes(34) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance16);
+        if (instanceIdsToShow.includes(35) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance17);
+        if (instanceIdsToShow.includes(36) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance18);
+        if (instanceIdsToShow.includes(37) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance19);
+        if (instanceIdsToShow.includes(38) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance20);
+        if (instanceIdsToShow.includes(39) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance21);
+        if (instanceIdsToShow.includes(40) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance22);
+        if (instanceIdsToShow.includes(41) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance23);
+        if (instanceIdsToShow.includes(42) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance24);
 
         table.columns(columnsToToggle).visible(isVisible);
     }
