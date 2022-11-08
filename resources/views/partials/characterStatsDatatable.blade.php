@@ -74,14 +74,15 @@
                 @endforeach
             </select>
         </li>
-        <li id="instance_filter_container" class="list-inline-item">
+        <li class="list-inline-item">
             <label for="instance_filter" class="font-weight-light">
-                <span class="text-muted fas fa-fw fa-sack"></span>
+                <span class="text-muted fas fa-fw fa-dungeon"></span>
                 {{ __("Dungeon Filter") }}
                 <abbr class="small text-muted" title="{{ __(' currently only works when you have loot revealed (click "Show all loot")') }}">{{ __("WIP") }}</abbr>
             </label>
             <select id="instance_filter"
                 multiple
+                autocomplete="off"
                 class="form-control dark selectpicker"
                 data-actions-box="true"
                 data-none-selected-text="—"
@@ -217,6 +218,23 @@
                         {{ __("Ruby Sanctum H25") }}
                     </option>
                 @endif
+            </select>
+        </li>
+        <li id="loot_type_container" class="list-inline-item">
+            <label for="loot_type" class="font-weight-light">
+                <span class="text-muted fas fa-fw fa-sack"></span>
+                {{ __("Loot Type") }}
+            </label>
+            <select id="loot_type" class="form-control dark selectpicker" autocomplete="off">
+                <option value="received">
+                    {{ __("Received") }}
+                </option>
+                <option value="prios">
+                    {{ __("Prios") }}
+                </option>
+                <option value="wishlist">
+                    {{ __("Wishlist") }}
+                </option>
             </select>
         </li>
     </ul>

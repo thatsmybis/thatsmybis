@@ -240,7 +240,7 @@
                         <br>
                         Please consider supporting on <a href="https://www.patreon.com/lemmings19" target="_blank">Patreon</a> or disabling your ad blocker on this website. &lt;3
                         <br>
-                        <span class="smaller text-muted">If you support on Patreon please link your Discord account!</span>
+                        <span class="smaller text-muted">If you support on Patreon please link your Discord account or message me!</span>
                     </div>
                 </div>
             </div>
