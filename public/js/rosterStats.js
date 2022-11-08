@@ -154,8 +154,12 @@ $(document).ready( function () {
     $(".js-hide-strikethrough-items").click(function() {
         if (strikethroughVisible) {
             strikethroughVisible = false;
+            $("#hide_received_label").hide();
+            $("#show_received_label").show();
         } else {
             strikethroughVisible = true;
+            $("#hide_received_label").show();
+            $("#show_received_label").hide();
         }
         initializeTable();
     });
@@ -170,8 +174,12 @@ $(document).ready( function () {
     $(".js-hide-offspec-items").click(function() {
         if (offspecVisible) {
             offspecVisible = false;
+            $("#hide_os_label").hide();
+            $("#show_os_label").show();
         } else {
             offspecVisible = true;
+            $("#hide_os_label").show();
+            $("#show_os_label").hide();
         }
         initializeTable();
     });
@@ -180,9 +188,13 @@ $(document).ready( function () {
         if (allItemsVisible) {
             $(".js-item-list").hide();
             allItemsVisible = false;
+            $("#hide_items_label").hide();
+            $("#show_items_label").show();
         } else {
             $(".js-item-list").show();
             allItemsVisible = true;
+            $("#hide_items_label").show();
+            $("#show_items_label").hide();
         }
     });
 
@@ -618,9 +630,9 @@ function createInstanceColumn(name, instanceId, isVisible) {
             _: function (data, type, row) {
                 let html = '';
 
-                const prioItems = row.prios ? row.prios.filter(item => item.instance_id === instanceId) : [];
-                const receivedItems = row.received ? row.received.filter(item => item.instance_id === instanceId) : [];
-                const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number)) : [];
+                let prioItems = row.prios ? row.prios.filter(item => item.instance_id === instanceId) : [];
+                let receivedItems = row.received ? row.received.filter(item => item.instance_id === instanceId) : [];
+                let wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number)) : [];
                 if (!offspecVisible) {
                     prioItems = prioItems.filter(item => item.pivot.is_offspec != 1);
                     receivedItems = receivedItems.filter(item => item.pivot.is_offspec != 1);
@@ -850,12 +862,10 @@ function createItemSlotColumn(name, slots) {
         },
         render : {
             _: function (data, type, row) {
-                const filteredItems = (slots ? data.filter(item => slots.includes(item.inventory_type)) : data);
-
+                let filteredItems = (slots ? data.filter(item => slots.includes(item.inventory_type)) : data);
                 if (!offspecVisible) {
                     filteredItems = filteredItems.filter(item => item.pivot.is_offspec != 1);
                 }
-
                 if (!strikethroughVisible) {
                     filteredItems = filteredItems.filter(item => item.pivot.is_received != 1);
                 }
@@ -876,7 +886,7 @@ function createItemSlotColumn(name, slots) {
                 }
             },
             sort: function (data, type, row) {
-                const filteredItems = (slots ? data.filter(item => slots.includes(item.inventory_type)) : data);
+                let filteredItems = (slots ? data.filter(item => slots.includes(item.inventory_type)) : data);
                 if (!offspecVisible) {
                     filteredItems = filteredItems.filter(item => item.pivot.is_offspec != 1);
                 }

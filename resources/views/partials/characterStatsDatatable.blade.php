@@ -248,7 +248,7 @@
         <li class="list-inline-item">
             <span class="js-hide-strikethrough-items text-link text-unselectable cursor-pointer font-weight-light">
                 <span class="text-muted fal fa-fw fa-strikethrough"></span>
-                <span id="hide_received_label">{{ __("Hide") }} <span class="font-strikethrough">{{ __("received") }}</span></span>
+                <span id="hide_received_label">{{ __("Hide received") }}</span>
                 <span id="show_received_label" style="display:none;">{{ __("Show received") }}</span>
             </span>
         </li>
