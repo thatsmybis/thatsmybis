@@ -753,6 +753,7 @@ class ExportController extends Controller {
                 LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
             WHERE {$lootTypeFragment}
                 c.guild_id = {$guild->id}
+                AND c.inactive_at IS NULL
                 AND i.expansion_id = {$guild->expansion_id}
                 AND (ci.type != 'wishlist' OR (ci.type = 'wishlist' AND ci.list_number = {$guild->current_wishlist_number}))
             ORDER BY ci.type, rg.name, c.name, ci.`order`;";
