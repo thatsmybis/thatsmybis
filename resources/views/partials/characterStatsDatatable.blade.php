@@ -78,7 +78,6 @@
             <label for="instance_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-dungeon"></span>
                 {{ __("Dungeon Filter") }}
-                <abbr class="small text-muted" title="{{ __(' currently only works when you have loot revealed (click "Show all loot")') }}">{{ __("WIP") }}</abbr>
             </label>
             <select id="instance_filter"
                 multiple
@@ -249,22 +248,24 @@
         <li class="list-inline-item">
             <span class="js-hide-strikethrough-items text-link text-unselectable cursor-pointer font-weight-light">
                 <span class="text-muted fal fa-fw fa-strikethrough"></span>
-                {{ __("Hide") }}
-                <span class="font-strikethrough">{{ __("received") }}</span>
+                <span id="hide_received_label">{{ __("Hide") }} <span class="font-strikethrough">{{ __("received") }}</span></span>
+                <span id="show_received_label" style="display:none;">{{ __("Show received") }}</span>
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="js-hide-offspec-items text-link text-unselectable cursor-pointer font-weight-light">
                 <span class="text-muted fal fa-fw fa-trash"></span>
-                {{ __("Hide OS") }}
+                <span id="hide_os_label">{{ __("Hide OS") }}</span>
+                <span id="show_os_label" style="display:none;">{{ __("Show OS") }}</span>
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="js-show-all-items text-link text-unselectable cursor-pointer font-weight-light">
                 <span class="text-muted fal fa-fw fa-eye"></span>
-                {{ __("Show all loot") }}
+                <span id="show_items_label">{{ __("Show items") }}</span>
+                <span id="hide_items_label" style="display:none;">{{ __("Hide items") }}</span>
             </span>
         </li>
     </ul>

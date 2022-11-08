@@ -154,11 +154,10 @@ $(document).ready( function () {
     $(".js-hide-strikethrough-items").click(function() {
         if (strikethroughVisible) {
             strikethroughVisible = false;
-            hideStrikethroughItems();
         } else {
             strikethroughVisible = true;
-            showStrikethroughItems();
         }
+        initializeTable();
     });
 
     // Triggered when a column is made visible
@@ -171,11 +170,10 @@ $(document).ready( function () {
     $(".js-hide-offspec-items").click(function() {
         if (offspecVisible) {
             offspecVisible = false;
-            hideOffspecItems();
         } else {
             offspecVisible = true;
-            showOffspecItems();
         }
+        initializeTable();
     });
 
     $(".js-show-all-items").click(function () {
@@ -619,8 +617,22 @@ function createInstanceColumn(name, instanceId, isVisible) {
         render : {
             _: function (data, type, row) {
                 let html = '';
-                // Prios
+
                 const prioItems = row.prios ? row.prios.filter(item => item.instance_id === instanceId) : [];
+                const receivedItems = row.received ? row.received.filter(item => item.instance_id === instanceId) : [];
+                const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number)) : [];
+                if (!offspecVisible) {
+                    prioItems = prioItems.filter(item => item.pivot.is_offspec != 1);
+                    receivedItems = receivedItems.filter(item => item.pivot.is_offspec != 1);
+                    wishlistItems = wishlistItems.filter(item => item.pivot.is_offspec != 1);
+                }
+                if (!strikethroughVisible) {
+                    prioItems = prioItems.filter(item => item.pivot.is_received != 1);
+                    receivedItems = receivedItems.filter(item => item.pivot.is_received != 1);
+                    wishlistItems = wishlistItems.filter(item => item.pivot.is_received != 1);
+                }
+
+                // Prios
                 const prioOffspecCount = prioItems.filter(item => item.is_offspec).length;
                 if (prioItems && prioItems.length) {
                     html += `<div class="js-prio-items">
@@ -636,7 +648,6 @@ function createInstanceColumn(name, instanceId, isVisible) {
                 }
 
                 // Received
-                const receivedItems = row.received ? row.received.filter(item => item.instance_id === instanceId) : [];
                 const receivedOffspecCount = receivedItems.filter(item => item.is_offspec).length;
                 if (receivedItems && receivedItems.length) {
                     html += `<div class="js-received-items">
@@ -652,7 +663,6 @@ function createInstanceColumn(name, instanceId, isVisible) {
                 }
 
                 // Wishlist (current only)
-                const wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number)) : [];
                 const wishlistOffspecCount = wishlistItems.filter(item => item.is_offspec).length;
                 if (wishlistItems && wishlistItems.length) {
                     html += `<div class="js-wishlist-items">
@@ -672,11 +682,21 @@ function createInstanceColumn(name, instanceId, isVisible) {
             sort: function (data, type, row) {
                 let filteredItems = [];
                 if (view === VIEW_PRIOS) {
-                    filteredItems = row.prios ? row.prios.filter(item => item.instance_id === instanceId) : [];
+                    filteredItems = row.prios ? row.prios.slice() : [];
                 } else if (view === VIEW_RECEIVED) {
-                    filteredItems = row.received ? row.received.filter(item => item.instance_id === instanceId) : [];
+                    filteredItems = row.received ? row.received.slice() : [];
                 } else if (view === VIEW_WISHLIST) {
-                    filteredItems = row.all_wishlists ? row.all_wishlists.filter(item => (item.instance_id === instanceId && item.list_number === guild.current_wishlist_number)) : [];
+                    filteredItems = row.all_wishlists ? row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number) : [];
+                }
+                // Filter out items not belonging in the selected instance(s)
+                if (instanceIdsToShow.length > 0) {
+                    filteredItems = filteredItems.filter(item => instanceIdsToShow.includes(item.instance_id));
+                }
+                if (!offspecVisible) {
+                    filteredItems = filteredItems.filter(item => item.pivot.is_offspec != 1);
+                }
+                if (!strikethroughVisible) {
+                    filteredItems = filteredItems.filter(item => item.pivot.is_received != 1);
                 }
                 return filteredItems.length;
             },
@@ -708,18 +728,21 @@ function createInstanceTotalsColumn(isVisible) {
                 let prioItems = row.prios ? row.prios.slice() : [];
                 let receivedItems = row.received ? row.received.slice() : [];
                 let wishlistItems = row.all_wishlists ? row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number) : [];
-
                 // Filter out items not belonging in the selected instance(s)
                 if (instanceIdsToShow.length > 0) {
-                    if (prioItems.length > 0) {
-                        prioItems = prioItems.filter(item => instanceIdsToShow.includes(item.instance_id));
-                    }
-                    if (receivedItems.length > 0) {
-                        receivedItems = receivedItems.filter(item => instanceIdsToShow.includes(item.instance_id));
-                    }
-                    if (wishlistItems.length > 0) {
-                        wishlistItems = wishlistItems.filter(item => instanceIdsToShow.includes(item.instance_id));
-                    }
+                    prioItems = prioItems.filter(item => instanceIdsToShow.includes(item.instance_id));
+                    receivedItems = receivedItems.filter(item => instanceIdsToShow.includes(item.instance_id));
+                    wishlistItems = wishlistItems.filter(item => instanceIdsToShow.includes(item.instance_id));
+                }
+                if (!offspecVisible) {
+                    prioItems = prioItems.filter(item => item.pivot.is_offspec != 1);
+                    receivedItems = receivedItems.filter(item => item.pivot.is_offspec != 1);
+                    wishlistItems = wishlistItems.filter(item => item.pivot.is_offspec != 1);
+                }
+                if (!strikethroughVisible) {
+                    prioItems = prioItems.filter(item => item.pivot.is_received != 1);
+                    receivedItems = receivedItems.filter(item => item.pivot.is_received != 1);
+                    wishlistItems = wishlistItems.filter(item => item.pivot.is_received != 1);
                 }
 
                 // Prios
@@ -768,11 +791,21 @@ function createInstanceTotalsColumn(isVisible) {
             sort: function (data, type, row) {
                 let filteredItems = [];
                 if (view === VIEW_PRIOS) {
-                    filteredItems = row.prios ? row.prios : [];
+                    filteredItems = row.prios ? row.prios.slice() : [];
                 } else if (view === VIEW_RECEIVED) {
-                    filteredItems = row.received ? row.received : [];
+                    filteredItems = row.received ? row.received.slice() : [];
                 } else if (view === VIEW_WISHLIST) {
                     filteredItems = row.all_wishlists ? row.all_wishlists.filter(item => item.list_number === guild.current_wishlist_number) : [];
+                }
+                // Filter out items not belonging in the selected instance(s)
+                if (instanceIdsToShow.length > 0) {
+                    filteredItems = filteredItems.filter(item => instanceIdsToShow.includes(item.instance_id));
+                }
+                if (!offspecVisible) {
+                    filteredItems = filteredItems.filter(item => item.pivot.is_offspec != 1);
+                }
+                if (!strikethroughVisible) {
+                    filteredItems = filteredItems.filter(item => item.pivot.is_received != 1);
                 }
                 return filteredItems.length;
             },
@@ -801,11 +834,11 @@ function createItemSlotColumn(name, slots) {
 
             // Filter data by loot type
             if (lootTypeToShow === 'prios') {
-                data = row.prios || [];
+                data = row.prios ? row.prios.slice() : [];
             } else if (lootTypeToShow === 'wishlist') {
-                data = row.wishlist || [];
+                data = row.all_wishlists ? row.all_wishlists.slice() : [];
             } else {
-                data = row.received || [];
+                data = row.received ? row.received.slice() : [];
             }
 
             // Filter data by instance
@@ -818,7 +851,17 @@ function createItemSlotColumn(name, slots) {
         render : {
             _: function (data, type, row) {
                 const filteredItems = (slots ? data.filter(item => slots.includes(item.inventory_type)) : data);
+
+                if (!offspecVisible) {
+                    filteredItems = filteredItems.filter(item => item.pivot.is_offspec != 1);
+                }
+
+                if (!strikethroughVisible) {
+                    filteredItems = filteredItems.filter(item => item.pivot.is_received != 1);
+                }
+
                 const offspecCount = filteredItems.filter(item => item.is_offspec).length;
+
                 if (filteredItems && filteredItems.length) {
                     return `<div class="ml-1">
                             <ul class="list-inline mb-0">
@@ -834,6 +877,12 @@ function createItemSlotColumn(name, slots) {
             },
             sort: function (data, type, row) {
                 const filteredItems = (slots ? data.filter(item => slots.includes(item.inventory_type)) : data);
+                if (!offspecVisible) {
+                    filteredItems = filteredItems.filter(item => item.pivot.is_offspec != 1);
+                }
+                if (!strikethroughVisible) {
+                    filteredItems = filteredItems.filter(item => item.pivot.is_received != 1);
+                }
                 return filteredItems.length;
             },
         },
@@ -902,24 +951,6 @@ function getRaidGroupHtml(name, color) {
 
 function getTierHtml(item, showColor) {
     return `<span class="text-monospace small font-weight-normal text-${ showColor && item.guild_tier ? 'tier-' + Math.ceil(item.guild_tier) : 'muted' }">${ item.guild_tier ? getItemTierLabel(item, guild.tier_mode) : '&nbsp;' }</span>`;
-}
-
-function hideOffspecItems() {
-    $("[data-offspec='1']").hide();
-}
-
-function showOffspecItems() {
-    $("[data-offspec='1']").show();
-}
-
-function hideStrikethroughItems() {
-    $("[data-type='prio']").children(".font-strikethrough").parent().hide();
-    $("[data-type='wishlist']").children(".font-strikethrough").parent().hide();
-}
-
-function showStrikethroughItems() {
-    $("[data-type='prio']").children(".font-strikethrough").parent().show();
-    $("[data-type='wishlist']").children(".font-strikethrough").parent().show();
 }
 
 /**
