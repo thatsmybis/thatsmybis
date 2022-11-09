@@ -809,9 +809,9 @@ class ExportController extends Controller {
             "SELECT
                 {$fields}
             FROM items i
-                JOIN item_item_sources iis ON iis.item_id = i.item_id
-                JOIN item_sources          ON item_sources.id = iis.item_source_id
-                JOIN instances             ON instances.id = item_sources.instance_id
+                LEFT JOIN item_item_sources iis ON iis.item_id = i.item_id
+                LEFT JOIN item_sources          ON item_sources.id = iis.item_source_id
+                LEFT JOIN instances             ON instances.id = item_sources.instance_id
                 JOIN guild_items gi        ON gi.item_id = i.item_id AND gi.guild_id = {$guild->id}
             WHERE i.expansion_id = {$guild->expansion_id}
             ORDER BY instances.`order` DESC, i.name ASC;";
