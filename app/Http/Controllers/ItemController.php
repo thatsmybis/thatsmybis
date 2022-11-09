@@ -476,15 +476,13 @@ class ItemController extends Controller
         $locale = App::getLocale();
         if ($locale === 'en') {
             $locale = '';
+        } else {
+            $locale .= '.';
         }
 
         try {
             if ($expansionId === 3) {
-                if ($locale) {
-                    $json = json_decode(file_get_contents('https://wowhead.com/' . $domain . '/' . $locale . '/tooltip/item/' . (int)$itemId));
-                } else {
-                    $json = json_decode(file_get_contents('https://wowhead.com/' . $domain . '/tooltip/item/' . (int)$itemId));
-                }
+                $json = json_decode(file_get_contents('https://' . $locale . 'wowhead.com/' . $domain . '/tooltip/item/' . (int)$itemId));
             } else {
                 // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)
                 $json = json_decode(file_get_contents('https://' . $locale . $domain . '.wowhead.com/tooltip/item/' . (int)$itemId));
