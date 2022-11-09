@@ -667,6 +667,7 @@ class ExportController extends Controller {
         } else {
             return response($csv)
                 ->withHeaders([
+                    // Browser should not attempt to download
                     'X-Content-Type-Options' => 'nosniff',
                     'Content-Type'           => 'text/plain',
                     'Cache-Control'          => 'no-store, no-cache',
