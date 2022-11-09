@@ -494,7 +494,7 @@ class ItemController extends Controller
             // Remove links
             $json->tooltip = str_replace('<a ', '<span ', $json->tooltip);
             $json->tooltip = str_replace('</a>', '</span>', $json->tooltip);
-        } catch (Exception $e) {
+        } catch (\Exception $e) {
             // Fail silently, that's okay, we just won't display the content
         }
 
