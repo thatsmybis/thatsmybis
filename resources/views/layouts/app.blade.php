@@ -175,14 +175,10 @@
         </div>
     @endif
 
-
+    <!-- For announcements
     <div class="text-center font-weight-light small text-muted text-mage mb-2">
-        <!--
-        Heart of Magic is not in the loot tables because "<a href="https://www.wowhead.com/%69tem=44650/heart-of-magic#comments" target="_blank">Everyone on the quest can loot their own Heart of Magic</a>"
-        <br>
-        If this proves false, I will add it in.
-        -->
     </div>
+    -->
 
     @if (session('status'))
         <div class="container-fluid container-width-capped">

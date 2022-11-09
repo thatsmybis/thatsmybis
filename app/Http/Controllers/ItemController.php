@@ -476,16 +476,13 @@ class ItemController extends Controller
         $locale = App::getLocale();
         if ($locale === 'en') {
             $locale = '';
-        } else {
-            $locale .= '.';
         }
 
         try {
-            if ($expansionId === 3) {
-                $json = json_decode(file_get_contents('https://' . $locale . 'wowhead.com/' . $domain . '/tooltip/item/' . (int)$itemId));
+            if ($locale) {
+                $json = json_decode(file_get_contents('https://nether.wowhead.com/' . $domain . '/' . $locale . '/tooltip/item/' . (int)$itemId));
             } else {
-                // Suppressing warnings with the error control operator @ (if the id doesn't exist, it will fail to open stream)
-                $json = json_decode(file_get_contents('https://' . $locale . $domain . '.wowhead.com/tooltip/item/' . (int)$itemId));
+                $json = json_decode(file_get_contents('https://nether.wowhead.com/' . $domain . '/tooltip/item/' . (int)$itemId));
             }
 
             // Fix link - Not using this because I wasn't easily able to get wowhead's script to not parse the link and do stupid crap to it
@@ -494,7 +491,7 @@ class ItemController extends Controller
             // Remove links
             $json->tooltip = str_replace('<a ', '<span ', $json->tooltip);
             $json->tooltip = str_replace('</a>', '</span>', $json->tooltip);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             // Fail silently, that's okay, we just won't display the content
         }
 
