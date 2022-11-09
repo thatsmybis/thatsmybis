@@ -665,10 +665,12 @@ class ExportController extends Controller {
                     'Content-Disposition' => 'attachment; filename="' . slug($title) . '.json"',
                 ]);
         } else {
-            return view('guild.export.generic', [
-                'data' => $csv,
-                'name' => $title,
-            ]);
+            return response($csv)
+                ->withHeaders([
+                    'X-Content-Type-Options' => 'nosniff',
+                    'Content-Type'           => 'text/plain',
+                    'Cache-Control'          => 'no-store, no-cache',
+                ]);
         }
     }
 
