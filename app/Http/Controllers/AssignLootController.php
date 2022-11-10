@@ -611,18 +611,29 @@ class AssignLootController extends Controller
                 if ($deletePrio) {
                     // Delete the one we found
                     CharacterItem::where(['id' => $prioRow->id])->delete();
+                    $auditMessage = 'deleted 1 prio';
 
-                    // Now correct the order on the remaning prios for that item in that raid group
-                    // (Commented out because we don't always want this to happen; what if there are still people assigned to this item at this order?)
-                    // CharacterItem::
-                    //     where([
-                    //         'item_id'       => $prioRow->item_id,
-                    //         'raid_group_id' => $prioRow->raid_group_id,
-                    //         'type'          => Item::TYPE_PRIO,
-                    //     ])
-                    //     ->where('order', '>', $prioRow->order)
-                    //     ->update(['order' => DB::raw('`order` - 1')]);
-                    $auditMessage = 'removed 1 prio';
+                    // Check whether or not there are other prios at this order/rank.
+                    $matchingPrioOrderRows = CharacterItem::where([
+                        'item_id'       => $detachRow['item_id'],
+                        'type'          => Item::TYPE_PRIO,
+                        'order'         => $prioRow->order,
+                        'raid_group_id' => $prioRow->raid_group_id,
+                    ])->first();
+
+                    // There are no other items at this order; safe to decrement the others.
+                    if (!$matchingPrioOrderRows) {
+                        // Now correct the order on the remaning prios for that item in that raid group
+                        CharacterItem::
+                            where([
+                                'item_id'       => $prioRow->item_id,
+                                'raid_group_id' => $prioRow->raid_group_id,
+                                'type'          => Item::TYPE_PRIO,
+                            ])
+                            ->where('order', '>', $prioRow->order)
+                            ->update(['order' => DB::raw('`order` - 1')]);
+                        $auditMessage = 'removed 1 prio';
+                    }
                 } else {
                     CharacterItem::
                         where(['id' => $prioRow->id])
