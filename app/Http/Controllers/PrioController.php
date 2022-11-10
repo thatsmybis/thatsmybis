@@ -154,7 +154,7 @@ class PrioController extends Controller
                             'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                         ])
                         ->whereRaw("(`characters`.`raid_group_id` = {$raidGroup->id} OR `character_raid_groups`.`raid_group_id` = {$raidGroup->id})")
-                        ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
+                        // ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
                         ->orderBy('character_items.order');
                 },
                 'childItems' => function ($query) use ($guild, $raidGroup) {
