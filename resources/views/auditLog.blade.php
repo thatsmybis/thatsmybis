@@ -277,10 +277,20 @@
             <div class="row">
                 @if ($logs->count())
                     <div class="col-12 mb-3">
-                        <span id="download_csv" class="btn btn-success">
-                            <span class="fas fa-fw fa-file-export"></span>
-                            {{ __('Download') }}
-                        </span>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <span id="download_csv" class="btn btn-success">
+                                    <span class="fas fa-fw fa-file-export"></span>
+                                    {{ __("Download CSV") }}
+                                </span>
+                            </li>
+                            <li class="list-inline-item">
+                                <a id="view_csv" class="text-link cursor-pointer">
+                                    <span class="fas fa-fw fas fa-file-csv"></span>
+                                    {{ __("View CSV") }}
+                                </a>
+                            </li>
+                        </ul>
                     </div>
                 @endif
                 <div class="col-12">
@@ -426,6 +436,15 @@
     $("#download_csv").click(function () {
         let url = new URL(location);
         url.searchParams.set('export', 1);
+        url.searchParams.set('rows', 500);
+        window.open(url, '_blank').focus();
+    });
+
+    $("#view_csv").click(function (e) {
+        e.preventDefault();
+        let url = new URL(location);
+        url.searchParams.set('export', 1);
+        url.searchParams.set('view', 1);
         url.searchParams.set('rows', 500);
         window.open(url, '_blank').focus();
     });

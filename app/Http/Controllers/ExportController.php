@@ -645,7 +645,7 @@ class ExportController extends Controller {
      *
      * @return Application|ResponseFactory|Factory|Response|View
      * @var string $title
-     * @var string $fileType 'csv' or 'html'
+     * @var string $fileType 'csv', 'json', anything else = html
      *
      * @var array|string  $csv      The data.
      */

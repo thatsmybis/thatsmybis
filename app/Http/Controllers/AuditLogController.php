@@ -247,7 +247,14 @@ class AuditLogController extends Controller
             ];
 
             $csv = ExportController::createCsv($simpleFormatLogs, $headers);
-            return ExportController::GetExport($csv, $guild->name . ' Audit Logs @' . time(), ExportController::CSV);
+
+            if (request()->input('view')) {
+                // view csv
+                return ExportController::GetExport($csv, $guild->name . ' Audit Logs @' . time(), ExportController::HTML);
+            } else {
+                // download csv
+                return ExportController::GetExport($csv, $guild->name . ' Audit Logs @' . time(), ExportController::CSV);
+            }
         }
 
         return view('auditLog', [
