@@ -617,8 +617,8 @@ class AssignLootController extends Controller
                     $matchingPrioOrderRows = CharacterItem::where([
                         'item_id'       => $detachRow['item_id'],
                         'type'          => Item::TYPE_PRIO,
-                        'order'         => $prioRow->order,
                         'raid_group_id' => $prioRow->raid_group_id,
+                        'order'         => $prioRow->order,
                     ])->first();
 
                     // There are no other items at this order; safe to decrement the others.
@@ -632,7 +632,7 @@ class AssignLootController extends Controller
                             ])
                             ->where('order', '>', $prioRow->order)
                             ->update(['order' => DB::raw('`order` - 1')]);
-                        $auditMessage = 'removed 1 prio';
+                        $auditMessage .= ' and adjusted remaining prios';
                     }
                 } else {
                     CharacterItem::
