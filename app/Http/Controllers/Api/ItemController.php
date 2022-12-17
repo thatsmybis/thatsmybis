@@ -25,18 +25,6 @@ class ItemController extends \App\Http\Controllers\Controller
             'expansion_id' => 'integer|min:1|max:99',
             'faction'      => ['nullable', 'string', Rule::in(array_keys(Guild::getFactions()))],
             'query'        => 'string|min:1|max:40',
-            'locale'       => ['nullable', 'string', Rule::in([
-                    "de",
-                    "en",
-                    "es",
-                    "fr",
-                    "it",
-                    "pt",
-                    "ru",
-                    "ko",
-                    "cn",
-                ])
-            ],
         ];
     }
 
@@ -56,7 +44,6 @@ class ItemController extends \App\Http\Controllers\Controller
             'faction'      => $faction,
             'expansion_id' => $expansionId,
             'query'        => $query,
-            'locale'       => $locale,
         ], $this->getValidationRules());
 
         $expansionId = (int) $expansionId;
@@ -73,7 +60,7 @@ class ItemController extends \App\Http\Controllers\Controller
 
                 $selectFields = ['name', 'item_id', 'quality', 'item_level', 'faction', 'is_heroic', 'expansion_id'];
 
-                if ($locale) {
+                if ($locale && in_array($locale, $this->supportedLocales())) {
                     array_push($selectFields, "name_{$locale}");
                     $sqlQuery = $sqlQuery->select(array_values($selectFields))
                     ->where([
@@ -118,7 +105,7 @@ class ItemController extends \App\Http\Controllers\Controller
 
                     $label = '';
 
-                    if ($locale) {
+                    if ($locale && in_array($locale, $this->supportedLocales())) {
                         $item->name = ($item["name_{$locale}"] ? $item["name_{$locale}"] : $item->name);
                     }
 
@@ -154,5 +141,23 @@ class ItemController extends \App\Http\Controllers\Controller
 
             return response()->json($results, 200);
         }
+    }
+
+    /**
+     * Locales that are supported for name lookups.
+     * @return array
+     */
+    private function supportedLocales() {
+        return [
+            "de",
+            "en",
+            "es",
+            "fr",
+            "it",
+            "pt",
+            "ru",
+            "ko",
+            "cn",
+        ];
     }
 }
