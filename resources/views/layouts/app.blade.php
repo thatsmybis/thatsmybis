@@ -225,24 +225,6 @@
         </div>
     @endif
 
-    @if (!request()->get('hideAds'))
-        <div id="{{ $rand }}" class="container-fluid mb-3 " style="display:none;">
-            <div class="row">
-                <div class="col-12">
-                    <div class="ml-3 mr-3 p-3 bg-light rounded" style="max-width: 800px;">
-                        You appear to be using an ad blocker.
-                        <br>
-                        How will I ever afford a yacht if you continue to use an ad blocker?
-                        <br>
-                        Please consider supporting on <a href="https://www.patreon.com/lemmings19" target="_blank">Patreon</a> or disabling your ad blocker on this website. &lt;3
-                        <br>
-                        <span class="smaller text-muted">If you support on Patreon please link your Discord account or message me!</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
-
     @if (isset($guild) && $guild->message)
         <div class="container-fluid container-width-capped">
             <div class="row">
@@ -261,6 +243,21 @@
     @endif
 
     @if (!request()->get('hideAds'))
+        <div id="{{ $rand }}" class="container-fluid mb-3 " style="display:none;">
+            <div class="row">
+                <div class="col-12">
+                    <div class="ml-3 mr-3 p-3 bg-light rounded" style="max-width: 800px;">
+                        You appear to be using an ad blocker.
+                        <br>
+                        This site is operated independently and relies on ad revenue and donations.
+                        <br>
+                        Please consider supporting on <a href="https://www.patreon.com/lemmings19" target="_blank">Patreon</a> or disabling your ad blocker on this website.
+                        <br>
+                        <span class="smaller text-muted">If you support on Patreon please link your Discord account or message me!</span>
+                    </div>
+                </div>
+            </div>
+        </div>
         <div class="d-poster-970 mb-4" id="top-large-leaderboard-poster"></div>
         <div class="d-poster-728 mb-4" id="top-leaderboard-poster"></div>
         <div class="d-poster-320 mb-4" id="top-mobile-banner-poster"></div>
@@ -431,17 +428,20 @@
                 scroll(0,0);
             });
 
-            if (!getCookie("closedAddonPrompt")) {
+            const CLOSED_ADDON_COOKIE = "closedAddonPrompt";
+            const addonPromptCookie = Cookies.get(CLOSED_ADDON_COOKIE);
+
+            if (!addonPromptCookie) {
                 $("#addonPrompt").show();
             }
 
             $("#closeAddonPrompt").click(function () {
                 $("#addonPrompt").hide();
-                setCookie("closedAddonPrompt", true, 30, 'd');
+                Cookies.set(CLOSED_ADDON_COOKIE, 1, { expires: 30 });
             });
         });
         function restoreAddonPrompt() {
-            deleteCookie("closedAddonPrompt", "");
+            Cookies.remove(CLOSED_ADDON_COOKIE);
         }
     </script>
 
@@ -621,7 +621,7 @@
         // Adblock detection
         document.addEventListener('blockerEvent', (event) => {
             // The user is blocking ads
-            $("#{{ $rand }}").slideDown(250);
+            $("#{{ $rand }}").show();
         });
 
         function dispatchBlockerEvent() {
@@ -661,7 +661,7 @@
                     // Ads blocked
                     dispatchBlockerEvent();
                 }
-            }, 3000);
+            }, 1500);
         });
     </script>
 
