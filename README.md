@@ -48,6 +48,18 @@ Javascript and CSS goes through a preprocessor/transpiler before being used in p
 
 The [restcord](https://packagist.org/packages/restcord/restcord) package is being used for accessing Discord's API. As of 2021-09-21, we are using the `dev-develop` branch of restcord and not a proper version number. This is because only [dev-develop supports guzzlehttp ^7.0](https://githubmemory.com/repo/restcord/restcord/issues/156), which is a requirement for upgrading to Laravel 8.0.
 
+# Server Setup
+While this is for a live server and not just local, most of this should apply to a local server as well. This list is **not** exhaustive, but should give a general direction to head in:
+
+1. Install latest LTS (Long Term Support) version of Ubuntu (versions ending in ".04" eg. 20.04)
+2. Install version of PHP specified in `composer.json`. (eg. `php8.2-fpm`)
+    - Configure `php-fpm.ini` (see notes about increasing max input variables)
+3. Install Nginx if not using Apache. (see the PHP upgrade notes in this readme for hints)
+    - Configure Nginx. (add `thatsmybis` to `sites-available` and create a symlink to it in `sites-enabled`)
+4. Clone thatmsbis repo to server. (I chose the directory `/var/www/thatsmybis`)
+5. Install Composer. (run `composer install` from the thatsmybis directory)
+6. Create a `.env` and configure it.
+
 ## Caching
 
 Redis has been chosen for caching. The `CACHE_DRIVER` environment variable will need to be configured appropriately for this to be taken advantage of.
@@ -94,7 +106,7 @@ sudo apt install php-mbstring
 sudo systemctl status php8.0-fpm
 sudo a2enmod actions fcgid alias proxy_fcgi
 sudo nano /etc/nginx/sites-available/thatsmybis.local
-    > fastcgi_pass unix:/var/run/php/php9.0-fpm.sock
+    > fastcgi_pass unix:/var/run/php/php8.0-fpm.sock
 sudo systemctl restart nginx
 ```
 
@@ -107,11 +119,11 @@ You may need to copy over some custom configs to php8.0-fpm (`/etc/php/8.0/fpm/p
 1. `apt install php-redis`
 2. `apt install redis-server`
 
-I required `phpize`, so I ran `sudo apt install php7.4-dev` (adjust for you version of php).
+I required `phpize`, so I ran `sudo apt install php8.2-dev` (adjust for you version of php).
 
 You may need to run `sudo apt install igbinary`.
 
-You may need to add the following to your php or php-fpm config:
+You may need to add the following to your `php.ini` or `php-fpm.ini`:
 ```
 extension=redis.so
 extension=igbinary.so
@@ -139,7 +151,7 @@ Now, there's still going to be a little bit of work and learning curve involved 
 
 Laravel has a custom environment for Vagrant. They call their environment 'Homestead', and that's what we're going to be setting up. It's easiest to get this up and running on Linux, but it's not much more work to get it running on Windows.
 
-Best place to start? [RTFM](https://www.urbandictionary.com/define.php?term=RTFM): https://laravel.com/docs/7.x/homestead
+Best place to start? [RTFM](https://www.urbandictionary.com/define.php?term=RTFM): https://laravel.com/docs/8.x/homestead
 
 tl;dr
 
@@ -191,7 +203,7 @@ tl;dr
 
 ### Getting the `The server requested authentication method unknown to the client` error after spinning up Homestead?
 
-Try running this in MySQL on your local environemtn: `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'secret';`
+Try running this in MySQL on your local environment: `ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'secret';`
 
 ## Items Table
 
@@ -201,10 +213,10 @@ Find these insert statements in the DB repo: https://github.com/thatsmybis/class
 
 Run the raw SQL from these files in mysql (in this order):
 
-1. Insert items.
-2. Insert instances.
-3. Insert item_sources.
-4. Insert item_item_sources.
+1. Insert `items`.
+2. Insert `instances`.
+3. Insert `item_sources`.
+4. Insert `item_item_sources`.
 
 ## Permissions
 
@@ -222,6 +234,8 @@ Roles are loaded from the Discord server.
 
 - `ONLY_FULL_GROUP_BY` for SQL has been disabled in `database.php` by changing `strict` to `false`. This is to allow for writing simpler `GROUP BY` clauses in queries. If you can fix the `group by` complications caused by `strict`, you're welcome to turn it back on. I tried. It required mutilating my `SELECT` statements, and even then I couldn't get it to 100% work the way it did before 5.7 when it just assumed `ANY_VALUE()` on non-aggregated columns (even when I told it to use `ANY_VALUE()`). Good luck. ([SO thread](https://stackoverflow.com/questions/34115174/error-related-to-only-full-group-by-when-executing-a-query-in-mysql))
 - `max_input_vars` in `php.ini` (PHP's config) has been increased from 1000 to 6000. This is to support some pages with an absurd amount of inputs. (ie. 120 items with 20 input fields each = 2400 inputs)
+
+# Docker
 
 ## Docker Compose Local Development Environment
 
@@ -267,7 +281,6 @@ CONTAINER ID        IMAGE                            COMMAND                  CR
 ## Docker Development with Visual Studio Code
 
 A quick an dirty way to develop is to use Visual Studio Code with the PHP plugin which does intelisense and syntax highlighting. The laravel app will most times pick up the changes immediately if you refresh the page.
-
 
 ## Docker Development Laravel Development Commands
 
