@@ -18,6 +18,9 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'App\Http\Controllers';
 
+    // Page views per minute
+    private const GLOBAL_RATE_LIMIT = 10;
+
     /**
      * Define your route model bindings, pattern filters, etc.
      *
@@ -52,6 +55,15 @@ class RouteServiceProvider extends ServiceProvider
     {
         RateLimiter::for('api', function (Request $request) {
             return Limit::perMinute(60)->by(optional($request->user())->id ?: $request->ip());
+        });
+
+        RateLimiter::for('global', function (Request $request) {
+            return Limit::perMinute(self::GLOBAL_RATE_LIMIT)
+                ->response(
+                    function (Request $request, array $headers) {
+                        return response(__("Error 429: Too many requests (page views). Maximum " . self::GLOBAL_RATE_LIMIT . " requests per minute. Wait a bit and try again."), 429, $headers);
+                    }
+                );
         });
     }
 

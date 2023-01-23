@@ -48,18 +48,6 @@ Javascript and CSS goes through a preprocessor/transpiler before being used in p
 
 The [restcord](https://packagist.org/packages/restcord/restcord) package is being used for accessing Discord's API. As of 2021-09-21, we are using the `dev-develop` branch of restcord and not a proper version number. This is because only [dev-develop supports guzzlehttp ^7.0](https://githubmemory.com/repo/restcord/restcord/issues/156), which is a requirement for upgrading to Laravel 8.0.
 
-# Server Setup
-While this is for a live server and not just local, most of this should apply to a local server as well. This list is **not** exhaustive, but should give a general direction to head in:
-
-1. Install latest LTS (Long Term Support) version of Ubuntu (versions ending in ".04" eg. 20.04)
-2. Install version of PHP specified in `composer.json`. (eg. `php8.2-fpm`)
-    - Configure `php-fpm.ini` (see notes about increasing max input variables)
-3. Install Nginx if not using Apache. (see the PHP upgrade notes in this readme for hints)
-    - Configure Nginx. (add `thatsmybis` to `sites-available` and create a symlink to it in `sites-enabled`)
-4. Clone thatmsbis repo to server. (I chose the directory `/var/www/thatsmybis`)
-5. Install Composer. (run `composer install` from the thatsmybis directory)
-6. Create a `.env` and configure it.
-
 ## Caching
 
 Redis has been chosen for caching. The `CACHE_DRIVER` environment variable will need to be configured appropriately for this to be taken advantage of.
@@ -100,6 +88,7 @@ sudo add-apt-repository ppa:ondrej/php
 sudo add-apt-repository ppa:ondrej/nginx
 sudo apt update
 sudo apt upgrade
+sudo apt install php-curl
 sudo apt install php-fpm
 sudo apt install php-mysql
 sudo apt install php-mbstring
