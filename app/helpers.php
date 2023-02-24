@@ -109,7 +109,7 @@ function getLocales() {
         "it" => "Italiano (items only)",
         "no" => "Norsk (incomplete)",
         "pl" => "Polski (no items)",
-        "pt" => "Português Brasileiro (items only)",
+        "pt" => "Português Brasileiro",
         "ru" => "Русский",
         "ko" => "한국어 (items only)",
         "cn" => "简体中文 (items only)",
