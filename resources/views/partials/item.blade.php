@@ -57,15 +57,15 @@ if (isset($showTier) && $showTier) {
     }
 }
 
-$wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain. '" ';
+$wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocalNoDot . $wowheadSubdomain. '" ';
 $wowheadUrl = null;
 
 if ($itemExpansionId === 3) {
     $wowheadUrl = 'https://' . $wowheadLocale . 'wowhead.com/' . $wowheadSubdomain . '/' . ($wowheadLocalNoDot ? $wowheadLocalNoDot . '/' : null) . 'item=' . $itemId;
-    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
+    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocalNoDot . $wowheadSubdomain . '"';
 } else {
     $wowheadUrl = 'https://' . $wowheadLocale . $wowheadSubdomain . '.wowhead.com/item=' . $itemId;
-    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
+    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocalNoDot . $wowheadSubdomain . '"';
 }
 
 // Options: tiny, small, medium, large
