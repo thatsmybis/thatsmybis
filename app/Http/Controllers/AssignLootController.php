@@ -534,6 +534,10 @@ class AssignLootController extends Controller
                 'character_items.type'         => Item::TYPE_WISHLIST,
             ];
 
+            if ($guild->current_wishlist_number) {
+                $whereClause['character_items.list_number'] = $guild->current_wishlist_number;
+            }
+
             if (!$deleteWishlist) {
                 $whereClause['character_items.is_received'] = 0;
             }
@@ -558,7 +562,7 @@ class AssignLootController extends Controller
                 // Just deal with the first item; any extras get left for next time.
                 $wishlistRow = $wishlistRows->first();
 
-                if ($deleteWishlist && $wishlistRow->list_number == $guild->current_wishlist_number) {
+                if ($deleteWishlist) {
                     // Delete the one we found
                     CharacterItem::where(['id' => $wishlistRow->id])->delete();
                     $audits[] = [
