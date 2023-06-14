@@ -555,41 +555,42 @@ class AssignLootController extends Controller
                 ->get();
 
             if ($wishlistRows->count()) {
-                foreach ($wishlistRows as $wishlistRow) {
-                    if ($deleteWishlist && $wishlistRow->list_number == $guild->current_wishlist_number) {
-                        // Delete the one we found
-                        CharacterItem::where(['id' => $wishlistRow->id])->delete();
-                        $audits[] = [
-                            'description'   => 'System removed 1 wishlist item after character was assigned item',
-                            'type'          => Item::TYPE_WISHLIST,
-                            'member_id'     => $currentMember->id,
-                            'character_id'  => $wishlistRow->character_id,
-                            'guild_id'      => $currentMember->guild_id,
-                            'raid_group_id' => $wishlistRow->raid_group_id,
-                            'raid_id'       => $raidId,
-                            'item_id'       => $wishlistRow->item_id,
-                            'created_at'    => $now,
-                        ];
-                    } else {
-                        CharacterItem::
-                            where(['id' => $wishlistRow->id])
-                            ->update([
-                                'is_received' => 1,
-                                'received_at' => $now,
-                            ]);
+                // Just deal with the first item; any extras get left for next time.
+                $wishlistRow = $wishlistRows->first();
 
-                        $audits[] = [
-                            'description'   => 'System flagged 1 wishlist item as received after character was assigned item',
-                            'type'          => Item::TYPE_WISHLIST,
-                            'member_id'     => $currentMember->id,
-                            'character_id'  => $wishlistRow->character_id,
-                            'guild_id'      => $currentMember->guild_id,
-                            'raid_group_id' => $wishlistRow->raid_group_id,
-                            'raid_id'       => $raidId,
-                            'item_id'       => $wishlistRow->item_id,
-                            'created_at'    => $now,
-                        ];
-                    }
+                if ($deleteWishlist && $wishlistRow->list_number == $guild->current_wishlist_number) {
+                    // Delete the one we found
+                    CharacterItem::where(['id' => $wishlistRow->id])->delete();
+                    $audits[] = [
+                        'description'   => 'System removed 1 wishlist item after character was assigned item',
+                        'type'          => Item::TYPE_WISHLIST,
+                        'member_id'     => $currentMember->id,
+                        'character_id'  => $wishlistRow->character_id,
+                        'guild_id'      => $currentMember->guild_id,
+                        'raid_group_id' => $wishlistRow->raid_group_id,
+                        'raid_id'       => $raidId,
+                        'item_id'       => $wishlistRow->item_id,
+                        'created_at'    => $now,
+                    ];
+                } else {
+                    CharacterItem::
+                        where(['id' => $wishlistRow->id])
+                        ->update([
+                            'is_received' => 1,
+                            'received_at' => $now,
+                        ]);
+
+                    $audits[] = [
+                        'description'   => 'System flagged 1 wishlist item as received after character was assigned item',
+                        'type'          => Item::TYPE_WISHLIST,
+                        'member_id'     => $currentMember->id,
+                        'character_id'  => $wishlistRow->character_id,
+                        'guild_id'      => $currentMember->guild_id,
+                        'raid_group_id' => $wishlistRow->raid_group_id,
+                        'raid_id'       => $raidId,
+                        'item_id'       => $wishlistRow->item_id,
+                        'created_at'    => $now,
+                    ];
                 }
             }
 
