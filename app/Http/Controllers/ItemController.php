@@ -512,7 +512,7 @@ class ItemController extends Controller
                 // For keeping track of what characters already have the item showing up in the wishlist
                 $seenCharacters = [];
                 // Merge the child items' wishlist characters with the main items' wishlist characters.
-                // toBase() prevents duplicates of the same character from being removed
+                // Setting new keys prevents union() from removing duplicates with the same key
                 $mergedWishlistCharacters = $items[$itemKey]->wishlistCharacters->keyBy(function ($character) {return $character->id . '-' . $character->pivot->item_id . '-' . $character->pivot->list_number . '-' . $character->pivot->order;})
                     ->union($childItem->wishlistCharacters->keyBy(function ($character) {return $character->id . '-' . $character->pivot->item_id . '-' . $character->pivot->list_number . '-' . $character->pivot->order;}))
                     // Resort the wishlist characters.
