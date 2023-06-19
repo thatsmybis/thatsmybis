@@ -504,27 +504,37 @@ class ItemController extends Controller
      * This causes tokens to show anyone who wishlisted the items they get turned in for... provided the DB has those relationships set up/inserted.
      */
     public static function mergeTokenWishlists($items, $guild) {
+        $itemsThatHaveChildItems = $items->filter(function ($item) { return $item->childItems->count(); });
         // Combine items' child items' wishlist characters into parent items' wishlist characters
-        foreach ($items->filter(function ($item) { return $item->childItems->count(); }) as $itemKey => $item) {
-            foreach ($item->childItems->filter(function ($childItem) { return $childItem->wishlistCharacters->count(); }) as $childItem) {
+        foreach ($itemsThatHaveChildItems as $itemKey => $item) {
+            $childItemsThatHaveBeenWishlisted = $item->childItems->filter(function ($childItem) { return $childItem->wishlistCharacters->count(); });
+            foreach ($childItemsThatHaveBeenWishlisted as $childItem) {
+                // For keeping track of what characters already have the item showing up in the wishlist
+                $seenCharacters = [];
+                // Merge the child items' wishlist characters with the main items' wishlist characters.
+                // toBase() prevents duplicates of the same character from being removed
+                $mergedWishlistCharacters = $items[$itemKey]->wishlistCharacters->keyBy(function ($character) {return $character->id . '-' . $character->pivot->item_id . '-' . $character->pivot->list_number . '-' . $character->pivot->order;})
+                    ->union($childItem->wishlistCharacters->keyBy(function ($character) {return $character->id . '-' . $character->pivot->item_id . '-' . $character->pivot->list_number . '-' . $character->pivot->order;}))
+                    // Resort the wishlist characters.
+                    ->sortBy(function($character) {
+                        // RE: -strtotime(): rofl, rofl, kekw, bur, kek, roflmao sort by newest to oldest date wishlisted.
+                        return [$character->raid_group_name, $character->pivot->order,  -strtotime($character->pivot->created_at)];
+                    })
+                    // Filter out duplicates... otherwise this list can get very very long.
+                    ->filter(function ($character) use (&$seenCharacters) {
+                        if (in_array($character->id . '-' . $character->pivot->list_number, $seenCharacters)) {
+                            return false;
+                        } else {
+                            $seenCharacters[] = $character->id . '-' . $character->pivot->list_number;
+                            return true;
+                        }
+                    })
+                    ->values();
+
                 $items[$itemKey]
                     ->setRelation(
                         'wishlistCharacters',
-                        $items[$itemKey]
-                            ->wishlistCharacters
-                            // Keys should be unique per character ID and wishlist number.
-                            ->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
-                            // Combine the two arrays based on the keys we just defined.
-                            // If a character has both a token and its child items wishlisted, merge into one.
-                            // But ONLY if they are on the same wishlist number.
-                            ->union(
-                                $childItem->wishlistCharacters->keyBy(function ($character) {return $character->id . '-' . $character->pivot->list_number;})
-                            )
-                            ->sortBy(function($character) {
-                                // RE: -strtotime(): rofl, rofl, kekw, bur, kek, roflmao sort by newest to oldest date wishlisted.
-                                return [$character->raid_group_name, $character->pivot->order, -strtotime($character->pivot->created_at)];
-                            })
-                            ->values()
+                        $mergedWishlistCharacters
                     );
             }
         }
