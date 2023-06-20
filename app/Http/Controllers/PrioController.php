@@ -191,7 +191,7 @@ class PrioController extends Controller
             if (!$guild->is_attendance_hidden) {
                 $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
                 foreach ($items as $item) {
-                    $item->wishlistCharacters = Character::mergeAttendance($item->wishlistCharacters, $charactersWithAttendance);
+                    $item->wishlistCharacters = Character::mergeAttendance($item->wishlistCharacters, $charactersWithAttendance, false);
                 }
             }
         }
@@ -279,6 +279,7 @@ class PrioController extends Controller
                         ->where([
                             'characters.guild_id'      => $guild->id,
                             // 'is_received'              => 0,
+                            'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                         ])
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})");
                         // ->groupBy(['character_items.character_id', 'character_items.item_id']);
@@ -295,6 +296,7 @@ class PrioController extends Controller
                                     ->where([
                                         'characters.guild_id'      => $guild->id,
                                         // 'is_received'              => 0,
+                                        'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                                     ])
                                     ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
                                     ->whereNull('characters.inactive_at');
@@ -325,7 +327,7 @@ class PrioController extends Controller
             // the existing characters for prios and wishlists
             if (!$guild->is_attendance_hidden) {
                 $charactersWithAttendance = Guild::getAllCharactersWithAttendanceCached($guild);
-                $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance);
+                $wishlistCharacters = Character::mergeAttendance($wishlistCharacters, $charactersWithAttendance, false);
             }
         }
 

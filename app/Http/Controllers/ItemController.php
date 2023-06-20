@@ -503,7 +503,7 @@ class ItemController extends Controller
      * Merge all of the childItems' wishlists into their parents.
      * This causes tokens to show anyone who wishlisted the items they get turned in for... provided the DB has those relationships set up/inserted.
      */
-    public static function mergeTokenWishlists($items, $guild) {
+    public static function mergeTokenWishlists($items, $guild, $filterDuplicates = true) {
         $itemsThatHaveChildItems = $items->filter(function ($item) { return $item->childItems->count(); });
         // Combine items' child items' wishlist characters into parent items' wishlist characters
         foreach ($itemsThatHaveChildItems as $itemKey => $item) {
@@ -519,17 +519,21 @@ class ItemController extends Controller
                     ->sortBy(function($character) {
                         // RE: -strtotime(): rofl, rofl, kekw, bur, kek, roflmao sort by newest to oldest date wishlisted.
                         return [$character->raid_group_name, $character->pivot->order,  -strtotime($character->pivot->created_at)];
-                    })
+                    });
+
+                if ($filterDuplicates) {
                     // Filter out duplicates... otherwise this list can get very very long.
-                    ->filter(function ($character) use (&$seenCharacters) {
-                        if (in_array($character->id . '-' . $character->pivot->list_number, $seenCharacters)) {
+                    $mergedWishlistCharacters = $mergedWishlistCharacters->filter(function ($character) use (&$seenCharacters) {
+                        if (in_array($character->id . '-' . $character->pivot->list_number . '-' . $character->pivot->order, $seenCharacters)) {
                             return false;
                         } else {
-                            $seenCharacters[] = $character->id . '-' . $character->pivot->list_number;
+                            $seenCharacters[] = $character->id . '-' . $character->pivot->list_number . '-' . $character->pivot->order;
                             return true;
                         }
-                    })
-                    ->values();
+                    });
+                }
+
+                $mergedWishlistCharacters = $mergedWishlistCharacters->values();
 
                 $items[$itemKey]
                     ->setRelation(
