@@ -87,6 +87,7 @@
                                     <div>
                                         <h2 class="ml-3 font-weight-medium font-blizz" id="{{ slug($item->source_name) }}">
                                             {{ $item->source_name }}
+                                            <button class="btn-sm btn btn-success float-right"><span class="fas fa-fw fa-save"></span> {{ __("Submit") }}</button>
                                         </h2>
                                     </div>
                                 </div>
