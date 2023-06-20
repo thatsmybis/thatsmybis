@@ -121,8 +121,8 @@ class PrioController extends Controller
             ->with([
                 'priodCharacters' => function ($query) use ($raidGroup) {
                     return $query
-                        ->where('character_items.raid_group_id', $raidGroup->id)
-                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        ->where('character_items.raid_group_id', $raidGroup->id);
+                        // ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
                 'receivedAndRecipeCharacters' => function ($query) use($guild, $raidGroup) {
                     return $query
@@ -398,8 +398,8 @@ class PrioController extends Controller
             ->with([
                 'priodCharacters' => function ($query) use ($raidGroup) {
                     return $query
-                        ->where('character_items.raid_group_id', $raidGroup->id)
-                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        ->where('character_items.raid_group_id', $raidGroup->id);
+                        // ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
             ])
             ->groupBy('items.item_id')
@@ -462,8 +462,8 @@ class PrioController extends Controller
             ->with([
                 'priodCharacters' => function ($query) use ($raidGroup) {
                     return $query
-                        ->where('character_items.raid_group_id', $raidGroup->id)
-                        ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        ->where('character_items.raid_group_id', $raidGroup->id);
+                        // ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
             ])
             ->get();

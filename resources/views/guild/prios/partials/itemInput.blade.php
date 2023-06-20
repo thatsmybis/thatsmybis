@@ -125,13 +125,13 @@
                 @endif
             </label>
 
+            <!-- data-no-dupes="1" -->
             <select id="{{ $loop->index }}"
                 name=""
                 class="js-input-select form-control dark selectpicker"
                 data-live-search="true"
                 data-input-prefix="items[{{ $item->item_id }}][characters]"
                 data-input-key="[character_id]"
-                data-no-dupes="1"
                 autocomplete="off">
                 <option value="">
                     —

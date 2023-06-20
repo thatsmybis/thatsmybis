@@ -121,8 +121,8 @@ class ItemController extends Controller
                                 ['character_items.is_received', 0],
                             ])
                             ->whereIn('character_items.raid_group_id', $guild->raidGroups->pluck('id'))
-                            ->whereNull('character_items.received_at')
-                            ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                            ->whereNull('character_items.received_at');
+                            // ->groupBy(['character_items.character_id', 'character_items.item_id']);
                     }
                 ]);
             }
@@ -291,8 +291,8 @@ class ItemController extends Controller
                     'priodCharacters' => function ($query) use ($guild, $viewPrioPermission) {
                         return $query
                             ->where(['characters.guild_id' => $guild->id])
-                            ->whereIn('character_items.raid_group_id', $guild->raidGroups->pluck('id'))
-                            ->groupBy(['character_items.character_id', 'character_items.raid_group_id']);
+                            ->whereIn('character_items.raid_group_id', $guild->raidGroups->pluck('id'));
+                            // ->groupBy(['character_items.character_id', 'character_items.raid_group_id']);
                     },
                 ]);
             }

@@ -138,7 +138,7 @@ class Item extends BaseModel
                 'characters.*',
                 'raid_groups.name AS raid_group_name',
                 'raid_group_roles.color AS raid_group_color',
-                DB::raw('MAX(added_by_members.username) AS added_by_username'),
+                'added_by_members.username AS added_by_username',
             ])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raid_groups', function ($join) {
@@ -175,7 +175,7 @@ class Item extends BaseModel
                 'characters.*',
                 'raid_groups.name AS raid_group_name',
                 'raid_group_roles.color AS raid_group_color',
-                DB::raw('MAX(added_by_members.username) AS added_by_username'),
+                'added_by_members.username AS added_by_username',
             ])
             ->whereNull('characters.inactive_at')
             ->leftJoin('raid_groups', function ($join) {
