@@ -70,6 +70,13 @@
                 <input hidden name="instance_id" value="{{ $instance->id }}">
 
                 <div class="row">
+                    <div class="w-100 form-group text-right">
+                        <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Submit") }}</button>
+                        <br>
+                        <span class="text-muted smaller">
+                            {{ __("WARNING: This form expires if you don't submit it within :hours hours (security reasons)", ['hours' =>  env('SESSION_LIFETIME') / 60]) }}
+                        </span>
+                    </div>
                     <div id="pinnableList" class="col-12 mt-3 mb-3 bg-light rounded">
                         @php
                             $oldSourceName = null;
