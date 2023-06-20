@@ -334,7 +334,7 @@
 
                     @if ($character->received->count() > 6)
                         <div class="form-group">
-                            <button class="btn btn-primary"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
+                            <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
                         </div>
                     @endif
 
@@ -458,7 +458,7 @@
 
                     @if ($character->recipes->count() > 6)
                         <div class="form-group">
-                            <button class="btn btn-primary"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
+                            <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Save") }}</button>
                         </div>
                     @endif
 
