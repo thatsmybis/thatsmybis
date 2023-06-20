@@ -150,7 +150,7 @@ class PrioController extends Controller
                         })
                         ->where([
                             'characters.guild_id' => $guild->id,
-                            'is_received'         => 0,
+                            // 'is_received'         => 0,
                             'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                         ])
                         ->whereRaw("(`characters`.`raid_group_id` = {$raidGroup->id} OR `character_raid_groups`.`raid_group_id` = {$raidGroup->id})")
@@ -168,7 +168,7 @@ class PrioController extends Controller
                                     })
                                     ->where([
                                         'characters.guild_id' => $guild->id,
-                                        'is_received'         => 0,
+                                        // 'is_received'         => 0,
                                         'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                                     ])
                                     ->whereRaw("(`characters`.`raid_group_id` = {$raidGroup->id} OR `character_raid_groups`.`raid_group_id` = {$raidGroup->id})")
@@ -257,8 +257,8 @@ class PrioController extends Controller
             ->with([
                 'priodCharacters' => function ($query) use ($raidGroup) {
                     return $query
-                        ->where('character_items.raid_group_id', $raidGroup->id)
-                        ->groupBy(['character_items.character_id']);
+                        ->where('character_items.raid_group_id', $raidGroup->id);
+                        // ->groupBy(['character_items.character_id']);
                 },
                 'receivedAndRecipeCharacters' => function ($query) use($guild, $raidGroup) {
                     return $query
@@ -278,7 +278,7 @@ class PrioController extends Controller
                         })
                         ->where([
                             'characters.guild_id'      => $guild->id,
-                            'is_received'              => 0,
+                            // 'is_received'              => 0,
                         ])
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})");
                         // ->groupBy(['character_items.character_id', 'character_items.item_id']);
@@ -294,7 +294,7 @@ class PrioController extends Controller
                                     })
                                     ->where([
                                         'characters.guild_id'      => $guild->id,
-                                        'is_received'              => 0,
+                                        // 'is_received'              => 0,
                                     ])
                                     ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
                                     ->whereNull('characters.inactive_at');

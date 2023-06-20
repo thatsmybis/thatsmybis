@@ -564,25 +564,79 @@ class CharacterLootController extends Controller
         // Insert...
         CharacterItem::insert($toAdd);
 
-        // Find any wishlist or prio items that match what was just set as received, and flag them
-        // as having been received.
+        // Find the first wishlist or prio item that matches what was just set as received,
+        // and flag it as having been received.
         if ($itemType == Item::TYPE_RECEIVED && $markAsReceived) {
             $itemIds = array_map(function ($toAdd) {return $toAdd['item_id'];}, $toAdd);
-
-            if (count($itemIds) > 0) {
-                // Find all of the wishlist and prio items associated with this character
-                // that are in the IDs of the items we're adding.
-                CharacterItem::
-                    where([
-                        'character_id' => $character->id,
-                        'is_received' => 0,
+            foreach ($itemIds as $addedItemId) {
+                // Find first unreceived wishlist item and mark it as received
+                $wishlistRow = CharacterItem::
+                    select('character_items.*')
+                    // Look for both the original item and the possible token reward for the item
+                    ->join('items', function ($join) {
+                        return $join->on('items.item_id', 'character_items.item_id')
+                            ->orWhereRaw('`items`.`parent_item_id` = `character_items`.`item_id`');
+                    })
+                    ->where([
+                        'character_items.character_id' => $character->id,
+                        'character_items.type'         => Item::TYPE_WISHLIST,
+                        'character_items.is_received'  => 0,
                     ])
-                    ->whereIn('type', [Item::TYPE_WISHLIST, Item::TYPE_PRIO])
-                    ->whereIn('item_id', $itemIds)
-                    ->update([
-                        'is_received' => 1,
-                        'received_at' => $now,
-                    ]);
+                    ->whereRaw("(items.item_id = {$addedItemId} OR items.parent_item_id = {$addedItemId})")
+                    ->groupBy(['character_items.list_number', 'character_items.item_id'])
+                    ->orderBy('character_items.is_received')
+                    ->orderBy('character_items.list_number')
+                    ->orderBy('character_items.order')
+                    ->first();
+                if ($wishlistRow) {
+                    CharacterItem::
+                        where(['id' => $wishlistRow->id])
+                        ->update([
+                            'is_received' => 1,
+                            'received_at' => $now,
+                        ]);
+
+                    $audits[] = [
+                        'description'   => 'System flagged 1 wishlist item as received after character was assigned item',
+                        'type'          => Item::TYPE_WISHLIST,
+                        'member_id'     => $currentMember->id,
+                        'raid_id'       => $wishlistRow->raid_id,
+                        'guild_id'      => $currentMember->guild_id,
+                        'character_id'  => $character->id,
+                        'item_id'       => $wishlistRow->item_id,
+                        'created_at'    => $now,
+                    ];
+                }
+
+                $prioRow = CharacterItem::where([
+                        'item_id'      => $addedItemId,
+                        'character_id' => $character->id,
+                        'type'         => Item::TYPE_PRIO,
+                        'is_received'  => 0,
+                    ])
+                    ->orderBy('is_received')
+                    ->orderBy('order')
+                    ->first();
+                if ($prioRow) {
+                    CharacterItem::
+                        where(['id' => $prioRow->id])
+                        ->update([
+                            'is_received' => 1,
+                            'received_at' => $now,
+
+                        ]);
+
+                    $audits[] = [
+                        'description'   => 'System flagged 1 prio as received after character was assigned item',
+                        'type'          => Item::TYPE_PRIO,
+                        'member_id'     => $currentMember->id,
+                        'raid_id'       => $prioRow->raid_id,
+                        'guild_id'      => $currentMember->guild_id,
+                        'character_id'  => $character->id,
+                        'item_id'       => $prioRow->item_id,
+                        'created_at'    => $now,
+                    ];
+                }
             }
         }
 
