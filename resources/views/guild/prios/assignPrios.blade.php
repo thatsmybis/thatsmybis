@@ -8,6 +8,15 @@
 
     // used to keep track of the order of the list when the user pins items with javascript
     $headerCount = 0;
+
+    $itemSourceAmounts = [];
+
+    foreach ($instance->itemSources as $itemSource) {
+        $itemSourceAmounts[$itemSource->name] = [
+            'wishlistCount' => array_sum(array_keys($items->where('source_name', $itemSource->name)->countBy(function ($item) { return $item->wishlistCharacters->where('pivot.is_received', 0)->count();})->toArray())),
+            'prioCount'     => array_sum(array_keys($items->where('source_name', $itemSource->name)->countBy(function ($item) { return $item->priodCharacters->where('pivot.is_received', 0)->count();})->toArray())),
+        ];
+    }
 @endphp
 
 @section('content')
@@ -40,6 +49,12 @@
                                 <a href="#{{ trim($itemSource->slug) }}">
                                     {{ $itemSource->name }}
                                 </a>
+                                <span title="{{ __('Wishlist') }}" class="{{ $itemSourceAmounts[$itemSource->name]['wishlistCount'] > 0 ? 'small font-weight-bold text-legendary' : 'smaller text-muted' }}"><span class="text-muted fal fa-fw fa-scroll-old"></span>
+                                    {{ $itemSourceAmounts[$itemSource->name]['wishlistCount'] }}
+                                </span>
+                                <span title="{{ __('Prio') }}" class="{{ $itemSourceAmounts[$itemSource->name]['prioCount'] > 0 ? 'small font-weight-bold text-gold' : 'smaller text-muted' }}"><span class="text-muted fal fa-fw fa-sort-amount-down"></span>
+                                    {{ $itemSourceAmounts[$itemSource->name]['prioCount'] }}
+                                </span>
                             </li>
                         @endforeach
                     </ul>
@@ -87,6 +102,12 @@
                                     <div>
                                         <h2 class="ml-3 font-weight-medium font-blizz" id="{{ slug($item->source_name) }}">
                                             {{ $item->source_name }}
+                                            <span title="{{ __('Wishlist') }}" class="smaller {{ $itemSourceAmounts[$item->source_name]['wishlistCount'] > 0 ? 'text-legendary' : 'smaller text-muted' }}"><span class="text-muted fal fa-fw fa-scroll-old"></span>
+                                                {{ $itemSourceAmounts[$item->source_name]['wishlistCount'] }}
+                                            </span>
+                                            <span title="{{ __('Prio') }}" class="smaller {{ $itemSourceAmounts[$item->source_name]['prioCount'] > 0 ? 'text-gold' : 'smaller text-muted' }}"><span class="text-muted fal fa-fw fa-sort-amount-down"></span>
+                                                {{ $itemSourceAmounts[$item->source_name]['prioCount'] }}
+                                            </span>
                                             <button class="btn-sm btn btn-success float-right"><span class="fas fa-fw fa-save"></span> {{ __("Submit") }}</button>
                                         </h2>
                                     </div>
