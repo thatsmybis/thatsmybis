@@ -4,7 +4,7 @@
 @php
     // Iterating over 100+ characters 100+ items results in TENS OF THOUSANDS OF ITERATIONS.
     // So we're iterating over the characters only one time, saving the results, and printing them.
-    $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->characters->where('raid_group_id', $raidGroup->id)]);
+    $characterSelectOptions = (string)View::make('partials.characterOptions', ['characters' => $guild->characters]);
 
     // used to keep track of the order of the list when the user pins items with javascript
     $headerCount = 0;
