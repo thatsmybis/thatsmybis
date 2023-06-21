@@ -111,6 +111,7 @@ class PrioController extends Controller
             ->where([
                 ['item_sources.instance_id', $instance->id],
                 ['items.expansion_id', $guild->expansion_id],
+
             ])
             // ->whereNull('items.parent_id')
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
@@ -135,7 +136,8 @@ class PrioController extends Controller
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})");
                         // ->groupBy(['character_items.character_id', 'character_items.item_id']);
                 },
-            ]);
+            ])
+            ->ofFaction($guild->faction);
 
         if ($guild->is_wishlist_disabled) {
             $query = $query->with('childItems', function ($query) use ($guild) {
