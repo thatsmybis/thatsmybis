@@ -11,7 +11,7 @@ use Illuminate\Validation\Rule;
 
 class PrioController extends Controller
 {
-    const MAX_PRIOS = 40;
+    const MAX_PRIOS = 100;
 
     /**
      * Create a new controller instance.
