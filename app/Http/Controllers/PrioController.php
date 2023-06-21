@@ -111,7 +111,6 @@ class PrioController extends Controller
             ->where([
                 ['item_sources.instance_id', $instance->id],
                 ['items.expansion_id', $guild->expansion_id],
-
             ])
             // ->whereNull('items.parent_id')
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
