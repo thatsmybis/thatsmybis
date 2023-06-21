@@ -518,7 +518,7 @@ class ItemController extends Controller
                     // Resort the wishlist characters.
                     ->sortBy(function($character) {
                         // RE: -strtotime(): rofl, rofl, kekw, bur, kek, roflmao sort by newest to oldest date wishlisted.
-                        return [$character->raid_group_name, $character->pivot->order,  -strtotime($character->pivot->created_at)];
+                        return [$character->raid_group_name, $character->pivot->order,  $character->name, -strtotime($character->pivot->created_at)];
                     });
 
                 if ($filterDuplicates) {
