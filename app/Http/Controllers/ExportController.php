@@ -55,7 +55,9 @@ class ExportController extends Controller {
         "item_tier",
         "item_tier_label",
         "created_at",
-        "updated_at"
+        "updated_at",
+        "instance_name",
+        "source_name",
     ];
 
     const ITEM_NOTE_HEADERS = [
@@ -742,7 +744,9 @@ class ExportController extends Controller {
                 gi.tier        AS 'item_tier',
                 {$tierLabelField},
                 ci.created_at  AS 'created_at',
-                ci.updated_at  AS 'updated_at'";
+                ci.updated_at  AS 'updated_at',
+                instances.name    AS 'instance_name',
+                item_sources.name AS 'source_name'";
         }
 
         return
@@ -753,7 +757,10 @@ class ExportController extends Controller {
                 LEFT JOIN members m      ON m.id = c.member_id
                 LEFT JOIN raid_groups rg ON rg.id = c.raid_group_id
                 JOIN items i             ON i.item_id = ci.item_id
-                LEFT JOIN guild_items gi ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
+                LEFT JOIN item_item_sources ON item_item_sources.item_id = i.item_id
+                LEFT JOIN item_sources      ON item_sources.id = item_item_sources.item_source_id
+                LEFT JOIN instances         ON instances.id = item_sources.instance_id
+                LEFT JOIN guild_items gi    ON gi.item_id = i.item_id AND gi.guild_id = c.guild_id
             WHERE {$lootTypeFragment}
                 c.guild_id = {$guild->id}
                 AND c.inactive_at IS NULL
