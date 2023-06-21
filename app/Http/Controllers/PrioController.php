@@ -77,12 +77,28 @@ class PrioController extends Controller
 
         $guild->load([
             'characters',
+            'characters.secondaryRaidGroups',
         ]);
 
         $raidGroup = RaidGroup::where([
             'guild_id' => $guild->id,
             'id'       => $raidGroupId,
         ])->firstOrFail();
+
+        // Filter characters to only those in this raid (both primary and general raiders)
+        $filteredCharacters = $guild->characters
+            ->filter(
+                function ($character) use ($raidGroup) {
+                    return $character->raid_group_id === $raidGroup->id
+                        || $character->secondaryRaidGroups
+                            ->filter(function ($secondaryRaidGroup) use ($raidGroup) {
+                                return $secondaryRaidGroup->id === $raidGroup->id;
+                            })
+                            ->count() > 0;
+                }
+            );
+
+        $guild->setRelation('characters', $filteredCharacters->values());
 
         $instance = Instance::where('slug', $instanceSlug)
             ->with('itemSources')
@@ -228,9 +244,27 @@ class PrioController extends Controller
             return redirect()->route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $currentMember->id, 'usernameSlug' => $currentMember->slug]);
         }
 
-        $guild->load('characters');
+        $guild->load([
+            'characters',
+            'characters.secondaryRaidGroups',
+        ]);
 
         $raidGroup = RaidGroup::where(['guild_id' => $guild->id, 'id' => $raidGroupId])->firstOrFail();
+
+        // Filter characters to only those in this raid (both primary and general raiders)
+        $filteredCharacters = $guild->characters
+            ->filter(
+                function ($character) use ($raidGroup) {
+                    return $character->raid_group_id === $raidGroup->id
+                        || $character->secondaryRaidGroups
+                            ->filter(function ($secondaryRaidGroup) use ($raidGroup) {
+                                return $secondaryRaidGroup->id === $raidGroup->id;
+                            })
+                            ->count() > 0;
+                }
+            );
+
+        $guild->setRelation('characters', $filteredCharacters->values());
 
         $items = Item::select([
                 'items.id',
