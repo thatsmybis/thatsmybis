@@ -518,7 +518,10 @@ class PrioController extends Controller
         // The means if a user attempts to add new items to the page, they will be ignored.
         // We're already making potentially thousands of iterations (items*prios), this helps ensure this limit.
         foreach ($itemsWithExistingPrios as $existingItem) {
-            $inputItem = $inputItems[$existingItem->item_id];
+            $inputItem = null;
+            if (array_key_exists($existingItem->item_id, $inputItems)) {
+                $inputItem = $inputItems[$existingItem->item_id];
+            }
 
             if ($inputItem) {
                 // Filter out empty inputs
