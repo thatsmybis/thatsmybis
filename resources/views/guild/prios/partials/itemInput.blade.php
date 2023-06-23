@@ -113,14 +113,18 @@
 
             @if (!$guild->is_wishlist_disabled && ($item->priodCharacters->count() > 0 || $item->wishlistCharacters->count() > 0))
                 <li>
-                    <span class="fa-li mt-1" title="{{ __('Differences') }}"><span class="fal fa-fw fa-exclamation-triangle text-warning"></span></span>
+                    <span class="fa-li mt-1" title="{{ __('Differences') }}"><span class="small fal fa-fw fa-exclamation-triangle text-muted"></span></span>
                     <ul class="lesser-indent pt-1 small font-weight-light">
                         @php
+                            $differenceCount = 0;
                             $priodCharacters = $item->priodCharacters->where('pivot.is_received', 0);
                             $wishlistCharacters = $item->wishlistCharacters->where('pivot.is_received', 0);
                         @endphp
                         @foreach ($priodCharacters as $character)
                             @if (!$wishlistCharacters->where('id', $character->id)->count())
+                                @php
+                                    $differenceCount++;
+                                @endphp
                                 <li class="text-muted">
                                     <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ $character ? slug($character->class) : '' }}">{{ $character->name }}</a>
                                     {{ __("prio but no wishlist") }}
@@ -129,12 +133,20 @@
                         @endforeach
                         @foreach ($wishlistCharacters as $character)
                             @if (!$priodCharacters->where('id', $character->id)->count())
+                                @php
+                                    $differenceCount++;
+                                @endphp
                                 <li class="text-muted">
                                     <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ $character ? slug($character->class) : '' }}">{{ $character->name }}</a>
                                     {{ __("wishlisted but no prio") }}
                                 </li>
                             @endif
                         @endforeach
+                        @if ($differenceCount == 0)
+                            <li>
+                                {{ _("none") }}
+                            </li>
+                        @endif
                     </ul>
                 </li>
             @endif
