@@ -13,8 +13,8 @@
 
     foreach ($instance->itemSources as $itemSource) {
         $itemSourceAmounts[$itemSource->name] = [
-            'wishlistCount' => 0, //array_sum(array_keys($items->where('source_name', $itemSource->name)->countBy(function ($source) { return $source->wishlistCharacters->where('pivot.is_received', 0)->count();})->toArray())),
-            'prioCount'     => 0, //array_sum(array_keys($items->where('source_name', $itemSource->name)->countBy(function ($source) { return $source->priodCharacters->where('pivot.is_received', 0)->count();})->toArray())),
+            'wishlistCount' => $guild->is_wishlist_disabled ? 0 : array_sum(array_keys($items->where('source_name', $itemSource->name)->countBy(function ($source) { return $source->wishlistCharacters->where('pivot.is_received', 0)->count();})->toArray())),
+            'prioCount'     => $guild->is_prio_disabled ? 0 : array_sum(array_keys($items->where('source_name', $itemSource->name)->countBy(function ($source) { return $source->priodCharacters->where('pivot.is_received', 0)->count();})->toArray())),
         ];
     }
 @endphp
@@ -38,9 +38,6 @@
 
             <div class="row">
                 <div class="col-12 pt-2 mb-2">
-                    <div class="text-warning">
-                        Wishlist/prio summary counts are unavailable. I am fixing a bug with them.
-                    </div>
                     <ul class="list-inline mb-0">
                         @foreach ($instance->itemSources as $itemSource)
                             @if (!$loop->first)
