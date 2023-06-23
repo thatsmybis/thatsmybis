@@ -532,15 +532,8 @@ class AssignLootController extends Controller
             $whereClause = [
                 'character_items.character_id' => $detachRow['character_id'],
                 'character_items.type'         => Item::TYPE_WISHLIST,
+                'character_items.is_received'  => 0,
             ];
-
-            if ($guild->current_wishlist_number) {
-                $whereClause['character_items.list_number'] = $guild->current_wishlist_number;
-            }
-
-            if (!$deleteWishlist) {
-                $whereClause['character_items.is_received'] = 0;
-            }
 
             // Find wishlist rows for this item
             $wishlistRows = CharacterItem::
@@ -552,49 +545,49 @@ class AssignLootController extends Controller
                 })
                 ->where($whereClause)
                 ->whereRaw("(items.item_id = {$detachRow['item_id']} OR items.parent_item_id = {$detachRow['item_id']})")
-                ->groupBy(['character_items.list_number', 'character_items.item_id'])
+                ->groupBy(['character_items.list_number'])
                 ->orderBy('character_items.is_received')
                 ->orderBy('character_items.list_number')
                 ->orderBy('character_items.order')
                 ->get();
 
             if ($wishlistRows->count()) {
-                // Just deal with the first item; any extras get left for next time.
-                $wishlistRow = $wishlistRows->first();
+                // Drop the first one from each wishlist
+                foreach($wishlistRows as $wishlistRow) {
+                    if ($deleteWishlist) {
+                        // Delete the one we found
+                        CharacterItem::where(['id' => $wishlistRow->id])->delete();
+                        $audits[] = [
+                            'description'   => "System removed 1 wishlist item (list {$wishlistRow->list_number}) after character was assigned item",
+                            'type'          => Item::TYPE_WISHLIST,
+                            'member_id'     => $currentMember->id,
+                            'character_id'  => $wishlistRow->character_id,
+                            'guild_id'      => $currentMember->guild_id,
+                            'raid_group_id' => $wishlistRow->raid_group_id,
+                            'raid_id'       => $raidId,
+                            'item_id'       => $wishlistRow->item_id,
+                            'created_at'    => $now,
+                        ];
+                    } else {
+                        CharacterItem::
+                            where(['id' => $wishlistRow->id])
+                            ->update([
+                                'is_received' => 1,
+                                'received_at' => $now,
+                            ]);
 
-                if ($deleteWishlist) {
-                    // Delete the one we found
-                    CharacterItem::where(['id' => $wishlistRow->id])->delete();
-                    $audits[] = [
-                        'description'   => 'System removed 1 wishlist item after character was assigned item',
-                        'type'          => Item::TYPE_WISHLIST,
-                        'member_id'     => $currentMember->id,
-                        'character_id'  => $wishlistRow->character_id,
-                        'guild_id'      => $currentMember->guild_id,
-                        'raid_group_id' => $wishlistRow->raid_group_id,
-                        'raid_id'       => $raidId,
-                        'item_id'       => $wishlistRow->item_id,
-                        'created_at'    => $now,
-                    ];
-                } else {
-                    CharacterItem::
-                        where(['id' => $wishlistRow->id])
-                        ->update([
-                            'is_received' => 1,
-                            'received_at' => $now,
-                        ]);
-
-                    $audits[] = [
-                        'description'   => 'System flagged 1 wishlist item as received after character was assigned item',
-                        'type'          => Item::TYPE_WISHLIST,
-                        'member_id'     => $currentMember->id,
-                        'character_id'  => $wishlistRow->character_id,
-                        'guild_id'      => $currentMember->guild_id,
-                        'raid_group_id' => $wishlistRow->raid_group_id,
-                        'raid_id'       => $raidId,
-                        'item_id'       => $wishlistRow->item_id,
-                        'created_at'    => $now,
-                    ];
+                        $audits[] = [
+                            'description'   => "System flagged 1 wishlist item (list {$wishlistRow->list_number}) as received after character was assigned item",
+                            'type'          => Item::TYPE_WISHLIST,
+                            'member_id'     => $currentMember->id,
+                            'character_id'  => $wishlistRow->character_id,
+                            'guild_id'      => $currentMember->guild_id,
+                            'raid_group_id' => $wishlistRow->raid_group_id,
+                            'raid_id'       => $raidId,
+                            'item_id'       => $wishlistRow->item_id,
+                            'created_at'    => $now,
+                        ];
+                    }
                 }
             }
 

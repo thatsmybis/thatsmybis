@@ -570,7 +570,7 @@ class CharacterLootController extends Controller
             $itemIds = array_map(function ($toAdd) {return $toAdd['item_id'];}, $toAdd);
             foreach ($itemIds as $addedItemId) {
                 // Find first unreceived wishlist item and mark it as received
-                $wishlistRow = CharacterItem::
+                $wishlistRows = CharacterItem::
                     select('character_items.*')
                     // Look for both the original item and the possible token reward for the item
                     ->join('items', function ($join) {
@@ -583,29 +583,33 @@ class CharacterLootController extends Controller
                         'character_items.is_received'  => 0,
                     ])
                     ->whereRaw("(items.item_id = {$addedItemId} OR items.parent_item_id = {$addedItemId})")
-                    ->groupBy(['character_items.list_number', 'character_items.item_id'])
+                    ->groupBy(['character_items.list_number'])
                     ->orderBy('character_items.is_received')
                     ->orderBy('character_items.list_number')
                     ->orderBy('character_items.order')
-                    ->first();
-                if ($wishlistRow) {
-                    CharacterItem::
-                        where(['id' => $wishlistRow->id])
-                        ->update([
-                            'is_received' => 1,
-                            'received_at' => $now,
-                        ]);
+                    ->get();
 
-                    $audits[] = [
-                        'description'   => 'System flagged 1 wishlist item as received after character was assigned item',
-                        'type'          => Item::TYPE_WISHLIST,
-                        'member_id'     => $currentMember->id,
-                        'raid_id'       => $wishlistRow->raid_id,
-                        'guild_id'      => $currentMember->guild_id,
-                        'character_id'  => $character->id,
-                        'item_id'       => $wishlistRow->item_id,
-                        'created_at'    => $now,
-                    ];
+                if ($wishlistRows->count()) {
+                    // Drop the first one from each wishlist
+                    foreach($wishlistRows as $wishlistRow) {
+                        CharacterItem::
+                            where(['id' => $wishlistRow->id])
+                            ->update([
+                                'is_received' => 1,
+                                'received_at' => $now,
+                            ]);
+
+                        $audits[] = [
+                            'description'   => "System flagged 1 wishlist item (list {$wishlistRow->list_number}) as received after character was assigned item",
+                            'type'          => Item::TYPE_WISHLIST,
+                            'member_id'     => $currentMember->id,
+                            'raid_id'       => $wishlistRow->raid_id,
+                            'guild_id'      => $currentMember->guild_id,
+                            'character_id'  => $character->id,
+                            'item_id'       => $wishlistRow->item_id,
+                            'created_at'    => $now,
+                        ];
+                    }
                 }
 
                 $prioRow = CharacterItem::where([
