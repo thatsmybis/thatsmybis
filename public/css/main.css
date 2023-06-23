@@ -439,6 +439,10 @@ body {
     text-decoration-thickness: 12%;
 }
 
+.pt-1-5 {
+    padding-top: .4rem !important;
+}
+
 .smaller {
     font-size: 70%;
 }

@@ -114,7 +114,7 @@
             @if (!$guild->is_wishlist_disabled && ($item->priodCharacters->count() > 0 || $item->wishlistCharacters->count() > 0))
                 <li>
                     <span class="fa-li mt-1" title="{{ __('Differences') }}"><span class="small fal fa-fw fa-exclamation-triangle text-muted"></span></span>
-                    <ul class="lesser-indent pt-1 small font-weight-light">
+                    <ul class="lesser-indent pt-1-5 small font-weight-light">
                         @php
                             $differenceCount = 0;
                             $priodCharacters = $item->priodCharacters->where('pivot.is_received', 0);
@@ -143,7 +143,7 @@
                             @endif
                         @endforeach
                         @if ($differenceCount == 0)
-                            <li>
+                            <li class="text-muted">
                                 {{ _("none") }}
                             </li>
                         @endif
