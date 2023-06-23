@@ -182,6 +182,9 @@ body {
 .text-underline {
     text-decoration: underline;
 }
+.text-underline-hover:hover {
+    text-decoration: underline;
+}
 
 .text-1 {
     font-size:52px;

@@ -39,6 +39,15 @@ $(document).ready(function () {
     // If the user has pinned items in the cookies, apply their ordering
     sortItems();
 
+    $(".js-reset-ranks").click(function () {
+        const index = $(this).data("index");
+        $(`input.js-rank[data-index='${index}']`).val("");
+    });
+
+    $(".js-reset-all-ranks").click(function () {
+        $(`input.js-rank`).val("");
+    });
+
     $(".loadingBarContainer").removeClass("d-flex").hide();
     $("#editForm").show();
 });

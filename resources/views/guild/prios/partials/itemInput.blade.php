@@ -114,7 +114,7 @@
             @if (!$guild->is_wishlist_disabled && ($item->priodCharacters->count() > 0 || $item->wishlistCharacters->count() > 0))
                 <li>
                     <span class="fa-li mt-1" title="{{ __('Differences') }}"><span class="fal fa-fw fa-exclamation-triangle text-warning"></span></span>
-                    <ul class="small lesser-indent pt-1">
+                    <ul class="lesser-indent pt-1 small font-weight-light">
                         @php
                             $priodCharacters = $item->priodCharacters->where('pivot.is_received', 0);
                             $wishlistCharacters = $item->wishlistCharacters->where('pivot.is_received', 0);
@@ -227,15 +227,16 @@
                                                     type="number"
                                                     min="1"
                                                     max="{{ $maxPrios }}"
-                                                    class="d-inline numbered form-control dark slim-order"
+                                                    class="js-rank d-inline numbered form-control dark slim-order"
                                                     autocomplete="off"
                                                     placeholder="{{ $i + 1 }}"
-                                                    value="{{ $characterOrder }}" />
+                                                    value="{{ $characterOrder }}"
+                                                    data-index="{{ $loop->index }}" />
                                             </div>
                                         </div>
                                     </li>
                                     <li class="list-inline-item">
-                                        <span class="js-input-label text-{{ $character ? slug($character->class) : '' }} font-weight-medium">
+                                        <span class="js-input-label text-{{ $character ? slug($character->class) : '' }} font-weight-medium {{ $strikeThrough }}">
                                             {!! $characterLabel !!}
                                         </span>
                                     </li>
@@ -269,6 +270,10 @@
                     @endif
                 @endfor
             </ol>
+
+            @if ($item->priodCharacters->count())
+                <span class="js-reset-ranks small text-muted cursor-pointer text-underline-hover" data-index="{{ $loop->index }}">{{ __("reset ranks") }} <span class="fal fa-fw fa-sync"></span></span>
+            @endif
 
             @if ($errors->has('items.' . $item->item_id . '.*'))
                 <div class="'text-danger font-weight-bold'">
