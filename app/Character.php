@@ -161,6 +161,7 @@ class Character extends BaseModel
         return $this->belongsToMany(Raid::class, 'raid_characters', 'character_id', 'raid_id')
             ->orderByDesc('raids.date')
             ->withPivot([
+                'id',
                 'is_exempt',
                 'credit',
                 'remark_id',

@@ -104,7 +104,7 @@
                     @if (count($wishlists))
                         <div class="col-12 mb-4">
                             <span id="show-inactive-wishlists" class="cursor-pointer font-weight-bold text-warning">
-                                <span class="text-legendary fas fa-fw fa-scroll-old"></span> {{ __("show inactive wishlists") }} ({{count($wishlists) - 1 }}) <span class="text-link fas fa-fw fa-eye-slash"></span>
+                                <span class="fas fa-fw fa-scroll-old"></span> {{ __("show inactive wishlists") }} ({{count($wishlists) - 1 }}) <span class="text-link fas fa-fw fa-eye-slash"></span>
                             </span>
                         </div>
 

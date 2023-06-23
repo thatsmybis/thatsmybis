@@ -66,7 +66,7 @@
 
             @if (!$guild->is_wishlist_disabled && $item->wishlistCharacters->count() > 0)
                 <li>
-                    <span class="fa-li mt-1" title="Characters who have it wishlisted"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
+                    <span class="fa-li mt-1" title="{{ __('Characters who have it wishlisted') }}"><span class="fal fa-fw fa-scroll-old text-legendary"></span></span>
                     <ul class="list-inline">
                         @foreach ($item->wishlistCharacters as $character)
                             <li class="list-inline-item">
@@ -97,7 +97,7 @@
 
             @if ($item->receivedAndRecipeCharacters->count() > 0)
                 <li>
-                    <span class="fa-li mt-1" title="Characters who have received it"><span class="fal fa-fw fa-sack text-success"></span></span>
+                    <span class="fa-li mt-1" title="{{ __('Characters who have received it') }}"><span class="fal fa-fw fa-sack text-success"></span></span>
                     <ul class="list-inline">
                         @foreach ($item->receivedAndRecipeCharacters as $character)
                             <li class="list-inline-item">
@@ -106,6 +106,34 @@
                                     <span class="text-{{ slug($character->class) }}">{{ $character->name }}</span>
                                 </a>
                             </li>
+                        @endforeach
+                    </ul>
+                </li>
+            @endif
+
+            @if (!$guild->is_wishlist_disabled && ($item->priodCharacters->count() > 0 || $item->wishlistCharacters->count() > 0))
+                <li>
+                    <span class="fa-li mt-1" title="{{ __('Differences') }}"><span class="fal fa-fw fa-exclamation-triangle text-warning"></span></span>
+                    <ul class="small lesser-indent pt-1">
+                        @php
+                            $priodCharacters = $item->priodCharacters->where('pivot.is_received', 0);
+                            $wishlistCharacters = $item->wishlistCharacters->where('pivot.is_received', 0);
+                        @endphp
+                        @foreach ($priodCharacters as $character)
+                            @if (!$wishlistCharacters->where('id', $character->id)->count())
+                                <li class="text-muted">
+                                    <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ $character ? slug($character->class) : '' }}">{{ $character->name }}</a>
+                                    {{ __("prio but no wishlist") }}
+                                </li>
+                            @endif
+                        @endforeach
+                        @foreach ($wishlistCharacters as $character)
+                            @if (!$priodCharacters->where('id', $character->id)->count())
+                                <li class="text-muted">
+                                    <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ $character ? slug($character->class) : '' }}">{{ $character->name }}</a>
+                                    {{ __("wishlisted but no prio") }}
+                                </li>
+                            @endif
                         @endforeach
                     </ul>
                 </li>

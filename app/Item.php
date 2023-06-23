@@ -189,6 +189,7 @@ class Item extends BaseModel
             })
             ->withTimeStamps()
             ->withPivot([
+                'id',
                 'added_by',
                 'raid_group_id',
                 'type',
@@ -221,6 +222,7 @@ class Item extends BaseModel
             })
             ->withTimeStamps()
             ->withPivot([
+                'id',
                 'added_by',
                 'raid_group_id',
                 'type',
@@ -258,6 +260,7 @@ class Item extends BaseModel
             ->whereNull('characters.inactive_at')
             ->withTimeStamps()
             ->withPivot([
+                'id',
                 'added_by',
                 'type',
                 'note',
