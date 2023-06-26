@@ -45,7 +45,9 @@ $(document).ready(function () {
     });
 
     $(".js-reset-all-ranks").click(function () {
-        $(`input.js-rank`).val("");
+        if (confirm("This will remove any manually input numbers for prio ranks. You can review this before you submit the page. Continue?")) {
+            $(`input.js-rank`).val("");
+        }
     });
 
     $(".loadingBarContainer").removeClass("d-flex").hide();

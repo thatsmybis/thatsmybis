@@ -87,7 +87,7 @@
                 <div class="row">
                     <div class="d-flex justify-content-between pb-3 w-100">
                         <div>
-                            <span class="js-reset-all-ranks btn btn-warning "><span class="fas fa-fw fa-sync"></span> {{ __("Reset all prio rankings") }}</span>
+                            <span class="js-reset-all-ranks btn btn-warning "><span class="fas fa-fw fa-redo"></span> {{ __("Clear all manually input ranks") }}</span>
                         </div>
                         <div class="text-right">
                             <button class="btn btn-success"><span class="fas fa-fw fa-save"></span> {{ __("Submit") }}</button>

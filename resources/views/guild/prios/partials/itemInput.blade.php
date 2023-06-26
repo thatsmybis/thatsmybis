@@ -197,7 +197,7 @@
                         $characterId    = old($oldInputName . '.character_id') ? old($oldInputName . '.character_id') : ($character ? $character->id : null);
                         $strikeThrough = !old($oldInputName) && $character && ($character->pivot->is_received || $character->pivot->received_at) ? 'font-strikethrough' : null;
                     @endphp
-                    <li class="input-item position-relative {{ $characterId ? 'd-flex' : '' }} {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }} {{ $strikeThrough }}"
+                    <li class="input-item position-relative {{ $characterId ? 'd-flex' : '' }} {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}"
                         data-needs-template="{{ !$characterId ? '1' : '0' }}"
                         data-index="{{ $i }}"
                         data-input-prefix="items[{{ $item->item_id }}][characters][{{ $i }}]"
@@ -284,7 +284,7 @@
             </ol>
 
             @if ($item->priodCharacters->count())
-                <span class="js-reset-ranks small text-muted cursor-pointer text-underline-hover" data-index="{{ $loop->index }}">{{ __("reset ranks") }} <span class="fal fa-fw fa-sync"></span></span>
+                <span class="js-reset-ranks small text-muted cursor-pointer text-underline-hover" data-index="{{ $loop->index }}">{{ __("clear manually input ranks") }} <span class="fal fa-fw fa-redo"></span></span>
             @endif
 
             @if ($errors->has('items.' . $item->item_id . '.*'))
