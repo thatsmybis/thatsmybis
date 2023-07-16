@@ -149,8 +149,8 @@ class PrioController extends Controller
                             'characters.guild_id' => $guild->id,
                         ])
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
-                        ->orderBy('characters.name');
-                        // ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        ->orderBy('characters.name')
+                        ->groupBy(['character_items.id']);
                 },
             ])
             ->ofFaction($guild->faction);
@@ -172,7 +172,7 @@ class PrioController extends Controller
                             'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                         ])
                         ->whereRaw("(`characters`.`raid_group_id` = {$raidGroup->id} OR `character_raid_groups`.`raid_group_id` = {$raidGroup->id})")
-                        // ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
+                        ->groupBy(['character_items.id'])
                         ->orderBy('character_items.order')
                         ->orderBy('characters.name');
                 },
@@ -192,7 +192,7 @@ class PrioController extends Controller
                                     ])
                                     ->whereRaw("(`characters`.`raid_group_id` = {$raidGroup->id} OR `character_raid_groups`.`raid_group_id` = {$raidGroup->id})")
                                     ->whereNull('characters.inactive_at')
-                                    // ->groupBy(['character_items.character_id', 'character_items.item_id', 'character_items.list_number'])
+                                    ->groupBy(['character_items.id'])
                                     ->orderBy('character_items.order')
                                     ->orderBy('characters.name');
                             },
@@ -306,8 +306,8 @@ class PrioController extends Controller
                         ->where([
                             'characters.guild_id' => $guild->id,
                         ])
-                        ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})");
-                        // ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
+                        ->groupBy(['character_items.id']);
                 },
                 'wishlistCharacters' => function ($query) use($guild, $raidGroup) {
                     return $query
@@ -319,8 +319,8 @@ class PrioController extends Controller
                             // 'is_received'              => 0,
                             'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                         ])
-                        ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})");
-                        // ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                        ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
+                        ->groupBy(['character_items.id']);
                 },
                 'childItems' => function ($query) use ($guild, $raidGroup) {
                     return $query
@@ -337,8 +337,8 @@ class PrioController extends Controller
                                         'list_number'         => DB::raw('`wishlist_guilds`.`current_wishlist_number`'),
                                     ])
                                     ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
-                                    ->whereNull('characters.inactive_at');
-                                    // ->groupBy(['character_items.character_id', 'character_items.item_id']);
+                                    ->whereNull('characters.inactive_at')
+                                    ->groupBy(['character_items.id']);
                             },
                         ]);
                 },
