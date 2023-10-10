@@ -231,7 +231,6 @@ class Guild extends BaseModel
     }
 
     /**
-     * SHORT AND SIMPLE NAME IS SHORT AND SIMPLE.
      * Returns all of the characters and all the stuff associated with them.
      * Since it goes through the work of looking them up, also returns some of passed in member's permissions.
      *
@@ -242,7 +241,16 @@ class Guild extends BaseModel
      *
      * @return array
      */
-    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, $showInactive, $allWishlists) {
+    public function getCharactersWithItemsAndPermissions(
+        $showOfficerNote,
+        $showPrios,
+        $showWishlist,
+        $viewPrioPermission,
+        $showInactive,
+        $allWishlists,
+        $minDate = null,
+        $maxDate = null
+    ) {
         $characterFields = [
             'characters.id',
             'characters.member_id',
@@ -293,7 +301,15 @@ class Guild extends BaseModel
             ->where('characters.guild_id', $this->id)
             ->orderBy('characters.name')
             ->with([
-                'received',
+                'received' => function ($query) use ($minDate, $maxDate) {
+                    if ($minDate) {
+                        $query = $query->where('character_items.created_at', '>=', $minDate);
+                    }
+                    if ($maxDate) {
+                        $query = $query->where('character_items.created_at', '<=', $maxDate);
+                    }
+                    return $query;
+                },
                 'secondaryRaidGroups' => function ($query) {
                     return $query
                         ->select([
@@ -316,21 +332,46 @@ class Guild extends BaseModel
         if ($showPrios) {
             if ($this->prio_show_count && !$viewPrioPermission) {
                 $query = $query->with(['prios' => function ($query) {
+
                     return $query->where([
                         ['character_items.order', '<=', $this->prio_show_count],
                     ]);
                 }]);
             } else {
-                $query = $query->with('prios');
+                $query = $query->with(['prios' => function ($query) {
+                    return $query->where([
+                        ['character_items.order', '<=', $this->prio_show_count],
+                    ]);
+                }]);
             }
         }
 
         if ($showWishlist) {
             if ($allWishlists) {
                 // NOTE that this will output the relation 'allWishlists' and NOT 'wishlist'
-                $query = $query->with('allWishlists');
+                $query = $query->with([
+                    'allWishlists' => function ($query) use ($minDate, $maxDate) {
+                        if ($minDate) {
+                            $query = $query->where('character_items.created_at', '>=', $minDate);
+                        }
+                        if ($maxDate) {
+                            $query = $query->where('character_items.created_at', '<=', $maxDate);
+                        }
+                        return $query;
+                    }
+                ]);
             } else {
-                $query = $query->with('wishlist');
+                $query = $query->with([
+                    'wishlist' => function ($query) use ($minDate, $maxDate) {
+                        if ($minDate) {
+                            $query = $query->where('character_items.created_at', '>=', $minDate);
+                        }
+                        if ($maxDate) {
+                            $query = $query->where('character_items.created_at', '<=', $maxDate);
+                        }
+                        return $query;
+                    }
+                ]);
             }
         }
 

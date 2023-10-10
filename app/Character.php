@@ -380,7 +380,7 @@ class Character extends BaseModel
     {
         return $this->hasMany(CharacterItem::class)
             ->where('is_received', 0)
-            ->whereIn('type', ['wishlist', 'prio']);
+            ->whereIn('type', [Item::TYPE_WISHLIST, Item::TYPE_PRIO]);
     }
 
     /**

@@ -12,45 +12,49 @@
                         {{ __("Choose Data to Export") }}
                     </h1>
                 </div>
+                <div class="col-12 bg-light rounded small pt-3">
+                    <div class="row">
+                        <div class="col-12 text-muted">
+                            <h4>{{ __("Filter received loot by date") }}</h4>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-2 col-md-3 col-6">
+                            <div class="form-group">
+                                <label for="min_date" class="text-muted font-weight-light">
+                                    <span class="fas fa-fw fa-calendar-minus text-muted"></span>
+                                    {{ __("Min Date") }}
+                                </label>
+                                <input name="min_date" min="2004-09-22"
+                                    max="{{ getDateTime('Y-m-d') }}"
+                                    value="{{ Request::get('min_date') ? Request::get('min_date') : ''}}"
+                                    type="date"
+                                    placeholder="—"
+                                    class="form-control dark text-muted"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-2 col-md-3 col-6">
+                            <div class="form-group">
+                                <label for="max_date" class="text-muted font-weight-light">
+                                    <span class="fas fa-fw fa-calendar-plus text-muted"></span>
+                                    {{ __("Max Date") }}
+                                </label>
+                                <input name="max_date"
+                                    min="2004-09-22"
+                                    value="{{ Request::get('max_date') ? Request::get('max_date') : ''}}"
+                                    max="{{ getDateTime('Y-m-d') }}"
+                                    type="date"
+                                    placeholder="—"
+                                    class="form-control dark text-muted"
+                                    autocomplete="off">
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     <ol class="no-bullet no-indent striped">
-                        <!-- TMB Tooltips Addon -->
-                        <li class="p-3 mb-3 rounded">
-                            <h2>
-                                <span class="fab fa-fw fa-battle-net text-mage"></span>
-                                <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-uncommon">
-                                    {{ __("TMB Tooltips Addon") }}
-                                </a>
-                            </h2>
-                            <p>
-                                {{ __("Copy+paste this into the") }} <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank">{{ __("TMB Tooltips Addon") }}</a>
-                            </p>
-                            <!--
-                            <p>
-                                Fields exported:
-                            </p>
-                            <div class="bg-dark rounded p-2">
-                                <code>
-                                    {{ collect(App\Http\Controllers\ExportController::LOOT_HEADERS)->implode(', ') }}
-                                </code>
-                            </div>
-                            -->
-                            <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}" target="_blank" class="btn btn-success">
-                                        <span class="fas fa-fw fas fa-file-csv"></span>
-                                        {{ __("Download CSV") }}
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank">
-                                        <span class="fas fa-fw fas fa-file-csv"></span>
-                                        {{ __("View CSV") }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li>
-
                         <!-- Gargul -->
                         <li class="p-3 mb-3 rounded">
                             <h2>
@@ -63,6 +67,8 @@
                                 {!! __("Import wishlist and loot priority data into the Gargul addon. Select all ( ctrl+a ), copy ( ctrl+c ) and then paste ( ctrl+v ) in the import window (/gl wl). For more info check :curseforge_url on Curseforge. Happy lootin'!", ['curseforge_url' => "<a href='https://www.curseforge.com/wow/addons/gargul' target='_blank'>Gargul</a>"]) !!}
                             </p>
                             <form class="form-horizontal" role="form" method="GET" action="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                <input type="text" name="gargul_min_date" value="" id="gargul_min_date" hidden />
+                                <input type="text" name="gargul_max_date" value="" id="gargul_max_date" hidden />
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <button class="btn btn-success" type="submit">
@@ -98,6 +104,53 @@
                             </form>
                         </li>
 
+                        <!-- TMB Tooltips Addon -->
+                        <li class="p-3 mb-3 rounded">
+                            <h2>
+                                <span class="fab fa-fw fa-battle-net text-mage"></span>
+                                <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-uncommon">
+                                    {{ __("TMB Tooltips Addon") }}
+                                </a>
+                            </h2>
+                            <p>
+                                {{ __("Copy+paste this into the") }} <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank">{{ __("TMB Tooltips Addon") }}</a>
+                            </p>
+                            <!--
+                            <p>
+                                Fields exported:
+                            </p>
+                            <div class="bg-dark rounded p-2">
+                                <code>
+                                    {{ collect(App\Http\Controllers\ExportController::LOOT_HEADERS)->implode(', ') }}
+                                </code>
+                            </div>
+                            -->
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a
+                                        href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}"
+                                        data-url="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}"
+                                        target="_blank"
+                                        class="js-uses-date-filter btn btn-success"
+                                    >
+                                        <span class="fas fa-fw fas fa-file-csv"></span>
+                                        {{ __("Download CSV") }}
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a
+                                        href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}"
+                                        data-url="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}"
+                                        target="_blank"
+                                        class="js-uses-date-filter"
+                                    >
+                                        <span class="fas fa-fw fas fa-file-csv"></span>
+                                        {{ __("View CSV") }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
                         <li class="p-3 mb-3 rounded">
                             <p class="text-4">
                                 {!! __('Exports are <span class="font-weight-bold">CACHED</span> for :count minutes.', ['count' => env('EXPORT_CACHE_SECONDS', 120) / 60]) !!}
@@ -127,13 +180,23 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => 'all']) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => 'all']) }}"
+                                        data-url="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => 'all']) }}"
+                                        target="_blank"
+                                        class="js-uses-date-filter tag"
+                                    >
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         {{ __("Download CSV") }}
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => 'all']) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => 'all']) }}"
+                                        data-url="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => 'all']) }}"
+                                        target="_blank"
+                                        class="js-uses-date-filter tag"
+                                    >
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         {{ __("View CSV") }}
                                     </a>
@@ -151,13 +214,21 @@
                             </p>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_WISHLIST]) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_WISHLIST]) }}"
+                                        target="_blank"
+                                        class="tag"
+                                    >
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         {{ __("Download CSV") }}
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_WISHLIST]) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_WISHLIST]) }}"
+                                        target="_blank"
+                                        class="tag"
+                                    >
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         {{ __("View CSV") }}
                                     </a>
@@ -175,13 +246,21 @@
                             </p>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_PRIO]) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_PRIO]) }}"
+                                        target="_blank"
+                                        class="tag"
+                                    >
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         {{ __("Download CSV") }}
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_PRIO]) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_PRIO]) }}"
+                                        target="_blank"
+                                        class="tag"
+                                    >
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         {{ __("View CSV") }}
                                     </a>
@@ -199,13 +278,23 @@
                             </p>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_RECEIVED]) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_RECEIVED]) }}"
+                                        data-url="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv', 'lootType' => App\Item::TYPE_RECEIVED]) }}"
+                                        target="_blank"
+                                        class="js-uses-date-filter tag"
+                                    >
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         {{ __("Download CSV") }}
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_RECEIVED]) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_RECEIVED]) }}"
+                                        data-url="{{ route('guild.export.loot', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html', 'lootType' => App\Item::TYPE_RECEIVED]) }}"
+                                        target="_blank"
+                                        class="js-uses-date-filter tag"
+                                    >
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         {{ __("View CSV") }}
                                     </a>
@@ -362,13 +451,23 @@
                             </div>
                             <ul class="list-inline">
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'json']) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'json']) }}"
+                                        data-url="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'json']) }}"
+                                        target="_blank"
+                                        class="js-uses-date-filter tag"
+                                    >
                                         <span class="fas fa-fw fa-file-code text-muted"></span>
                                         {{ __("Download JSON") }}
                                     </a>
                                 </li>
                                 <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="tag">
+                                    <a
+                                        href="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}"
+                                        data-url="{{ route('guild.export.charactersWithItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}"
+                                        target="_blank"
+                                        class="js-uses-date-filter tag"
+                                    >
                                         <span class="fas fa-fw fa-file-code text-muted"></span>
                                         {{ __("View JSON") }}
                                     </a>
@@ -382,4 +481,35 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('scripts')
+<script>
+    $(document).ready(function() {
+        $("[name=min_date]").change(function(){updateLinks()});
+        $("[name=max_date]").change(function(){updateLinks()});
+        updateLinks();
+    });
+    /**
+     * `js-uses-date-filter` explained:
+     * Any <a /> with this class will have its href automatically be updated to
+     * contain whatever values are in the date inputs.
+     */
+    function updateLinks() {
+        let minDate = $("[name=min_date]").val();
+        let maxDate = $("[name=max_date]").val();
+        // Convert from local to UTC for server, remove milliseconds for server
+        minDate = minDate ? Math.floor(moment(minDate + ' 00:00:00').valueOf() / 1000) : '';
+        // For max date, all times until end of day are valid
+        maxDate = maxDate ? Math.floor(moment(maxDate + ' 23:59:59').valueOf() / 1000) : '';
+
+        $(".js-uses-date-filter").each(function(index) {
+            let url = $(this).data('url');
+            url = url + `?min_date=${minDate}&max_date=${maxDate}`;
+            $(this).prop('href', url);
+        });
+        $("#gargul_min_date").val(minDate);
+        $("#gargul_max_date").val(maxDate);
+    }
+</script>
 @endsection

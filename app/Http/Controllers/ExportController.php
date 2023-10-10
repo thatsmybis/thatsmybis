@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use App;
 use Exception;
 use App\{Guild, GuildItem, Item};
-use Illuminate\Support\Facades\{DB, Cache};
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
+use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\{DB, Cache};
 use Illuminate\View\View;
 
 class ExportController extends Controller {
@@ -216,11 +217,18 @@ class ExportController extends Controller {
                     $query->select('id', 'name');
                 },
                 'outstandingItems' => function ($query) use ($guild, $listNumbers) {
+// [$minDate, $maxDate] = $this->getDatesFromRequest();
+// if ($minDate) {
+//     $query = $query->where('created_at', '>=', $minDate);
+// }
+// if ($maxDate) {
+//     $query = $query->where('created_at', '<=', $maxDate);
+// }
                     return $query->where(function($query) use ($guild, $listNumbers) {
                         return $query
                             ->whereIn('list_number', $listNumbers)
                             ->orWhere(function ($query) {
-                                $query->where('type', 'prio')
+                                $query->where('type', Item::TYPE_PRIO)
                                     ->where('is_received', 0);
                             })
                             ->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
@@ -364,12 +372,15 @@ class ExportController extends Controller {
         if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
             $showWishlist = true;
         }
-
-        $characters = Cache::remember('export:roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':viewPrioPermission:' . $viewPrioPermission . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden,
+        $cacheKey = 'export:roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':viewPrioPermission:' . $viewPrioPermission . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden;
+        $characters = Cache::remember(
+            $cacheKey,
             env('EXPORT_CACHE_SECONDS', 120),
             function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
-            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, false)['characters']->makeVisible('officer_note');
-        });
+                [$minDate, $maxDate] = $this->getDatesFromRequest();
+                return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, false, $minDate, $maxDate)['characters']->makeVisible('officer_note');
+            }
+        );
 
         return $this->getExport($characters, 'Character JSON', $fileType);
     }
@@ -676,6 +687,28 @@ class ExportController extends Controller {
                     'Cache-Control'          => 'no-store, no-cache',
                 ]);
         }
+    }
+
+    /**
+     * Helper function to get the min and max date filters from the request.
+     *
+     * @return array
+     */
+    private function getDatesFromRequest():array
+    {
+        $minDate = request()->input('min_date');
+        $maxDate = request()->input('max_date');
+        if (is_numeric($minDate)) {
+            $minDate = Carbon::createFromTimestamp($minDate)->toDateTimeString();
+        } else {
+            $minDate = null;
+        }
+        if (is_numeric($maxDate)) {
+            $maxDate = Carbon::createFromTimestamp($maxDate)->toDateTimeString();
+        } else {
+            $maxDate = null;
+        }
+        return [$minDate, $maxDate];
     }
 
     /**
