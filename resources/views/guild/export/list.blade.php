@@ -12,10 +12,11 @@
                         {{ __("Choose Data to Export") }}
                     </h1>
                 </div>
+                {{--
                 <div class="col-12 bg-light rounded small pt-3">
                     <div class="row">
                         <div class="col-12 text-muted">
-                            <h4>{{ __("Filter received loot by date") }}</h4>
+                            <h4>{{ __("Filter loot received by date") }}</h4>
                         </div>
                     </div>
                     <div class="row">
@@ -53,6 +54,7 @@
                         </div>
                     </div>
                 </div>
+                --}}
                 <div class="col-12 pt-3 pb-1 mb-2 bg-light rounded">
                     <ol class="no-bullet no-indent striped">
                         <!-- Gargul -->

@@ -18,6 +18,44 @@
                     </div>
                 </div>
 
+                <div class="row">
+                    <div class="col-lg-2 col-md-3 col-6">
+                        <div class="form-group">
+                            <label for="gargul_min_date" class="text-muted font-weight-light">
+                                <span class="fas fa-fw fa-calendar-minus text-muted"></span>
+                                {{ __("Min Date") }}
+                            </label>
+                            <input name="gargul_min_date"
+                                id="gargul_min_date"
+                                min="2004-09-22"
+                                max="{{ getDateTime('Y-m-d') }}"
+                                value=""
+                                type="date"
+                                placeholder="—"
+                                class="form-control dark text-muted"
+                                autocomplete="off">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-2 col-md-3 col-6">
+                        <div class="form-group">
+                            <label for="gargul_max_date" class="text-muted font-weight-light">
+                                <span class="fas fa-fw fa-calendar-plus text-muted"></span>
+                                {{ __("Max Date") }}
+                            </label>
+                            <input name="gargul_max_date"
+                                id="gargul_max_date"
+                                min="2004-09-22"
+                                value=""
+                                max="{{ getDateTime('Y-m-d') }}"
+                                type="date"
+                                placeholder="—"
+                                class="form-control dark text-muted"
+                                autocomplete="off">
+                        </div>
+                    </div>
+                </div>
+
                 <div class="row mt-4 mb-4">
                     <div class="col-12 pt-2 pb-2 bg-light rounded">
                         <div class="row">
@@ -71,7 +109,20 @@
 
 @section('scripts')
 <script>
+    // Page may be loaded with min and max date arguments. We want to preserve them by
+    // Adding them to the min and max date inputs. But first we need to convert from
+    // PHP's UTC timestamp to a Javascript local timestamp.
+    // Add 000 to date for the milliseconds Javascript wants for timestamps.
+    let minDate = {{ Request::get('gargul_min_date') ? Request::get('gargul_min_date') . '000' : 'null'}};
+    minDate = minDate ? moment.utc(minDate).format('Y-MM-DD') : '';
+    let maxDate = {{ Request::get('gargul_max_date') ? Request::get('gargul_max_date') . '000' : 'null'}};
+    maxDate = maxDate ? moment.utc(maxDate).format('Y-MM-DD') : '';
+
     $(document).ready(function() {
+        // Load dates into inputs on first load.
+        $("#gargul_min_date").val(minDate);
+        $("#gargul_max_date").val(maxDate);
+
         let checkboxSelector = "input[type='checkbox'][name='gargul_wishlist[]']";
 
         // Make sure the proper wishlists are checked based on the current URI
@@ -92,6 +143,9 @@
 
         // Update the page when the user selects different wishlists
         $(checkboxSelector).change(refreshExport);
+        // Update the page when the user selects different dates
+        $("#gargul_min_date").change(refreshExport);
+        $("#gargul_max_date").change(refreshExport);
 
         let refreshTimeout;
         function refreshExport() {
@@ -103,6 +157,15 @@
                 checked.each(function (i) {
                     url += "gargul_wishlist[]=" + checked[i].value + "&";
                 });
+
+                let minDate = $("#gargul_min_date").val();
+                let maxDate = $("#gargul_max_date").val();
+                // Convert from local to UTC for server, remove milliseconds for server
+                minDate = minDate ? Math.floor(moment(minDate + ' 00:00:00').valueOf() / 1000) : '';
+                // For max date, all times until end of day are valid
+                maxDate = maxDate ? Math.floor(moment(maxDate + ' 23:59:59').valueOf() / 1000) : '';
+
+                url += `gargul_min_date=${minDate}&gargul_max_date=${maxDate}&`;
 
                 window.location.href = url;
             }, 1500);

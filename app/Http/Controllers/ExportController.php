@@ -220,6 +220,13 @@ class ExportController extends Controller {
                     $query->select('id', 'name');
                 },
                 'outstandingItems' => function ($query) use ($guild, $listNumbers) {
+// [$minDate, $maxDate] = $this->getDatesFromRequest();
+// if ($minDate) {
+//     $query = $query->where('created_at', '>=', $minDate);
+// }
+// if ($maxDate) {
+//     $query = $query->where('created_at', '<=', $maxDate);
+// }
                     return $query->where(function($query) use ($guild, $listNumbers) {
                         return $query
                             ->whereIn('list_number', $listNumbers)
