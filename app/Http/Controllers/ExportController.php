@@ -148,7 +148,8 @@ class ExportController extends Controller {
             ci.received_at AS 'received_at',
             REPLACE(REPLACE(gi.priority, CHAR(13), ' '), CHAR(10), ' ') AS 'item_prio_note',
             -- {$itemOfficerNote} AS 'item_officer_note',
-            {$tierLabelField}";
+            {$tierLabelField},
+            ci.created_at AS 'created_at'";
 
         $rows = DB::select(DB::raw($this->getLootBaseSql('noRecipes', $guild, $showPrios, $showWishlist, $showOfficerNote, $viewPrioPermission, $fields)));
 
@@ -171,6 +172,8 @@ class ExportController extends Controller {
             $rows,
             DB::select(DB::raw($this->getNotesBaseSql($guild, $showOfficerNote, $fields)))
         );
+
+        $rows = $this->applyDateFilter($rows);
 
         $csv = $this->createCsv($rows, self::ADDON_HEADERS);
 
@@ -217,13 +220,6 @@ class ExportController extends Controller {
                     $query->select('id', 'name');
                 },
                 'outstandingItems' => function ($query) use ($guild, $listNumbers) {
-// [$minDate, $maxDate] = $this->getDatesFromRequest();
-// if ($minDate) {
-//     $query = $query->where('created_at', '>=', $minDate);
-// }
-// if ($maxDate) {
-//     $query = $query->where('created_at', '<=', $maxDate);
-// }
                     return $query->where(function($query) use ($guild, $listNumbers) {
                         return $query
                             ->whereIn('list_number', $listNumbers)
@@ -511,6 +507,8 @@ class ExportController extends Controller {
                     );
                 }
 
+                $rows = $this->applyDateFilter($rows);
+
                 return $this->createCsv($rows, self::LOOT_HEADERS);
             });
 
@@ -687,6 +685,47 @@ class ExportController extends Controller {
                     'Cache-Control'          => 'no-store, no-cache',
                 ]);
         }
+    }
+
+    /**
+     * Take a row of data and filter out received items with dates outside of the desired range.
+     * Range is provided by user input when they send the GET request.
+     */
+    private function applyDateFilter(array $rows): array
+    {
+        // Filter out unwanted rows
+        [$minDate, $maxDate] = $this->getDatesFromRequest();
+        foreach ($rows as $key => $row) {
+            if ($row->type !== Item::TYPE_RECEIVED) {
+                continue;
+            }
+            // Rely on received at date first, if that doesn't work fall back to created_at
+            if ($row->received_at) {
+                if ($row->received_at < $minDate) {
+                    unset($rows[$key]);
+                    continue;
+                }
+                if ($row->received_at > $maxDate) {
+                    unset($rows[$key]);
+                    continue;
+                }
+            } else {
+                if ($row->created_at < $minDate) {
+                    unset($rows[$key]);
+                    continue;
+                }
+                if ($row->created_at > $maxDate) {
+                    unset($rows[$key]);
+                    continue;
+                }
+            }
+            // Remove created_at, we no longer need it
+            unset($rows[$key]->created_at);
+        }
+        // Reindex array
+        $rows = array_values($rows);
+
+        return $rows;
     }
 
     /**

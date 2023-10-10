@@ -67,8 +67,6 @@
                                 {!! __("Import wishlist and loot priority data into the Gargul addon. Select all ( ctrl+a ), copy ( ctrl+c ) and then paste ( ctrl+v ) in the import window (/gl wl). For more info check :curseforge_url on Curseforge. Happy lootin'!", ['curseforge_url' => "<a href='https://www.curseforge.com/wow/addons/gargul' target='_blank'>Gargul</a>"]) !!}
                             </p>
                             <form class="form-horizontal" role="form" method="GET" action="{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                <input type="text" name="gargul_min_date" value="" id="gargul_min_date" hidden />
-                                <input type="text" name="gargul_max_date" value="" id="gargul_max_date" hidden />
                                 <ul class="list-inline">
                                     <li class="list-inline-item">
                                         <button class="btn btn-success" type="submit">
@@ -508,8 +506,6 @@
             url = url + `?min_date=${minDate}&max_date=${maxDate}`;
             $(this).prop('href', url);
         });
-        $("#gargul_min_date").val(minDate);
-        $("#gargul_max_date").val(maxDate);
     }
 </script>
 @endsection
