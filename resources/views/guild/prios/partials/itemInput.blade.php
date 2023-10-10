@@ -51,16 +51,23 @@
         </label>
         <ul class="fa-ul">
             @if ($item->guild_note)
-                <li title="Note">
+                <li title="{{ __('Note') }}">
                     <span class="fa-li"><span class="fal fa-fw fa-sticky-note text-muted"></span></span>
                     <span class="js-markdown-inline">{{ $item->guild_note }}</span>
                 </li>
             @endif
 
             @if ($item->guild_priority)
-                <li title="Priority note">
+                <li title="{{ __('Priority note') }}">
                     <span class="fa-li"><span class="fal fa-fw fa-sort-amount-down text-muted"></span></span>
                     <span class="js-markdown-inline">{{ $item->guild_priority }}</span>
+                </li>
+            @endif
+
+            @if ($showOfficerNote && $item->guild_officer_note)
+                <li title="{{ __('Officer Note') }}">
+                    <span class="fa-li"><span class="fal fa-fw fa-shield text-muted"></span></span>
+                    <span class="js-markdown-inline">{{ $item->guild_officer_note }}</span>
                 </li>
             @endif
 

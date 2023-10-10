@@ -111,6 +111,7 @@ class PrioController extends Controller
                 'items.quality',
                 'item_sources.name      AS source_name',
                 'guild_items.note       AS guild_note',
+                'guild_items.officer_note AS guild_officer_note',
                 'guild_items.priority   AS guild_priority',
                 'guild_items.tier       AS guild_tier',
             ])
@@ -216,6 +217,11 @@ class PrioController extends Controller
             }
         }
 
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
         return view('guild.prios.assignPrios', [
             'currentMember' => $currentMember,
             'guild'         => $guild,
@@ -223,6 +229,7 @@ class PrioController extends Controller
             'instance'      => $instance,
             'items'         => $items,
             'maxPrios'      => self::MAX_PRIOS,
+            'showOfficerNote' => $showOfficerNote,
         ]);
     }
 
@@ -273,6 +280,7 @@ class PrioController extends Controller
                 'items.quality',
                 'item_sources.name      AS source_name',
                 'guild_items.note       AS guild_note',
+                'guild_items.officer_note AS guild_officer_note',
                 'guild_items.priority   AS guild_priority',
                 'guild_items.tier       AS guild_tier',
             ])
@@ -369,6 +377,11 @@ class PrioController extends Controller
             }
         }
 
+        $showOfficerNote = false;
+        if ($currentMember->hasPermission('view.officer-notes') && !isStreamerMode()) {
+            $showOfficerNote = true;
+        }
+
         return view('guild.prios.singleInput', [
             'currentMember'      => $currentMember,
             'guild'              => $guild,
@@ -376,6 +389,7 @@ class PrioController extends Controller
             'maxPrios'           => self::MAX_PRIOS,
             'raidGroup'          => $raidGroup,
             'wishlistCharacters' => $wishlistCharacters,
+            'showOfficerNote'    => $showOfficerNote,
         ]);
     }
 
