@@ -5,12 +5,11 @@ namespace App\Http\Controllers;
 use App;
 use Exception;
 use App\{Guild, GuildItem, Item};
+use Illuminate\Support\Facades\{DB, Cache};
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Routing\ResponseFactory;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
-use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\{DB, Cache};
 use Illuminate\View\View;
 
 class ExportController extends Controller {
@@ -148,8 +147,7 @@ class ExportController extends Controller {
             ci.received_at AS 'received_at',
             REPLACE(REPLACE(gi.priority, CHAR(13), ' '), CHAR(10), ' ') AS 'item_prio_note',
             -- {$itemOfficerNote} AS 'item_officer_note',
-            {$tierLabelField},
-            ci.created_at AS 'created_at'";
+            {$tierLabelField}";
 
         $rows = DB::select(DB::raw($this->getLootBaseSql('noRecipes', $guild, $showPrios, $showWishlist, $showOfficerNote, $viewPrioPermission, $fields)));
 
@@ -172,8 +170,6 @@ class ExportController extends Controller {
             $rows,
             DB::select(DB::raw($this->getNotesBaseSql($guild, $showOfficerNote, $fields)))
         );
-
-        $rows = $this->applyDateFilter($rows);
 
         $csv = $this->createCsv($rows, self::ADDON_HEADERS);
 
@@ -224,7 +220,7 @@ class ExportController extends Controller {
                         return $query
                             ->whereIn('list_number', $listNumbers)
                             ->orWhere(function ($query) {
-                                $query->where('type', Item::TYPE_PRIO)
+                                $query->where('type', 'prio')
                                     ->where('is_received', 0);
                             })
                             ->select('character_id', 'item_id', 'type', 'order', 'is_offspec');
@@ -368,15 +364,12 @@ class ExportController extends Controller {
         if (!$guild->is_wishlist_private || $currentMember->hasPermission('view.wishlists')) {
             $showWishlist = true;
         }
-        $cacheKey = 'export:roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':viewPrioPermission:' . $viewPrioPermission . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden;
-        $characters = Cache::remember(
-            $cacheKey,
+
+        $characters = Cache::remember('export:roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':viewPrioPermission:' . $viewPrioPermission . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden,
             env('EXPORT_CACHE_SECONDS', 120),
             function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
-                [$minDate, $maxDate] = $this->getDatesFromRequest();
-                return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, false, $minDate, $maxDate)['characters']->makeVisible('officer_note');
-            }
-        );
+            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, false)['characters']->makeVisible('officer_note');
+        });
 
         return $this->getExport($characters, 'Character JSON', $fileType);
     }
@@ -506,8 +499,6 @@ class ExportController extends Controller {
                         DB::select(DB::raw($this->getNotesBaseSql($guild, $showOfficerNote)))
                     );
                 }
-
-                $rows = $this->applyDateFilter($rows);
 
                 return $this->createCsv($rows, self::LOOT_HEADERS);
             });
@@ -685,69 +676,6 @@ class ExportController extends Controller {
                     'Cache-Control'          => 'no-store, no-cache',
                 ]);
         }
-    }
-
-    /**
-     * Take a row of data and filter out received items with dates outside of the desired range.
-     * Range is provided by user input when they send the GET request.
-     */
-    private function applyDateFilter(array $rows): array
-    {
-        // Filter out unwanted rows
-        [$minDate, $maxDate] = $this->getDatesFromRequest();
-        foreach ($rows as $key => $row) {
-            if ($row->type !== Item::TYPE_RECEIVED) {
-                continue;
-            }
-            // Rely on received at date first, if that doesn't work fall back to created_at
-            if ($row->received_at) {
-                if ($row->received_at < $minDate) {
-                    unset($rows[$key]);
-                    continue;
-                }
-                if ($row->received_at > $maxDate) {
-                    unset($rows[$key]);
-                    continue;
-                }
-            } else {
-                if ($row->created_at < $minDate) {
-                    unset($rows[$key]);
-                    continue;
-                }
-                if ($row->created_at > $maxDate) {
-                    unset($rows[$key]);
-                    continue;
-                }
-            }
-            // Remove created_at, we no longer need it
-            unset($rows[$key]->created_at);
-        }
-        // Reindex array
-        $rows = array_values($rows);
-
-        return $rows;
-    }
-
-    /**
-     * Helper function to get the min and max date filters from the request.
-     *
-     * @return array
-     */
-    private function getDatesFromRequest():array
-    {
-        $minDate = request()->input('min_date');
-        $maxDate = request()->input('max_date');
-        if (is_numeric($minDate)) {
-            $minDate = Carbon::createFromTimestamp($minDate)->toDateTimeString();
-        } else {
-            $minDate = null;
-        }
-        if (is_numeric($maxDate)) {
-            $maxDate = Carbon::createFromTimestamp($maxDate)->toDateTimeString();
-        } else {
-            $maxDate = null;
-        }
-        return [$minDate, $maxDate];
     }
 
     /**
