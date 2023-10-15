@@ -33,11 +33,11 @@ if (!isset($wowheadLocale)) {
     $wowheadLocale = App::getLocale();
 }
 
-$wowheadLocalNoDot = $wowheadLocale;
+$wowheadLocaleNoDot = $wowheadLocale;
 
 if ($wowheadLocale === 'en') {
     $wowheadLocale = '';
-    $wowheadLocalNoDot = '';
+    $wowheadLocaleNoDot = '';
 } else {
     $wowheadLocale .= '.';
 }
@@ -57,15 +57,15 @@ if (isset($showTier) && $showTier) {
     }
 }
 
-$wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocalNoDot . $wowheadSubdomain. '" ';
+$wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain. '" ';
 $wowheadUrl = null;
 
 if ($itemExpansionId === 3) {
-    $wowheadUrl = 'https://' . $wowheadLocale . 'wowhead.com/' . $wowheadSubdomain . '/' . ($wowheadLocalNoDot ? $wowheadLocalNoDot . '/' : null) . 'item=' . $itemId;
-    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocalNoDot . $wowheadSubdomain . '"';
+    $wowheadUrl = 'https://' . $wowheadLocale . 'wowhead.com/' . $wowheadSubdomain . '/' . ($wowheadLocaleNoDot ? $wowheadLocaleNoDot . '/' : null) . 'item=' . $itemId;
+    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
 } else {
     $wowheadUrl = 'https://' . $wowheadLocale . $wowheadSubdomain . '.wowhead.com/item=' . $itemId;
-    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocalNoDot . $wowheadSubdomain . '"';
+    $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
 }
 
 // Options: tiny, small, medium, large
