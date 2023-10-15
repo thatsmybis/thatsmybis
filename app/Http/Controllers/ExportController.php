@@ -767,6 +767,7 @@ class ExportController extends Controller {
                 AND c.inactive_at IS NULL
                 AND i.expansion_id = {$guild->expansion_id}
                 AND (ci.type != 'wishlist' OR (ci.type = 'wishlist' AND ci.list_number = {$guild->current_wishlist_number}))
+            GROUP BY ci.id
             ORDER BY ci.type, rg.name, c.name, ci.`order`;";
     }
 
