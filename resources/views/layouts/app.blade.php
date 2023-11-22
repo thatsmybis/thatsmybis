@@ -466,7 +466,7 @@
         });
         window['nitroAds'].createAd('top-large-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "refreshLimit": 10,
+            "refreshLimit": 0,
             "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
@@ -485,7 +485,7 @@
         });
         window['nitroAds'].createAd('bottom-large-billboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "refreshLimit": 10,
+            "refreshLimit": 0,
             "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
@@ -504,7 +504,7 @@
         });
         window['nitroAds'].createAd('top-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "refreshLimit": 10,
+            "refreshLimit": 0,
             "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
@@ -523,7 +523,7 @@
         });
         window['nitroAds'].createAd('bottom-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "refreshLimit": 10,
+            "refreshLimit": 0,
             "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
@@ -542,7 +542,7 @@
         });
         window['nitroAds'].createAd('top-mobile-banner-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "refreshLimit": 10,
+            "refreshLimit": 0,
             "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
@@ -561,7 +561,7 @@
         });
         window['nitroAds'].createAd('bottom-mobile-banner-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "refreshLimit": 10,
+            "refreshLimit": 0,
             "refreshTime": 60,
             "renderVisibleOnly": true,
             "refreshVisibleOnly": true,
@@ -580,7 +580,7 @@
         });
         window['nitroAds'].createAd('left-banner', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "refreshLimit": 10,
+            "refreshLimit": 0,
             "refreshTime": 60,
             "renderVisibleOnly": false,
             "refreshVisibleOnly": true,
@@ -599,7 +599,7 @@
         });
         window['nitroAds'].createAd('right-banner', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "refreshLimit": 10,
+            "refreshLimit": 0,
             "refreshTime": 60,
             "renderVisibleOnly": false,
             "refreshVisibleOnly": true,
