@@ -37,8 +37,8 @@
                                         @for ($i = 1; $i <= $maxWishlistLists; $i++)
                                             <a class="dropdown-item"
                                                href="javascript: void(0);">
-                                                <input type="checkbox" name="gargul_wishlist[]" id="gargul_wishlist_{{ $i }}" value="{{ $i }}" {{ $guild->current_wishlist_number == $i ? 'checked="checked"' : '' }}>
-                                                <label for="gargul_wishlist_{{ $i }}">
+                                                <input type="checkbox" name="gargul_wishlist[]" id="gargul_wishlist_{{ $i }}" value="{{ $i }}" {{ $guild->current_wishlist_number == $i ? 'checked="checked"' : '' }} class="cursor-pointer">
+                                                <label for="gargul_wishlist_{{ $i }}" class="cursor-pointer">
                                                     {{ __("Wishlist") }} {{ $i }}
                                                     @if ($guild->current_wishlist_number == $i)
                                                         <span class="text-success">{{ __('(active)') }}</span>
@@ -58,6 +58,7 @@
                                 </div>
                             </div>
                             <div class="col-12">
+                                @include('partials/loadingBars', ['hide' => true])
                                 <div id="input-string" class="form-group">
                                     <textarea disabled="disabled" id="exportData" name="import_textarea" rows="20" class="form-control dark">{{ $data }}</textarea>
                                 </div>
@@ -95,6 +96,7 @@
 
         let refreshTimeout;
         function refreshExport() {
+            $(".loadingBarContainer").addClass("d-flex").show();
             refreshTimeout ? clearTimeout(refreshTimeout) : null;
             refreshTimeout = setTimeout(function () {
                 let url = "{{ route('guild.export.gargul', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}?";
