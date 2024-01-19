@@ -184,6 +184,13 @@
                     <option value="42">
                         {{ __("Ruby Sanctum H25") }}
                     </option>
+                @elseif ($guild->expansion_id == 4)
+                    <option value="43">
+                        {{ __("Blackfathom Depths") }}
+                    </option>
+                    <option value="44" disabled>
+                        {{ __("Gnomregan") }}
+                    </option>
                 @endif
             </select>
         </li>

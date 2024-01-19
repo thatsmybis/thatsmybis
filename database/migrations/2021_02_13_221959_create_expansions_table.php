@@ -15,10 +15,10 @@ class CreateExpansionsTable extends Migration
     {
         Schema::create('expansions', function (Blueprint $table) {
             $table->id();
-            $table->string('name', 16);
-            $table->string('name_short', 16);
-            $table->string('name_long', 32);
-            $table->string('slug', 16);
+            $table->string('name', 64);
+            $table->string('name_short', 64);
+            $table->string('name_long', 64);
+            $table->string('slug', 64);
             $table->boolean('is_enabled')->default(0);
             $table->timestamps();
         });
@@ -27,7 +27,8 @@ class CreateExpansionsTable extends Migration
             VALUES
                 ("Classic", "Classic", "Classic", "classic", 1, "2021-02-13 00:00:00"),
                 ("Burning Crusade", "TBC", "The Burning Crusade", "burning-crusade", 0, "2021-02-13 00:00:00"),
-                ("Wrath", "WoTLK", "Wrath of the Lich King", "wrath", 0, "2021-02-13 00:00:00");');
+                ("Wrath", "WoTLK", "Wrath of the Lich King", "wrath", 0, "2021-02-13 00:00:00"),
+                ("Season of Discovery", "SoD", "Season of Discovery", "season-of-discovery", 0, "2024-01-10 00:00:00");');
 
         Schema::table('guilds', function (Blueprint $table) {
             $table->bigInteger('expansion_id')->default(1)->unsigned()->after('discord_id');
