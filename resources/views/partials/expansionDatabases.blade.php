@@ -1,43 +1,21 @@
-
-<!-- Classic Loot Tables -->
+<!-- SOD Loot Tables -->
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-gold">{{ __("Classic") }}</span> {{ __("Loot Tables") }}
+        <span class="font-weight-normal text-gold">{{ __("Season of Discovery") }}</span> {{ __("Loot Tables") }}
     </h2>
-    <ul class="list-inline">
-        <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
-                <span class="fas fa-fw fa-file-csv text-muted"></span>
-                {{ __("Download CSV") }}
-            </a>
-        </li>
-        <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
-                <span class="fas fa-fw fa-file-csv text-muted"></span>
-                {{ __("View CSV") }}
-            </a>
-        </li>
-    </ul>
-</li>
-<!-- Burning Crusade Loot Tables -->
-<li class="p-3 mb-3 rounded">
-    <h2>
-        <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-uncommon">{{ __("Burning Crusade") }}</span> {{ __("Loot Tables") }}
-    </h2>
-    <p>
-       {{ __("(includes Classic too)") }}
+    <p class="text-warning">
+        Loot tables are also not guaranteed 100%; but are a best estimate.
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'burning-crusade', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'season-of-discovery', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
                 {{ __("Download CSV") }}
             </a>
         </li>
         <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'burning-crusade', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'season-of-discovery', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
                 {{ __("View CSV") }}
             </a>
@@ -68,24 +46,45 @@
         </li>
     </ul>
 </li>
-<!-- SOD Loot Tables -->
+<!-- Burning Crusade Loot Tables -->
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-mage">{{ __("Season of Discovery") }}</span> {{ __("Loot Tables") }}
+        <span class="font-weight-normal text-uncommon">{{ __("Burning Crusade") }}</span> {{ __("Loot Tables") }}
     </h2>
-    <p class="text-warning">
-        Loot tables are also not guaranteed 100%; but are a best estimate.
+    <p>
+       {{ __("(includes Classic too)") }}
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'season-of-discovery', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'burning-crusade', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
                 {{ __("Download CSV") }}
             </a>
         </li>
         <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'season-of-discovery', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'burning-crusade', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
+                <span class="fas fa-fw fa-file-csv text-muted"></span>
+                {{ __("View CSV") }}
+            </a>
+        </li>
+    </ul>
+</li>
+<!-- Classic Loot Tables -->
+<li class="p-3 mb-3 rounded">
+    <h2>
+        <span class="fas fa-fw fa-sack text-muted"></span>
+        <span class="font-weight-normal text-gold">{{ __("Classic") }}</span> {{ __("Loot Tables") }}
+    </h2>
+    <ul class="list-inline">
+        <li class="list-inline-item">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
+                <span class="fas fa-fw fa-file-csv text-muted"></span>
+                {{ __("Download CSV") }}
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
                 {{ __("View CSV") }}
             </a>
@@ -96,7 +95,7 @@
 <!-- <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-mage">{{ __("Cataclysm) }}</span> {{ __("Loot Tables") }}
+        <span class="font-weight-normal text-mage">{{ __("Cataclysm") }}</span> {{ __("Loot Tables") }}
     </h2>
     <p class="text-warning">
         Loot tables are also not guaranteed 100%; but are a best estimate.

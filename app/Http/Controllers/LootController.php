@@ -47,6 +47,7 @@ class LootController extends Controller
                     'items.item_id',
                     'items.name',
                     'items.quality',
+                    'items.faction',
                     'item_sources.name AS source_name',
                 ])
                 ->join('item_item_sources', function ($join) {
@@ -96,14 +97,18 @@ class LootController extends Controller
             $expansionId = 2;
         } else if ($expansionName == 'wotlk' || $expansionName === 3) {
             $expansionId = 3;
+        } else if ($expansionName == 'season-of-discovery' || $expansionName === 4) {
+            $expansionId = 4;
+        } else if ($expansionName == 'cataclysm' || $expansionName === 5) {
+            $expansionId = 5;
         } else {
-            $expansionId = 2;
+            $expansionId = 1;
         }
 
         $classes = Character::classes($expansionId);
 
         if (!$guild && !$expansionName) {
-            return redirect()->route('loot.wishlist', ['expansionName' => 'tbc', 'class' => $class]);
+            return redirect()->route('loot.wishlist', ['expansionName' => 'classic', 'class' => $class]);
         }
 
         if (!$class) {
