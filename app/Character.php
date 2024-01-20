@@ -673,7 +673,7 @@ class Character extends BaseModel
                 self::CLASS_WARLOCK => __('Warlock'),
                 self::CLASS_WARRIOR => __('Warrior'),
             ];
-        } else if ($expansionId === 3 || $expansionId === 5) { // WoTLK, Cata
+        } else { // WoTLK, Cata
             return [
                 self::CLASS_DEATH_KNIGHT => __('Death Knight'),
                 self::CLASS_DRUID        => __('Druid'),
@@ -729,7 +729,7 @@ class Character extends BaseModel
                 self::PROFESSION_SKINNING       => __('Skinning'),
                 self::PROFESSION_TAILORING      => __('Tailoring'),
             ];
-        } else if ($expansionId === 5) { // Cata
+        } else { // Cata
             return [
                 self::PROFESSION_ALCHEMY        => __('Alchemy'),
                 self::PROFESSION_ARCHAEOLOGY    => __('Archaeology'),
@@ -745,7 +745,6 @@ class Character extends BaseModel
                 self::PROFESSION_TAILORING      => __('Tailoring'),
             ];
         }
-
     }
 
     static public function races($expansionId = 0) {
@@ -786,7 +785,7 @@ class Character extends BaseModel
                 self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
                 self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
             ];
-        } else if ($expansionId === 5) { // Cata
+        } else { // Cata
             return  [
                 self::RACE_BLOOD_ELF => ['name' => __('Blood Elf'), 'faction' => self::FACTION_BEST],
                 self::RACE_GOBLIN    => ['name' => __('Goblin'),    'faction' => self::FACTION_BEST],
@@ -939,7 +938,7 @@ class Character extends BaseModel
                     self::SPEC_WARRIOR_PROT       => ['name' => __('Protection'),    'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_TANK, 'icon' => 'spec_protection_warrior.jpg'],
                 ];
                 break;
-            case 5: // Cata
+            default: // Cata
                 return [
                     // TODO
                     self::SPEC_DEATH_KNIGHT_BLOOD  => ['name' => __('Blood'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_blood.jpg'],

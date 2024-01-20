@@ -82,6 +82,7 @@ class ItemController extends Controller
                     'items.id',
                     'items.item_id',
                     'items.name',
+                    'items.faction',
                     'items.quality',
                     'item_sources.name    AS source_name',
                     'item_sources.slug    AS source_slug',

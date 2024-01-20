@@ -14,6 +14,11 @@
                                 @if ($itemJson)
 
                                     @php
+                                    $itemFaction = $item->faction;
+                                    if (isset($guild) && $guild->faction) {
+                                        $itemFaction = null;
+                                    }
+
                                         $wowheadSubdomain = 'www';
                                         if ($guild->expansion_id === 1) {
                                             $wowheadSubdomain = 'classic';
@@ -47,6 +52,11 @@
                                     <a class="q{!! $itemJson->quality !!}" href="{{ $wowheadUrl }}" target="_blank">
                                         <span class="iconlarge">
                                             <ins style='background-image: url("https://wow.zamimg.com/images/wow/icons/large/{!! $itemJson->icon !!}.jpg");'></ins><del></del></span>{!! $itemJson->name !!}
+                                            @if ($itemFaction === 'h')
+                                                <span class="text-horde font-weight-bold" title="{{ __('Horde') }}">H</span>
+                                            @elseif ($itemFaction === 'a')
+                                                <span class="text-alliance font-weight-bold" title="{{ __('Alliance') }}">A</span>
+                                            @endif
                                     </a>
                                 @else
                                     @include('partials/item', ['wowheadLink' => true])

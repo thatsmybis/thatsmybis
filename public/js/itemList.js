@@ -369,6 +369,16 @@ function getItemLink(row, iconSize = null) {
     } else {
         url = "";
     }
+
+    let factionHtml = ``;
+    if (row.faction && !(guild && guild.faction)) {
+        if (row.faction === 'h') {
+            factionHtml = `<span class="text-horde font-weight-bold" title="Horde">H</span>`;
+        } else if (row.faction === 'a') {
+            factionHtml = `<span class="text-alliance font-weight-bold" title="Alliance">A</span>`;
+        }
+    }
+
     return `
     <ul class="no-bullet no-indent mb-0">
         <li>
@@ -380,6 +390,7 @@ function getItemLink(row, iconSize = null) {
                 ${ wowheadData }>
                 ${ row.name }
             </a>
+            ${ factionHtml }
         </li>
     </ul>`;
 }
