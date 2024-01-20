@@ -353,11 +353,11 @@
                         {{ __("Blackfathom Depths") }}
                     </a>
                 </li>
-                <li class="">
+                <!-- <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'gnomeregan']) }}">
                         {{ __("Gnomeregan") }}
                     </a>
-                </li>
+                </li> -->
                 <!-- <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'zulgurub']) }}">
                         {{ __("Zul'Gurub") }}
