@@ -186,11 +186,16 @@
                     </option>
                 @elseif ($guild->expansion_id == 4)
                     <option value="43">
+                        {{ __("World") }}
+                    </option>
+                    <option value="44">
                         {{ __("Blackfathom Depths") }}
                     </option>
-                    <option value="44" disabled>
+                    <option value="45" disabled>
                         {{ __("Gnomregan") }}
                     </option>
+                @elseif ($guild->expansion_id == 5)
+                    <!-- -->
                 @endif
             </select>
         </li>

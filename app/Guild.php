@@ -356,12 +356,14 @@ class Guild extends BaseModel
 
     // Returns the maximum level for characters in this guild
     public function getMaxLevel() {
-        if ($this->expansion_id === 1) {
+        if ($this->expansion_id === 1 || $this->expansion_id === 4) {
             return 60;
         } else if ($this->expansion_id === 2) {
             return 70;
         } else if ($this->expansion_id === 3) {
             return 80;
+        } else if ($this->expansion_id === 5) {
+            return 85;
         } else {
             return 60;
         }

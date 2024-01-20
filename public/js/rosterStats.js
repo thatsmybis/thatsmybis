@@ -508,6 +508,12 @@ function createRosterStatsTable() {
         rosterStatsTableColumns.push(createInstanceColumn("RS H10",   41, (isVisible && (instanceIdsToShow.includes(41) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("RS H25",   42, (isVisible && (instanceIdsToShow.includes(42) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("Other", null, (instanceIdsToShow.length === 0)));
+    } else if (guild && guild.expansion_id === 4) { // SOD
+        rosterStatsTableColumns.push(createInstanceColumn("World",    43, (isVisible && (instanceIdsToShow.includes(43) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("World",    44, (isVisible && (instanceIdsToShow.includes(44) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("World",    45, (isVisible && (instanceIdsToShow.includes(45) || instanceIdsToShow.length === 0))));
+    } else if (guild && guild.expansion_id === 5) { // Cata
+        //
     }
 
     rosterStatsTable = $("#characterStatsTable").DataTable({
@@ -1028,6 +1034,21 @@ function toggleInstanceCols(isVisible) {
         if (instanceIdsToShow.includes(40) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance22);
         if (instanceIdsToShow.includes(41) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance23);
         if (instanceIdsToShow.includes(42) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance24);
+
+        table.columns(columnsToToggle).visible(isVisible);
+    } else if (guild.expansion_id === 4) { // SOD
+        const columnsToToggle = [colInstanceTotal];
+
+        if (instanceIdsToShow.includes(43) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance1);
+        if (instanceIdsToShow.includes(44) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance2);
+        if (instanceIdsToShow.includes(45) || instanceIdsToShow.length === 0) columnsToToggle.push(colInstance3);
+        // TODO ADD INSTANCES
+
+        table.columns(columnsToToggle).visible(isVisible);
+    } else if (guild.expansion_id === 5) { // Cata
+        const columnsToToggle = [colInstanceTotal];
+
+        // TODO add columns
 
         table.columns(columnsToToggle).visible(isVisible);
     }

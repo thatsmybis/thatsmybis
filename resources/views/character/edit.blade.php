@@ -143,7 +143,7 @@
                             </div>
                         </div>
 
-                        @if ($guild->expansion_id === 1)
+                        @if ($guild->expansion_id === 1 || $guild->expansion_id === 4)
                             <div class="row mt-4">
                                 <div class="col-sm-3 col-6">
                                     <div class="form-group">

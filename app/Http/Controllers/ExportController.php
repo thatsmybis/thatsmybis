@@ -387,17 +387,23 @@ class ExportController extends Controller {
             $expansionId = 2;
         } else if ($expansionSlug == 'wotlk') {
             $expansionId = 3;
+        } else if ($expansionSlug == 'season-of-destruction') {
+            $expansionId = 4;
+        } else if ($expansionSlug == 'cataclysm') {
+            $expansionId = 5;
         } else {
             abort(404, __('Expansion not found'));
         }
 
         $subdomain = 'www';
-        if ($expansionId == 1) {
+        if ($expansionId == 1 || $expansionId == 4) {
             $subdomain = 'classic';
         } else if ($expansionId == 2) {
             $subdomain = 'tbc';
         } else if ($expansionId == 3) {
             $subdomain = 'wotlk';
+        } else if ($expansionId == 5) {
+            $subdomain = 'cataclysm';
         }
 
         $locale = App::getLocale();
@@ -408,7 +414,7 @@ class ExportController extends Controller {
         }
 
         $csv = Cache::remember('lootTableExport:' . $expansionSlug, env('PUBLIC_EXPORT_CACHE_SECONDS', 600), function () use ($subdomain, $expansionId, $locale) {
-                if ($expansionId === 3) {
+                if ($expansionId === 3 || $expansionId === 5) {
                     $wowheadLink = "https://{$locale}wowhead.com/{$subdomain}/item=";
                 } else {
                     $wowheadLink = "https://{$locale}{$subdomain}.wowhead.com/item=";

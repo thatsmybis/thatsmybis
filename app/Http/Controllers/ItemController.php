@@ -466,12 +466,14 @@ class ItemController extends Controller
         $json = null;
         $domain = 'www';
 
-        if ($expansionId === 1) {
+        if ($expansionId === 1 || $expansionId === 4) {
             $domain = 'classic';
         } else if ($expansionId === 2) {
             $domain = 'tbc';
         } else if ($expansionId === 3) {
             $domain = 'wotlk';
+        } else if ($expansionId === 5) {
+            $domain = 'cataclyms';
         }
 
         $locale = App::getLocale();

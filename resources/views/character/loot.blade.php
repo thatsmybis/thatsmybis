@@ -102,19 +102,21 @@
                                 <div>
                                     <span id="toggleImport" class="js-toggle-import btn btn-primary mt-2 mb-3">
                                         <span class="fas fa-fw fa-file-import"></span>
-                                        @if ($guild->expansion_id === 1)
+                                        @if ($guild->expansion_id === 1 || $guild->expansion_id === 4)
                                             {{ __("Import wishlist from sixtyupgrades.com") }}
                                         @elseif ($guild->expansion_id === 2)
                                             {{ __("Import wishlist from seventyupgrades.com") }}
                                         @elseif ($guild->expansion_id === 3)
                                             {{ __("Import wishlist from eightyupgrades.com") }}
+                                        @elseif ($guild->expansion_id === 5)
+                                            {{ __("Import wishlist from eightyfiveupgrades.com") }}
                                         @endif
                                     </span>
                                 </div>
 
                                 <div id="importArea" style="display:none;" class="mt-2 mb-3">
                                     <div class="mb-3">
-                                        @if ($guild->expansion_id === 1)
+                                        @if ($guild->expansion_id === 1 || $guild->expansion_id === 4)
                                             <a href="https://sixtyupgrades.com/" target="_blank">
                                                 <span class="fas fa-fw fa-link"></span>
                                                 sixtyupgrades.com
@@ -129,12 +131,17 @@
                                                 <span class="fas fa-fw fa-link"></span>
                                                 eightyupgrades.com
                                             </a>
+                                        @elseif ($guild->expansion_id === 5)
+                                            <a href="https://eightyfiveupgrades.com/" target="_blank">
+                                                <span class="fas fa-fw fa-link"></span>
+                                                eightyupgrades.com
+                                            </a>
                                         @endif
                                     </div>
 
                                     <img
                                         src="{{ asset('images/upgrades_import_instructions.png') }}"
-                                        alt="Export from 60/70/80upgrades.com, paste into the box below"
+                                        alt="Export from 60/70/80/85upgrades.com, paste into the box below"
                                         class="pb-3 max-100"></img>
 
                                     <textarea
