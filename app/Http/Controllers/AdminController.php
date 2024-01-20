@@ -187,6 +187,8 @@ class AdminController extends Controller
             $expansionId = 3;
         } else if ($expansion === 'tbc') {
             $expansionId = 2;
+        } else if ($expansion === 'catactlysm') {
+            $expansionId = 5;
         }
 
         $items = Item::where([['item_id', '>=', $minId], ['item_id', '<=', $maxId], ['expansion_id', $expansionId]])->orderBy('item_id')->get();

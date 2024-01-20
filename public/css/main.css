@@ -151,6 +151,9 @@ body {
 .bg-expansion-4 {
     background: #ffb400;
 }
+.bg-expansion-5 {
+    background: #ff8000;
+}
 
 .discord-link {
     height: 40px;
@@ -219,6 +222,9 @@ body {
 }
 .text-expansion-4 {
     color: #ffb400;
+}
+.text-expansion-5 {
+    color: #ff8000;
 }
 
 .text-horde {

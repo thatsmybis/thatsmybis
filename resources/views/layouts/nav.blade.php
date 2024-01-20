@@ -238,6 +238,18 @@
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-h25']) }}">
                                             {{ __("Ruby Sanctum H25") }}
                                         <a>
+                                    @elseif ($guild->expansion_id == 4)
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'world']) }}">
+                                            {{ __("World") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackfathom-depths']) }}">
+                                            {{ __("BFD") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gnomeregan']) }}">
+                                            {{ __("Gnomeregan") }}
+                                        </a>
+                                    @elseif ($guild->expansion_id == 5)
+                                        <!-- nothing -->
                                     @endif
                                 </div>
                             </div>
@@ -379,6 +391,18 @@
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruby-sanctum-h25']) }}">
                                             {{ __("Ruby Sanctum H25") }}
                                         <a>
+                                    @elseif ($guild->expansion_id == 4)
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'world']) }}">
+                                            {{ __("World") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackfathom-depths']) }}">
+                                            {{ __("BFD") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gnomeregan']) }}">
+                                            {{ __("Gnomeregan") }}
+                                        </a>
+                                    @elseif ($guild->expansion_id == 5)
+                                        <!-- nothing -->
                                     @endif
                                 </div>
                             </div>
@@ -588,6 +612,21 @@
                                     <a>
                                 </div>
                             </div>
+
+                        @elseif ($guild->expansion_id == 4)
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'world']) }}">
+                                {{ __("World") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackfathom-depths']) }}">
+                                {{ __("Blackfathom Depths") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gnomeregan']) }}">
+                                {{ __("Gnomeregan") }}
+                            </a>
+                        @elseif ($guild->expansion_id == 5)
+                            <!-- <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'karazhan']) }}">
+                                {{ __("Karazhan") }}
+                            </a> -->
                         @endif
                     </div>
                 </li>

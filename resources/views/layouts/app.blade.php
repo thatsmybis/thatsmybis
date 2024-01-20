@@ -161,7 +161,7 @@
         </div>
     @endif
 
-    @if (isset($guild) && $guild->expansion_id != 3)
+    @if (isset($guild) && $guild->expansion_id < 4)
         <div class="text-center font-weight-normal text-muted mb-2">
             To use WoTLK, register from <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a> or <a href="{{ route('home') }}">Dashboard</a>.
             <span class="text-muted">
@@ -357,6 +357,10 @@
                 var wowheadSubdomain = "tbc";
             @elseif ($guild->expansion_id === 3)
                 var wowheadSubdomain = "wotlk";
+            @elseif ($guild->expansion_id === 4)
+                var wowheadSubdomain = "classic";
+            @elseif ($guild->expansion_id === 5)
+                var wowheadSubdomain = "cataclysm";
             @else
                 var wowheadSubdomain = "www";
             @endif
@@ -368,6 +372,10 @@
                 var wowheadSubdomain = "tbc";
             @elseif ($expansionId == 3)
                 var wowheadSubdomain = "wotlk";
+            @elseif ($expansionId == 4)
+                var wowheadSubdomain = "classic";
+            @elseif ($expansionId == 5)
+                var wowheadSubdomain = "cataclysm";
             @else
                 var wowheadSubdomain = "www";
             @endif

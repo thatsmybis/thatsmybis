@@ -241,7 +241,7 @@
                     </div>
 
                     <div class="col-md-6 col-12">
-                        @if ($guild->expansion_id === 1)
+                        @if ($guild->expansion_id === 1 || $guild->expansion_id === 4)
                             <!-- Rank -->
                             <div class="form-group">
                                 @include('character/partials/pvpRankInput', [
@@ -265,7 +265,7 @@
                     </div>
 
                     <div class="col-md-6 col-12">
-                        @if ($guild->expansion_id === 1)
+                        @if ($guild->expansion_id === 1 || $guild->expansion_id === 4)
                             <!-- Rank Goal -->
                             <div class="form-group">
                                 @include('character/partials/pvpRankGoalInput', [

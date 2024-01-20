@@ -17,6 +17,14 @@
                 <li class="list-inline-item font-weight-{{ $expansionId == 3 ? 'bold' : 'light' }}">
                     <a href="{{ route('loot.wishlist', ['expansionName' => 'wotlk']) }}" class="text-{{ getExpansionColor(3) }}">{{ __("WoTLK") }}</a>
                 </li>
+                <li class="list-inline-item">&sdot;</li>
+                <li class="list-inline-item font-weight-{{ $expansionId == 4 ? 'bold' : 'light' }}">
+                    <a href="{{ route('loot.wishlist', ['expansionName' => 'season-of-discovery']) }}" class="text-{{ getExpansionColor(4) }}">{{ __("SOD") }}</a>
+                </li>
+                <!-- <li class="list-inline-item">&sdot;</li>
+                <li class="list-inline-item font-weight-{{ $expansionId == 5 ? 'bold' : 'light' }}">
+                    <a href="{{ route('loot.wishlist', ['expansionName' => 'cataclysm']) }}" class="text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</a>
+                </li> -->
             </ul>
             <h1>
                 <span class="font-weight-bold">{{ __("Top") }} {{ $maxItems }}</span> {{ __("Wishlisted") }}

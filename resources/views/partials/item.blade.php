@@ -21,13 +21,14 @@ if (isset($guild) && $guild->expansion_id) {
     $itemExpansionId = $item->expansion_id;
 }
 
-if ($itemExpansionId === 1) {
+if ($itemExpansionId === 1 || $itemExpansionId === 4) {
     $wowheadSubdomain = 'classic';
 } else if ($itemExpansionId === 2) {
     $wowheadSubdomain = 'tbc';
 } else if ($itemExpansionId === 3) {
     $wowheadSubdomain = 'wotlk';
-}
+} else if ($itemExpansionId === 5) {
+    $wowheadSubdomain = 'cataclysm';
 
 if (!isset($wowheadLocale)) {
     $wowheadLocale = App::getLocale();
@@ -60,7 +61,7 @@ if (isset($showTier) && $showTier) {
 $wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain. '" ';
 $wowheadUrl = null;
 
-if ($itemExpansionId === 3) {
+if ($itemExpansionId === 3 || $itemExpansionId === 5) {
     $wowheadUrl = 'https://' . $wowheadLocale . 'wowhead.com/' . $wowheadSubdomain . '/' . ($wowheadLocaleNoDot ? $wowheadLocaleNoDot . '/' : null) . 'item=' . $itemId;
     $wowheadAttribs .= 'data-wowhead-link="' . $wowheadUrl . '?domain=' . $wowheadLocale . $wowheadSubdomain . '"';
 } else {

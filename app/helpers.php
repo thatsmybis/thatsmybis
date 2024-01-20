@@ -80,6 +80,10 @@ function getExpansionColor($expansionId) {
             return 'uncommon';
         case 3: // WOTLK
             return 'mage';
+        case 4: // Season of Discovery
+            return 'gold';
+        case 5: // Cataclysm
+            return 'druid';
         default:
             return 'white';
     }
@@ -93,6 +97,10 @@ function getExpansionAbbr($expansionId, $lowercase = null) {
             return $lowercase ? 'tbc' : 'TBC';
         case 3:
             return $lowercase ? 'wotlk' : 'WoTLK';
+        case 4: // Season of Discovery
+            return $lowercase ? 'sod' : 'SOD';
+        case 3:
+            return $lowercase ? 'cata' : 'Cata';
         default:
             return '';
     }

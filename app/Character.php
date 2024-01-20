@@ -67,6 +67,7 @@ class Character extends BaseModel
 
     // Each constant must be unique among their group. They are used as keys.
     const RACE_BLOOD_ELF = 'Blood Elf';
+    const RACE_GOBLIN    = 'Goblin';
     const RACE_ORC       = 'Orc';
     const RACE_TAUREN    = 'Tauren';
     const RACE_TROLL     = 'Troll';
@@ -76,6 +77,7 @@ class Character extends BaseModel
     const RACE_GNOME     = 'Gnome';
     const RACE_HUMAN     = 'Human';
     const RACE_NIGHT_ELF = 'Night Elf';
+    const RACE_WORGEN    = 'Worgen';
 
     const CLASS_DEATH_KNIGHT = 'Death Knight';
     const CLASS_DRUID        = 'Druid';
@@ -89,6 +91,7 @@ class Character extends BaseModel
     const CLASS_WARRIOR      = 'Warrior';
 
     const PROFESSION_ALCHEMY        = 'Alchemy';
+    const PROFESSION_ARCHAEOLOGY    = 'Archaeology';
     const PROFESSION_BLACKSMITHING  = 'Blacksmithing';
     const PROFESSION_ENCHANTING     = 'Enchanting';
     const PROFESSION_ENGINEERING    = 'Engineering';
@@ -645,140 +648,159 @@ class Character extends BaseModel
     }
 
     static public function classes($expansionId = 0) {
-        switch ($expansionId) {
-            case 1: // Classic
-                return [
-                    self::CLASS_DRUID   => __('Druid'),
-                    self::CLASS_HUNTER  => __('Hunter'),
-                    self::CLASS_MAGE    => __('Mage'),
-                    self::CLASS_PALADIN => __('Paladin'),
-                    self::CLASS_PRIEST  => __('Priest'),
-                    self::CLASS_ROGUE   => __('Rogue'),
-                    self::CLASS_SHAMAN  => __('Shaman'),
-                    self::CLASS_WARLOCK => __('Warlock'),
-                    self::CLASS_WARRIOR => __('Warrior'),
-                ];
-                break;
-            case 2: // TBC
-                return [
-                    self::CLASS_DEATH_KNIGHT => __('Death Knight'),
-                    self::CLASS_DRUID   => __('Druid'),
-                    self::CLASS_HUNTER  => __('Hunter'),
-                    self::CLASS_MAGE    => __('Mage'),
-                    self::CLASS_PALADIN => __('Paladin'),
-                    self::CLASS_PRIEST  => __('Priest'),
-                    self::CLASS_ROGUE   => __('Rogue'),
-                    self::CLASS_SHAMAN  => __('Shaman'),
-                    self::CLASS_WARLOCK => __('Warlock'),
-                    self::CLASS_WARRIOR => __('Warrior'),
-                ];
-                break;
-            default: // WoTLK
-                return [
-                    self::CLASS_DEATH_KNIGHT => __('Death Knight'),
-                    self::CLASS_DRUID        => __('Druid'),
-                    self::CLASS_HUNTER       => __('Hunter'),
-                    self::CLASS_MAGE         => __('Mage'),
-                    self::CLASS_PALADIN      => __('Paladin'),
-                    self::CLASS_PRIEST       => __('Priest'),
-                    self::CLASS_ROGUE        => __('Rogue'),
-                    self::CLASS_SHAMAN       => __('Shaman'),
-                    self::CLASS_WARLOCK      => __('Warlock'),
-                    self::CLASS_WARRIOR      => __('Warrior'),
-                ];
-                break;
+        if ($expansionId === 1 || $expansionId === 4) { // Classic, SOD
+            return [
+                self::CLASS_DRUID   => __('Druid'),
+                self::CLASS_HUNTER  => __('Hunter'),
+                self::CLASS_MAGE    => __('Mage'),
+                self::CLASS_PALADIN => __('Paladin'),
+                self::CLASS_PRIEST  => __('Priest'),
+                self::CLASS_ROGUE   => __('Rogue'),
+                self::CLASS_SHAMAN  => __('Shaman'),
+                self::CLASS_WARLOCK => __('Warlock'),
+                self::CLASS_WARRIOR => __('Warrior'),
+            ];
+        } else if ($expansionId === 2) { // TBC
+            return [
+                self::CLASS_DEATH_KNIGHT => __('Death Knight'),
+                self::CLASS_DRUID   => __('Druid'),
+                self::CLASS_HUNTER  => __('Hunter'),
+                self::CLASS_MAGE    => __('Mage'),
+                self::CLASS_PALADIN => __('Paladin'),
+                self::CLASS_PRIEST  => __('Priest'),
+                self::CLASS_ROGUE   => __('Rogue'),
+                self::CLASS_SHAMAN  => __('Shaman'),
+                self::CLASS_WARLOCK => __('Warlock'),
+                self::CLASS_WARRIOR => __('Warrior'),
+            ];
+        } else if ($expansionId === 3 || $expansionId === 5) { // WoTLK, Cata
+            return [
+                self::CLASS_DEATH_KNIGHT => __('Death Knight'),
+                self::CLASS_DRUID        => __('Druid'),
+                self::CLASS_HUNTER       => __('Hunter'),
+                self::CLASS_MAGE         => __('Mage'),
+                self::CLASS_PALADIN      => __('Paladin'),
+                self::CLASS_PRIEST       => __('Priest'),
+                self::CLASS_ROGUE        => __('Rogue'),
+                self::CLASS_SHAMAN       => __('Shaman'),
+                self::CLASS_WARLOCK      => __('Warlock'),
+                self::CLASS_WARRIOR      => __('Warrior'),
+            ];
         }
     }
 
     static public function professions($expansionId = 0) {
-        switch ($expansionId) {
-            case 1: // Classic
-                return [
-                    self::PROFESSION_ALCHEMY        => __('Alchemy'),
-                    self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
-                    self::PROFESSION_ENCHANTING     => __('Enchanting'),
-                    self::PROFESSION_ENGINEERING    => __('Engineering'),
-                    self::PROFESSION_HERBALISM      => __('Herbalism'),
-                    self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
-                    self::PROFESSION_MINING         => __('Mining'),
-                    self::PROFESSION_SKINNING       => __('Skinning'),
-                    self::PROFESSION_TAILORING      => __('Tailoring'),
-                ];
-                break;
-            case 2: // TBC
-                return [
-                    self::PROFESSION_ALCHEMY        => __('Alchemy'),
-                    self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
-                    self::PROFESSION_ENCHANTING     => __('Enchanting'),
-                    self::PROFESSION_ENGINEERING    => __('Engineering'),
-                    self::PROFESSION_HERBALISM      => __('Herbalism'),
-                    self::PROFESSION_JEWELCRAFTING  => __('Jewelcrafting'),
-                    self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
-                    self::PROFESSION_MINING         => __('Mining'),
-                    self::PROFESSION_SKINNING       => __('Skinning'),
-                    self::PROFESSION_TAILORING      => __('Tailoring'),
-                ];
-                break;
-            default: // WoTLK
-                return [
-                    self::PROFESSION_ALCHEMY        => __('Alchemy'),
-                    self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
-                    self::PROFESSION_ENCHANTING     => __('Enchanting'),
-                    self::PROFESSION_ENGINEERING    => __('Engineering'),
-                    self::PROFESSION_HERBALISM      => __('Herbalism'),
-                    self::PROFESSION_INSCRIPTION    => __('Inscription'),
-                    self::PROFESSION_JEWELCRAFTING  => __('Jewelcrafting'),
-                    self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
-                    self::PROFESSION_MINING         => __('Mining'),
-                    self::PROFESSION_SKINNING       => __('Skinning'),
-                    self::PROFESSION_TAILORING      => __('Tailoring'),
-                ];
-                break;
+        if ($expansionId === 1 || $expansionId === 4) { // Classic, SOD
+            return [
+                self::PROFESSION_ALCHEMY        => __('Alchemy'),
+                self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
+                self::PROFESSION_ENCHANTING     => __('Enchanting'),
+                self::PROFESSION_ENGINEERING    => __('Engineering'),
+                self::PROFESSION_HERBALISM      => __('Herbalism'),
+                self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
+                self::PROFESSION_MINING         => __('Mining'),
+                self::PROFESSION_SKINNING       => __('Skinning'),
+                self::PROFESSION_TAILORING      => __('Tailoring'),
+            ];
+        } else if ($expansionId === 2) { // TBC
+            return [
+                self::PROFESSION_ALCHEMY        => __('Alchemy'),
+                self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
+                self::PROFESSION_ENCHANTING     => __('Enchanting'),
+                self::PROFESSION_ENGINEERING    => __('Engineering'),
+                self::PROFESSION_HERBALISM      => __('Herbalism'),
+                self::PROFESSION_JEWELCRAFTING  => __('Jewelcrafting'),
+                self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
+                self::PROFESSION_MINING         => __('Mining'),
+                self::PROFESSION_SKINNING       => __('Skinning'),
+                self::PROFESSION_TAILORING      => __('Tailoring'),
+            ];
+        } else if ($expansionId === 3) { // WoTLK
+            return [
+                self::PROFESSION_ALCHEMY        => __('Alchemy'),
+                self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
+                self::PROFESSION_ENCHANTING     => __('Enchanting'),
+                self::PROFESSION_ENGINEERING    => __('Engineering'),
+                self::PROFESSION_HERBALISM      => __('Herbalism'),
+                self::PROFESSION_INSCRIPTION    => __('Inscription'),
+                self::PROFESSION_JEWELCRAFTING  => __('Jewelcrafting'),
+                self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
+                self::PROFESSION_MINING         => __('Mining'),
+                self::PROFESSION_SKINNING       => __('Skinning'),
+                self::PROFESSION_TAILORING      => __('Tailoring'),
+            ];
+        } else if ($expansionId === 5) { // Cata
+            return [
+                self::PROFESSION_ALCHEMY        => __('Alchemy'),
+                self::PROFESSION_ARCHAEOLOGY    => __('Archaeology'),
+                self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
+                self::PROFESSION_ENCHANTING     => __('Enchanting'),
+                self::PROFESSION_ENGINEERING    => __('Engineering'),
+                self::PROFESSION_HERBALISM      => __('Herbalism'),
+                self::PROFESSION_INSCRIPTION    => __('Inscription'),
+                self::PROFESSION_JEWELCRAFTING  => __('Jewelcrafting'),
+                self::PROFESSION_LEATHERWORKING => __('Leatherworking'),
+                self::PROFESSION_MINING         => __('Mining'),
+                self::PROFESSION_SKINNING       => __('Skinning'),
+                self::PROFESSION_TAILORING      => __('Tailoring'),
+            ];
         }
+
     }
 
     static public function races($expansionId = 0) {
-        switch ($expansionId) {
-            case 1: // Classic
-                return [
-                    self::RACE_ORC       => ['name' => __('Orc'),    'faction' => self::FACTION_BEST],
-                    self::RACE_TAUREN    => ['name' => __('Tauren'), 'faction' => self::FACTION_BEST],
-                    self::RACE_TROLL     => ['name' => __('Troll'),  'faction' => self::FACTION_BEST],
-                    self::RACE_UNDEAD    => ['name' => __('Undead'), 'faction' => self::FACTION_BEST],
-                    self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
-                    self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
-                    self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
-                    self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
-                ];
-                break;
-            case 2: // TBC
-                return [
-                    self::RACE_BLOOD_ELF => ['name' => __('Blood Elf'), 'faction' => self::FACTION_BEST],
-                    self::RACE_ORC       => ['name' => __('Orc'),       'faction' => self::FACTION_BEST],
-                    self::RACE_TAUREN    => ['name' => __('Tauren'),    'faction' => self::FACTION_BEST],
-                    self::RACE_TROLL     => ['name' => __('Troll'),     'faction' => self::FACTION_BEST],
-                    self::RACE_UNDEAD    => ['name' => __('Undead'),    'faction' => self::FACTION_BEST],
-                    self::RACE_DRAENEI   => ['name' => __('Draenei'),   'faction' => self::FACTION_WORST],
-                    self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
-                    self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
-                    self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
-                    self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
-                ];
-                break;
-            default: // WoTLK
-                return  [
-                    self::RACE_BLOOD_ELF => ['name' => __('Blood Elf'), 'faction' => self::FACTION_BEST],
-                    self::RACE_ORC       => ['name' => __('Orc'),       'faction' => self::FACTION_BEST],
-                    self::RACE_TAUREN    => ['name' => __('Tauren'),    'faction' => self::FACTION_BEST],
-                    self::RACE_TROLL     => ['name' => __('Troll'),     'faction' => self::FACTION_BEST],
-                    self::RACE_UNDEAD    => ['name' => __('Undead'),    'faction' => self::FACTION_BEST],
-                    self::RACE_DRAENEI   => ['name' => __('Draenei'),   'faction' => self::FACTION_WORST],
-                    self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
-                    self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
-                    self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
-                    self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
-                ];
-                break;
+        if ($expansionId === 1 || $expansionId === 4) { // Classic
+            return [
+                self::RACE_ORC       => ['name' => __('Orc'),    'faction' => self::FACTION_BEST],
+                self::RACE_TAUREN    => ['name' => __('Tauren'), 'faction' => self::FACTION_BEST],
+                self::RACE_TROLL     => ['name' => __('Troll'),  'faction' => self::FACTION_BEST],
+                self::RACE_UNDEAD    => ['name' => __('Undead'), 'faction' => self::FACTION_BEST],
+                self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
+                self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
+                self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
+                self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
+            ];
+        } else if ($expansionId === 2) { // TBC
+            return [
+                self::RACE_BLOOD_ELF => ['name' => __('Blood Elf'), 'faction' => self::FACTION_BEST],
+                self::RACE_ORC       => ['name' => __('Orc'),       'faction' => self::FACTION_BEST],
+                self::RACE_TAUREN    => ['name' => __('Tauren'),    'faction' => self::FACTION_BEST],
+                self::RACE_TROLL     => ['name' => __('Troll'),     'faction' => self::FACTION_BEST],
+                self::RACE_UNDEAD    => ['name' => __('Undead'),    'faction' => self::FACTION_BEST],
+                self::RACE_DRAENEI   => ['name' => __('Draenei'),   'faction' => self::FACTION_WORST],
+                self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
+                self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
+                self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
+                self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
+            ];
+        } else if ($expansionId === 3) { // WoTLK
+            return  [
+                self::RACE_BLOOD_ELF => ['name' => __('Blood Elf'), 'faction' => self::FACTION_BEST],
+                self::RACE_ORC       => ['name' => __('Orc'),       'faction' => self::FACTION_BEST],
+                self::RACE_TAUREN    => ['name' => __('Tauren'),    'faction' => self::FACTION_BEST],
+                self::RACE_TROLL     => ['name' => __('Troll'),     'faction' => self::FACTION_BEST],
+                self::RACE_UNDEAD    => ['name' => __('Undead'),    'faction' => self::FACTION_BEST],
+                self::RACE_DRAENEI   => ['name' => __('Draenei'),   'faction' => self::FACTION_WORST],
+                self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
+                self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
+                self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
+                self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
+            ];
+        } else if ($expansionId === 5) { // Cata
+            return  [
+                self::RACE_BLOOD_ELF => ['name' => __('Blood Elf'), 'faction' => self::FACTION_BEST],
+                self::RACE_GOBLIN    => ['name' => __('Goblin'),    'faction' => self::FACTION_BEST],
+                self::RACE_ORC       => ['name' => __('Orc'),       'faction' => self::FACTION_BEST],
+                self::RACE_TAUREN    => ['name' => __('Tauren'),    'faction' => self::FACTION_BEST],
+                self::RACE_TROLL     => ['name' => __('Troll'),     'faction' => self::FACTION_BEST],
+                self::RACE_UNDEAD    => ['name' => __('Undead'),    'faction' => self::FACTION_BEST],
+                self::RACE_DRAENEI   => ['name' => __('Draenei'),   'faction' => self::FACTION_WORST],
+                self::RACE_DWARF     => ['name' => __('Dwarf'),     'faction' => self::FACTION_WORST],
+                self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
+                self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
+                self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
+                self::RACE_WORGEN    => ['name' => __('Worgen'),    'faction' => self::FACTION_BEST],
+            ];
         }
     }
 
@@ -849,8 +871,77 @@ class Character extends BaseModel
                     self::SPEC_WARRIOR_PROT        => ['name' => __('Protection'),    'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_TANK, 'icon' => 'spec_protection_warrior.jpg'],
                 ];
                 break;
-            default: // WoTLK
+            case 3: // WoTLK
                 return [
+                    self::SPEC_DEATH_KNIGHT_BLOOD  => ['name' => __('Blood'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_blood.jpg'],
+                    self::SPEC_DEATH_KNIGHT_FROST  => ['name' => __('Frost'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_frost_dk.jpg'],
+                    self::SPEC_DEATH_KNIGHT_UNHOLY => ['name' => __('Unholy'),        'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_unholy.jpg'],
+                    self::SPEC_DRUID_BALANCE       => ['name' => __('Balance'),       'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_balance.jpg'],
+                    self::SPEC_DRUID_FERAL         => ['name' => __('Feral'),         'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_feral.jpg'],
+                    self::SPEC_DRUID_RESTO         => ['name' => __('Restoration'),   'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spec_restoration_druid.jpg'],
+                    self::SPEC_HUNTER_BEAST        => ['name' => __('Beast'),         'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_beast.jpg'],
+                    self::SPEC_HUNTER_MARKSMAN     => ['name' => __('Marksmanship'),  'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_marksmanship.jpg'],
+                    self::SPEC_HUNTER_SURVIVAL     => ['name' => __('Survival'),      'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_survival.jpg'],
+                    self::SPEC_MAGE_ARCANE         => ['name' => __('Arcane'),        'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_arcane.jpg'],
+                    self::SPEC_MAGE_FIRE           => ['name' => __('Fire'),          'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_fire.jpg'],
+                    self::SPEC_MAGE_FROST          => ['name' => __('Frost'),         'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_frost_mage.jpg'],
+                    self::SPEC_PALADIN_COMBAT      => ['name' => __('Retribution'),   'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_retribution.jpg'],
+                    self::SPEC_PALADIN_HOLY        => ['name' => __('Holy'),          'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spec_holy.jpg'],
+                    self::SPEC_PALADIN_PROTECTION  => ['name' => __('Protection'),    'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_TANK,     'icon' => 'spec_protection_paladin.jpg'],
+                    self::SPEC_PRIEST_DISCIPLINE   => ['name' => __('Discipline'),    'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spec_discipline.jpg'],
+                    self::SPEC_PRIEST_HOLY         => ['name' => __('Holy'),          'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spec_holyjpgg'],
+                    self::SPEC_PRIEST_SHADOW       => ['name' => __('Shadow'),        'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_shadow.jpg'],
+                    self::SPEC_ROGUE_ASSASSIN      => ['name' => __('Assassination'), 'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_assassination.jpg'],
+                    self::SPEC_ROGUE_COMBAT        => ['name' => __('Combat'),        'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_combat.jpg'],
+                    self::SPEC_ROGUE_SUBTLETY      => ['name' => __('Subtlety'),      'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_subtlety.jpg'],
+                    self::SPEC_SHAMAN_ELEMENTAL    => ['name' => __('Elemental'),     'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_elemental.jpg'],
+                    self::SPEC_SHAMAN_ENHANCE      => ['name' => __('Enhancement'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_enhancement.jpg'],
+                    self::SPEC_SHAMAN_RESTO        => ['name' => __('Restoration'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_HEAL,     'icon' => 'spec_restoration_shaman.jpg'],
+                    self::SPEC_WARLOCK_AFFLICTION  => ['name' => __('Affliction'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_affliction.jpg'],
+                    self::SPEC_WARLOCK_DESTRO      => ['name' => __('Destruction'),   'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_destruction.jpg'],
+                    self::SPEC_WARLOCK_DEMON       => ['name' => __('Demonology'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_demonology.jpg'],
+                    self::SPEC_WARRIOR_ARMS        => ['name' => __('Arms'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_arms.jpg'],
+                    self::SPEC_WARRIOR_FURY        => ['name' => __('Fury'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_fury.jpg'],
+                    self::SPEC_WARRIOR_PROT        => ['name' => __('Protection'),    'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_TANK,     'icon' => 'spec_protection_warrior.jpg'],
+                    // self::SPEC_HUNTER_CUNNING      => ['name' => __('Cunning'),       'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_hunter_beasttaming.jpg'],
+                    // self::SPEC_HUNTER_FEROCITY     => ['name' => __('Ferocity'),      'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_hunter_beasttaming.jpg'],
+                    // self::SPEC_HUNTER_TENACTIY     => ['name' => __('Tenacity'),      'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,      'icon' => 'ability_hunter_beasttaming.jpg'],
+                ];
+                break;
+            case 4: // SOD
+                return [
+                    self::SPEC_DRUID_BALANCE      => ['name' => __('Balance'),       'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_balance.jpg'],
+                    self::SPEC_DRUID_FERAL        => ['name' => __('Feral'),         'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_feral.jpg'],
+                    self::SPEC_DRUID_RESTO        => ['name' => __('Restoration'),   'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spec_restoration_druid.jpg'],
+                    self::SPEC_HUNTER_BEAST       => ['name' => __('Beast'),         'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_beast.jpg'],
+                    self::SPEC_HUNTER_MARKSMAN    => ['name' => __('Marksmanship'),  'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_marksmanship.jpg'],
+                    self::SPEC_HUNTER_SURVIVAL    => ['name' => __('Survival'),      'class' => self::CLASS_HUNTER,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_survival.jpg'],
+                    self::SPEC_MAGE_ARCANE        => ['name' => __('Arcane'),        'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_arcane.jpg'],
+                    self::SPEC_MAGE_FIRE          => ['name' => __('Fire'),          'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_fire.jpg'],
+                    self::SPEC_MAGE_FROST         => ['name' => __('Frost'),         'class' => self::CLASS_MAGE,    'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_frost_mage.jpg'],
+                    self::SPEC_PALADIN_COMBAT     => ['name' => __('Retribution'),   'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_retribution.jpg'],
+                    self::SPEC_PALADIN_HOLY       => ['name' => __('Holy'),          'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spec_holy.jpg'],
+                    self::SPEC_PALADIN_PROTECTION => ['name' => __('Protection'),    'class' => self::CLASS_PALADIN, 'archetype' => self::ARCHETYPE_TANK, 'icon' => 'spec_protection_paladin.jpg'],
+                    self::SPEC_PRIEST_DISCIPLINE  => ['name' => __('Discipline'),    'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spec_discipline.jpg'],
+                    self::SPEC_PRIEST_HOLY        => ['name' => __('Holy'),          'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spec_holy.jpg'],
+                    self::SPEC_PRIEST_SHADOW      => ['name' => __('Shadow'),        'class' => self::CLASS_PRIEST,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_shadow.jpg'],
+                    self::SPEC_ROGUE_ASSASSIN     => ['name' => __('Assassination'), 'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_assassination.jpg'],
+                    self::SPEC_ROGUE_COMBAT       => ['name' => __('Combat'),        'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_combat.jpg'],
+                    self::SPEC_ROGUE_SUBTLETY     => ['name' => __('Subtlety'),      'class' => self::CLASS_ROGUE,   'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_subtlety.jpg'],
+                    self::SPEC_SHAMAN_ELEMENTAL   => ['name' => __('Elemental'),     'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_elemental.jpg'],
+                    self::SPEC_SHAMAN_ENHANCE     => ['name' => __('Enhancement'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_enhancement.jpg'],
+                    self::SPEC_SHAMAN_RESTO       => ['name' => __('Restoration'),   'class' => self::CLASS_SHAMAN,  'archetype' => self::ARCHETYPE_HEAL, 'icon' => 'spec_restoration_shaman.jpg'],
+                    self::SPEC_WARLOCK_AFFLICTION => ['name' => __('Affliction'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_affliction.jpg'],
+                    self::SPEC_WARLOCK_DESTRO     => ['name' => __('Destruction'),   'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_destruction.jpg'],
+                    self::SPEC_WARLOCK_DEMON      => ['name' => __('Demonology'),    'class' => self::CLASS_WARLOCK, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_demonology.jpg'],
+                    self::SPEC_WARRIOR_ARMS       => ['name' => __('Arms'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_arms.jpg'],
+                    self::SPEC_WARRIOR_FURY       => ['name' => __('Fury'),          'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_DPS,  'icon' => 'spec_fury.jpg'],
+                    self::SPEC_WARRIOR_PROT       => ['name' => __('Protection'),    'class' => self::CLASS_WARRIOR, 'archetype' => self::ARCHETYPE_TANK, 'icon' => 'spec_protection_warrior.jpg'],
+                ];
+                break;
+            case 5: // Cata
+                return [
+                    // TODO
                     self::SPEC_DEATH_KNIGHT_BLOOD  => ['name' => __('Blood'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_blood.jpg'],
                     self::SPEC_DEATH_KNIGHT_FROST  => ['name' => __('Frost'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_frost_dk.jpg'],
                     self::SPEC_DEATH_KNIGHT_UNHOLY => ['name' => __('Unholy'),        'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_unholy.jpg'],

@@ -21,6 +21,10 @@
                                             $wowheadSubdomain = 'tbc';
                                         } elseif ($guild->expansion_id === 3) {
                                             $wowheadSubdomain = 'wotlk';
+                                        } elseif ($guild->expansion_id === 4) {
+                                            $wowheadSubdomain = 'classic';
+                                        } elseif ($guild->expansion_id === 5) {
+                                            $wowheadSubdomain = 'cataclysm';
                                         }
 
                                         $wowheadLocale = App::getLocale();
@@ -32,7 +36,7 @@
 
                                         $wowheadUrl = '';
 
-                                        if ($guild->expansion_id === 3) {
+                                        if ($guild->expansion_id === 3 || $guild->expansion_id === 5) {
                                             $wowheadUrl = 'https://' . $wowheadLocale . 'wowhead.com/' . $wowheadSubdomain . '/%69tem=' . $item->item_id;
                                         } else {
                                             // %69 (code for 'i') is a workaround that masks the link so wowhead's script won't parse it, allowing *us* to style it however we want
