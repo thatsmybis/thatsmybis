@@ -44,22 +44,32 @@ class RosterController extends Controller
             Cache::forget($cacheKey);
         }
 
-        $characters = Cache::remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
-            return $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, true);
+        $data = Cache::remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
+            $data = $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, true);
+            // VASTLY reduce memory usage by encoding to JSON before saving to cache.
+            // On a large guild in late WoTLK:
+            // - 91mb memory usage after running query above
+            // - 156mb memory usage after Cache::remember WITHOUT early JSON encoding.
+            // - 34mb memory usage after Cache::remember WITH early JSON encoding.
+            $data['characterJson'] = $data['characters']->makeVisible('officer_note')->toJson();
+            // For Roster Breakdown page which uses the model. Other pages just pass the JSON to the client.
+            $data['characters'] = $data['characters']->transform(function($character, $key) {
+                unset($character->received);
+                unset($character->prios);
+                unset($character->allWishlists);
+                unset($character->wishlist);
+                return $character;
+            })->makeVisible('officer_note');
+            return $data;
         });
-
         $showEdit = false;
         if ($currentMember->hasPermission('edit.characters')) {
             $showEdit = true;
         }
 
         if ($page === self::BREAKDOWN) {
-            $character = $characters['characters']->where('name', 'Coop')->first();
-            // dd(
-            //     array_merge([$character->raid_group_id], $character->secondaryRaidGroups->map(function ($raidGroup) { return $raidGroup->id; })->all())
-            // );
             return view('rosterBreakdown', [
-                'characters'    => $characters['characters'],
+                'characters'    => $data['characters'],
                 'currentMember' => $currentMember,
                 'guild'         => $guild,
                 'raidGroups'    => $guild->allRaidGroups,
@@ -72,25 +82,25 @@ class RosterController extends Controller
             ]);
         } else if ($page === self::STATS) {
             return view('rosterStats', [
-                'characters'      => $characters['characters'],
+                'characters'      => $data['characterJson'],
                 'currentMember'   => $currentMember,
                 'guild'           => $guild,
                 'raidGroups'      => $guild->allRaidGroups,
                 'showEdit'        => $showEdit,
-                'showOfficerNote' => $characters['showOfficerNote'],
-                'showPrios'       => $characters['showPrios'],
-                'showWishlist'    => $characters['showWishlist'],
+                'showOfficerNote' => $data['showOfficerNote'],
+                'showPrios'       => $data['showPrios'],
+                'showWishlist'    => $data['showWishlist'],
             ]);
         } else {
             return view('roster', [
-                'characters'      => $characters['characters'],
+                'characters'      => $data['characterJson'],
                 'currentMember'   => $currentMember,
                 'guild'           => $guild,
                 'raidGroups'      => $guild->allRaidGroups,
                 'showEdit'        => $showEdit,
-                'showOfficerNote' => $characters['showOfficerNote'],
-                'showPrios'       => $characters['showPrios'],
-                'showWishlist'    => $characters['showWishlist'],
+                'showOfficerNote' => $data['showOfficerNote'],
+                'showPrios'       => $data['showPrios'],
+                'showWishlist'    => $data['showWishlist'],
             ]);
         }
     }

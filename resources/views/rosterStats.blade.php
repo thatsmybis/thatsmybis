@@ -15,7 +15,7 @@
 
 @section('scripts')
 <script>
-    var characters       = {!! $characters->makeVisible('officer_note')->toJson() !!};
+    var characters       = {!! $characters !!};
     var currentWishlistNumber = {{ $guild->current_wishlist_number }};
     var guild            = {!! $guild->toJson() !!};
     var maxWishlistLists = {{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }};
