@@ -44,7 +44,7 @@
                     @php
                         $disabled = [];
                     @endphp
-                    @foreach ($user->members as $member)
+                    @foreach ($user->members->sortByDesc('created_at') as $member)
                         @if ($member->guild->disabled_at || $member->inactive_at)
                             @php
                                 $disabled[] = $member;
@@ -71,6 +71,8 @@
                                             </a>
                                         </li>
                                     @endforeach
+                                </ul>
+                                <ul class="list-inline mt-3">
                                     <li class="list-inline-item pt-0 pl-1 pb-1 pr-1">
                                         <a href="{{ route('character.showCreate', ['guildId' => $member->guild->id, 'guildSlug' => $member->guild->slug]) }}">
                                             <span class="fas fa-plus"></span>
