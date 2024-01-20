@@ -56,7 +56,7 @@
     var guild            = {!! $guild ? $guild->toJson() : '{}' !!};
     // Used for checking attendance
     var guildCharacters  = {!! $charactersWithAttendance ? $charactersWithAttendance->toJson() : '{}' !!};
-    var items            = {!! $items ? $items->toJson() : '{}' !!};
+    var items            = {!! $items ? $items : '{}' !!};
     var maxWishlistLists = {{ App\Http\Controllers\CharacterLootController::MAX_WISHLIST_LISTS }};
     var raidGroups       = {!! $raidGroups ? $raidGroups->toJson() : '{}' !!};
     var showNotes        = {{ $showNotes ? 'true' : 'false' }};

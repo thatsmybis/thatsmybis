@@ -191,7 +191,8 @@ class ItemController extends Controller
                 $items = $this->mergeTokenWishlists($items, $guild);
             }
 
-            return $items;
+            // Serialize as JSON to save memory.
+            return $items->toJson();
         });
 
         // For optimization, fetch characters with their attendance here.
