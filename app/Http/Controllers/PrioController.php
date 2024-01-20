@@ -108,6 +108,7 @@ class PrioController extends Controller
                 'items.id',
                 'items.item_id',
                 'items.name',
+                'items.faction',
                 'items.quality',
                 'item_sources.name      AS source_name',
                 'guild_items.note       AS guild_note',

@@ -8,6 +8,10 @@ if (isset($item)) {
     if (isset($item->guild_tier)) {
         $itemTier = $item->guild_tier;
     }
+    $itemFaction = $item->faction;
+    if (isset($guild) && $guild->faction) {
+        $itemFaction = null;
+    }
 }
 
 $wowheadSubdomain = 'www';
@@ -29,6 +33,7 @@ if ($itemExpansionId === 1 || $itemExpansionId === 4) {
     $wowheadSubdomain = 'wotlk';
 } else if ($itemExpansionId === 5) {
     $wowheadSubdomain = 'cataclysm';
+}
 
 if (!isset($wowheadLocale)) {
     $wowheadLocale = App::getLocale();
@@ -104,6 +109,13 @@ if (isset($iconSize) && $iconSize) {
             <a href="{{ $wowheadUrl }}" target="_blank" class="{{ isset($itemQuality) ? $itemQuality : '' }}">{{ $itemName }}</a>
         @endif
     </span>
+    @if (isset($itemFaction))
+        @if ($itemFaction === 'h')
+            <span class="text-horde font-weight-bold" title="{{ __('Horde') }}">H</span>
+        @elseif ($itemFaction === 'a')
+            <span class="text-alliance font-weight-bold" title="{{ __('Alliance') }}">A</span>
+        @endif
+    @endif
 </span>
 
 @if (isset($itemDate) && $itemDate)
