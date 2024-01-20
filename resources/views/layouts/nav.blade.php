@@ -245,9 +245,9 @@
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackfathom-depths']) }}">
                                             {{ __("BFD") }}
                                         </a>
-                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gnomeregan']) }}">
+                                        <!-- <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gnomeregan']) }}">
                                             {{ __("Gnomeregan") }}
-                                        </a>
+                                        </a> -->
                                     @elseif ($guild->expansion_id == 5)
                                         <!-- nothing -->
                                     @endif
