@@ -387,7 +387,7 @@ class ExportController extends Controller {
             $expansionId = 2;
         } else if ($expansionSlug == 'wotlk') {
             $expansionId = 3;
-        } else if ($expansionSlug == 'season-of-destruction') {
+        } else if ($expansionSlug == 'season-of-discovery') {
             $expansionId = 4;
         } else if ($expansionSlug == 'cataclysm') {
             $expansionId = 5;

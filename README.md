@@ -251,7 +251,9 @@ Expansions may need to be added. Follow these steps to do so:
 17. Update `AdminController.php`... current functionality is only for a developer helper function.
 18. Update `ExportController.php`
 19. Update `ItemController.php`
-20. 
+20. Update `showWishlistStats()` in `LootController.php`
+21. Update `home.blade.php`
+22. 
 
 This project started with just Classic. Later, TBC was added, followed by WoTLK. As of this writing, Season of Discovery is being added, and Cataclysm will likely be added afterwards.
 
