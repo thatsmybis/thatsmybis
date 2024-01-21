@@ -49,7 +49,7 @@
                                                         </li>
                                                     @endforeach
                                                 @endif
-                                                <li class="list-inline-item">
+                                                <li class="list-inline-item mt-1">
                                                     @if (!$matchingGuilds->count())
                                                         <span class="text-muted">
                                                             {{ $expansion->name_long }}
@@ -57,11 +57,9 @@
                                                     @endif
                                                     @if ($expansion->is_enabled)
                                                         <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}"
-                                                            class="btn {{ $expansion->id === 3 ? 'btn-info' : 'btn-secondary' }} pt-0 pb-0 pl-1 pr-1"
+                                                            class="small btn {{ $expansion->id === 4 ? 'btn-success font-weight-medium p-2' : 'btn-primary' }} pt-0 pb-0 pl-1 pr-1"
                                                         >
-                                                            <span class="small">
-                                                                {{ __("New :expansionName Guild", ['expansionName' => $expansion->name_short]) }}
-                                                            </span>
+                                                            {{ __("New :expansionName Guild", ['expansionName' => $expansion->name_short]) }}
                                                         </a>
                                                     @else
                                                         <span class="text-muted font-italic small">{{ __("not yet supported") }}</span>

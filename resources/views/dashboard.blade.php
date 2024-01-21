@@ -40,6 +40,12 @@
                     <span class="fas fa-fw fa-users text-muted"></span>
                     {{ __("Your Guilds") }}
                 </h3>
+                @if ($user->members->count() > 4)
+                    <a class="text-5" href="{{ route('guild.showRegister') }}" title="{{ __('Create new guild') }}" rel="nofollow">
+                        <span class="fas fa-fw fa-plus"></span>
+                        {{ __("Create new guild") }}
+                    </a>
+                @endif
                 <ul class="no-bullet no-indent">
                     @php
                         $disabled = [];
@@ -187,7 +193,7 @@
                 <p class="font-weight-normal pt-3 text-4">
                     {{ __("Are you a Guild Master?") }}
                 </p>
-                <a class="btn btn-light" href="{{ route('guild.showRegister') }}" title="Register a Guild" rel="nofollow">
+                <a class="btn btn-light" href="{{ route('guild.showRegister') }}" title="{{ __('Register a Guild') }}" rel="nofollow">
                     <img class="discord-link" src="{{ asset('images/discord-logo.svg') }}" alt="" /> {{ __("Register a Guild") }}
                 </a>
             </div>
