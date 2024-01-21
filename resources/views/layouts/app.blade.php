@@ -163,7 +163,7 @@
 
     @if (isset($guild) && $guild->expansion_id < 4)
         <div class="text-center font-weight-normal text-muted mb-2">
-            To use WoTLK, register from <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a> or <a href="{{ route('home') }}">Dashboard</a>.
+            To use SOD, register from <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a> or <a href="{{ route('home') }}">Dashboard</a>.
             <span class="text-muted">
             </span>
         </div>
