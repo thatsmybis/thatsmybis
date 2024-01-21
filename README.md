@@ -253,7 +253,9 @@ Expansions may need to be added. Follow these steps to do so:
 19. Update `ItemController.php`
 20. Update `showWishlistStats()` in `LootController.php`
 21. Update `home.blade.php`
-22. 
+
+If there are any tokens that have duplicates across both factions but share the same rewards, probably one of them should be deleted and one preferred for our system. If this is done:
+1. Update `assignLoot.js` (see `// Convert item ID to the ID that we use` comments in that file)
 
 This project started with just Classic. Later, TBC was added, followed by WoTLK. As of this writing, Season of Discovery is being added, and Cataclysm will likely be added afterwards.
 

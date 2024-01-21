@@ -63,7 +63,7 @@ if (isset($showTier) && $showTier) {
     }
 }
 
-$wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . $wowheadLocale . $wowheadSubdomain. '" ';
+$wowheadAttribs = 'data-wowhead="item=' . $itemId . '?domain=' . ($wowheadLocaleNoDot ? $wowheadLocale : '') . $wowheadSubdomain. '" ';
 $wowheadUrl = null;
 
 if ($itemExpansionId === 3 || $itemExpansionId === 5) {

@@ -454,6 +454,11 @@ function loadItemToForm(item, i) {
         itemId = 44083; // Reins of the Grand Black War Mammoth, Horde version
     }
 
+    // Convert item ID to the ID that we use
+    if (itemId && itemId == 209693) { // 209693 = Perfect Blackfathom Pearl, Alliance version
+        itemId = 211452; // Perfect Blackfathom Pearl, Horde version
+    }
+
     if (item['item']) { // RCLC value
         itemName = item['item'].trim();
     } else if (item['itemName']) {
