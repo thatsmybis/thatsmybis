@@ -452,7 +452,7 @@
         <a href="{{ route('loot.wishlist', ['expansionName' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>,
         {{ __("and") }}
         <a href="{{ route('loot.wishlist', ['expansionName' => 'season-of-discovery']) }}" class="text-{{ getExpansionColor(4) }}">{{ __("Season of Discovery") }}</a>
-        <!-- <a href="{{ route('loot.wishlist', ['expansionName' => 'cataclysm']) }}" class="text-{{ getExpansionColor(5) }}">{{ __("Classic") }}</a> -->
+        <!-- <a href="{{ route('loot.wishlist', ['expansionName' => 'cataclysm']) }}" class="text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</a> -->
 
     </p>
 </li>
