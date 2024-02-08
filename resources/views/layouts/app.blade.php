@@ -137,8 +137,7 @@
     <div class="text-center font-weight-bold text-warning">
         <!-- Sitewide warning message, good for downtime announcements -->
         <!-- Site will be down for maintenance <span class="js-timestamp" data-timestamp="1697036400" data-format="ddd, MMM Do YYYY @ h:mm a"></span> -->
-        <span class="text-muted">
-        </span>
+        <span class="text-gold"></span>
     </div>
 
     @if (isset($guild))
