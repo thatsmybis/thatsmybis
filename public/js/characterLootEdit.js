@@ -102,7 +102,7 @@ function loadItemToForm(item) {
     const wishlistInput = $("#wishlist");
 
     // Defined in autocomplete.js
-    addTag(wishlistInput, item.id, item.name);
+    addTag(wishlistInput, item.id, (item.name || null));
 }
 
 function parseUpgradesImport($this) {
@@ -153,10 +153,17 @@ function parseUpgradesImport($this) {
 
         setTimeout(function(){}, 250); // hack
 
+        let items = null;
         if (json.items && json.items.length > 0) {
+            items = json.items;
+        } else if (json.player?.equipment?.items) {
+            items = json.player.equipment.items;
+        }
+
+        if (items && items.length > 0) {
             // Load the items into the form
-            for (let i = 0; i < json.items.length; i++) {
-                let item = json.items[i];
+            for (let i = 0; i < items.length; i++) {
+                let item = items[i];
                 if (i >= maxItems) {
                     overLimitCount++;
                     skippedItems.push(item.name);

@@ -103,40 +103,38 @@
                                     <span id="toggleImport" class="js-toggle-import btn btn-primary mt-2 mb-3">
                                         <span class="fas fa-fw fa-file-import"></span>
                                         @if ($guild->expansion_id === 1 || $guild->expansion_id === 4)
-                                            {{ __("Import wishlist from sixtyupgrades.com") }}
+                                            {{ __("Import wishlist from sixtyupgrades.com") }} {{ __("OR WoWSims") }}
                                         @elseif ($guild->expansion_id === 2)
-                                            {{ __("Import wishlist from seventyupgrades.com") }}
+                                            {{ __("Import wishlist from seventyupgrades.com") }} {{ __("OR WoWSims") }}
                                         @elseif ($guild->expansion_id === 3)
-                                            {{ __("Import wishlist from eightyupgrades.com") }}
+                                            {{ __("Import wishlist from eightyupgrades.com") }} {{ __("OR WoWSims") }}
                                         @elseif ($guild->expansion_id === 5)
-                                            {{ __("Import wishlist from eightyfiveupgrades.com") }}
+                                            {{ __("Import wishlist from eightyfiveupgrades.com") }} {{ __("OR WoWSims") }}
                                         @endif
                                     </span>
                                 </div>
 
                                 <div id="importArea" style="display:none;" class="mt-2 mb-3">
                                     <div class="mb-3">
+                                        <span class="fas fa-fw fa-link"></span>
                                         @if ($guild->expansion_id === 1 || $guild->expansion_id === 4)
                                             <a href="https://sixtyupgrades.com/" target="_blank">
-                                                <span class="fas fa-fw fa-link"></span>
                                                 sixtyupgrades.com
                                             </a>
                                         @elseif ($guild->expansion_id === 2)
                                             <a href="https://seventyupgrades.com/" target="_blank">
-                                                <span class="fas fa-fw fa-link"></span>
                                                 seventyupgrades.com
                                             </a>
                                         @elseif ($guild->expansion_id === 3)
                                             <a href="https://eightyupgrades.com/" target="_blank">
-                                                <span class="fas fa-fw fa-link"></span>
                                                 eightyupgrades.com
                                             </a>
                                         @elseif ($guild->expansion_id === 5)
                                             <a href="https://eightyfiveupgrades.com/" target="_blank">
-                                                <span class="fas fa-fw fa-link"></span>
                                                 eightyupgrades.com
                                             </a>
                                         @endif
+                                        OR <a href="https://wowsims.github.io/sod/" target="_blank">wowsims.github.io</a>
                                     </div>
 
                                     <img
