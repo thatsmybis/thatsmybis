@@ -318,7 +318,11 @@ function completeCsvImport(results)
                 skippedCount++;
                 overLimitCount++;
                 continue;
-            } else if (item['response'] != undefined && disenchantFlags.includes(item['response'].toLowerCase())) {
+            } else if (
+                (item['response'] != undefined && disenchantFlags.includes(item['response'].toLowerCase()))
+                || (item['Disenchanted'] && item['Disenchanted'] == 1) // LootReserve addon field
+                || (item['Reason'] && item['Reason'] === 'Vendor') // LootReserve addon field
+            ) {
                 console.log(`Skipping row ${ (i + 1) }: Disenchant/vendored ${ item.item ? item.item : (item.item_id ? item.item_id : '') }`);
                 skippedCount++;
                 disenchantCount++;
@@ -346,7 +350,7 @@ function completeCsvImport(results)
     }
 
     if (skippedCount) {
-        statusMessages += `<li class="text-warning">Skipped ${ skippedCount } item${ skippedCount > 1 ? 's' : '' } ${ disenchantCount ? "(" + disenchantCount + " items disenchanted)" : "" } ${ overLimitCount ? "(" + overLimitCount + " items over the limit of " + maxItems + ")" : ""}</li>`;
+        statusMessages += `<li class="text-warning">Skipped ${ skippedCount } item${ skippedCount > 1 ? 's' : '' } ${ disenchantCount ? "(" + disenchantCount + " items disenchanted or vendored)" : "" } ${ overLimitCount ? "(" + overLimitCount + " items over the limit of " + maxItems + ")" : ""}</li>`;
     }
 
     if (offspecCount) {
@@ -408,6 +412,8 @@ function loadItemToForm(item, i) {
         characterName = item['character'].trim();
     } else if (item['name']) {
         characterName = item['name'].trim();
+    } else if (item['Winner']) { // LootReserve addon field
+        characterName = item['Winner'].trim();
     }
 
     if (item['id']) { // RCLC value
@@ -432,6 +438,8 @@ function loadItemToForm(item, i) {
         itemId = item['itemID'].trim();
     } else if (item['item_id']) {
         itemId = item['item_id'].trim();
+    } else if (item['Item ID']) { // LootReserve addon field
+        itemId = item['Item ID'].trim();
     }
 
     // Convert item ID to the ID that we use, because having two of the same item is stupid.
@@ -470,6 +478,8 @@ function loadItemToForm(item, i) {
         itemName = item['itemName'].trim();
     } else if (item['item_name']) {
         itemName = item['item_name'].trim();
+    } else if (item['Item Name']) { // LootReserve addon field
+        itemName = item['Item Name'].trim();
     }
 
     if (item['date'] && !date) { // If RCLC value; can instead default to the date in the ID
@@ -485,12 +495,16 @@ function loadItemToForm(item, i) {
         date = moment(item['dateTime'].trim()).format('YYYY-MM-DD');
     } else if (item['date_time']) {
         date = moment(item['date_time'].trim()).format('YYYY-MM-DD');
+    } else if (item['Time']) { // LootReserve addon field
+        date = moment(item['Time'].trim() * 1000).format('YYYY-MM-DD');
     }
 
     if (item['publicNote']) {
         publicNote = item['publicNote'].trim();
     } else if (item['public_note']) {
         publicNote = item['public_note'].trim();
+    } else if (item['Reason']) { // LootReserve addon field
+        publicNote = item['Reason'].trim();
     }
 
     publicNote = publicNote.substr(0, 140);
@@ -513,7 +527,7 @@ function loadItemToForm(item, i) {
     officerNote = (votes ? "Votes: " + votes + " " : "") + (officerNote ? officerNote + " " : "") + (response ? '"' + response + '" ' : "") + (note ? '"' + note + '" ' : "");
     officerNote = officerNote.substr(0, 140);
 
-    let offspecFlags = ['os', 'offspec'];
+    let offspecFlags = ['os', 'offspec', 'Off Spec'];
 
     if ((item['offspec'] && item['offspec'] == 1)) {
         offspec = 1;
@@ -531,6 +545,8 @@ function loadItemToForm(item, i) {
         } else if (item['officer_note'] && offspecFlags.includes(item['officer_note'].toLowerCase())) {
             offspec = 1;
         }
+    } else if (item['Reason'] && offspecFlags.includes(item['Reason'].toLowerCase())) { // LootReserve addon field
+        offspec = 1;
     }
 
     if (itemId) {
