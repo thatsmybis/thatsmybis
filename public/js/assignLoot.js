@@ -459,6 +459,11 @@ function loadItemToForm(item, i) {
         itemId = 211452; // Perfect Blackfathom Pearl, Horde version
     }
 
+    // Convert item ID to the ID that we use
+    if (itemId && itemId == 217350) { // 217350 = Thermaplugg's Engineering Notes, Alliance version
+        itemId = 217351; // Thermaplugg's Engineering Notes, Horde version
+    }
+
     if (item['item']) { // RCLC value
         itemName = item['item'].trim();
     } else if (item['itemName']) {
