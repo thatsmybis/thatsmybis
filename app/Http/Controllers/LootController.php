@@ -171,7 +171,7 @@ class LootController extends Controller
 
 
     public static function getWishlistStats($expansionId, $class) {
-        $cutoffDate = date('Y-m-d H:i:s', strtotime("-12 months"));
+        $cutoffDate = date('Y-m-d H:i:s', strtotime("-6 months"));
         return collect(DB::select(
             DB::raw(
                 "SELECT
