@@ -662,7 +662,7 @@ class Character extends BaseModel
             ];
         } else if ($expansionId === 2) { // TBC
             return [
-                self::CLASS_DEATH_KNIGHT => __('Death Knight'),
+                // self::CLASS_DEATH_KNIGHT => __('Death Knight'),
                 self::CLASS_DRUID   => __('Druid'),
                 self::CLASS_HUNTER  => __('Hunter'),
                 self::CLASS_MAGE    => __('Mage'),
