@@ -171,6 +171,7 @@ class LootController extends Controller
 
 
     public static function getWishlistStats($expansionId, $class) {
+        $cutoffDate = date('Y-m-d H:i:s', strtotime("-12 months"));
         return collect(DB::select(
             DB::raw(
                 "SELECT
@@ -227,6 +228,7 @@ class LootController extends Controller
                                 g.`expansion_id` = :expansionId
                                 AND ci.`type` = :listType
                                 AND c.`class` = :class
+                                AND ci.`created_at` > '{$cutoffDate}'
                                 -- To fetch ALL classes, change to:
                                 -- AND c.`class` IS NOT NULL
                             GROUP BY i.`item_id`, c.`spec`, c.`class`, c.`archetype`
