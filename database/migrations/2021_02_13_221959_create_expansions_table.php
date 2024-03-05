@@ -28,7 +28,7 @@ class CreateExpansionsTable extends Migration
                 ("Classic", "Classic", "Classic", "classic", 1, "2021-02-13 00:00:00"),
                 ("Burning Crusade", "TBC", "The Burning Crusade", "burning-crusade", 0, "2021-02-13 00:00:00"),
                 ("Wrath", "WoTLK", "Wrath of the Lich King", "wrath", 0, "2021-02-13 00:00:00"),
-                ("Season of Discovery", "SoD", "Season of Discovery", "season-of-discovery", 0, "2024-01-10 00:00:00");'),
+                ("Season of Discovery", "SoD", "Season of Discovery", "season-of-discovery", 0, "2024-01-10 00:00:00");');
 
         Schema::table('guilds', function (Blueprint $table) {
             $table->bigInteger('expansion_id')->default(1)->unsigned()->after('discord_id');
