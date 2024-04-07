@@ -134,29 +134,21 @@
         </div>
     @endif
 
-    <div class="text-center font-weight-bold text-warning">
+    <div class="text-center text-warning">
         <!-- Sitewide warning message, good for downtime announcements -->
         <!-- Site will be down for maintenance <span class="js-timestamp" data-timestamp="1697036400" data-format="ddd, MMM Do YYYY @ h:mm a"></span> -->
-        <span class="text-gold"></span>
+        <span class="font-weight-bold text-gold"></span>
+        @if (isset($guild) && $guild->expansion_id === 4)
+            <span class="">Sunken Temple added (no loot tables yet)</span>
+        @endif
     </div>
 
     @if (isset($guild))
         <div id="addonPrompt" class="text-center font-weight-medium text-success" style="display:none;">
-            Choose an addon to use with TMB: <span id="closeAddonPrompt" class="cursor-pointer small text-muted fa-fw fas fa-times"></span>
-            <ul class="no-bullet no-indent">
-                <li>
-                    <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-legendary">Gargul <span class="small text-muted">86% recommended</span></a>
-                </li>
-                <li>
-                    <a href="https://www.curseforge.com/wow/addons/rclootcouncil-classic" target="_blank" class="text-legendary">RCLC <span class="small text-muted">64% recommended</span></a>
-                </li>
-                <li>
-                    <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-legendary">TMB Tooltips <span class="small text-muted">Gargul also does this</span></a>
-                </li>
-                <li>
-                    <a href="https://docs.google.com/forms/d/1lyTQ1qtTcXbCWY3cLt_zww_D9TtkhJYEmWhAW4sauIo/viewanalytics" target="_blank" class="small text-muted">poll results</a>
-                </li>
-            </ul>
+            Choose an addon to use with TMB:
+            <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-legendary">Gargul</a> or
+            <a href="https://www.curseforge.com/wow/addons/rclootcouncil-classic" target="_blank" class="text-legendary">RCLC</a>
+            <span id="closeAddonPrompt" class="cursor-pointer small text-muted fa-fw fas fa-times"></span>
         </div>
     @endif
 
