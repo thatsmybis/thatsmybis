@@ -358,6 +358,11 @@
                         {{ __("Gnomeregan") }}
                     </a>
                 </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'sunken-temple']) }}">
+                        {{ __("Sunken Temple") }}
+                    </a>
+                </li>
                 <!-- <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'zulgurub']) }}">
                         {{ __("Zul'Gurub") }}

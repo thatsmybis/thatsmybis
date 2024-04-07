@@ -248,6 +248,9 @@
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gnomeregan']) }}">
                                             {{ __("Gnomeregan") }}
                                         </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'sunken-temple']) }}">
+                                            {{ __("Sunken Temple") }}
+                                        </a>
                                     @elseif ($guild->expansion_id == 5)
                                         <!-- nothing -->
                                     @endif
@@ -400,6 +403,9 @@
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gnomeregan']) }}">
                                             {{ __("Gnomeregan") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'sunken-temple']) }}">
+                                            {{ __("Sunken Temple") }}
                                         </a>
                                     @elseif ($guild->expansion_id == 5)
                                         <!-- nothing -->
@@ -622,6 +628,9 @@
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'gnomeregan']) }}">
                                 {{ __("Gnomeregan") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'sunken-temple']) }}">
+                                {{ __("Sunken Temple") }}
                             </a>
                         @elseif ($guild->expansion_id == 5)
                             <!-- <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'karazhan']) }}">
