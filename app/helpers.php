@@ -99,8 +99,8 @@ function getExpansionAbbr($expansionId, $lowercase = null) {
             return $lowercase ? 'wotlk' : 'WoTLK';
         case 4: // Season of Discovery
             return $lowercase ? 'sod' : 'SOD';
-        case 3:
-            return $lowercase ? 'cata' : 'Cata';
+        case 5:
+            return $lowercase ? 'cata' : 'Cataclysm';
         default:
             return '';
     }

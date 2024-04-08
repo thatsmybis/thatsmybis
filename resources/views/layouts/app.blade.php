@@ -139,7 +139,7 @@
         <!-- Site will be down for maintenance <span class="js-timestamp" data-timestamp="1697036400" data-format="ddd, MMM Do YYYY @ h:mm a"></span> -->
         <span class="font-weight-bold text-gold"></span>
         @if (isset($guild) && $guild->expansion_id === 4)
-            <span class="">Sunken Temple added (no loot tables yet)</span>
+            <span class=""></span>
         @endif
     </div>
 
@@ -351,7 +351,7 @@
             @elseif ($guild->expansion_id === 4)
                 var wowheadSubdomain = "classic";
             @elseif ($guild->expansion_id === 5)
-                var wowheadSubdomain = "cataclysm";
+                var wowheadSubdomain = "cata";
             @else
                 var wowheadSubdomain = "www";
             @endif
@@ -366,7 +366,7 @@
             @elseif ($expansionId == 4)
                 var wowheadSubdomain = "classic";
             @elseif ($expansionId == 5)
-                var wowheadSubdomain = "cataclysm";
+                var wowheadSubdomain = "cata";
             @else
                 var wowheadSubdomain = "www";
             @endif

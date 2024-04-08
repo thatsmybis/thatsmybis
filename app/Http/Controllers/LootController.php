@@ -99,7 +99,7 @@ class LootController extends Controller
             $expansionId = 3;
         } else if ($expansionName == 'sod' || $expansionName === 4) {
             $expansionId = 4;
-        } else if ($expansionName == 'cataclysm' || $expansionName === 5) {
+        } else if ($expansionName == 'cata' || $expansionName === 5) {
             $expansionId = 5;
         } else {
             $expansionId = 1;

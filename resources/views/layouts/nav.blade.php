@@ -252,7 +252,42 @@
                                             {{ __("Sunken Temple") }}
                                         </a>
                                     @elseif ($guild->expansion_id == 5)
-                                        <!-- nothing -->
+                                        <!-- <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'baradin-hold-n']) }}">
+                                            {{ __("Baradin Hold Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'baradin-hold-h']) }}">
+                                            {{ __("Baradin Hold Heroic") }}
+                                        </a> -->
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-the-four-winds-n']) }}">
+                                            {{ __("Throne of the Four Winds Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-the-four-winds-h']) }}">
+                                            {{ __("Throne of the Four Winds Heroic") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-descent-n']) }}">
+                                            {{ __("Blackwing Descent Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-descent-h']) }}">
+                                            {{ __("Blackwing Descent Heroic") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'the-bastion-of-twilight-n']) }}">
+                                            {{ __("The Bastion of Twilight Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'the-bastion-of-twilight-h']) }}">
+                                            {{ __("The Bastion of Twilight Heroic") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'firelands-n']) }}">
+                                            {{ __("Firelands Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'firelands-h']) }}">
+                                            {{ __("Firelands Heroic") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'dragon-soul-n']) }}">
+                                            {{ __("Dragon Soul Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'dragon-soul-h']) }}">
+                                            {{ __("Dragon Soul Heroic") }}
+                                        </a>
                                     @endif
                                 </div>
                             </div>
@@ -408,7 +443,42 @@
                                             {{ __("Sunken Temple") }}
                                         </a>
                                     @elseif ($guild->expansion_id == 5)
-                                        <!-- nothing -->
+                                        <!-- <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'baradin-hold-n']) }}">
+                                            {{ __("Baradin Hold Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'baradin-hold-h']) }}">
+                                            {{ __("Baradin Hold Heroic") }}
+                                        </a> -->
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-the-four-winds-n']) }}">
+                                            {{ __("Throne of the Four Winds Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-the-four-winds-h']) }}">
+                                            {{ __("Throne of the Four Winds Heroic") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-descent-n']) }}">
+                                            {{ __("Blackwing Descent Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-descent-h']) }}">
+                                            {{ __("Blackwing Descent Heroic") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'the-bastion-of-twilight-n']) }}">
+                                            {{ __("The Bastion of Twilight Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'the-bastion-of-twilight-h']) }}">
+                                            {{ __("The Bastion of Twilight Heroic") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'firelands-n']) }}">
+                                            {{ __("Firelands Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'firelands-h']) }}">
+                                            {{ __("Firelands Heroic") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'dragon-soul-n']) }}">
+                                            {{ __("Dragon Soul Normal") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'dragon-soul-h']) }}">
+                                            {{ __("Dragon Soul Heroic") }}
+                                        </a>
                                     @endif
                                 </div>
                             </div>
@@ -633,9 +703,42 @@
                                 {{ __("Sunken Temple") }}
                             </a>
                         @elseif ($guild->expansion_id == 5)
-                            <!-- <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'karazhan']) }}">
-                                {{ __("Karazhan") }}
+                            <!-- <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'baradin-hold-n']) }}">
+                                {{ __("Baradin Hold Normal") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'baradin-hold-h']) }}">
+                                {{ __("Baradin Hold Heroic") }}
                             </a> -->
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-the-four-winds-n']) }}">
+                                {{ __("Throne of the Four Winds Normal") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-the-four-winds-h']) }}">
+                                {{ __("Throne of the Four Winds Heroic") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-descent-n']) }}">
+                                {{ __("Blackwing Descent Normal") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-descent-h']) }}">
+                                {{ __("Blackwing Descent Heroic") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'the-bastion-of-twilight-n']) }}">
+                                {{ __("The Bastion of Twilight Normal") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'the-bastion-of-twilight-h']) }}">
+                                {{ __("The Bastion of Twilight Heroic") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'firelands-n']) }}">
+                                {{ __("Firelands Normal") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'firelands-h']) }}">
+                                {{ __("Firelands Heroic") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'dragon-soul-n']) }}">
+                                {{ __("Dragon Soul Normal") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'dragon-soul-h']) }}">
+                                {{ __("Dragon Soul Heroic") }}
+                            </a>
                         @endif
                     </div>
                 </li>

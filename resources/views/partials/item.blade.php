@@ -32,7 +32,7 @@ if ($itemExpansionId === 1 || $itemExpansionId === 4) {
 } else if ($itemExpansionId === 3) {
     $wowheadSubdomain = 'wotlk';
 } else if ($itemExpansionId === 5) {
-    $wowheadSubdomain = 'cataclysm';
+    $wowheadSubdomain = 'cata';
 }
 
 if (!isset($wowheadLocale)) {
