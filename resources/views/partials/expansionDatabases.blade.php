@@ -26,7 +26,7 @@
         <span class="font-weight-normal text-gold">{{ __("Season of Discovery") }}</span> {{ __("Loot Tables") }}
     </h2>
     <p class="text-warning">
-        Loot tables are also not guaranteed 100%; they are a best estimate.
+        Loot tables are a best estimate based on available data.
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">
@@ -95,7 +95,7 @@
         <span class="font-weight-normal text-druid">{{ __("Cataclysm") }}</span> {{ __("Loot Tables") }}
     </h2>
     <p class="text-warning">
-        Loot tables are also not guaranteed 100%; they are a best estimate.
+        Loot tables are a best estimate based on available data.
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">
@@ -490,7 +490,7 @@
         <span class="font-weight-normal text-gold">{{ __("Season of Discovery") }}</span> {{ __("MySQL Item Database") }}
     </h2>
     <p>
-        {{ __("The MySQL WoW item database used by :appName for WoTLK (export includes Classic and TBC data too).", ['appName' => env('APP_NAME')]) }}
+        {{ __("The MySQL WoW item database used by :appName for WoTLK (export includes Classic, TBC, and WoTLK data too).", ['appName' => env('APP_NAME')]) }}
     </p>
     <p>
         <a href="https://github.com/thatsmybis/sod-item-db/" class="text-5" target="_blank">https://github.com/thatsmybis/sod-item-db</a>
@@ -529,7 +529,7 @@
         <span class="font-weight-normal text-druid">{{ __("Cataclysm") }}</span> {{ __("MySQL Item Database") }}
     </h2>
     <p>
-        {{ __("The MySQL WoW item database used by :appName for WoTLK (export includes Classic and TBC data too).", ['appName' => env('APP_NAME')]) }}
+        {{ __("The MySQL WoW item database used by :appName for WoTLK (export includes Classic, TBC, WoTLK, and SOD data too).", ['appName' => env('APP_NAME')]) }}
     </p>
     <p>
         <a href="https://github.com/thatsmybis/cata-item-db/" class="text-5" target="_blank">https://github.com/thatsmybis/cata-item-db</a>
@@ -537,8 +537,6 @@
 </li>
 
 <li>
-    <h2>{{ __("Want more?") }}</h2>
-
     <p>
         {{ __("View the") }} <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}">{{ __("live data") }}</a> {{ __("for what people are wishlisting in") }}
         <a href="{{ route('loot.wishlist', ['expansionName' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>,
