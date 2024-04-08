@@ -385,7 +385,7 @@ class ExportController extends Controller {
             $expansionId = 1;
         } else if ($expansionSlug == 'burning-crusade') {
             $expansionId = 2;
-        } else if ($expansionSlug == 'wotlk') {
+        } else if ($expansionSlug == 'wrath-of-the-lich-king') {
             $expansionId = 3;
         } else if ($expansionSlug == 'season-of-discovery') {
             $expansionId = 4;
@@ -403,7 +403,7 @@ class ExportController extends Controller {
         } else if ($expansionId == 3) {
             $subdomain = 'wotlk';
         } else if ($expansionId == 5) {
-            $subdomain = 'cataclysm';
+            $subdomain = 'cata';
         }
 
         $locale = App::getLocale();
