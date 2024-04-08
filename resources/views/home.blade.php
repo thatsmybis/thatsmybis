@@ -39,15 +39,16 @@
                 </a>
             </div>
 
-            <h4 class="text-5 pt-3">
+            <!-- <h4 class="text-5 pt-3">
                 {{ __("see what people are wishlisting in") }}
+                <br>
                 <a href="{{ route('loot.wishlist', ['expansionName' => 'cata']) }}" class="font-weight-bold text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</a>,
                 <a href="{{ route('loot.wishlist', ['expansionName' => 'sod']) }}" class="font-weight-bold text-{{ getExpansionColor(4) }}">{{ __("SOD") }}</a>,
                 <a href="{{ route('loot.wishlist', ['expansionName' => 'wotlk']) }}" class="font-weight-bold text-{{ getExpansionColor(3) }}">{{ __("Wrath of the Lich King") }}</a>,
                 <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="font-weight-bold text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>,
                 {{ __("and") }}
                 <a href="{{ route('loot.wishlist', ['expansionName' => 'classic']) }}" class="font-weight-bold text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>
-            </h4>
+            </h4> -->
 
             <p class="mt-3">
                 {{ __("or view our public") }} <a href="{{ route('loot') }}">{{ __("loot tables") }}</a>
@@ -68,7 +69,7 @@
             </div>
 
             <p class="mt-3">
-                {!! __("supports Classic, Classic Fresh, Classic Season of Mastery, Classic Plus, Classic+,<br> The Burning Crusade (TBC), and Wrath of the Lich King (WotLK)") !!}
+                {!! __("supports Classic, Classic Fresh, Classic Season of Mastery, Classic Plus, Classic+,<br> The Burning Crusade (TBC), and Wrath of the Lich King (WotLK)") !!}. Also Season of Discovery, Cataclysm.
             </p>
         </div>
     </div>

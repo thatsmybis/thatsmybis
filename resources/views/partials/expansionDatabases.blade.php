@@ -1,3 +1,24 @@
+<!-- Classic Loot Tables -->
+<li class="p-3 mb-3 rounded">
+    <h2>
+        <span class="fas fa-fw fa-sack text-muted"></span>
+        <span class="font-weight-normal text-gold">{{ __("Classic") }}</span> {{ __("Loot Tables") }}
+    </h2>
+    <ul class="list-inline">
+        <li class="list-inline-item">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
+                <span class="fas fa-fw fa-file-csv text-muted"></span>
+                {{ __("Download CSV") }}
+            </a>
+        </li>
+        <li class="list-inline-item">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
+                <span class="fas fa-fw fa-file-csv text-muted"></span>
+                {{ __("View CSV") }}
+            </a>
+        </li>
+    </ul>
+</li>
 <!-- SOD Loot Tables -->
 <li class="p-3 mb-3 rounded">
     <h2>
@@ -5,7 +26,7 @@
         <span class="font-weight-normal text-gold">{{ __("Season of Discovery") }}</span> {{ __("Loot Tables") }}
     </h2>
     <p class="text-warning">
-        Loot tables are also not guaranteed 100%; but are a best estimate.
+        Loot tables are also not guaranteed 100%; they are a best estimate.
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">
@@ -16,30 +37,6 @@
         </li>
         <li class="list-inline-item">
             <a href="{{ route('loot.table', ['expansionSlug' => 'season-of-discovery', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
-                <span class="fas fa-fw fa-file-csv text-muted"></span>
-                {{ __("View CSV") }}
-            </a>
-        </li>
-    </ul>
-</li>
-<!-- WoTLK Loot Tables -->
-<li class="p-3 mb-3 rounded">
-    <h2>
-        <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-mage">{{ __("Wrath of The Lich King") }}</span> {{ __("Loot Tables") }}
-    </h2>
-    <p class="text-warning">
-        Loot tables are also not guaranteed 100%; but are a best estimate.
-    </p>
-    <ul class="list-inline">
-        <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'wotlk', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
-                <span class="fas fa-fw fa-file-csv text-muted"></span>
-                {{ __("Download CSV") }}
-            </a>
-        </li>
-        <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'wotlk', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
                 {{ __("View CSV") }}
             </a>
@@ -70,21 +67,21 @@
         </li>
     </ul>
 </li>
-<!-- Classic Loot Tables -->
+<!-- WoTLK Loot Tables -->
 <li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-gold">{{ __("Classic") }}</span> {{ __("Loot Tables") }}
+        <span class="font-weight-normal text-mage">{{ __("Wrath of The Lich King") }}</span> {{ __("Loot Tables") }}
     </h2>
     <ul class="list-inline">
         <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'wrath-of-the-lich-king', 'type' => 'csv']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
                 {{ __("Download CSV") }}
             </a>
         </li>
         <li class="list-inline-item">
-            <a href="{{ route('loot.table', ['expansionSlug' => 'classic', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
+            <a href="{{ route('loot.table', ['expansionSlug' => 'wrath-of-the-lich-king', 'type' => 'html']) }}" target="_blank" class="text-4 tag">
                 <span class="fas fa-fw fa-file-csv text-muted"></span>
                 {{ __("View CSV") }}
             </a>
@@ -92,13 +89,13 @@
     </ul>
 </li>
 <!-- Catacylsm Loot Tables -->
-<!-- <li class="p-3 mb-3 rounded">
+<li class="p-3 mb-3 rounded">
     <h2>
         <span class="fas fa-fw fa-sack text-muted"></span>
-        <span class="font-weight-normal text-mage">{{ __("Cataclysm") }}</span> {{ __("Loot Tables") }}
+        <span class="font-weight-normal text-druid">{{ __("Cataclysm") }}</span> {{ __("Loot Tables") }}
     </h2>
     <p class="text-warning">
-        Loot tables are also not guaranteed 100%; but are a best estimate.
+        Loot tables are also not guaranteed 100%; they are a best estimate.
     </p>
     <ul class="list-inline">
         <li class="list-inline-item">
@@ -114,7 +111,7 @@
             </a>
         </li>
     </ul>
-</li> -->
+</li>
 <!-- Burning Crusade Loot Tables -->
 <li class="p-3 mb-3 rounded">
     <h2>
@@ -165,6 +162,67 @@
                         {{ __("Naxxramas") }}
                     </a>
                 </li>
+            </ul>
+        </div>
+
+        <div class="col-sm-6 p-4">
+            <h2 class="font-weight-bold text-gold">{{ __("Season of Discovery Raids") }}</h2>
+            <ul class="no-bullet no-indent">
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'blackfathom-depths']) }}">
+                        {{ __("Blackfathom Depths") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'gnomeregan']) }}">
+                        {{ __("Gnomeregan") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'sunken-temple']) }}">
+                        {{ __("Sunken Temple") }}
+                    </a>
+                </li>
+                <!-- <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'zulgurub']) }}">
+                        {{ __("Zul'Gurub") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
+                        {{ __("Ruins of Ahn'Qiraj") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'world-bosses']) }}">
+                        {{ __("World Bosses") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'molten-core']) }}">
+                        {{ __("Molten Core") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'onyxias-lair']) }}">
+                        {{ __("Onyxia's Lair") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'blackwing-lair']) }}">
+                        {{ __("Blackwing Lair") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
+                        {{ __("Temple of Ahn'Qiraj") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'naxxramas']) }}">
+                        {{ __("Naxxramas") }}
+                    </a>
+                </li> -->
             </ul>
         </div>
 
@@ -346,68 +404,9 @@
         </div>
 
         <div class="col-sm-6 p-4">
-            <h2 class="font-weight-bold text-gold">{{ __("Season of Discovery Raids") }}</h2>
+            <h2 class="font-weight-bold text-druid">{{ __("Cataclyms Raids") }}</h2>
             <ul class="no-bullet no-indent">
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'blackfathom-depths']) }}">
-                        {{ __("Blackfathom Depths") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'gnomeregan']) }}">
-                        {{ __("Gnomeregan") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'sunken-temple']) }}">
-                        {{ __("Sunken Temple") }}
-                    </a>
-                </li>
                 <!-- <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'zulgurub']) }}">
-                        {{ __("Zul'Gurub") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
-                        {{ __("Ruins of Ahn'Qiraj") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'world-bosses']) }}">
-                        {{ __("World Bosses") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'molten-core']) }}">
-                        {{ __("Molten Core") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'onyxias-lair']) }}">
-                        {{ __("Onyxia's Lair") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'blackwing-lair']) }}">
-                        {{ __("Blackwing Lair") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
-                        {{ __("Temple of Ahn'Qiraj") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'naxxramas']) }}">
-                        {{ __("Naxxramas") }}
-                    </a>
-                </li> -->
-            </ul>
-            <div class="col-sm-6 p-4">
-            <h2 class="font-weight-bold text-gold">{{ __("Cataclyms Raids") }}</h2>
-            <ul class="no-bullet no-indent">
-                <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'baradin-hold-n']) }}">
                         {{ __("Baradin Hold Normal") }}
                     </a>
@@ -416,7 +415,7 @@
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'baradin-hold-h']) }}">
                         {{ __("Baradin Hold Heroic") }}
                     </a>
-                </li>
+                </li> -->
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'throne-of-the-four-winds-n']) }}">
                         {{ __("Throne of the Four Winds Normal") }}
@@ -484,6 +483,19 @@
         <a href="https://github.com/thatsmybis/classic-wow-item-db/" class="text-5" target="_blank">https://github.com/thatsmybis/classic-wow-item-db</a>
     </p>
 </li>
+<!-- Season of Discovery Item Database -->
+<li class="p-3 mb-3 rounded">
+    <h2>
+        <span class="fas fa-fw fa-database text-muted"></span>
+        <span class="font-weight-normal text-gold">{{ __("Season of Discovery") }}</span> {{ __("MySQL Item Database") }}
+    </h2>
+    <p>
+        {{ __("The MySQL WoW item database used by :appName for WoTLK (export includes Classic and TBC data too).", ['appName' => env('APP_NAME')]) }}
+    </p>
+    <p>
+        <a href="https://github.com/thatsmybis/sod-item-db/" class="text-5" target="_blank">https://github.com/thatsmybis/sod-item-db</a>
+    </p>
+</li>
 <!-- TBC Item Database -->
 <li class="p-3 mb-3 rounded">
     <h2>
@@ -510,18 +522,31 @@
         <a href="https://github.com/thatsmybis/wotlk-item-db/" class="text-5" target="_blank">https://github.com/thatsmybis/wotlk-item-db</a>
     </p>
 </li>
+<!-- Cata Item Database -->
+<li class="p-3 mb-3 rounded">
+    <h2>
+        <span class="fas fa-fw fa-database text-muted"></span>
+        <span class="font-weight-normal text-druid">{{ __("Cataclysm") }}</span> {{ __("MySQL Item Database") }}
+    </h2>
+    <p>
+        {{ __("The MySQL WoW item database used by :appName for WoTLK (export includes Classic and TBC data too).", ['appName' => env('APP_NAME')]) }}
+    </p>
+    <p>
+        <a href="https://github.com/thatsmybis/cata-item-db/" class="text-5" target="_blank">https://github.com/thatsmybis/cata-item-db</a>
+    </p>
+</li>
 
 <li>
     <h2>{{ __("Want more?") }}</h2>
 
     <p>
         {{ __("View the") }} <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}">{{ __("live data") }}</a> {{ __("for what people are wishlisting in") }}
-        <a href="{{ route('loot.wishlist', ['expansionName' => 'wotlk']) }}" class="text-{{ getExpansionColor(3) }}">{{ __("WoTLK") }}</a>,
-        <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>,
         <a href="{{ route('loot.wishlist', ['expansionName' => 'classic']) }}" class="text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</a>,
+        <a href="{{ route('loot.wishlist', ['expansionName' => 'sod']) }}" class="text-{{ getExpansionColor(4) }}">{{ __("Season of Discovery") }}</a>,
+        <a href="{{ route('loot.wishlist', ['expansionName' => 'tbc']) }}" class="text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</a>,
+        <a href="{{ route('loot.wishlist', ['expansionName' => 'wotlk']) }}" class="text-{{ getExpansionColor(3) }}">{{ __("WoTLK") }}</a>,
         {{ __("and") }}
-        <a href="{{ route('loot.wishlist', ['expansionName' => 'season-of-discovery']) }}" class="text-{{ getExpansionColor(4) }}">{{ __("Season of Discovery") }}</a>
-        <!-- <a href="{{ route('loot.wishlist', ['expansionName' => 'cataclysm']) }}" class="text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</a> -->
+        <a href="{{ route('loot.wishlist', ['expansionName' => 'cata']) }}" class="text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</a>
 
     </p>
 </li>
