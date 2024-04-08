@@ -404,6 +404,70 @@
                     </a>
                 </li> -->
             </ul>
+            <div class="col-sm-6 p-4">
+            <h2 class="font-weight-bold text-gold">{{ __("Cataclyms Raids") }}</h2>
+            <ul class="no-bullet no-indent">
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'baradin-hold-n']) }}">
+                        {{ __("Baradin Hold Normal") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'baradin-hold-h']) }}">
+                        {{ __("Baradin Hold Heroic") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'throne-of-the-four-winds-n']) }}">
+                        {{ __("Throne of the Four Winds Normal") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'throne-of-the-four-winds-h']) }}">
+                        {{ __("Throne of the Four Winds Heroic") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'blackwing-descent-n']) }}">
+                        {{ __("Blackwing Descent Normal") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'blackwing-descent-h']) }}">
+                        {{ __("Blackwing Descent Heroic") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'the-bastion-of-twilight-n']) }}">
+                        {{ __("The Bastion of Twilight Normal") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'the-bastion-of-twilight-h']) }}">
+                        {{ __("The Bastion of Twilight Heroic") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'firelands-n']) }}">
+                        {{ __("Firelands Normal") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'firelands-h']) }}">
+                        {{ __("Firelands Heroic") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'dragon-soul-n']) }}">
+                        {{ __("Dragon Soul Normal") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'dragon-soul-h']) }}">
+                        {{ __("Dragon Soul Heroic") }}
+                    </a>
+                </li>
+            </ul>
         </div>
     </div>
 </li>

@@ -798,7 +798,7 @@ class Character extends BaseModel
                 self::RACE_GNOME     => ['name' => __('Gnome'),     'faction' => self::FACTION_WORST],
                 self::RACE_HUMAN     => ['name' => __('Human'),     'faction' => self::FACTION_WORST],
                 self::RACE_NIGHT_ELF => ['name' => __('Night Elf'), 'faction' => self::FACTION_WORST],
-                self::RACE_WORGEN    => ['name' => __('Worgen'),    'faction' => self::FACTION_BEST],
+                self::RACE_WORGEN    => ['name' => __('Worgen'),    'faction' => self::FACTION_WORST],
             ];
         }
     }

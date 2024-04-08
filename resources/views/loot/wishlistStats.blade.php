@@ -21,17 +21,16 @@
                 <li class="list-inline-item font-weight-{{ $expansionId == 4 ? 'bold' : 'light' }}">
                     <a href="{{ route('loot.wishlist', ['expansionName' => 'sod']) }}" class="text-{{ getExpansionColor(4) }}">{{ __("SOD") }}</a>
                 </li>
-                <!-- <li class="list-inline-item">&sdot;</li>
+                <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item font-weight-{{ $expansionId == 5 ? 'bold' : 'light' }}">
-                    <a href="{{ route('loot.wishlist', ['expansionName' => 'cataclysm']) }}" class="text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</a>
-                </li> -->
+                    <a href="{{ route('loot.wishlist', ['expansionName' => 'cata']) }}" class="text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</a>
+                </li>
             </ul>
             <h1>
                 <span class="font-weight-bold">{{ __("Top") }} {{ $maxItems }}</span> {{ __("Wishlisted") }}
                 <span class="text-{{ getExpansionColor($expansionId) }} font-weight-bold">{{ getExpansionAbbr($expansionId) }}</span> {{ __("Items") }}
                 <span class="small text-muted">(recently)</span>
             </h1>
-            <span class="smaller text-muted">{{ __("Now you can be just like everyone else!") }} :D</span>
             @include('partials/firstHitIsFree')
         </div>
     </div>

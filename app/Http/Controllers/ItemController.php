@@ -474,7 +474,7 @@ class ItemController extends Controller
         } else if ($expansionId === 3) {
             $domain = 'wotlk';
         } else if ($expansionId === 5) {
-            $domain = 'cataclysm';
+            $domain = 'cata';
         }
 
         $locale = App::getLocale();

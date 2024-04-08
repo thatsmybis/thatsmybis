@@ -29,7 +29,7 @@
                                         } elseif ($guild->expansion_id === 4) {
                                             $wowheadSubdomain = 'classic';
                                         } elseif ($guild->expansion_id === 5) {
-                                            $wowheadSubdomain = 'cataclysm';
+                                            $wowheadSubdomain = 'cata';
                                         }
 
                                         $wowheadLocale = App::getLocale();
