@@ -18,9 +18,6 @@
             <h1 class="mt-5 pt-5 mb-1 text-1">
                 <span class="font-weight-bold">{{ env('APP_NAME') }}</span>
             </h1>
-            <h3 class="mb-5 text-expansion-3 font-weight-bold">
-                {{ __("Wrath of the Lich King") }}
-            </h3>
             <h2 class="mt-1 font-weight-normal mb-5 text-3">
                 {{ __("A tool for World of Warcraft") }}
                 <br>
@@ -32,6 +29,16 @@
                 <br>
                 {{ __("loot distribution") }}
             </h3>
+
+            <h4 class="text-5 pt-3">
+                {{ __("Supports") }}
+                <span class="font-weight-bold text-{{ getExpansionColor(1) }}">{{ __("Classic") }}</span>,
+                <span class="font-weight-bold text-{{ getExpansionColor(4) }}">{{ __("SOD") }}</span>,
+                <span class="font-weight-bold text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</span>,
+                <span class="font-weight-bold text-{{ getExpansionColor(3) }}">{{ __("WoTLK") }}</span>,
+                &
+                <span class="font-weight-bold text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</span>
+            </h4>
 
             <div class="mt-5 mb-5">
                 <a class="btn btn-light" href="{{ route('discordLogin') }}" title="Sign in with Discord" rel="nofollow">
@@ -63,7 +70,7 @@
 
             <div class="pt-5 mt-5 mb-5">
                 <p class="font-weight-bold text-4">
-                    {{ __("Longer preview video with most of the new features and stuff") }}
+                    {{ __("Newer preview video with more of the features") }}
                 </p>
                 <iframe style="width:100%;max-width:960px;height:540px;" src="https://www.youtube.com/embed/hj_tqjxy6sY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
             </div>
