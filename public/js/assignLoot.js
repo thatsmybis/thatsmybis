@@ -472,6 +472,11 @@ function loadItemToForm(item, i) {
         itemId = 217351; // Thermaplugg's Engineering Notes, Horde version
     }
 
+    // Convert item ID to the ID that we use
+    if (itemId && itemId == 221363) { // 221363 = Scapula of the Fallen Avatar, Alliance version
+        itemId = 221346; // Scapula of the Fallen Avatar, Horde version
+    }
+
     if (item['item']) { // RCLC value
         itemName = item['item'].trim();
     } else if (item['itemName']) {
