@@ -473,8 +473,8 @@ function loadItemToForm(item, i) {
     }
 
     // Convert item ID to the ID that we use
-    if (itemId && itemId == 221363) { // 221363 = Scapula of the Fallen Avatar, Alliance version
-        itemId = 221346; // Scapula of the Fallen Avatar, Horde version
+    if (itemId && itemId == 221346) { // 221346 = Scapula of the Fallen Avatar, Alliance version
+        itemId = 221363; // Scapula of the Fallen Avatar, Horde version
     }
 
     if (item['item']) { // RCLC value
