@@ -194,6 +194,9 @@
                     <option value="45" disabled>
                         {{ __("Gnomregan") }}
                     </option>
+                    <option value="46" disabled>
+                        {{ __("Sunken Temple") }}
+                    </option>
                 @elseif ($guild->expansion_id == 5)
                     <!-- -->
                 @endif
