@@ -223,10 +223,10 @@
                     <option value="44">
                         {{ __("Blackfathom Depths") }}
                     </option>
-                    <option value="45" disabled>
+                    <option value="45">
                         {{ __("Gnomregan") }}
                     </option>
-                    <option value="46" disabled>
+                    <option value="46">
                         {{ __("Sunken Temple") }}
                     </option>
                 @elseif ($guild->expansion_id == 5)
