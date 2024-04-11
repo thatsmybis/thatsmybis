@@ -230,7 +230,42 @@
                         {{ __("Sunken Temple") }}
                     </option>
                 @elseif ($guild->expansion_id == 5)
-                    <!-- -->
+                    <option value="47">
+                        {{ __("Baradin Hold Normal") }}
+                    </option>
+                    <option value="48">
+                        {{ __("Baradin Hold Heroic") }}
+                    </option>
+                    <option value="49">
+                        {{ __("Throne of the Four Winds Normal") }}
+                    </option>
+                    <option value="50">
+                        {{ __("Throne of the Four Winds Heroic") }}
+                    </option>
+                    <option value="51">
+                        {{ __("Blackwing Descent Normal") }}
+                    </option>
+                    <option value="52">
+                        {{ __("Blackwing Descent Heroic") }}
+                    </option>
+                    <option value="53">
+                        {{ __("The Bastion of Twilight Normal") }}
+                    </option>
+                    <option value="54">
+                        {{ __("The Bastion of Twilight Heroic") }}
+                    </option>
+                    <option value="55">
+                        {{ __("Firelands Normal") }}
+                    </option>
+                    <option value="56">
+                        {{ __("Firelands Heroic") }}
+                    </option>
+                    <option value="57">
+                        {{ __("Dragon Soul Normal") }}
+                    </option>
+                    <option value="58">
+                        {{ __("Dragon Soul Heroic") }}
+                    </option>
                 @endif
             </select>
         </li>
