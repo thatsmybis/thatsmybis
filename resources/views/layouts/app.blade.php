@@ -140,6 +140,8 @@
         <span class="font-weight-bold text-gold"></span>
         @if (isset($guild) && $guild->expansion_id === 4)
             <span class=""></span>
+        @elseif (isset($guild) && $guild->expansion_id === 5)
+            <span class="">Cata loot tables were put together manually; there might be errors.
         @endif
     </div>
 
