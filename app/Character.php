@@ -732,7 +732,7 @@ class Character extends BaseModel
         } else { // Cata
             return [
                 self::PROFESSION_ALCHEMY        => __('Alchemy'),
-                self::PROFESSION_ARCHAEOLOGY    => __('Archaeology'),
+                // self::PROFESSION_ARCHAEOLOGY    => __('Archaeology'),
                 self::PROFESSION_BLACKSMITHING  => __('Blacksmithing'),
                 self::PROFESSION_ENCHANTING     => __('Enchanting'),
                 self::PROFESSION_ENGINEERING    => __('Engineering'),
@@ -941,7 +941,7 @@ class Character extends BaseModel
             default: // Cata
                 return [
                     // TODO
-                    self::SPEC_DEATH_KNIGHT_BLOOD  => ['name' => __('Blood'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_blood.jpg'],
+                    self::SPEC_DEATH_KNIGHT_BLOOD  => ['name' => __('Blood'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_TANK, 'icon' => 'spec_blood.jpg'],
                     self::SPEC_DEATH_KNIGHT_FROST  => ['name' => __('Frost'),         'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_frost_dk.jpg'],
                     self::SPEC_DEATH_KNIGHT_UNHOLY => ['name' => __('Unholy'),        'class' => self::CLASS_DEATH_KNIGHT, 'archetype' => self::ARCHETYPE_DPS, 'icon' => 'spec_unholy.jpg'],
                     self::SPEC_DRUID_BALANCE       => ['name' => __('Balance'),       'class' => self::CLASS_DRUID,   'archetype' => self::ARCHETYPE_DPS,      'icon' => 'spec_balance.jpg'],
