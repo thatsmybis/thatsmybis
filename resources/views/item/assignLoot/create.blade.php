@@ -421,6 +421,9 @@ offspec
                                             {{ __("Delete assigned items from each character's prio list") }} <abbr title="{{ __('if unchecked, corresponding prio will be flagged as received but still be visible') }}">?</abbr>
                                     </label>
                                 </div>
+                                <div class="small text-muted">
+                                    {{ __("Some legendary fragments (eg. Splinter of Atiesh) can only be delete/flagged manually") }}
+                                </div>
                             </div>
                         </div>
                     </div>
