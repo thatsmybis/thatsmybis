@@ -422,7 +422,7 @@ offspec
                                     </label>
                                 </div>
                                 <div class="small text-muted">
-                                    {{ __("Some legendary fragments (eg. Splinter of Atiesh) can only be delete/flagged manually") }}
+                                    {{ __("Some legendary fragments (eg. Splinter of Atiesh) can only be deleted/flagged manually") }}
                                 </div>
                             </div>
                         </div>
