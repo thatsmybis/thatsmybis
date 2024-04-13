@@ -353,6 +353,15 @@ class AssignLootController extends Controller
 
     // Submit a whole bunch of loot at once
     public function submitAssignLoot($guildId, $guildSlug) {
+        $idsToNotRemove = [
+            22726, // splinter-of-atiesh (Naxx legendary token)
+            45038, // fragment-of-valanyr (Ulduar legendary token)
+            50274, // shadowfrost-shard (ICC legendary token)
+            71141, // eternal-ember (Firelands legendary token)
+            69815, // seething-cinder (Firelands legendary token)
+            77952, // elementium-gem-cluster (Dragon Soul legendary token)
+        ];
+
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
@@ -554,11 +563,10 @@ class AssignLootController extends Controller
             if ($wishlistRows->count()) {
                 // Drop the first one from each wishlist
                 foreach($wishlistRows as $wishlistRow) {
-                    if ($deleteWishlist) {
-                        // Delete the one we found
-                        CharacterItem::where(['id' => $wishlistRow->id])->delete();
+                    if (in_array($wishlistRow->item_id, $idsToNotRemove)) {
+                        // Skip removing or flagging this item
                         $audits[] = [
-                            'description'   => "System removed 1 wishlist item (list {$wishlistRow->list_number}) after character was assigned item",
+                            'description'   => "System skipped " . ($deleteWishlist ? 'deleting wishlist item' : 'flagging wishlist item as received') . " - this specific item can only be " . ($deleteWishlist ? 'deleted' : 'flagged as received') . " manually",
                             'type'          => Item::TYPE_WISHLIST,
                             'member_id'     => $currentMember->id,
                             'character_id'  => $wishlistRow->character_id,
@@ -569,24 +577,40 @@ class AssignLootController extends Controller
                             'created_at'    => $now,
                         ];
                     } else {
-                        CharacterItem::
-                            where(['id' => $wishlistRow->id])
-                            ->update([
-                                'is_received' => 1,
-                                'received_at' => $now,
-                            ]);
+                        if ($deleteWishlist) {
+                            // Delete the one we found
+                            CharacterItem::where(['id' => $wishlistRow->id])->delete();
+                            $audits[] = [
+                                'description'   => "System removed 1 wishlist item (list {$wishlistRow->list_number}) after character was assigned item",
+                                'type'          => Item::TYPE_WISHLIST,
+                                'member_id'     => $currentMember->id,
+                                'character_id'  => $wishlistRow->character_id,
+                                'guild_id'      => $currentMember->guild_id,
+                                'raid_group_id' => $wishlistRow->raid_group_id,
+                                'raid_id'       => $raidId,
+                                'item_id'       => $wishlistRow->item_id,
+                                'created_at'    => $now,
+                            ];
+                        } else {
+                            CharacterItem::
+                                where(['id' => $wishlistRow->id])
+                                ->update([
+                                    'is_received' => 1,
+                                    'received_at' => $now,
+                                ]);
 
-                        $audits[] = [
-                            'description'   => "System flagged 1 wishlist item (list {$wishlistRow->list_number}) as received after character was assigned item",
-                            'type'          => Item::TYPE_WISHLIST,
-                            'member_id'     => $currentMember->id,
-                            'character_id'  => $wishlistRow->character_id,
-                            'guild_id'      => $currentMember->guild_id,
-                            'raid_group_id' => $wishlistRow->raid_group_id,
-                            'raid_id'       => $raidId,
-                            'item_id'       => $wishlistRow->item_id,
-                            'created_at'    => $now,
-                        ];
+                            $audits[] = [
+                                'description'   => "System flagged 1 wishlist item (list {$wishlistRow->list_number}) as received after character was assigned item",
+                                'type'          => Item::TYPE_WISHLIST,
+                                'member_id'     => $currentMember->id,
+                                'character_id'  => $wishlistRow->character_id,
+                                'guild_id'      => $currentMember->guild_id,
+                                'raid_group_id' => $wishlistRow->raid_group_id,
+                                'raid_id'       => $raidId,
+                                'item_id'       => $wishlistRow->item_id,
+                                'created_at'    => $now,
+                            ];
+                        }
                     }
                 }
             }
@@ -605,55 +629,70 @@ class AssignLootController extends Controller
             $prioRow = CharacterItem::where($whereClause)->orderBy('is_received')->orderBy('order')->first();
 
             if ($prioRow) {
-                $auditMessage = '';
-                if ($deletePrio) {
-                    // Delete the one we found
-                    CharacterItem::where(['id' => $prioRow->id])->delete();
-                    $auditMessage = 'deleted 1 prio';
-
-                    // Check whether or not there are other prios at this order/rank.
-                    $matchingPrioOrderRows = CharacterItem::where([
-                        'item_id'       => $detachRow['item_id'],
+                if (in_array($prioRow->item_id, $idsToNotRemove)) {
+                    // Skip removing or flagging this item
+                    $audits[] = [
+                        'description'   => "System skipped " . ($deletePrio ? 'deleting prio' : 'flagging prio as received') . " - this specific item can only be " . ($deletePrio ? 'deleted' : 'flagged as received') . " manually",
                         'type'          => Item::TYPE_PRIO,
+                        'member_id'     => $currentMember->id,
+                        'character_id'  => $prioRow->character_id,
+                        'guild_id'      => $currentMember->guild_id,
                         'raid_group_id' => $prioRow->raid_group_id,
-                        'order'         => $prioRow->order,
-                    ])->first();
-
-                    // There are no other items at this order; safe to decrement the others.
-                    if (!$matchingPrioOrderRows) {
-                        // Now correct the order on the remaning prios for that item in that raid group
-                        CharacterItem::
-                            where([
-                                'item_id'       => $prioRow->item_id,
-                                'raid_group_id' => $prioRow->raid_group_id,
-                                'type'          => Item::TYPE_PRIO,
-                            ])
-                            ->where('order', '>', $prioRow->order)
-                            ->update(['order' => DB::raw('`order` - 1')]);
-                        $auditMessage .= ' and adjusted remaining prios';
-                    }
+                        'raid_id'       => $raidId,
+                        'item_id'       => $prioRow->item_id,
+                        'created_at'    => $now,
+                    ];
                 } else {
-                    CharacterItem::
-                        where(['id' => $prioRow->id])
-                        ->update([
-                            'is_received' => 1,
-                            'received_at' => $now,
+                    $auditMessage = '';
+                    if ($deletePrio) {
+                        // Delete the one we found
+                        CharacterItem::where(['id' => $prioRow->id])->delete();
+                        $auditMessage = 'deleted 1 prio';
 
-                        ]);
-                    $auditMessage = 'flagged 1 prio as received';
+                        // Check whether or not there are other prios at this order/rank.
+                        $matchingPrioOrderRows = CharacterItem::where([
+                            'item_id'       => $detachRow['item_id'],
+                            'type'          => Item::TYPE_PRIO,
+                            'raid_group_id' => $prioRow->raid_group_id,
+                            'order'         => $prioRow->order,
+                        ])->first();
+
+                        // There are no other items at this order; safe to decrement the others.
+                        if (!$matchingPrioOrderRows) {
+                            // Now correct the order on the remaning prios for that item in that raid group
+                            CharacterItem::
+                                where([
+                                    'item_id'       => $prioRow->item_id,
+                                    'raid_group_id' => $prioRow->raid_group_id,
+                                    'type'          => Item::TYPE_PRIO,
+                                ])
+                                ->where('order', '>', $prioRow->order)
+                                ->update(['order' => DB::raw('`order` - 1')]);
+                            $auditMessage .= ' and adjusted remaining prios';
+                        }
+                    } else {
+                        CharacterItem::
+                            where(['id' => $prioRow->id])
+                            ->update([
+                                'is_received' => 1,
+                                'received_at' => $now,
+
+                            ]);
+                        $auditMessage = 'flagged 1 prio as received';
+                    }
+
+                    $audits[] = [
+                        'description'   => 'System ' . $auditMessage . ' after character was assigned item',
+                        'type'          => Item::TYPE_PRIO,
+                        'member_id'     => $currentMember->id,
+                        'character_id'  => $prioRow->character_id,
+                        'guild_id'      => $currentMember->guild_id,
+                        'raid_group_id' => $prioRow->raid_group_id,
+                        'raid_id'       => $raidId,
+                        'item_id'       => $prioRow->item_id,
+                        'created_at'    => $now,
+                    ];
                 }
-
-                $audits[] = [
-                    'description'   => 'System ' . $auditMessage . ' after character was assigned item',
-                    'type'          => Item::TYPE_PRIO,
-                    'member_id'     => $currentMember->id,
-                    'character_id'  => $prioRow->character_id,
-                    'guild_id'      => $currentMember->guild_id,
-                    'raid_group_id' => $prioRow->raid_group_id,
-                    'raid_id'       => $raidId,
-                    'item_id'       => $prioRow->item_id,
-                    'created_at'    => $now,
-                ];
             }
         }
 
