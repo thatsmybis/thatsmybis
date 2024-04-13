@@ -25,6 +25,50 @@
                             <a href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">{{ __("edit prios") }}</a>
                         </li>
                     @endif
+
+                    <li class="list-inline-item">
+                        <form id="minReceivedLootDateForm"
+                            class="form-horizontal"
+                            role="form"
+                            method="GET"
+                            action="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
+                            {{ csrf_field() }}
+                            <div class="pull-left">
+                                <label for="min_date" class="small font-weight-light text-muted">
+                                    <span class="fas fa-fw fa-calendar text-muted"></span>
+                                    {{ __("Received Loot Cutoff") }}
+                                </label>
+                            </div>
+                            <div class="d-flex">
+                                <div>
+                                    <input name="min_date" min="2004-09-22"
+                                        max="{{ getDateTime('Y-m-d') }}"
+                                        value="{{ $minReceivedLootDate ? $minReceivedLootDate : ''}}"
+                                        type="date"
+                                        placeholder="—"
+                                        class="slim-date form-control dark"
+                                        autocomplete="off">
+                                </div>
+                                <div class="ml-1">
+                                    <button id="submit" class="link"> {{ __('apply') }}</button>
+                                </div>
+                            </div>
+                        </form>
+                    </li>
+                    <!-- <li class="list-inline-item">
+                        <label for="max_date" class="font-weight-light">
+                            <span class="fas fa-fw fa-calendar-plus text-muted"></span>
+                            {{ __("Max Date") }}
+                        </label>
+                        <input name="max_date"
+                            min="2004-09-22"
+                            value="{{ Request::get('max_date') ? Request::get('max_date') : ''}}"
+                            max="{{ getDateTime('Y-m-d') }}"
+                            type="date"
+                            placeholder="—"
+                            class="form-control dark"
+                            autocomplete="off">
+                    </li> -->
                 </ul>
             @endif
             @if ($instance->itemSources)

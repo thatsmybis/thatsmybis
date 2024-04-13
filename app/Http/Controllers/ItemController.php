@@ -2,12 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Character, Guild, Instance, Item};
+use App\{Character, Guild, Instance, Item};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\{App, Cache, DB, Validator};
-use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\{App, Cache, DB};
 
 class ItemController extends Controller
 {
@@ -71,13 +70,29 @@ class ItemController extends Controller
             $showWishlist = true;
         }
 
-        $cacheKey = 'items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0);
+        $dateCacheKey = 'guild:' . $guild->id . ':user:' . $currentMember->user_id . ':received_loot_min_date';
+        $minReceivedLootDate = null;
+        if (empty(request()->input('min_date'))) {
+            // Check cache for old input, otherwise use default
+            $minReceivedLootDate = Cache::get($dateCacheKey);
+            if (!$minReceivedLootDate) {
+                $minReceivedLootDate = Carbon::now()->subMonths(env('CACHE_MEMBER_RECEIVED_LOOT_MIN_DATE_SECONDS', 6))->format('Y-m-d');
+            }
+        } else {
+            // use date input
+            $minReceivedLootDate = request()->input('min_date');
+            Cache::remember($dateCacheKey, env('CACHE_MEMBER_RECEIVED_LOOT_MIN_DATE_SECONDS', 86400), function () use ($minReceivedLootDate) {
+                return $minReceivedLootDate;
+            });
+        }
+dd($minReceivedLootDate);
+        $cacheKey = 'items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0) . ':minDate:' . $minReceivedLootDate;
 
         if (request()->get('bustCache')) {
             Cache::forget($cacheKey);
         }
 
-        $items = Cache::remember($cacheKey, env('CACHE_INSTANCE_ITEMS_SECONDS', 5), function () use ($guild, $instance, $currentMember, $characterFields, $showPrios, $showWishlist, $showOfficerNote, $viewPrioPermission) {
+        $items = Cache::remember($cacheKey, env('CACHE_INSTANCE_ITEMS_SECONDS', 5), function () use ($guild, $instance, $currentMember, $characterFields, $showPrios, $showWishlist, $showOfficerNote, $viewPrioPermission, $minReceivedLootDate) {
             $query = Item::select([
                     'items.id',
                     'items.item_id',
@@ -174,10 +189,14 @@ class ItemController extends Controller
             }
 
             $query = $query->with([
-                    'receivedAndRecipeCharacters' => function ($query) use($guild) {
-                        return $query->where(['characters.guild_id' => $guild->id]);
-                    },
-                ]);
+                'receivedAndRecipeCharacters' => function ($query) use($guild, $minReceivedLootDate) {
+                    if (!empty(request()->input('max_date'))) {
+                        $query = $query->where('character_items.created_at', '<',  request()->input('max_date'));
+                    }
+                    return $query->where(['characters.guild_id' => $guild->id])
+                        ->where('character_items.created_at', '>',  $minReceivedLootDate);
+                },
+            ]);
 
             $items = $query->get();
 
@@ -206,6 +225,7 @@ class ItemController extends Controller
             'guild'           => $guild,
             'instance'        => $instance,
             'items'           => $items,
+            'minReceivedLootDate' => $minReceivedLootDate,
             'raidGroups'      => $guild->raidGroups,
             'showNotes'       => true,
             'showOfficerNote' => $showOfficerNote,
