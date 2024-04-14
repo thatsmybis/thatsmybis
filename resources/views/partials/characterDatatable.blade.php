@@ -260,6 +260,46 @@
                 </option>
             </select>
         </li>
+        @if (isset($receivedLootDateFilter) && $receivedLootDateFilter && isset($minReceivedLootDate))
+            <li class="list-inline-item">
+                <label for="min_date" class="font-weight-light">
+                    <span class="text-muted fas fa-fw fa-sack"></span>
+                    {{ __("Received filter") }}
+                </label>
+                <div class="ml-2 d-flex small">
+                    <form id="minReceivedLootDateForm"
+                    class="d-flex"
+                    role="form"
+                    method="POST"
+                    action="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                    {{ csrf_field() }}
+                        <div>
+                            <input name="min_date" min="2004-09-22"
+                                max="{{ getDateTime('Y-m-d') }}"
+                                value="{{ $minReceivedLootDate ? $minReceivedLootDate : ''}}"
+                                type="date"
+                                placeholder="—"
+                                class="form-control dark"
+                                autocomplete="off">
+                        </div>
+                        <div class="ml-1">
+                            <button id="submit" class="link"><span class="text-muted fas fa-fw fa-check"></span> {{ __('apply') }}</button>
+                        </div>
+                    </form>
+                    <form id="minReceivedLootDateForm"
+                    class="d-flex"
+                    role="form"
+                    method="POST"
+                    action="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                    {{ csrf_field() }}
+                        <input name="reset_date" value="1" class="d-none" autocomplete="off">
+                        <div class="ml-1">
+                            <button id="submit" class="link"><span class="text-muted fas fa-fw fa-sync"></span> {{ __('reset') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </li>
+        @endif
     </ul>
     <ul class="list-inline mb-0 mt-3">
         <!-- Hidden as it doesn't take into account the rest of the filters right now

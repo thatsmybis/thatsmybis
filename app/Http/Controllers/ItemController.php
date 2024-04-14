@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\{Character, Guild, Instance, Item};
+use App\{Character, Guild, Instance, Item, Member};
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
@@ -70,13 +70,13 @@ class ItemController extends Controller
             $showWishlist = true;
         }
 
-        $dateCacheKey = 'guild:' . $guild->id . ':user:' . $currentMember->user_id . ':received_loot_min_date';
+        $dateCacheKey = $this->getLootDateCacheKey($guild, $currentMember);
         $minReceivedLootDate = null;
         if (empty(request()->input('min_date'))) {
             // Check cache for old input, otherwise use default
             $minReceivedLootDate = Cache::get($dateCacheKey);
             if (!$minReceivedLootDate) {
-                $minReceivedLootDate = Carbon::now()->subMonths(env('CACHE_MEMBER_RECEIVED_LOOT_MIN_DATE_SECONDS', 6))->format('Y-m-d');
+                $minReceivedLootDate = Carbon::now()->subMonths(6)->format('Y-m-d');
             }
         } else {
             // use date input
@@ -85,7 +85,7 @@ class ItemController extends Controller
                 return $minReceivedLootDate;
             });
         }
-dd($minReceivedLootDate);
+
         $cacheKey = 'items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0) . ':minDate:' . $minReceivedLootDate;
 
         if (request()->get('bustCache')) {
@@ -611,4 +611,17 @@ dd($minReceivedLootDate);
         }
         return $item;
     }
+
+    /**
+     * Get the cache key for the loot date filter.
+     *
+     * @param Guild  $guild         The guild to get the cache key for.
+     * @param Member $currentMember The member to get the cache key for.
+     *
+     * @return string
+     */
+    static public function getLootDateCacheKey(Guild $guild, Member $currentMember) {
+        return 'guild:' . $guild->id . ':user:' . $currentMember->user_id . ':received_loot_min_date';
+    }
+
 }

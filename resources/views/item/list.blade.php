@@ -16,45 +16,15 @@
                 <ul class="list-inline">
                     @if ($viewOfficerNotesPermission)
                         <li class="list-inline-item">
-                            <a href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">{{ __("edit notes") }}</a>
+                            <a href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}"><span class="text-muted fal fa-fw fa-comment-alt-lines"></span> {{ __("edit notes") }}</a>
                         </li>
                     @endif
                     @if ($viewPrioPermission)
                         <li class="list-inline-item">&sdot;</li>
                         <li class="list-inline-item">
-                            <a href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">{{ __("edit prios") }}</a>
+                            <a href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}"><span class="text-muted fal fa-fw fa-sort-amount-down"></span> {{ __("edit prios") }}</a>
                         </li>
                     @endif
-
-                    <li class="list-inline-item">
-                        <form id="minReceivedLootDateForm"
-                            class="form-horizontal"
-                            role="form"
-                            method="GET"
-                            action="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
-                            {{ csrf_field() }}
-                            <div class="pull-left">
-                                <label for="min_date" class="small font-weight-light text-muted">
-                                    <span class="fas fa-fw fa-calendar text-muted"></span>
-                                    {{ __("Received Loot Cutoff") }}
-                                </label>
-                            </div>
-                            <div class="d-flex">
-                                <div>
-                                    <input name="min_date" min="2004-09-22"
-                                        max="{{ getDateTime('Y-m-d') }}"
-                                        value="{{ $minReceivedLootDate ? $minReceivedLootDate : ''}}"
-                                        type="date"
-                                        placeholder="—"
-                                        class="slim-date form-control dark"
-                                        autocomplete="off">
-                                </div>
-                                <div class="ml-1">
-                                    <button id="submit" class="link"> {{ __('apply') }}</button>
-                                </div>
-                            </div>
-                        </form>
-                    </li>
                     <!-- <li class="list-inline-item">
                         <label for="max_date" class="font-weight-light">
                             <span class="fas fa-fw fa-calendar-plus text-muted"></span>
@@ -72,7 +42,7 @@
                 </ul>
             @endif
             @if ($instance->itemSources)
-                <ul class="list-inline">
+                <ul class="list-inline text-center">
                     @foreach ($instance->itemSources as $itemSource)
                         @if (!$loop->first)
                             <li class="list-inline-item">
@@ -87,7 +57,7 @@
             @endif
         </div>
         <div class="col-12 pr-0 pl-0">
-            @include('partials/itemDatatable')
+            @include('partials/itemDatatable', ['receivedLootDateFilter' => true])
         </div>
     </div>
 </div>
