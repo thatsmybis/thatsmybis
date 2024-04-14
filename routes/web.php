@@ -119,6 +119,7 @@ Route::middleware(['throttle:global'])->group(function () {
         Route::get( '/loot/recipes',            'RecipeController@listRecipesWithGuild')  ->name('guild.recipe.list');
 
         Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')           ->name('guild.item.list');
+        Route::post('/loot/{instanceSlug}',      'ItemController@listWithGuild')           ->name('guild.item.list');
         Route::get( '/loot/{instanceSlug}/edit', 'ItemNoteController@listWithGuildEdit')   ->name('guild.item.list.edit');
         Route::post('/loot/{instanceSlug}/edit', 'ItemNoteController@listWithGuildSubmit') ->name('guild.item.list.submit');
 
@@ -148,8 +149,11 @@ Route::middleware(['throttle:global'])->group(function () {
         // Route::get( '/posts/{slug}',     'ContentController@show') ->name('showPost');
 
         Route::get( '/roster',           'RosterController@roster')->name('guild.roster');
+        Route::post('/roster',           'RosterController@roster')->name('guild.roster');
         Route::get( '/roster-stats',     'RosterController@rosterStats')->name('guild.rosterStats');
+        Route::post('/roster-stats',     'RosterController@rosterStats')->name('guild.rosterStats');
         Route::get( '/roster-breakdown', 'RosterController@rosterBreakdown')->name('guild.rosterBreakdown');
+        Route::post('/roster-breakdown', 'RosterController@rosterBreakdown')->name('guild.rosterBreakdown');
 
         Route::get( '/assign-loot',                'AssignLootController@assignLoot')      ->name('item.assignLoot');
         Route::post('/assign-loot',                'AssignLootController@submitAssignLoot')->name('item.assignLoot.submit');

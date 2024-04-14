@@ -732,6 +732,14 @@ input.slim-date {
     padding-left: 5px;
     padding-right: 5px;
 }
+input.super-slim-date {
+    font-size: 90%;
+    height: 1.5rem;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    padding-left: 5px;
+    padding-right: 5px;
+}
 input.slim {
     height: 1.8rem;
 }

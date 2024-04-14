@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\{Character, Instance};
+use App\Http\Controllers\ItemController;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Cache;
@@ -38,7 +39,29 @@ class RosterController extends Controller
             $showWishlist = true;
         }
 
-        $cacheKey = 'roster:guild:' . $guild->id . ':showOfficerNote:' . $showOfficerNote . ':showPrios:' . $showPrios . ':viewPrioPermission:' . $viewPrioPermission . ':showWishlist:' . $showWishlist . ':attendance:' . $guild->is_attendance_hidden;
+        $dateCacheKey = ItemController::getLootDateCacheKey($guild, $currentMember);;
+        $minReceivedLootDate = null;
+        if (empty(request()->input('min_date'))) {
+            // Check cache for old input, otherwise use default
+            $minReceivedLootDate = Cache::get($dateCacheKey);
+            if (!$minReceivedLootDate) {
+                $minReceivedLootDate = Carbon::now()->subMonths(6)->format('Y-m-d');
+            }
+        } else {
+            // use date input
+            $minReceivedLootDate = request()->input('min_date');
+            Cache::remember($dateCacheKey, env('CACHE_MEMBER_RECEIVED_LOOT_MIN_DATE_SECONDS', 86400), function () use ($minReceivedLootDate) {
+                return $minReceivedLootDate;
+            });
+        }
+
+        $cacheKey = 'roster:guild:' . $guild->id
+            . ':showOfficerNote:' . $showOfficerNote
+            . ':showPrios:' . $showPrios
+            . ':viewPrioPermission:' . $viewPrioPermission
+            . ':showWishlist:' . $showWishlist
+            . ':attendance:' . $guild->is_attendance_hidden
+            . ':minLootDate:' . $minReceivedLootDate;
 
         if (request()->get('bustCache')) {
             Cache::forget($cacheKey);
@@ -72,6 +95,7 @@ class RosterController extends Controller
                 'characters'    => $data['characters'],
                 'currentMember' => $currentMember,
                 'guild'         => $guild,
+                'minReceivedLootDate' => $minReceivedLootDate,
                 'raidGroups'    => $guild->allRaidGroups,
 
                 'archetypes'  => Character::archetypes(),
@@ -85,6 +109,7 @@ class RosterController extends Controller
                 'characters'      => $data['characterJson'],
                 'currentMember'   => $currentMember,
                 'guild'           => $guild,
+                'minReceivedLootDate' => $minReceivedLootDate,
                 'raidGroups'      => $guild->allRaidGroups,
                 'showEdit'        => $showEdit,
                 'showOfficerNote' => $data['showOfficerNote'],
@@ -96,6 +121,7 @@ class RosterController extends Controller
                 'characters'      => $data['characterJson'],
                 'currentMember'   => $currentMember,
                 'guild'           => $guild,
+                'minReceivedLootDate' => $minReceivedLootDate,
                 'raidGroups'      => $guild->allRaidGroups,
                 'showEdit'        => $showEdit,
                 'showOfficerNote' => $data['showOfficerNote'],

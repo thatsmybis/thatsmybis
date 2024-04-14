@@ -43,15 +43,52 @@
             </li>
         @endif
 
-        <li class="list-inline-item font-weight-light">
-            <span class="text-muted fas fa-fw fa-eye-slash"></span>
-            {{ __("Columns") }}
-        </li>
+        @if (isset($receivedLootDateFilter) && $receivedLootDateFilter && isset($minReceivedLootDate))
+            <li class="list-inline-item">
+                <label for="min_date" class="font-weight-light">
+                    <span class="text-muted fas fa-fw fa-sack"></span>
+                    {{ __("Received filter") }}
+                </label>
+                <div class="d-flex small">
+                    <form id="minReceivedLootDateForm"
+                    class="d-flex"
+                    role="form"
+                    method="POST"
+                    action="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
+                    {{ csrf_field() }}
+                        <div>
+                            <input name="min_date" min="2004-09-22"
+                                max="{{ getDateTime('Y-m-d') }}"
+                                value="{{ $minReceivedLootDate ? $minReceivedLootDate : ''}}"
+                                type="date"
+                                placeholder="—"
+                                class="form-control dark"
+                                autocomplete="off">
+                        </div>
+                        <div class="ml-1">
+                            <button id="submit" class="link"><span class="text-muted fas fa-fw fa-check"></span> {{ __('apply') }}</button>
+                        </div>
+                    </form>
+                    <form id="minReceivedLootDateForm"
+                    class="d-flex"
+                    role="form"
+                    method="POST"
+                    action="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
+                    {{ csrf_field() }}
+                        <input name="reset_date" value="1" class="d-none" autocomplete="off">
+                        <div class="ml-1">
+                            <button id="submit" class="link"><span class="text-muted fas fa-fw fa-sync"></span> {{ __('reset') }}</button>
+                        </div>
+                    </form>
+                </div>
+            </li>
+        @endif
+
         @if ($showPrios)
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2" href="">
-                    <span class="text-muted fal fa-fw fa-sort-amount-down"></span>
+                    <span class="text-muted fal fa-fw fa-eye-slash"></span>
                     {{ __("Prios") }}
                 </span>
             </li>
@@ -60,7 +97,7 @@
             <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
-                    <span class="text-muted fal fa-fw fa-scroll-old"></span>
+                    <span class="text-muted fal fa-fw fa-eye-slash"></span>
                     {{ __("Wishlist") }}
                 </span>
             </li>
@@ -68,28 +105,28 @@
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4" href="">
-                <span class="text-muted fal fa-fw fa-sack"></span>
+                <span class="text-muted fal fa-fw fa-eye-slash"></span>
                 {{ __("Received") }}
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="5" href="">
-                <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
+                <span class="text-muted fal fa-fw fa-eye-slash"></span>
                 {{ __("Notes") }}
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="6" href="">
-                <span class="text-muted fal fa-fw fa-comment-alt-lines"></span>
+                <span class="text-muted fal fa-fw fa-eye-slash"></span>
                 {{ __("Prio Notes") }}
             </span>
         </li>
         <li class="list-inline-item">&sdot;</li>
         <li class="list-inline-item">
             <span class="js-hide-offspec-items text-link cursor-pointer font-weight-light" data-column="6">
-                <span class="text-muted fal fa-fw fa-trash"></span>
+                <span class="text-muted fal fa-fw fa-eye-slash"></span>
                 {{ __("Hide OS") }}
             </span>
         </li>
