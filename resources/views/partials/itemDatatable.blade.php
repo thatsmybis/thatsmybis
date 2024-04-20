@@ -1,7 +1,7 @@
 @include('partials/loadingBars')
 <div class="pr-2 pl-2" style="display:none;" id="itemDatatable">
-    <ul class="list-inline mb-0">
-        <li class="list-inline-item">
+    <div class="row mb-0 mx-0">
+        <div class="mr-3">
             <label for="raid_group_filter font-weight-light">
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                 {{ __("Raid Group") }}
@@ -16,9 +16,9 @@
                     @endforeach
                 @endif
             </select>
-        </li>
+        </div>
         @if ($guild)
-            <li class="list-inline-item">
+            <div class="mr-3">
                 @php
                     $wishlistNames = $guild->getWishlistNames();
                 @endphp
@@ -40,52 +40,23 @@
                         {{ __("All") }}
                     </option>
                 </select>
-            </li>
+            </div>
         @endif
 
         @if (isset($receivedLootDateFilter) && $receivedLootDateFilter && isset($minReceivedLootDate))
-            <li class="list-inline-item">
+            <div class="">
                 <label for="min_date" class="font-weight-light">
                     <span class="text-muted fas fa-fw fa-sack"></span>
-                    {{ __("Received filter") }}
+                    {{ __("Received Loot Filter") }}
                 </label>
-                <div class="d-flex small">
-                    <form id="minReceivedLootDateForm"
-                    class="d-flex"
-                    role="form"
-                    method="POST"
-                    action="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
-                    {{ csrf_field() }}
-                        <div>
-                            <input name="min_date" min="2004-09-22"
-                                max="{{ getDateTime('Y-m-d') }}"
-                                value="{{ $minReceivedLootDate ? $minReceivedLootDate : ''}}"
-                                type="date"
-                                placeholder="—"
-                                class="form-control dark"
-                                autocomplete="off">
-                        </div>
-                        <div class="ml-1">
-                            <button id="submit" class="link"><span class="text-muted fas fa-fw fa-check"></span> {{ __('apply') }}</button>
-                        </div>
-                    </form>
-                    <form id="minReceivedLootDateForm"
-                    class="d-flex"
-                    role="form"
-                    method="POST"
-                    action="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}">
-                    {{ csrf_field() }}
-                        <input name="reset_date" value="1" class="d-none" autocomplete="off">
-                        <div class="ml-1">
-                            <button id="submit" class="link"><span class="text-muted fas fa-fw fa-sync"></span> {{ __('reset') }}</button>
-                        </div>
-                    </form>
+                <div class="small">
+                    @include('partials/receivedLootDateFilter')
                 </div>
-            </li>
+            </div>
         @endif
-
+    </div>
+    <ul class="list-inline mb-0 mt-3">
         @if ($showPrios)
-            <li class="list-inline-item">&sdot;</li>
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="2" href="">
                     <span class="text-muted fal fa-fw fa-eye-slash"></span>
@@ -94,7 +65,9 @@
             </li>
         @endif
         @if ($showWishlist)
-            <li class="list-inline-item">&sdot;</li>
+            @if ($showPrios)
+                <li class="list-inline-item">&sdot;</li>
+            @endif
             <li class="list-inline-item">
                 <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="3" href="">
                     <span class="text-muted fal fa-fw fa-eye-slash"></span>
@@ -102,7 +75,9 @@
                 </span>
             </li>
         @endif
-        <li class="list-inline-item">&sdot;</li>
+        @if ($showWishlist || $showPrios)
+            <li class="list-inline-item">&sdot;</li>
+        @endif
         <li class="list-inline-item">
             <span class="toggle-column text-link cursor-pointer font-weight-light" data-column="4" href="">
                 <span class="text-muted fal fa-fw fa-eye-slash"></span>

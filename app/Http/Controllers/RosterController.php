@@ -6,6 +6,7 @@ use App\{Character, Instance};
 use App\Http\Controllers\ItemController;
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Cache;
 
 class RosterController extends Controller
@@ -41,18 +42,10 @@ class RosterController extends Controller
 
         $dateCacheKey = ItemController::getLootDateCacheKey($guild, $currentMember);;
         $minReceivedLootDate = null;
-        if (empty(request()->input('min_date'))) {
-            // Check cache for old input, otherwise use default
-            $minReceivedLootDate = Cache::get($dateCacheKey);
-            if (!$minReceivedLootDate) {
-                $minReceivedLootDate = Carbon::now()->subMonths(6)->format('Y-m-d');
-            }
-        } else {
-            // use date input
-            $minReceivedLootDate = request()->input('min_date');
-            Cache::remember($dateCacheKey, env('CACHE_MEMBER_RECEIVED_LOOT_MIN_DATE_SECONDS', 86400), function () use ($minReceivedLootDate) {
-                return $minReceivedLootDate;
-            });
+        // Check cache for old input, otherwise use default
+        $minReceivedLootDate = Cache::get($dateCacheKey);
+        if (!$minReceivedLootDate) {
+            $minReceivedLootDate = Carbon::now()->subMonths(6)->format('Y-m-d');
         }
 
         $cacheKey = 'roster:guild:' . $guild->id
@@ -67,8 +60,8 @@ class RosterController extends Controller
             Cache::forget($cacheKey);
         }
 
-        $data = Cache::remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission) {
-            $data = $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, true);
+        $data = Cache::remember($cacheKey, env('CACHE_ROSTER_SECONDS', 5), function () use ($guild, $showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, $minReceivedLootDate) {
+            $data = $guild->getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, false, true, $minReceivedLootDate);
             // VASTLY reduce memory usage by encoding to JSON before saving to cache.
             // On a large guild in late WoTLK:
             // - 91mb memory usage after running query above

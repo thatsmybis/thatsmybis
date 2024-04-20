@@ -72,21 +72,13 @@ class ItemController extends Controller
 
         $dateCacheKey = $this->getLootDateCacheKey($guild, $currentMember);
         $minReceivedLootDate = null;
-        if (empty(request()->input('min_date'))) {
-            // Check cache for old input, otherwise use default
-            $minReceivedLootDate = Cache::get($dateCacheKey);
-            if (!$minReceivedLootDate) {
-                $minReceivedLootDate = Carbon::now()->subMonths(6)->format('Y-m-d');
-            }
-        } else {
-            // use date input
-            $minReceivedLootDate = request()->input('min_date');
-            Cache::remember($dateCacheKey, env('CACHE_MEMBER_RECEIVED_LOOT_MIN_DATE_SECONDS', 86400), function () use ($minReceivedLootDate) {
-                return $minReceivedLootDate;
-            });
+        // Check cache for old input, otherwise use default
+        $minReceivedLootDate = Cache::get($dateCacheKey);
+        if (!$minReceivedLootDate) {
+            $minReceivedLootDate = Carbon::now()->subMonths(6)->format('Y-m-d');
         }
 
-        $cacheKey = 'items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0) . ':minDate:' . $minReceivedLootDate;
+        $cacheKey = 'items:guild:' . $guild->id . ':instance:' . $instance->id . ':officer:' . ($showOfficerNote ? 1 : 0) . ':prios:' . ($showPrios ? 1 : 0) . ':wishlist:' . ($showWishlist ? 1 : 0) . ':minLootDate:' . $minReceivedLootDate;
 
         if (request()->get('bustCache')) {
             Cache::forget($cacheKey);
@@ -448,6 +440,27 @@ class ItemController extends Controller
             'wishlistCharacters' => $wishlistCharacters,
             'itemJson'           => self::getItemWowheadJson($guild->expansion_id, $item->item_id),
         ]);
+    }
+
+    /**
+     * Update the loot date filter.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function updateLootDateFilter($guildId, $guildSlug)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+        $dateCacheKey = $this->getLootDateCacheKey($guild, $currentMember);
+        $minReceivedLootDate = null;
+        if (!empty(request()->input('min_date'))) {
+            // use date input
+            $minReceivedLootDate = request()->input('min_date');
+            Cache::put($dateCacheKey, $minReceivedLootDate, env('CACHE_MEMBER_RECEIVED_LOOT_MIN_DATE_SECONDS', 86400));
+        } else {
+            Cache::forget($dateCacheKey);
+        }
+        return back();
     }
 
     private function addWishlistQuery($query, $guild, $viewPrioPermission) {
