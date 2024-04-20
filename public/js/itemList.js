@@ -355,19 +355,20 @@ function getNotes(row, note) {
 }
 
 function getItemLink(row, iconSize = null) {
-    let wowheadData =
-    `data-wowhead-link="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ row.item_id }"
-    data-wowhead="item=${ row.item_id }?domain=${ wowheadLocale + wowheadSubdomain }"`;
+    let wowheadUrl = `https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ row.item_id }`;
+    let wowheadData = `data-wowhead-link="${ wowheadUrl }" data-wowhead="item=${ row.item_id }?domain=${ wowheadLocale + wowheadSubdomain }"`;
 
     if (iconSize) {
         wowheadData += ` data-wh-icon-size="${ iconSize }"`;
     }
 
+    const hasGuild = guild && !$.isEmptyObject(guild);
     let url = "";
-    if (guild) {
+    if (hasGuild) {
         url = `/${ guild.id }/${ guild.slug }/i/${ row.item_id }/${ slug(row.name) }`;
     } else {
-        url = "";
+        console.log('no guild');
+        url = wowheadUrl;
     }
 
     let factionHtml = ``;
@@ -386,6 +387,7 @@ function getItemLink(row, iconSize = null) {
                 `<span class="text-monospace font-weight-medium text-tier-${ row.guild_tier ? row.guild_tier : '' }">${ row.guild_tier ? getItemTierLabel(row, guild.tier_mode) : '&nbsp;' }</span>`
             : `` }
             <a href="${ url }"
+                target="${ !hasGuild ? "_blank" : "" }"
                 class="${ row.quality ? 'q' + row.quality : '' }"
                 ${ wowheadData }>
                 ${ row.name }
