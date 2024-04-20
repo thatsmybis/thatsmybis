@@ -156,7 +156,7 @@
 
     @if (isset($guild) && $guild->expansion_id < 4)
         <div class="text-center font-weight-normal text-muted mb-2">
-            To use Cata, register a new guild in <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a> or the <a href="{{ route('home') }}">Dashboard</a>
+            To use <span class="font-weight-semibold text-legendary">Cata</span>, register a new guild in <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a> or the <a href="{{ route('home') }}">Dashboard</a>
             <span class="text-muted">
             </span>
         </div>

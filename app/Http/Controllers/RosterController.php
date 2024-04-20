@@ -88,7 +88,6 @@ class RosterController extends Controller
                 'characters'    => $data['characters'],
                 'currentMember' => $currentMember,
                 'guild'         => $guild,
-                'minReceivedLootDate' => $minReceivedLootDate,
                 'raidGroups'    => $guild->allRaidGroups,
 
                 'archetypes'  => Character::archetypes(),
