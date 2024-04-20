@@ -1,7 +1,7 @@
 @include('partials/loadingBars')
 <div class="pr-2 pl-2" style="display:none;" id="characterDatatable">
-    <ul class="list-inline mb-0">
-        <li class="list-inline-item">
+    <div class="row mb-0 mx-0">
+        <div class="mr-3">
             <label for="raid_group_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-helmet-battle"></span>
                 {{ __("Raid Group") }}
@@ -14,8 +14,8 @@
                     </option>
                 @endforeach
             </select>
-        </li>
-        <li class="list-inline-item">
+        </div>
+        <div class="mr-3">
             <label for="class_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-axe-battle"></span>
                 {{ __("Class") }}
@@ -28,8 +28,8 @@
                     </option>
                 @endforeach
             </select>
-        </li>
-        <li class="list-inline-item">
+        </div>
+        <div class="mr-3">
             <label for="archetype_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-chess"></span>
                 {{ __("Role") }}
@@ -42,8 +42,8 @@
                     </option>
                 @endforeach
             </select>
-        </li>
-        <li class="list-inline-item">
+        </div>
+        <div class="mr-3">
             <label for="instance_filter" class="font-weight-light">
                 <span class="text-muted fas fa-fw fa-sack"></span>
                 {{ __("Dungeon") }}
@@ -236,8 +236,8 @@
                     </option>
                 @endif
             </select>
-        </li>
-        <li class="list-inline-item">
+        </div>
+        <div class="mr-3">
             @php
                 $wishlistNames = $guild->getWishlistNames();
             @endphp
@@ -259,48 +259,19 @@
                     {{ __("All") }}
                 </option>
             </select>
-        </li>
+        </div>
         @if (isset($receivedLootDateFilter) && $receivedLootDateFilter && isset($minReceivedLootDate))
-            <li class="list-inline-item">
+            <div>
                 <label for="min_date" class="font-weight-light">
                     <span class="text-muted fas fa-fw fa-sack"></span>
-                    {{ __("Received filter") }}
+                    {{ __("Received Loot Filter") }}
                 </label>
-                <div class="ml-2 d-flex small">
-                    <form id="minReceivedLootDateForm"
-                    class="d-flex"
-                    role="form"
-                    method="POST"
-                    action="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                    {{ csrf_field() }}
-                        <div>
-                            <input name="min_date" min="2004-09-22"
-                                max="{{ getDateTime('Y-m-d') }}"
-                                value="{{ $minReceivedLootDate ? $minReceivedLootDate : ''}}"
-                                type="date"
-                                placeholder="—"
-                                class="form-control dark"
-                                autocomplete="off">
-                        </div>
-                        <div class="ml-1">
-                            <button id="submit" class="link"><span class="text-muted fas fa-fw fa-check"></span> {{ __('apply') }}</button>
-                        </div>
-                    </form>
-                    <form id="minReceivedLootDateForm"
-                    class="d-flex"
-                    role="form"
-                    method="POST"
-                    action="{{ route('guild.roster', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                    {{ csrf_field() }}
-                        <input name="reset_date" value="1" class="d-none" autocomplete="off">
-                        <div class="ml-1">
-                            <button id="submit" class="link"><span class="text-muted fas fa-fw fa-sync"></span> {{ __('reset') }}</button>
-                        </div>
-                    </form>
+                <div class="small">
+                    @include('partials/receivedLootDateFilter')
                 </div>
-            </li>
+            </div>
         @endif
-    </ul>
+    </div>
     <ul class="list-inline mb-0 mt-3">
         <!-- Hidden as it doesn't take into account the rest of the filters right now
         <li class="list-inline-item">

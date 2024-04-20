@@ -235,14 +235,17 @@ class Guild extends BaseModel
      * Returns all of the characters and all the stuff associated with them.
      * Since it goes through the work of looking them up, also returns some of passed in member's permissions.
      *
-     * @param bool   $showOfficerNote
-     * @param bool   $showPrios
-     * @param bool   $showWishlist
-     * @param bool   $showInactive
+     * @param boolean $showOfficerNote
+     * @param boolean $showPrios
+     * @param boolean $showWishlist
+     * @param boolean $viewPrioPermission
+     * @param boolean $showInactive        Whether to return inactive characters
+     * @param boolean $allWishlists        Whether to return all wishlists (not just guild's selected wishlist)
+     * @param string  $minReceivedLootDate Minimum date to filter received loot by
      *
      * @return array
      */
-    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, $showInactive, $allWishlists) {
+    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, $showInactive, $allWishlists, $minReceivedLootDate) {
         $characterFields = [
             'characters.id',
             'characters.member_id',
@@ -293,7 +296,15 @@ class Guild extends BaseModel
             ->where('characters.guild_id', $this->id)
             ->orderBy('characters.name')
             ->with([
-                'received',
+                'received'  => function ($query) use($minReceivedLootDate) {
+                    if (!empty(request()->input('max_date'))) {
+                        $query = $query->where('character_items.created_at', '<',  request()->input('max_date'));
+                    }
+                    if ($minReceivedLootDate) {
+                        $query = $query->where('character_items.created_at', '>',  $minReceivedLootDate);
+                    }
+                    return $query;
+                },
                 'secondaryRaidGroups' => function ($query) {
                     return $query
                         ->select([
