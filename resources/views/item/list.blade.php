@@ -25,24 +25,10 @@
                             <a href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => $instance->slug]) }}"><span class="text-muted fal fa-fw fa-sort-amount-down"></span> {{ __("edit prios") }}</a>
                         </li>
                     @endif
-                    <!-- <li class="list-inline-item">
-                        <label for="max_date" class="font-weight-light">
-                            <span class="fas fa-fw fa-calendar-plus text-muted"></span>
-                            {{ __("Max Date") }}
-                        </label>
-                        <input name="max_date"
-                            min="2004-09-22"
-                            value="{{ Request::get('max_date') ? Request::get('max_date') : ''}}"
-                            max="{{ getDateTime('Y-m-d') }}"
-                            type="date"
-                            placeholder="—"
-                            class="form-control dark"
-                            autocomplete="off">
-                    </li> -->
                 </ul>
             @endif
             @if ($instance->itemSources)
-                <ul class="list-inline text-center">
+                <ul class="list-inline">
                     @foreach ($instance->itemSources as $itemSource)
                         @if (!$loop->first)
                             <li class="list-inline-item">
