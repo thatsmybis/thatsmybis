@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row pt-2 mb-3">
         <div class="col-12 pr-0 pl-0">
-            @include('partials/characterStatsDatatable')
+            @include('partials/characterStatsDatatable', ['receivedLootDateFilter' => true])
         </div>
     </div>
 </div>
