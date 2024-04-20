@@ -297,9 +297,9 @@ class Guild extends BaseModel
             ->orderBy('characters.name')
             ->with([
                 'received'  => function ($query) use($minReceivedLootDate) {
-                    if (!empty(request()->input('max_date'))) {
-                        $query = $query->where('character_items.created_at', '<',  request()->input('max_date'));
-                    }
+                    // if (!empty(request()->input('max_date'))) {
+                    //     $query = $query->where('character_items.created_at', '<',  request()->input('max_date'));
+                    // }
                     if ($minReceivedLootDate) {
                         $query = $query->where('character_items.created_at', '>',  $minReceivedLootDate);
                     }
