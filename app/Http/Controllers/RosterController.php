@@ -45,7 +45,7 @@ class RosterController extends Controller
         // Check cache for old input, otherwise use default
         $minReceivedLootDate = Cache::get($dateCacheKey);
         if (!$minReceivedLootDate) {
-            $minReceivedLootDate = Carbon::now()->subMonths(6)->format('Y-m-d');
+            $minReceivedLootDate = Carbon::now()->subMonths(env('DEFAULT_RECEIVED_LOOT_MONTHS_CUTOFF', 6))->format('Y-m-d');
         }
 
         $cacheKey = 'roster:guild:' . $guild->id
