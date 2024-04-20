@@ -286,6 +286,17 @@
                 </option>
             </select>
         </li>
+        @if (isset($receivedLootDateFilter) && $receivedLootDateFilter && isset($minReceivedLootDate))
+            <li class="list-inline-item">
+                <label for="min_date" class="font-weight-light">
+                    <span class="text-muted fas fa-fw fa-sack"></span>
+                    {{ __("Received Loot Filter") }}
+                </label>
+                <div class="small">
+                    @include('partials/receivedLootDateFilter')
+                </div>
+            </li>
+        @endif
     </ul>
     <ul class="list-inline mb-0 mt-3">
         <li class="list-inline-item">
