@@ -245,7 +245,7 @@ class Guild extends BaseModel
      *
      * @return array
      */
-    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, $showInactive, $allWishlists, $minReceivedLootDate) {
+    public function getCharactersWithItemsAndPermissions($showOfficerNote, $showPrios, $showWishlist, $viewPrioPermission, $showInactive, $allWishlists, $minReceivedLootDate = null) {
         $characterFields = [
             'characters.id',
             'characters.member_id',
