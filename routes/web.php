@@ -121,6 +121,7 @@ Route::middleware(['throttle:global'])->group(function () {
         Route::post('/loot/update-date-filter',  'ItemController@updateLootDateFilter')    ->name('guild.item.updateDateFilter');
         Route::get( '/loot/{instanceSlug}',      'ItemController@listWithGuild')           ->name('guild.item.list');
         Route::get( '/loot/{instanceSlug}/edit', 'ItemNoteController@listWithGuildEdit')   ->name('guild.item.list.edit');
+        Route::post('/loot/{instanceSlug}/edit', 'ItemNoteController@listWithGuildSubmit') ->name('guild.item.list.submit');
 
 
         Route::group(['prefix' => 'i'], function () {
