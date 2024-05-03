@@ -427,6 +427,7 @@ class PrioController extends Controller
             'items.*.characters.*.character_id' => 'nullable|integer|exists:characters,id',
             'items.*.characters.*.is_received'  => 'nullable|boolean',
             'items.*.characters.*.is_offspec'   => 'nullable|boolean',
+            'items.*.characters.*.note'         => 'nullable|string|max:140',
             'items.*.characters.*.order'        => 'nullable|integer|min:1|max:' . self::MAX_PRIOS,
         ];
 
@@ -500,6 +501,7 @@ class PrioController extends Controller
             'items.*.characters.*.character_id' => 'nullable|integer|exists:characters,id',
             'items.*.characters.*.is_received'  => 'nullable|boolean',
             'items.*.characters.*.is_offspec'   => 'nullable|boolean',
+            'items.*.characters.*.note'         => 'nullable|string|max:140',
             'items.*.characters.*.order'        => 'nullable|integer|min:1|max:' . self::MAX_PRIOS,
         ];
 
@@ -609,6 +611,7 @@ class PrioController extends Controller
                                 $order      = isset($inputPrio['order']) ? $inputPrio['order'] : $i;
                                 $isReceived = isset($inputPrio['is_received']) && $inputPrio['is_received'] ? 1 : 0;
                                 $isOffspec  = isset($inputPrio['is_offspec']) && $inputPrio['is_offspec'] ? 1 : 0;
+                                $note       = isset($inputPrio['note']) && $inputPrio['note'] ? $inputPrio['note'] : null;
 
                                 if ($existingPrio->pivot->order != $order) {
                                     // Update the metadata
@@ -634,6 +637,12 @@ class PrioController extends Controller
                                     $newValues['is_offspec'] = $isOffspec;
                                 }
 
+                                if ($existingPrio->pivot->note != $note) {
+                                    $changed = true;
+                                    $newValues['id']   = $existingPrio->pivot->id;
+                                    $newValues['note'] = $note;
+                                }
+
                                 if ($changed) {
                                     // Since we are using UPSERT, these fields MUST be present. Populate them if they are missing.
                                     if (!array_key_exists('received_at', $newValues)) {
@@ -647,6 +656,9 @@ class PrioController extends Controller
                                     }
                                     if (!array_key_exists('is_offspec', $newValues)) {
                                         $newValues['is_offspec'] = $existingPrio->pivot->is_offspec;
+                                    }
+                                    if (!array_key_exists('note', $newValues)) {
+                                        $newValues['note'] = $existingPrio->pivot->note;
                                     }
 
                                     $toUpdate[] = $newValues;
@@ -693,6 +705,7 @@ class PrioController extends Controller
                     $i++;
 
                     $order = isset($inputPrio['order']) && $inputPrio['order'] ? $inputPrio['order'] : $i;
+                    $note  = isset($inputPrio['note']) && $inputPrio['note'] ? $inputPrio['note'] : null;
 
                     if (!isset($inputPrio['resolved'])) {
                         $toAdd[] = [
@@ -705,6 +718,7 @@ class PrioController extends Controller
                             'raid_group_id' => $raidGroup->id,
                             'type'          => Item::TYPE_PRIO,
                             'order'         => $order,
+                            'note'          => $note,
                             'created_at'    => $now,
                             'updated_at'    => $now,
                         ];
@@ -753,6 +767,7 @@ class PrioController extends Controller
                 ['id'], // Identifying column
                 [ // Fields to be updated
                     'order',
+                    'note',
                     'is_offspec',
                     'is_received',
                     'received_at',
