@@ -111,7 +111,7 @@ function addItemListSelectHandler() {
         if (value) {
             const cssClass = $(this).find(":selected").data("class") || '';
 
-            // Optional: Specif which input we want to look for. Useful when there are multiple inputs
+            // Optional: Specify which input we want to look for. Useful when there are multiple inputs
             // in the next input's group.
             const key = $(this).data("input-key");
 
@@ -148,6 +148,8 @@ function addItemListSelectHandler() {
                     addItemRemoveHandler(); // Add handlers to the new html
 
                     const prefix = $nextInput.data("input-prefix");
+                    // JQuery doesn't like brackets in some selectors, so we'll remove them ahead of time (right now)
+                    const prefixNoBrackets = $nextInput.data("input-prefix").replaceAll("[", "").replaceAll("]", "");
                     const index = $nextInput.data("index");
 
                     if (prefix) {
@@ -164,9 +166,16 @@ function addItemListSelectHandler() {
                         // Update any placeholders that need to be equal to the current index.
                         $nextInput.find(`input[name$="[order]"]`).each(function () {
                             $(this).attr("placeholder", index + 1);
+                            $(this).attr("data-index", index + 1);
+                        });
+                        console.log('searching...');
+                        $nextInput.find(`input[name$="[has_note]"]`).each(function () {
+                            $(this).attr("data-index", `${prefixNoBrackets}${index + 1}`);
+                        });
+                        $nextInput.find(`input[name$="[note]"]`).each(function () {
+                            $(this).attr("data-index", `${prefixNoBrackets}${index + 1}`);
                         });
                     }
-
                     $nextInput = $nextInput.children("input[value='']").first();
                 }
             }
@@ -206,6 +215,8 @@ function addItemListSelectHandler() {
                 $nextInput.parent().find(`input[name$="[is_offspec]"]`).prop("checked", false);
                 $nextInput.parent().find(`input[name$="[is_received]"]`).prop("checked", false);
                 $nextInput.parent().find(`input[name$="[order]"]`).val("");
+                $nextInput.parent().find(`input[name$="[has_note]"]`).val("");
+                $nextInput.parent().find(`input[name$="[note]"]`).val("");
                 $(this).find("option:first").text("—");
             } else {
             // Can't add any more.
@@ -315,6 +326,8 @@ function addTag($this, value, label) {
             $nextInput.parent().find(`input[name$="[is_offspec]"]`).prop("checked", false);
             $nextInput.parent().find(`input[name$="[is_received]"]`).prop("checked", false);
             $nextInput.parent().find(`input[name$="[order]"]`).val("");
+            $nextInput.parent().find(`input[name$="[has_note]"]`).prop("checked", false);
+            $nextInput.parent().find(`input[name$="[order]"]`).val("").hide();
 
             addItemRemoveHandler();
 

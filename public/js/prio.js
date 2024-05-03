@@ -51,6 +51,21 @@ $(document).ready(function () {
     });
 
     // Show/hide note input
+    applyNoteToggleHandlers();
+    // When a character is added to the prio list and a new entry is populated, reapply the handlers for notes
+    $("select.js-input-select").change(function () {
+        console.log('applying handlers');
+        applyNoteToggleHandlers();
+    });
+
+    $(".loadingBarContainer").removeClass("d-flex").hide();
+    $("#editForm").show();
+});
+
+// When the note toggle is changed, show/hide the note input
+function applyNoteToggleHandlers() {
+    $(".js-toggle-note").off();
+    // Show/hide note input
     $(".js-toggle-note").change(function () {
         const index = $(this).data('index');
 
@@ -60,10 +75,7 @@ $(document).ready(function () {
             $(".js-note[data-index=" + index + "]").parent().hide();
         }
     });
-
-    $(".loadingBarContainer").removeClass("d-flex").hide();
-    $("#editForm").show();
-});
+}
 
 // icon is a jquery element that contains a font awesome class (fas or fal)
 function makeIconLight(icon) {

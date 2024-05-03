@@ -35,7 +35,7 @@ var inputTemplate =
             </li>
             <li class="list-inline-item">
                 <div class="checkbox">
-                    <label class="small text-muted">
+                    <label class="small text-muted" for="[is_offspec]">
                         <input type="checkbox" name="[is_offspec]" value="1" class="" autocomplete="off">
                             {{ __("OS") }}
                     </label>
@@ -43,11 +43,37 @@ var inputTemplate =
             </li>
             <li class="list-inline-item">
                 <div class="checkbox">
-                    <label class="small text-muted">
+                    <label class="small text-muted" for="[is_received]">
                         <input type="checkbox" name="[is_received]" value="1" class="" autocomplete="off">
                             {{ __("Received") }}
                     </label>
                 </div>
             </li>
+            <li class="list-inline-item">
+                <div class="checkbox">
+                    <label class="small text-muted" for="[has_note]">
+                        <input type="checkbox"
+                            name="[has_note]"
+                            value="1"
+                            class="js-toggle-note"
+                            data-index=""
+                            autocomplete="off">
+                            {{ __("Note") }}
+                    </label>
+                </div>
+            </li>
         </ul>
+        <div class="form-group mb-1" style="display:none;">
+            <label for="[note]" class="sr-only font-weight-light">
+                {{ __("Note") }}
+            </label>
+            <input type="text"
+                class="js-note form-control dark slim"
+                data-index=""
+                placeholder="{{ __('add a note') }}"
+                maxlength="140"
+                name="[note]"
+                value=""
+                autocomplete="off">
+        </div>
     </div>`;
