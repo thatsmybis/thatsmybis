@@ -166,7 +166,7 @@ function addItemListSelectHandler() {
                         // Update any placeholders that need to be equal to the current index.
                         $nextInput.find(`input[name$="[order]"]`).each(function () {
                             $(this).attr("placeholder", index + 1);
-                            $(this).attr("data-index", index + 1);
+                            $(this).attr("data-index", `${prefixNoBrackets}${index + 1}`);
                         });
                         console.log('searching...');
                         $nextInput.find(`input[name$="[has_note]"]`).each(function () {
