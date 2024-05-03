@@ -277,24 +277,28 @@
                                                     class="js-item-wishlist-character font-weight-normal mb-1 {{ $character->pivot->is_received || $character->pivot->received_at? 'font-strikethrough' : '' }}"
                                                     value="{{ $character->pivot->order }}">
                                                     <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                                        title="{{ $character->raid_group_name ? $character->raid_group_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}"
                                                         class="text-{{ $character->class ? slug($character->class) : ''}}-important tag d-inline">
-                                                        <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_group_color ? $character->raid_group_color : '')) }}"></span>{{ $character->name }}
-                                                        @if ($character->is_alt)
-                                                            <span class="text-gold">{{ __("alt") }}</span>
-                                                        @endif
-                                                        @if ($character->pivot->is_offspec)
-                                                            <span class="text-muted">{{ __("OS") }}</span>
-                                                        @endif
-                                                        @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
-                                                            <span class="small">
-                                                                @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
+                                                        <span title="{{ $character->raid_group_name ? $character->raid_group_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}">
+                                                            <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_group_color ? $character->raid_group_color : '')) }}"></span>{{ $character->name }}
+                                                            @if ($character->is_alt)
+                                                                <span class="text-gold">{{ __("alt") }}</span>
+                                                            @endif
+                                                            @if ($character->pivot->is_offspec)
+                                                                <span class="text-muted">{{ __("OS") }}</span>
+                                                            @endif
+                                                            @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
+                                                                <span class="small">
+                                                                    @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
+                                                                </span>
+                                                            @endif
+                                                            <span class="js-watchable-timestamp smaller text-muted"
+                                                                data-timestamp="{{ $character->pivot->created_at }}"
+                                                                data-is-short="1">
                                                             </span>
-                                                        @endif
-                                                        <span class="js-watchable-timestamp smaller text-muted"
-                                                            data-timestamp="{{ $character->pivot->created_at }}"
-                                                            data-is-short="1">
                                                         </span>
+                                                        @if ($character->pivot->note)
+                                                            <span class="smaller text-muted text-underline" title="{{ $character->pivot->note }}">note</span>
+                                                        @endif
                                                     </a>
                                                 </li>
                                             @if ($loop->last)
