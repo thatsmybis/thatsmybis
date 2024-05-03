@@ -50,6 +50,17 @@ $(document).ready(function () {
         }
     });
 
+    // Show/hide note input
+    $(".js-toggle-note").change(function () {
+        const index = $(this).data('index');
+
+        if ($(this).prop("checked")) {
+            $(".js-note[data-index=" + index + "]").parent().show();
+        } else {
+            $(".js-note[data-index=" + index + "]").parent().hide();
+        }
+    });
+
     $(".loadingBarContainer").removeClass("d-flex").hide();
     $("#editForm").show();
 });

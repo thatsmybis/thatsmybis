@@ -216,6 +216,7 @@
                                 $characterOrder = old($oldInputName . '.order') ? old($oldInputName . '.order') : ($character && $character->pivot->order ? $character->pivot->order : null);
                                 $isReceived     = old($oldInputName . '.is_received') && old($oldInputName . '.is_received') == 1 ? 'checked' : ($character && ($character->pivot->is_received || $character->pivot->received_at) ? 'checked' : null);
                                 $isOffspec      = old($oldInputName . '.is_offspec') && old($oldInputName . '.is_offspec') == 1 ? 'checked' : ($character && $character->pivot->is_offspec ? 'checked' : null);
+                                $note           = old($oldInputName . '.note') ? old($oldInputName . '.note') : (($character && $character->pivot->note) ? $character->pivot->note : null);
 
                                 // Let the order field auto-generate if it's not different from the index
                                 if ($characterOrder && $characterOrder == $i + 1) {
@@ -277,7 +278,34 @@
                                             </label>
                                         </div>
                                     </li>
+                                    <li class="list-inline-item">
+                                        <div class="checkbox">
+                                            <label class="small text-muted">
+                                                <input type="checkbox"
+                                                    name="items[{{ $item->item_id }}][characters][{{ $i }}][has_note]"
+                                                    value="1"
+                                                    class="js-toggle-note"
+                                                    data-index="item-{{ $item->item_id }}-character-{{ $i }}"
+                                                    autocomplete="off"
+                                                    {{ $note ? 'checked' : '' }}>
+                                                    {{ __("Note") }}
+                                            </label>
+                                        </div>
+                                    </li>
                                 </ul>
+                                <div class="form-group mb-1" style="{{ $note ? '' : 'display:none;' }}">
+                                    <label for="items[{{ $item->item_id }}][characters][{{ $i }}][note]" class="sr-only font-weight-light">
+                                        {{ __("Note") }}
+                                    </label>
+                                    <input type="text"
+                                        class="js-note form-control dark slim"
+                                        data-index="item-{{ $item->item_id }}-character-{{ $i }}"
+                                        placeholder="{{ __('add a note') }}"
+                                        maxlength="140"
+                                        name="items[{{ $item->item_id }}][characters][{{ $i }}][note]"
+                                        value="{{ $note ? $note : '' }}"
+                                        autocomplete="off">
+                                </div>
                             </div>
                         @endif
                     </li>
