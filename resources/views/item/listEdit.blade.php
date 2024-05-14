@@ -242,7 +242,8 @@
                                             data-max-length="2000"
                                             rows="4"
                                             type="text"
-                                            placeholder="{{ __('eg. mage > warlock > boomkin') }}"
+                                            placeholder="{{ __('eg. mage > warlock > boomkin') }}
+{{ __('NOTE: Gargul addon displays each `>` character as a numbered list item on a new line') }}"
                                             class="form-control dark"
                                         >{{ old('items.' . $loop->iteration . '.priority') ? old('items.' . $loop->iteration . '.priority') : ($item->guild_priority ? $item->guild_priority : '') }}</textarea>
 

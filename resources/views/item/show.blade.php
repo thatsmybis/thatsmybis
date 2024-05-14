@@ -161,7 +161,7 @@
                                             <label for="note" class="sr-only">
                                                 {{ __("Item Note") }}
                                             </label>
-                                            <textarea maxlength="2000" data-max-length="2000" name="note" rows="6" placeholder="add a note" class="form-control dark">{{ old('note') ? old('note') : ($item ? $notes['note'] : '') }}</textarea>
+                                            <textarea maxlength="2000" data-max-length="2000" name="note" rows="6" placeholder="{{ __('add a note') }}" class="form-control dark">{{ old('note') ? old('note') : ($item ? $notes['note'] : '') }}</textarea>
                                         </div>
                                     </div>
                                 @endif
@@ -185,7 +185,7 @@
                                                 <label for="officer_note" class="sr-only">
                                                     {{ __("Officer Note") }}
                                                 </label>
-                                                <textarea maxlength="2000" data-max-length="2000" name="officer_note" rows="6" placeholder="add a note" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($item ? $notes['officer_note'] : '') }}</textarea>
+                                                <textarea maxlength="2000" data-max-length="2000" name="officer_note" rows="6" placeholder="{{ __('add an officer note') }}" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($item ? $notes['officer_note'] : '') }}</textarea>
                                             </div>
                                         </div>
                                     @endif
@@ -209,7 +209,8 @@
                                             <label for="priority" class="sr-only">
                                                 {{ __("Item Priority") }}
                                             </label>
-                                            <textarea maxlength="2000" data-max-length="2000" name="priority" rows="6" placeholder="eg. mage > warlock > boomkin > arcane shot hunter" class="form-control dark">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
+                                            <textarea maxlength="2000" data-max-length="2000" name="priority" rows="6" placeholder="{{ __('eg. mage > warlock > boomkin') }}
+{{ __('NOTE: Gargul addon displays each `>` character as a numbered list item on a new line') }}" class="form-control dark">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
                                         </div>
                                     </div>
                                 @endif
