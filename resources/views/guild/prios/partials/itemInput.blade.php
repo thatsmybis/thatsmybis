@@ -53,21 +53,36 @@
             @if ($item->guild_note)
                 <li title="{{ __('Note') }}">
                     <span class="fa-li"><span class="fal fa-fw fa-sticky-note text-muted"></span></span>
-                    <span class="js-markdown-inline">{{ $item->guild_note }}</span>
+                    <span class="js-preview-text js-markdown-inline">{{ substr($item->guild_note, 0, 200) }}</span>
+                    @if (strlen($item->guild_note) > 200)
+                        <span class="js-full-text js-markdown-inline" style="display:none;">{{ $item->guild_note }}</span>
+                        <span class="js-show-text text-link cursor-pointer">show more…</span>
+                        <span class="js-hide-text text-link cursor-pointer" style="display:none;">show less…</span>
+                    @endif
                 </li>
             @endif
 
             @if ($item->guild_priority)
                 <li title="{{ __('Priority note') }}">
                     <span class="fa-li"><span class="fal fa-fw fa-sort-amount-down text-muted"></span></span>
-                    <span class="js-markdown-inline">{{ $item->guild_priority }}</span>
+                    <span class="js-preview-text js-markdown-inline">{{ substr($item->guild_priority, 0, 200) }}</span>
+                    @if (strlen($item->guild_priority) > 200)
+                        <span class="js-full-text js-markdown-inline" style="display:none;">{{ $item->guild_priority }}</span>
+                        <span class="js-show-text text-link cursor-pointer">show more…</span>
+                        <span class="js-hide-text text-link cursor-pointer" style="display:none;">show less…</span>
+                    @endif
                 </li>
             @endif
 
             @if ($showOfficerNote && $item->guild_officer_note)
                 <li title="{{ __('Officer Note') }}">
                     <span class="fa-li"><span class="fal fa-fw fa-shield text-muted"></span></span>
-                    <span class="js-markdown-inline">{{ $item->guild_officer_note }}</span>
+                    <span class="js-preview-text js-markdown-inline">{{ substr($item->guild_officer_note, 0, 200) }}</span>
+                    @if (strlen($item->guild_officer_note) > 200)
+                        <span class="js-full-text js-markdown-inline" style="display:none;">{{ $item->guild_officer_note }}</span>
+                        <span class="js-show-text text-link cursor-pointer">show more…</span>
+                        <span class="js-hide-text text-link cursor-pointer" style="display:none;">show less…</span>
+                    @endif
                 </li>
             @endif
 

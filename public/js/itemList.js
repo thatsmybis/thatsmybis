@@ -189,7 +189,13 @@ function createTable() {
                 title  : `<span class="fas fa-fw fa-comment-alt-lines"></span> ${headerPrioNotes}`,
                 data   : "guild_priority",
                 render : function (data, type, row) {
-                    return (data ? `<span class="js-markdown-inline">${ nl2br(data) }</span>` : '—');
+                    return (data ?
+                    `<span class="js-preview-text js-markdown-inline">${ DOMPurify.sanitize(nl2br(data.substring(0, 200))) }</span>
+                    ${ data.length > 200 ?
+                        `<span class="js-full-text js-markdown-inline" style="display:none;">${ DOMPurify.sanitize(nl2br(data)) }</span>
+                        <span class="js-show-text text-link cursor-pointer">show more…</span>
+                        <span class="js-hide-text text-link cursor-pointer" style="display:none;">show less…</span>` : ``}`
+                    : '—');
                 },
                 orderable : false,
                 visible : showNotes ? true : false,
@@ -342,10 +348,20 @@ function getNotes(row, note) {
     // console.log(row.guildofficer_note, officerNote);
     if (note || officerNote || childItems) {
         note =
-            `<span class="js-markdown-inline">${ note ? DOMPurify.sanitize(nl2br(note)) : '' }</span>
+            `${ note ? `<span class="js-preview-text js-markdown-inline">${ DOMPurify.sanitize(nl2br(note.substring(0, 200))) }</span>
+                ${ note.length > 200 ?
+                    `<span class="js-full-text js-markdown-inline" style="display:none;">${ DOMPurify.sanitize(nl2br(note)) }</span>
+                    <span class="js-show-text text-link cursor-pointer">show more…</span>
+                    <span class="js-hide-text text-link cursor-pointer" style="display:none;">show less…</span>` : ``}`
+            : ''}
             ${ officerNote && note ? `<br>` : `` }
             ${ officerNote ?
-            `<small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br><span class="js-markdown-inline">${ DOMPurify.sanitize(nl2br(officerNote)) }</span>`
+            `<small class="font-weight-bold font-italic text-gold">Officer\'s Note</small><br>
+            <span class="js-preview-text js-markdown-inline">${ DOMPurify.sanitize(nl2br(officerNote.substring(0, 200))) }</span>
+            ${ officerNote.length > 200 ?
+                `<span class="js-full-text js-markdown-inline" style="display:none;">${ DOMPurify.sanitize(nl2br(officerNote)) }</span>
+                <span class="js-show-text text-link cursor-pointer">show more…</span>
+                <span class="js-hide-text text-link cursor-pointer" style="display:none;">show less…</span>` : ``}`
             : ''}
             ${ childItems ? childItems : '' }`;
     } else {

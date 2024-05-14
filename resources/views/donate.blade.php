@@ -14,9 +14,6 @@
                 {!! __("Hello! My name is Lemmings19 and I am the author of this That's My BIS. I've spent <a href=':link1' target='_blank'>hundreds upon hundreds</a> of hours building, maintaining, and supporting TMB and its community.", ['link1' => 'https://github.com/thatsmybis/thatsmybis/graphs/contributors']) !!}
             </p>
             <p class="mt-3">
-                {{ __("Everything you donate will go back into development, and not to some CEO's yacht...") }}
-            </p>
-            <p class="mt-3">
                 {!! __("If you want to reach out to me directly, email is best (<a href=':email1' target='_blank'>:email1</a>). Sometimes I am on the <a href=':link1' target='_blank'>That's My BIS Discord</a>. My username is Lemmings19#1149.", ['link1' => env('APP_DISCORD'), 'email1' => 'lemmings19@gmail.com']) !!}
             </p>
             <p class="mt-3">

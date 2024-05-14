@@ -538,6 +538,21 @@ function parseMarkdown(element = null) {
             }
         });
     }
+
+    // This isn't markdown but it shows at the same time as a lot of markdown
+    // so I am lazily throwing it in here to hijack when parseMarkdown() gets called.
+    $(".js-show-text").click(function () {
+        const previewText = $(this).siblings(".js-preview-text").hide();
+        const fullText = $(this).siblings(".js-full-text").show();
+        const showText = $(this).siblings(".js-hide-text").show();
+        $(this).hide();
+    });
+    $(".js-hide-text").click(function () {
+        const previewText = $(this).siblings(".js-preview-text").show();
+        const fullText = $(this).siblings(".js-full-text").hide();
+        const showText = $(this).siblings(".js-show-text").show();
+        $(this).hide();
+    });
 }
 
 // Takes a numeric RGB value and turns it into a hex colour code

@@ -179,8 +179,14 @@
                                             @endif
                                         </label>
 
-                                        <input name="items[{{ $loop->iteration }}][note]" maxlength="140" data-max-length="140" type="text" placeholder="{{ __('add a note') }}" class="form-control dark"
-                                            value="{{ old('items.' . $loop->iteration . '.note') ? old('items.' . $loop->iteration . '.note') : ($item->guild_note ? $item->guild_note : '') }}">
+                                        <textarea name="items[{{ $loop->iteration }}][note]"
+                                            maxlength="2000"
+                                            data-max-length="2000"
+                                            rows="4"
+                                            type="text"
+                                            placeholder="{{ __('add a note') }}"
+                                            class="form-control dark"
+                                        >{{ old('items.' . $loop->iteration . '.note') ? old('items.' . $loop->iteration . '.note') : ($item->guild_note ? $item->guild_note : '') }}</textarea>
 
                                         @if ($errors->has('items.' . $loop->iteration . '.note'))
                                             <div class="'text-danger font-weight-bold'">
@@ -198,13 +204,14 @@
                                             @endif
                                         </label>
 
-                                        <input name="items[{{ $loop->iteration }}][officer_note]"
-                                            maxlength="140"
-                                            data-max-length="140"
+                                        <textarea name="items[{{ $loop->iteration }}][officer_note]"
+                                            maxlength="2000"
+                                            data-max-length="2000"
+                                            rows="4"
                                             type="text"
                                             placeholder="{{ __('add an officer note') }}"
-                                            class="form-control dark {{ $isStreamerMode ? 'd-none' : '' }}"
-                                            value="{{ old('items.' . $loop->iteration . '.officer_note') ? old('items.' . $loop->iteration . '.officer_note') : ($item->guild_officer_note ? $item->guild_officer_note : '') }}">
+                                            class="form-control dark
+                                        {{ $isStreamerMode ? 'd-none' : '' }}">{{ old('items.' . $loop->iteration . '.officer_note') ? old('items.' . $loop->iteration . '.officer_note') : ($item->guild_officer_note ? $item->guild_officer_note : '') }}</textarea>
 
                                         @if ($isStreamerMode)
                                             <span class="text-muted small">{{ __("officer note hidden in streamer mode") }}</span>
@@ -230,8 +237,14 @@
                                             @endif
                                         </label>
 
-                                        <input name="items[{{ $loop->iteration }}][priority]" maxlength="140" data-max-length="140" type="text" placeholder="{{ __('eg. mage > warlock > boomkin') }}" class="form-control dark"
-                                            value="{{ old('items.' . $loop->iteration . '.priority') ? old('items.' . $loop->iteration . '.priority') : ($item->guild_priority ? $item->guild_priority : '') }}">
+                                        <textarea name="items[{{ $loop->iteration }}][priority]"
+                                            maxlength="2000"
+                                            data-max-length="2000"
+                                            rows="4"
+                                            type="text"
+                                            placeholder="{{ __('eg. mage > warlock > boomkin') }}"
+                                            class="form-control dark"
+                                        >{{ old('items.' . $loop->iteration . '.priority') ? old('items.' . $loop->iteration . '.priority') : ($item->guild_priority ? $item->guild_priority : '') }}</textarea>
 
                                         @if ($errors->has('items.' . $loop->iteration . '.priority'))
                                             <div class="'text-danger font-weight-bold'">
@@ -271,7 +284,7 @@
         warnBeforeLeaving("#editForm");
 
         $("#loadAverageTiers").click(function () {
-            if (confirm("{{ __("Doing this will overwrite any custom tiers for this dungeon. Continue?") }}")) {
+            if (confirm("{{ __("Doing this will overwrite any custom tiers for this dungeon. Continue?") }} {{ __("note: Only works if other guilds have added tiers that can be used as a baseline.") }}")) {
                 $.each($("select"), function (key, value) {
                     let itemId = $(this).data("itemId");
                     if (itemId) {

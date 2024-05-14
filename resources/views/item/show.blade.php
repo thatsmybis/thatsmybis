@@ -150,7 +150,7 @@
                                     </span>
                                 </div>
                                 <div class="col-12 mb-3 pl-4">
-                                    {{ $notes['note'] ? $notes['note'] : '—' }}
+                                    <span class="js-markdown-inline">{{ $notes['note'] ? $notes['note'] : '—' }}</span>
                                     @if ($showNoteEdit)
                                         <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                                     @endif
@@ -161,7 +161,7 @@
                                             <label for="note" class="sr-only">
                                                 {{ __("Item Note") }}
                                             </label>
-                                            <textarea maxlength="140" data-max-length="140" name="note" rows="2" placeholder="add a note" class="form-control dark">{{ old('note') ? old('note') : ($item ? $notes['note'] : '') }}</textarea>
+                                            <textarea maxlength="2000" data-max-length="2000" name="note" rows="6" placeholder="add a note" class="form-control dark">{{ old('note') ? old('note') : ($item ? $notes['note'] : '') }}</textarea>
                                         </div>
                                     </div>
                                 @endif
@@ -174,7 +174,7 @@
                                         </span>
                                     </div>
                                     <div class="col-12 mb-3 pl-4">
-                                        {{ $notes['officer_note'] ? $notes['officer_note'] : '—' }}
+                                        <span class="js-markdown-inline">{{ $notes['officer_note'] ? $notes['officer_note'] : '—' }}</span>
                                         @if ($showNoteEdit)
                                             <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                                         @endif
@@ -185,7 +185,7 @@
                                                 <label for="officer_note" class="sr-only">
                                                     {{ __("Officer Note") }}
                                                 </label>
-                                                <textarea maxlength="140" data-max-length="140" name="officer_note" rows="2" placeholder="add a note" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($item ? $notes['officer_note'] : '') }}</textarea>
+                                                <textarea maxlength="2000" data-max-length="2000" name="officer_note" rows="6" placeholder="add a note" class="form-control dark">{{ old('officer_note') ? old('officer_note') : ($item ? $notes['officer_note'] : '') }}</textarea>
                                             </div>
                                         </div>
                                     @endif
@@ -198,7 +198,7 @@
                                     </span>
                                 </div>
                                 <div class="col-12 mb-3 pl-4">
-                                    {{ $notes['priority'] ? $notes['priority'] : '—' }}
+                                    <span class="js-markdown-inline">{{ $notes['priority'] ? $notes['priority'] : '—' }}</span>
                                     @if ($showPrioEdit)
                                         <span class="js-show-note-edit fas fa-fw fa-pencil text-link cursor-pointer" title="edit"></span>
                                     @endif
@@ -209,7 +209,7 @@
                                             <label for="priority" class="sr-only">
                                                 {{ __("Item Priority") }}
                                             </label>
-                                            <textarea maxlength="140" data-max-length="140" name="priority" rows="2" placeholder="eg. mage > warlock > boomkin > arcane shot hunter" class="form-control dark">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
+                                            <textarea maxlength="2000" data-max-length="2000" name="priority" rows="6" placeholder="eg. mage > warlock > boomkin > arcane shot hunter" class="form-control dark">{{ old('priority') ? old('priority') : ($item ? $notes['priority'] : '') }}</textarea>
                                         </div>
                                     </div>
                                 @endif

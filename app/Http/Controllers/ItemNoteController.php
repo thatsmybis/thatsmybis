@@ -110,9 +110,9 @@ class ItemNoteController extends Controller
                 'integer',
                 Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
             ],
-            'items.*.note'         => 'nullable|string|max:140',
-            'items.*.priority'     => 'nullable|string|max:140',
-            'items.*.officer_note' => 'nullable|string|max:140',
+            'items.*.note'         => 'nullable|string|max:2020',
+            'items.*.priority'     => 'nullable|string|max:2020',
+            'items.*.officer_note' => 'nullable|string|max:2020',
             'items.*.tier'         => ['nullable', 'integer', Rule::in(array_keys(Guild::tiers()))],
         ];
 
@@ -220,9 +220,9 @@ class ItemNoteController extends Controller
                 'integer',
                 Rule::exists('items', 'item_id')->where('items.expansion_id', $guild->expansion_id),
             ],
-            'note'         => 'nullable|string|max:140',
-            'priority'     => 'nullable|string|max:140',
-            'officer_note' => 'nullable|string|max:140',
+            'note'         => 'nullable|string|max:2020',
+            'priority'     => 'nullable|string|max:2020',
+            'officer_note' => 'nullable|string|max:2020',
             'tier'         => ['nullable', 'integer', Rule::in(array_keys(Guild::tiers()))],
         ];
 
