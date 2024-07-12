@@ -56,6 +56,7 @@ class ItemController extends \App\Http\Controllers\Controller
         } else {
             if ($query && $query != " ") {
                 $sqlQuery = Item::orderByDesc('weight')
+                    ->where('is_disabled', 0)
                     ->limit(15);
 
                 $selectFields = ['name', 'item_id', 'quality', 'item_level', 'faction', 'is_heroic', 'expansion_id'];

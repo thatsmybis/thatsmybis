@@ -228,7 +228,7 @@ Roles are loaded from the Discord server.
 - `ONLY_FULL_GROUP_BY` for SQL has been disabled in `database.php` by changing `strict` to `false`. This is to allow for writing simpler `GROUP BY` clauses in queries. If you can fix the `group by` complications caused by `strict`, you're welcome to turn it back on. I tried. It required mutilating my `SELECT` statements, and even then I couldn't get it to 100% work the way it did before 5.7 when it just assumed `ANY_VALUE()` on non-aggregated columns (even when I told it to use `ANY_VALUE()`). Good luck. ([SO thread](https://stackoverflow.com/questions/34115174/error-related-to-only-full-group-by-when-executing-a-query-in-mysql))
 - `max_input_vars` in `php.ini` (PHP's config) has been increased from 1000 to 6000. This is to support some pages with an absurd amount of inputs. (ie. 120 items with 20 input fields each = 2400 inputs)
 
-# Adding An Epxansion
+# Adding An Expansion
 
 Expansions may need to be added. Follow these steps to do so:
 

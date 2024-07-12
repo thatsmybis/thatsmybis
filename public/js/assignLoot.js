@@ -443,38 +443,27 @@ function loadItemToForm(item, i) {
     }
 
     // Convert item ID to the ID that we use, because having two of the same item is stupid.
-    if (itemId && itemId == 18423) { // 18423 = Head of Onyxia, Alliance version
+    if (itemId && itemId == 18423) { // 18423 = Vanilla Head of Onyxia, Alliance version
         itemId = 18422; // Head of Onyxia, Horde version
     }
 
     // Convert item ID to the ID that we use
-    if (itemId && itemId == 19003) { // 19003 = Head of Nefarian, Alliance version
-        itemId = 19002; // Head of Nefarian, Horde version
-    }
-
-    // Convert item ID to the ID that we use
-    if (itemId && itemId == 32386) { // 32385 = Magtheridon's Head, Alliance version
-        itemId = 32385; // Magtheridon's Head, Horde version
-    }
-
-    // Convert item ID to the ID that we use
-    if (itemId && itemId == 43959) { // 43959 = Reins of the Grand Black War Mammoth, Alliance version
-        itemId = 44083; // Reins of the Grand Black War Mammoth, Horde version
-    }
-
-    // Convert item ID to the ID that we use
-    if (itemId && itemId == 209693) { // 209693 = Perfect Blackfathom Pearl, Alliance version
-        itemId = 211452; // Perfect Blackfathom Pearl, Horde version
-    }
-
-    // Convert item ID to the ID that we use
-    if (itemId && itemId == 217350) { // 217350 = Thermaplugg's Engineering Notes, Alliance version
-        itemId = 217351; // Thermaplugg's Engineering Notes, Horde version
-    }
-
-    // Convert item ID to the ID that we use
-    if (itemId && itemId == 221346) { // 221346 = Scapula of the Fallen Avatar, Alliance version
-        itemId = 221363; // Scapula of the Fallen Avatar, Horde version
+    if (itemId) {
+        if (itemId == 19003) { // 19003 = Vanilla Head of Nefarian, Alliance version
+            itemId = 19002; // Head of Nefarian, Horde version
+        } else if (itemId == 32386) { // 32385 = TBC Magtheridon's Head, Alliance version
+            itemId = 32385; // Magtheridon's Head, Horde version
+        } else if (itemId == 43959) { // 43959 = WoTLK Reins of the Grand Black War Mammoth, Alliance version
+            itemId = 44083; // Reins of the Grand Black War Mammoth, Horde version
+        } else if (itemId == 221346) { // 221346 = Cata Scapula of the Fallen Avatar, Alliance version
+            itemId = 221363; // Scapula of the Fallen Avatar, Horde version
+        } else if (itemId == 209693) { // 209693 = SoD Perfect Blackfathom Pearl, Alliance version
+            itemId = 211452; // SoD Perfect Blackfathom Pearl, Horde version
+        } else if (itemId == 217350) { // 217350 = SoD Thermaplugg's Engineering Notes, Alliance version
+            itemId = 217351; // SoD Thermaplugg's Engineering Notes, Horde version
+        } else if (itemId == 228688) { // 221346 = SoD Head of Onyxia, Alliance version
+            itemId = 228689; // SoD Head of Onyxia, Horde version
+        }
     }
 
     if (item['item']) { // RCLC value

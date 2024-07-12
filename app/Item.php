@@ -30,6 +30,7 @@ class Item extends BaseModel
         'item_level',
         'required_level',
         'set_id',
+        'is_disabled',
     ];
 
     /**
@@ -50,6 +51,7 @@ class Item extends BaseModel
         'name_ru',
         'required_level',
         'set_id',
+        'is_disabled',
     ];
 
     const TYPE_PRIO     = 'prio';
