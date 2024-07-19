@@ -91,43 +91,44 @@
                         {{ __("Sunken Temple") }}
                     </a>
                 </li>
-                <!-- <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'zulgurub']) }}">
-                        {{ __("Zul'Gurub") }}
-                    </a>
-                </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'ruins-of-ahnqiraj']) }}">
-                        {{ __("Ruins of Ahn'Qiraj") }}
-                    </a>
-                </li>
-                <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'world-bosses']) }}">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'world-bosses-sod']) }}">
                         {{ __("World Bosses") }}
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'molten-core']) }}">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'molten-core-sod']) }}">
                         {{ __("Molten Core") }}
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'onyxias-lair']) }}">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'onyxias-lair-sod']) }}">
                         {{ __("Onyxia's Lair") }}
                     </a>
                 </li>
+                <!--
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'blackwing-lair']) }}">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'zulgurub-sod']) }}">
+                        {{ __("Zul'Gurub") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'ruins-of-ahnqiraj-sod']) }}">
+                        {{ __("Ruins of Ahn'Qiraj") }}
+                    </a>
+                </li>
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'blackwing-lair-sod']) }}">
                         {{ __("Blackwing Lair") }}
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'temple-of-ahnqiraj']) }}">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'temple-of-ahnqiraj-sod']) }}">
                         {{ __("Temple of Ahn'Qiraj") }}
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'naxxramas']) }}">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'naxxramas-sod']) }}">
                         {{ __("Naxxramas") }}
                     </a>
                 </li> -->

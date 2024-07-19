@@ -229,6 +229,15 @@
                     <option value="46">
                         {{ __("Sunken Temple") }}
                     </option>
+                    <option value="59">
+                        {{ __("World Bosses") }}
+                    </option>
+                    <option value="60">
+                        {{ __("Molten Core") }}
+                    </option>
+                    <option value="61">
+                        {{ __("Onyxia's Lair") }}
+                    </option>
                 @elseif ($guild->expansion_id == 5)
                     <option value="47">
                         {{ __("Baradin Hold Normal") }}
