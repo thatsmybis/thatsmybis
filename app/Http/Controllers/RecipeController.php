@@ -120,6 +120,12 @@ class RecipeController extends Controller
                 }
             ])
             ->get();
+
+            // Item IDs we don't want showing up, but would normally match our filters.
+            $blackListItemIds = [63540, 65004];
+            $items = $items->filter(function ($item) use ($blackListItemIds) {
+                return !in_array($item->item_id, $blackListItemIds);
+            });
         return view('item.listRecipes', [
             'currentMember'   => $currentMember,
             'guild'           => $guild,
