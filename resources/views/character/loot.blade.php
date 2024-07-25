@@ -105,11 +105,11 @@
                                         @if ($guild->expansion_id === 1 || $guild->expansion_id === 4)
                                             {{ __("Import wishlist from sixtyupgrades.com") }} {{ __("OR WoWSims") }}
                                         @elseif ($guild->expansion_id === 2)
-                                            {{ __("Import wishlist from seventyupgrades.com") }} {{ __("OR WoWSims") }}
+                                            {{ __("Import wishlist from sixtyupgrades.com") }} {{ __("OR WoWSims") }}
                                         @elseif ($guild->expansion_id === 3)
-                                            {{ __("Import wishlist from eightyupgrades.com") }} {{ __("OR WoWSims") }}
+                                            {{ __("Import wishlist from sixtyupgrades.com") }} {{ __("OR WoWSims") }}
                                         @elseif ($guild->expansion_id === 5)
-                                            {{ __("Import wishlist from eightyfiveupgrades.com") }} {{ __("OR WoWSims") }}
+                                            {{ __("Import wishlist from sixtyupgrades.com") }} {{ __("OR WoWSims") }}
                                         @endif
                                     </span>
                                 </div>
@@ -118,23 +118,31 @@
                                     <div class="mb-3">
                                         <span class="fas fa-fw fa-link"></span>
                                         @if ($guild->expansion_id === 1 || $guild->expansion_id === 4)
-                                            <a href="https://sixtyupgrades.com/" target="_blank">
+                                            <a href="https://sixtyupgrades.com/era/" target="_blank">
                                                 sixtyupgrades.com
                                             </a>
+                                            OR <a href="https://wowsims.github.io/" target="_blank">wowsims.github.io</a>
                                         @elseif ($guild->expansion_id === 2)
-                                            <a href="https://seventyupgrades.com/" target="_blank">
-                                                seventyupgrades.com
+                                            <a href="https://sixtyupgrades.com/tbc/" target="_blank">
+                                                sixtyupgrades.com
                                             </a>
+                                            OR <a href="https://wowsims.github.io/tbc/" target="_blank">wowsims.github.io</a>
                                         @elseif ($guild->expansion_id === 3)
-                                            <a href="https://eightyupgrades.com/" target="_blank">
-                                                eightyupgrades.com
+                                            <a href="https://sixtyupgrades.com/wotlk/" target="_blank">
+                                                sixtyupgrades.com
                                             </a>
+                                            OR <a href="https://wowsims.github.io/wotlk/" target="_blank">wowsims.github.io</a>
+                                        @elseif ($guild->expansion_id === 4)
+                                            <a href="https://sixtyupgrades.com/sod/" target="_blank">
+                                                sixtyupgrades.com
+                                            </a>
+                                            OR <a href="https://wowsims.github.io/sod/" target="_blank">wowsims.github.io</a>
                                         @elseif ($guild->expansion_id === 5)
-                                            <a href="https://eightyfiveupgrades.com/" target="_blank">
-                                                eightyupgrades.com
+                                            <a href="https://sixtyupgrades.com/cata/" target="_blank">
+                                                sixtyupgrades.com
                                             </a>
+                                            OR <a href="https://wowsims.github.io/cata/" target="_blank">wowsims.github.io</a>
                                         @endif
-                                        OR <a href="https://wowsims.github.io/sod/" target="_blank">wowsims.github.io</a>
                                     </div>
 
                                     <img
