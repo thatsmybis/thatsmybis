@@ -637,6 +637,15 @@ function getItemListHtml(data, type, characterId, useOrder = false, showInstance
             `;
         }
 
+        let heroicHtml = ``;
+        if (item.is_heroic) {
+            if (MOLTEN_ITEM_IDS.find((element) => element === item.item_id)) {
+                heroicHtml = `<span class="text-legendary small" title="Heroic">Molten</span>`;
+            } else {
+                heroicHtml = `<span class="text-uncommon small" title="Heroic">Heroic</span>`;
+            }
+        }
+
         let wowheadData = `data-wowhead-link="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ item.item_id }"
             data-wowhead="item=${ item.item_id }?domain=${ wowheadLocale + wowheadSubdomain }"`;
 
@@ -657,6 +666,7 @@ function getItemListHtml(data, type, characterId, useOrder = false, showInstance
                     ${ wowheadData }>
                     ${ item.name }
                 </a>
+                ${ heroicHtml }
                 ${ item.pivot.is_offspec ? '<span title="offspec item" class="small font-weight-bold text-muted">OS</span>' : '' }
                 <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
                     data-timestamp="${ item.pivot.received_at ? item.pivot.received_at : item.pivot.created_at }"

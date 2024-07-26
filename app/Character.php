@@ -187,6 +187,7 @@ class Character extends BaseModel
                 'items.weight',
                 'items.quality',
                 'items.inventory_type',
+                'items.is_heroic',
                 'added_by_members.username AS added_by_username',
                 'instances.id AS instance_id'
             ])
@@ -224,6 +225,7 @@ class Character extends BaseModel
                 'items.weight',
                 'items.quality',
                 'items.inventory_type',
+                'items.is_heroic',
                 'added_by_members.username AS added_by_username',
                 'raid_groups.name          AS raid_group_name',
                 'raids.name                AS raid_name',
@@ -278,6 +280,7 @@ class Character extends BaseModel
                 'items.weight',
                 'items.quality',
                 'items.inventory_type',
+                'items.is_heroic',
                 'added_by_members.username AS added_by_username',
                 'instances.id              AS instance_id',
                 'guild_items.tier          AS guild_tier',
@@ -329,6 +332,7 @@ class Character extends BaseModel
                 'items.weight',
                 'items.quality',
                 'items.inventory_type',
+                'items.is_heroic',
                 'item_sources.id             AS item_source_id',
                 'item_sources.instance_id    AS instance_id',
                 'instances.name              AS instance_name',

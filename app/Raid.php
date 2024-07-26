@@ -71,6 +71,7 @@ class Raid extends BaseModel
                 'items.name',
                 'items.weight',
                 'items.quality',
+                'items.is_heroic',
                 'items.inventory_type',
                 'characters.id             AS character_id',
                 'characters.name           AS character_name',

@@ -48,6 +48,7 @@ class LootController extends Controller
                     'items.name',
                     'items.quality',
                     'items.faction',
+                    'items.is_heroic',
                     'item_sources.name AS source_name',
                 ])
                 ->join('item_item_sources', function ($join) {

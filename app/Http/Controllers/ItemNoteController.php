@@ -44,6 +44,7 @@ class ItemNoteController extends Controller
                 'items.item_id',
                 'items.name',
                 'items.quality',
+                'items.is_heroic',
                 'item_sources.name      AS source_name',
                 'guild_items.note       AS guild_note',
                 'guild_items.priority   AS guild_priority',

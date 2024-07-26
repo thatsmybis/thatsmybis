@@ -91,6 +91,7 @@ class ItemController extends Controller
                     'items.name',
                     'items.faction',
                     'items.quality',
+                    'items.is_heroic',
                     'item_sources.name    AS source_name',
                     'item_sources.slug    AS source_slug',
                     'guild_items.note     AS guild_note',

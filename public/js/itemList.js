@@ -396,6 +396,15 @@ function getItemLink(row, iconSize = null) {
         }
     }
 
+    let heroicHtml = ``;
+    if (row.is_heroic) {
+        if (MOLTEN_ITEM_IDS.find((element) => element === row.item_id)) {
+            heroicHtml = `<span class="text-legendary small" title="Heroic">Molten</span>`;
+        } else {
+            heroicHtml = `<span class="text-uncommon small" title="Heroic">Heroic</span>`;
+        }
+    }
+
     return `
     <ul class="no-bullet no-indent mb-0">
         <li>
@@ -408,6 +417,7 @@ function getItemLink(row, iconSize = null) {
                 ${ wowheadData }>
                 ${ row.name }
             </a>
+            ${ heroicHtml }
             ${ factionHtml }
         </li>
     </ul>`;
