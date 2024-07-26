@@ -1,6 +1,171 @@
 @extends('layouts.app')
 @section('title', __("Donate") . " - " . config('app.name'))
 
+@php
+    $donors = [
+        ['name' => '.aristedes',          'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'A. Pires',            'icon' => 'crown', 'title' => 'Main Tank'], // no Discord username given
+        ['name' => 'A4uronn',             'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Adilar/Myras',        'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Aethil',              'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Alexa J.',            'icon' => 'crown', 'title' => 'Parser'], // no Discord username given
+        ['name' => 'Amatyr',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'andrew_g',            'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Angela C.',           'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
+        ['name' => 'Anonymous',           'icon' => 'crown', 'title' => 'Patreon'],
+        ['name' => 'Anthony',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Arcadia',             'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Arma',                'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'astraeli',            'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'bakedbread',          'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Ben A.',              'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
+        ['name' => 'Bianca',              'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Blezner',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'bigkahuneh',          'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'botnet',              'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Braeo',               'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Brandon S.',          'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
+        ['name' => 'breytak',             'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Brictom#6635',        'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'BurnHavoc',           'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Busmonstret',         'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'C. Wilson',           'icon' => 'crown', 'title' => 'Parser'], // no Discord username given
+        ['name' => 'Calaris',             'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'chaaya',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Cole V.',             'icon' => 'crown', 'title' => 'Parser'], // no Discord username given
+        ['name' => 'Craig',               'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'dahlmighty',          'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'dahk',                'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'diadia',              'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'Drezdan',             'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'drizzt',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'E. Schmidt',          'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
+        ['name' => 'Elysa#5616',          'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'elkheart',            'icon' => 'crown', 'title' => 'Black Lotus'],
+        ['name' => 'EmpKain',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Euredraith',          'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Faelor',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'fallenfaux',          'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Feora',               'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'ficojm',              'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Finvy',               'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Fragtoaster1',        'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Freddykr',            'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'g. avaxx',            'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Gametheory#8080',     'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Garsidian Games',     'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'Gerhart#6969',        'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'grolo',               'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'GrumpyOwl',           'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'hackng',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Hadiya',              'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'Hello',               'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'himea.saito',         'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'hiroaki',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'hopop_',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'InY0f4c3#3214',       'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'ITank',               'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Jahare#3676',         'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Jensok',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Jetor',               'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'jhohm',               'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Junior',              'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'Jonathan W.',         'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Joshua M.',           'icon' => 'crown', 'title' => 'Parser'],  // no Discord username given
+        ['name' => 'Kazczyk',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Keckterz',            'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'kevlari',             'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Khashte',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'khanrad',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Kirk',                'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'kip1337',             'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Kral',                'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Kroxz',               'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'kzEr',                'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'lawlop',              'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'leibo',               'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'LeviosaMimosa',       'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'M. Claffey',          'icon' => 'crown', 'title' => 'Raider'],  // no Discord username given
+        ['name' => 'M. Khan',             'icon' => 'crown', 'title' => 'Raider'],  // no Discord username given
+        ['name' => 'Mapletree',           'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Mashgar',             'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'mataglap',            'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'mathias.schreiber',   'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'mattyp237',           'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'mechler',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'megajohn',            'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'menttor',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Mike S.',             'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
+        ['name' => 'Mister Awesomesauce', 'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'napoliane',           'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Nectu',               'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'niph',                'icon' => 'crown', 'title' => 'Paypal'],
+        ['name' => 'Nompire',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'noxdeseus.',          'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'offthewall.',         'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'omoplata',            'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Onehalf',             'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Panya',               'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Paul',                'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'pheebz',              'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Pordge#9567',         'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'pyrese',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Raspy#1918',          'icon' => 'crown', 'title' => 'Black Lotus'],
+        ['name' => 'Rebecca G.',          'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
+        ['name' => 'Riotdog TV',          'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Rishi',               'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Rmalhada',            'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'rogerrabbit',         'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'ryooki',              'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'samspayde',           'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Sangwa',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Sarafina',            'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'SatanHimself',        'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Sean M.',             'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
+        ['name' => 'Sentence',            'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'SHIELD',              'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'Sigaren',             'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'sinark',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'skoz',                'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Sleete',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Slish',               'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Strix',               'icon' => 'crown', 'title' => 'Black Lotus'],
+        ['name' => 'Strken',              'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'Sumorex',             'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'Syy',                 'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Theseus#0373',        'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'TideAd',              'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Tric',                'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'Triper',              'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Tron',                'icon' => 'crown', 'title' => 'Main Tank'],
+        ['name' => 'Uriah',               'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Vejusatko',           'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Vexxe#4040',          'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'viciousri',           'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Waughter',            'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'wave.0',              'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'weirdGuy',            'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'xekno',               'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'Yjay',                'icon' => 'crown', 'title' => 'Raider'],
+        ['name' => 'youngmouse',          'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Zanna',               'icon' => 'crown', 'title' => 'Parser'],
+        ['name' => 'Zura',                'icon' => 'crown', 'title' => 'Parser'],
+    ];
+
+    $translators = [
+        ['name' => 'Ardash',    'icon' => 'comment', 'title' => 'Russian + item lookups'],
+        ['name' => 'ashrasmun', 'icon' => 'comment', 'title' => 'Polish'],
+        ['name' => 'Etaya',     'icon' => 'comment', 'title' => 'German'],
+        ['name' => 'Fingbel',   'icon' => 'comment', 'title' => 'French'],
+        ['name' => 'Hopop',     'icon' => 'comment', 'title' => 'French'],
+        ['name' => 'Irhala',    'icon' => 'comment', 'title' => 'French'],
+        ['name' => 'Kayley',    'icon' => 'comment', 'title' => 'Danish'],
+        ['name' => 'Kyraa',     'icon' => 'comment', 'title' => 'German'],
+        ['name' => 'myki',      'icon' => 'comment', 'title' => 'French'],
+        ['name' => 'Strix',     'icon' => 'comment', 'title' => 'Norwegian'],
+    ];
+@endphp
+
 @section('content')
 <div class="container-fluid container-width-capped">
     <div class="row bg-light mb-3 pt-5 pb-5 rounded">
@@ -95,171 +260,6 @@
         </div>
     </div>
 
-    @php
-        $donors = [
-            ['name' => '.aristedes',          'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'A. Pires',            'icon' => 'crown', 'title' => 'Main Tank'], // no Discord username given
-            ['name' => 'A4uronn',             'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Adilar/Myras',        'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Aethil',              'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Alexa J.',            'icon' => 'crown', 'title' => 'Parser'], // no Discord username given
-            ['name' => 'Amatyr',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'andrew_g',            'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Angela C.',           'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
-            ['name' => 'Anonymous',           'icon' => 'crown', 'title' => 'Patreon'],
-            ['name' => 'Anthony',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Arcadia',             'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Arma',                'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'astraeli',            'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'bakedbread',          'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Ben A.',              'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
-            ['name' => 'Bianca',              'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Blezner',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'bigkahuneh',          'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'botnet',              'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Braeo',               'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Brandon S.',          'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
-            ['name' => 'breytak',             'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Brictom#6635',        'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'BurnHavoc',           'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Busmonstret',         'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'C. Wilson',           'icon' => 'crown', 'title' => 'Parser'], // no Discord username given
-            ['name' => 'Calaris',             'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'chaaya',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Cole V.',             'icon' => 'crown', 'title' => 'Parser'], // no Discord username given
-            ['name' => 'Craig',               'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'dahlmighty',          'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'dahk',                'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'diadia',              'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Drezdan',             'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'drizzt',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'E. Schmidt',          'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
-            ['name' => 'Elysa#5616',          'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'elkheart',            'icon' => 'crown', 'title' => 'Black Lotus'],
-            ['name' => 'EmpKain',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Euredraith',          'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Faelor',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'fallenfaux',          'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Feora',               'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'ficojm',              'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Finvy',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Fragtoaster1',        'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Freddykr',            'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'g. avaxx',            'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Gametheory#8080',     'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Garsidian Games',     'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Gerhart#6969',        'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'grolo',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'GrumpyOwl',           'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'hackng',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Hadiya',              'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Hello',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'himea.saito',         'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'hiroaki',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'hopop_',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'InY0f4c3#3214',       'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'ITank',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Jahare#3676',         'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Jensok',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Jetor',               'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'jhohm',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Junior',              'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Jonathan W.',         'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Joshua M.',           'icon' => 'crown', 'title' => 'Parser'],  // no Discord username given
-            ['name' => 'Kazczyk',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Keckterz',            'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'kevlari',             'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Khashte',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'khanrad',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Kirk',                'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'kip1337',             'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Kral',                'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Kroxz',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'kzEr',                'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'lawlop',              'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'leibo',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'LeviosaMimosa',       'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'M. Claffey',          'icon' => 'crown', 'title' => 'Raider'],  // no Discord username given
-            ['name' => 'M. Khan',             'icon' => 'crown', 'title' => 'Raider'],  // no Discord username given
-            ['name' => 'Mapletree',           'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Mashgar',             'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'mataglap',            'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'mathias.schreiber',   'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'mattyp237',           'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'mechler',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'megajohn',            'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'menttor',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Mike S.',             'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
-            ['name' => 'Mister Awesomesauce', 'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'napoliane',           'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Nectu',               'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'niph',                'icon' => 'crown', 'title' => 'Paypal'],
-            ['name' => 'Nompire',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'noxdeseus.',          'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'offthewall.',         'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'omoplata',            'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Onehalf',             'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Panya',               'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Paul',                'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'pheebz',              'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Pordge#9567',         'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'pyrese',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Raspy#1918',          'icon' => 'crown', 'title' => 'Black Lotus'],
-            ['name' => 'Rebecca G.',          'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
-            ['name' => 'Riotdog TV',          'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Rishi',               'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Rmalhada',            'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'rogerrabbit',         'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'ryooki',              'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'samspayde',           'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Sangwa',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Sarafina',            'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'SatanHimself',        'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Sean M.',             'icon' => 'crown', 'title' => 'Raider'], // no Discord username given
-            ['name' => 'Sentence',            'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'SHIELD',              'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Sigaren',             'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'sinark',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'skoz',                'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Sleete',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Slish',               'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Strix',               'icon' => 'crown', 'title' => 'Black Lotus'],
-            ['name' => 'Strken',              'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Sumorex',             'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Syy',                 'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Theseus#0373',        'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'TideAd',              'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Tric',                'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Triper',              'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Tron',                'icon' => 'crown', 'title' => 'Main Tank'],
-            ['name' => 'Uriah',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Vejusatko',           'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Vexxe#4040',          'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'viciousri',           'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Waughter',            'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'wave.0',              'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'weirdGuy',            'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'xekno',               'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'Yjay',                'icon' => 'crown', 'title' => 'Raider'],
-            ['name' => 'youngmouse',          'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Zanna',               'icon' => 'crown', 'title' => 'Parser'],
-            ['name' => 'Zura',                'icon' => 'crown', 'title' => 'Parser'],
-        ];
-
-        $translators = [
-            ['name' => 'Ardash',    'icon' => 'comment', 'title' => 'Russian + item lookups'],
-            ['name' => 'ashrasmun', 'icon' => 'comment', 'title' => 'Polish'],
-            ['name' => 'Etaya',     'icon' => 'comment', 'title' => 'German'],
-            ['name' => 'Fingbel',   'icon' => 'comment', 'title' => 'French'],
-            ['name' => 'Hopop',     'icon' => 'comment', 'title' => 'French'],
-            ['name' => 'Irhala',    'icon' => 'comment', 'title' => 'French'],
-            ['name' => 'Kayley',    'icon' => 'comment', 'title' => 'Danish'],
-            ['name' => 'Kyraa',     'icon' => 'comment', 'title' => 'German'],
-            ['name' => 'myki',      'icon' => 'comment', 'title' => 'French'],
-            ['name' => 'Strix',     'icon' => 'comment', 'title' => 'Norwegian'],
-        ];
-    @endphp
-
     <div class="row bg-light pt-5 pb-5 mb-5 rounded">
         <div class="col-lg-4 offset-lg-2 col-md-5 offset-md-1 col-sm-6 col-12">
             <h1>
@@ -269,8 +269,18 @@
             <ul class="fa-ul">
                 @foreach ($donors as $donor)
                     <li>
-                        <span class="fa-li fas fa-{{ $donor['icon'] }}"></span>
-                        <span class="text-uncommon">{{ $donor['name'] }}</span>
+                        <span class="text-muted fa-li fas fa-{{ $donor['icon'] }}"></span>
+                        @if ($donor['title'] === 'Raider')
+                            <span class="text-rare">{{ $donor['name'] }}</span>
+                        @elseif  ($donor['title'] === 'Parser')
+                            <span class="text-epic">{{ $donor['name'] }}</span>
+                        @elseif  ($donor['title'] === 'Main Tank')
+                            <span class="text-legendary">{{ $donor['name'] }}</span>
+                        @elseif  ($donor['title'] === 'Black Lotus')
+                            <span class="text-uncommon">{{ $donor['name'] }}</span>
+                        @else
+                            <span class="text-white">{{ $donor['name'] }}</span>
+                        @endif
                         <span class="text-muted">{{ $donor['title'] }}</span>
                     </li>
                 @endforeach
