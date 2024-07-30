@@ -134,7 +134,6 @@ class PrioController extends Controller
             // ->whereNull('items.parent_id')
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
             // This is problematic because the notes entered may differ, but we can only take one.
-            ->groupBy('items.item_id')
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
             ->with([
@@ -152,8 +151,8 @@ class PrioController extends Controller
                             'characters.guild_id' => $guild->id,
                         ])
                         ->whereRaw("(characters.raid_group_id = {$raidGroup->id} OR character_raid_groups.raid_group_id = {$raidGroup->id})")
-                        ->orderBy('characters.name')
-                        ->groupBy(['character_items.id']);
+                        ->groupBy(['character_items.id'])
+                        ->orderBy('characters.name');
                 },
             ])
             ->ofFaction($guild->faction);
@@ -204,7 +203,14 @@ class PrioController extends Controller
             ]);
         }
 
+        // I was using a GROUP BY, but it wouldn't preserve the rows that I wanted to keep.
+        // (I wanted the items beloning to the item_source ordered earliest to always stay)
+        // So instead of doing GROUP BY, I am adding this new column of data.
+        // Then I just filter AFTER fetching the data because it was easier to figure out how to code.
+        $query = $query->addSelect(DB::raw('ROW_NUMBER() OVER (PARTITION BY items.item_id ORDER BY item_sources.order) AS row_num'));
+
         $items = $query->get();
+        $items = $items->where('row_num', 1);
 
         if (!$guild->is_wishlist_disabled) {
             $items = ItemController::mergeTokenWishlists($items, $guild);
