@@ -207,10 +207,10 @@ class PrioController extends Controller
         // (I wanted the items beloning to the item_source ordered earliest to always stay)
         // So instead of doing GROUP BY, I am adding this new column of data.
         // Then I just filter AFTER fetching the data because it was easier to figure out how to code.
-        $query = $query->addSelect(DB::raw('ROW_NUMBER() OVER (PARTITION BY items.item_id ORDER BY item_sources.order) AS row_num'));
+        // $query = $query->addSelect(DB::raw('(SELECT COUNT(*) FROM items i2 WHERE i2.item_id = items.item_id AND i2.id <= items.id) as row_num'));
 
         $items = $query->get();
-        $items = $items->where('row_num', 1);
+        // $items = $items->where('row_num', 1);
 
         if (!$guild->is_wishlist_disabled) {
             $items = ItemController::mergeTokenWishlists($items, $guild);
