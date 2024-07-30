@@ -203,14 +203,22 @@ class PrioController extends Controller
             ]);
         }
 
-        // I was using a GROUP BY, but it wouldn't preserve the rows that I wanted to keep.
-        // (I wanted the items beloning to the item_source ordered earliest to always stay)
-        // So instead of doing GROUP BY, I am adding this new column of data.
-        // Then I just filter AFTER fetching the data because it was easier to figure out how to code.
-        // $query = $query->addSelect(DB::raw('(SELECT COUNT(*) FROM items i2 WHERE i2.item_id = items.item_id AND i2.id <= items.id) as row_num'));
-
         $items = $query->get();
-        // $items = $items->where('row_num', 1);
+
+        // Filter out duplicate items.
+        // Couldn't use GROUP BY because it wouldn't always filter out the copy of the item
+        // that I actually wanted gone. Tried another method (see previous commit), but the
+        // server's SQL version didn't support it. So we filter in the code. Hopefully not
+        // too stressful on the server in big guilds.
+        $foundItems = [];
+        $items = $items->filter(function ($item) use (&$foundItems) {
+            if (in_array($item->item_id, $foundItems)) {
+                return false;
+            } else {
+                $foundItems[] = $item->item_id;
+                return true;
+            }
+        });
 
         if (!$guild->is_wishlist_disabled) {
             $items = ItemController::mergeTokenWishlists($items, $guild);
