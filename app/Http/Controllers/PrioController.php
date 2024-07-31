@@ -134,6 +134,7 @@ class PrioController extends Controller
             // ->whereNull('items.parent_id')
             // Without this, we'd get the same item listed multiple times from multiple sources in some cases
             // This is problematic because the notes entered may differ, but we can only take one.
+            ->groupBy('items.item_id')
             ->orderBy('item_sources.order')
             ->orderBy('items.name')
             ->with([
@@ -204,21 +205,6 @@ class PrioController extends Controller
         }
 
         $items = $query->get();
-
-        // Filter out duplicate items.
-        // Couldn't use GROUP BY because it wouldn't always filter out the copy of the item
-        // that I actually wanted gone. Tried another method (see previous commit), but the
-        // server's SQL version didn't support it. So we filter in the code. Hopefully not
-        // too stressful on the server in big guilds.
-        $foundItems = [];
-        $items = $items->filter(function ($item) use (&$foundItems) {
-            if (in_array($item->item_id, $foundItems)) {
-                return false;
-            } else {
-                $foundItems[] = $item->item_id;
-                return true;
-            }
-        });
 
         if (!$guild->is_wishlist_disabled) {
             $items = ItemController::mergeTokenWishlists($items, $guild);
