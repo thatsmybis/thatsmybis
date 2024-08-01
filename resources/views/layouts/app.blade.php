@@ -141,12 +141,16 @@
         @if (isset($guild) && $guild->expansion_id === 4)
             <span class=""></span>
         @elseif (isset($guild) && $guild->expansion_id === 5)
-            <span class="">Cata loot tables were put together manually; there might be errors.
+            <span class="small">
+                Cata loot tables were put together manually; report errors
+                <a href="{{ env('APP_DISCORD') }}" target="_blank" title="{{ __('Report a bug') }}">here</a>
+            </span>
+    </a>
         @endif
     </div>
 
     @if (isset($guild))
-        <div id="addonPrompt" class="text-center font-weight-medium text-success" style="display:none;">
+        <div id="addonPrompt" class="small text-center text-success" style="display:none;">
             Choose an addon to use with TMB:
             <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-legendary">Gargul</a> or
             <a href="https://www.curseforge.com/wow/addons/rclootcouncil-classic" target="_blank" class="text-legendary">RCLC</a>
@@ -640,7 +644,7 @@
                 i.onerror = () => {
                     errcnt++;
                     if (errcnt < 3) {
-                        setTimeout(testImg, 250);
+                        setTimeout(testImg, 10);
                     } else {
                         npDetect.blocking = true;
                         dispatchBlockerEvent();
@@ -662,7 +666,7 @@
                     // Ads blocked
                     dispatchBlockerEvent();
                 }
-            }, 1500);
+            }, 400);
         });
     </script>
 
