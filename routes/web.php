@@ -214,6 +214,7 @@ Route::middleware(['throttle:global'])->group(function () {
         Route::group(['prefix' => 'export'], function () {
             Route::get('/',                                      'GuildController@showExports')               ->name('guild.exports');
             Route::get('/addon/{fileType}',                      'ExportController@exportTmbHelperItems')     ->name('guild.export.addonItems')         ->where(['fileType' => '(csv|html)']);
+            Route::get('/attendance/{fileType}',                 'ExportController@exportAttendance')         ->name('guild.export.attendance')         ->where(['fileType' => '(csv|html)']);
             Route::get('/characters-with-items/{fileType}',      'ExportController@exportCharactersWithItems')->name('guild.export.charactersWithItems')->where(['fileType' => '(html|json)']);
             Route::get('/gargul',                                'ExportController@gargul')                   ->name('guild.export.gargul');
             Route::get('/item-notes/{fileType}',                 'ExportController@exportItemNotes')          ->name('guild.export.itemNotes')          ->where(['fileType' => '(csv|html)']);

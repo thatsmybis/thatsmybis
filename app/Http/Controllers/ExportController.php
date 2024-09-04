@@ -33,6 +33,20 @@ class ExportController extends Controller {
         "item_tier_label",
     ];
 
+    const ATTENDANCE_HEADERS = [
+        "raid_date",
+        "raid_name",
+        "character_name",
+        "class",
+        "is_alt",
+        "inactive_at",
+        "credit",
+        "is_exempt",
+        "remark",
+        "raid_note",
+    ];
+
+
     const LOOT_HEADERS = [
         "type",
         "raid_group_name",
@@ -337,6 +351,52 @@ class ExportController extends Controller {
             'notes' => $notes,
             'tiers' => $tiers,
         ];
+    }
+
+    /**
+     * Export attendance data for all characters in the guild.
+     *
+     * @return Response
+     */
+    public function exportAttendance($guildId, $guildSlug, $fileType)
+    {
+        $guild         = request()->get('guild');
+        $currentMember = request()->get('currentMember');
+
+        $csv = Cache::remember('attendanceExport:' . $guild->id, env('EXPORT_CACHE_SECONDS', 10), function () use ($guild) {
+                $rows = DB::select(DB::raw(
+                    sprintf("SELECT
+                            r.date 'raid_date',
+                            r.name 'raid_name',
+                            c.name 'character_name',
+                            c.class 'class',
+                            c.is_alt 'is_alt',
+                            c.inactive_at 'inactive_at',
+                            rc.credit 'credit',
+                            rc.is_exempt 'is_exempt',
+                            rc.remark_id 'remark',
+                            r.public_note 'raid_note',
+                        CASE
+                            -- See Raid.php for remarks
+                            WHEN rc.remark_id = 1 THEN 'Late'
+                            WHEN rc.remark_id = 2 THEN 'Unprepared'
+                            WHEN rc.remark_id = 3 THEN 'Late & unprepared'
+                            WHEN rc.remark_id = 4 THEN 'No call, no show'
+                            WHEN rc.remark_id = 5 THEN 'Gave notice'
+                            WHEN rc.remark_id = 6 THEN 'Benched'
+                        END AS 'remark',
+                        rc.public_note 'note'
+                        -- rc.officer_note
+                    FROM `raids` r
+                    JOIN `raid_characters` rc ON rc.raid_id = r.id
+                    JOIN `characters` c ON c.id = rc.character_id
+                    WHERE r.guild_id = 3 AND r.cancelled_at IS NULL
+                    ORDER BY r.date DESC, c.name ASC;", $guild->id)));
+
+                return $this->createCsv($rows, self::ATTENDANCE_HEADERS);
+            });
+
+        return $this->getExport($csv, $guild->name . ' Attendance', $fileType);
     }
 
     /**
