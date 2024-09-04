@@ -399,7 +399,7 @@ class ExportController extends Controller {
                         (
                             SELECT GROUP_CONCAT(rg.name SEPARATOR ', ')
                             FROM raid_raid_groups AS rrg
-                            JOIN raid_groups AS rg ON rg.id = rrg.raid_id
+                            JOIN raid_groups AS rg ON rg.id = rrg.raid_group_id
                             WHERE rrg.raid_id = r.id
                         ) AS 'raid_groups'
                     FROM `raids` r
