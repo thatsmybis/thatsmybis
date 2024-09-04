@@ -390,7 +390,7 @@ class ExportController extends Controller {
                     FROM `raids` r
                     JOIN `raid_characters` rc ON rc.raid_id = r.id
                     JOIN `characters` c ON c.id = rc.character_id
-                    WHERE r.guild_id = 3 AND r.cancelled_at IS NULL
+                    WHERE r.guild_id = %s AND r.cancelled_at IS NULL
                     ORDER BY r.date DESC, c.name ASC;", $guild->id)));
 
                 return $this->createCsv($rows, self::ATTENDANCE_HEADERS);
