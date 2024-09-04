@@ -38,9 +38,10 @@ class ExportController extends Controller {
         "raid_name",
         "character_name",
         "class",
-        "is_alt",
-        "inactive_at",
         "credit",
+        "is_alt",
+        "member_name",
+        "inactive_at",
         "is_exempt",
         "remark",
         "raid_note",
@@ -370,9 +371,10 @@ class ExportController extends Controller {
                             r.name 'raid_name',
                             c.name 'character_name',
                             c.class 'class',
-                            c.is_alt 'is_alt',
-                            c.inactive_at 'inactive_at',
                             rc.credit 'credit',
+                            c.is_alt 'is_alt',
+                            m.username 'member_name',
+                            c.inactive_at 'inactive_at',
                             rc.is_exempt 'is_exempt',
                             rc.remark_id 'remark',
                             r.public_note 'raid_note',
@@ -390,7 +392,10 @@ class ExportController extends Controller {
                     FROM `raids` r
                     JOIN `raid_characters` rc ON rc.raid_id = r.id
                     JOIN `characters` c ON c.id = rc.character_id
-                    WHERE r.guild_id = %s AND r.cancelled_at IS NULL
+                    JOIN `members` m ON m.id = c.member_id
+                    WHERE r.guild_id = %s
+                        AND r.cancelled_at IS NULL
+                        AND r.ignore_attendance = 0
                     ORDER BY r.date DESC, c.name ASC;", $guild->id)));
 
                 return $this->createCsv($rows, self::ATTENDANCE_HEADERS);
