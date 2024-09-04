@@ -46,6 +46,8 @@ class ExportController extends Controller {
         "member_name",
         "character_note",
         "raid_note",
+        "instances",
+        "raid_groups",
     ];
 
 
@@ -368,12 +370,12 @@ class ExportController extends Controller {
         $csv = Cache::remember('attendanceExport:' . $guild->id, env('EXPORT_CACHE_SECONDS', 10), function () use ($guild) {
                 $rows = DB::select(DB::raw(
                     sprintf("SELECT
-                        r.date 'raid_date',
-                        r.name 'raid_name',
-                        c.name 'character_name',
-                        c.class 'class',
-                        rc.credit 'credit',
-                        c.is_alt 'is_alt',
+                        r.date    AS 'raid_date',
+                        r.name    AS 'raid_name',
+                        c.name    AS 'character_name',
+                        c.class   AS 'class',
+                        rc.credit AS 'credit',
+                        c.is_alt  AS 'is_alt',
                         CASE
                             -- See Raid.php for remarks
                             WHEN rc.remark_id = 1 THEN 'Late'
@@ -383,16 +385,27 @@ class ExportController extends Controller {
                             WHEN rc.remark_id = 5 THEN 'Gave notice'
                             WHEN rc.remark_id = 6 THEN 'Benched'
                         END AS 'remark',
-                        c.inactive_at 'character_inactive_at',
-                        rc.is_exempt 'is_exempt',
-                        m.username 'member_name',
-                        rc.public_note 'character_note',
-                        r.public_note 'raid_note'
-                        -- rc.officer_note
+                        c.inactive_at  AS 'character_inactive_at',
+                        rc.is_exempt   AS 'is_exempt',
+                        m.username     AS 'member_name',
+                        rc.public_note AS 'character_note',
+                        r.public_note  AS 'raid_note',
+                        (
+                            SELECT GROUP_CONCAT(i.name SEPARATOR ', ')
+                            FROM raid_instances AS ri
+                            JOIN instances AS i ON i.id = ri.instance_id
+                            WHERE ri.raid_id = r.id
+                        ) AS 'instances',
+                        (
+                            SELECT GROUP_CONCAT(rg.name SEPARATOR ', ')
+                            FROM raid_raid_groups AS rrg
+                            JOIN raid_groups AS rg ON rg.id = rrg.raid_id
+                            WHERE rrg.raid_id = r.id
+                        ) AS 'raid_groups'
                     FROM `raids` r
                     JOIN `raid_characters` rc ON rc.raid_id = r.id
-                    JOIN `characters` c ON c.id = rc.character_id
-                    JOIN `members` m ON m.id = c.member_id
+                    JOIN `characters` c       ON c.id = rc.character_id
+                    JOIN `members` m          ON m.id = c.member_id
                     WHERE r.guild_id = %s
                         AND r.cancelled_at IS NULL
                         AND r.ignore_attendance = 0
