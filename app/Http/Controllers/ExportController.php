@@ -40,10 +40,11 @@ class ExportController extends Controller {
         "class",
         "credit",
         "is_alt",
-        "member_name",
-        "inactive_at",
-        "is_exempt",
         "remark",
+        "character_inactive_at",
+        "is_exempt",
+        "member_name",
+        "character_note",
         "raid_note",
     ];
 
@@ -367,17 +368,12 @@ class ExportController extends Controller {
         $csv = Cache::remember('attendanceExport:' . $guild->id, env('EXPORT_CACHE_SECONDS', 10), function () use ($guild) {
                 $rows = DB::select(DB::raw(
                     sprintf("SELECT
-                            r.date 'raid_date',
-                            r.name 'raid_name',
-                            c.name 'character_name',
-                            c.class 'class',
-                            rc.credit 'credit',
-                            c.is_alt 'is_alt',
-                            m.username 'member_name',
-                            c.inactive_at 'inactive_at',
-                            rc.is_exempt 'is_exempt',
-                            rc.remark_id 'remark',
-                            r.public_note 'raid_note',
+                        r.date 'raid_date',
+                        r.name 'raid_name',
+                        c.name 'character_name',
+                        c.class 'class',
+                        rc.credit 'credit',
+                        c.is_alt 'is_alt',
                         CASE
                             -- See Raid.php for remarks
                             WHEN rc.remark_id = 1 THEN 'Late'
@@ -387,7 +383,11 @@ class ExportController extends Controller {
                             WHEN rc.remark_id = 5 THEN 'Gave notice'
                             WHEN rc.remark_id = 6 THEN 'Benched'
                         END AS 'remark',
-                        rc.public_note 'note'
+                        c.inactive_at 'character_inactive_at',
+                        rc.is_exempt 'is_exempt',
+                        m.username 'member_name',
+                        rc.public_note 'character_note',
+                        r.public_note 'raid_note'
                         -- rc.officer_note
                     FROM `raids` r
                     JOIN `raid_characters` rc ON rc.raid_id = r.id
