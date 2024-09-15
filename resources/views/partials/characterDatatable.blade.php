@@ -206,6 +206,18 @@
                     <option value="61">
                         {{ __("Onyxia's Lair") }}
                     </option>
+                    <option value="60">
+                        {{ __("Molten Core") }}
+                    </option>
+                    <option value="61">
+                        {{ __("Onyxia's Lair") }}
+                    </option>
+                    <option value="62">
+                        {{ __("Zul'Gurub") }}
+                    </option>
+                    <option value="63">
+                        {{ __("Blackwing Lair") }}
+                    </option>
                 @elseif ($guild->expansion_id == 5)
                     <option value="47">
                         {{ __("Baradin Hold Normal") }}

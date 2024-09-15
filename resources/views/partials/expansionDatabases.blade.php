@@ -106,20 +106,20 @@
                         {{ __("Onyxia's Lair") }}
                     </a>
                 </li>
-                <!--
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'zulgurub-sod']) }}">
                         {{ __("Zul'Gurub") }}
                     </a>
                 </li>
                 <li class="">
-                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'ruins-of-ahnqiraj-sod']) }}">
-                        {{ __("Ruins of Ahn'Qiraj") }}
-                    </a>
-                </li>
-                <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'blackwing-lair-sod']) }}">
                         {{ __("Blackwing Lair") }}
+                    </a>
+                </li>
+                <!--
+                <li class="">
+                    <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'ruins-of-ahnqiraj-sod']) }}">
+                        {{ __("Ruins of Ahn'Qiraj") }}
                     </a>
                 </li>
                 <li class="">
