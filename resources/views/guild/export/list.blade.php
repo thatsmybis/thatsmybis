@@ -244,7 +244,7 @@
                                 </li>
                             </ul>
                         </li>
-                        <!-- Item Notes -->
+                        <!-- Raid Groups -->
                         <li class="p-3 mb-3 rounded">
                             <h2>
                                 <span class="fas fa-fw fa-helmet-battle text-dk"></span>
@@ -267,6 +267,35 @@
                                 </li>
                                 <li class="list-inline-item">
                                     <a href="{{ route('guild.export.raidGroups', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        {{ __("View CSV") }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                        <!-- Attendance -->
+                        <li class="p-3 mb-3 rounded">
+                            <h2>
+                                <span class="fas fa-fw fa-list text-success"></span>
+                                {{ __("Guild Attendance") }}
+                            </h2>
+                            <p>
+                                {{ __("Fields exported:") }}
+                            </p>
+                            <div class="bg-dark rounded p-2">
+                                <code>
+                                    {{ collect(App\Http\Controllers\ExportController::ATTENDANCE_HEADERS)->implode(', ') }}
+                                </code>
+                            </div>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}" target="_blank" class="tag">
+                                        <span class="fas fa-fw fa-file-csv text-muted"></span>
+                                        {{ __("Download CSV") }}
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.attendance', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank" class="tag">
                                         <span class="fas fa-fw fa-file-csv text-muted"></span>
                                         {{ __("View CSV") }}
                                     </a>
