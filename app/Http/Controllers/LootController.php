@@ -172,7 +172,11 @@ class LootController extends Controller
 
 
     public static function getWishlistStats($expansionId, $class) {
-        $cutoffDate = date('Y-m-d H:i:s', strtotime("-6 months"));
+        if ($expansionId === 4) {
+            $cutoffDate = date('Y-m-d H:i:s', strtotime("-45 days"));
+        } else {
+            $cutoffDate = date('Y-m-d H:i:s', strtotime("-6 months"));
+        }
         return collect(DB::select(
             DB::raw(
                 "SELECT
