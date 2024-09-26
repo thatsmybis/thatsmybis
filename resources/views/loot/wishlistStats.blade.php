@@ -30,7 +30,7 @@
                 <span class="font-weight-bold">{{ __("Top") }} {{ $maxItems }}</span> {{ __("Wishlisted") }}
                 <span class="text-{{ getExpansionColor($expansionId) }} font-weight-bold">{{ getExpansionAbbr($expansionId) }}</span> {{ __("Items") }}
             </h1>
-            <span class="small text-muted">(items wishlisted in the las 6 months)</span>
+            <span class="small text-muted">{{ __("(items wishlisted in the last :number months)", ['number' => 6]) }}</span>
             @include('partials/firstHitIsFree')
         </div>
     </div>

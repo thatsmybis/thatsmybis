@@ -172,8 +172,17 @@ class LootController extends Controller
 
 
     public static function getWishlistStats($expansionId, $class) {
+        $cutoffDate = null;
+        // Manual exceptions for Phases
         if ($expansionId === 4) {
-            $cutoffDate = date('Y-m-d H:i:s', strtotime("-45 days"));
+            // 3 months or this date, whichever is LESS time
+            $cutoffDate1 = "2024-08-01 00:00:00";
+            $cutoffDate2 = date('Y-m-d H:i:s', strtotime("-3 months"));
+            if ($cutoffDate1 > $cutoffDate2) {
+                $cutoffDate = $cutoffDate1;
+            } else {
+                $cutoffDate = $cutoffDate2;
+            }
         } else {
             $cutoffDate = date('Y-m-d H:i:s', strtotime("-6 months"));
         }
@@ -234,6 +243,7 @@ class LootController extends Controller
                                 AND ci.`type` = :listType
                                 AND c.`class` = :class
                                 AND ci.`created_at` > '{$cutoffDate}'
+                                AND i.`item_id` != 3857 -- Someone keeps spamming Coal on wishlists.
                                 -- To fetch ALL classes, change to:
                                 -- AND c.`class` IS NOT NULL
                             GROUP BY i.`item_id`, c.`spec`, c.`class`, c.`archetype`
