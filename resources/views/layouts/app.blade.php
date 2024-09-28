@@ -166,6 +166,17 @@
         </div>
     @endif
 
+    @if (isset($guild) && $guild->expansion_id === 4 && time() < 1728302400)
+        <div class="text-center font-weight-normal text-muted mb-2">
+            <span class="font-weight-semibold text-gold">
+                Lord Thunderaan has been added to
+                <a href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'world-bosses-sod']) }}#thunderaan">
+                    {{ __("World Bosses") }}
+                </a>
+            </span>
+        </div>
+    @endif
+
     @if (isset($guild) && in_array(Illuminate\Support\Facades\App::getLocale(), ['de', 'es', 'fr', 'pt', 'ru', 'ko', 'cn']))
         <div class="text-center font-weight-normal text-muted mb-2">
             You can now lookup items using your language. <span class="small">previously only English</span>
