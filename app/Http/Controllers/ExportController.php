@@ -520,6 +520,7 @@ class ExportController extends Controller {
                         JOIN item_item_sources ON item_item_sources.item_source_id = item_sources.id
                         JOIN items             ON items.item_id = item_item_sources.item_id
                     WHERE items.expansion_id = {$expansionId}
+                        AND instances.expansion_id = {$expansionId}
                     ORDER BY instances.`order` DESC, item_sources.`order` ASC, items.name ASC;"));
 
                 return $this->createCsv($rows, self::EXPANSION_LOOT_HEADERS);
