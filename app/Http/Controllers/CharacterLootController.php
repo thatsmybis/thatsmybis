@@ -611,19 +611,12 @@ class CharacterLootController extends Controller
                     }
                 }
 
-                $prioRow = CharacterItem::
-                    select('character_items.*')
-                    // Look for both the original item and the possible token reward for the item
-                    ->join('items', function ($join) {
-                        return $join->on('items.item_id', 'character_items.item_id')
-                            ->orWhereRaw('`items`.`parent_item_id` = `character_items`.`item_id`');
-                    })
-                    ->where([
-                        'character_items.character_id' => $character->id,
-                        'character_items.type'         => Item::TYPE_PRIO,
-                        'character_items.is_received'  => 0,
+                $prioRow = CharacterItem::where([
+                        'item_id'      => $addedItemId,
+                        'character_id' => $character->id,
+                        'type'         => Item::TYPE_PRIO,
+                        'is_received'  => 0,
                     ])
-                    ->whereRaw("(items.item_id = {$addedItemId} OR items.parent_item_id = {$addedItemId})")
                     ->orderBy('is_received')
                     ->orderBy('order')
                     ->first();

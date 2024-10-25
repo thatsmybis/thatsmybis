@@ -616,26 +616,17 @@ class AssignLootController extends Controller
             }
 
             $whereClause = [
-                'character_items.character_id' => $detachRow['character_id'],
-                'character_items.type'         => Item::TYPE_PRIO,
+                'item_id'      => $detachRow['item_id'],
+                'character_id' => $detachRow['character_id'],
+                'type'         => Item::TYPE_PRIO,
             ];
+
             if (!$deletePrio) {
-                $whereClause['character_items.is_received'] = 0;
+                $whereClause['is_received'] = 0;
             }
 
             // Find prio for this item
-            $prioRow = CharacterItem::
-                    select('character_items.*')
-                    // Look for both the original item and the possible token reward for the item
-                    ->join('items', function ($join) {
-                        return $join->on('items.item_id', 'character_items.item_id')
-                            ->orWhereRaw('`items`.`parent_item_id` = `character_items`.`item_id`');
-                    })
-                    ->where($whereClause)
-                    ->whereRaw("(items.item_id = {$detachRow['item_id']} OR items.parent_item_id = {$detachRow['item_id']})")
-                    ->orderBy('is_received')
-                    ->orderBy('order')
-                    ->first();
+            $prioRow = CharacterItem::where($whereClause)->orderBy('is_received')->orderBy('order')->first();
 
             if ($prioRow) {
                 if (in_array($prioRow->item_id, $idsToNotRemove)) {
