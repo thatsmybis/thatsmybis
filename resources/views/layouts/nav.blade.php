@@ -266,6 +266,12 @@
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-lair-sod']) }}">
                                             {{ __("Blackwing Lair") }}
                                         </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj-sod']) }}">
+                                            {{ __("Ruins of Ahn'Qiraj") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj-sod']) }}">
+                                            {{ __("Temple of Ahn'Qiraj") }}
+                                        </a>
                                     @elseif ($guild->expansion_id == 5)
                                         <!-- <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'baradin-hold-n']) }}">
                                             {{ __("Baradin Hold Normal") }}
@@ -471,6 +477,12 @@
                                         </a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-lair-sod']) }}">
                                             {{ __("Blackwing Lair") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj-sod']) }}">
+                                            {{ __("Ruins of Ahn'Qiraj") }}
+                                        </a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj-sod']) }}">
+                                            {{ __("Temple of Ahn'Qiraj") }}
                                         </a>
                                     @elseif ($guild->expansion_id == 5)
                                         <!-- <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'baradin-hold-n']) }}">
@@ -746,6 +758,12 @@
                             </a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'blackwing-lair-sod']) }}">
                                 {{ __("Blackwing Lair") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'ruins-of-ahnqiraj-sod']) }}">
+                                {{ __("Ruins of Ahn'Qiraj") }}
+                            </a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'temple-of-ahnqiraj-sod']) }}">
+                                {{ __("Temple of Ahn'Qiraj") }}
                             </a>
                         @elseif ($guild->expansion_id == 5)
                             <!-- <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'baradin-hold-n']) }}">

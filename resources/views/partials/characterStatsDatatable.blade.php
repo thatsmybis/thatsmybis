@@ -244,6 +244,12 @@
                     <option value="63">
                         {{ __("Blackwing Lair") }}
                     </option>
+                    <option value="64">
+                        {{ __("Ruins of Ahn'Qiraj") }}
+                    </option>
+                    <option value="65">
+                        {{ __("Temple of Ahn'Qiraj") }}
+                    </option>
                 @elseif ($guild->expansion_id == 5)
                     <option value="47">
                         {{ __("Baradin Hold Normal") }}
