@@ -224,6 +224,9 @@
                     <option value="65">
                         {{ __("Temple of Ahn'Qiraj") }}
                     </option>
+                    <option value="66">
+                        {{ __("Naxxramas") }}
+                    </option>
                 @elseif ($guild->expansion_id == 5)
                     <option value="47">
                         {{ __("Baradin Hold Normal") }}

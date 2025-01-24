@@ -126,12 +126,11 @@
                         {{ __("Temple of Ahn'Qiraj") }}
                     </a>
                 </li>
-                <!--
                 <li class="">
                     <a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 4, 'instanceSlug' => 'naxxramas-sod']) }}">
                         {{ __("Naxxramas") }}
                     </a>
-                </li> -->
+                </li>
             </ul>
         </div>
 
