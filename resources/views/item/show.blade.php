@@ -223,99 +223,93 @@
                     </li>
                     @if ($showPrios)
                         <li class="list-inline-item bg-lightest rounded p-3 mt-3 align-top">
-                            @if ($item->itemSources->count())
-                                <ul class="list-inline">
-                                    <li class="list-inline-item">
-                                        <h2 class="font-weight-bold mb-3">
-                                            <span class="fas fa-fw fa-sort-amount-down text-gold"></span>
-                                            {{ __("Character Prios") }}
-                                        </h2>
-                                    </li>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <h2 class="font-weight-bold mb-3">
+                                        <span class="fas fa-fw fa-sort-amount-down text-gold"></span>
+                                        {{ __("Character Prios") }}
+                                    </h2>
+                                </li>
 
-                                    <li class="list-inline-item">
-                                        @if ($showPrioEdit)
-                                            <div class="dropdown">
-                                                <span class="dropdown-toggle text-link" role="button" id="editPrioLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                    <span class="fas fa-fw fa-pencil"></span>
-                                                    {{ __("edit") }}
-                                                </span>
-                                                <div class="dropdown-menu" aria-labelledby="editPrioLink">
-                                                    @foreach ($raidGroups as $raidGroup)
-                                                        <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'raidGroupId' => $raidGroup->id]) }}">
-                                                            {{ $raidGroup->name }}
-                                                        </a>
-                                                    @endforeach
-                                                    <a class="dropdown-item" href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
-                                                        <span class="fas fa-fw fa-plus"></span> {{ __("Create New Raid Group") }}
+                                <li class="list-inline-item">
+                                    @if ($showPrioEdit)
+                                        <div class="dropdown">
+                                            <span class="dropdown-toggle text-link" role="button" id="editPrioLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <span class="fas fa-fw fa-pencil"></span>
+                                                {{ __("edit") }}
+                                            </span>
+                                            <div class="dropdown-menu" aria-labelledby="editPrioLink">
+                                                @foreach ($raidGroups as $raidGroup)
+                                                    <a class="dropdown-item" href="{{ route('guild.item.prios', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'item_id' => $item->item_id, 'raidGroupId' => $raidGroup->id]) }}">
+                                                        {{ $raidGroup->name }}
                                                     </a>
-                                                </div>
+                                                @endforeach
+                                                <a class="dropdown-item" href="{{ route('guild.raidGroup.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
+                                                    <span class="fas fa-fw fa-plus"></span> {{ __("Create New Raid Group") }}
+                                                </a>
                                             </div>
-                                        @endif
-                                    </li>
-                                </ul>
-                                @if ($priodCharacters && $priodCharacters->count() > 0)
-                                    @php
-                                        $lastRaidGroup = '';
-                                    @endphp
-                                    <ul class="list-inline">
-                                        @foreach ($priodCharacters as $character)
-                                            @if ($character->pivot->raid_group_id != $lastRaidGroup)
-                                                @if (!$loop->first)
-                                                        </ol>
-                                                    </li>
-                                                @endif
-                                                @php
-                                                    $lastRaidGroup = $character->pivot->raid_group_id;
-                                                    $newRaidGroup = $raidGroups->where('id', $character->pivot->raid_group_id)->first();
-                                                @endphp
-                                                <li class="list-inline-item align-top">
-                                                    <ol class="lesser-indent">
-                                                        <li data-raid-group-id="{{ $character->pivot->raid_group_id }}" class="no-bullet font-weight-bold mt-2">
-                                                            {{ $newRaidGroup ? $newRaidGroup->name : '' }}
-                                                        </li>
-                                            @endif
-                                                <li data-raid-group-id="{{ $character->pivot->raid_group_id }}"
-                                                    class="js-item-wishlist-character font-weight-normal mb-1 {{ $character->pivot->is_received || $character->pivot->received_at? 'font-strikethrough' : '' }}"
-                                                    value="{{ $character->pivot->order }}">
-                                                    <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
-                                                        class="text-{{ $character->class ? slug($character->class) : ''}}-important tag d-inline">
-                                                        <span title="{{ $character->raid_group_name ? $character->raid_group_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}">
-                                                            <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_group_color ? $character->raid_group_color : '')) }}"></span>{{ $character->name }}
-                                                            @if ($character->is_alt)
-                                                                <span class="text-gold">{{ __("alt") }}</span>
-                                                            @endif
-                                                            @if ($character->pivot->is_offspec)
-                                                                <span class="text-muted">{{ __("OS") }}</span>
-                                                            @endif
-                                                            @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
-                                                                <span class="small">
-                                                                    @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
-                                                                </span>
-                                                            @endif
-                                                            <span class="js-watchable-timestamp smaller text-muted"
-                                                                data-timestamp="{{ $character->pivot->created_at }}"
-                                                                data-is-short="1">
-                                                            </span>
-                                                        </span>
-                                                        @if ($character->pivot->note)
-                                                            <span class="smaller text-muted text-underline" title="{{ $character->pivot->note }}">note</span>
-                                                        @endif
-                                                    </a>
-                                                </li>
-                                            @if ($loop->last)
+                                        </div>
+                                    @endif
+                                </li>
+                            </ul>
+                            @if ($priodCharacters && $priodCharacters->count() > 0)
+                                @php
+                                    $lastRaidGroup = '';
+                                @endphp
+                                <ul class="list-inline">
+                                    @foreach ($priodCharacters as $character)
+                                        @if ($character->pivot->raid_group_id != $lastRaidGroup)
+                                            @if (!$loop->first)
                                                     </ol>
                                                 </li>
                                             @endif
-                                        @endforeach
-                                    </ul>
-                                @else
-                                    <div class="lead ml-4 mt-3">
-                                        <em>{{ __("None") }}</em>
-                                    </div>
-                                @endif
+                                            @php
+                                                $lastRaidGroup = $character->pivot->raid_group_id;
+                                                $newRaidGroup = $raidGroups->where('id', $character->pivot->raid_group_id)->first();
+                                            @endphp
+                                            <li class="list-inline-item align-top">
+                                                <ol class="lesser-indent">
+                                                    <li data-raid-group-id="{{ $character->pivot->raid_group_id }}" class="no-bullet font-weight-bold mt-2">
+                                                        {{ $newRaidGroup ? $newRaidGroup->name : '' }}
+                                                    </li>
+                                        @endif
+                                            <li data-raid-group-id="{{ $character->pivot->raid_group_id }}"
+                                                class="js-item-wishlist-character font-weight-normal mb-1 {{ $character->pivot->is_received || $character->pivot->received_at? 'font-strikethrough' : '' }}"
+                                                value="{{ $character->pivot->order }}">
+                                                <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
+                                                    class="text-{{ $character->class ? slug($character->class) : ''}}-important tag d-inline">
+                                                    <span title="{{ $character->raid_group_name ? $character->raid_group_name . ' -' : '' }} {{ $character->level ? $character->level : '' }} {{ $character->race ? $character->race : '' }} {{ $character->spec ? $character->spec : '' }} {{ $character->class ? $character->class : '' }} {{ $character->username ? '(' . $character->username . ')' : '' }}">
+                                                        <span class="role-circle" style="background-color:{{ getHexColorFromDec(($character->raid_group_color ? $character->raid_group_color : '')) }}"></span>{{ $character->name }}
+                                                        @if ($character->is_alt)
+                                                            <span class="text-gold">{{ __("alt") }}</span>
+                                                        @endif
+                                                        @if ($character->pivot->is_offspec)
+                                                            <span class="text-muted">{{ __("OS") }}</span>
+                                                        @endif
+                                                        @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
+                                                            <span class="small">
+                                                                @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
+                                                            </span>
+                                                        @endif
+                                                        <span class="js-watchable-timestamp smaller text-muted"
+                                                            data-timestamp="{{ $character->pivot->created_at }}"
+                                                            data-is-short="1">
+                                                        </span>
+                                                    </span>
+                                                    @if ($character->pivot->note)
+                                                        <span class="smaller text-muted text-underline" title="{{ $character->pivot->note }}">note</span>
+                                                    @endif
+                                                </a>
+                                            </li>
+                                        @if ($loop->last)
+                                                </ol>
+                                            </li>
+                                        @endif
+                                    @endforeach
+                                </ul>
                             @else
-                                <div class="text-muted">
-                                    {{ __("Can't set prios for this item") }} <abbr title="{{ __("Cannot set prios for items that aren't in the loot tables for a boss. This includes token rewards. Set prios on the token instead.") }}">?</abbr>
+                                <div class="lead ml-4 mt-3">
+                                    <em>{{ __("None") }}</em>
                                 </div>
                             @endif
                         </li>
