@@ -16,7 +16,16 @@ var offspecVisible = true;
 // For making sure we don't spam request handlers to be added.
 var itemListHandlersTimeout = null;
 
+// I put this here to save time on lookups on every item
+var raidGroupMap = {};
+
 $(document).ready( function () {
+    if (raidGroups.length) {
+        for (const raidGroup of raidGroups) {
+            raidGroupMap[raidGroup.id] = raidGroup;
+        }
+    }
+
    table = createTable();
 
    $(".toggle-column").click(function(e) {
@@ -239,12 +248,12 @@ function addWishlistFilterHandlers() {
 
 // Gets an HTML list of characters
 function createCharacterListHtml(data, type, itemId, header = null) {
-    let characters = `<ul class="list-inline js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`;
+    const characters = [];
+
+    characters.push( `<ul class="list-inline js-item-list mb-0" data-type="${ type }" data-id="${ itemId }">`);
 
     if (header) {
-        characters += `<li class="js-item-wishlist-character no-bullet font-weight-bold text-muted small">
-            ${ header }
-        </li>`;
+        characters.push(`<li class="js-item-wishlist-character no-bullet font-weight-bold text-muted small">${ header }</li>`);
     }
 
     let initialLimit = 4;
@@ -259,18 +268,8 @@ function createCharacterListHtml(data, type, itemId, header = null) {
 
         if (type == 'prio' && character.pivot.raid_group_id && character.pivot.raid_group_id != lastRaidGroupId) {
             lastRaidGroupId = character.pivot.raid_group_id;
-            let raidGroupName = '';
-            if (raidGroups.length) {
-                let raidGroup = raidGroups.find(raidGroup => raidGroup.id === character.pivot.raid_group_id);
-                 if (raidGroup) {
-                    raidGroupName = raidGroup.name;
-                }
-            }
-            characters += `
-                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted small">
-                    ${ raidGroupName }
-                </li>
-            `;
+            const raidGroupName = raidGroupMap[character.pivot.raid_group_id]?.name || '';
+            characters.push(`<li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted small">${ raidGroupName }</li>`);
         }
 
         if (type == 'wishlist' && (
@@ -290,47 +289,44 @@ function createCharacterListHtml(data, type, itemId, header = null) {
                     }
                 }
             }
-            characters += `
-                <li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted small">
-                    ${ raidGroupName }
-                </li>
-            `;
+            characters.push(`<li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted small">${ raidGroupName }</li>`);
         }
 
-        characters += `
-            <li data-raid-group-id="${ type == 'prio' ? character.pivot.raid_group_id : character.raid_group_id }"
-                data-offspec="${ character.pivot.is_offspec ? 1 : 0}"
-                value="${ type == 'prio' ? character.pivot.order : '' }"
-                class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0 ${ character.pivot.type != 'received' && character.pivot.received_at ? 'font-strikethrough' : '' }">
-                <span class="tag text-muted d-inline">
-                    <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
-                        title="${ character.raid_group_name ? character.raid_group_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.raid_count ? `(${ character.raid_count } raid${ character.raid_count > 1 ? 's' : '' } attended)` : `` } ${ character.username ? '(' + character.username + ')' : '' }"
-                        class="text-muted">
-                        <span class="">${ type !== 'received' && character.pivot.order ? character.pivot.order : '' }</span>
-                        <span class="small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
-                        <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_group_color) }"></span>
-                        <span class="text-${ character.class ? slug(character.class) : '' }-important">${ character.name }</span>
-                        ${ character.is_alt ? `
-                            <span class="text-warning">${localeAlt}</span>
-                        ` : '' }
-                        ${ type !== 'received' && attendanceCharacter && (attendanceCharacter.attendance_percentage || attendanceCharacter.raid_count) ?
-                            `${ attendanceCharacter.raid_count && typeof attendanceCharacter.attendance_percentage === 'number'
-                                ? `<span title="attendance" class="smaller ${ getAttendanceColor(attendanceCharacter.attendance_percentage) }">${ Math.round(attendanceCharacter.attendance_percentage * 100) }%</span>`
-                                : '' }${ attendanceCharacter.raid_count ? `<span class="smaller"> ${ attendanceCharacter.raid_count }r</span>` : ``}
-                        ` : `` }
-                    </a>
-                    <span class="js-watchable-timestamp js-timestamp-title smaller"
-                        data-timestamp="${ character.pivot.created_at }"
-                        data-is-short="1">
-                    </span>
-                    <span style="display:none;">${ character.discord_username } ${ character.username }</span>
-                    ${ character.pivot.note ? `<span class="smaller text-muted text-underline" title="${ character.pivot.note }">note</span>` : '' }
-                </span>
-            </li>`;
+        characters.push(
+`<li data-raid-group-id="${ type == 'prio' ? character.pivot.raid_group_id : character.raid_group_id }"
+data-offspec="${ character.pivot.is_offspec ? 1 : 0}"
+value="${ type == 'prio' ? character.pivot.order : '' }"
+class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0 ${ character.pivot.type != 'received' && character.pivot.received_at ? 'font-strikethrough' : '' }">
+<span class="tag text-muted d-inline">
+  <a href="/${ guild.id }/${ guild.slug }/c/${ character.id }/${ character.slug }"
+    title="${ character.raid_group_name ? character.raid_group_name + ' -' : '' } ${ character.level ? character.level : '' } ${ character.race ? character.race : '' } ${ character.spec ? character.spec : '' } ${ character.class ? character.class : '' } ${ character.raid_count ? `(${ character.raid_count } raid${ character.raid_count > 1 ? 's' : '' } attended)` : `` } ${ character.username ? '(' + character.username + ')' : '' }"
+    class="text-muted">
+    <span class="">${ type !== 'received' && character.pivot.order ? character.pivot.order : '' }</span>
+    <span class="small font-weight-bold">${ character.pivot.is_offspec ? 'OS' : '' }</span>
+    <span class="role-circle" style="background-color:${ getColorFromDec(character.raid_group_color) }"></span>
+    <span class="text-${ character.class ? slug(character.class) : '' }-important">${ character.name }</span>
+    ${ character.is_alt ? `
+        <span class="text-warning">${localeAlt}</span>
+    ` : '' }
+    ${ type !== 'received' && attendanceCharacter && (attendanceCharacter.attendance_percentage || attendanceCharacter.raid_count) ?
+        `${ attendanceCharacter.raid_count && typeof attendanceCharacter.attendance_percentage === 'number'
+            ? `<span title="attendance" class="smaller ${ getAttendanceColor(attendanceCharacter.attendance_percentage) }">${ Math.round(attendanceCharacter.attendance_percentage * 100) }%</span>`
+            : '' }${ attendanceCharacter.raid_count ? `<span class="smaller"> ${ attendanceCharacter.raid_count }r</span>` : ``}
+    ` : `` }
+  </a>
+  <span class="js-watchable-timestamp js-timestamp-title smaller"
+    data-timestamp="${ character.pivot.created_at }"
+    data-is-short="1">
+  </span>
+  <span style="display:none;">${ character.discord_username } ${ character.username }</span>
+  ${ character.pivot.note ? `<span class="smaller text-muted text-underline" title="${ character.pivot.note }">note</span>` : '' }
+</span>
+</li>`);
     });
 
-    characters += `</ul>`;
-    return characters;
+    characters.push(`</ul>`);
+
+    return characters.join('');
 }
 
 function getNotes(row, note) {
@@ -398,11 +394,7 @@ function getItemLink(row, iconSize = null) {
 
     let heroicHtml = ``;
     if (row.is_heroic) {
-        if (MOLTEN_ITEM_IDS.find((element) => element === row.item_id)) {
-            heroicHtml = `<span class="text-legendary small" title="Heroic">Molten</span>`;
-        } else {
-            heroicHtml = `<span class="text-uncommon small" title="Heroic">Heroic</span>`;
-        }
+        heroicHtml = `<span class="text-uncommon small" title="Heroic">Heroic</span>`;
     }
 
     return `

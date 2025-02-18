@@ -8,6 +8,11 @@ In general, decisions made in the development of this project should reflect tho
 
 We want to lessen the gap between raiders and raid management, not increase it. Raid management is there to support everyone else in the raid, not act above them.
 
+# Note
+
+Just writing this for myself because I keep having to look it up:
+`npm run prod` failing? `NODE_OPTIONS=--openssl-legacy-provider npm run start`
+
 # Some Technical Details
 
 If you have any questions, reach out on the project's Discord server: [https://discord.gg/HWNUMKK](https://discord.gg/HWNUMKK)

@@ -108,9 +108,6 @@ const WARCRAFTLOGS_CLASSES = {
     12: {"id": 12, "name": "Demon Hunter", "slug": "dh", "specs": {1: {"id": 1, "name": "Havoc"}, 2: {"id": 2, "name": "Vengeance"}}}
 };
 
-// Added for SoD Phase 4 "Molten" flagged items because I don't want to change the item model/database just for this...
-const MOLTEN_ITEM_IDS = [228508, 229374,229379,229373,229380,229377,229381,229372,229382,229378,229376,228229,228463,228519,228462,228506,228702,228517,228922,228701,228461,228511,228460];
-
 // How often to update timestamps
 var timestampCheckRate = 30000;
 

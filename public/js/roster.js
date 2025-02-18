@@ -17,10 +17,19 @@ var allItemsVisible = false;
 var strikethroughVisible = true;
 var offspecVisible = true;
 
+// I put this here to save time on lookups on every item
+var raidGroupMap = {};
+
 // For making sure we don't spam request handlers to be added.
 var rosterHandlersTimeout = null;
 
 $(document).ready( function () {
+    if (raidGroups.length) {
+        for (const raidGroup of raidGroups) {
+            raidGroupMap[raidGroup.id] = raidGroup;
+        }
+    }
+
    var table = createTable();
 
    $(".toggle-column").click(function(e) {
@@ -579,10 +588,11 @@ function addWishlistFilterHandlers() {
 
 // Gets an HTML list of items with pretty wowhead formatting
 function getItemListHtml(data, type, characterId, useOrder = false, showInstances = false, listClass = null, isVisible = true, header = null) {
-    let items = `<ol class="no-indent js-item-list mb-2 ${ listClass }" data-type="${ type }" data-id="${ characterId }" style="${ isVisible ? '' : 'display:none;' }">`;
+    const items = [];
+    items.push(`<ol class="no-indent js-item-list mb-2 ${ listClass }" data-type="${ type }" data-id="${ characterId }" style="${ isVisible ? '' : 'display:none;' }">`);
 
     if (header) {
-        items += `<li class="small text-muted no-bullet " data-type="${ type }" data-id="${ characterId }">${header}</li>`;
+        items.push(`<li class="small text-muted no-bullet " data-type="${ type }" data-id="${ characterId }">${header}</li>`);
     }
 
     let initialLimit = 4;
@@ -601,88 +611,77 @@ function getItemListHtml(data, type, characterId, useOrder = false, showInstance
         if (index >= initialLimit) {
             clipItem = true;
             if (index == initialLimit) {
-                items += `<li class="js-show-clipped-items small cursor-pointer no-bullet " data-type="${ type }" data-id="${ characterId }">show ${ data.length - initialLimit } more…</li>`;
+                items.push(`<li class="js-show-clipped-items small cursor-pointer no-bullet " data-type="${ type }" data-id="${ characterId }">show ${ data.length - initialLimit } more…</li>`);
             }
         }
 
         if (type == 'prio' && item.pivot.raid_group_id && item.pivot.raid_group_id != lastRaidGroupId) {
             lastRaidGroupId = item.pivot.raid_group_id;
-            let raidGroupName = '';
-            if (raidGroups.length) {
-                let raidGroup = raidGroups.find(raidGroup => raidGroup.id === item.pivot.raid_group_id);
-                 if (raidGroup) {
-                    raidGroupName = raidGroup.name;
-                }
-            }
-            items += `
-                <li data-raid-group-id="" class="${ clipItem ? 'js-clipped-item' : '' } js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small"
-                    style="${ clipItem ? 'display:none;' : '' }"
-                    data-type="${ type }"
-                    data-id="${ characterId }">
-                    ${ raidGroupName }
-                </li>
-            `;
+            const raidGroupName = raidGroupMap[item.pivot.raid_group_id]?.name || '';
+            items.push(
+`<li data-raid-group-id="" class="${ clipItem ? 'js-clipped-item' : '' } js-item-wishlist-character no-bullet font-weight-normal font-italic text-muted small"
+style="${ clipItem ? 'display:none;' : '' }"
+data-type="${ type }"
+data-id="${ characterId }">
+${ raidGroupName }
+</li>`);
         }
 
         if (showInstances && item.instance_id && item.instance_id != lastInstanceId) {
             lastInstanceId = item.instance_id;
-            items += `
-                <li class="js-has-instance ${ clipItem ? 'js-clipped-item' : '' } no-bullet font-weight-normal font-italic text-muted small"
-                    style="${ clipItem ? 'display:none;' : '' }"
-                    data-type="${ type }"
-                    data-id="${ characterId }"
-                    data-instance-id="${ item.instance_id }">
-                    ${ item.instance_name }
-                </li>
-            `;
+            items.push(
+`<li class="js-has-instance ${ clipItem ? 'js-clipped-item' : '' } no-bullet font-weight-normal font-italic text-muted small"
+style="${ clipItem ? 'display:none;' : '' }"
+data-type="${ type }"
+data-id="${ characterId }"
+data-instance-id="${ item.instance_id }">
+${ item.instance_name }
+</li>`
+            );
         }
 
         let heroicHtml = ``;
         if (item.is_heroic) {
-            if (MOLTEN_ITEM_IDS.find((element) => element === item.item_id)) {
-                heroicHtml = `<span class="text-legendary small" title="Heroic">Molten</span>`;
-            } else {
-                heroicHtml = `<span class="text-uncommon small" title="Heroic">Heroic</span>`;
-            }
+            heroicHtml = `<span class="text-uncommon small" title="Heroic">Heroic</span>`;
         }
 
-        let wowheadData = `data-wowhead-link="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ item.item_id }"
-            data-wowhead="item=${ item.item_id }?domain=${ wowheadLocale + wowheadSubdomain }"`;
+        let wowheadData = `data-wowhead-link="https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ item.item_id }" data-wowhead="item=${ item.item_id }?domain=${ wowheadLocale + wowheadSubdomain }"`;
 
-        items += `
-            <li class="js-has-instance font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
-                data-type="${ type }"
-                data-id="${ characterId }"
-                data-offspec="${ item.pivot.is_offspec ? 1 : 0 }"
-                data-instance-id="${ item.instance_id }"
-                data-wishlist-number="${item.list_number}"
-                value="${ useOrder ? item.pivot.order : '' }"
-                style="${ clipItem ? 'display:none;' : '' }">
-                ${ guild.tier_mode ?
-                    `<span class="text-monospace font-weight-medium text-tier-${ item.guild_tier ? item.guild_tier : '' }">${ item.guild_tier ? getItemTierLabel(item, guild.tier_mode) : '&nbsp;' }</span>`
-                : `` }
-                <a href="/${ guild.id }/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"
-                    class="${ item.quality ? 'q' + item.quality : '' } ${ item.pivot.is_received && (item.pivot.type == 'wishlist' || item.pivot.type == 'prio') ? 'font-strikethrough' : '' }"
-                    ${ wowheadData }>
-                    ${ item.name }
-                </a>
-                ${ heroicHtml }
-                ${ item.pivot.is_offspec ? '<span title="offspec item" class="small font-weight-bold text-muted">OS</span>' : '' }
-                <span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
-                    data-timestamp="${ item.pivot.received_at ? item.pivot.received_at : item.pivot.created_at }"
-                    data-title="added by ${ item.added_by_username } at"
-                    data-is-short="1">
-                </span>
-                ${ item.pivot.note ? `<span class="smaller text-muted text-underline" title="${ item.pivot.note }">note</span>` : '' }
-            </li>`;
+        items.push(
+`<li class="js-has-instance font-weight-normal ${ clipItem ? 'js-clipped-item' : '' }"
+data-type="${ type }"
+data-id="${ characterId }"
+data-offspec="${ item.pivot.is_offspec ? 1 : 0 }"
+data-instance-id="${ item.instance_id }"
+data-wishlist-number="${item.list_number}"
+value="${ useOrder ? item.pivot.order : '' }"
+style="${ clipItem ? 'display:none;' : '' }">
+${ guild.tier_mode ?
+`<span class="text-monospace font-weight-medium text-tier-${ item.guild_tier ? item.guild_tier : '' }">${ item.guild_tier ? getItemTierLabel(item, guild.tier_mode) : '&nbsp;' }</span>`
+: `` }
+<a href="/${ guild.id }/${ guild.slug }/i/${ item.item_id }/${ slug(item.name) }"
+class="${ item.quality ? 'q' + item.quality : '' } ${ item.pivot.is_received && (item.pivot.type == 'wishlist' || item.pivot.type == 'prio') ? 'font-strikethrough' : '' }"
+${ wowheadData }>
+${ item.name }
+</a>
+${ heroicHtml }
+${ item.pivot.is_offspec ? '<span title="offspec item" class="small font-weight-bold text-muted">OS</span>' : '' }
+<span class="js-watchable-timestamp js-timestamp-title smaller text-muted"
+data-timestamp="${ item.pivot.received_at ? item.pivot.received_at : item.pivot.created_at }"
+data-title="added by ${ item.added_by_username } at"
+data-is-short="1">
+</span>
+${ item.pivot.note ? `<span class="smaller text-muted text-underline" title="${ item.pivot.note }">note</span>` : '' }
+</li>`);
     });
 
     if (data.length > initialLimit) {
-        items += `<li class="js-hide-clipped-items small cursor-pointer no-bullet" style="display:none;" data-type="${ type }" data-id="${ characterId }">show less</li>`;
+        items.push(`<li class="js-hide-clipped-items small cursor-pointer no-bullet" style="display:none;" data-type="${ type }" data-id="${ characterId }">show less</li>`);
     }
 
-    items += `</ol>`;
-    return items;
+    items.push(`</ol>`);
+
+    return items.join('');
 }
 
 function getNotes(data, type, row) {
