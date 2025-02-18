@@ -18,11 +18,17 @@ var itemListHandlersTimeout = null;
 
 // I put this here to save time on lookups on every item
 var raidGroupMap = {};
+var guildCharactersMap = {};
 
 $(document).ready( function () {
     if (raidGroups.length) {
         for (const raidGroup of raidGroups) {
             raidGroupMap[raidGroup.id] = raidGroup;
+        }
+    }
+    if (!guild.is_attendance_hidden) {
+        for (const char of guildCharacters) {
+            guildCharactersMap[char.id] = char;
         }
     }
 
@@ -259,11 +265,12 @@ function createCharacterListHtml(data, type, itemId, header = null) {
     let initialLimit = 4;
 
     let lastRaidGroupId = null;
-    $.each(data, function (index, character) {
+    for (let index = 0; index < data.length; index++) {
+        character = data[index];
 
         let attendanceCharacter = null;
         if (!guild.is_attendance_hidden) {
-            attendanceCharacter = guildCharacters.find(char => char.id == character.id);
+            attendanceCharacter = guildCharactersMap[character.id];
         }
 
         if (type == 'prio' && character.pivot.raid_group_id && character.pivot.raid_group_id != lastRaidGroupId) {
@@ -283,10 +290,7 @@ function createCharacterListHtml(data, type, itemId, header = null) {
             } else {
                 lastRaidGroupId = character.raid_group_id;
                 if (raidGroups.length) {
-                    let raidGroup = raidGroups.find(raidGroup => raidGroup.id === character.raid_group_id);
-                     if (raidGroup) {
-                        raidGroupName = raidGroup.name;
-                    }
+                    let raidGroupName = raidGroupMap[character.raid_group_id]?.name;
                 }
             }
             characters.push(`<li data-raid-group-id="" class="js-item-wishlist-character no-bullet font-weight-normal text-muted small">${ raidGroupName }</li>`);
@@ -322,7 +326,7 @@ class="js-item-wishlist-character list-inline-item font-weight-normal mb-1 mr-0 
   ${ character.pivot.note ? `<span class="smaller text-muted text-underline" title="${ character.pivot.note }">note</span>` : '' }
 </span>
 </li>`);
-    });
+    };
 
     characters.push(`</ul>`);
 

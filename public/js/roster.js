@@ -599,7 +599,9 @@ function getItemListHtml(data, type, characterId, useOrder = false, showInstance
 
     let lastInstanceId = null;
     let lastRaidGroupId = null;
-    $.each(data, function (index, item) {
+
+    for (let index = 0; index < data.length; index++) {
+        item = data[index];
 
         // Skip prio item if raid group is disabled or not found in the guild
         // if (type == 'prio' && item.pivot.raid_group_id && guild.raidGroups.filter(raidGroup => (raidGroup.id == item.pivot.raid_group_id)).length < 1) {
@@ -673,7 +675,7 @@ data-is-short="1">
 </span>
 ${ item.pivot.note ? `<span class="smaller text-muted text-underline" title="${ item.pivot.note }">note</span>` : '' }
 </li>`);
-    });
+    };
 
     if (data.length > initialLimit) {
         items.push(`<li class="js-hide-clipped-items small cursor-pointer no-bullet" style="display:none;" data-type="${ type }" data-id="${ characterId }">show less</li>`);
