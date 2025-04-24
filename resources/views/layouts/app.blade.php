@@ -476,17 +476,10 @@
                 );
             }
         }
-        window['nitroAds'].createAd('video-poster-floating', {
+        window['nitroAds'].createAd('video-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "format": "floating",
-            "refreshTime": 30,
-            "report": {
-                "enabled": true,
-                "icon": true,
-                "wording": "Report Ad",
-                "position": "bottom-right"
-            },
-            "video": {}
+            "format": "video-nc",
+            "refreshTime": 60,
         });
         window['nitroAds'].createAd('top-large-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},

@@ -11,7 +11,7 @@ We want to lessen the gap between raiders and raid management, not increase it. 
 # Note
 
 Just writing this for myself because I keep having to look it up:
-`npm run prod` failing? `NODE_OPTIONS=--openssl-legacy-provider npm run start`
+`npm run prod` failing? `NODE_OPTIONS=--openssl-legacy-provider npm run prod`
 
 # Some Technical Details
 

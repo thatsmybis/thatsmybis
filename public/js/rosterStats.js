@@ -509,11 +509,32 @@ function createRosterStatsTable() {
         rosterStatsTableColumns.push(createInstanceColumn("RS H25",   42, (isVisible && (instanceIdsToShow.includes(42) || instanceIdsToShow.length === 0))));
         rosterStatsTableColumns.push(createInstanceColumn("Other", null, (instanceIdsToShow.length === 0)));
     } else if (guild && guild.expansion_id === 4) { // SOD
-        rosterStatsTableColumns.push(createInstanceColumn("World",    43, (isVisible && (instanceIdsToShow.includes(43) || instanceIdsToShow.length === 0))));
-        rosterStatsTableColumns.push(createInstanceColumn("World",    44, (isVisible && (instanceIdsToShow.includes(44) || instanceIdsToShow.length === 0))));
-        rosterStatsTableColumns.push(createInstanceColumn("World",    45, (isVisible && (instanceIdsToShow.includes(45) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("World",      43, (isVisible && (instanceIdsToShow.includes(43) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("BFD",        44, (isVisible && (instanceIdsToShow.includes(44) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("Gnomer",     45, (isVisible && (instanceIdsToShow.includes(45) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("ST",         46, (isVisible && (instanceIdsToShow.includes(46) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("World Boss", 59, (isVisible && (instanceIdsToShow.includes(59) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("MC",         60, (isVisible && (instanceIdsToShow.includes(60) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("Ony",        61, (isVisible && (instanceIdsToShow.includes(61) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("ZG",         62, (isVisible && (instanceIdsToShow.includes(62) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("BWL",        63, (isVisible && (instanceIdsToShow.includes(63) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("AQ20",       64, (isVisible && (instanceIdsToShow.includes(64) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("AQ40",       65, (isVisible && (instanceIdsToShow.includes(65) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("Naxx",       66, (isVisible && (instanceIdsToShow.includes(66) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("Enclave",    67, (isVisible && (instanceIdsToShow.includes(67) || instanceIdsToShow.length === 0))));
     } else if (guild && guild.expansion_id === 5) { // Cata
-        //
+        rosterStatsTableColumns.push(createInstanceColumn("BH N",    47, (isVisible && (instanceIdsToShow.includes(47) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("BH H",    48, (isVisible && (instanceIdsToShow.includes(48) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("TotFW N", 49, (isVisible && (instanceIdsToShow.includes(49) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("TotFW H", 50, (isVisible && (instanceIdsToShow.includes(50) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("BWD N",   51, (isVisible && (instanceIdsToShow.includes(51) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("BWD H",   52, (isVisible && (instanceIdsToShow.includes(52) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("BoT N",   53, (isVisible && (instanceIdsToShow.includes(53) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("BoT H",   54, (isVisible && (instanceIdsToShow.includes(54) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("FL N",    55, (isVisible && (instanceIdsToShow.includes(55) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("FL H",    56, (isVisible && (instanceIdsToShow.includes(56) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("DS N",    57, (isVisible && (instanceIdsToShow.includes(57) || instanceIdsToShow.length === 0))));
+        rosterStatsTableColumns.push(createInstanceColumn("DS H",    58, (isVisible && (instanceIdsToShow.includes(58) || instanceIdsToShow.length === 0))));
     }
 
     rosterStatsTable = $("#characterStatsTable").DataTable({

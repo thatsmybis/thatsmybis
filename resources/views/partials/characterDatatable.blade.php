@@ -227,6 +227,9 @@
                     <option value="66">
                         {{ __("Naxxramas") }}
                     </option>
+                    <option value="67">
+                        {{ __("Scarlet Enclave") }}
+                    </option>
                 @elseif ($guild->expansion_id == 5)
                     <option value="47">
                         {{ __("Baradin Hold Normal") }}
