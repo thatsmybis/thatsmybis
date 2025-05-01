@@ -62,7 +62,7 @@
                         </li>
 
                         <!-- TMB Tooltips Addon -->
-                        <li class="p-3 mb-3 rounded">
+                        <!-- <li class="p-3 mb-3 rounded">
                             <h2>
                                 <span class="fab fa-fw fa-battle-net text-mage"></span>
                                 <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-uncommon">
@@ -71,7 +71,7 @@
                             </h2>
                             <p>
                                 {{ __("Copy+paste this into the") }} <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank">{{ __("TMB Tooltips Addon") }}</a>
-                            </p>
+                            </p> -->
                             <!--
                             <p>
                                 Fields exported:
@@ -82,7 +82,7 @@
                                 </code>
                             </div>
                             -->
-                            <ul class="list-inline">
+                            <!-- <ul class="list-inline">
                                 <li class="list-inline-item">
                                     <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}" target="_blank" class="btn btn-success">
                                         <span class="fas fa-fw fas fa-file-csv"></span>
@@ -96,7 +96,7 @@
                                     </a>
                                 </li>
                             </ul>
-                        </li>
+                        </li> -->
 
                         <li class="p-3 mb-3 rounded">
                             <p class="text-4">

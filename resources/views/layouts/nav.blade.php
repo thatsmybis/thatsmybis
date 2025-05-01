@@ -977,10 +977,10 @@
                             <img class="inline-image-icon" src="{{ asset('images/gargul_monotone.png') }}"></img>
                             {{ __("Export Gargul") }}
                         </a>
-                        <a class="dropdown-item" target="_blank" href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}">
+                        <!-- <a class="dropdown-item" target="_blank" href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}">
                             <span class="fas fa-fw fa- text-muted"></span>
                             {{ __("Export TMB Tooltips") }}
-                        </a>
+                        </a> -->
                         <a class="dropdown-item" href="{{ route('guild.members.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) }}">
                             <span class="fas fa-fw fa-users text-muted"></span>
                             {{ __("Members") }}
