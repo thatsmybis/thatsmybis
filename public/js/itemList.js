@@ -26,7 +26,8 @@ $(document).ready( function () {
             raidGroupMap[raidGroup.id] = raidGroup;
         }
     }
-    if (!guild.is_attendance_hidden) {
+
+    if (!guild.is_attendance_hidden && Array.isArray(guildCharacters)) {
         for (const char of guildCharacters) {
             guildCharactersMap[char.id] = char;
         }
