@@ -245,19 +245,6 @@
                 </p>
             </div>
         </div>
-        <div class="col-md-6 col-12 pl-2 pr-2">
-            <div class="bg-light rounded mb-3 pt-5 pb-5 col-12">
-                <h2>
-                    <span class="fab fa-fw fa-battle-net text-mage"></span>
-                    <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-uncommon">
-                        {{ __("TMB Tooltips Addon") }}
-                    </a>
-                </h2>
-                <p class="mt-3">
-                    {!! __("<a href=':link1' target='_blank'>TMB Tooltips</a> is an addon developed with love, and independently of TMB. Its author is Strix#1000.", ['link1' => 'https://www.curseforge.com/wow/addons/tmb-helper']) !!}
-                </p>
-            </div>
-        </div>
     </div>
 
     <div class="row bg-light pt-5 pb-5 mb-5 rounded">
