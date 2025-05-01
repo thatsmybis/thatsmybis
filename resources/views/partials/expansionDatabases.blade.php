@@ -26,7 +26,7 @@
 
         <!-- Cata -->
         <div class="col-sm-6 p-4">
-            <h2 class="font-weight-bold text-druid">{{ __("Cataclyms Raids") }}</h2>
+            <h2 class="font-weight-bold text-druid">{{ __("Cataclysm Raids") }}</h2>
             <ul class="no-bullet no-indent">
                 <!-- <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'baradin-hold-n']) }}">{{ __("Baradin Hold Normal") }}</a></li>
                 <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 5, 'instanceSlug' => 'baradin-hold-h']) }}">{{ __("Baradin Hold Heroic") }}</a></li> -->
