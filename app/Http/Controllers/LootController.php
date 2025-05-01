@@ -102,6 +102,8 @@ class LootController extends Controller
             $expansionId = 4;
         } else if ($expansionName == 'cata' || $expansionName === 5) {
             $expansionId = 5;
+        } else if ($expansionName == 'mop' || $expansionName === 6) {
+            $expansionId = 6;
         } else {
             $expansionId = 1;
         }

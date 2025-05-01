@@ -375,6 +375,8 @@ class Guild extends BaseModel
             return 80;
         } else if ($this->expansion_id === 5) {
             return 85;
+        } else if ($this->expansion_id === 6) {
+            return 90;
         } else {
             return 60;
         }

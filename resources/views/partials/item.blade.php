@@ -1,7 +1,4 @@
 @php
-// Added for SoD Phase 4 "Molten" flagged items because I don't want to change the item model/database just for this...
-$moltenItemIds = [228508, 229374,229379,229373,229380,229377,229381,229372,229382,229378,229376,228229,228463,228519,228462,228506,228702,228517,228922,228701,228461,228511,228460];
-
 if (isset($item)) {
     $itemName = $item->name;
     $itemId   = $item->item_id;
@@ -39,7 +36,10 @@ if ($itemExpansionId === 1 || $itemExpansionId === 4) {
     $wowheadSubdomain = 'wotlk';
 } else if ($itemExpansionId === 5) {
     $wowheadSubdomain = 'cata';
+} else if ($itemExpansionId === 6) {
+    $wowheadSubdomain = 'mop-classic';
 }
+
 
 if (!isset($wowheadLocale)) {
     $wowheadLocale = App::getLocale();
@@ -123,11 +123,7 @@ if (isset($iconSize) && $iconSize) {
         @endif
     @endif
     @if (isset($isHeroic) && $isHeroic)
-        @if (in_array($item->item_id, $moltenItemIds))
-            <span class="smaller text-legendary">Molten</span>
-        @else
-            <span class="text-uncommon small" title="{{ __('Heroic') }}">Heroic</span>
-        @endif
+        <span class="text-uncommon small" title="{{ __('Heroic') }}">Heroic</span>
     @endif
 </span>
 

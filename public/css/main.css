@@ -226,6 +226,9 @@ body {
 .text-expansion-5 {
     color: #ff8000;
 }
+.text-expansion-7 {
+    color: #00ff98;
+}
 
 .text-horde {
     color: #dc3545;
@@ -254,6 +257,9 @@ body {
 }
 .text-mage {
     color: #68ccef;
+}
+.text-monk {
+    color: #00ff98;
 }
 .text-paladin {
     color: #e68cab;
@@ -288,6 +294,9 @@ body {
 }
 .text-mage-important {
     color: #68ccef !important;
+}
+.text-monk-important {
+    color: #00ff98 !important;
 }
 .text-paladin-important {
     color: #e68cab !important;

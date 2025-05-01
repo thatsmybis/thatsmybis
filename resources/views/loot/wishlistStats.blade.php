@@ -19,11 +19,15 @@
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item font-weight-{{ $expansionId == 4 ? 'bold' : 'light' }}">
-                    <a href="{{ route('loot.wishlist', ['expansionName' => 'sod']) }}" class="text-{{ getExpansionColor(4) }}">{{ __("SOD") }}</a>
+                    <a href="{{ route('loot.wishlist', ['expansionName' => 'sod']) }}" class="text-{{ getExpansionColor(4) }}">{{ __("SoD") }}</a>
                 </li>
                 <li class="list-inline-item">&sdot;</li>
                 <li class="list-inline-item font-weight-{{ $expansionId == 5 ? 'bold' : 'light' }}">
                     <a href="{{ route('loot.wishlist', ['expansionName' => 'cata']) }}" class="text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</a>
+                </li>
+                <li class="list-inline-item">&sdot;</li>
+                <li class="list-inline-item font-weight-{{ $expansionId == 6 ? 'bold' : 'light' }}">
+                    <a href="{{ route('loot.wishlist', ['expansionName' => 'mop']) }}" class="text-{{ getExpansionColor(6) }}">{{ __("MoP") }}</a>
                 </li>
             </ul>
             <h1>

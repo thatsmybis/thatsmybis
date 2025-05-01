@@ -9,6 +9,7 @@ const CLASS_DEATH_KNIGHT = 'Death Knight';
 const CLASS_DRUID        = 'Druid';
 const CLASS_HUNTER       = 'Hunter';
 const CLASS_MAGE         = 'Mage';
+const CLASS_MONK         = 'Monk';
 const CLASS_PALADIN      = 'Paladin';
 const CLASS_PRIEST       = 'Priest';
 const CLASS_ROGUE        = 'Rogue';
@@ -31,6 +32,9 @@ const SPEC_HUNTER_SURVIVAL     = 'Survival';
 const SPEC_MAGE_ARCANE         = 'Arcane';
 const SPEC_MAGE_FIRE           = 'Fire';
 const SPEC_MAGE_FROST          = 'Frost';
+const SPEC_MONK_BREWMASTER     = 'Brewmaster';
+const SPEC_MONK_MISTWEAVER     = 'Mistweaver';
+const SPEC_MONK_WINDWALKER     = 'Windwalker';
 const SPEC_PALADIN_COMBAT      = 'Retribution';
 const SPEC_PALADIN_HOLY        = 'Holy (Pally)';
 const SPEC_PALADIN_PROTECTION  = 'Prot (Pally)';
@@ -94,18 +98,18 @@ const SLOT_RANGED_2         = 26; // crossbow, gun, wand
 const SLOT_RELIC            = 28; // totem/idol/libram
 
 const WARCRAFTLOGS_CLASSES = {
-    1: {"id": 1, "name": "Death Knight", "slug": "dk", "specs": {1: {"id": 1, "name": "Blood"}, 2: {"id": 2, "name": "Frost"}, 3: {"id": 3, "name": "Unholy"}}},
-    2: {"id": 2, "name": "Druid", "slug": "druid", "specs": {1: {"id": 1, "name": "Balance"}, 2: {"id": 2, "name": "Feral"}, 3: {"id": 3, "name": "Guardian"}, 4: {"id": 4, "name": "Restoration"}}},
-    3: {"id": 3, "name": "Hunter", "slug": "hunter", "specs": {1: {"id": 1, "name": "Beast Mastery"}, 2: {"id": 2, "name": "Marksmanship"}, 3: {"id": 3, "name": "Survival"}}},
-    4: {"id": 4, "name": "Mage", "slug": "mage", "specs": {1: {"id": 1, "name": "Arcane"}, 2: {"id": 2, "name": "Fire"}, 3: {"id": 3, "name": "Frost"}}},
-    5: {"id": 5, "name": "Monk", "slug": "monk", "specs": {1: {"id": 1, "name": "Brewmaster"}, 2: {"id": 2, "name": "Mistweaver"}, 3: {"id": 3, "name": "Windwalker"}}},
-    6: {"id": 6, "name": "Paladin", "slug": "paladin", "specs": {1: {"id": 1, "name": "Holy"}, 2: {"id": 2, "name": "Protection"}, 3: {"id": 3, "name": "Retribution"}}},
-    7: {"id": 7, "name": "Priest", "slug": "priest", "specs": {1: {"id": 1, "name": "Discipline"}, 2: {"id": 2, "name": "Holy"}, 3: {"id": 3, "name": "Shadow"}}},
-    8: {"id": 8, "name": "Rogue", "slug": "rogue", "specs": {1: {"id": 1, "name": "Assassination"}, 2: {"id": 2, "name": "Combat"}, 3: {"id": 3, "name": "Subtlety"}, 4: {"id": 4, "name": "Outlaw"}}},
-    9: {"id": 9, "name": "Shaman", "slug": "shaman", "specs": {1: {"id": 1, "name": "Elemental"}, 2: {"id": 2, "name": "Enhancement"}, 3: {"id": 3, "name": "Restoration"}}},
-    10: {"id": 10, "name": "Warlock", "slug": "warlock", "specs": {1: {"id": 1, "name": "Affliction"}, 2: {"id": 2, "name": "Demonology"}, 3: {"id": 3, "name": "Destruction"}}},
-    11: {"id": 11, "name": "Warrior", "slug": "warrior", "specs": {1: {"id": 1, "name": "Arms"}, 2: {"id": 2, "name": "Fury"}, 3: {"id": 3, "name": "Protection"}, 4: {"id": 4, "name": "Gladiator"}}},
-    12: {"id": 12, "name": "Demon Hunter", "slug": "dh", "specs": {1: {"id": 1, "name": "Havoc"}, 2: {"id": 2, "name": "Vengeance"}}}
+    1: {"id": 1, "name": "Death Knight",   "slug": "dk",      "specs": {1: {"id": 1, "name": "Blood"}, 2: {"id": 2, "name": "Frost"}, 3: {"id": 3, "name": "Unholy"}}},
+    2: {"id": 2, "name": "Druid",          "slug": "druid",   "specs": {1: {"id": 1, "name": "Balance"}, 2: {"id": 2, "name": "Feral"}, 3: {"id": 3, "name": "Guardian"}, 4: {"id": 4, "name": "Restoration"}}},
+    3: {"id": 3, "name": "Hunter",         "slug": "hunter",  "specs": {1: {"id": 1, "name": "Beast Mastery"}, 2: {"id": 2, "name": "Marksmanship"}, 3: {"id": 3, "name": "Survival"}}},
+    4: {"id": 4, "name": "Mage",           "slug": "mage",    "specs": {1: {"id": 1, "name": "Arcane"}, 2: {"id": 2, "name": "Fire"}, 3: {"id": 3, "name": "Frost"}}},
+    5: {"id": 5, "name": "Monk",           "slug": "monk",    "specs": {1: {"id": 1, "name": "Brewmaster"}, 2: {"id": 2, "name": "Mistweaver"}, 3: {"id": 3, "name": "Windwalker"}}},
+    6: {"id": 6, "name": "Paladin",        "slug": "paladin", "specs": {1: {"id": 1, "name": "Holy"}, 2: {"id": 2, "name": "Protection"}, 3: {"id": 3, "name": "Retribution"}}},
+    7: {"id": 7, "name": "Priest",         "slug": "priest",  "specs": {1: {"id": 1, "name": "Discipline"}, 2: {"id": 2, "name": "Holy"}, 3: {"id": 3, "name": "Shadow"}}},
+    8: {"id": 8, "name": "Rogue",          "slug": "rogue",   "specs": {1: {"id": 1, "name": "Assassination"}, 2: {"id": 2, "name": "Combat"}, 3: {"id": 3, "name": "Subtlety"}, 4: {"id": 4, "name": "Outlaw"}}},
+    9: {"id": 9, "name": "Shaman",         "slug": "shaman",  "specs": {1: {"id": 1, "name": "Elemental"}, 2: {"id": 2, "name": "Enhancement"}, 3: {"id": 3, "name": "Restoration"}}},
+    10: {"id": 10, "name": "Warlock",      "slug": "warlock", "specs": {1: {"id": 1, "name": "Affliction"}, 2: {"id": 2, "name": "Demonology"}, 3: {"id": 3, "name": "Destruction"}}},
+    11: {"id": 11, "name": "Warrior",      "slug": "warrior", "specs": {1: {"id": 1, "name": "Arms"}, 2: {"id": 2, "name": "Fury"}, 3: {"id": 3, "name": "Protection"}, 4: {"id": 4, "name": "Gladiator"}}},
+    12: {"id": 12, "name": "Demon Hunter", "slug": "dh",      "specs": {1: {"id": 1, "name": "Havoc"}, 2: {"id": 2, "name": "Vengeance"}}}
 };
 
 // How often to update timestamps

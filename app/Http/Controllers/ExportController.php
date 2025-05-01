@@ -463,12 +463,14 @@ class ExportController extends Controller {
             $expansionId = 1;
         } else if ($expansionSlug == 'burning-crusade') {
             $expansionId = 2;
-        } else if ($expansionSlug == 'wrath-of-the-lich-king') {
+        } else if ($expansionSlug == 'wrath') {
             $expansionId = 3;
         } else if ($expansionSlug == 'season-of-discovery') {
             $expansionId = 4;
         } else if ($expansionSlug == 'cataclysm') {
             $expansionId = 5;
+        } else if ($expansionSlug == 'mop') {
+            $expansionId = 6;
         } else {
             abort(404, __('Expansion not found'));
         }
@@ -482,6 +484,8 @@ class ExportController extends Controller {
             $subdomain = 'wotlk';
         } else if ($expansionId == 5) {
             $subdomain = 'cata';
+        } else if ($expansionId == 6) {
+            $subdomain = 'mop';
         }
 
         $locale = App::getLocale();

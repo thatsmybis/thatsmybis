@@ -36,8 +36,9 @@
                 <span class="font-weight-bold text-{{ getExpansionColor(4) }}">{{ __("SOD") }}</span>,
                 <span class="font-weight-bold text-{{ getExpansionColor(2) }}">{{ __("TBC") }}</span>,
                 <span class="font-weight-bold text-{{ getExpansionColor(3) }}">{{ __("WoTLK") }}</span>,
+                <span class="font-weight-bold text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</span>,
                 &
-                <span class="font-weight-bold text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</span>
+                <span class="font-weight-bold text-{{ getExpansionColor(6) }}">{{ __("MoP") }}</span>,
             </h4>
 
             <div class="mt-5 mb-5">
@@ -49,6 +50,7 @@
             <!-- <h4 class="text-5 pt-3">
                 {{ __("see what people are wishlisting in") }}
                 <br>
+                <a href="{{ route('loot.wishlist', ['expansionName' => 'mop']) }}" class="font-weight-bold text-{{ getExpansionColor(6) }}">{{ __("MoP") }}</a>,
                 <a href="{{ route('loot.wishlist', ['expansionName' => 'cata']) }}" class="font-weight-bold text-{{ getExpansionColor(5) }}">{{ __("Cataclysm") }}</a>,
                 <a href="{{ route('loot.wishlist', ['expansionName' => 'sod']) }}" class="font-weight-bold text-{{ getExpansionColor(4) }}">{{ __("SOD") }}</a>,
                 <a href="{{ route('loot.wishlist', ['expansionName' => 'wotlk']) }}" class="font-weight-bold text-{{ getExpansionColor(3) }}">{{ __("Wrath of the Lich King") }}</a>,
@@ -76,7 +78,7 @@
             </div>
 
             <p class="mt-3">
-                {!! __("supports Classic, Classic Fresh, Classic Season of Mastery, Classic Plus, Classic+,<br> The Burning Crusade (TBC), and Wrath of the Lich King (WotLK)") !!}. Also Season of Discovery, Cataclysm.
+                {!! __("supports Classic, Classic Fresh, Classic Season of Mastery, Classic Plus, Classic+,<br> The Burning Crusade (TBC), and Wrath of the Lich King (WotLK)") !!}. Also Season of Discovery, Cataclysm, Mists of Pandaria.
             </p>
         </div>
     </div>

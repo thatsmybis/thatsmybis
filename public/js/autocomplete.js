@@ -334,8 +334,8 @@ function addTag($this, value, label) {
             let link = "";
 
             let wowheadUrl = "";
-            // WoTLK uses a different URL structure
-            if (wowheadSubdomain === 'wotlk') {
+            // Newer re-released expansions use a different URL structure
+            if (wowheadSubdomain === 'wotlk' || wowheadSubdomain === 'cata' || wowheadSubdomain === 'mop-classic') {
                 wowheadUrl = `https://${ wowheadLocale }.wowhead.com/${ wowheadSubdomain }/item=${ value }`;
             } else {
                 wowheadUrl = `https://${ wowheadLocale + wowheadSubdomain }.wowhead.com/item=${ value }`;

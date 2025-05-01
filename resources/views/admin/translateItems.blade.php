@@ -45,7 +45,13 @@
         </li>
         <li>
             expansion: <strong>{{ $expansion }}</strong>
-            <span class="small text-muted">(<a href="{{ route('admin.translateItems', ['expansion' => 'classic', 'lang' => $lang, 'minId' => $minId, 'maxId' => $maxId]) }}">classic</a>, <a href="{{ route('admin.translateItems', ['expansion' => 'tbc', 'lang' => $lang, 'minId' => $minId, 'maxId' => $maxId]) }}">tbc</a>, <a href="{{ route('admin.translateItems', ['expansion' => 'wotlk', 'lang' => $lang, 'minId' => $minId, 'maxId' => $maxId]) }}">wotlk</a>)</span>
+            <span class="small text-muted">
+                (<a href="{{ route('admin.translateItems', ['expansion' => 'classic', 'lang' => $lang, 'minId' => $minId, 'maxId' => $maxId]) }}">classic</a>,
+                <a href="{{ route('admin.translateItems', ['expansion' => 'tbc', 'lang' => $lang, 'minId' => $minId, 'maxId' => $maxId]) }}">tbc</a>,
+                <a href="{{ route('admin.translateItems', ['expansion' => 'wotlk', 'lang' => $lang, 'minId' => $minId, 'maxId' => $maxId]) }}">wotlk</a>,
+                <a href="{{ route('admin.translateItems', ['expansion' => 'cata', 'lang' => $lang, 'minId' => $minId, 'maxId' => $maxId]) }}">cata</a>,
+                <a href="{{ route('admin.translateItems', ['expansion' => 'mop', 'lang' => $lang, 'minId' => $minId, 'maxId' => $maxId]) }}">mop</a>)
+            </span>
         </li>
         <li>
             lang: <strong>{{ $lang }}</strong>

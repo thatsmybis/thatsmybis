@@ -84,6 +84,8 @@ function getExpansionColor($expansionId) {
             return 'gold';
         case 5: // Cataclysm
             return 'druid';
+        case 6: // MoP
+            return 'monk';
         default:
             return 'white';
     }
@@ -101,6 +103,8 @@ function getExpansionAbbr($expansionId, $lowercase = null) {
             return $lowercase ? 'sod' : 'SOD';
         case 5:
             return $lowercase ? 'cata' : 'Cataclysm';
+        case 6:
+            return $lowercase ? 'mop' : 'MoP';
         default:
             return '';
     }

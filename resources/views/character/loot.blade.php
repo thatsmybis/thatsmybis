@@ -110,6 +110,8 @@
                                             {{ __("Import wishlist from sixtyupgrades.com") }} {{ __("OR WoWSims") }}
                                         @elseif ($guild->expansion_id === 5)
                                             {{ __("Import wishlist from sixtyupgrades.com") }} {{ __("OR WoWSims") }}
+                                        @elseif ($guild->expansion_id === 6)
+                                            {{ __("Import wishlist from sixtyupgrades.com") }} {{ __("OR WoWSims") }}
                                         @endif
                                     </span>
                                 </div>
@@ -142,6 +144,11 @@
                                                 sixtyupgrades.com
                                             </a>
                                             OR <a href="https://wowsims.github.io/cata/" target="_blank">wowsims.github.io</a>
+                                        @elseif ($guild->expansion_id === 6)
+                                            <a href="https://sixtyupgrades.com/mop/" target="_blank">
+                                                sixtyupgrades.com
+                                            </a>
+                                            OR <a href="https://wowsims.github.io/mop/" target="_blank">wowsims.github.io</a>
                                         @endif
                                     </div>
 

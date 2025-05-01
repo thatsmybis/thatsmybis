@@ -509,6 +509,8 @@ class ItemController extends Controller
             $domain = 'wotlk';
         } else if ($expansionId === 5) {
             $domain = 'cata';
+        } else if ($expansionId === 6) {
+            $domain = 'mop-classic';
         }
 
         $locale = App::getLocale();

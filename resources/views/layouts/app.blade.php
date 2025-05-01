@@ -369,6 +369,8 @@
                 var wowheadSubdomain = "classic";
             @elseif ($guild->expansion_id === 5)
                 var wowheadSubdomain = "cata";
+            @elseif ($guild->expansion_id === 6)
+                var wowheadSubdomain = "mop-classic";
             @else
                 var wowheadSubdomain = "www";
             @endif
@@ -384,6 +386,8 @@
                 var wowheadSubdomain = "classic";
             @elseif ($expansionId == 5)
                 var wowheadSubdomain = "cata";
+            @elseif ($expansionId == 6)
+                var wowheadSubdomain = "mop-classic";
             @else
                 var wowheadSubdomain = "www";
             @endif
