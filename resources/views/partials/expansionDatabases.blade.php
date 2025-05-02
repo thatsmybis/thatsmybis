@@ -10,8 +10,8 @@
             <h2 class="font-weight-bold text-gold">{{ __("Mists of Pandaria Raids") }}</h2>
             <ul class="no-bullet no-indent">
                 <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'world-bosses-mop']) }}">{{ __("World Bosses") }}</a></li>
-                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'mogu-shan-vaults-n']) }}">{{ __("Mogu'Shan Vaults Normal") }}</a></li>
-                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'mogu-shan-vaults-h']) }}">{{ __("Mogu'Shan Vaults Heroic") }}</a></li>
+                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'mogu-shan-vaults-n']) }}">{{ __("Mogu'shan Vaults Normal") }}</a></li>
+                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'mogu-shan-vaults-h']) }}">{{ __("Mogu'shan Vaults Heroic") }}</a></li>
                 <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'heart-of-fear-n']) }}">{{ __("Heart of Fear Normal") }}</a></li>
                 <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'heart-of-fear-h']) }}">{{ __("Heart of Fear Heroic") }}</a></li>
                 <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'terrace-of-endless-spring-n']) }}">{{ __("Terrace of Endless Spring Normal") }}</a></li>

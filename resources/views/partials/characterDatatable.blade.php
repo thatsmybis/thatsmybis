@@ -119,8 +119,8 @@
                     <option value="58">{{ __("Dragon Soul Heroic") }}</option>
                 @elseif ($guild->expansion_id == 6)
                     <option value="68">{{ __("World Bosses") }}</option>
-                    <option value="69">{{ __("Mogu'Shan Vaults Normal") }}</option>
-                    <option value="70">{{ __("Mogu'Shan Vaults Heroic") }}</option>
+                    <option value="69">{{ __("Mogu'shan Vaults Normal") }}</option>
+                    <option value="70">{{ __("Mogu'shan Vaults Heroic") }}</option>
                     <option value="71">{{ __("Heart of Fear Normal") }}</option>
                     <option value="72">{{ __("Heart of Fear Heroic") }}</option>
                     <option value="73">{{ __("Terrace of Endless Spring Normal") }}</option>
