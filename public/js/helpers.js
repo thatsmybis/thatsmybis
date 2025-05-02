@@ -610,7 +610,7 @@ function slug(string) {
  *
  * @param rate How frequently the timestamps should be updated.
  */
-function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 400) {
+function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 300) {
     const watchableElements = Array.from(document.querySelectorAll(".js-watchable-timestamp"));
     const formattedElements = Array.from(document.querySelectorAll(".js-timestamp"));
     const titleElements = Array.from(document.querySelectorAll(".js-timestamp-title"));
