@@ -125,8 +125,8 @@
                     <option value="72">{{ __("Heart of Fear Heroic") }}</option>
                     <option value="73">{{ __("Terrace of Endless Spring Normal") }}</option>
                     <option value="74">{{ __("Terrace of Endless Spring Heroic") }}</option>
-                    <option value="75">{{ __("Throne of Tunder Normal") }}</option>
-                    <option value="76">{{ __("Throne of Tunder Heroic") }}</option>
+                    <option value="75">{{ __("Throne of Thunder Normal") }}</option>
+                    <option value="76">{{ __("Throne of Thunder Heroic") }}</option>
                     <option value="77">{{ __("Siege of Orgrimmar Flex") }}</option>
                     <option value="78">{{ __("Siege of Orgrimmar Normal") }}</option>
                     <option value="79">{{ __("Siege of Orgrimmar Heroic") }}</option>
