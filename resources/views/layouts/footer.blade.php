@@ -33,7 +33,7 @@
                         <div class="dropdown">
                             <a class="dropdown-toggle font-weight-bold {{ isset($guild) ? 'text-patreon-md' : 'text-patreon' }}" id="donateDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="fas fa-fw fa-sack"></span>
-                                {{ __("Support TMB") }}
+                                {{ __("Donate") }}
                             </a>
                             <div class="dropdown-menu text-center" aria-labelledby="donateDropdown">
                                 <span class="dropdown-item">

@@ -113,7 +113,7 @@ const WARCRAFTLOGS_CLASSES = {
 };
 
 // How often to update timestamps
-var timestampCheckRate = 60000;
+var timestampCheckRate = 120000;
 
 // For keeping track of the intervals updating times
 var timestampUpdateInterval = null;
@@ -604,97 +604,166 @@ function slug(string) {
 
 /**
  * Tracks any timestamps on the page and prints how long since/until each timestamp's date.
+ * For performance on 1000's of dates, this function has been written to not use jQuery or moment.js.
+ *
+ * Includes rate limiting so that it won't try to update 1000's of dates at once.
  *
  * @param rate How frequently the timestamps should be updated.
  */
-function trackTimestamps(rate = timestampCheckRate) {
-    const watchableTimestamps = document.querySelectorAll(".js-watchable-timestamp");
-    const jsTimestamps = document.querySelectorAll(".js-timestamp");
-    const timestampTitles = document.querySelectorAll(".js-timestamp-title");
+function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 400) {
+    const watchableElements = Array.from(document.querySelectorAll(".js-watchable-timestamp"));
+    const formattedElements = Array.from(document.querySelectorAll(".js-timestamp"));
+    const titleElements = Array.from(document.querySelectorAll(".js-timestamp-title"));
 
-    if (locale) {
-        moment.locale(locale);
+    const rtf = new Intl.RelativeTimeFormat(locale || 'en', { numeric: "auto" });
+
+    function formatRelativeTime(fromMs, toMs, isShort = false) {
+        const diff = toMs - fromMs;
+        const absDiff = Math.abs(diff);
+
+        const seconds = Math.round(absDiff / 1000);
+        const minutes = Math.round(absDiff / 60000);
+        const hours = Math.round(absDiff / 3600000);
+        const days = Math.round(absDiff / 86400000);
+        const months = Math.round(days / 30);
+        const years = Math.round(days / 365);
+
+        let value, unit;
+
+        if (seconds < 45) {
+            value = Math.sign(diff) * seconds;
+            unit = "second";
+        } else if (minutes < 45) {
+            value = Math.sign(diff) * minutes;
+            unit = "minute";
+        } else if (hours < 22) {
+            value = Math.sign(diff) * hours;
+            unit = "hour";
+        } else if (days < 26) {
+            value = Math.sign(diff) * days;
+            unit = "day";
+        } else if (months < 11) {
+            value = Math.sign(diff) * months;
+            unit = "month";
+        } else {
+            value = Math.sign(diff) * years;
+            unit = "year";
+        }
+
+        if (isShort) {
+            const abs = Math.abs(value);
+            if (unit === "second") return abs < 10 ? "just now" : `${abs}s`;
+            if (unit === "minute") return `${abs}m`;
+            if (unit === "hour") return `${abs}h`;
+            if (unit === "day") return `${abs}d`;
+            if (unit === "month") return `${abs}mo`;
+            if (unit === "year") return `${abs}y`;
+        }
+
+        return rtf.format(value, unit);
     }
 
-    if ((!locale || locale === 'en')) {
-        moment.locale('en', {
-            relativeTime: {
-                past: '%s ago',
-                s:  'just now',
-                ss: '%ss',
-                m:  '%dm',
-                mm: '%dm',
-                h:  '%dh',
-                hh: '%dh',
-                d:  '%dd',
-                dd: '%dd',
-                M:  '%dmo',
-                MM: '%dmo',
-                y:  '%dy',
-                yy: '%dy'
-            }
-        });
-    }
+    function processWatchable(el) {
+        const timestamp = Date.parse(el.dataset.timestamp);
+        if (isNaN(timestamp)) return;
 
-    function updateWatchableTimestamps(elements) {
         const now = Date.now();
-        elements.forEach(el => {
-            const raw = el.dataset.timestamp;
-            const timestamp = moment(raw).valueOf();
-            if (!timestamp) return;
+        const isShort = el.dataset.isShort === "1";
+        const maxDays = parseInt(el.dataset.maxDays, 10);
+        let content;
 
-            const future = timestamp > now;
-            const maxDays = Number(el.dataset.maxDays);
-            let since;
+        if (maxDays && (now - timestamp > maxDays * 86400000)) {
+            content = "over 2 weeks";
+        } else {
+            content = formatRelativeTime(timestamp, now, isShort);
+        }
 
-            if (maxDays && timestamp < (moment().valueOf() - (maxDays * 86400000))) {
-                since = "over 2 weeks";
-            } else {
-                since = moment.utc(timestamp).fromNow(true);
-            }
-
-            if (el.tagName.toLowerCase() === "abbr") {
-                el.title = (future ? "in " : "") + since + (!future ? " ago" : "");
-            } else {
-                el.textContent = since;
-            }
-        });
+        if (el.tagName.toLowerCase() === "abbr") {
+            const isFuture = timestamp > now;
+            el.title = isFuture ? `in ${content}` : `${content} ago`;
+        } else {
+            el.textContent = content;
+        }
     }
 
-    function updateJsTimestamps(elements) {
-        elements.forEach(el => {
-            const timestamp = moment(el.dataset.timestamp).valueOf();
-            if (!timestamp) return;
+    function processFormatted(el) {
+        const timestamp = Date.parse(el.dataset.timestamp);
+        if (isNaN(timestamp)) return;
 
-            const format = el.dataset.format || "ddd, MMM Do YYYY @ h:mm a";
-            const formatted = moment.utc(timestamp).local().format(format);
+        const format = el.dataset.format || "default";
+        const date = new Date(timestamp);
 
-            if (el.tagName.toLowerCase() === "abbr") {
-                el.title = formatted;
-            } else {
-                el.textContent = formatted;
+        const formatted = format === "default"
+            ? date.toLocaleString(locale || 'en', {
+                weekday: "short",
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+                hour12: true
+            })
+            : date.toLocaleString(locale || 'en');
+
+        if (el.tagName.toLowerCase() === "abbr") {
+            el.title = formatted;
+        } else {
+            el.textContent = formatted;
+        }
+    }
+
+    function processTitle(el) {
+        const timestamp = Date.parse(el.dataset.timestamp);
+        if (isNaN(timestamp)) return;
+
+        const date = new Date(timestamp);
+        const formatted = date.toLocaleString(locale || 'en', {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true
+        });
+
+        const prefix = el.dataset.title || "";
+        el.title = prefix ? `${prefix} ${formatted}` : formatted;
+    }
+
+    function rateLimitedProcess(list, fn, perSecond = 100) {
+        const queue = [...list];
+        const batchSize = Math.max(1, Math.floor(perSecond / 5)); // 5 batches/sec
+        const interval = 1000 / 5;
+
+        function processBatch() {
+            const batch = queue.splice(0, batchSize);
+            for (let el of batch) {
+                fn(el);
             }
-        });
+
+            if (queue.length > 0) {
+                setTimeout(processBatch, interval);
+            }
+        }
+
+        processBatch();
     }
 
-    function updateTimestampTitles(elements) {
-        elements.forEach(el => {
-            const timestamp = moment(el.dataset.timestamp).valueOf();
-            if (!timestamp) return;
-
-            const title = el.dataset.title || "";
-            const timeStr = moment.utc(timestamp).local().format("ddd, MMM Do YYYY @ h:mm a");
-            el.title = title ? `${title} ${timeStr}` : timeStr;
-        });
+    function runAll() {
+        rateLimitedProcess(watchableElements, processWatchable, updatesPerSecond);
+        rateLimitedProcess(formattedElements, processFormatted, updatesPerSecond);
+        rateLimitedProcess(titleElements, processTitle, updatesPerSecond);
     }
 
-    updateWatchableTimestamps(watchableTimestamps);
-    updateJsTimestamps(jsTimestamps);
-    updateTimestampTitles(timestampTitles);
+    if (window.timestampUpdateInterval) {
+        clearInterval(window.timestampUpdateInterval);
+    }
 
-    if (timestampUpdateInterval) clearInterval(timestampUpdateInterval);
-    timestampUpdateInterval = setInterval(() => {
-        updateWatchableTimestamps(watchableTimestamps);
+    runAll();
+
+    window.timestampUpdateInterval = setInterval(() => {
+        rateLimitedProcess(watchableElements, processWatchable, updatesPerSecond);
     }, rate);
 }
 
