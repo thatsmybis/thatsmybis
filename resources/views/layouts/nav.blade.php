@@ -191,9 +191,9 @@
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'terrace-of-endless-spring-h']) }}">{{ __("Terrace of Endless Spring Heroic") }}</a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-thunder-n']) }}">{{ __("Throne of Tunder Normal") }}</a>
                                         <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-thunder-h']) }}">{{ __("Throne of Tunder Heroic") }}</a>
-                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'seige-of-ogrimmar-flex']) }}">{{ __("Seige of Orgrimmar Flex") }}</a>
-                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'seige-of-ogrimmar-normal']) }}">{{ __("Seige of Orgrimmar Normal") }}</a>
-                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'seige-of-ogrimmar-heroic']) }}">{{ __("Seige of Orgrimmar Heroic") }}</a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'siege-of-ogrimmar-flex']) }}">{{ __("Siege of Orgrimmar Flex") }}</a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'siege-of-ogrimmar-normal']) }}">{{ __("Siege of Orgrimmar Normal") }}</a>
+                                        <a class="dropdown-item" href="{{ route('guild.item.list.edit', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'siege-of-ogrimmar-heroic']) }}">{{ __("Siege of Orgrimmar Heroic") }}</a>
                                     @endif
                                 </div>
                             </div>
@@ -288,9 +288,9 @@
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'terrace-of-endless-spring-h']) }}">{{ __("Terrace of Endless Spring Heroic") }}</a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-thunder-n']) }}">{{ __("Throne of Tunder Normal") }}</a>
                                         <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-thunder-h']) }}">{{ __("Throne of Tunder Heroic") }}</a>
-                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'seige-of-ogrimmar-flex']) }}">{{ __("Seige of Orgrimmar Flex") }}</a>
-                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'seige-of-ogrimmar-normal']) }}">{{ __("Seige of Orgrimmar Normal") }}</a>
-                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'seige-of-ogrimmar-heroic']) }}">{{ __("Seige of Orgrimmar Heroic") }}</a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'siege-of-ogrimmar-flex']) }}">{{ __("Siege of Orgrimmar Flex") }}</a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'siege-of-ogrimmar-normal']) }}">{{ __("Siege of Orgrimmar Normal") }}</a>
+                                        <a class="dropdown-item" href="{{ route('guild.prios.chooseRaidGroup', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'siege-of-ogrimmar-heroic']) }}">{{ __("Siege of Orgrimmar Heroic") }}</a>
                                     @endif
                                 </div>
                             </div>
@@ -454,9 +454,9 @@
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'terrace-of-endless-spring-h']) }}">{{ __("Terrace of Endless Spring Heroic") }}</a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-thunder-n']) }}">{{ __("Throne of Tunder Normal") }}</a>
                             <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'throne-of-thunder-h']) }}">{{ __("Throne of Tunder Heroic") }}</a>
-                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'seige-of-ogrimmar-flex']) }}">{{ __("Seige of Orgrimmar Flex") }}</a>
-                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'seige-of-ogrimmar-normal']) }}">{{ __("Seige of Orgrimmar Normal") }}</a>
-                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'seige-of-ogrimmar-heroic']) }}">{{ __("Seige of Orgrimmar Heroic") }}</a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'siege-of-ogrimmar-flex']) }}">{{ __("Siege of Orgrimmar Flex") }}</a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'siege-of-ogrimmar-normal']) }}">{{ __("Siege of Orgrimmar Normal") }}</a>
+                            <a class="dropdown-item" href="{{ route('guild.item.list', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'instanceSlug' => 'siege-of-ogrimmar-heroic']) }}">{{ __("Siege of Orgrimmar Heroic") }}</a>
                         @endif
                     </div>
                 </li>

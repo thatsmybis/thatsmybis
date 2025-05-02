@@ -18,9 +18,9 @@
                 <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'terrace-of-endless-spring-h']) }}">{{ __("Terrace of Endless Spring Heroic") }}</a></li>
                 <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'throne-of-thunder-n']) }}">{{ __("Throne of Tunder Normal") }}</a></li>
                 <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'throne-of-thunder-h']) }}">{{ __("Throne of Tunder Heroic") }}</a></li>
-                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'seige-of-ogrimmar-flex']) }}">{{ __("Seige of Orgrimmar Flex") }}</a></li>
-                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'seige-of-ogrimmar-normal']) }}">{{ __("Seige of Orgrimmar Normal") }}</a></li>
-                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'seige-of-ogrimmar-heroic']) }}">{{ __("Seige of Orgrimmar Heroic") }}</a></li>
+                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'siege-of-ogrimmar-flex']) }}">{{ __("Siege of Orgrimmar Flex") }}</a></li>
+                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'siege-of-ogrimmar-normal']) }}">{{ __("Siege of Orgrimmar Normal") }}</a></li>
+                <li class=""><a class="text-4 tag" href="{{ route('loot.list', ['expansionId' => 6, 'instanceSlug' => 'siege-of-ogrimmar-heroic']) }}">{{ __("Siege of Orgrimmar Heroic") }}</a></li>
             </ul>
         </div>
 

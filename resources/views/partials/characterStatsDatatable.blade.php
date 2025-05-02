@@ -180,9 +180,9 @@
                     <option value="74">{{ __("Terrace of Endless Spring Heroic") }}</option>
                     <option value="75">{{ __("Throne of Tunder Normal") }}</option>
                     <option value="76">{{ __("Throne of Tunder Heroic") }}</option>
-                    <option value="77">{{ __("Seige of Orgrimmar Flex") }}</option>
-                    <option value="78">{{ __("Seige of Orgrimmar Normal") }}</option>
-                    <option value="79">{{ __("Seige of Orgrimmar Heroic") }}</option>
+                    <option value="77">{{ __("Siege of Orgrimmar Flex") }}</option>
+                    <option value="78">{{ __("Siege of Orgrimmar Normal") }}</option>
+                    <option value="79">{{ __("Siege of Orgrimmar Heroic") }}</option>
                 @endif
             </select>
         </li>
