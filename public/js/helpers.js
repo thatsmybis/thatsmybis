@@ -608,108 +608,121 @@ function slug(string) {
  * @param rate How frequently the timestamps should be updated.
  */
 function trackTimestamps(rate = timestampCheckRate) {
-    const watchableTimestamps = document.querySelectorAll(".js-watchable-timestamp");
-    const jsTimestamps = document.querySelectorAll(".js-timestamp");
-    const timestampTitles = document.querySelectorAll(".js-timestamp-title");
+    $(".js-watchable-timestamp").each(function () {
+        let isShort = $(this).data("isShort");
 
-    // Set locale once
-    if (locale) {
-        moment.locale(locale);
-    }
+        if (locale) {
+            moment.locale(locale);
+        }
 
-    // Override English short-form locale only once
-    if ((!locale || locale === 'en')) {
-        moment.locale('en', {
-            relativeTime: {
-                past: '%s ago',
-                s:  'just now',
-                ss: '%ss',
-                m:  '%dm',
-                mm: '%dm',
-                h:  '%dh',
-                hh: '%dh',
-                d:  '%dd',
-                dd: '%dd',
-                M:  '%dmo',
-                MM: '%dmo',
-                y:  '%dy',
-                yy: '%dy'
-            }
-        });
-    }
+        // For English short-form dates
+        if (isShort && (!locale || locale === 'en')) {
+            moment
+            .locale('en', {
+                relativeTime: {
+                    past: '%s ago',
+                    s:  'just now',
+                    ss: '%ss',
+                    m:  '%dm',
+                    mm: '%dm',
+                    h:  '%dh',
+                    hh: '%dh',
+                    d:  '%dd',
+                    dd: '%dd',
+                    M:  '%dmo',
+                    MM: '%dmo',
+                    y:  '%dy',
+                    yy: '%dy'
+                }
+            });
+        }
 
-    function updateWatchableTimestamps(elements) {
-        const now = Date.now();
-        elements.forEach(el => {
-            let timestamp = Number(el.dataset.timestamp);
-            if (isNaN(timestamp)) return;
+        let timestamp = $(this).data("timestamp");
+        if (timestamp < 1000000000000) { // <-- Potential y33.658k bug [that's a y2k joke]
+            timestamp = timestamp * 1000; // convert from seconds to milliseconds
+        }
+        let future = false;
+        if (timestamp > (Date.now())) {
+            future = true;
+        }
 
+        let since = null;
+        let maxDays = $(this).data("maxDays");
+        if (maxDays && (timestamp < moment().valueOf() - (maxDays * 86400000))) {
+        // > 2 weeks, change the message to that
+            since = "over 2 weeks";
+        } else {
+        // < 2 weeks
+            since = moment
+                .utc(timestamp)
+                .fromNow(true);
+        }
+
+        if ($(this).is("abbr")) {
+            $(this).prop("title", (future ? "in " : "") + since + (!future ? " ago" : ""));
+        } else {
+            $(this).html(since);
+        }
+    });
+
+    $(".js-timestamp").each(function () {
+        let timestamp = $(this).data("timestamp");
+        if (timestamp < 1000000000000) {
+            timestamp = timestamp * 1000;
+        }
+        let format = ($(this).data("format") ? $(this).data("format") : "ddd, MMM Do YYYY @ h:mm a");
+        let since  = moment.utc(timestamp).local().format(format);
+        if ($(this).is("abbr")) {
+            $(this).prop("title", since);
+        } else {
+            $(this).html(since);
+        }
+    });
+
+    $(".js-timestamp-title").each(function () {
+        let title = $(this).data("title");
+
+        let timestamp = $(this).data("timestamp");
+        if (timestamp < 1000000000000) {
+            timestamp = timestamp * 1000;
+        }
+        let time = moment.utc(timestamp).local().format("ddd, MMM Do YYYY @ h:mm a");
+        if (title) {
+            $(this).prop("title", (title + ' ' + time));
+        } else {
+            $(this).prop("title", time);
+        }
+    });
+
+    timestampUpdateInterval ? clearInterval(timestampUpdateInterval) : null;
+
+    timestampUpdateInterval = setInterval(function () {
+        $(".js-watchable-timestamp").each(function () {
+            let timestamp = $(this).data("timestamp");
             if (timestamp < 1000000000000) {
-                timestamp *= 1000;
+                timestamp = timestamp * 1000; // convert from seconds to milliseconds
+            }
+            let future = false;
+            if (timestamp > (Date.now())) {
+                future = true;
             }
 
-            const future = timestamp > now;
-            const maxDays = Number(el.dataset.maxDays);
-            let since;
-
-            if (maxDays && timestamp < (moment().valueOf() - (maxDays * 86400000))) {
+            let since = null;
+            let maxDays = $(this).data("maxDays");
+            if (maxDays && (timestamp < moment().valueOf() - (maxDays * 86400000))) {
+            // > 2 weeks, change the message to that
                 since = "over 2 weeks";
             } else {
+            // < 2 weeks
                 since = moment.utc(timestamp).fromNow(true);
             }
 
-            if (el.tagName.toLowerCase() === "abbr") {
-                el.title = (future ? "in " : "") + since + (!future ? " ago" : "");
+            if ($(this).is("abbr")) {
+                $(this).prop("title", (future ? "in " : "") + since + (!future ? " ago" : ""));
             } else {
-                el.textContent = since;
+                $(this).html(since);
             }
         });
-    }
-
-    function updateJsTimestamps(elements) {
-        elements.forEach(el => {
-            let timestamp = Number(el.dataset.timestamp);
-            if (isNaN(timestamp)) return;
-
-            if (timestamp < 1000000000000) {
-                timestamp *= 1000;
-            }
-
-            const format = el.dataset.format || "ddd, MMM Do YYYY @ h:mm a";
-            const formatted = moment.utc(timestamp).local().format(format);
-
-            if (el.tagName.toLowerCase() === "abbr") {
-                el.title = formatted;
-            } else {
-                el.textContent = formatted;
-            }
-        });
-    }
-
-    function updateTimestampTitles(elements) {
-        elements.forEach(el => {
-            let timestamp = Number(el.dataset.timestamp);
-            if (isNaN(timestamp)) return;
-
-            if (timestamp < 1000000000000) {
-                timestamp *= 1000;
-            }
-
-            const title = el.dataset.title || "";
-            const timeStr = moment.utc(timestamp).local().format("ddd, MMM Do YYYY @ h:mm a");
-            el.title = title ? `${title} ${timeStr}` : timeStr;
-        });
-    }
-
-    // Initial run
-    updateWatchableTimestamps(watchableTimestamps);
-    updateJsTimestamps(jsTimestamps);
-    updateTimestampTitles(timestampTitles);
-
-    // Interval update
-    if (timestampUpdateInterval) clearInterval(timestampUpdateInterval);
-    timestampUpdateInterval = setInterval(() => {
-        updateWatchableTimestamps(watchableTimestamps);
     }, rate);
 }
 
