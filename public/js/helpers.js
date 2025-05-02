@@ -609,6 +609,7 @@ function slug(string) {
  * Includes rate limiting so that it won't try to update 1000's of dates at once.
  *
  * @param rate How frequently the timestamps should be updated.
+ * @param updatesPerSecond How many elements to process per second (maximum).
  */
 function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 200) {
     const watchableElements = Array.from(document.querySelectorAll(".js-watchable-timestamp"));
