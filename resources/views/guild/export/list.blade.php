@@ -61,43 +61,6 @@
                             </form>
                         </li>
 
-                        <!-- TMB Tooltips Addon -->
-                        <!-- <li class="p-3 mb-3 rounded">
-                            <h2>
-                                <span class="fab fa-fw fa-battle-net text-mage"></span>
-                                <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank" class="text-uncommon">
-                                    {{ __("TMB Tooltips Addon") }}
-                                </a>
-                            </h2>
-                            <p>
-                                {{ __("Copy+paste this into the") }} <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank">{{ __("TMB Tooltips Addon") }}</a>
-                            </p> -->
-                            <!--
-                            <p>
-                                Fields exported:
-                            </p>
-                            <div class="bg-dark rounded p-2">
-                                <code>
-                                    {{ collect(App\Http\Controllers\ExportController::LOOT_HEADERS)->implode(', ') }}
-                                </code>
-                            </div>
-                            -->
-                            <!-- <ul class="list-inline">
-                                <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}" target="_blank" class="btn btn-success">
-                                        <span class="fas fa-fw fas fa-file-csv"></span>
-                                        {{ __("Download CSV") }}
-                                    </a>
-                                </li>
-                                <li class="list-inline-item">
-                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank">
-                                        <span class="fas fa-fw fas fa-file-csv"></span>
-                                        {{ __("View CSV") }}
-                                    </a>
-                                </li>
-                            </ul>
-                        </li> -->
-
                         <li class="p-3 mb-3 rounded">
                             <p class="text-4">
                                 {!! __('Exports are <span class="font-weight-bold">CACHED</span> for :count minutes.', ['count' => env('EXPORT_CACHE_SECONDS', 120) / 60]) !!}
@@ -405,6 +368,41 @@
                             </ul>
                         </li>
                         @include('partials/expansionDatabases')
+                        <!-- TMB Tooltips Addon -->
+                        <li class="p-3 mb-3 rounded text-muted small">
+                            <div class="font-weight-bold">
+                                TMB TOOLTIPS ADDON IS NO LONGER SUPPORTED
+                            </div>
+                            <div class="">
+                                Download {{ __("TMB Tooltips Addon") }}
+                                <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank">here</a>
+                            </div>
+                            <div>
+                                {{ __("Copy+paste this into the") }} <a href="https://www.curseforge.com/wow/addons/tmb-helper" target="_blank">{{ __("TMB Tooltips Addon") }}</a>
+                            </div>
+                            <div>
+                                Fields exported:
+                            </div>
+                            <div class="bg-dark rounded p-2">
+                                <code class="small">
+                                    {{ collect(App\Http\Controllers\ExportController::LOOT_HEADERS)->implode(', ') }}
+                                </code>
+                            </div>
+                            <ul class="list-inline">
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'csv']) }}" target="_blank" class="">
+                                        <span class="fas fa-fw fas fa-file-csv"></span>
+                                        {{ __("Download CSV") }}
+                                    </a>
+                                </li>
+                                <li class="list-inline-item">
+                                    <a href="{{ route('guild.export.addonItems', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'fileType' => 'html']) }}" target="_blank">
+                                        <span class="fas fa-fw fas fa-file-csv"></span>
+                                        {{ __("View CSV") }}
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
                     </ol>
                 </div>
             </div>
