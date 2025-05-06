@@ -98,10 +98,14 @@
                                     <!--<span class="role-circle" style="background-color:{{ getHexColorFromDec($character->raid_group_color) }}"></span>-->
                                     <span class="text-muted small font-weight-bold">{{ $character->pivot->is_offspec ? 'OS' : '' }}</span>
                                     <span class="text-{{ slug($character->class) }}">{{ $character->name }}</span>
+                                    @if ($character->is_alt)
+                                        <span class="text-gold">{{ __("alt") }}</span>
+                                    @endif
                                     <span class="js-watchable-timestamp smaller text-muted"
                                         data-timestamp="{{ $character->pivot->created_at }}"
                                         data-is-short="1">
                                     </span>
+
                                     @if (!$guild->is_attendance_hidden && (isset($character->attendance_percentage) || isset($character->raid_count)))
                                         <span class="small">
                                             @include('partials/attendanceTag', ['attendancePercentage' => $character->attendance_percentage, 'raidCount' => $character->raid_count, 'raidShort' => true])
@@ -126,6 +130,9 @@
                                 <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}"
                                     class="tag" target="_blank">
                                     <span class="text-{{ slug($character->class) }}">{{ $character->name }}</span>
+                                    @if ($character->is_alt)
+                                        <span class="text-gold">{{ __("alt") }}</span>
+                                    @endif
                                 </a>
                             </li>
                         @endforeach
@@ -149,6 +156,9 @@
                                 @endphp
                                 <li class="text-muted">
                                     <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ $character ? slug($character->class) : '' }}">{{ $character->name }}</a>
+                                    @if ($character->is_alt)
+                                        <span class="text-gold">{{ __("alt") }}</span>
+                                    @endif
                                     {{ __("prio but no wishlist") }}
                                 </li>
                             @endif
@@ -160,6 +170,9 @@
                                 @endphp
                                 <li class="text-muted">
                                     <a href="{{ route('character.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'characterId' => $character->id, 'nameSlug' => $character->slug]) }}" class="text-{{ $character ? slug($character->class) : '' }}">{{ $character->name }}</a>
+                                    @if ($character->is_alt)
+                                        <span class="text-gold">{{ __("alt") }}</span>
+                                    @endif
                                     {{ __("wishlisted but no prio") }}
                                 </li>
                             @endif
@@ -217,7 +230,7 @@
                         $oldInputName   = 'items.' . $item->item_id . '.characters.' . $i;
                         $character      = $item->priodCharacters->get($i) ? $item->priodCharacters->get($i) : null;
                         $characterId    = old($oldInputName . '.character_id') ? old($oldInputName . '.character_id') : ($character ? $character->id : null);
-                        $strikeThrough = !old($oldInputName) && $character && ($character->pivot->is_received || $character->pivot->received_at) ? 'font-strikethrough' : null;
+                        $strikeThrough  = !old($oldInputName) && $character && ($character->pivot->is_received || $character->pivot->received_at) ? 'font-strikethrough' : null;
                     @endphp
                     <li class="input-item position-relative {{ $characterId ? 'd-flex' : '' }} {{ $errors->has('items.' . $item->item_id . '.characters.' . $i ) ? 'text-danger font-weight-bold' : '' }}"
                         data-needs-template="{{ !$characterId ? '1' : '0' }}"
@@ -273,6 +286,9 @@
                                     <li class="list-inline-item">
                                         <span class="js-input-label text-{{ $character ? slug($character->class) : '' }} font-weight-medium {{ $strikeThrough }}">
                                             {!! $characterLabel !!}
+                                            @if ($character->is_alt)
+                                                <span class="text-gold">{{ __("alt") }}</span>
+                                            @endif
                                         </span>
                                     </li>
                                     <li class="list-inline-item">
