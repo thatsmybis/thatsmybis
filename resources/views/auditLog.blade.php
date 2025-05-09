@@ -302,10 +302,10 @@
                                         <div class="list-timestamp text-right text-muted p-2 small">
                                             @if ($log->member_id)
                                                 <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->member_slug]) }}" class="text-muted">
-                                                    <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> {{ __("ago") }}
+                                                    <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span>
                                                 </a>
                                             @else
-                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span> {{ __("ago") }}
+                                                <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $log->created_at }}"></span>
                                             @endif
                                         </div>
 

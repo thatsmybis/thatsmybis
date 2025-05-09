@@ -661,7 +661,7 @@ function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 200) {
             if (unit === "year") return `${abs}y`;
         }
 
-        return rtf.format(value, unit);
+        return rtf.format(-value, unit);
     }
 
     function processWatchable(el) {
