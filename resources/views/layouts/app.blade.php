@@ -158,11 +158,9 @@
         </div>
     @endif
 
-    @if (isset($guild) && $guild->expansion_id < 4)
+    @if (isset($guild) && $guild->expansion_id < 5)
         <div class="text-center font-weight-normal text-muted mb-2">
-            To use <span class="font-weight-semibold text-legendary">Cata</span>, register a new guild in <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a> or the <a href="{{ route('home') }}">Dashboard</a>
-            <span class="text-muted">
-            </span>
+            To use <span class="font-weight-semibold text-monk">MoP</span>, register a new guild in <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a> or the <a href="{{ route('home') }}">Dashboard</a>
         </div>
     @endif
 
@@ -174,12 +172,6 @@
                     {{ __("World Bosses") }}
                 </a>
             </span>
-        </div>
-    @endif
-
-    @if (isset($guild) && in_array(Illuminate\Support\Facades\App::getLocale(), ['de', 'es', 'fr', 'pt', 'ru', 'ko', 'cn']))
-        <div class="text-center font-weight-normal text-muted mb-2">
-            You can now lookup items using your language. <span class="small">previously only English</span>
         </div>
     @endif
 
