@@ -686,7 +686,7 @@ function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 100) {
         if (maxDays && (nowUtc - timestampUtc > maxDays * 86400000)) {
             content = "over 2 weeks";
         } else {
-            content = formatRelativeTime(timestampUtc, nowUtc, isShort);
+            content = formatRelativeTime(nowUtc, timestampUtc, isShort);
         }
 
         if (el.tagName.toLowerCase() === "abbr") {
