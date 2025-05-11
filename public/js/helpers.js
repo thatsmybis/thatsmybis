@@ -611,15 +611,25 @@ function slug(string) {
  * @param rate How frequently the timestamps should be updated.
  * @param updatesPerSecond How many elements to process per second (maximum).
  */
-function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 200) {
+function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 100) {
     const watchableElements = Array.from(document.querySelectorAll(".js-watchable-timestamp"));
     const formattedElements = Array.from(document.querySelectorAll(".js-timestamp"));
     const titleElements = Array.from(document.querySelectorAll(".js-timestamp-title"));
 
-    const rtf = new Intl.RelativeTimeFormat(locale || 'en', { numeric: "auto" });
+    const userLocale = navigator.language || 'en-US';
+    const userTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+    const rtf = new Intl.RelativeTimeFormat(userLocale, { numeric: "auto" });
 
-    function formatRelativeTime(fromMs, toMs, isShort = false) {
-        const diff = toMs - fromMs;
+    function parseUtcTimestamp(raw) {
+        raw = raw.trim();
+        if (raw.includes('T') || raw.endsWith('Z')) {
+            return Date.parse(raw); // ISO or UTC string
+        }
+        return Date.parse(raw.replace(' ', 'T') + 'Z'); // "YYYY-MM-DD HH:mm:ss" → ISO UTC
+    }
+
+    function formatRelativeTime(fromUtcMs, toUtcMs, isShort = false) {
+        const diff = toUtcMs - fromUtcMs;
         const absDiff = Math.abs(diff);
 
         const seconds = Math.round(absDiff / 1000);
@@ -661,26 +671,26 @@ function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 200) {
             if (unit === "year") return `${abs}y`;
         }
 
-        return rtf.format(-value, unit);
+        return rtf.format(value, unit);
     }
 
     function processWatchable(el) {
-        const timestamp = Date.parse(el.dataset.timestamp);
-        if (isNaN(timestamp)) return;
+        const timestampUtc = parseUtcTimestamp(el.dataset.timestamp);
+        if (isNaN(timestampUtc)) return;
 
-        const now = Date.now();
+        const nowUtc = Date.now();
         const isShort = el.dataset.isShort === "1";
         const maxDays = parseInt(el.dataset.maxDays, 10);
         let content;
 
-        if (maxDays && (now - timestamp > maxDays * 86400000)) {
+        if (maxDays && (nowUtc - timestampUtc > maxDays * 86400000)) {
             content = "over 2 weeks";
         } else {
-            content = formatRelativeTime(timestamp, now, isShort);
+            content = formatRelativeTime(timestampUtc, nowUtc, isShort);
         }
 
         if (el.tagName.toLowerCase() === "abbr") {
-            const isFuture = timestamp > now;
+            const isFuture = timestampUtc > nowUtc;
             el.title = isFuture ? `in ${content}` : `${content} ago`;
         } else {
             el.textContent = content;
@@ -688,23 +698,20 @@ function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 200) {
     }
 
     function processFormatted(el) {
-        const timestamp = Date.parse(el.dataset.timestamp);
-        if (isNaN(timestamp)) return;
+        const timestampUtc = parseUtcTimestamp(el.dataset.timestamp);
+        if (isNaN(timestampUtc)) return;
 
-        const format = el.dataset.format || "default";
-        const date = new Date(timestamp);
-
-        const formatted = format === "default"
-            ? date.toLocaleString(locale || 'en', {
-                weekday: "short",
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-                hour: "numeric",
-                minute: "2-digit",
-                hour12: true
-            })
-            : date.toLocaleString(locale || 'en');
+        const date = new Date(timestampUtc);
+        const formatted = date.toLocaleString(userLocale, {
+            weekday: "short",
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit",
+            hour12: true,
+            timeZone: userTimeZone
+        });
 
         if (el.tagName.toLowerCase() === "abbr") {
             el.title = formatted;
@@ -714,18 +721,19 @@ function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 200) {
     }
 
     function processTitle(el) {
-        const timestamp = Date.parse(el.dataset.timestamp);
-        if (isNaN(timestamp)) return;
+        const timestampUtc = parseUtcTimestamp(el.dataset.timestamp);
+        if (isNaN(timestampUtc)) return;
 
-        const date = new Date(timestamp);
-        const formatted = date.toLocaleString(locale || 'en', {
+        const date = new Date(timestampUtc);
+        const formatted = date.toLocaleString(userLocale, {
             weekday: "short",
             year: "numeric",
             month: "short",
             day: "numeric",
             hour: "numeric",
             minute: "2-digit",
-            hour12: true
+            hour12: true,
+            timeZone: userTimeZone
         });
 
         const prefix = el.dataset.title || "";
@@ -734,7 +742,7 @@ function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 200) {
 
     function rateLimitedProcess(list, fn, perSecond = 100) {
         const queue = [...list];
-        const batchSize = Math.max(1, Math.floor(perSecond / 5)); // 5 batches/sec
+        const batchSize = Math.max(1, Math.floor(perSecond / 5));
         const interval = 1000 / 5;
 
         function processBatch() {
@@ -767,6 +775,7 @@ function trackTimestamps(rate = timestampCheckRate, updatesPerSecond = 200) {
         rateLimitedProcess(watchableElements, processWatchable, updatesPerSecond);
     }, rate);
 }
+
 
 function ucfirst(string) {
   return string.charAt(0).toUpperCase() + string.slice(1);

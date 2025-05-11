@@ -407,7 +407,6 @@
                                     <li class="list-inline-item text-muted small">
                                         {{ __("received") }}
                                         <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $character->pivot->received_at ? $character->pivot->received_at : $character->pivot->created_at }}"></span>
-                                        {{ __("ago") }}
                                     </li>
                                 @endif
                             </ul>
