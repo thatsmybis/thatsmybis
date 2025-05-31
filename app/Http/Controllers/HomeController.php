@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use App\{Expansion, Guild, User};
 use Auth;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\{Cache, Log};
+use Psr\Log\NullLogger;
 use RestCord\DiscordClient;
-use Illuminate\Support\Facades\Cache;
 
 class HomeController extends Controller
 {
@@ -104,7 +105,10 @@ class HomeController extends Controller
                         $discord = new DiscordClient([
                             'token'     => $user->discord_token,
                             'tokenType' => 'OAuth',
+                            'version'   => '9',
+                            'logger'    => new NullLogger(),
                         ]);
+
                         // TODO: Handle this failing; sometimes gives 401 or 500 or whatever.
                         return $discord->user->getCurrentUserGuilds();
                     }
@@ -112,8 +116,9 @@ class HomeController extends Controller
 
                 if ($discordGuilds) {
                     $guildIds = [];
+
                     foreach ($discordGuilds as $discordGuild) {
-                        $discordGuildIds[$discordGuild->id] = $discordGuild->id;
+                        $discordGuildIds[$discordGuild['id']] = $discordGuild['id'];
                     }
 
                     $currentGuildIds = $user->members->pluck('guild_id')->toArray();

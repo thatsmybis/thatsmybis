@@ -120,11 +120,11 @@ class Member extends BaseModel
      * @param RestCord\Model\Guild\GuildMember $discordMember The Discord Member, along with their roles
      */
     public function syncRoles($guild, $discordMember) {
-        if ($discordMember->roles) {
+        if ($discordMember['roles']) {
             $memberRoles = $this->roles->keyBy('discord_id')->keys()->toArray();
 
-            $rolesToDetach = array_diff($memberRoles, $discordMember->roles);
-            $rolesToAttach = array_diff($discordMember->roles, $memberRoles);
+            $rolesToDetach = array_diff($memberRoles, $discordMember['roles']);
+            $rolesToAttach = array_diff($discordMember['roles'], $memberRoles);
 
             if ($rolesToDetach) {
                 // Looks like you don't actually have those roles anymore. RIP!

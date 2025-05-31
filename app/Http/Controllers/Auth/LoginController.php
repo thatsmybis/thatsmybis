@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Auth;
-use App\{User};
 use App\Http\Controllers\Controller;
+use App\{User};
+use Auth;
 use Exception;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Support\Facades\Log;
+use Psr\Log\NullLogger;
 use RestCord\DiscordClient;
 use Socialite;
 
@@ -75,7 +77,12 @@ class LoginController extends Controller
             abort(403, __("Didn't receive your ID from Discord. Try again."));
         }
 
-        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+        $discord = new DiscordClient([
+            'token'     => $unauthUser->token,
+            'tokenType' => 'OAuth',
+            'version'   => '9',
+            'logger'    => new NullLogger(),
+        ]);
 
         $authUser = $this->findUser($unauthUser, 'discord');
 

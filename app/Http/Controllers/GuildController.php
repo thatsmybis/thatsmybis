@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers;
 
-use App\{AuditLog, Expansion, Guild, Member, Permission, Role, User};
 use App\Http\Controllers\{CharacterController, PrioController};
+use App\{AuditLog, Expansion, Guild, Member, Permission, Role, User};
 use Auth;
 use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\{DB, Log};
 use Illuminate\Validation\Rule;
+use Psr\Log\NullLogger;
 use RestCord\DiscordClient;
 
 class GuildController extends Controller
@@ -678,7 +679,11 @@ class GuildController extends Controller
      */
     private function createNewGuild($guildName, $discordId, $expansionId, $user) {
         // Verify that the bot is on the server
-        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+        $discord = new DiscordClient([
+            'token' => env('DISCORD_BOT_TOKEN'),
+            'version' => '9',
+            'logger'  => new NullLogger(),
+        ]);
 
         try {
             $discordMember = $discord->guild->getGuildMember(['guild.id' => (int)$discordId, 'user.id' => (int)$user->discord_id]);
@@ -695,13 +700,13 @@ class GuildController extends Controller
 
         $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$discordId]);
 
-        if ($discordMember->user->id == $discordGuild->owner_id) {
+        if ($discordMember['user']['id'] == $discordGuild['owner_id']) {
             // You own the server... come right in.
             $hasPermissions = true;
         } else {
             // Go through each of the user's roles, and check to see if any of them have admin or management permissions
             // We're only going to let the user register this server if they have one of those permissions
-            foreach ($discordMember->roles as $role) {
+            foreach ($discordMember['roles'] as $role) {
                 $discordPermissions = $roles[array_search($role, array_column($roles, 'id'))]->permissions;
                 if (($discordPermissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) { // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
                     $hasPermissions = true;
@@ -728,14 +733,14 @@ class GuildController extends Controller
 
         // Insert the roles associated with this Discord
         foreach ($roles as $role) {
-            Role::firstOrCreate(['discord_id' => $role->id, 'guild_id' => $guild->id],
+            Role::firstOrCreate(['discord_id' => $role['id'], 'guild_id' => $guild->id],
                 [
-                    'name'                => $role->name,
-                    'slug'                => slug($role->name),
+                    'name'                => $role['name'],
+                    'slug'                => slug($role['name']),
                     'description'         => null,
-                    'color'               => $role->color ? $role->color : null,
-                    'position'            => $role->position,
-                    'discord_permissions' => $role->permissions,
+                    'color'               => $role['color'] ? $role['color'] : null,
+                    'position'            => $role['position'],
+                    'discord_permissions' => $role['permissions'],
                 ]);
         }
 
@@ -750,8 +755,10 @@ class GuildController extends Controller
         // Fetch guilds the user can join that already exist on this website
         if ($user->discord_token) {
             $discord = new DiscordClient([
-                'token' => $user->discord_token,
+                'token'     => $user->discord_token,
                 'tokenType' => 'OAuth',
+                'version'   => '9',
+                'logger'    => new NullLogger(),
             ]);
 
             $guilds = $discord->user->getCurrentUserGuilds();
@@ -759,12 +766,12 @@ class GuildController extends Controller
             if ($guilds) {
                 foreach ($guilds as $guild) {
                     // only add guilds they have admin permissions for
-                    if (($guild->permissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) {
-                        $guildArray[$guild->id] = [
-                            'id'          => $guild->id,
-                            'name'        => $guild->name,
+                    if (($guild['permissions'] & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) {
+                        $guildArray[$guild['id']] = [
+                            'id'          => $guild['id'],
+                            'name'        => $guild['name'],
                             'registered'  => false,
-                            'permissions' => $guild->permissions,
+                            'permissions' => $guild['permissions'],
                         ];
                     }
                 }

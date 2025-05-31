@@ -2,11 +2,12 @@
 
 namespace App\Http\Middleware;
 
-use Auth, Closure;
 use App\{AuditLog, Guild, Member};
+use Auth, Closure;
 use Exception;
+use Illuminate\Support\Facades\{Cache, Log};
+use Psr\Log\NullLogger;
 use RestCord\DiscordClient;
-use Illuminate\Support\Facades\Cache;
 
 class CheckGuildPermissions
 {
@@ -59,8 +60,6 @@ class CheckGuildPermissions
                 return redirect()->route('login');
             }
 
-            $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
-
             $discordMember = null;
 
             $cacheKey = 'user:' . $user->id . ':guild:' . $guild->id . ':discordMember';
@@ -74,7 +73,11 @@ class CheckGuildPermissions
             $discordMember = Cache::remember($cacheKey, env('DISCORD_ROLE_CACHE_SECONDS', 30),
                 function () use ($user, $guild) {
                     try {
-                        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+                        $discord = new DiscordClient([
+                            'token'   => env('DISCORD_BOT_TOKEN'),
+                            'version' => '9',
+                            'logger'  => new NullLogger(),
+                        ]);
                         return $discord->guild->getGuildMember([
                             'guild.id' => (int)$guild->discord_id,
                             'user.id' => (int)$user->discord_id
@@ -86,9 +89,9 @@ class CheckGuildPermissions
                 }
             );
 
-            if ($discordMember && $discordMember->user->username . '#' . $discordMember->user->discriminator != $user->discord_username) {
+            if ($discordMember && $discordMember['user']['username'] . '#' . $discordMember['user']['discriminator'] != $user->discord_username) {
                 $user->update([
-                    'discord_username' => $discordMember->user->username . '#' . $discordMember->user->discriminator,
+                    'discord_username' => $discordMember['user']['username'] . '#' . $discordMember['user']['discriminator'],
                 ]);
             }
 
@@ -109,7 +112,7 @@ class CheckGuildPermissions
                 if ($user->id != $guild->user_id && !$isAdmin) {
                     if ($guild->getMemberRoleIds()) {
                         // Check that the Discord user has one of the role(s) required to access this guild
-                        $matchingRoles = array_intersect(array_merge($guild->getMemberRoleIds(), [$guild->gm_role_id, $guild->officer_role_id, $guild->raid_leader_role_id]), $discordMember->roles);
+                        $matchingRoles = array_intersect(array_merge($guild->getMemberRoleIds(), [$guild->gm_role_id, $guild->officer_role_id, $guild->raid_leader_role_id]), $discordMember['roles']);
 
                         if (count($matchingRoles) <= 0) {
                             request()->session()->flash('status', __('Insufficient Discord role to access that guild.'));
@@ -173,7 +176,7 @@ class CheckGuildPermissions
                 $storedRoles = $currentMember->roles->keyBy('discord_id')->keys()->toArray();
 
                 // Compare Discord's roles vs. our DB's roles
-                $diffRoles = array_merge(array_diff($storedRoles, $discordMember->roles), array_diff($discordMember->roles, $storedRoles));
+                $diffRoles = array_merge(array_diff($storedRoles, $discordMember['roles']), array_diff($discordMember['roles'], $storedRoles));
 
                 // The roles we have vs. what Discord has differ.
                 if ($diffRoles || $doHotfix) {

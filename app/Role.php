@@ -3,7 +3,9 @@
 namespace App;
 
 use App\{BaseModel, Member};
+use Illuminate\Support\Facades\Log;
 use Kodeine\Acl\Traits\HasPermission;
+use Psr\Log\NullLogger;
 use RestCord\DiscordClient;
 
 /**
@@ -165,7 +167,11 @@ class Role extends BaseModel
      * @return array Counts of the number of roles added, removed, and updated. Also the updated guild object.
      */
     public static function syncWithDiscord($guild) {
-        $discord = new DiscordClient(['token' => env('DISCORD_BOT_TOKEN')]);
+        $discord = new DiscordClient([
+            'token'   => env('DISCORD_BOT_TOKEN'),
+            'version' => '9',
+            'logger'  => new NullLogger(),
+        ]);
 
         // List of roles that we already have (local)
         $localRoles = $guild->roles;
@@ -179,27 +185,27 @@ class Role extends BaseModel
 
         // Iterate over the roles in remote
         foreach ($remoteRoles as $remoteRole) {
-            if (!$localRoles->contains('discord_id', $remoteRole->id)) {
+            if (!$localRoles->contains('discord_id', $remoteRole['id'])) {
             // Role not found in local: Add role to local
                 Role::create([
-                    'name'                => $remoteRole->name,
+                    'name'                => $remoteRole['name'],
                     'guild_id'            => $guild->id,
-                    'discord_id'          => (int)$remoteRole->id,
-                    'discord_permissions' => $remoteRole->permissions,
-                    'position'            => $remoteRole->position,
-                    'color'               => $remoteRole->color,
-                    'slug'                => slug($remoteRole->name),
+                    'discord_id'          => (int)$remoteRole['id'],
+                    'discord_permissions' => $remoteRole['permissions'],
+                    'position'            => $remoteRole['position'],
+                    'color'               => $remoteRole['color'],
+                    'slug'                => slug($remoteRole['name']),
                     'description'         => '',
                 ]);
                 $addedCount++;
             } else {
             // Role found in local: Update role in local to match remote
-                $localRole = $localRoles->where('discord_id', $remoteRole->id)->first();
+                $localRole = $localRoles->where('discord_id', $remoteRole['id'])->first();
 
-                $localRole->color = $remoteRole->color ? $remoteRole->color : null;
-                $localRole->name = $remoteRole->name;
-                $localRole->slug = slug($remoteRole->name);
-                $localRole->position = $remoteRole->position;
+                $localRole->color = $remoteRole['color'] ? $remoteRole['color'] : null;
+                $localRole->name = $remoteRole['name'];
+                $localRole->slug = slug($remoteRole['name']);
+                $localRole->position = $remoteRole['position'];
 
                 $localRole->save();
                 $updatedCount++;
@@ -210,7 +216,7 @@ class Role extends BaseModel
         foreach ($localRoles as $localRole) {
             $found = false;
             foreach ($remoteRoles as $remoteRole) {
-                if ($remoteRole->id == $localRole->discord_id) {
+                if ($remoteRole['id'] == $localRole->discord_id) {
                     $found = true;
                     break;
                 }
