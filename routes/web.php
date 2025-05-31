@@ -83,6 +83,9 @@ Route::middleware(['throttle:global'])->group(function () {
             Route::post('/{userId}/edit', 'AdminController@submitEditUser')->name('admin.users.edit.submit');
         });
         Route::get( '/translate-items', 'AdminController@showTranslateItems')->name('admin.translateItems');
+        Route::get('/trigger-500', function () {
+            abort(500);
+        });
     });
 
     Route::group([
