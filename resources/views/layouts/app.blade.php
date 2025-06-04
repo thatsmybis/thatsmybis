@@ -472,18 +472,18 @@
                 );
             }
         }
-        // window['nitroAds'].createAd('video-poster', {
-        //     "demo": {{ env('EXAMPLE_ADS', 'false') }},
-        //     "format": "video-nc",
-        //     "refreshTime": 60,
-        //     "reduceMobileSize": true,
-        // });
         window['nitroAds'].createAd('video-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
-            "format": "floating",
+            "format": "video-nc",
             "refreshTime": 60,
             "reduceMobileSize": true,
         });
+        // window['nitroAds'].createAd('video-poster', {
+        //     "demo": {{ env('EXAMPLE_ADS', 'false') }},
+        //     "format": "floating",
+        //     "refreshTime": 60,
+        //     "reduceMobileSize": true,
+        // });
         window['nitroAds'].createAd('top-large-leaderboard-poster', {
             "demo": {{ env('EXAMPLE_ADS', 'false') }},
             "refreshLimit": 0,

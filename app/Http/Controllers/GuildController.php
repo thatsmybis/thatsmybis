@@ -699,6 +699,7 @@ class GuildController extends Controller
         $hasPermissions = false;
 
         $roles = $discord->guild->getGuildRoles(['guild.id' => (int)$discordId]);
+        $roles = $roles instanceof \GuzzleHttp\Command\Result ? $roles->toArray() : $roles;
 
         if ($discordMember['user']['id'] == $discordGuild['owner_id']) {
             // You own the server... come right in.
@@ -706,9 +707,14 @@ class GuildController extends Controller
         } else {
             // Go through each of the user's roles, and check to see if any of them have admin or management permissions
             // We're only going to let the user register this server if they have one of those permissions
-            foreach ($discordMember['roles'] as $role) {
-                $discordPermissions = $roles[array_search($role, array_column($roles, 'id'))]->permissions;
-                if (($discordPermissions & self::ADMIN_PERMISSIONS) == self::ADMIN_PERMISSIONS) { // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
+            foreach ($discordMember['roles'] as $roleId) {
+                $idx = array_search($roleId, array_column($roles, 'id'));
+                if ($idx === false) {
+                    continue;
+                }
+                $discordPermissions = $roles[$idx]['permissions'];
+                // if we want to allow management permissions: || ($permissions & self::MANAGEMENT_PERMISSIONS) == self::MANAGEMENT_PERMISSIONS
+                if (($discordPermissions & self::ADMIN_PERMISSIONS) === self::ADMIN_PERMISSIONS) {
                     $hasPermissions = true;
                     break;
                 }
