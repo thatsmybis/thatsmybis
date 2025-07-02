@@ -1300,7 +1300,7 @@ div.dataTables_filter input {
 .d-poster-320 {
     display: none;
 }
-@media (max-width: 746px) {
+@media (max-width: 747px) {
     .d-poster-320 {
         display: block !important;
     }
