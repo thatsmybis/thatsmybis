@@ -38,7 +38,6 @@
     <meta name="csrf-token" content="">
 
     <title>@yield('title', config('app.name'))</title>
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('images/favicon.ico') }}?v=1" />
     <meta name="description" content="@yield('description', 'An online gaming community.')" />
     <meta name="keywords" content="@yield('keywords', "thatsmybis,that's my bis,thatsmybis wow,thatsmybis classic,faerlina,horde,faerlina horde,wow streamers,warcraft streamers,faerlina streamer,faerlina streamers")" />
     <meta name="author" content="https://github.com/Lemmings19/">
