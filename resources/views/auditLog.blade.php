@@ -325,7 +325,7 @@
                                                         &sdot;
                                                     </li>
                                                     <li class="list-inline-item">
-                                                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->member_id, 'usernameSlug' => $log->other_member_slug]) }}" class="text-muted">
+                                                        <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $log->other_member_id, 'usernameSlug' => $log->other_member_slug]) }}" class="text-muted">
                                                             {{ $log->other_member_username }}
                                                         </a>
                                                     </li>
