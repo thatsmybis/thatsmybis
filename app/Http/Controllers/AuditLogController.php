@@ -36,7 +36,7 @@ class AuditLogController extends Controller
         $guild         = request()->get('guild');
         $currentMember = request()->get('currentMember');
 
-        $guild->load(['characters', 'members', 'raidGroups']);
+        $guild->load(['allCharacters', 'allMembers', 'allRaidGroups']);
 
         $instances = Cache::remember('instances:expansion:' . $guild->expansion_id,
             env('CACHE_INSTANCES_SECONDS', 600),

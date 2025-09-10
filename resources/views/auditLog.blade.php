@@ -127,11 +127,11 @@
                             <option value="">
                                 —
                             </option>
-                            @foreach ($guild->characters as $character)
+                            @foreach ($guild->allCharacters as $character)
                                 <option value="{{ $character->id }}"
                                         data-tokens="{{ $character->id }}" class="text-{{ slug($character->class) }}-important"
                                         {{ Request::get('character_id') && Request::get('character_id') == $character->id ? 'selected' : ''}}>
-                                    {{ $character->name }} &nbsp; {{ $character->class ? '(' . $character->class . ')' : '' }} &nbsp; {{ $character->is_alt ? "Alt" : '' }}
+                                    {{ $character->name }} {{ $character->class ? '(' . $character->class . ')' : '' }} {{ $character->is_alt ? "Alt" : '' }} {{ $character->inactive_at ? '(' . __('ARCHIVED') . ')' : '' }}
                                 </option>
                             @endforeach
 
@@ -148,11 +148,11 @@
                             <option value="">
                                 —
                             </option>
-                            @foreach ($guild->members as $member)
+                            @foreach ($guild->allMembers as $member)
                                 <option value="{{ $member->id }}"
                                     data-tokens="{{ $member->id }}"
                                     {{ Request::get('member_id') && Request::get('member_id') == $member->id ? 'selected' : ''}}>
-                                    {{ $member->username }}
+                                    {{ $member->username }} {{ $member->banned_at ? '(' . __('BANNED') . ')' : '' }} {{ $member->inactive_at ? '(' . __('ARCHIVED') . ')' : '' }}
                                 </option>
                             @endforeach
 
@@ -169,11 +169,11 @@
                             <option value="">
                                 —
                             </option>
-                            @foreach ($guild->raidGroups as $raidGroup)
+                            @foreach ($guild->allRaidGroups as $raidGroup)
                                 <option value="{{ $raidGroup->id }}"
                                     data-tokens="{{ $raidGroup->id }}"
                                     {{ Request::get('raid_group_id') && Request::get('raid_group_id') == $raidGroup->id ? 'selected' : ''}}>
-                                    {{ $raidGroup->name }}
+                                    {{ $raidGroup->name }} {{ $raidGroup->disabled_at ? '(' . __('ARCHIVED') . ')' : '' }}
                                 </option>
                             @endforeach
 

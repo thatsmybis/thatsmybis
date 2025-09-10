@@ -158,9 +158,9 @@
     @endif
 
     @if (isset($guild) && $guild->expansion_id < 5)
-        <div class="text-center font-weight-normal text-muted mb-2">
+        <!-- <div class="text-center font-weight-normal text-muted mb-2">
             To use <span class="font-weight-semibold text-monk">MoP</span>, register a new guild in <a href="{{ isset($guild) ? route('guild.settings', ['guildId' => $guild->id, 'guildSlug' => $guild->slug]) : route('home') }}">Guild Settings</a> or the <a href="{{ route('home') }}">Dashboard</a>
-        </div>
+        </div> -->
     @endif
 
     @if (isset($guild) && $guild->expansion_id === 4 && time() < 1728302400)
