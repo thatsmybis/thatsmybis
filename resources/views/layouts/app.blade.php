@@ -149,11 +149,19 @@
     </div>
 
     @if (isset($guild))
-        <div id="addonPrompt" class="small text-center text-success" style="display:none;">
+        <div id="addonPrompt" class="mb-1 small text-center text-success" style="display:none;">
             Choose an addon to use with TMB:
             <a href="https://www.curseforge.com/wow/addons/gargul" target="_blank" class="text-legendary">Gargul</a> or
             <a href="https://www.curseforge.com/wow/addons/rclootcouncil-classic" target="_blank" class="text-legendary">RCLC</a>
             <span id="closeAddonPrompt" class="cursor-pointer small text-muted fa-fw fas fa-times"></span>
+        </div>
+
+        <div id="jediwarlockPrompt" class="mb-1 small text-center text-success" style="display:none;">
+            I love this Vanilla WoW channel and want to support it:
+            <a href="https://www.youtube.com/@Jediwarlock" target="_blank" class="text-link">Jediwarlock</a>
+            — TMB dev ;)
+            <!-- Not only because I want him to do well, but for selfish reasons I want him to keep making videos that I can keep enjoying XD -->
+            <span id="closeJediwarlockPrompt" class="cursor-pointer small text-muted fa-fw fas fa-times"></span>
         </div>
     @endif
 
@@ -426,6 +434,9 @@
             var localeAlt = "alt";
         @endif
 
+        const CLOSED_ADDON_COOKIE = "closedAddonPrompt";
+        const CLOSED_JEDIWARLOCK_COOKIE = "closeJediwarlockPrompt";
+
         $(document).ready(function () {
             $(document).scroll(function() {
                 const y = $(this).scrollTop();
@@ -439,7 +450,6 @@
                 scroll(0,0);
             });
 
-            const CLOSED_ADDON_COOKIE = "closedAddonPrompt";
             const addonPromptCookie = Cookies.get(CLOSED_ADDON_COOKIE);
 
             if (!addonPromptCookie) {
@@ -450,9 +460,25 @@
                 $("#addonPrompt").hide();
                 Cookies.set(CLOSED_ADDON_COOKIE, 1, { expires: 30 });
             });
+
+            const jediwarlockPromptCookie = Cookies.get(CLOSED_JEDIWARLOCK_COOKIE);
+
+            if (!jediwarlockPromptCookie) {
+                $("#jediwarlockPrompt").show();
+            }
+
+            $("#closeJediwarlockPrompt").click(function () {
+                $("#jediwarlockPrompt").hide();
+                Cookies.set(CLOSED_JEDIWARLOCK_COOKIE, 1, { expires: 30 });
+            });
         });
         function restoreAddonPrompt() {
             Cookies.remove(CLOSED_ADDON_COOKIE);
+            $("#addonPrompt").show();
+        }
+        function restoreJediwarlockPrompt() {
+            Cookies.remove(CLOSED_JEDIWARLOCK_COOKIE);
+            $("#jediwarlockPrompt").show();
         }
     </script>
 
