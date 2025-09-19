@@ -57,7 +57,7 @@
                                                     @endif
                                                     @if ($expansion->is_enabled)
                                                         <a href="{{ route('guild.showRegisterExpansion', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'expansionSlug' => $expansion->slug]) }}"
-                                                            class="small btn {{ $expansion->id === 4 ? 'btn-success font-weight-medium p-2' : 'btn-primary' }} pt-0 pb-0 pl-1 pr-1"
+                                                            class="small btn btn-primary pt-0 pb-0 pl-1 pr-1"
                                                         >
                                                             {{ __("New :expansionName Guild", ['expansionName' => $expansion->name_short]) }}
                                                         </a>
