@@ -122,6 +122,7 @@
                                     </label>
                                     <div class="font-italic">
                                         <span class="text-discord">
+                                            <span class="fas fa-fw fa-crown text-gold" title="guild owner on this website"></span>
                                             {{ $guild->user->discord_username }}
                                         </span>
                                         <a href="{{ route('member.show', ['guildId' => $guild->id, 'guildSlug' => $guild->slug, 'memberId' => $owner->id, 'usernameSlug' => $owner->slug]) }}" class="text-muted">
