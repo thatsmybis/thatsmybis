@@ -33,6 +33,9 @@
                 </li>
             @endif
             <li class="list-inline-item">
+                @if ($member->user_id == $guild->user_id)
+                    <span class="fas fa-fw fa-crown text-gold" title="guild owner on this website"></span>
+                @endif
                 {{ __("Member") }}
                 @if (!$guild->is_attendance_hidden && (isset($attendancePercentage) || (isset($raidCount) || isset($benchedCount))))
                     <span class="small">
