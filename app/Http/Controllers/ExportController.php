@@ -463,7 +463,7 @@ class ExportController extends Controller {
             $expansionId = 1;
         } else if ($expansionSlug == 'burning-crusade') {
             $expansionId = 2;
-        } else if ($expansionSlug == 'wrath') {
+        } else if ($expansionSlug == 'wrath-of-the-lich-king') {
             $expansionId = 3;
         } else if ($expansionSlug == 'season-of-discovery') {
             $expansionId = 4;
