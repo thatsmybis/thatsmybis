@@ -15,22 +15,23 @@ class Item extends BaseModel
      * @var array
      */
     protected $fillable = [
+        'allowable_class',
+        'display_id',
         'expansion_id',
         'faction',
+        'inventory_type',
+        'is_disabled',
+        'is_heroic',
+        'item_level',
+        'name',
         'parent_id',
         'parent_item_id',
-        'name',
-        'source',
         'profession',
         'quality',
-        'is_heroic',
-        'display_id',
-        'inventory_type',
-        'allowable_class',
-        'item_level',
         'required_level',
         'set_id',
-        'is_disabled',
+        'source',
+        'weight',
     ];
 
     /**
@@ -40,7 +41,7 @@ class Item extends BaseModel
      */
     protected $hidden = [
         'allowable_class',
-        'item_level',
+        'is_disabled',
         'name_cn',
         'name_de',
         'name_es',
@@ -51,7 +52,6 @@ class Item extends BaseModel
         'name_ru',
         'required_level',
         'set_id',
-        'is_disabled',
     ];
 
     const TYPE_PRIO     = 'prio';

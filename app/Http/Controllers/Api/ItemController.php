@@ -88,6 +88,8 @@ class ItemController extends \App\Http\Controllers\Controller
                     // )
                 }
 
+                $sqlQuery = $sqlQuery->orderBy('item_level');
+
                 if ($faction) {
                     $sqlQuery->ofFaction($faction);
                 }
