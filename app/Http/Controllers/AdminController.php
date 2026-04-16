@@ -45,7 +45,7 @@ class AdminController extends Controller
                 // DB::raw("(SELECT count(`id`) FROM `raid_groups` WHERE `raid_groups`.`guild_id` = `guilds`.`id`) AS `raid_group_count`"),
                 // DB::raw('COUNT(DISTINCT `batches`.`id`)    AS `batch_count`'),
                 // DB::raw('COUNT(DISTINCT `characters`.`id`) AS `char_count`'),
-                DB::raw('COUNT(DISTINCT `members`.`id`)    AS `member_count`'),
+                // DB::raw('COUNT(DISTINCT `members`.`id`)    AS `member_count`'),
                 // DB::raw('COUNT(DISTINCT `raid_groups`.`id`)      AS `raid_group_count`'),
                 // Joins running too slow; need to optimize before using
                 // DB::raw("(SELECT count(`id`) FROM `character_items` AS `wishlist_items` WHERE `raid_groups`.`guild_id` = `guilds`.`id`) AS `raid_group_count`"),
@@ -73,33 +73,33 @@ class AdminController extends Controller
             //         ->whereNotNull('batch_items.batch_id');
             // })
             ->leftJoin('users AS owner',          'owner.id',                     '=', 'guilds.user_id')
-            ->leftJoin('members',                 'members.guild_id',             '=', 'guilds.id')
+            // ->leftJoin('members',                 'members.guild_id',             '=', 'guilds.id')
             ->leftJoin('members AS owner_member', 'owner_member.user_id',         '=', 'owner.id')
             ->leftJoin('raid_groups',             'raid_groups.guild_id',         '=', 'guilds.id')
             ->groupBy('guilds.id');
 
         // These both require joining on members
-        if (!empty(request()->input('member_name')) || (!empty(request()->input('discord_username')))) {
-            $query = $query->join('members AS req_members', 'req_members.guild_id', 'guilds.id');
-        }
+        // if (!empty(request()->input('member_name')) || (!empty(request()->input('discord_username')))) {
+        //     $query = $query->join('members AS req_members', 'req_members.guild_id', 'guilds.id');
+        // }
 
-        if (!empty(request()->input('character_name'))) {
-            $query = $query->join('characters', 'characters.guild_id', 'guilds.id')
-                ->where('characters.name', 'like', '%' . request()->input('character_name') . '%');
-        }
+        // if (!empty(request()->input('character_name'))) {
+        //     $query = $query->join('characters', 'characters.guild_id', 'guilds.id')
+        //         ->where('characters.name', 'like', '%' . request()->input('character_name') . '%');
+        // }
 
         if (!empty(request()->input('guild_name'))) {
             $query = $query->where('guilds.name', 'like', '%' . request()->input('guild_name') . '%');
         }
 
-        if (!empty(request()->input('discord_username'))) {
-            $query = $query->join('users', 'users.id', 'req_members.user_id')
-                ->where('users.discord_username', 'like', '%' . request()->input('discord_username') . '%');
-        }
+        // if (!empty(request()->input('discord_username'))) {
+        //     $query = $query->join('users', 'users.id', 'req_members.user_id')
+        //         ->where('users.discord_username', 'like', '%' . request()->input('discord_username') . '%');
+        // }
 
-        if (!empty(request()->input('member_name'))) {
-            $query = $query->where('req_members.username', 'like', '%' . request()->input('member_name') . '%');
-        }
+        // if (!empty(request()->input('member_name'))) {
+        //     $query = $query->where('req_members.username', 'like', '%' . request()->input('member_name') . '%');
+        // }
 
         if (!empty(request()->input('order_by'))) {
             $query = $query->orderBy(request()->input('order_by'), 'desc');

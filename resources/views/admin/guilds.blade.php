@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="col-lg-2 col-md-3 col-6">
+            <!-- <div class="col-lg-2 col-md-3 col-6">
                 <div class="form-group">
                     <label for="discord_username" class="font-weight-bold">
                         <span class="fab fa-fw fa-discord text-muted"></span>
@@ -86,9 +86,9 @@
                         placeholder=""
                         class="form-control dark">
                 </div>
-            </div>
+            </div> -->
 
-            <div class="col-lg-2 col-md-3 col-6">
+            <!-- <div class="col-lg-2 col-md-3 col-6">
                 <div class="form-group">
                     <label for="order_by" class="font-weight-bold">
                         <span class="fas fa-fw fa-sort text-muted"></span>
@@ -106,7 +106,7 @@
                         </option>
                     </select>
                 </div>
-            </div>
+            </div> -->
 
             {{ csrf_field() }}
 
@@ -173,7 +173,7 @@
                                 </td>
                                 <td>
                                     <ul class="no-bullet no-indent">
-                                        <li class="">
+                                        <!-- <li class="">
                                             {{ $guild->character_count }} <span class="text-muted small">characters</span>
                                         </li>
                                         <li class="">
@@ -181,7 +181,7 @@
                                         </li>
                                         <li class="">
                                             {{ $guild->raid_group_count }} <span class="text-muted small">raid groups</span>
-                                        </li>
+                                        </li> -->
                                     </ul>
                                 </td>
                                 <td class="">
