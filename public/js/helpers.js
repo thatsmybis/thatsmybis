@@ -175,7 +175,7 @@ function addDateInputHandlers() {
     $(".js-date-input").change(function () {
         let actualInput = $(this).prev(".js-date");
         if ($(this).val()) {
-            actualInput.val(moment($(this).val()).utc().format("YYYY-MM-DD HH:mm:ss"));
+            actualInput.val(moment.utc($(this).val()).format("YYYY-MM-DD HH:mm:ss"));
         } else {
             actualInput.val(date);
             $(this).val(moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss"));
