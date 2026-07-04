@@ -171,14 +171,28 @@ $(document).ready(function () {
 });
 
 // Take the visible date input, and convert its time to UTC, update the hidden date input.
+// Date-only values (e.g. from an <input type="date">, like the loot received date) have no
+// meaningful time-of-day, so they're kept in local mode and never converted, to avoid shifting
+// the calendar day. Full date+time values (e.g. from the raid datetimepicker) do have a
+// meaningful local time-of-day, so those still get converted from local time to UTC.
 function addDateInputHandlers() {
+    const dateTimeFormat = "YYYY-MM-DD HH:mm:ss";
+    const dateOnlyFormat = "YYYY-MM-DD";
+
     $(".js-date-input").change(function () {
         let actualInput = $(this).prev(".js-date");
-        if ($(this).val()) {
-            actualInput.val(moment.utc($(this).val()).format("YYYY-MM-DD HH:mm:ss"));
-        } else {
+        let value = $(this).val();
+
+        if (!value) {
             actualInput.val(date);
-            $(this).val(moment.utc(date).local().format("YYYY-MM-DD HH:mm:ss"));
+            $(this).val(moment.utc(date).local().format(dateTimeFormat));
+            return;
+        }
+
+        if (/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+            actualInput.val(moment(value, dateOnlyFormat, true).format("YYYY-MM-DD 00:00:00"));
+        } else {
+            actualInput.val(moment(value, dateTimeFormat, true).utc().format(dateTimeFormat));
         }
     });
 }
