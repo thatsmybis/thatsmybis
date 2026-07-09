@@ -60,9 +60,7 @@
 
                             <ul class="no-indent no-bullet">
                                 <li class="mt-2 text-5 font-weight-bold">
-                                    {{ $isFuture ? __('in') : '' }}
                                     <span class="js-watchable-timestamp js-timestamp-title" data-timestamp="{{ $raid->date }}"></span>
-                                    {{ !$isFuture ? __('ago') : '' }}
                                     <span class="js-timestamp" data-timestamp="{{ $raid->date }}" data-format="@ h:mm a, ddd MMM D {{ $isFuture ? '' : 'YYYY' }}"></span>
                                     <span class="small text-muted">{{ __("in your timezone") }}</span>
                                 </li>
